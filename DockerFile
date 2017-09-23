@@ -5,4 +5,4 @@ RUN cd btcpayserver && dotnet restore && cd BTCPayServer && dotnet build -c Debu
 EXPOSE 23001
 WORKDIR /btcpayserver/BTCPayServer
 ENTRYPOINT ["dotnet", "bin/Debug/netcoreapp2.0/BTCPayServer.dll"]
-CMD ["-testnet", "-explorercookiefile=/.cookie", "-explorerurl=https://nbxplorer-testnet-public.azurewebsites.net/", "-bind=0.0.0.0"]
+CMD ["--testnet", "--explorercookiefile=/.cookie", "--explorerurl=https://nbxplorer-testnet-public.azurewebsites.net/", "--bind=0.0.0.0"]

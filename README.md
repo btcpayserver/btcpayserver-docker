@@ -6,7 +6,7 @@ Running on TestNet:
 ```
 git clone https://github.com/btcpayserver/btcpayserver-docker
 cd btcpayserver-docker
-docker build -t btcpay
+docker build . -t btcpay
 docker run -p 23001:23001 -ti btcpay
 ```
 
