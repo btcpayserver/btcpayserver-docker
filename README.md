@@ -6,7 +6,7 @@ Running on TestNet with postgres database:
 ```
 git clone https://github.com/btcpayserver/btcpayserver-docker
 cd btcpayserver-docker
-docker-compose up
+docker-compose up --force-recreate
 ```
 
 You can then browse http://127.0.0.1:23001/
