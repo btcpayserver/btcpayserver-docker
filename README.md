@@ -15,6 +15,8 @@ If you want to refresh the btcpay image up to the latest master, you need to reb
 
 ```
 docker build . -t btcpay --no-cache
+docker-compose build
+docker-compose up
 ```
 
 By default this will connect to a NBXplorer instance hosted by me, on which I can make no promise of avaialability.
