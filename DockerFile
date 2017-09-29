@@ -1,9 +1,0 @@
-FROM microsoft/dotnet:2.0.0-sdk
-
-RUN git clone https://github.com/btcpayserver/btcpayserver
-RUN cd btcpayserver && dotnet restore && cd BTCPayServer && dotnet build -c Debug
-EXPOSE 23001
-WORKDIR /btcpayserver/BTCPayServer
-ENTRYPOINT ["dotnet", "bin/Debug/netcoreapp2.0/BTCPayServer.dll"]
-ENV POSTGRES="User ID=postgres;Host=postgres;Port=5432;Database=btcpayserver"
-CMD ["--testnet", "--explorercookiefile=/.cookie", "--explorerurl=https://nbxplorer-testnet-public.azurewebsites.net/", "--bind=0.0.0.0"]

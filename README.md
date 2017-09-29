@@ -1,23 +1,20 @@
 # How to use
 
-Mainnet is not support for now, as BTCPay is under development.
-Running on TestNet with postgres database:
+Here is BTCPay Architecture
 
-```
-git clone https://github.com/btcpayserver/btcpayserver-docker
-cd btcpayserver-docker
-docker-compose up --force-recreate
-```
+![Architecture](https://github.com/btcpayserver/btcpayserver-doc/raw/master/img/Architecture.png)
 
-You can then browse http://127.0.0.1:23001/
+As you can see, it depends on several piece of infrastructure, mainly NBXplorer, Postgres, and Bitcoin Core.
+Setting up the dependencies might be time consuming, this repository is meant to give working example of docker-compose file which will setup everything for you.
 
-If you want to refresh the btcpay image up to the latest master, you need to rebuild the image.
+This assume you already know how docker-compose works.
 
-```
-docker build . -t btcpay --no-cache
-docker-compose build
-docker-compose up --force-recreate
-```
+Used docker image used [BTCPayServer](https://hub.docker.com/r/nicolasdorier/btcpayserver/), [NBXplorer](https://hub.docker.com/r/nicolasdorier/nbxplorer/), [Bitcoin Core](https://hub.docker.com/r/nicolasdorier/docker-bitcoin/) and [Postgres](https://hub.docker.com/_/postgres/).
 
-By default this will connect to a NBXplorer instance hosted by me, on which I can make no promise of avaialability.
+The revelant volumes are:
+
+* /datadir in NBXplorer
+* /datadir in BTCPayServer
+* /data in Bitcoin
+* /var/lib/postgresql/data in Postgres
 
