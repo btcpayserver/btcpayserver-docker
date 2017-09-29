@@ -17,4 +17,3 @@ The revelant volumes are:
 * /datadir in BTCPayServer
 * /data in Bitcoin
 * /var/lib/postgresql/data in Postgres
-
