@@ -6,6 +6,15 @@ It exposes BTCPay on the host address http://localhost:8080/.
 
 It also exposes Bitcoin Core RPC which you can access through port 8081:
 
+To access it, you can use:
+On Powershell:
+
 ```
-bitcoin-cli -regtest -rpcport=8081 -rpcpassword=DwubwWsoo3 -rpcuser=ceiwHEbqWI83 getblockcount
+bitcoin-cli -conf="$pwd/bitcoin.conf" getblockcount
+```
+
+On Linux:
+
+```
+bitcoin-cli -conf="$pwd/bitcoin.conf" getblockcount
 ```
