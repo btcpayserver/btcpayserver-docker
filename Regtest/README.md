@@ -16,5 +16,5 @@ bitcoin-cli -conf="$pwd/bitcoin.conf" getblockcount
 On Linux:
 
 ```
-bitcoin-cli -conf="$pwd/bitcoin.conf" getblockcount
+bitcoin-cli -conf="`pwd`/bitcoin.conf" getblockcount
 ```
