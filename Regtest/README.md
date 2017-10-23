@@ -4,17 +4,14 @@ This docker-compose shows how to configure postgres, bitcoind, NBXplorer and BTC
 
 It exposes BTCPay on the host address http://localhost:8080/.
 
-It also exposes Bitcoin Core RPC which you can access through port 8081:
+If you need to access bitcoind RPC, you can use bitcoin-cli inside the container:
 
-To access it, you can use:
 On Powershell:
-
 ```
-bitcoin-cli -conf="$pwd/bitcoin.conf" getblockcount
+.\docker-bitcoin-cli getblockcount
 ```
 
 On Linux:
-
 ```
-bitcoin-cli -conf="`pwd`/bitcoin.conf" getblockcount
+docker exec -ti btcpayserver_regtest_bitcoind bitcoin-cli -regtest -conf="/data/bitcoin.conf" -datadir="/data" getblockcount
 ```

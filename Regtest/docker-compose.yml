@@ -33,13 +33,10 @@ services:
       - bitcoind
 
   bitcoind:
+    container_name: btcpayserver_regtest_bitcoind
     image: nicolasdorier/docker-bitcoin:0.15.0.1
     environment:
       BITCOIN_EXTRA_ARGS: "rpcuser=ceiwHEbqWI83\nrpcpassword=DwubwWsoo3\nregtest=1\nrpcport=43782\nport=8332"
-      BITCOIN_RPC_USER: ceiwHEbqWI83
-      BITCOIN_RPC_PASSWORD: DwubwWsoo3
-    ports: 
-      - 8081:43782
     expose:
       - "43782"
       - "8332"
