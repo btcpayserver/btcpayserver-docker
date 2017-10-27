@@ -3,7 +3,7 @@ version: "3"
 services:
 
   btcpayserver:
-    image: nicolasdorier/btcpayserver:1.0.0.25
+    image: nicolasdorier/btcpayserver:1.0.0.26
     ports: 
       - 8080:49392
     expose:
