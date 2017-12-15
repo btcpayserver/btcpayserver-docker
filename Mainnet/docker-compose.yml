@@ -55,19 +55,19 @@ services:
       - "49392"
     environment:
       # BTCPay settings
-      - BTCPAY_POSTGRES: "User ID=postgres;Host=postgres;Port=5432;Database=btcpayserver"
-      - BTCPAY_NETWORK: regtest
-      - BTCPAY_EXPLORERURL: http://nbxplorer:32838/
-      - BTCPAY_BIND: 0.0.0.0:49392
+      BTCPAY_POSTGRES: "User ID=postgres;Host=postgres;Port=5432;Database=btcpayserver"
+      BTCPAY_NETWORK: regtest
+      BTCPAY_EXPLORERURL: http://nbxplorer:32838/
+      BTCPAY_BIND: 0.0.0.0:49392
 
       # NGINX settings
-      - VIRTUAL_NETWORK: nginx-proxy
-      - VIRTUAL_PORT: 49392
+      VIRTUAL_NETWORK: nginx-proxy
+      VIRTUAL_PORT: 49392
       - VIRTUAL_HOST
 
       # Let's encrypt settings
       - LETSENCRYPT_HOST
-      - LETSENCRYPT_EMAIL: email@btcpayserver.com
+      LETSENCRYPT_EMAIL: email@btcpayserver.com
       
     links:
       - nbxplorer
@@ -81,12 +81,12 @@ services:
     expose: 
       - "32838"
     environment:
-      - NBXPLORER_NETWORK: regtest
-      - NBXPLORER_RPCURL: http://bitcoind:43782/
-      - NBXPLORER_RPCCOOKIEFILE: /btc/regtest/.cookie
-      - NBXPLORER_NODEENDPOINT: bitcoind:39388
-      - NBXPLORER_BIND: 0.0.0.0:32838
-      - NBXPLORER_NOAUTH: 1
+      NBXPLORER_NETWORK: regtest
+      NBXPLORER_RPCURL: http://bitcoind:43782/
+      NBXPLORER_RPCCOOKIEFILE: /btc/regtest/.cookie
+      NBXPLORER_NODEENDPOINT: bitcoind:39388
+      NBXPLORER_BIND: 0.0.0.0:32838
+      NBXPLORER_NOAUTH: 1
     links:
       - bitcoind
     volumes:
