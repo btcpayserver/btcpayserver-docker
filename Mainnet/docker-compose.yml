@@ -55,7 +55,7 @@ services:
       - "49392"
     environment:
       # BTCPay settings
-      BTCPAY_POSTGRES: "User ID=postgres;Host=postgres;Port=5432;Database=btcpayserver"
+      BTCPAY_POSTGRES: User ID=postgres;Host=postgres;Port=5432;Database=btcpayserver
       BTCPAY_NETWORK: regtest
       BTCPAY_EXPLORERURL: http://nbxplorer:32838/
       BTCPAY_BIND: 0.0.0.0:49392
