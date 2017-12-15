@@ -63,10 +63,10 @@ services:
       # NGINX settings
       VIRTUAL_NETWORK: nginx-proxy
       VIRTUAL_PORT: 49392
-      - VIRTUAL_HOST
+      VIRTUAL_HOST:
 
       # Let's encrypt settings
-      - LETSENCRYPT_HOST
+      LETSENCRYPT_HOST:
       LETSENCRYPT_EMAIL: email@btcpayserver.com
       
     links:
