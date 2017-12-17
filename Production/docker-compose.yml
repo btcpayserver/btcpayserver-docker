@@ -57,7 +57,7 @@ services:
     environment:
       # BTCPay settings
       BTCPAY_POSTGRES: User ID=postgres;Host=postgres;Port=5432;Database=btcpayserver
-      BTCPAY_NETWORK: regtest
+      BTCPAY_NETWORK: ${NBITCOIN_NETWORK-regtest}
       BTCPAY_EXPLORERURL: http://nbxplorer:32838/
       BTCPAY_BIND: 0.0.0.0:49392
       BTCPAY_INTERNALURL: http://btcpayserver:49392/
@@ -83,9 +83,9 @@ services:
     expose: 
       - "32838"
     environment:
-      NBXPLORER_NETWORK: regtest
+      NBXPLORER_NETWORK: ${NBITCOIN_NETWORK-regtest}
       NBXPLORER_RPCURL: http://bitcoind:43782/
-      NBXPLORER_RPCCOOKIEFILE: /btc/regtest/.cookie
+      NBXPLORER_RPCCOOKIEFILE: /btc/${BITCOIND_COOKIEFILE-regtest/.cookie}
       NBXPLORER_NODEENDPOINT: bitcoind:39388
       NBXPLORER_BIND: 0.0.0.0:32838
       NBXPLORER_NOAUTH: 1
@@ -97,12 +97,12 @@ services:
 
   bitcoind:
     restart: always
-    container_name: btcpayserver_regtest_bitcoind
+    container_name: btcpayserver_bitcoind
     image: nicolasdorier/docker-bitcoin:0.15.0.1
     environment:
       BITCOIN_EXTRA_ARGS: |
         rpcport=43782
-        regtest=1
+        ${BITCOIND_NETWORKPARAMETER-regtest=1}
         port=39388
         whitelist=0.0.0.0/0
     expose:
