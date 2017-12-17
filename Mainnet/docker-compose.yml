@@ -60,6 +60,7 @@ services:
       BTCPAY_NETWORK: regtest
       BTCPAY_EXPLORERURL: http://nbxplorer:32838/
       BTCPAY_BIND: 0.0.0.0:49392
+      BTCPAY_INTERNALURL: http://btcpayserver:49392/
 
       # NGINX settings
       VIRTUAL_NETWORK: nginx-proxy
