@@ -17,4 +17,4 @@ The [Production](Production) docker-compose is used for production environment. 
 
 You can provision a production BTCPay Server on Azure via this button:
 
-[![Deploy to Azure](https://azuredeploy.net/deploybutton.svg)](https://deploy.azure.com/?repository=https://github.com/btcpayserver/btcpayserver-azure?ptmpl=parameters.azuredeploy.json)
+[![Deploy to Azure](https://azuredeploy.net/deploybutton.svg)](https://portal.azure.com/#create/Microsoft.Template/uri/https://github.com/btcpayserver/btcpayserver-azure?ptmpl=azuredeploy.json)
