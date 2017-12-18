@@ -11,9 +11,6 @@ This assume you already know how docker-compose works.
 
 Used docker image used [BTCPayServer](https://hub.docker.com/r/nicolasdorier/btcpayserver/), [NBXplorer](https://hub.docker.com/r/nicolasdorier/nbxplorer/), [Bitcoin Core](https://hub.docker.com/r/nicolasdorier/docker-bitcoin/) and [Postgres](https://hub.docker.com/_/postgres/).
 
-The revelant volumes are:
+The [Regtest](Regtest) docker-compose is used for local testing.
 
-* /datadir in NBXplorer
-* /datadir in BTCPayServer
-* /data in Bitcoin
-* /var/lib/postgresql/data in Postgres
+The [Production](Production) docker-compose is used for production environment. It is using NGinx as a reverse proxy and [Let's Encrypt and DockerGen](https://github.com/gilyes/docker-nginx-letsencrypt-sample) to automatically configured HTTPS.
