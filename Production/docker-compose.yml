@@ -70,7 +70,7 @@ services:
 
       # Let's encrypt settings
       LETSENCRYPT_HOST: ${BTCPAY_HOST}
-      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL-email@btcpayserver.com}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL-my@email.com}
       
     links:
       - nbxplorer
