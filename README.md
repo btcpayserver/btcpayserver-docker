@@ -14,3 +14,7 @@ Used docker image used [BTCPayServer](https://hub.docker.com/r/nicolasdorier/btc
 The [Regtest](Regtest) docker-compose is used for local testing.
 
 The [Production](Production) docker-compose is used for production environment. It is using NGinx as a reverse proxy and [Let's Encrypt and DockerGen](https://github.com/gilyes/docker-nginx-letsencrypt-sample) to automatically configured HTTPS.
+
+You can provision a production BTCPay Server on Azure via this button:
+
+[![Deploy to Azure](https://azuredeploy.net/deploybutton.svg)](https://deploy.azure.com/?repository=https://github.com/btcpayserver/btcpayserver-azure?ptmpl=parameters.azuredeploy.json)
