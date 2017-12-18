@@ -13,7 +13,7 @@ It is composed of:
 
 ![Architecture](Production.png)
 
-This `docker-compose` is used for [one click deploy on azure](https://github.com/btcpayserver/btcpayserver-azure) by an Ubuntu, it can be used on any docker supporting host.
+[The Deploy on Azure Button](https://github.com/btcpayserver/btcpayserver-azure) is using this `docker-compose` under the hood on an Ubuntu machine. You can use it on any docker supporting host.
 
 The relevant environment variables are:
 
