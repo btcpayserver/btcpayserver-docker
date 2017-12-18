@@ -1,6 +1,6 @@
 # About this docker-compose
 
-The docker-compose can be used for production purpose.
+The `docker-compose` can be used for production purpose.
 
 It is composed of:
 
@@ -13,7 +13,7 @@ It is composed of:
 
 ![Architecture](Production.png)
 
-This docker-compose is used for [one click deploy on azure](https://github.com/btcpayserver/btcpayserver-azure) by an Ubuntu, it can be used on any docker supporting host.
+This `docker-compose` is used for [one click deploy on azure](https://github.com/btcpayserver/btcpayserver-azure) by an Ubuntu, it can be used on any docker supporting host.
 
 The relevant environment variables are:
 

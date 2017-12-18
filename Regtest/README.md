@@ -1,6 +1,8 @@
 # About this docker-compose
 
-This docker-compose shows how to configure postgres, bitcoind, NBXplorer and BTCPay on regtest.
+This `docker-compose` shows how to configure postgres, bitcoind, NBXplorer and BTCPay on regtest.
+
+![Architecture](https://github.com/btcpayserver/btcpayserver-doc/raw/master/img/Architecture.png)
 
 It exposes BTCPay on the host address http://localhost:8080/.
 
