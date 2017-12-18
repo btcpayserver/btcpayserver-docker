@@ -61,16 +61,16 @@ services:
       BTCPAY_EXPLORERURL: http://nbxplorer:32838/
       BTCPAY_BIND: 0.0.0.0:49392
       BTCPAY_INTERNALURL: http://btcpayserver:49392/
-      BTCPAY_EXTERNALURL: https://$(BTCPAY_HOST)/
+      BTCPAY_EXTERNALURL: https://${BTCPAY_HOST}/
 
       # NGINX settings
       VIRTUAL_NETWORK: nginx-proxy
       VIRTUAL_PORT: 49392
-      VIRTUAL_HOST: $(BTCPAY_HOST)
+      VIRTUAL_HOST: ${BTCPAY_HOST}
 
       # Let's encrypt settings
-      LETSENCRYPT_HOST: $(BTCPAY_HOST)
-      LETSENCRYPT_EMAIL: email@btcpayserver.com
+      LETSENCRYPT_HOST: ${BTCPAY_HOST}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL-email@btcpayserver.com}
       
     links:
       - nbxplorer
