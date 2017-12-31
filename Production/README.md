@@ -18,7 +18,7 @@ It is composed of:
 The relevant environment variables are:
 
 * `NBITCOIN_NETWORK`: the blockchain identifier used by NBitcoin (eg., `regtest`, `testnet`, `mainnet`)
-* `BTCPAY_HOST`: the external url used to access the NGINX server from internet
+* `BTCPAY_HOST`: the external url used to access the NGINX server from internet. This domain name must point to this machine for Let's Encrypt to create your certificate. (typically with a CNAME or A record)
 * `LETSENCRYPT_EMAIL`: The email Let's Encrypt will use to notify you about certificate expiration.
 * `BITCOIND_COOKIEFILE`: The relative path to RPC cookie file from bitcoin's data directory. (`.cookie` for mainnet, `regtest/.cookie` for regtest, `testnet3/.cookie` for testnet)
 * `BITCOIND_NETWORKPARAMETER`: The blockchain identifier parameter used by bitcoind (`regtest=1` for regtest, `testnet=1` for testnet, `#mainnet=1` for mainnet)
