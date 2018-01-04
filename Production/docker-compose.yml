@@ -51,7 +51,7 @@ services:
 
   btcpayserver:
     restart: always
-    image: nicolasdorier/btcpayserver:1.0.0.49
+    image: nicolasdorier/btcpayserver:1.0.0.50
     expose:
       - "49392"
     environment:
@@ -80,7 +80,7 @@ services:
 
   nbxplorer:
     restart: always
-    image: nicolasdorier/nbxplorer:1.0.0.32
+    image: nicolasdorier/nbxplorer:1.0.0.34
     expose: 
       - "32838"
     environment:
