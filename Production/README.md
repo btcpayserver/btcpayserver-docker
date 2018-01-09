@@ -24,4 +24,8 @@ The relevant environment variables are:
 * `BITCOIND_NETWORKPARAMETER`: The blockchain identifier parameter used by bitcoind (`regtest=1` for regtest, `testnet=1` for testnet, `#mainnet=1` for mainnet)
 * `ACME_CA_URI`: Let's encrypt API endpoint (`https://acme-staging.api.letsencrypt.org/directory` for a staging certificate, `https://acme-v01.api.letsencrypt.org/directory` for a production one)
 
+If using litecoin:
+
+* `LITECOIND_COOKIEFILE`: The relative path to RPC cookie file from bitcoin's data directory. (`.cookie` for mainnet, `regtest/.cookie` for regtest, `testnet4/.cookie` for testnet)
+
 Any unset or empty environment variable will be set for a `regtest` deployment.

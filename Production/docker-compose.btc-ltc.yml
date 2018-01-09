@@ -127,7 +127,7 @@ services:
     environment:
       NBXPLORER_NETWORK: litecoin-${NBITCOIN_NETWORK:-regtest}
       NBXPLORER_RPCURL: http://litecoind:43782/
-      NBXPLORER_RPCCOOKIEFILE: /ltc/${BITCOIND_COOKIEFILE:-regtest/.cookie}
+      NBXPLORER_RPCCOOKIEFILE: /ltc/${LITECOIND_COOKIEFILE:-regtest/.cookie}
       NBXPLORER_NODEENDPOINT: litecoind:39388
       NBXPLORER_BIND: 0.0.0.0:32838
       NBXPLORER_NOAUTH: 1
