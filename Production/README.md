@@ -26,6 +26,6 @@ The relevant environment variables are:
 
 If using litecoin:
 
-* `LITECOIND_COOKIEFILE`: The relative path to RPC cookie file from bitcoin's data directory. (`.cookie` for mainnet, `regtest/.cookie` for regtest, `testnet4/.cookie` for testnet)
+* `LITECOIND_COOKIEFILE`: The relative path to RPC cookie file from litecoin's data directory. (`.cookie` for mainnet, `regtest/.cookie` for regtest, `testnet4/.cookie` for testnet)
 
 Any unset or empty environment variable will be set for a `regtest` deployment.
