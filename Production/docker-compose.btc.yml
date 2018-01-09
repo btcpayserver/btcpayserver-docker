@@ -1,7 +1,6 @@
 version: "3"
 
 # This run BTCPay behind NGINX reverse proxy configured with Let's Encrypt
-# Same as docker-compose.btc.yml keeping for not breaking legacy docker-azure users
 
 services:
   nginx:

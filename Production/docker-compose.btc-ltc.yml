@@ -1,7 +1,6 @@
 version: "3"
 
 # This run BTCPay behind NGINX reverse proxy configured with Let's Encrypt
-# Same as docker-compose.btc.yml keeping for not breaking legacy docker-azure users
 
 services:
   nginx:
@@ -17,7 +16,7 @@ services:
       - "nginx_html:/usr/share/nginx/html"
       - "nginx_certs:/etc/nginx/certs:ro"
     links:
-      - nbxplorer
+      - btcpayserver
     
   nginx-gen:
     restart: always
@@ -60,9 +59,9 @@ services:
       # BTCPay settings
       BTCPAY_POSTGRES: User ID=postgres;Host=postgres;Port=5432;Database=btcpayserver${NBITCOIN_NETWORK:-regtest}
       BTCPAY_NETWORK: ${NBITCOIN_NETWORK:-regtest}
-      BTCPAY_EXPLORERURL: http://nbxplorer:32838/
+      BTCPAY_BTCEXPLORERURL: http://nbxplorer-btc:32838/
+      BTCPAY_LTCEXPLORERURL: http://nbxplorer-ltc:32838/
       BTCPAY_BIND: 0.0.0.0:49392
-      BTCPAY_INTERNALURL: http://btcpayserver:49392/
       BTCPAY_EXTERNALURL: https://${BTCPAY_HOST}/
 
       # NGINX settings
@@ -75,12 +74,13 @@ services:
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-yourname@example.com}
       
     links:
-      - nbxplorer
+      - nbxplorer-btc
+      - nbxplorer-ltc
       - postgres
     volumes:
      - "btcpay_datadir:/datadir"
 
-  nbxplorer:
+  nbxplorer-btc:
     restart: always
     image: nicolasdorier/nbxplorer:1.0.0.41
     expose: 
@@ -95,8 +95,8 @@ services:
     links:
       - bitcoind
     volumes:
-      - "nbxplorer_datadir:/datadir"
-      - "bitcoin_datadir:/btc"
+      - "nbxplorer_btc_datadir:/datadir"
+      - "bitcoin_btc_datadir:/btc"
 
   bitcoind:
     restart: always
@@ -112,7 +112,46 @@ services:
       - "43782"
       - "39388"
     volumes:
-      - "bitcoin_datadir:/data"
+      - "bitcoin_btc_datadir:/data"
+
+  postgres:
+    image:  postgres:9.6.5
+    volumes:
+      - "postgres_datadir:/var/lib/postgresql/data"
+
+  nbxplorer-ltc:
+    restart: always
+    image: nicolasdorier/nbxplorer:1.0.0.41
+    expose: 
+      - "32838"
+    environment:
+      NBXPLORER_NETWORK: litecoin-${NBITCOIN_NETWORK:-regtest}
+      NBXPLORER_RPCURL: http://litecoind:43782/
+      NBXPLORER_RPCCOOKIEFILE: /ltc/${BITCOIND_COOKIEFILE:-regtest/.cookie}
+      NBXPLORER_NODEENDPOINT: litecoind:39388
+      NBXPLORER_BIND: 0.0.0.0:32838
+      NBXPLORER_NOAUTH: 1
+    links:
+      - litecoind
+    volumes:
+      - "nbxplorer_ltc_datadir:/datadir"
+      - "bitcoin_ltc_datadir:/ltc"
+
+  litecoind:
+    restart: always
+    container_name: btcpayserver_litecoind
+    image: nicolasdorier/docker-litecoin:0.14.2
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        rpcport=43782
+        ${BITCOIND_NETWORKPARAMETER:-regtest=1}
+        port=39388
+        whitelist=0.0.0.0/0
+    expose:
+      - "43782"
+      - "39388"
+    volumes:
+      - "bitcoin_ltc_datadir:/data"
 
   postgres:
     image:  postgres:9.6.5
@@ -124,7 +163,9 @@ volumes:
     nginx_vhost:
     nginx_html:
     nginx_certs:
-    bitcoin_datadir:
+    bitcoin_btc_datadir:
+    bitcoin_ltc_datadir:
     postgres_datadir:
     btcpay_datadir:
-    nbxplorer_datadir:
+    nbxplorer_ltc_datadir:
+    nbxplorer_btc_datadir:
