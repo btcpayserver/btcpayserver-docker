@@ -82,7 +82,7 @@ services:
 
   nbxplorer-btc:
     restart: always
-    image: nicolasdorier/btcpayserver:1.0.0.45
+    image: nicolasdorier/nbxplorer:1.0.0.45
     expose: 
       - "32838"
     environment:
@@ -121,7 +121,7 @@ services:
 
   nbxplorer-ltc:
     restart: always
-    image: nicolasdorier/btcpayserver:1.0.0.45
+    image: nicolasdorier/nbxplorer:1.0.0.45
     expose: 
       - "32838"
     environment:
