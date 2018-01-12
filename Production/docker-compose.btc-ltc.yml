@@ -83,7 +83,7 @@ services:
 
   nbxplorer:
     restart: always
-    image: nicolasdorier/nbxplorer:1.0.0.61
+    image: nicolasdorier/nbxplorer:1.0.0.62
     expose: 
       - "32838"
     environment:
