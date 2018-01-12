@@ -1,6 +1,7 @@
 version: "3"
 
 # This run BTCPay behind NGINX reverse proxy configured with Let's Encrypt
+# Same as docker-compose.btc.yml keeping for not breaking legacy docker-azure users
 
 services:
   nginx:
@@ -52,16 +53,15 @@ services:
 
   btcpayserver:
     restart: always
-    image: nicolasdorier/btcpayserver:1.0.0.64
+    image: nicolasdorier/btcpayserver:1.0.0.69
     expose:
       - "49392"
     environment:
       # BTCPay settings
       BTCPAY_POSTGRES: User ID=postgres;Host=postgres;Port=5432;Database=btcpayserver${NBITCOIN_NETWORK:-regtest}
       BTCPAY_NETWORK: ${NBITCOIN_NETWORK:-regtest}
-      BTCPAY_EXPLORERURL: http://nbxplorer:32838/
+      BTCPAY_BTCEXPLORERURL: http://nbxplorer:32838/
       BTCPAY_BIND: 0.0.0.0:49392
-      BTCPAY_INTERNALURL: http://btcpayserver:49392/
       BTCPAY_EXTERNALURL: https://${BTCPAY_HOST}/
 
       # NGINX settings
@@ -78,24 +78,23 @@ services:
       - postgres
     volumes:
      - "btcpay_datadir:/datadir"
+     - "nbxplorer_datadir:/root/.nbxplorer"
 
   nbxplorer:
     restart: always
-    image: nicolasdorier/nbxplorer:1.0.0.45
+    image: nicolasdorier/nbxplorer:1.0.0.54
     expose: 
       - "32838"
     environment:
       NBXPLORER_NETWORK: ${NBITCOIN_NETWORK:-regtest}
-      NBXPLORER_RPCURL: http://bitcoind:43782/
-      NBXPLORER_RPCCOOKIEFILE: /btc/${BITCOIND_COOKIEFILE:-regtest/.cookie}
-      NBXPLORER_NODEENDPOINT: bitcoind:39388
+      NBXPLORER_BTCRPCURL: http://bitcoind:43782/
+      NBXPLORER_BTCNODEENDPOINT: bitcoind:39388
       NBXPLORER_BIND: 0.0.0.0:32838
-      NBXPLORER_NOAUTH: 1
     links:
       - bitcoind
     volumes:
       - "nbxplorer_datadir:/datadir"
-      - "bitcoin_datadir:/btc"
+      - "bitcoin_datadir:/root/.bitcoin"
 
   bitcoind:
     restart: always
@@ -104,7 +103,7 @@ services:
     environment:
       BITCOIN_EXTRA_ARGS: |
         rpcport=43782
-        ${BITCOIND_NETWORKPARAMETER:-regtest=1}
+        ${NBITCOIN_NETWORK:-regtest}=1
         port=39388
         whitelist=0.0.0.0/0
     expose:

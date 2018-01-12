@@ -3,7 +3,7 @@ version: "3"
 services:
 
   btcpayserver:
-    image: nicolasdorier/btcpayserver:1.0.0.64
+    image: nicolasdorier/btcpayserver:1.0.0.69
     ports: 
       - 8080:49392
     expose:
@@ -13,13 +13,12 @@ services:
       BTCPAY_NETWORK: regtest
       BTCPAY_EXPLORERURL: http://nbxplorer:32838/
       BTCPAY_BIND: 0.0.0.0:49392
-      BTCPAY_INTERNALURL: http://btcpayserver:49392/
     links:
       - nbxplorer
       - postgres
 
   nbxplorer:
-    image: nicolasdorier/nbxplorer:1.0.0.45
+    image: nicolasdorier/nbxplorer:1.0.0.54
     expose: 
       - "32838"
     environment:

@@ -4,7 +4,7 @@ The `docker-compose` can be used for production purpose.
 
 It is composed of:
 
-1. A full node (Bitcoin Core)
+1. One full node per supported cryptocurrency (bitcoind/litecoind)
 2. A lightweight block explorer ([NBxplorer](https://github.com/dgarage/NBXplorer))
 3. A [BTCPay Server](https://github.com/btcpayserver/btcpayserver)
 4. A database (Postgres)
@@ -20,12 +20,6 @@ The relevant environment variables are:
 * `NBITCOIN_NETWORK`: the blockchain identifier used by NBitcoin (eg., `regtest`, `testnet`, `mainnet`)
 * `BTCPAY_HOST`: the external url used to access the NGINX server from internet. This domain name must point to this machine for Let's Encrypt to create your certificate. (typically with a CNAME or A record)
 * `LETSENCRYPT_EMAIL`: The email Let's Encrypt will use to notify you about certificate expiration.
-* `BITCOIND_COOKIEFILE`: The relative path to RPC cookie file from bitcoin's data directory. (`.cookie` for mainnet, `regtest/.cookie` for regtest, `testnet3/.cookie` for testnet)
-* `BITCOIND_NETWORKPARAMETER`: The blockchain identifier parameter used by bitcoind (`regtest=1` for regtest, `testnet=1` for testnet, `#mainnet=1` for mainnet)
 * `ACME_CA_URI`: Let's encrypt API endpoint (`https://acme-staging.api.letsencrypt.org/directory` for a staging certificate, `https://acme-v01.api.letsencrypt.org/directory` for a production one)
-
-If using litecoin:
-
-* `LITECOIND_COOKIEFILE`: The relative path to RPC cookie file from litecoin's data directory. (`.cookie` for mainnet, `regtest/.cookie` for regtest, `testnet4/.cookie` for testnet)
 
 Any unset or empty environment variable will be set for a `regtest` deployment.

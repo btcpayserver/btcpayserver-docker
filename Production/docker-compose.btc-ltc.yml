@@ -52,15 +52,16 @@ services:
 
   btcpayserver:
     restart: always
-    image: nicolasdorier/btcpayserver:1.0.0.64
+    image: nicolasdorier/btcpayserver:1.0.0.69
     expose:
       - "49392"
     environment:
       # BTCPay settings
       BTCPAY_POSTGRES: User ID=postgres;Host=postgres;Port=5432;Database=btcpayserver${NBITCOIN_NETWORK:-regtest}
       BTCPAY_NETWORK: ${NBITCOIN_NETWORK:-regtest}
-      BTCPAY_BTCEXPLORERURL: http://nbxplorer-btc:32838/
-      BTCPAY_LTCEXPLORERURL: http://nbxplorer-ltc:32838/
+      BTCPAY_CHAINS: "btc,ltc"
+      BTCPAY_BTCEXPLORERURL: http://nbxplorer:32838/
+      BTCPAY_LTCEXPLORERURL: http://nbxplorer:32838/
       BTCPAY_BIND: 0.0.0.0:49392
       BTCPAY_EXTERNALURL: https://${BTCPAY_HOST}/
 
@@ -74,29 +75,32 @@ services:
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-yourname@example.com}
       
     links:
-      - nbxplorer-btc
-      - nbxplorer-ltc
+      - nbxplorer
       - postgres
     volumes:
      - "btcpay_datadir:/datadir"
+     - "nbxplorer_btc_datadir:/root/.nbxplorer"
 
-  nbxplorer-btc:
+  nbxplorer:
     restart: always
-    image: nicolasdorier/nbxplorer:1.0.0.45
+    image: nicolasdorier/nbxplorer:1.0.0.54
     expose: 
       - "32838"
     environment:
       NBXPLORER_NETWORK: ${NBITCOIN_NETWORK:-regtest}
-      NBXPLORER_RPCURL: http://bitcoind:43782/
-      NBXPLORER_RPCCOOKIEFILE: /btc/${BITCOIND_COOKIEFILE:-regtest/.cookie}
-      NBXPLORER_NODEENDPOINT: bitcoind:39388
+      NBXPLORER_CHAINS: "btc,ltc"
+      NBXPLORER_BTCRPCURL: http://bitcoind:43782/
+      NBXPLORER_BTCNODEENDPOINT: bitcoind:39388
+      NBXPLORER_LTCRPCURL: http://litecoind:43782/
+      NBXPLORER_LTCNODEENDPOINT: litecoind:39388
       NBXPLORER_BIND: 0.0.0.0:32838
-      NBXPLORER_NOAUTH: 1
     links:
       - bitcoind
+      - litecoind
     volumes:
       - "nbxplorer_btc_datadir:/datadir"
-      - "bitcoin_btc_datadir:/btc"
+      - "bitcoin_btc_datadir:/root/.bitcoin"
+      - "bitcoin_ltc_datadir:/root/.litecoin"
 
   bitcoind:
     restart: always
@@ -105,7 +109,7 @@ services:
     environment:
       BITCOIN_EXTRA_ARGS: |
         rpcport=43782
-        ${BITCOIND_NETWORKPARAMETER:-regtest=1}
+        ${NBITCOIN_NETWORK:-regtest}=1
         port=39388
         whitelist=0.0.0.0/0
     expose:
@@ -119,24 +123,6 @@ services:
     volumes:
       - "postgres_datadir:/var/lib/postgresql/data"
 
-  nbxplorer-ltc:
-    restart: always
-    image: nicolasdorier/nbxplorer:1.0.0.45
-    expose: 
-      - "32838"
-    environment:
-      NBXPLORER_NETWORK: litecoin-${NBITCOIN_NETWORK:-regtest}
-      NBXPLORER_RPCURL: http://litecoind:43782/
-      NBXPLORER_RPCCOOKIEFILE: /ltc/${LITECOIND_COOKIEFILE:-regtest/.cookie}
-      NBXPLORER_NODEENDPOINT: litecoind:39388
-      NBXPLORER_BIND: 0.0.0.0:32838
-      NBXPLORER_NOAUTH: 1
-    links:
-      - litecoind
-    volumes:
-      - "nbxplorer_ltc_datadir:/datadir"
-      - "bitcoin_ltc_datadir:/ltc"
-
   litecoind:
     restart: always
     container_name: btcpayserver_litecoind
@@ -144,7 +130,7 @@ services:
     environment:
       BITCOIN_EXTRA_ARGS: |
         rpcport=43782
-        ${BITCOIND_NETWORKPARAMETER:-regtest=1}
+        ${NBITCOIN_NETWORK:-regtest}=1
         port=39388
         whitelist=0.0.0.0/0
     expose:
