@@ -98,7 +98,7 @@ services:
       - bitcoind
       - litecoind
     volumes:
-      - "nbxplorer_btc_datadir:/datadir"
+      - "nbxplorer_datadir:/datadir"
       - "bitcoin_datadir:/root/.bitcoin"
       - "litecoin_datadir:/root/.litecoin"
 
