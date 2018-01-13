@@ -1,5 +1,8 @@
 {{ $CurrentContainer := where $ "ID" .Docker.CurrentContainerID | first }}
 
+# So nginx does not crash with long domain name
+server_names_hash_bucket_size 128;
+
 {{ define "upstream" }}
 	{{ if .Address }}
 		{{/* If we got the containers from swarm and this container's port is published to host, use host IP:PORT */}}
