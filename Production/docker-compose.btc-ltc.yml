@@ -153,5 +153,4 @@ volumes:
     bitcoin_ltc_datadir:
     postgres_datadir:
     btcpay_datadir:
-    nbxplorer_ltc_datadir:
     nbxplorer_btc_datadir:
