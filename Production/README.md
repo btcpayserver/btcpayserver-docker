@@ -22,4 +22,6 @@ The relevant environment variables are:
 * `LETSENCRYPT_EMAIL`: The email Let's Encrypt will use to notify you about certificate expiration.
 * `ACME_CA_URI`: Let's encrypt API endpoint (`https://acme-staging.api.letsencrypt.org/directory` for a staging certificate, `https://acme-v01.api.letsencrypt.org/directory` for a production one)
 
+Use `docker-compose.btc-ltc.yml` for bitcoin and litecoin support, or `docker-compose.btc.yml` for only bitcoin.
+
 Any unset or empty environment variable will be set for a `regtest` deployment.
