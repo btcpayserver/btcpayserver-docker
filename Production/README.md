@@ -26,7 +26,7 @@ Use `docker-compose.btc-ltc.yml` for bitcoin and litecoin support, or `docker-co
 
 Any unset or empty environment variable will be set for a `regtest` deployment.
 
-The necessary open port are:
+The necessary open ports are:
 
 1. `80` for Let's encrypt
 2. `443` for the website
