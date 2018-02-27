@@ -25,3 +25,32 @@ The relevant environment variables are:
 Use `docker-compose.btc-ltc.yml` for bitcoin and litecoin support, or `docker-compose.btc.yml` for only bitcoin.
 
 Any unset or empty environment variable will be set for a `regtest` deployment.
+
+The necessary open port are:
+
+1. `80` for Let's encrypt
+2. `443` for the website
+
+Example for running on `mainnet`:
+
+For linux:
+
+```
+docker-compose up \
+    -e "NBITCOIN_NETWORK=mainnet" \
+    -e "BTCPAY_HOST=btcpay.example.com" \
+    -e "LETSENCRYPT_EMAIL=me@example.com" \
+    -e "ACME_CA_URI=https://acme-v01.api.letsencrypt.org/directory"
+```
+
+For powershell
+
+```
+docker-compose up `
+    -e "NBITCOIN_NETWORK=mainnet" `
+    -e "BTCPAY_HOST=btcpay.example.com" `
+    -e "LETSENCRYPT_EMAIL=me@example.com" `
+    -e "ACME_CA_URI=https://acme-v01.api.letsencrypt.org/directory"
+```
+
+Make sure the domain `btcpay.example.com` point to your server and that port `80` and `443` are open.
