@@ -43,7 +43,7 @@ docker-compose up \
     -e "ACME_CA_URI=https://acme-v01.api.letsencrypt.org/directory"
 ```
 
-For powershell
+For powershell:
 
 ```
 docker-compose up `
