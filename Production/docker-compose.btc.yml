@@ -82,7 +82,7 @@ services:
 
   nbxplorer:
     restart: always
-    image: nicolasdorier/nbxplorer:1.0.1.14
+    image: nicolasdorier/nbxplorer:1.0.1.15
     expose: 
       - "32838"
     environment:
@@ -99,7 +99,7 @@ services:
   bitcoind:
     restart: always
     container_name: btcpayserver_bitcoind
-    image: nicolasdorier/docker-bitcoin:0.15.0.1
+    image: nicolasdorier/docker-bitcoin:0.16.0
     environment:
       BITCOIN_EXTRA_ARGS: |
         rpcport=43782
