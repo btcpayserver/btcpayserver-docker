@@ -3,7 +3,7 @@ version: "3"
 services:
 
   btcpayserver:
-    image: nicolasdorier/btcpayserver:1.0.1.41
+    image: nicolasdorier/btcpayserver:1.0.1.42
     ports: 
       - 8080:49392
     expose:
@@ -18,7 +18,7 @@ services:
       - postgres
 
   nbxplorer:
-    image: nicolasdorier/nbxplorer:1.0.1.16
+    image: nicolasdorier/nbxplorer:1.0.1.17
     expose: 
       - "32838"
     environment:
