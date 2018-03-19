@@ -1,101 +1,93 @@
-version: "3"
-
-# This run BTCPay behind NGINX reverse proxy configured with Let's Encrypt
-# Same as docker-compose.btc.yml keeping for not breaking legacy docker-azure users
-
+version: 3
 services:
   nginx:
     restart: always
     image: nginx
     container_name: nginx
     ports:
-      - "80:80"
-      - "443:443"
+    - "80:80"
+    - "443:443"
     volumes:
-      - "nginx_conf:/etc/nginx/conf.d"
-      - "nginx_vhost:/etc/nginx/vhost.d"
-      - "nginx_html:/usr/share/nginx/html"
-      - "nginx_certs:/etc/nginx/certs:ro"
+    - "nginx_conf:/etc/nginx/conf.d"
+    - "nginx_vhost:/etc/nginx/vhost.d"
+    - "nginx_html:/usr/share/nginx/html"
+    - "nginx_certs:/etc/nginx/certs:ro"
     links:
-      - nbxplorer
-    
+    - btcpayserver
   nginx-gen:
     restart: always
     image: jwilder/docker-gen
     container_name: nginx-gen
     volumes:
-      - "/var/run/docker.sock:/tmp/docker.sock:ro"
-      - "./nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro"
-      - "nginx_conf:/etc/nginx/conf.d"
-      - "nginx_vhost:/etc/nginx/vhost.d"
-      - "nginx_html:/usr/share/nginx/html"
-      - "nginx_certs:/etc/nginx/certs:ro"
+    - "/var/run/docker.sock:/tmp/docker.sock:ro"
+    - "./nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro"
+    - "nginx_conf:/etc/nginx/conf.d"
+    - "nginx_vhost:/etc/nginx/vhost.d"
+    - "nginx_html:/usr/share/nginx/html"
+    - "nginx_certs:/etc/nginx/certs:ro"
     entrypoint: /usr/local/bin/docker-gen -notify-sighup nginx -watch -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
     links:
-      - nginx
-
+    - nginx
   letsencrypt-nginx-proxy-companion:
     restart: always
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: letsencrypt-nginx-proxy-companion
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "nginx_conf:/etc/nginx/conf.d"
-      - "nginx_vhost:/etc/nginx/vhost.d"
-      - "nginx_html:/usr/share/nginx/html"
-      - "nginx_certs:/etc/nginx/certs:rw"
+    - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    - "nginx_conf:/etc/nginx/conf.d"
+    - "nginx_vhost:/etc/nginx/vhost.d"
+    - "nginx_html:/usr/share/nginx/html"
+    - "nginx_certs:/etc/nginx/certs:rw"
     environment:
       NGINX_DOCKER_GEN_CONTAINER: "nginx-gen"
       NGINX_PROXY_CONTAINER: "nginx"
       ACME_CA_URI: ${ACME_CA_URI:-https://acme-staging.api.letsencrypt.org/directory}
     links:
-      - nginx
-
+    - nginx
   btcpayserver:
     restart: always
     image: nicolasdorier/btcpayserver:1.0.1.53
     expose:
-      - "49392"
+    - "49392"
     environment:
-      # BTCPay settings
       BTCPAY_POSTGRES: User ID=postgres;Host=postgres;Port=5432;Database=btcpayserver${NBITCOIN_NETWORK:-regtest}
       BTCPAY_NETWORK: ${NBITCOIN_NETWORK:-regtest}
-      BTCPAY_BTCEXPLORERURL: http://nbxplorer:32838/
       BTCPAY_BIND: 0.0.0.0:49392
       BTCPAY_EXTERNALURL: https://${BTCPAY_HOST}/
-
-      # NGINX settings
       VIRTUAL_NETWORK: nginx-proxy
       VIRTUAL_PORT: 49392
       VIRTUAL_HOST: ${BTCPAY_HOST}
-
-      # Let's encrypt settings
       LETSENCRYPT_HOST: ${BTCPAY_HOST}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-yourname@example.com}
-      
+      BTCPAY_CHAINS: "btc"
+      BTCPAY_BTCEXPLORERURL: http://nbxplorer:32838/
     links:
-      - nbxplorer
-      - postgres
+    - nbxplorer
+    - postgres
     volumes:
-     - "btcpay_datadir:/datadir"
-     - "nbxplorer_datadir:/root/.nbxplorer"
-
+    - "btcpay_datadir:/datadir"
+    - "nbxplorer_datadir:/root/.nbxplorer"
   nbxplorer:
     restart: always
     image: nicolasdorier/nbxplorer:1.0.1.23
-    expose: 
-      - "32838"
+    expose:
+    - "32838"
     environment:
       NBXPLORER_NETWORK: ${NBITCOIN_NETWORK:-regtest}
+      NBXPLORER_BIND: 0.0.0.0:32838
+      BTCPAY_CHAINS: "btc"
       NBXPLORER_BTCRPCURL: http://bitcoind:43782/
       NBXPLORER_BTCNODEENDPOINT: bitcoind:39388
-      NBXPLORER_BIND: 0.0.0.0:32838
-    links:
-      - bitcoind
     volumes:
-      - "nbxplorer_datadir:/datadir"
-      - "bitcoin_datadir:/root/.bitcoin"
-
+    - "nbxplorer_datadir:/datadir"
+    - "bitcoin_datadir:/root/.bitcoin"
+    links:
+    - bitcoind
+  postgres:
+    restart: always
+    image: postgres:9.6.5
+    volumes:
+    - "postgres_datadir:/var/lib/postgresql/data"
   bitcoind:
     restart: always
     container_name: btcpayserver_bitcoind
@@ -107,23 +99,16 @@ services:
         port=39388
         whitelist=0.0.0.0/0
     expose:
-      - "43782"
-      - "39388"
+    - "43782"
+    - "39388"
     volumes:
-      - "bitcoin_datadir:/data"
-
-  postgres:
-    restart: always
-    image:  postgres:9.6.5
-    volumes:
-      - "postgres_datadir:/var/lib/postgresql/data"
-
+    - "bitcoin_datadir:/data"
 volumes:
-    nginx_conf:
-    nginx_vhost:
-    nginx_html:
-    nginx_certs:
-    bitcoin_datadir:
-    postgres_datadir:
-    btcpay_datadir:
-    nbxplorer_datadir:
+  nginx_conf: 
+  nginx_vhost: 
+  nginx_html: 
+  nginx_certs: 
+  postgres_datadir: 
+  btcpay_datadir: 
+  nbxplorer_datadir: 
+  bitcoin_datadir: 

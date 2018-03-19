@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  litecoind:
+    restart: always
+    container_name: btcpayserver_litecoind
+    image: nicolasdorier/docker-litecoin:0.14.2
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        rpcport=43782
+        ${NBITCOIN_NETWORK:-regtest}=1
+        port=39388
+        whitelist=0.0.0.0/0
+    expose:
+      - "43782"
+      - "39388"
+    volumes:
+      - "litecoin_datadir:/data"
+  nbxplorer:
+      environment:
+        BTCPAY_CHAINS: "ltc"
+        NBXPLORER_LTCRPCURL: http://litecoind:43782/
+        NBXPLORER_LTCNODEENDPOINT: litecoind:39388
+      links:
+        - litecoind
+      volumes:
+        - "litecoin_datadir:/root/.litecoin"
+  btcpayserver:
+      environment:
+        BTCPAY_LTCEXPLORERURL: http://nbxplorer:32838/
+        BTCPAY_CHAINS: "ltc"
+
+volumes:
+    litecoin_datadir:

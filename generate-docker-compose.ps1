@@ -1,0 +1,1 @@
+cd .\docker-compose-generator;  dotnet run -p .\src\docker-compose-generator.csproj; cd ..;

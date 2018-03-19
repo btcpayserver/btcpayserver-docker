@@ -1,0 +1,53 @@
+version: "3"
+
+services:
+
+  btcpayserver:
+    restart: always
+    image: nicolasdorier/btcpayserver:1.0.1.53
+    expose:
+      - "49392"
+    environment:
+      # BTCPay settings
+      BTCPAY_POSTGRES: User ID=postgres;Host=postgres;Port=5432;Database=btcpayserver${NBITCOIN_NETWORK:-regtest}
+      BTCPAY_NETWORK: ${NBITCOIN_NETWORK:-regtest}
+      BTCPAY_BIND: 0.0.0.0:49392
+      BTCPAY_EXTERNALURL: https://${BTCPAY_HOST}/
+
+      # NGINX settings
+      VIRTUAL_NETWORK: nginx-proxy
+      VIRTUAL_PORT: 49392
+      VIRTUAL_HOST: ${BTCPAY_HOST}
+
+      # Let's encrypt settings
+      LETSENCRYPT_HOST: ${BTCPAY_HOST}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-yourname@example.com}
+      
+    links:
+      - nbxplorer
+      - postgres
+    volumes:
+     - "btcpay_datadir:/datadir"
+     - "nbxplorer_datadir:/root/.nbxplorer"
+
+  nbxplorer:
+    restart: always
+    image: nicolasdorier/nbxplorer:1.0.1.23
+    expose: 
+      - "32838"
+    environment:
+      NBXPLORER_NETWORK: ${NBITCOIN_NETWORK:-regtest}
+      NBXPLORER_BIND: 0.0.0.0:32838
+    volumes:
+      - "nbxplorer_datadir:/datadir"
+
+  postgres:
+    restart: always
+    image:  postgres:9.6.5
+    volumes:
+      - "postgres_datadir:/var/lib/postgresql/data"
+
+volumes:
+    postgres_datadir:
+    btcpay_datadir:
+    nbxplorer_datadir:
