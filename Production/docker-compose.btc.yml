@@ -75,7 +75,7 @@ services:
     environment:
       NBXPLORER_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       NBXPLORER_BIND: 0.0.0.0:32838
-      BTCPAY_CHAINS: "btc"
+      NBXPLORER_CHAINS: "btc"
       NBXPLORER_BTCRPCURL: http://bitcoind:43782/
       NBXPLORER_BTCNODEENDPOINT: bitcoind:39388
     volumes:

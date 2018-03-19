@@ -18,7 +18,7 @@ services:
         - "bitcoin_datadir:/data"
   nbxplorer:
       environment:
-        BTCPAY_CHAINS: "btc"
+        NBXPLORER_CHAINS: "btc"
         NBXPLORER_BTCRPCURL: http://bitcoind:43782/
         NBXPLORER_BTCNODEENDPOINT: bitcoind:39388
       links:

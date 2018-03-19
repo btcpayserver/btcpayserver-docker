@@ -18,7 +18,7 @@ services:
       - "litecoin_datadir:/data"
   nbxplorer:
       environment:
-        BTCPAY_CHAINS: "ltc"
+        NBXPLORER_CHAINS: "ltc"
         NBXPLORER_LTCRPCURL: http://litecoind:43782/
         NBXPLORER_LTCNODEENDPOINT: litecoind:39388
       links:

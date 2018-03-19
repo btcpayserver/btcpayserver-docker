@@ -76,7 +76,7 @@ services:
     environment:
       NBXPLORER_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       NBXPLORER_BIND: 0.0.0.0:32838
-      BTCPAY_CHAINS: "btc,ltc"
+      NBXPLORER_CHAINS: "btc,ltc"
       NBXPLORER_BTCRPCURL: http://bitcoind:43782/
       NBXPLORER_BTCNODEENDPOINT: bitcoind:39388
       NBXPLORER_LTCRPCURL: http://litecoind:43782/
