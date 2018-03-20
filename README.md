@@ -31,7 +31,7 @@ Several scripts are provided to access the internal of your docker-service.
 You can use it easily:
 
 ```
-bitcoin-cli.sh getblockcount
+./bitcoin-cli.sh getblockcount
 ```
 
 # For docker noobs
