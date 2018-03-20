@@ -293,4 +293,5 @@ BTCPayServer/wwwroot/bundles/*
 !BTCPayServer/wwwroot/bundles/.gitignore
 
 Production/.env
+.env
 .vscode/
