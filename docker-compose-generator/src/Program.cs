@@ -29,11 +29,11 @@ namespace DockerGenerator
 				def.Build();
 			}
 
-			var testLocation = FindLocation("Test");
+			var testLocation = FindLocation("Production-NoReverseProxy");
 			foreach(var def in defs)
 			{
 				def.Fragments.Remove("nginx");
-				def.Fragments.Add("btcpayserver-test");
+				def.Fragments.Add("btcpayserver-noreverseproxy");
 				def.BuildOutputDirectory = testLocation;
 				def.Build();
 			}
