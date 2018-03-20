@@ -12,9 +12,9 @@ As you can see, it depends on several piece of infrastructure, mainly:
 
 Setting up the dependencies might be time consuming, this repository is meant to give working example of `docker-compose` file which will setup everything for you.
 
-The [Regtest](Regtest) `docker-compose` can be used for local testing.
+The [Test](Test) `docker-compose` are used for local testing.
 
-The [Production](Production) `docker-compose` is used for production environment. It is using NGinx as a reverse proxy and [Let's Encrypt and DockerGen](https://github.com/gilyes/docker-nginx-letsencrypt-sample) to automatically configured HTTPS.
+The [Production](Production) `docker-compose` are used for production environment. It adds NGinx as a reverse proxy and [Let's Encrypt and DockerGen](https://github.com/gilyes/docker-nginx-letsencrypt-sample) to automatically configure HTTPS.
 
 The production `docker-compose` is used under the hood to deploy an instance of BTCPay on Microsoft Azure in one click:
 

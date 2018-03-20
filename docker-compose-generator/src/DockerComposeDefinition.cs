@@ -10,12 +10,15 @@ namespace DockerGenerator
 {
 	public class DockerComposeDefinition
 	{
-		string[] _Fragments;
+		public List<string> Fragments
+		{
+			get; set;
+		}
 		private string _Name;
 
-		public DockerComposeDefinition(string name, string[] fragments)
+		public DockerComposeDefinition(string name, List<string> fragments)
 		{
-			_Fragments = fragments;
+			Fragments = fragments;
 			_Name = name;
 		}
 
@@ -39,21 +42,21 @@ namespace DockerGenerator
 			var serializer = new SerializerBuilder().Build();
 
 			Console.WriteLine($"With fragments:");
-			foreach(var fragment in _Fragments)
+			foreach(var fragment in Fragments)
 			{
 				Console.WriteLine($"\t{fragment}");
 			}
 			var services = new List<KeyValuePair<YamlNode, YamlNode>>();
 			var volumes = new List<KeyValuePair<YamlNode, YamlNode>>();
 
-			foreach(var doc in _Fragments.Select(f => ParseDocument(f)))
+			foreach(var doc in Fragments.Select(f => ParseDocument(f)))
 			{
-				if(doc.Children["services"] is YamlMappingNode fragmentServicesRoot)
+				if(doc.Children.ContainsKey("services") && doc.Children["services"] is YamlMappingNode fragmentServicesRoot)
 				{
 					services.AddRange(fragmentServicesRoot.Children);
 				}
 
-				if(doc.Children["volumes"] is YamlMappingNode fragmentVolumesRoot)
+				if(doc.Children.ContainsKey("volumes") && doc.Children["volumes"] is YamlMappingNode fragmentVolumesRoot)
 				{
 					volumes.AddRange(fragmentVolumesRoot.Children);
 				}

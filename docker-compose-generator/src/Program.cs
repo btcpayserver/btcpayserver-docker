@@ -15,11 +15,10 @@ namespace DockerGenerator
 		private void Run()
 		{
 			List<DockerComposeDefinition> defs = new List<DockerComposeDefinition>();
-			var btc = new DockerComposeDefinition("btc",
-						  new string[] { "nginx", "btcpayserver", "bitcoin" });
-			defs.Add(btc);
+			defs.Add(new DockerComposeDefinition("btc",
+						  new List<string> { "nginx", "btcpayserver", "bitcoin" }));
 			defs.Add(new DockerComposeDefinition("btc-ltc",
-						  new string[] { "nginx", "btcpayserver", "bitcoin", "litecoin" }));
+						  new List<string> { "nginx", "btcpayserver", "bitcoin", "litecoin" }));
 
 			var fragmentLocation = FindLocation("docker-fragments");
 			var productionLocation = FindLocation("Production");
@@ -29,7 +28,15 @@ namespace DockerGenerator
 				def.BuildOutputDirectory = productionLocation;
 				def.Build();
 			}
-			File.Copy(btc.GetFilePath(), Path.Combine(new FileInfo(btc.GetFilePath()).Directory.FullName, "docker-compose.yml"), true);
+
+			var testLocation = FindLocation("Test");
+			foreach(var def in defs)
+			{
+				def.Fragments.Remove("nginx");
+				def.Fragments.Add("btcpayserver-test");
+				def.BuildOutputDirectory = testLocation;
+				def.Build();
+			}
 		}
 
 		private string FindLocation(string path)
