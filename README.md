@@ -47,7 +47,7 @@ git clone https://github.com/btcpayserver/btcpayserver-docker
 cd btcpayserver-docker
 ```
 
-Create an `.env` file with the parameters documented in [Production](Production) or [Production-NoReverseProxy](Production-NoReverseProxy).
+Create an `.env` file with the parameters documented in [Production](Production):
 
 ```
 NBITCOIN_NETWORK=mainnet
