@@ -4,7 +4,7 @@ This `docker-compose` shows how to configure postgres, bitcoind, NBXplorer and B
 
 ![Architecture](https://github.com/btcpayserver/btcpayserver-doc/raw/master/img/Architecture.png)
 
-This is the same architecture as [Production](../Production)
+This is the same architecture as [Production](../Production) but without NGINX as a reverse proxy.
 
 The relevant environment variables are:
 
