@@ -41,8 +41,6 @@ If you are a docker noob here is how you would create a HTTPS ready server.
 First step is to make sure you have a domain name pointing to your host, and that port `443` and `80` and externally accessible.
 Let's assume it is `btcpay.example.com`.
 
-Then, create a `.env` file in the directory.
-
 Clone the repository:
 ```
 git clone https://github.com/btcpayserver/btcpayserver-docker
