@@ -19,3 +19,17 @@ The [Production](Production) `docker-compose` is used for production environment
 The production `docker-compose` is used under the hood to deploy an instance of BTCPay on Microsoft Azure in one click:
 
 [![Deploy to Azure](https://azuredeploy.net/deploybutton.svg)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fbtcpayserver%2Fbtcpayserver-azure%2Fmaster%2Fazuredeploy.json)
+
+# About accessing services inside those docker compose
+
+Several scripts are provided to access the internal of your docker-service.
+
+`litecoin-cli.sh` and `litecoin-cli.ps1` let you access your litecoin node CLI.
+
+`bitcoin-cli.sh` and `bitcoin-cli.ps1` let you access your bitcoin node CLI.
+
+You can use it easily:
+
+```
+bitcoin-cli.sh getblockcount
+```
