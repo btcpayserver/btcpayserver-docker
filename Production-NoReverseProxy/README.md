@@ -14,4 +14,4 @@ The relevant environment variables are:
 
 The port `80` is exposed.
 
-** Note that in order to successfully use the BTCPay API, you must still access to it from an HTTPS url (https://<BTCPAY_HOST>/. **
+** Note that in order to successfully use the BTCPay API, you must still access to it from an HTTPS url `https://BTCPAY_HOST/`. **
