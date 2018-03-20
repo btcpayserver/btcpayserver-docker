@@ -10,6 +10,8 @@ It is suited for environment which already expose the host behind a reverse prox
 The relevant environment variables are:
 
 * `NBITCOIN_NETWORK`: the blockchain identifier used by NBitcoin (eg., `regtest`, `testnet`, `mainnet`)
-* `BTCPAY_HOST`: the external url used to access your server from internet. This domain name must point to this machine for Let's Encrypt to create your certificate. (typically with a CNAME or A record)
+* `BTCPAY_HOST`: the external url used to access your server from internet. This domain name must point to this machine.
 
 The port `80` is exposed.
+
+** Note that in order to successfully use the BTCPay API, you must still access to it from an HTTPS url (https://<BTCPAY_HOST>/. **
