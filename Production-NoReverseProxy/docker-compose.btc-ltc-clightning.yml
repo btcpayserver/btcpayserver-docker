@@ -17,13 +17,19 @@ services:
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-yourname@example.com}
       BTCPAY_LTCEXPLORERURL: http://nbxplorer:32838/
       BTCPAY_CHAINS: "ltc,btc"
+      BTCPAY_LTCLIGHTNING: "/etc/clightning_litecoin/lightning-rpc"
       BTCPAY_BTCEXPLORERURL: http://nbxplorer:32838/
+      BTCPAY_BTCLIGHTNING: "/etc/clightning_bitcoin/lightning-rpc"
     links:
     - nbxplorer
     - postgres
+    - clightning_litecoin
+    - clightning_bitcoin
     volumes:
     - "btcpay_datadir:/datadir"
     - "nbxplorer_datadir:/root/.nbxplorer"
+    - "clightning_litecoin_datadir:/etc/clightning_litecoin"
+    - "clightning_bitcoin_datadir:/etc/clightning_bitcoin"
     ports:
     - "80:49392"
   nbxplorer:
@@ -66,6 +72,20 @@ services:
     - "39388"
     volumes:
     - "litecoin_datadir:/data"
+  clightning_litecoin:
+    image: nicolasdorier/clightning
+    environment:
+      LIGHTNINGD_OPT: |
+        bitcoin-datadir=/etc/litecoin
+        bitcoin-rpcconnect=litecoind
+        ipaddr=${BTCPAY_HOST}
+        network=${NBITCOIN_NETWORK:-regtest}
+        chain=ltc
+    volumes:
+    - "clightning_litecoin_datadir:/root/.lightning"
+    - "litecoin_datadir:/etc/litecoin"
+    links:
+    - litecoind
   bitcoind:
     restart: always
     container_name: btcpayserver_bitcoind
@@ -81,9 +101,25 @@ services:
     - "39388"
     volumes:
     - "bitcoin_datadir:/data"
+  clightning_bitcoin:
+    image: nicolasdorier/clightning
+    environment:
+      LIGHTNINGD_OPT: |
+        bitcoin-datadir=/etc/bitcoin
+        bitcoin-rpcconnect=bitcoind
+        ipaddr=${BTCPAY_HOST}
+        network=${NBITCOIN_NETWORK:-regtest}
+        chain=btc
+    volumes:
+    - "clightning_bitcoin_datadir:/root/.lightning"
+    - "bitcoin_datadir:/etc/bitcoin"
+    links:
+    - bitcoind
 volumes:
   postgres_datadir: 
   btcpay_datadir: 
   nbxplorer_datadir: 
   litecoin_datadir: 
+  clightning_litecoin_datadir: 
   bitcoin_datadir: 
+  clightning_bitcoin_datadir: 

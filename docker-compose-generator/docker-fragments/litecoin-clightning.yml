@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  clightning_litecoin:
+    image: nicolasdorier/clightning
+    environment:
+      LIGHTNINGD_OPT: |
+        bitcoin-datadir=/etc/litecoin
+        bitcoin-rpcconnect=litecoind
+        ipaddr=${BTCPAY_HOST}
+        network=${NBITCOIN_NETWORK:-regtest}
+        chain=ltc
+    volumes:
+      - "clightning_litecoin_datadir:/root/.lightning"
+      - "litecoin_datadir:/etc/litecoin"
+    links:
+      - litecoind
+  btcpayserver:
+    environment:
+      BTCPAY_LTCLIGHTNING: "/etc/clightning_litecoin/lightning-rpc"
+    volumes:
+      - "clightning_litecoin_datadir:/etc/clightning_litecoin"
+    links:
+      - clightning_litecoin
+volumes:
+  clightning_litecoin_datadir:

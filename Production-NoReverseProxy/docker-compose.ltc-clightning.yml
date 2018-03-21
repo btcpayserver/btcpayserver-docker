@@ -16,14 +16,16 @@ services:
       LETSENCRYPT_HOST: ${BTCPAY_HOST}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-yourname@example.com}
       BTCPAY_LTCEXPLORERURL: http://nbxplorer:32838/
-      BTCPAY_CHAINS: "ltc,btc"
-      BTCPAY_BTCEXPLORERURL: http://nbxplorer:32838/
+      BTCPAY_CHAINS: "ltc"
+      BTCPAY_LTCLIGHTNING: "/etc/clightning_litecoin/lightning-rpc"
     links:
     - nbxplorer
     - postgres
+    - clightning_litecoin
     volumes:
     - "btcpay_datadir:/datadir"
     - "nbxplorer_datadir:/root/.nbxplorer"
+    - "clightning_litecoin_datadir:/etc/clightning_litecoin"
     ports:
     - "80:49392"
   nbxplorer:
@@ -34,18 +36,14 @@ services:
     environment:
       NBXPLORER_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       NBXPLORER_BIND: 0.0.0.0:32838
-      NBXPLORER_CHAINS: "ltc,btc"
+      NBXPLORER_CHAINS: "ltc"
       NBXPLORER_LTCRPCURL: http://litecoind:43782/
       NBXPLORER_LTCNODEENDPOINT: litecoind:39388
-      NBXPLORER_BTCRPCURL: http://bitcoind:43782/
-      NBXPLORER_BTCNODEENDPOINT: bitcoind:39388
     volumes:
     - "nbxplorer_datadir:/datadir"
     - "litecoin_datadir:/root/.litecoin"
-    - "bitcoin_datadir:/root/.bitcoin"
     links:
     - litecoind
-    - bitcoind
   postgres:
     restart: always
     image: postgres:9.6.5
@@ -66,24 +64,23 @@ services:
     - "39388"
     volumes:
     - "litecoin_datadir:/data"
-  bitcoind:
-    restart: always
-    container_name: btcpayserver_bitcoind
-    image: nicolasdorier/docker-bitcoin:0.16.0
+  clightning_litecoin:
+    image: nicolasdorier/clightning
     environment:
-      BITCOIN_EXTRA_ARGS: |
-        rpcport=43782
-        ${NBITCOIN_NETWORK:-regtest}=1
-        port=39388
-        whitelist=0.0.0.0/0
-    expose:
-    - "43782"
-    - "39388"
+      LIGHTNINGD_OPT: |
+        bitcoin-datadir=/etc/litecoin
+        bitcoin-rpcconnect=litecoind
+        ipaddr=${BTCPAY_HOST}
+        network=${NBITCOIN_NETWORK:-regtest}
+        chain=ltc
     volumes:
-    - "bitcoin_datadir:/data"
+    - "clightning_litecoin_datadir:/root/.lightning"
+    - "litecoin_datadir:/etc/litecoin"
+    links:
+    - litecoind
 volumes:
   postgres_datadir: 
   btcpay_datadir: 
   nbxplorer_datadir: 
   litecoin_datadir: 
-  bitcoin_datadir: 
+  clightning_litecoin_datadir: 
