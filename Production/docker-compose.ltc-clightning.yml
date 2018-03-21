@@ -109,6 +109,7 @@ services:
   clightning_litecoin:
     image: nicolasdorier/clightning
     container_name: btcpayserver_clightning_litecoin
+    restart: always
     environment:
       LIGHTNINGD_OPT: |
         bitcoin-datadir=/etc/litecoin

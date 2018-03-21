@@ -109,6 +109,7 @@ services:
   clightning_bitcoin:
     image: nicolasdorier/clightning
     container_name: btcpayserver_clightning_bitcoin
+    restart: always
     environment:
       LIGHTNINGD_OPT: |
         bitcoin-datadir=/etc/bitcoin
@@ -119,6 +120,8 @@ services:
     volumes:
     - "clightning_bitcoin_datadir:/root/.lightning"
     - "bitcoin_datadir:/etc/bitcoin"
+    ports:
+    - "9735:9735"
     links:
     - bitcoind
 volumes:
