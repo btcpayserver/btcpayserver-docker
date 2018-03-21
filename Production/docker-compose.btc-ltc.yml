@@ -53,7 +53,7 @@ services:
       BTCPAY_POSTGRES: User ID=postgres;Host=postgres;Port=5432;Database=btcpayserver${NBITCOIN_NETWORK:-regtest}
       BTCPAY_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       BTCPAY_BIND: 0.0.0.0:49392
-      BTCPAY_EXTERNALURL: https://${BTCPAY_HOST}/
+      BTCPAY_EXTERNALURL: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/
       VIRTUAL_NETWORK: nginx-proxy
       VIRTUAL_PORT: 49392
       VIRTUAL_HOST: ${BTCPAY_HOST}
@@ -70,7 +70,7 @@ services:
     - "nbxplorer_datadir:/root/.nbxplorer"
   nbxplorer:
     restart: always
-    image: nicolasdorier/nbxplorer:1.0.1.23
+    image: nicolasdorier/nbxplorer:1.0.1.24
     expose:
     - "32838"
     environment:
