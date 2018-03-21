@@ -72,12 +72,14 @@ services:
       LIGHTNINGD_OPT: |
         bitcoin-datadir=/etc/litecoin
         bitcoin-rpcconnect=litecoind
-        ipaddr=${BTCPAY_HOST}
+        ipaddr=${BTCPAY_HOST}:9736
         network=${NBITCOIN_NETWORK:-regtest}
         chain=ltc
     volumes:
     - "clightning_litecoin_datadir:/root/.lightning"
     - "litecoin_datadir:/etc/litecoin"
+    ports:
+    - "9736:9735"
     links:
     - litecoind
 volumes:
