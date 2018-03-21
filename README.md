@@ -37,7 +37,7 @@ You can use it easily:
 ./bitcoin-cli.sh getblockcount
 ```
 
-# For docker noobs
+# For docker noobs <a name="fornoobs" />
 
 If you are a docker noob here is how you would create a HTTPS ready server.
 
