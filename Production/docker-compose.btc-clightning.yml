@@ -116,7 +116,7 @@ services:
         bitcoin-rpcconnect=bitcoind
         ipaddr=${BTCPAY_HOST}
         network=${NBITCOIN_NETWORK:-regtest}
-        alias=${LIGHTNING_ALIAS:-}
+        alias=${LIGHTNING_ALIAS}
         chain=btc
     volumes:
     - "clightning_bitcoin_datadir:/root/.lightning"
