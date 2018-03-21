@@ -108,6 +108,7 @@ services:
     - "bitcoin_datadir:/data"
   clightning_bitcoin:
     image: nicolasdorier/clightning
+    container_name: btcpayserver_clightning_bitcoin
     environment:
       LIGHTNINGD_OPT: |
         bitcoin-datadir=/etc/bitcoin

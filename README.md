@@ -22,11 +22,14 @@ The [Production-NoReverseProxy](Production-NoReverseProxy) `docker-compose` file
 
 # About accessing services inside those docker compose
 
-Several scripts are provided to access the internal of your docker-service.
+Several scripts are provided to access the internal of your docker-service:
 
-`litecoin-cli.sh` and `litecoin-cli.ps1` let you access your litecoin node CLI.
+* `litecoin-cli.sh` 
+* `bitcoin-cli.sh`
+* `litecoin-lightning-cli.sh`
+* `bitcoin-lightning-cli.sh`
 
-`bitcoin-cli.sh` and `bitcoin-cli.ps1` let you access your bitcoin node CLI.
+We also provide powershell `.ps1` scripts if you are on windows.
 
 You can use it easily:
 
