@@ -11,6 +11,7 @@ services:
         bitcoin-rpcconnect=litecoind
         ipaddr=${BTCPAY_HOST}:9736
         network=${NBITCOIN_NETWORK:-regtest}
+        alias=${LIGHTNING_ALIAS:-}
         chain=ltc
     volumes:
       - "clightning_litecoin_datadir:/root/.lightning"
