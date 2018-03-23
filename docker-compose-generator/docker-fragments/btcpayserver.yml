@@ -4,7 +4,7 @@ services:
 
   btcpayserver:
     restart: always
-    image: nicolasdorier/btcpayserver:1.0.1.60
+    image: nicolasdorier/btcpayserver:1.0.1.61
     expose:
       - "49392"
     environment:
