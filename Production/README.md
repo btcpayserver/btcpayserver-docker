@@ -17,11 +17,14 @@ It is composed of:
 
 The relevant environment variables are:
 
-* `NBITCOIN_NETWORK`: the blockchain identifier used by NBitcoin (eg., `regtest`, `testnet`, `mainnet`)
-* `BTCPAY_HOST`: the external url used to access the NGINX server from internet. This domain name must point to this machine for Let's Encrypt to create your certificate. (typically with a CNAME or A record)
+* `NBITCOIN_NETWORK`: The blockchain identifier used by NBitcoin (eg., `regtest`, `testnet`, `mainnet`)
+* `BTCPAY_HOST`: The external url used to access the NGINX server from internet. This domain name must point to this machine for Let's Encrypt to create your certificate. (typically with a CNAME or A record)
+* `BTCPAY_ROOTPATH`: The root path directory where BTCPay is accessed, more information below. (default: /)
 * `LETSENCRYPT_EMAIL`: The email Let's Encrypt will use to notify you about certificate expiration.
 * `ACME_CA_URI`: Let's encrypt API endpoint (`https://acme-staging.api.letsencrypt.org/directory` for a staging certificate, `https://acme-v01.api.letsencrypt.org/directory` for a production one)
 * `LIGHTNING_ALIAS`: Optional, if using the integrated lightning feature, customize the alias of your nodes
+
+If `BTCPAY_HOST` is `btcpay.example.com` and `BTCPAY_ROOTPATH` is `/btcpay`, then you can access the site via `https://btcpay.example.com/btcpay`
 
 Use `docker-compose.btc-ltc.yml` for bitcoin and litecoin support, or `docker-compose.btc.yml` for only bitcoin.
 
