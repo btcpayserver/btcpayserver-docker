@@ -70,7 +70,7 @@ services:
     - "nbxplorer_datadir:/root/.nbxplorer"
   nbxplorer:
     restart: always
-    image: nicolasdorier/nbxplorer:1.0.1.25
+    image: nicolasdorier/nbxplorer:1.0.1.26
     expose:
     - "32838"
     environment:
