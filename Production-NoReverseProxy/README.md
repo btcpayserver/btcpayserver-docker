@@ -11,6 +11,7 @@ The relevant environment variables are:
 
 * `NBITCOIN_NETWORK`: the blockchain identifier used by NBitcoin (eg., `regtest`, `testnet`, `mainnet`)
 * `BTCPAY_HOST`: the external url used to access your server from internet. This domain name must point to this machine.
+* `BTCPAY_ROOTPATH`: The root path directory where BTCPay is accessed, more information below. (default: /)
 * `BTCPAY_PROTOCOL`: the protocol used to access this website from the internet (valid values: `http` and `https`, default: `https`)
 * `LIGHTNING_ALIAS`: Optional, if using the integrated lightning feature, customize the alias of your nodes
 
