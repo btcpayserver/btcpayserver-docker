@@ -23,3 +23,33 @@ The ports mapped on the host are:
 Note that you need to set `BTCPAY_PROTOCOL=http` if you want to do some tests locally without https.
 
 If you forget, you will get an error HTTP 400 when trying to register a new account on the website.
+
+## Example:
+
+With Powershell:
+
+```
+$env:BTCPAY_ROOTPATH="/test";
+$env:BTCPAY_PROTOCOL="http";
+$env:BTCPAY_HOST="btcpay.example.com";
+docker-compose -f docker-compose.btc.yml up
+```
+
+With Linux:
+
+```
+export BTCPAY_ROOTPATH="/test"
+export BTCPAY_PROTOCOL="http"
+export BTCPAY_HOST="btcpay.example.com"
+docker-compose -f docker-compose.btc.yml up
+```
+
+Then edit your [host file](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/) with
+
+```
+127.0.0.1	sampleapi.example.com
+```
+
+Then browse `http://btcpay.example.com/test`.
+
+Note: Chrome seems to block cookie to http://127.0.0.1:80/, which is why it is advised to use a custom domain like this.
