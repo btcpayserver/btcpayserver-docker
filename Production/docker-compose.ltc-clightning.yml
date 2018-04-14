@@ -73,7 +73,7 @@ services:
     - "clightning_litecoin_datadir:/etc/clightning_litecoin"
   nbxplorer:
     restart: always
-    image: nicolasdorier/nbxplorer:1.0.1.33
+    image: nicolasdorier/nbxplorer:1.0.1.34
     expose:
     - "32838"
     environment:
