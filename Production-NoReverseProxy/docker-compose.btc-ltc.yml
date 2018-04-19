@@ -2,7 +2,7 @@ version: "3"
 services:
   btcpayserver:
     restart: always
-    image: nicolasdorier/btcpayserver:1.0.1.86
+    image: nicolasdorier/btcpayserver:1.0.1.87
     expose:
     - "49392"
     environment:
@@ -29,7 +29,7 @@ services:
     - "80:49392"
   nbxplorer:
     restart: always
-    image: nicolasdorier/nbxplorer:1.0.1.34
+    image: nicolasdorier/nbxplorer:1.0.2.0
     expose:
     - "32838"
     environment:
