@@ -20,8 +20,6 @@ services:
     restart: always
     image: jwilder/docker-gen
     container_name: nginx-gen
-    environment:
-      SSL_POLICY: Mozilla-Modern 
     volumes:
       - "/var/run/docker.sock:/tmp/docker.sock:ro"
       - "./nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro"

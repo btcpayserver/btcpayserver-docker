@@ -18,8 +18,6 @@ services:
     restart: always
     image: jwilder/docker-gen
     container_name: nginx-gen
-    environment:
-      SSL_POLICY: Mozilla-Modern
     volumes:
     - "/var/run/docker.sock:/tmp/docker.sock:ro"
     - "./nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro"
@@ -60,6 +58,7 @@ services:
       VIRTUAL_NETWORK: nginx-proxy
       VIRTUAL_PORT: 49392
       VIRTUAL_HOST: ${BTCPAY_HOST}
+      SSL_POLICY: Mozilla-Modern
       LETSENCRYPT_HOST: ${BTCPAY_HOST}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-yourname@example.com}
       BTCPAY_CHAINS: "btc"

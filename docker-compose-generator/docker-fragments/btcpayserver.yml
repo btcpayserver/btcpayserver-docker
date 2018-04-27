@@ -19,6 +19,7 @@ services:
       VIRTUAL_NETWORK: nginx-proxy
       VIRTUAL_PORT: 49392
       VIRTUAL_HOST: ${BTCPAY_HOST}
+      SSL_POLICY: Mozilla-Modern 
 
       # Let's encrypt settings
       LETSENCRYPT_HOST: ${BTCPAY_HOST}
