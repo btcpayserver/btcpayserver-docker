@@ -46,7 +46,7 @@ services:
       NGINX_PROXY_CONTAINER: "nginx"
       ACME_CA_URI: ${ACME_CA_URI:-https://acme-staging.api.letsencrypt.org/directory}
     links:
-      - nginx
+      - nginx-gen
 
 volumes:
     nginx_conf:
