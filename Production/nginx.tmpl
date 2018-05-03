@@ -46,6 +46,9 @@ map $http_upgrade $proxy_connection {
 # Apply fix for very long server names
 server_names_hash_bucket_size 128;
 
+# Prevent Nginx Information Disclosure
+server_tokens off;
+
 # Default dhparam
 {{ if (exists "/etc/nginx/dhparam/dhparam.pem") }}
 ssl_dhparam /etc/nginx/dhparam/dhparam.pem;
