@@ -1,1 +1,2 @@
-cd .\docker-compose-generator;  dotnet run -p .\src\docker-compose-generator.csproj; cd ..;
+docker build -t btcpayserver/docker-compose-generator "$(Get-Location)\docker-compose-generator"
+docker run -v "$(Get-Location)\Production:/app/Production" -v "$(Get-Location)\Production-NoReverseProxy:/app/Production-NoReverseProxy" --rm btcpayserver/docker-compose-generator

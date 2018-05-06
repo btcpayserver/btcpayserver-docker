@@ -101,11 +101,16 @@ namespace DockerGenerator
 
 		private string FindLocation(string path)
 		{
+			string directory = path;
+			int i = 0;
 			while(true)
 			{
+				if(i > 10)
+					throw new DirectoryNotFoundException(directory);
 				if(Directory.Exists(path))
 					return path;
 				path = Path.Combine("..", path);
+				i++;
 			}
 		}
 	}
