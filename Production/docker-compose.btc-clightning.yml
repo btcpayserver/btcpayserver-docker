@@ -74,7 +74,7 @@ services:
     - "clightning_bitcoin_datadir:/etc/clightning_bitcoin"
   nbxplorer:
     restart: always
-    image: nicolasdorier/nbxplorer:1.0.2.3
+    image: nicolasdorier/nbxplorer:1.0.2.4
     expose:
     - "32838"
     environment:
