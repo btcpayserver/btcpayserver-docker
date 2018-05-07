@@ -20,7 +20,7 @@ namespace DockerGenerator
 			var testLocation = FindLocation("Production-NoReverseProxy");
 
 			HashSet<string> processed = new HashSet<string>();
-			foreach(var permutation in ItemCombinations(new[] { "btc", "ltc", "clightning" }.ToList()))
+			foreach(var permutation in ItemCombinations(new[] { "btc", "ltc", "clightning", "btg" }.ToList()))
 			{
 				if(permutation.Count == 1 && permutation.First() == "clightning")
 					continue;
@@ -47,8 +47,12 @@ namespace DockerGenerator
 					if(permutation.Contains("clightning"))
 						fragments.Add("bitcoin-clightning");
 				}
+			    if (permutation.Contains("btg"))
+			    {
+			        fragments.Add("bitcoingold");
+			    }
 
-				var def = new DockerComposeDefinition(id, fragments);
+                var def = new DockerComposeDefinition(id, fragments);
 				def.FragmentLocation = fragmentLocation;
 				def.BuildOutputDirectory = productionLocation;
 				def.Build();
