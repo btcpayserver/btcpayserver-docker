@@ -117,7 +117,7 @@ services:
         bitcoin-datadir=/etc/litecoin
         bitcoin-rpcconnect=litecoind
         port=9736
-        ipaddr=${BTCPAY_HOST}:9736
+        addr=${BTCPAY_HOST}:9736
         network=${NBITCOIN_NETWORK:-regtest}
         alias=${LIGHTNING_ALIAS}
         chain=ltc
