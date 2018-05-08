@@ -2,14 +2,15 @@ version: "3"
 
 services:
   clightning_litecoin:
-    image: nicolasdorier/clightning:0.0.0.13
+    image: nicolasdorier/clightning:0.0.0.12
     container_name: btcpayserver_clightning_litecoin
     restart: always
     environment:
       LIGHTNINGD_OPT: |
         bitcoin-datadir=/etc/litecoin
         bitcoin-rpcconnect=litecoind
-        addr=${BTCPAY_HOST}:9736
+        ipaddr=${BTCPAY_HOST}:9736
+        port=9736
         network=${NBITCOIN_NETWORK:-regtest}
         alias=${LIGHTNING_ALIAS}
         chain=ltc
