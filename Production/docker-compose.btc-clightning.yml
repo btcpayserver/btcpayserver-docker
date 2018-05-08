@@ -109,14 +109,15 @@ services:
     volumes:
     - "bitcoin_datadir:/data"
   clightning_bitcoin:
-    image: nicolasdorier/clightning:0.0.0.12
+    image: nicolasdorier/clightning:0.0.0.13
     container_name: btcpayserver_clightning_bitcoin
     restart: always
     environment:
       LIGHTNINGD_OPT: |
         bitcoin-datadir=/etc/bitcoin
         bitcoin-rpcconnect=bitcoind
-        ipaddr=${BTCPAY_HOST}
+        announce-addr=${BTCPAY_HOST}:9735
+        bind-addr=0.0.0.0:9735
         network=${NBITCOIN_NETWORK:-regtest}
         alias=${LIGHTNING_ALIAS}
         chain=btc
