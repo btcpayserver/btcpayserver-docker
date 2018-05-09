@@ -75,7 +75,7 @@ services:
     volumes:
     - "litecoin_datadir:/data"
   clightning_litecoin:
-    image: nicolasdorier/clightning:0.0.0.13
+    image: nicolasdorier/clightning:0.0.0.14
     container_name: btcpayserver_clightning_litecoin
     restart: always
     environment:
@@ -110,7 +110,7 @@ services:
     volumes:
     - "bitcoin_datadir:/data"
   clightning_bitcoin:
-    image: nicolasdorier/clightning:0.0.0.13
+    image: nicolasdorier/clightning:0.0.0.14
     container_name: btcpayserver_clightning_bitcoin
     restart: always
     environment:
