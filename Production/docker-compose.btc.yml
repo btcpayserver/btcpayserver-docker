@@ -46,7 +46,7 @@ services:
     - nginx-gen
   btcpayserver:
     restart: always
-    image: nicolasdorier/btcpayserver:1.0.2.17
+    image: nicolasdorier/btcpayserver:1.0.2.18
     expose:
     - "49392"
     environment:
