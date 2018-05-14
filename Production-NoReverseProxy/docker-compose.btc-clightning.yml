@@ -2,7 +2,7 @@ version: "3"
 services:
   btcpayserver:
     restart: always
-    image: nicolasdorier/btcpayserver:1.0.2.6
+    image: nicolasdorier/btcpayserver:1.0.2.18
     expose:
     - "49392"
     environment:
@@ -32,7 +32,7 @@ services:
     - "80:49392"
   nbxplorer:
     restart: always
-    image: nicolasdorier/nbxplorer:1.0.2.3
+    image: nicolasdorier/nbxplorer:1.0.2.7
     expose:
     - "32838"
     environment:
@@ -67,14 +67,15 @@ services:
     volumes:
     - "bitcoin_datadir:/data"
   clightning_bitcoin:
-    image: nicolasdorier/clightning:0.0.0.12
+    image: nicolasdorier/clightning:0.0.0.14
     container_name: btcpayserver_clightning_bitcoin
     restart: always
     environment:
       LIGHTNINGD_OPT: |
         bitcoin-datadir=/etc/bitcoin
         bitcoin-rpcconnect=bitcoind
-        ipaddr=${BTCPAY_HOST}
+        announce-addr=${BTCPAY_HOST}:9735
+        bind-addr=0.0.0.0:9735
         network=${NBITCOIN_NETWORK:-regtest}
         alias=${LIGHTNING_ALIAS}
         chain=btc
