@@ -2,7 +2,7 @@ version: "3"
 services:
   btcpayserver:
     restart: always
-    image: nicolasdorier/btcpayserver:1.0.2.18
+    image: nicolasdorier/btcpayserver:1.0.2.20
     expose:
     - "49392"
     environment:
@@ -67,7 +67,7 @@ services:
     volumes:
     - "bitcoin_datadir:/data"
   clightning_bitcoin:
-    image: nicolasdorier/clightning:0.0.0.14
+    image: nicolasdorier/clightning:0.0.0.16
     container_name: btcpayserver_clightning_bitcoin
     restart: always
     environment:
