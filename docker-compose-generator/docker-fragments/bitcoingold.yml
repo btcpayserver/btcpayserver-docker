@@ -19,8 +19,8 @@ services:
   nbxplorer:
       environment:
         NBXPLORER_CHAINS: "btg"
-        NBXPLORER_BTCRPCURL: http://bgoldd:43782/
-        NBXPLORER_BTCNODEENDPOINT: bgoldd:39388
+        NBXPLORER_BTGRPCURL: http://bgoldd:43782/
+        NBXPLORER_BTGNODEENDPOINT: bgoldd:39388
       links:
         - bgoldd
       volumes:
@@ -28,6 +28,6 @@ services:
   btcpayserver:
       environment:
         BTCPAY_CHAINS: "btg"
-        BTCPAY_BTCEXPLORERURL: http://nbxplorer:32838/
+        BTCPAY_BTGEXPLORERURL: http://nbxplorer:32838/
 volumes:
   bitcoingold_datadir:
