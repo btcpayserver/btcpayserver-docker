@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "docker-compose-generator": {
+      "commandName": "Project",
+      "commandLineArgs": "pregen",
+      "environmentVariables": {
+        "BTCPAYGEN_LIGHTNING": "clightning",
+        "BTCPAYGEN_CRYPTO2": "ltc",
+        "BTCPAYGEN_CRYPTO1": "btc",
+        "BTCPAYGEN_REVERSEPROXY": "nginx"
+      }
+    }
+  }
+}

@@ -8,108 +8,99 @@ namespace DockerGenerator
 {
 	class Program
 	{
+
 		static void Main(string[] args)
 		{
-			new Program().Run();
+			var root = Environment.GetEnvironmentVariable("INSIDE_CONTAINER") == "1" ? FindRoot("app")
+				: Path.GetFullPath(Path.Combine(FindRoot("docker-compose-generator"), ".."));
+
+			if(args.Any(a => a == "pregen"))
+			{
+				var productionLocation = Path.GetFullPath(Path.Combine(root, "Production"));
+				var testLocation = Path.GetFullPath(Path.Combine(root, "Production-NoReverseProxy"));
+
+				foreach(var proxy in new[] { "nginx", "no-reverseproxy" })
+				{
+					foreach(var lightning in new[] { "clightning", "" })
+					{
+						foreach(var btc in new[] { "btc", "" })
+						{
+							foreach(var ltc in new[] { "ltc", "" })
+							{
+								if(btc == "" && ltc == "")
+									continue;
+								string name = $"{btc}-{ltc}-{lightning}".Replace("--", "-");
+								if(name.EndsWith("-"))
+									name = name.Substring(0, name.Length - 1);
+								if(name.StartsWith("-"))
+									name = name.Substring(1, name.Length - 1);
+								var composition = new DockerComposition();
+								composition.SelectedCryptos = new HashSet<string>();
+								composition.SelectedCryptos.Add(btc);
+								composition.SelectedCryptos.Add(ltc);
+								composition.SelectedLN = lightning;
+								composition.SelectedProxy = proxy;
+								new Program().Run(composition, name, proxy == "nginx" ? productionLocation : testLocation);
+							}
+						}
+					}
+				}
+			}
+			else
+			{
+				var composition = DockerComposition.FromEnvironmentVariables();
+				Console.WriteLine("Crypto: " + string.Join(", ", composition.SelectedCryptos.ToArray()));
+				Console.WriteLine("Lightning: " + composition.SelectedLN);
+				Console.WriteLine("ReverseProxy: " + composition.SelectedProxy);
+				new Program().Run(composition, "generated", root);
+			}
 		}
 
-		private void Run()
+		private void Run(DockerComposition composition, string name, string output)
 		{
-			var fragmentLocation = FindLocation("docker-fragments");
-			var productionLocation = FindLocation("Production");
-			var testLocation = FindLocation("Production-NoReverseProxy");
+			var fragmentLocation = Environment.GetEnvironmentVariable("INSIDE_CONTAINER") == "1" ? "app" : "docker-compose-generator";
+			fragmentLocation = FindRoot(fragmentLocation);
+			fragmentLocation = Path.GetFullPath(Path.Combine(fragmentLocation, "docker-fragments"));
 
-			HashSet<string> processed = new HashSet<string>();
-			foreach(var permutation in ItemCombinations(new[] { "btc", "ltc", "clightning" }.ToList()))
+			var fragments = new List<string>();
+			if(composition.SelectedProxy == "nginx")
 			{
-				if(permutation.Count == 1 && permutation.First() == "clightning")
-					continue;
-				permutation.Sort();
-				if(permutation.Remove("clightning"))
-					permutation.Add("clightning"); // ensure clightning at the end
-				string id = string.Join('-', permutation);
-				if(!processed.Add(id))
-					continue;
-
-				var fragments = new List<string>();
 				fragments.Add("nginx");
-				fragments.Add("btcpayserver");
-
-				if(permutation.Contains("ltc"))
-				{
-					fragments.Add("litecoin");
-					if(permutation.Contains("clightning"))
-						fragments.Add("litecoin-clightning");
-				}
-				if(permutation.Contains("btc"))
-				{
-					fragments.Add("bitcoin");
-					if(permutation.Contains("clightning"))
-						fragments.Add("bitcoin-clightning");
-				}
-
-				var def = new DockerComposeDefinition(id, fragments);
-				def.FragmentLocation = fragmentLocation;
-				def.BuildOutputDirectory = productionLocation;
-				def.Build();
-
-
-				def.Fragments.Remove("nginx");
-				def.Fragments.Add("btcpayserver-noreverseproxy");
-				def.BuildOutputDirectory = testLocation;
-				def.Build();
 			}
-		}
-
-		/// <summary>
-		/// Method to create lists containing possible combinations of an input list of items. This is 
-		/// basically copied from code by user "jaolho" on this thread:
-		/// http://stackoverflow.com/questions/7802822/all-possible-combinations-of-a-list-of-values
-		/// </summary>
-		/// <typeparam name="T">type of the items on the input list</typeparam>
-		/// <param name="inputList">list of items</param>
-		/// <param name="minimumItems">minimum number of items wanted in the generated combinations, 
-		///                            if zero the empty combination is included,
-		///                            default is one</param>
-		/// <param name="maximumItems">maximum number of items wanted in the generated combinations,
-		///                            default is no maximum limit</param>
-		/// <returns>list of lists for possible combinations of the input items</returns>
-		public static List<List<T>> ItemCombinations<T>(List<T> inputList, int minimumItems = 1,
-														int maximumItems = int.MaxValue)
-		{
-			int nonEmptyCombinations = (int)Math.Pow(2, inputList.Count) - 1;
-			List<List<T>> listOfLists = new List<List<T>>(nonEmptyCombinations + 1);
-
-			if(minimumItems == 0)  // Optimize default case
-				listOfLists.Add(new List<T>());
-
-			for(int i = 1; i <= nonEmptyCombinations; i++)
+			else
 			{
-				List<T> thisCombination = new List<T>(inputList.Count);
-				for(int j = 0; j < inputList.Count; j++)
-				{
-					if((i >> j & 1) == 1)
-						thisCombination.Add(inputList[j]);
-				}
+				fragments.Add("btcpayserver-noreverseproxy");
+			}
+			fragments.Add("btcpayserver");
+			foreach(var crypto in CryptoDefinition.GetDefinitions())
+			{
+				if(!composition.SelectedCryptos.Contains(crypto.Crypto))
+					continue;
 
-				if(thisCombination.Count >= minimumItems && thisCombination.Count <= maximumItems)
-					listOfLists.Add(thisCombination);
+				fragments.Add(crypto.CryptoFragment);
+				if(composition.SelectedLN == "clightning" && crypto.CLightningFragment != null)
+				{
+					fragments.Add(crypto.CLightningFragment);
+				}
 			}
 
-			return listOfLists;
+			var def = new DockerComposeDefinition(name, fragments);
+			def.FragmentLocation = fragmentLocation;
+			def.BuildOutputDirectory = output;
+			def.Build();
 		}
 
-		private string FindLocation(string path)
+		private static string FindRoot(string rootDirectory)
 		{
-			string directory = path;
+			string directory = Directory.GetCurrentDirectory();
 			int i = 0;
 			while(true)
 			{
 				if(i > 10)
-					throw new DirectoryNotFoundException(directory);
-				if(Directory.Exists(path))
-					return path;
-				path = Path.Combine("..", path);
+					throw new DirectoryNotFoundException(rootDirectory);
+				if(directory.EndsWith(rootDirectory))
+					return directory;
+				directory = Path.GetFullPath(Path.Combine(directory, ".."));
 				i++;
 			}
 		}

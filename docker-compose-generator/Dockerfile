@@ -13,6 +13,8 @@ RUN mkdir /datadir
 ENV APP_DATADIR=/datadir
 VOLUME /datadir
 
+ENV INSIDE_CONTAINER=1
+
 COPY --from=builder "/app" .
 COPY docker-fragments docker-fragments
 
