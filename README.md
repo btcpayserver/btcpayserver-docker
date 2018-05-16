@@ -109,7 +109,7 @@ On Linux:
 BTCPAYGEN_CRYPTO1="btc" \
 BTCPAYGEN_CRYPTO2="ltc" \
 BTCPAYGEN_REVERSEPROXY="nginx" \
-BTCPAYGEN_LIGHTNING="cligthning" \
+BTCPAYGEN_LIGHTNING="clightning" \
 BTCPAYGEN_SUBNAME="custom" \
 ./build.sh
 ```
