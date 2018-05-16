@@ -52,7 +52,11 @@ namespace DockerGenerator
 				Console.WriteLine("Crypto: " + string.Join(", ", composition.SelectedCryptos.ToArray()));
 				Console.WriteLine("Lightning: " + composition.SelectedLN);
 				Console.WriteLine("ReverseProxy: " + composition.SelectedProxy);
-				new Program().Run(composition, "generated", root);
+				var generatedLocation = Path.GetFullPath(Path.Combine(root, "Generated"));
+
+				var name = Environment.GetEnvironmentVariable("BTCPAYGEN_SUBNAME");
+				name = string.IsNullOrEmpty(name) ? "generated" : name;
+				new Program().Run(composition, name, generatedLocation);
 			}
 		}
 

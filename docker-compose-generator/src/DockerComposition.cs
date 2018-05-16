@@ -30,7 +30,7 @@ namespace DockerGenerator
 			{
 				var selectedCrypto = Environment.GetEnvironmentVariable("BTCPAYGEN_CRYPTO" + i);
 				if(string.IsNullOrEmpty(selectedCrypto))
-					break;
+					continue;
 				composition.SelectedCryptos.Add(selectedCrypto.ToLowerInvariant());
 			}
 			composition.SelectedProxy = (Environment.GetEnvironmentVariable("BTCPAYGEN_REVERSEPROXY") ?? "").ToLowerInvariant();
