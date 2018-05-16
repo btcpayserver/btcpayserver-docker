@@ -90,6 +90,8 @@ To configure your custom docker-compose, the following environment variables are
 Then, running [build.sh](build.sh) (or [build.ps1](build.ps1))  will then generate a `docker-compose.generated.yml` in the root folder of this repository.
 For example, if you want `btc` and `ltc` support with `nginx` and `clightning` inside `Generate/docker-compose.custom.yml`:
 
+Note: The first run might take a while, but next run are instantaneous.
+
 On Windows:
 
 ```
