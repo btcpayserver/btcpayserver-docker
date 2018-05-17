@@ -197,7 +197,11 @@ echo -e "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE\n"
 
 # Schedule for reboot
 if [ -d "/etc/systemd/system" ]; then # Use systemd
-
+if [ -e "/etc/init/start_containers.conf" ]; then
+    echo -e "Uninstalling upstart script /etc/init/start_containers.conf"
+    rm "/etc/init/start_containers.conf"
+    initctl reload-configuration
+fi
 echo "Adding btcpayserver.service to systemd"
 echo "
 [Unit]
