@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$0" != "$BASH_SOURCE" ]; then
+if [ "$0" = "$BASH_SOURCE" ]; then
     echo "This script must be sourced \". btcpay-setup.sh\"" 
     exit 1
 fi
