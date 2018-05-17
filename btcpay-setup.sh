@@ -148,13 +148,13 @@ chmod +x /etc/profile.d/btcpay-env.sh
 echo "BTCPay Server environment variables successfully saved in /etc/profile.d/btcpay-env.sh"
 
 if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; then
-    apt-get update 2>error
+    apt-get update || true 2>error
     apt-get install -y \
         curl \
         apt-transport-https \
         ca-certificates \
         software-properties-common \
-        2>error
+        || true 2>error
 fi
 
 if ! [ -x "$(command -v docker)" ]; then
@@ -163,7 +163,7 @@ if ! [ -x "$(command -v docker)" ]; then
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
-    apt-get update
+    apt-get update || true 2>error 
     if apt-get install -y docker-ce ; then
         echo "Docker installed"
     else
@@ -173,8 +173,11 @@ if ! [ -x "$(command -v docker)" ]; then
             "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
             artful \
             stable"
-            apt-get update
-            apt-get install -y docker-ce
+            apt-get update || true 2>error 
+            if ! apt-get install -y docker-ce; then
+                echo "Failed to install docker installed"
+                return
+            fi
         fi
     fi
 else
