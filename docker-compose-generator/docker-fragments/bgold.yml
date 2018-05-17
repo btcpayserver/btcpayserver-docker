@@ -15,7 +15,7 @@ services:
         - "43782"
         - "39388"
       volumes:
-        - "bitcoingold_datadir:/data"
+        - "bgold_datadir:/data"
   nbxplorer:
       environment:
         NBXPLORER_CHAINS: "btg"
@@ -24,10 +24,10 @@ services:
       links:
         - bgoldd
       volumes:
-        - "bitcoingold_datadir:/root/.bitcoingold"
+        - "bgold_datadir:/root/.bitcoingold"
   btcpayserver:
       environment:
         BTCPAY_CHAINS: "btg"
         BTCPAY_BTGEXPLORERURL: http://nbxplorer:32838/
 volumes:
-  bitcoingold_datadir:
+  bgold_datadir:
