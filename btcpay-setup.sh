@@ -10,10 +10,10 @@ if [[ ! -d "Production-NoReverseProxy" ]]; then
    exit 1
 fi
 
-if ! git -C . rev-parse
+if ! git -C . rev-parse; then
     echo "You must run this script inside the git repository of btcpayserver-docker"
     exit 1
-then
+fi
 
 function display_help () {
 cat <<-END
@@ -47,6 +47,7 @@ Environment variables:
     BTCPAYGEN_REVERSEPROXY: Whether to use or not a reverse proxy. NGinx setup HTTPS for you. (eg. nginx, none. Default: nginx)
     BTCPAYGEN_LIGHTNING: Lightning network implementation to use (eg. clightning, none)
     ACME_CA_URI: The API endpoint to ask for HTTPS certificate (default: https://acme-v01.api.letsencrypt.org/directory)
+
 END
 }
 
