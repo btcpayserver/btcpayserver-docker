@@ -12,6 +12,7 @@ fi
 
 if ! git -C . rev-parse
     echo "You must run this script inside the git repository of btcpayserver-docker"
+    exit 1
 then
 
 function display_help () {
@@ -50,7 +51,7 @@ END
 }
 
 if [ "$1" != "-i" ]; then
-    display_help()
+    display_help
     exit 1
 fi
 
