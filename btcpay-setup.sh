@@ -6,7 +6,7 @@ if [ "$0" = "$BASH_SOURCE" ]; then
 fi
 
 if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root" 
+   echo "This script must be run as root after running \"sudo su -\"" 
    return
 fi
 
