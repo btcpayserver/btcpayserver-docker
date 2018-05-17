@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 if [ "$0" = "$BASH_SOURCE" ]; then
     echo "This script must be sourced \". btcpay-setup.sh\"" 
     exit 1
@@ -145,7 +147,7 @@ export BTCPAY_ENV_FILE=\"$BTCPAY_ENV_FILE\"" > /etc/profile.d/btcpay-env.sh
 chmod +x /etc/profile.d/btcpay-env.sh
 echo "BTCPay Server environment variables successfully saved in /etc/profile.d/btcpay-env.sh"
 
-if ! [ -x "$(command -v docker)" ]; then
+if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; then
     apt-get update 2>error
     apt-get install -y \
         curl \
@@ -153,6 +155,9 @@ if ! [ -x "$(command -v docker)" ]; then
         ca-certificates \
         software-properties-common \
         2>error
+fi
+
+if ! [ -x "$(command -v docker)" ]; then
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
         add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
@@ -178,13 +183,6 @@ fi
 
 # Install docker-compose
 if ! [ -x "$(command -v docker-compose)" ]; then
-    apt-get update 2>error
-    apt-get install -y \
-        curl \
-        apt-transport-https \
-        ca-certificates \
-        software-properties-common \
-        2>error
     curl -L https://github.com/docker/compose/releases/download/1.17.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
 else
@@ -204,7 +202,7 @@ echo "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE"
 # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
 . ./build.sh
 
-cd BTCPAY_BASE_DIRECTORY
+cd $BTCPAY_BASE_DIRECTORY
 
 # Schedule for reboot
 if [ -d "/etc/systemd/system" ]; then # Use systemd
