@@ -40,6 +40,7 @@ This script will:
 * Start BTCPay
 
 You can run again this script if you desire to change your configuration.
+Except BTC and LTC, other crypto currencies are maintained by their own community. Run at your own risk.
 
 Make sure you own a domain with DNS record pointing to your website and that port 80 is accessible before running this script.
 This will be used to properly setup HTTPS via let's encrypt.
