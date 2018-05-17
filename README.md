@@ -121,6 +121,6 @@ BTCPAYGEN_SUBNAME="custom" \
 1. Support for your crypto on [NBitcoin](https://github.com/MetacoSA/NBitcoin/tree/master/NBitcoin.Altcoins)/[NBxplorer](https://github.com/dgarage/NBXplorer)/[BTCPay Server](https://github.com/btcpayserver/btcpayserver). (Take example on other coins)
 2. Create your own docker image ([Example for BTC](https://hub.docker.com/r/nicolasdorier/docker-bitcoin/))
 3. Create a docker-compose fragment ([Example for BTC](docker-compose-generator/docker-fragments/bitcoin.yml))
-4. Add your Crypto Definition ([Example for BTC](docker-compose-generator/CryptoDefinition.cs))
+4. Add your Crypto Definition ([Example for BTC](docker-compose-generator/src/CryptoDefinition.cs))
 
 Congratulation!
