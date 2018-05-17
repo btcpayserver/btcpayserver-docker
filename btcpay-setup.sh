@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 if [ "$0" = "$BASH_SOURCE" ]; then
     echo "This script must be sourced \". btcpay-setup.sh\"" 
     exit 1
@@ -148,40 +146,28 @@ chmod +x /etc/profile.d/btcpay-env.sh
 echo -e "BTCPay Server environment variables successfully saved in /etc/profile.d/btcpay-env.sh\n"
 
 if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; then
-    apt-get update || true 2>error
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+    if [ $(lsb_release -cs) == "bionic" ]; then
+        # Bionic not in the repo yet, see https://linuxconfig.org/how-to-install-docker-on-ubuntu-18-04-bionic-beaver
+        add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu artful stable"
+    else
+        add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    fi
+    apt-get update 2>error
     apt-get install -y \
         curl \
         apt-transport-https \
         ca-certificates \
         software-properties-common \
-        || true 2>error
+        2>error
 fi
 
 if ! [ -x "$(command -v docker)" ]; then
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-    add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-   $(lsb_release -cs) \
-   stable"
-    apt-get update || true 2>error 
     if apt-get install -y docker-ce ; then
         echo "Docker installed"
     else
-        if [ $(lsb_release -cs) == "bionic" ]; then
-            # Bionic not in the repo yet, see https://linuxconfig.org/how-to-install-docker-on-ubuntu-18-04-bionic-beaver
-            add-apt-repository \
-            "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-            artful \
-            stable"
-            apt-get update || true 2>error 
-            if ! apt-get install -y docker-ce; then
-                echo "Failed to install docker"
-                return
-            fi
-        else
-            echo "Failed to install docker"
-            return
-        fi
+        echo "Failed to install docker"
+        return
     fi
 else
     echo -e "docker is already installed\n"
