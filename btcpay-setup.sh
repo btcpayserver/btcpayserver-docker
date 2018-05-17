@@ -2,24 +2,27 @@
 
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 
-   exit 1
+   return
 fi
 
 if [[ ! -d "Production-NoReverseProxy" ]]; then
    echo "You must run this script from inside the btcpayserver-docker folder" 
-   exit 1
+   return
 fi
 
 if ! git -C . rev-parse; then
     echo "You must run this script inside the git repository of btcpayserver-docker"
-    exit 1
+    return
 fi
 
 function display_help () {
 cat <<-END
 Usage:
 ------
-    This script must be run as root
+
+Install BTCPay on this server
+This script must be run as root
+
     -i : Run install
 
 This script will:
@@ -53,7 +56,7 @@ END
 
 if [ "$1" != "-i" ]; then
     display_help
-    exit 1
+    return
 fi
 
 : "${LETSENCRYPT_EMAIL:=me@example.com}"
@@ -97,12 +100,12 @@ BTCPAY_ENV_FILE=$BTCPAY_ENV_FILE
 
 if [ -z "$BTCPAY_HOST" ]; then
     echo "BTCPAY_HOST should not be empty"
-    exit 1
+    return
 fi
 
 if [ -z "$BTCPAYGEN_CRYPTO1" ]; then
     echo "BTCPAYGEN_CRYPTO1 should not be empty"
-    exit 1
+    return
 fi
 
 if [ "$NBITCOIN_NETWORK" != "mainnet" ] && [ "$NBITCOIN_NETWORK" != "testnet" ] && [ "$NBITCOIN_NETWORK" != "regtest" ]; then
