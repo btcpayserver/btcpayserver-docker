@@ -195,8 +195,6 @@ echo -e "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE\n"
 # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
 . ./build.sh
 
-cd $BTCPAY_BASE_DIRECTORY
-
 # Schedule for reboot
 if [ -d "/etc/systemd/system" ]; then # Use systemd
 
@@ -244,6 +242,7 @@ script
 end script" > /etc/init/start_containers.conf
     echo -e "BTCPay Server upstart configured in /etc/init/start_containers.conf\n"
     initctl reload-configuration
+    cd "$(dirname $BTCPAY_ENV_FILE)"
     docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d 
     echo "BTCPay Server started"
 fi
