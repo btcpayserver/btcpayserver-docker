@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ "$0" != "$BASH_SOURCE" ]; then
+    echo "This script must be sourced \". btcpay-setup.sh\"" 
+    exit 1
+fi
+
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 
    return
