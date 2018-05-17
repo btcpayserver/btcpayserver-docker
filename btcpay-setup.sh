@@ -145,7 +145,7 @@ export BTCPAY_DOCKER_COMPOSE=\"$BTCPAY_DOCKER_COMPOSE\"
 export BTCPAY_BASE_DIRECTORY=\"$BTCPAY_BASE_DIRECTORY\"
 export BTCPAY_ENV_FILE=\"$BTCPAY_ENV_FILE\"" > /etc/profile.d/btcpay-env.sh
 chmod +x /etc/profile.d/btcpay-env.sh
-echo "BTCPay Server environment variables successfully saved in /etc/profile.d/btcpay-env.sh"
+echo -e "BTCPay Server environment variables successfully saved in /etc/profile.d/btcpay-env.sh\n"
 
 if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; then
     apt-get update || true 2>error
@@ -159,7 +159,7 @@ fi
 
 if ! [ -x "$(command -v docker)" ]; then
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-        add-apt-repository \
+    add-apt-repository \
    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
    $(lsb_release -cs) \
    stable"
@@ -175,13 +175,16 @@ if ! [ -x "$(command -v docker)" ]; then
             stable"
             apt-get update || true 2>error 
             if ! apt-get install -y docker-ce; then
-                echo "Failed to install docker installed"
+                echo "Failed to install docker"
                 return
             fi
+        else
+            echo "Failed to install docker"
+            return
         fi
     fi
 else
-    echo "docker is already installed"
+    echo -e "docker is already installed\n"
 fi
 
 # Install docker-compose
@@ -189,7 +192,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
     curl -L https://github.com/docker/compose/releases/download/1.17.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
     chmod +x /usr/local/bin/docker-compose
 else
-    echo "docker-compose is already installed"
+    echo -e "docker-compose is already installed\n"
 fi
 
 # Set .env file
@@ -200,7 +203,7 @@ ACME_CA_URI=$ACME_CA_URI
 NBITCOIN_NETWORK=$NBITCOIN_NETWORK
 LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL
 LIGHTNING_ALIAS=$LIGHTNING_ALIAS" > $BTCPAY_ENV_FILE
-echo "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE"
+echo -e "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE\n"
 
 # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
 . ./build.sh
@@ -228,7 +231,7 @@ ExecReload=/bin/bash -c '. /etc/profile.d/btcpay-env.sh && cd \"\$(dirname \$BTC
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
 
-echo "BTCPay Server systemd configured in /etc/systemd/system/btcpayserver.service"
+echo -e "BTCPay Server systemd configured in /etc/systemd/system/btcpayserver.service\n"
 systemctl daemon-reload
 systemctl enable btcpayserver
 systemctl start btcpayserver
@@ -252,7 +255,7 @@ script
     cd \"`dirname \$BTCPAY_ENV_FILE`\"
     docker-compose -f \"\$BTCPAY_DOCKER_COMPOSE\" up -d
 end script" > /etc/init/start_containers.conf
-    echo "BTCPay Server upstart configured in /etc/init/start_containers.conf"
+    echo -e "BTCPay Server upstart configured in /etc/init/start_containers.conf\n"
     initctl reload-configuration
     docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d 
     echo "BTCPay Server started"
