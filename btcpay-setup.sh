@@ -249,5 +249,14 @@ end script" > /etc/init/start_containers.conf
 fi
 
 
-find "$ORIGINAL_DIRECTORY" -name "*.sh" -exec chmod +x {} \;
-find "$ORIGINAL_DIRECTORY" -name "*.sh" -exec ln -s {} /usr/bin \;
+cd $ORIGINAL_DIRECTORY
+
+for scriptname in *.sh; do
+    echo $scriptname
+    chmod +x $scriptname
+    if [ -e /usr/bin/$scriptname ]; then
+        rm /usr/bin/$scriptname
+    fi
+    ln -s $scriptname /usr/bin
+done
+
