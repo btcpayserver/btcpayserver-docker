@@ -2,7 +2,7 @@ version: "3"
 
 services:
   litecoind:
-    restart: always
+    restart: unless-stopped
     container_name: btcpayserver_litecoind
     image: nicolasdorier/docker-litecoin:0.15.1
     environment:

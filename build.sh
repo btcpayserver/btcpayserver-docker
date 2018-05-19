@@ -1,8 +1,9 @@
 #!/bin/bash
 
 # This script will run docker-compose-generator in a container to generate the yml files
-docker build -t btcpayserver/docker-compose-generator "$(pwd)/docker-compose-generator"
+docker pull btcpayserver/docker-compose-generator
 docker run -v "$(pwd)/Generated:/app/Generated" \
+           -v "$(pwd)/docker-compose-generator/docker-fragments:/app/docker-fragments" \
            -e "BTCPAYGEN_CRYPTO1=$BTCPAYGEN_CRYPTO1" \
            -e "BTCPAYGEN_CRYPTO2=$BTCPAYGEN_CRYPTO2" \
            -e "BTCPAYGEN_CRYPTO3=$BTCPAYGEN_CRYPTO3" \
@@ -16,3 +17,7 @@ docker run -v "$(pwd)/Generated:/app/Generated" \
            -e "BTCPAYGEN_LIGHTNING=$BTCPAYGEN_LIGHTNING" \
            -e "BTCPAYGEN_SUBNAME=$BTCPAYGEN_SUBNAME" \
            --rm btcpayserver/docker-compose-generator
+
+if [ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]; then
+    cp Production/nginx.tmpl Generated/nginx.tmpl
+fi

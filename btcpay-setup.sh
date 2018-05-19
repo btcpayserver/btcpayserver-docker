@@ -10,14 +10,16 @@ if [[ $EUID -ne 0 ]]; then
    return
 fi
 
-if [[ ! -d "Production-NoReverseProxy" ]]; then
-   echo "You must run this script from inside the btcpayserver-docker folder" 
-   return
-fi
-
-if ! git -C . rev-parse; then
-    echo "You must run this script inside the git repository of btcpayserver-docker"
-    return
+# Verify we are in right folder. If we are not, let's go in the parent folder of the current docker-compose.
+if ! git -C . rev-parse &> /dev/null || [ ! -d "Generated" ]; then
+    if [ ! -z $BTCPAY_DOCKER_COMPOSE ]; then
+        cd $(dirname $BTCPAY_DOCKER_COMPOSE)
+        cd ..
+    fi
+    if ! git -C . rev-parse || [ ! -d "Generated" ]; then
+        echo "You must run this script inside the git repository of btcpayserver-docker"
+        return
+    fi
 fi
 
 function display_help () {
@@ -65,16 +67,80 @@ if [ "$1" != "-i" ]; then
     return
 fi
 
+######### Migration: old pregen environment to new environment ############
+if [ ! -z $BTCPAY_DOCKER_COMPOSE ] && [ ! -z $DOWNLOAD_ROOT ] && [ -z $BTCPAYGEN_MIGRATED_PREGEN ]; then 
+    echo "Old pregen docker deployment detected. Migrating..."
+    rm "$DOWNLOAD_ROOT/btcpay-restart.sh"
+    rm "$DOWNLOAD_ROOT/btcpay-update.sh"
+    rm "$DOWNLOAD_ROOT/changedomain.sh"
+    rm "$DOWNLOAD_ROOT/entrypoint.sh"
+    DOWNLOAD_ROOT=""
+    BTCPAYGEN_MIGRATED_PREGEN="true"
+    # Migration: old deployment store those in BTCPAY_ENV_FILE
+    BTCPAY_HOST=$(cat $BTCPAY_ENV_FILE | sed -n 's/^BTCPAY_HOST=\(.*\)$/\1/p')
+    ACME_CA_URI=$(cat $BTCPAY_ENV_FILE | sed -n 's/^ACME_CA_URI=\(.*\)$/\1/p')
+    NBITCOIN_NETWORK=$(cat $BTCPAY_ENV_FILE | sed -n 's/^NBITCOIN_NETWORK=\(.*\)$/\1/p')
+    LETSENCRYPT_EMAIL=$(cat $BTCPAY_ENV_FILE | sed -n 's/^LETSENCRYPT_EMAIL=\(.*\)$/\1/p')
+    LIGHTNING_ALIAS=$(cat $BTCPAY_ENV_FILE | sed -n 's/^LIGHTNING_ALIAS=\(.*\)$/\1/p')
+
+    if [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production ]]; then
+        BTCPAYGEN_REVERSEPROXY='nginx'
+    fi
+    if [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production-NoReverseProxy ]]; then
+        BTCPAYGEN_REVERSEPROXY='none'
+    fi
+
+    if [[ $BTCPAY_DOCKER_COMPOSE == *docker-compose.btc.yml ]]; then
+        BTCPAYGEN_CRYPTO1='btc'
+        BTCPAYGEN_LIGHTNING='none'
+    fi
+    if [[ $BTCPAY_DOCKER_COMPOSE == *docker-compose.btc-clightning.yml ]]; then
+        BTCPAYGEN_CRYPTO1='btc'
+        BTCPAYGEN_LIGHTNING='clightning'
+    fi
+    if [[ $BTCPAY_DOCKER_COMPOSE == *docker-compose.ltc.yml ]]; then
+        BTCPAYGEN_CRYPTO1='ltc'
+        BTCPAYGEN_LIGHTNING='none'
+    fi
+    if [[ $BTCPAY_DOCKER_COMPOSE == *docker-compose.ltc-clightning.yml ]]; then
+        BTCPAYGEN_CRYPTO1='ltc'
+        BTCPAYGEN_LIGHTNING='clightning'
+    fi
+    if [[ $BTCPAY_DOCKER_COMPOSE == *docker-compose.btc-ltc.yml ]]; then
+        BTCPAYGEN_CRYPTO1='btc'
+        BTCPAYGEN_CRYPTO2='ltc'
+        BTCPAYGEN_LIGHTNING='none'
+    fi
+    if [[ $BTCPAY_DOCKER_COMPOSE == *docker-compose.btc-ltc-clightning.yml ]]; then
+        BTCPAYGEN_CRYPTO1='btc'
+        BTCPAYGEN_CRYPTO2='ltc'
+        BTCPAYGEN_LIGHTNING='clightning'
+    fi
+fi
+#########################################################
+
 : "${LETSENCRYPT_EMAIL:=me@example.com}"
+: "${BTCPAYGEN_MIGRATED_PREGEN:=false}"
 : "${NBITCOIN_NETWORK:=mainnet}"
 : "${BTCPAYGEN_CRYPTO1:=btc}"
 : "${BTCPAYGEN_REVERSEPROXY:=nginx}"
 : "${BTCPAYGEN_LIGHTNING:=none}"
 : "${ACME_CA_URI:=https://acme-v01.api.letsencrypt.org/directory}"
 
+OLD_BTCPAY_DOCKER_COMPOSE=$BTCPAY_DOCKER_COMPOSE
 ORIGINAL_DIRECTORY=$(pwd)
 BTCPAY_BASE_DIRECTORY="$(dirname $(pwd))"
-BTCPAY_DOCKER_COMPOSE="$(pwd)/Generated/docker-compose.generated.yml"
+
+if [ "$BTCPAYGEN_MIGRATED_PREGEN" == "true" ]; then
+    if [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production ]]; then
+        BTCPAY_DOCKER_COMPOSE="$(pwd)/Production/docker-compose.generated.yml"
+    elif [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production-NoReverseProxy ]]; then
+        BTCPAY_DOCKER_COMPOSE="$(pwd)/Production-NoReverseProxy/docker-compose.generated.yml"
+    fi
+else # new deployments must be in Generated
+    BTCPAY_DOCKER_COMPOSE="$(pwd)/Generated/docker-compose.generated.yml"
+fi
+
 BTCPAY_ENV_FILE="$BTCPAY_BASE_DIRECTORY/.env"
 
 echo "
@@ -101,6 +167,7 @@ Additional exported variables:
 BTCPAY_DOCKER_COMPOSE=$BTCPAY_DOCKER_COMPOSE
 BTCPAY_BASE_DIRECTORY=$BTCPAY_BASE_DIRECTORY
 BTCPAY_ENV_FILE=$BTCPAY_ENV_FILE
+BTCPAYGEN_MIGRATED_PREGEN=$BTCPAYGEN_MIGRATED_PREGEN
 ----------------------
 "
 
@@ -118,17 +185,10 @@ if [ "$NBITCOIN_NETWORK" != "mainnet" ] && [ "$NBITCOIN_NETWORK" != "testnet" ] 
     echo "NBITCOIN_NETWORK should be equal to mainnet, testnet or regtest"
 fi
 
-export BTCPAY_DOCKER_COMPOSE
-export BTCPAY_BASE_DIRECTORY
-export BTCPAY_ENV_FILE
-
 # Put the variables in /etc/profile.d when a user log interactively
 touch "/etc/profile.d/btcpay-env.sh"
 echo "
-export BTCPAY_HOST=\"$BTCPAY_HOST\"
-export LETSENCRYPT_EMAIL=\"$LETSENCRYPT_EMAIL\"
-export NBITCOIN_NETWORK=\"$NBITCOIN_NETWORK\"
-export LIGHTNING_ALIAS=\"$LIGHTNING_ALIAS\"
+export BTCPAYGEN_OLD_PREGEN=\"$BTCPAYGEN_MIGRATED_PREGEN\"
 export BTCPAYGEN_CRYPTO1=\"$BTCPAYGEN_CRYPTO1\"
 export BTCPAYGEN_CRYPTO2=\"$BTCPAYGEN_CRYPTO2\"
 export BTCPAYGEN_CRYPTO3=\"$BTCPAYGEN_CRYPTO3\"
@@ -139,14 +199,32 @@ export BTCPAYGEN_CRYPTO7=\"$BTCPAYGEN_CRYPTO7\"
 export BTCPAYGEN_CRYPTO8=\"$BTCPAYGEN_CRYPTO8\"
 export BTCPAYGEN_CRYPTO9=\"$BTCPAYGEN_CRYPTO9\"
 export BTCPAYGEN_LIGHTNING=\"$BTCPAYGEN_LIGHTNING\"
-export ACME_CA_URI=\"$ACME_CA_URI\"
+export BTCPAYGEN_REVERSEPROXY=\"$BTCPAYGEN_REVERSEPROXY\"
 export BTCPAY_DOCKER_COMPOSE=\"$BTCPAY_DOCKER_COMPOSE\"
 export BTCPAY_BASE_DIRECTORY=\"$BTCPAY_BASE_DIRECTORY\"
-export BTCPAY_ENV_FILE=\"$BTCPAY_ENV_FILE\"" > /etc/profile.d/btcpay-env.sh
+export BTCPAY_ENV_FILE=\"$BTCPAY_ENV_FILE\"
+if cat \$BTCPAY_ENV_FILE &> /dev/null; then
+export BTCPAY_HOST=\"\$(cat \$BTCPAY_ENV_FILE | sed -n 's/^BTCPAY_HOST=\(.*\)$/\1/p')\"
+export LETSENCRYPT_EMAIL=\"\$(cat \$BTCPAY_ENV_FILE | sed -n 's/^LETSENCRYPT_EMAIL=\(.*\)$/\1/p')\"
+export NBITCOIN_NETWORK=\"\$(cat \$BTCPAY_ENV_FILE | sed -n 's/^NBITCOIN_NETWORK=\(.*\)$/\1/p')\"
+export LIGHTNING_ALIAS=\"\$(cat \$BTCPAY_ENV_FILE | sed -n 's/^LIGHTNING_ALIAS=\(.*\)$/\1/p')\"
+export ACME_CA_URI=\"\$(cat \$BTCPAY_ENV_FILE | sed -n 's/^ACME_CA_URI=\(.*\)$/\1/p')\"
+fi
+" > /etc/profile.d/btcpay-env.sh
 chmod +x /etc/profile.d/btcpay-env.sh
+
+. /etc/profile.d/btcpay-env.sh
+
 echo -e "BTCPay Server environment variables successfully saved in /etc/profile.d/btcpay-env.sh\n"
 
 if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; then
+    apt-get update 2>error
+    apt-get install -y \
+        curl \
+        apt-transport-https \
+        ca-certificates \
+        software-properties-common \
+        2>error
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
     if [ $(lsb_release -cs) == "bionic" ]; then
         # Bionic not in the repo yet, see https://linuxconfig.org/how-to-install-docker-on-ubuntu-18-04-bionic-beaver
@@ -155,12 +233,6 @@ if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; t
         add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
     fi
     apt-get update 2>error
-    apt-get install -y \
-        curl \
-        apt-transport-https \
-        ca-certificates \
-        software-properties-common \
-        2>error
 fi
 
 if ! [ -x "$(command -v docker)" ]; then
@@ -195,8 +267,12 @@ echo -e "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE\n"
 # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
 . ./build.sh
 
+if [ "$BTCPAYGEN_MIGRATED_PREGEN" == "true" ]; then
+    cp Generated/docker-compose.generated.yml $BTCPAY_DOCKER_COMPOSE
+fi
+
 # Schedule for reboot
-if [ -d "/etc/systemd/system" ]; then # Use systemd
+if [ -x "$(command -v systemctl)" ]; then # Use systemd
 if [ -e "/etc/init/start_containers.conf" ]; then
     echo -e "Uninstalling upstart script /etc/init/start_containers.conf"
     rm "/etc/init/start_containers.conf"
@@ -241,25 +317,32 @@ stop on runlevel [!2345]
 
 script
     . /etc/profile.d/btcpay-env.sh
-    cd \"`dirname \$BTCPAY_ENV_FILE`\"
+    cd \"\$(dirname \$BTCPAY_ENV_FILE)\"
     docker-compose -f \"\$BTCPAY_DOCKER_COMPOSE\" up -d
 end script" > /etc/init/start_containers.conf
     echo -e "BTCPay Server upstart configured in /etc/init/start_containers.conf\n"
     initctl reload-configuration
-    cd "$(dirname $BTCPAY_ENV_FILE)"
-    docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d 
     echo "BTCPay Server started"
 fi
 
+cd "$(dirname $BTCPAY_ENV_FILE)"
+
+if [ $OLD_BTCPAY_DOCKER_COMPOSE != $BTCPAY_DOCKER_COMPOSE ]; then
+    echo "Closing old docker-compose at $OLD_BTCPAY_DOCKER_COMPOSE..."
+    docker-compose -f "$OLD_BTCPAY_DOCKER_COMPOSE" down
+fi
+
+docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d --remove-orphans
 
 cd $ORIGINAL_DIRECTORY
 
 for scriptname in *.sh; do
+    if [ "$scriptname" == "build.sh" -o "$scriptname" == "build-pregen.sh" ] ; then
+        continue;
+    fi
     echo "Adding symlink of $scriptname to /usr/bin"
     chmod +x $scriptname
-    if [ -e /usr/bin/$scriptname ]; then
-        rm /usr/bin/$scriptname
-    fi
-    ln -s $scriptname /usr/bin
+    rm /usr/bin/$scriptname &> /dev/null
+    ln -s "$(pwd)/$scriptname" /usr/bin
 done
 

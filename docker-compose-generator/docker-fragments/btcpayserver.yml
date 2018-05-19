@@ -3,7 +3,7 @@ version: "3"
 services:
 
   btcpayserver:
-    restart: always
+    restart: unless-stopped
     image: nicolasdorier/btcpayserver:1.0.2.21
     expose:
       - "49392"
@@ -33,7 +33,7 @@ services:
      - "nbxplorer_datadir:/root/.nbxplorer"
 
   nbxplorer:
-    restart: always
+    restart: unless-stopped
     image: nicolasdorier/nbxplorer:1.0.2.7
     expose: 
       - "32838"
@@ -44,7 +44,7 @@ services:
       - "nbxplorer_datadir:/datadir"
 
   postgres:
-    restart: always
+    restart: unless-stopped
     image:  postgres:9.6.5
     volumes:
       - "postgres_datadir:/var/lib/postgresql/data"

@@ -1,7 +1,7 @@
 version: "3"
 services:
   btcpayserver:
-    restart: always
+    restart: unless-stopped
     image: nicolasdorier/btcpayserver:1.0.2.21
     expose:
     - "49392"
@@ -31,7 +31,7 @@ services:
     ports:
     - "80:49392"
   nbxplorer:
-    restart: always
+    restart: unless-stopped
     image: nicolasdorier/nbxplorer:1.0.2.7
     expose:
     - "32838"
@@ -47,12 +47,12 @@ services:
     links:
     - litecoind
   postgres:
-    restart: always
+    restart: unless-stopped
     image: postgres:9.6.5
     volumes:
     - "postgres_datadir:/var/lib/postgresql/data"
   litecoind:
-    restart: always
+    restart: unless-stopped
     container_name: btcpayserver_litecoind
     image: nicolasdorier/docker-litecoin:0.15.1
     environment:
@@ -69,7 +69,7 @@ services:
   clightning_litecoin:
     image: nicolasdorier/clightning:0.0.0.16
     container_name: btcpayserver_clightning_litecoin
-    restart: always
+    restart: unless-stopped
     environment:
       LIGHTNINGD_OPT: |
         bitcoin-datadir=/etc/litecoin

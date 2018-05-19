@@ -295,4 +295,5 @@ BTCPayServer/wwwroot/bundles/*
 Production/.env
 .env
 .vscode/
+*docker-compose.generated.yml
 

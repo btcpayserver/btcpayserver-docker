@@ -1,7 +1,7 @@
 version: "3"
 services:
   nginx:
-    restart: always
+    restart: unless-stopped
     image: nginx
     container_name: nginx
     ports:
@@ -15,7 +15,7 @@ services:
     links:
     - btcpayserver
   nginx-gen:
-    restart: always
+    restart: unless-stopped
     image: jwilder/docker-gen
     container_name: nginx-gen
     volumes:
@@ -29,7 +29,7 @@ services:
     links:
     - nginx
   letsencrypt-nginx-proxy-companion:
-    restart: always
+    restart: unless-stopped
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: letsencrypt-nginx-proxy-companion
     volumes:
@@ -45,7 +45,7 @@ services:
     links:
     - nginx-gen
   btcpayserver:
-    restart: always
+    restart: unless-stopped
     image: nicolasdorier/btcpayserver:1.0.2.21
     expose:
     - "49392"
@@ -70,7 +70,7 @@ services:
     - "btcpay_datadir:/datadir"
     - "nbxplorer_datadir:/root/.nbxplorer"
   nbxplorer:
-    restart: always
+    restart: unless-stopped
     image: nicolasdorier/nbxplorer:1.0.2.7
     expose:
     - "32838"
@@ -86,12 +86,12 @@ services:
     links:
     - bitcoind
   postgres:
-    restart: always
+    restart: unless-stopped
     image: postgres:9.6.5
     volumes:
     - "postgres_datadir:/var/lib/postgresql/data"
   bitcoind:
-    restart: always
+    restart: unless-stopped
     container_name: btcpayserver_bitcoind
     image: nicolasdorier/docker-bitcoin:0.16.0
     environment:

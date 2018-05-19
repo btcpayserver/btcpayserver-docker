@@ -2,7 +2,7 @@ version: "3"
 
 services:
   bgoldd:
-      restart: always
+      restart: unless-stopped
       container_name: btcpayserver_bgoldd
       image: kamigawabul/docker-bitcoingold:0.15.0.2
       environment:

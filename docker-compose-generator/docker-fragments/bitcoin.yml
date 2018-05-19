@@ -2,7 +2,7 @@ version: "3"
 
 services:
   bitcoind:
-      restart: always
+      restart: unless-stopped
       container_name: btcpayserver_bitcoind
       image: nicolasdorier/docker-bitcoin:0.16.0
       environment:

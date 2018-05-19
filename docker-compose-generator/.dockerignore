@@ -122,3 +122,4 @@ output
 
 .vs
 **/launchSettings.json
+docker-fragments/

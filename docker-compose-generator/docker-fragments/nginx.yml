@@ -2,7 +2,7 @@ version: "3"
 
 services:
   nginx:
-    restart: always
+    restart: unless-stopped
     image: nginx
     container_name: nginx
     ports:
@@ -17,7 +17,7 @@ services:
       - btcpayserver
 
   nginx-gen:
-    restart: always
+    restart: unless-stopped
     image: jwilder/docker-gen
     container_name: nginx-gen
     volumes:
@@ -32,7 +32,7 @@ services:
       - nginx
 
   letsencrypt-nginx-proxy-companion:
-    restart: always
+    restart: unless-stopped
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: letsencrypt-nginx-proxy-companion
     volumes:
