@@ -10,7 +10,7 @@ git pull --force
 if [[ $BTCPAY_DOCKER_COMPOSE == *docker-compose.generated.yml ]]; then
     # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
     . ./build.sh
-    if [ "$BTCPAYGEN_MIGRATED_PREGEN" == "true" ]; then
+    if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then
         cp Generated/docker-compose.generated.yml $BTCPAY_DOCKER_COMPOSE
     fi
 fi
