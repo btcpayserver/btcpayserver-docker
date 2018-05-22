@@ -136,6 +136,8 @@ if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then
         BTCPAY_DOCKER_COMPOSE="$(pwd)/Production/docker-compose.generated.yml"
     elif [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production-NoReverseProxy ]]; then
         BTCPAY_DOCKER_COMPOSE="$(pwd)/Production-NoReverseProxy/docker-compose.generated.yml"
+    else
+        BTCPAY_DOCKER_COMPOSE="$(pwd)/Production/docker-compose.generated.yml"
     fi
 else # new deployments must be in Generated
     BTCPAY_DOCKER_COMPOSE="$(pwd)/Generated/docker-compose.generated.yml"
