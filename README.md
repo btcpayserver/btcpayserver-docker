@@ -76,7 +76,7 @@ export BTCPAYGEN_LIGHTNING="clightning"
 A wide range of tooling get available on your system when btcpay is installed:
 
 * `bitcoin-cli.sh` access your bitcoin node instance
-* `bitcoin-lightning-cli.sh` access your clighning node instance
+* `bitcoin-lightning-cli.sh` access your clightning node instance
 * `changedomain.sh` change the domain of your BTCPayServer
 * `btcpay-update.sh` update BTCPay to the latest version
 * `btcpay-setup.sh` change the settings of your server (run `. ./btcpay-setup.sh` to get more information about additional parameters, run `. ./btcpay-setup.sh -i` to setup again your btcpay server)
