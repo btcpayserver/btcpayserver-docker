@@ -16,7 +16,7 @@ PSQL="docker exec $POSTGRES_CONTAINER_ID psql -h localhost -p 5432 -U postgres"
 
 if [[ "$($PSQL -c "\l $DATABASE_NAME")" != *"en_US.utf8"* ]]; then
     echo "Database $DATABASE_NAME already uses locale C"
-    return
+    exit 0
 fi
 
 $PG_DUMP -h localhost -p 5432 -U postgres -F c -b -v -f "/tmp/$DATABASE_NAME.backup" $DATABASE_NAME
