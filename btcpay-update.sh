@@ -21,7 +21,7 @@ for scriptname in *.sh; do
     fi
     echo "Adding symlink of $scriptname to /usr/bin"
     chmod +x $scriptname
-    rm /usr/bin/$scriptname &> /dev/null
+    [ -e /usr/bin/$scriptname ] && rm /usr/bin/$scriptname &> /dev/null
     ln -s "$(pwd)/$scriptname" /usr/bin
 done
 
