@@ -14,7 +14,7 @@ PG_DUMP="docker exec $POSTGRES_CONTAINER_ID pg_dump"
 PG_RESTORE="docker exec $POSTGRES_CONTAINER_ID pg_restore"
 PSQL="docker exec $POSTGRES_CONTAINER_ID psql -h localhost -p 5432 -U postgres"
 
-if [[ "$($PSQL -h localhost -p 5432 -U postgres -c "\l $DATABASE_NAME")" != *"en_US.utf8"* ]]; then
+if [[ "$($PSQL -c "\l $DATABASE_NAME")" != *"en_US.utf8"* ]]; then
     echo "Database $DATABASE_NAME already uses locale C"
     return
 fi
