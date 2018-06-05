@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# This script is meant to change the locale of btcpayserver database deployed in docker
+# This script is meant to fix the locale of btcpayserver database deployed in docker
 # This change will make sure requests to postgres are properly using indexes when querying on text Primary keys
+# You can run this if you suspect your server is very slow when you have lot's of invoices 
 
 set -e
 
