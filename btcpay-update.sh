@@ -16,7 +16,9 @@ if [[ $BTCPAY_DOCKER_COMPOSE == *docker-compose.generated.yml ]]; then
 fi
 
 for scriptname in *.sh; do
-    if [ "$scriptname" == "build.sh" -o "$scriptname" == "build-pregen.sh" ] ; then
+    if [ "$scriptname" == "build.sh" ] || \
+       [ "$scriptname" == "build-pregen.sh" ] || \
+       [ "$scriptname" == "btcpay-setclocale.sh" ]; then
         continue;
     fi
     echo "Adding symlink of $scriptname to /usr/bin"
