@@ -44,7 +44,7 @@ namespace DockerGenerator
 					CryptoFragment = "bgold",
 					CLightningFragment = null,
 				},
-                new CryptoDefinition()
+				new CryptoDefinition()
 				{
 					Crypto = "ftc",
 					CryptoFragment = "feathercoin",
