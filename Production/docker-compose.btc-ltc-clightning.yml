@@ -60,7 +60,7 @@ services:
       VIRTUAL_HOST: ${BTCPAY_HOST}
       SSL_POLICY: Mozilla-Modern
       LETSENCRYPT_HOST: ${BTCPAY_HOST}
-      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-yourname@example.com}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}
       BTCPAY_LTCEXPLORERURL: http://nbxplorer:32838/
       BTCPAY_CHAINS: "ltc,btc"
       BTCPAY_LTCLIGHTNING: "/etc/clightning_litecoin/lightning-rpc"

@@ -49,7 +49,7 @@ This will be used to properly setup HTTPS via let's encrypt.
 
 Environment variables:
     BTCPAY_HOST: The hostname of your website (eg. btcpay.example.com)
-    LETSENCRYPT_EMAIL: A mail will be sent to this address if certificate expires and fail to renew automatically (eg. me@example.com, Default:me@example.com)
+    LETSENCRYPT_EMAIL: A mail will be sent to this address if certificate expires and fail to renew automatically (eg. me@example.com)
     NBITCOIN_NETWORK: The type of network to use (eg. mainnet, testnet or regtest. Default: mainnet)
     LIGHTNING_ALIAS: An alias for your lightning network node if used
     BTCPAYGEN_CRYPTO1: First supported crypto currency (eg. btc, ltc, none. Default: btc)
@@ -119,7 +119,9 @@ if [ ! -z $BTCPAY_DOCKER_COMPOSE ] && [ ! -z $DOWNLOAD_ROOT ] && [ -z $BTCPAYGEN
 fi
 #########################################################
 
-: "${LETSENCRYPT_EMAIL:=me@example.com}"
+[[ $LETSENCRYPT_EMAIL == *@example.com ]] && echo "LETSENCRYPT_EMAIL ends with @example.com, setting to empty email instead" && LETSENCRYPT_EMAIL=""
+
+: "${LETSENCRYPT_EMAIL:=}"
 : "${BTCPAYGEN_OLD_PREGEN:=false}"
 : "${NBITCOIN_NETWORK:=mainnet}"
 : "${BTCPAYGEN_CRYPTO1:=btc}"
