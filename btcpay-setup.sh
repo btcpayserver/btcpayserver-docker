@@ -67,6 +67,11 @@ if [ "$1" != "-i" ]; then
     return
 fi
 
+if [[ $LETSENCRYPT_EMAIL == *@example.com ]]; then
+    echo "LETSENCRYPT_EMAIL can't end with @example.com, transformed to empty email"
+    LETSENCRYPT_EMAIL=""
+fi
+
 ######### Migration: old pregen environment to new environment ############
 if [ ! -z $BTCPAY_DOCKER_COMPOSE ] && [ ! -z $DOWNLOAD_ROOT ] && [ -z $BTCPAYGEN_OLD_PREGEN ]; then 
     echo "Old pregen docker deployment detected. Migrating..."
