@@ -215,9 +215,19 @@ fi
 " > /etc/profile.d/btcpay-env.sh
 chmod +x /etc/profile.d/btcpay-env.sh
 
-. /etc/profile.d/btcpay-env.sh
-
 echo -e "BTCPay Server environment variables successfully saved in /etc/profile.d/btcpay-env.sh\n"
+
+# Set .env file
+touch $BTCPAY_ENV_FILE
+echo "
+BTCPAY_HOST=$BTCPAY_HOST
+ACME_CA_URI=$ACME_CA_URI
+NBITCOIN_NETWORK=$NBITCOIN_NETWORK
+LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL
+LIGHTNING_ALIAS=$LIGHTNING_ALIAS" > $BTCPAY_ENV_FILE
+echo -e "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE\n"
+
+. /etc/profile.d/btcpay-env.sh
 
 if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; then
     apt-get update 2>error
@@ -255,16 +265,6 @@ if ! [ -x "$(command -v docker-compose)" ]; then
 else
     echo -e "docker-compose is already installed\n"
 fi
-
-# Set .env file
-touch $BTCPAY_ENV_FILE
-echo "
-BTCPAY_HOST=$BTCPAY_HOST
-ACME_CA_URI=$ACME_CA_URI
-NBITCOIN_NETWORK=$NBITCOIN_NETWORK
-LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL
-LIGHTNING_ALIAS=$LIGHTNING_ALIAS" > $BTCPAY_ENV_FILE
-echo -e "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE\n"
 
 # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
 . ./build.sh
