@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  groestlcoind:
+      restart: unless-stopped
+      container_name: btcpayserver_groestlcoind
+      image: nicolasdorier/docker-groestlcoin:2.16.0
+      environment:
+        GROESTLCOIN_EXTRA_ARGS: |
+          rpcport=43782
+          ${NBITCOIN_NETWORK:-regtest}=1
+          port=39388
+          whitelist=0.0.0.0/0
+      expose:
+        - "43782"
+        - "39388"
+      volumes:
+        - "groestlcoin_datadir:/data"
+  nbxplorer:
+      environment:
+        NBXPLORER_CHAINS: "grs"
+        NBXPLORER_GRSRPCURL: http://groestlcoind:43782/
+        NBXPLORER_GRSNODEENDPOINT: groestlcoind:39388
+      links:
+        - groestlcoind
+      volumes:
+        - "groestlcoin_datadir:/root/.groestlcoin"
+  btcpayserver:
+      environment:
+        BTCPAY_CHAINS: "grs"
+        BTCPAY_GRSEXPLORERURL: http://nbxplorer:32838/
+volumes:
+  groestlcoin_datadir:

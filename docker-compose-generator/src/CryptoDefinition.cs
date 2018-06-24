@@ -49,7 +49,13 @@ namespace DockerGenerator
 					Crypto = "ftc",
 					CryptoFragment = "feathercoin",
 					CLightningFragment = null,
-				}
+				},
+                new CryptoDefinition()
+                {
+                    Crypto = "grs",
+                    CryptoFragment = "groestlcoin",
+                    CLightningFragment = null,
+                }
             };
 		}
     }
