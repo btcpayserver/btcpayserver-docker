@@ -46,7 +46,7 @@ services:
     - nginx-gen
   btcpayserver:
     restart: unless-stopped
-    image: nicolasdorier/btcpayserver:1.0.2.36
+    image: nicolasdorier/btcpayserver:1.0.2.37
     expose:
     - "49392"
     environment:
@@ -117,7 +117,7 @@ services:
     volumes:
     - "litecoin_datadir:/data"
   clightning_litecoin:
-    image: nicolasdorier/clightning:0.0.0.23
+    image: nicolasdorier/clightning:v0.6
     container_name: btcpayserver_clightning_litecoin
     restart: unless-stopped
     environment:
@@ -152,7 +152,7 @@ services:
     volumes:
     - "bitcoin_datadir:/data"
   clightning_bitcoin:
-    image: nicolasdorier/clightning:0.0.0.23
+    image: nicolasdorier/clightning:v0.6
     container_name: btcpayserver_clightning_bitcoin
     restart: unless-stopped
     environment:
