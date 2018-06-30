@@ -46,7 +46,7 @@ services:
     - nginx-gen
   btcpayserver:
     restart: unless-stopped
-    image: nicolasdorier/btcpayserver:1.0.2.37
+    image: nicolasdorier/btcpayserver:1.0.2.39
     expose:
     - "49392"
     environment:
@@ -78,7 +78,7 @@ services:
     - "clightning_bitcoin_datadir:/etc/clightning_bitcoin"
   nbxplorer:
     restart: unless-stopped
-    image: nicolasdorier/nbxplorer:1.0.2.10
+    image: nicolasdorier/nbxplorer:1.0.2.11
     expose:
     - "32838"
     environment:
