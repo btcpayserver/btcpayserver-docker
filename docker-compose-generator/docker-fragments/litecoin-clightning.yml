@@ -23,7 +23,7 @@ services:
       - litecoind
   btcpayserver:
     environment:
-      BTCPAY_LTCLIGHTNING: "/etc/clightning_litecoin/lightning-rpc"
+      BTCPAY_LTCLIGHTNING: "type=clightning;server=unix://etc/clightning_litecoin/lightning-rpc"
     volumes:
       - "clightning_litecoin_datadir:/etc/clightning_litecoin"
     links:

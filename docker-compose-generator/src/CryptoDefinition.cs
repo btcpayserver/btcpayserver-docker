@@ -21,8 +21,13 @@ namespace DockerGenerator
 			get;
 			private set;
 		}
+        public string LNDFragment
+        {
+            get;
+            private set;
+        }
 
-		public static CryptoDefinition[] GetDefinitions()
+        public static CryptoDefinition[] GetDefinitions()
 		{
 			return new[]
 			{
@@ -31,30 +36,29 @@ namespace DockerGenerator
 					Crypto = "ltc",
 					CryptoFragment = "litecoin",
 					CLightningFragment = "litecoin-clightning",
-				},
+                    LNDFragment = "litecoin-lnd"
+                },
 				new CryptoDefinition()
 				{
 					Crypto = "btc",
 					CryptoFragment = "bitcoin",
 					CLightningFragment = "bitcoin-clightning",
+                    LNDFragment = "bitcoin-lnd"
 				},
 				new CryptoDefinition()
 				{
 					Crypto = "btg",
-					CryptoFragment = "bgold",
-					CLightningFragment = null,
+					CryptoFragment = "bgold"
 				},
 				new CryptoDefinition()
 				{
 					Crypto = "ftc",
-					CryptoFragment = "feathercoin",
-					CLightningFragment = null,
+					CryptoFragment = "feathercoin"
 				},
                 new CryptoDefinition()
                 {
                     Crypto = "grs",
-                    CryptoFragment = "groestlcoin",
-                    CLightningFragment = null,
+                    CryptoFragment = "groestlcoin"
                 }
             };
 		}

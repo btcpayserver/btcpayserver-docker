@@ -23,7 +23,7 @@ services:
       - bitcoind
   btcpayserver:
     environment:
-      BTCPAY_BTCLIGHTNING: "/etc/clightning_bitcoin/lightning-rpc"
+      BTCPAY_BTCLIGHTNING: "type=clightning;server=unix://etc/clightning_bitcoin/lightning-rpc"
     volumes:
       - "clightning_bitcoin_datadir:/etc/clightning_bitcoin"
     links:

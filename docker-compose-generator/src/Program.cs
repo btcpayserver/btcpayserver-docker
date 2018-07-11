@@ -86,7 +86,11 @@ namespace DockerGenerator
 				{
 					fragments.Add(crypto.CLightningFragment);
 				}
-			}
+                if(composition.SelectedLN == "lnd" && crypto.LNDFragment != null)
+                {
+                    fragments.Add(crypto.LNDFragment);
+                }
+            }
 
 			var def = new DockerComposeDefinition(name, fragments);
 			def.FragmentLocation = fragmentLocation;
