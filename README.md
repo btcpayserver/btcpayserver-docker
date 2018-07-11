@@ -71,7 +71,7 @@ export BTCPAYGEN_LIGHTNING="clightning"
 * Add BTCPay utilities in /usr/bin
 * Start BTCPay
 
-# Tooling <a name="tooling" />
+# Tooling <a name="tooling"></a>
 
 A wide range of tooling get available on your system when btcpay is installed:
 
@@ -229,7 +229,7 @@ dotnet run
 This will generate your docker-compose in the `Generated` folder, which you can then try by yourself.
 Note that BTCPayServer developers will not spend time testing your image, so make sure it works.
 
-# For docker noobs <a name="fornoobs" />
+# For docker noobs <a name="fornoobs"></a>
 
 If you are a docker noob here is how you would create a HTTPS ready server.
 
@@ -271,7 +271,7 @@ export BTCPAYGEN_CRYPTO3='btg'
 . btcpay-setup.sh -i
 ```
 
-## I deployed before btcpay-setup.sh existed, can I migrate to this new system? <a name="migration" />
+## I deployed before btcpay-setup.sh existed, can I migrate to this new system? <a name="migration"></a>
 
 Yes, the following command will migrate you to this new system:
 
@@ -281,3 +281,17 @@ btcpay-update.sh
 cd $DOWNLOAD_ROOT/btcpayserver-docker
 . ./btcpay-setup.sh -i
 ```
+
+## Windows user error: Cannot create container for service docker: Mount denied
+
+If you see this error:
+
+`Cannot create container for service docker: b'Mount denied:\nThe source path "\\\\var\\\\run\\\\docker.sock:/var/run/docker.sock"\nis not a valid Windows path'`.
+
+Run this command and run again `docker-compose -f <your.yml> up`.
+
+```powershell
+$Env:COMPOSE_CONVERT_WINDOWS_PATHS=1
+```
+
+This bug comes from Docker for Windows and is [tracked on github](https://github.com/docker/for-win/issues/1829).
