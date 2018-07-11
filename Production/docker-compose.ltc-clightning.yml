@@ -46,7 +46,7 @@ services:
     - nginx-gen
   btcpayserver:
     restart: unless-stopped
-    image: nicolasdorier/btcpayserver:1.0.2.39
+    image: nicolasdorier/btcpayserver:1.0.2.40
     expose:
     - "49392"
     environment:
@@ -63,7 +63,7 @@ services:
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}
       BTCPAY_LTCEXPLORERURL: http://nbxplorer:32838/
       BTCPAY_CHAINS: "ltc"
-      BTCPAY_LTCLIGHTNING: "/etc/clightning_litecoin/lightning-rpc"
+      BTCPAY_LTCLIGHTNING: "type=clightning;server=unix://etc/clightning_litecoin/lightning-rpc"
     links:
     - nbxplorer
     - postgres
