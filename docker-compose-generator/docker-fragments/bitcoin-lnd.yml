@@ -4,6 +4,7 @@ services:
   lnd_bitcoin:
     image: btcpayserver/lnd:0.4.2.0
     container_name: btcpayserver_lnd_bitcoin
+    restart: unless-stopped
     environment:
       LND_CHAIN: "btc"
       LND_ENVIRONMENT: "${NBITCOIN_NETWORK:-regtest}"
