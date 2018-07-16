@@ -80,8 +80,9 @@ namespace DockerGenerator
                 .GroupBy(s => s.Key.ToString(), s => s.Value)
                 .Select(group =>
                     (GroupName: group.Key,
-                     MainNode: group.OfType<YamlMappingNode>().Single(n => n.Children.ContainsKey("image")),
+                     MainNode: group.OfType<YamlMappingNode>().SingleOrDefault(n => n.Children.ContainsKey("image")),
                      MergedNodes: group.OfType<YamlMappingNode>().Where(n => !n.Children.ContainsKey("image"))))
+                .Where(_ => _.MainNode != null)
                 .Select(_ =>
                 {
                     foreach(var node in _.MergedNodes)
