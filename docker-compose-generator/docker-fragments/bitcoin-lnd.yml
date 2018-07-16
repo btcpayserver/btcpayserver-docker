@@ -10,6 +10,7 @@ services:
       LND_ENVIRONMENT: "${NBITCOIN_NETWORK:-regtest}"
       LND_EXTRA_ARGS: |
         restlisten=0.0.0.0:8080
+        rpclisten=0.0.0.0:10009
         bitcoin.node=bitcoind
         bitcoind.rpchost=bitcoind:43782
         bitcoind.zmqpath=tcp://bitcoind:28332
@@ -45,6 +46,17 @@ services:
         zmqpubhashblock=tcp://0.0.0.0:28332
     expose:
       - "28332"
+  
+  nginx:
+    links:
+      - "lnd_bitcoin"
+    volumes:
+      - "lnd_bitcoin_datadir:/lnd"
+  nginx-gen:
+    links:
+      - "lnd_bitcoin"
+    volumes:
+      - "lnd_bitcoin_datadir:/lnd"
 
 volumes:
   lnd_bitcoin_datadir:
