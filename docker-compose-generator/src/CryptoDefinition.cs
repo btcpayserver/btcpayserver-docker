@@ -48,8 +48,9 @@ namespace DockerGenerator
 				new CryptoDefinition()
 				{
 					Crypto = "btg",
-					CryptoFragment = "bgold"
-				},
+					CryptoFragment = "bgold",
+				    LNDFragment = "bgold-lnd"
+                },
 				new CryptoDefinition()
 				{
 					Crypto = "ftc",

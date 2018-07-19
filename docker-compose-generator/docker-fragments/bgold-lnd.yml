@@ -1,0 +1,62 @@
+version: "3"
+
+services:
+  lnd_bitcoingold:
+    image: kamigawabul/btglnd:latest
+    container_name: btcpayserver_lnd_bitcoingold
+    restart: unless-stopped
+    environment:
+      LND_CHAIN: "btg"
+      LND_ENVIRONMENT: "${NBITCOIN_NETWORK:-regtest}"
+      LND_EXTRA_ARGS: |
+        restlisten=0.0.0.0:8080
+        rpclisten=127.0.0.1:10008
+        rpclisten=0.0.0.0:10009
+        bitcoingold.node=bgoldd
+        bgoldd.rpchost=bgoldd:43782
+        bgoldd.zmqpath=tcp://bgoldd:28332
+        externalip=${BTCPAY_HOST}:9735
+        alias=${LIGHTNING_ALIAS}
+        noencryptwallet=1
+    ports:
+      - "9735:9735"
+    expose:
+      - "8080"
+      - "9735"
+    volumes:
+      - "lnd_bitcoingold_datadir:/data"
+      - "bgold_datadir:/deps/.bitcoingold"
+    links:
+      - bgoldd
+
+  btcpayserver:
+    environment:
+      BTCPAY_BTCLIGHTNING: "type=lnd-rest;server=http://lnd_bitcoingold:8080/;macaroonfilepath=/etc/lnd_bitcoingold/admin.macaroon;allowinsecure=true"
+    volumes:
+      - "lnd_bitcoingold_datadir:/etc/lnd_bitcoingold"
+    links:
+      - lnd_bitcoingold
+
+  bgoldd:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        zmqpubrawtx=tcp://0.0.0.0:28332
+        zmqpubrawblock=tcp://0.0.0.0:28332
+        zmqpubrawtxlock=tcp://0.0.0.0:28332
+        zmqpubhashblock=tcp://0.0.0.0:28332
+    expose:
+      - "28332"
+  
+  nginx:
+    links:
+      - "lnd_bitcoingold"
+    volumes:
+      - "lnd_bitcoingold_datadir:/lnd"
+  nginx-gen:
+    links:
+      - "lnd_bitcoingold"
+    volumes:
+      - "lnd_bitcoingold_datadir:/lnd"
+
+volumes:
+  lnd_bitcoingold_datadir:
