@@ -45,11 +45,11 @@ namespace DockerGenerator
 					CLightningFragment = "bitcoin-clightning",
                     LNDFragment = "bitcoin-lnd"
 				},
-				new CryptoDefinition()
-				{
-					Crypto = "btg",
-					CryptoFragment = "bgold",
-				    LNDFragment = "bgold-lnd"
+			    new CryptoDefinition()
+			    {
+			        Crypto = "btg",
+			        CryptoFragment = "bgold",
+			        LNDFragment = "bgold-lnd"
                 },
 				new CryptoDefinition()
 				{
