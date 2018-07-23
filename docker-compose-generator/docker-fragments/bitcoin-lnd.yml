@@ -32,7 +32,7 @@ services:
 
   btcpayserver:
     environment:
-      BTCPAY_BTCLIGHTNING: "type=lnd-rest;server=http://lnd_bitcoin:8080/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon;allowinsecure=true",
+      BTCPAY_BTCLIGHTNING: "type=lnd-rest;server=http://lnd_bitcoin:8080/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon;allowinsecure=true"
       BTCPAY_BTCEXTERNALLNDGRPC: "type=lnd-grpc;server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon"
     volumes:
       - "lnd_bitcoin_datadir:/etc/lnd_bitcoin"
