@@ -46,7 +46,7 @@ services:
     - nginx-gen
   btcpayserver:
     restart: unless-stopped
-    image: nicolasdorier/btcpayserver:1.0.2.72
+    image: nicolasdorier/btcpayserver:1.0.2.77
     expose:
     - "49392"
     environment:
@@ -71,7 +71,7 @@ services:
     - "nbxplorer_datadir:/root/.nbxplorer"
   nbxplorer:
     restart: unless-stopped
-    image: nicolasdorier/nbxplorer:1.0.2.15
+    image: nicolasdorier/nbxplorer:1.0.2.16
     expose:
     - "32838"
     environment:
