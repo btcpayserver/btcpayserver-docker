@@ -2,12 +2,13 @@ version: "3"
 
 services:
   lnd_litecoin:
-    image: btcpayserver/lnd:0.4.2.0
+    image: btcpayserver/lnd:0.4.2.0.1
     container_name: btcpayserver_lnd_litecoin
     restart: unless-stopped
     environment:
       LND_CHAIN: "ltc"
       LND_ENVIRONMENT: "${NBITCOIN_NETWORK:-regtest}"
+      LND_EXPLORERURL: "http://nbxplorer:32838/"
       LND_EXTRA_ARGS: |
         restlisten=0.0.0.0:8080
         litecoin.node=litecoind
@@ -25,7 +26,9 @@ services:
     volumes:
       - "lnd_litecoin_datadir:/data"
       - "litecoin_datadir:/deps/.litecoin"
+      - "nbxplorer_datadir:/root/.nbxplorer"
     links:
+      - nbxplorer
       - litecoind
 
   btcpayserver:
