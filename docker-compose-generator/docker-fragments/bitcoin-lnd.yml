@@ -46,7 +46,7 @@ services:
     environment:
       BITCOIN_EXTRA_ARGS: |
         zmqpubrawtx=tcp://0.0.0.0:28332
-        zmqpubrawblock=tcp://0.0.0.0:28333
+        zmqpubrawblock=tcp://0.0.0.0:28332
     expose:
       - "28332"
       - "28333"
