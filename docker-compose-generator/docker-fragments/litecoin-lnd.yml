@@ -43,11 +43,10 @@ services:
     environment:
       BITCOIN_EXTRA_ARGS: |
         zmqpubrawtx=tcp://0.0.0.0:28332
-        zmqpubrawblock=tcp://0.0.0.0:28332
-        zmqpubrawtxlock=tcp://0.0.0.0:28332
-        zmqpubhashblock=tcp://0.0.0.0:28332
+        zmqpubrawblock=tcp://0.0.0.0:28333
     expose:
       - "28332"
+      - "28333"
 
 volumes:
   lnd_litecoin_datadir:
