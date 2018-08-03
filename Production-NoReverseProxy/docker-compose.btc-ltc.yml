@@ -30,7 +30,7 @@ services:
     - "80:49392"
   nbxplorer:
     restart: unless-stopped
-    image: nicolasdorier/nbxplorer:1.0.2.16
+    image: nicolasdorier/nbxplorer:1.0.2.20
     expose:
     - "32838"
     environment:
