@@ -104,7 +104,7 @@ Note: The first run might take a while, but next run are instantaneous.
 
 On Windows:
 
-```
+```powershell
 Invoke-Command {
     $BTCPAYGEN_CRYPTO1="btc"
     $BTCPAYGEN_CRYPTO2="ltc"
@@ -117,7 +117,7 @@ Invoke-Command {
 
 On Linux:
 
-```
+```bash
 BTCPAYGEN_CRYPTO1="btc" \
 BTCPAYGEN_CRYPTO2="ltc" \
 BTCPAYGEN_REVERSEPROXY="nginx" \
@@ -125,6 +125,11 @@ BTCPAYGEN_LIGHTNING="clightning" \
 BTCPAYGEN_SUBNAME="custom" \
 ./build.sh
 ```
+
+Next, you will need to configure the runtime environment variable for `Generated/docker-compose.custom.yml`. 
+
+* If you are using [NGinx](Production/README.md)
+* If you are [not using NGinx](Production-NoReverseProxy/README.md)
 
 ## What btcpay-setup do
 
