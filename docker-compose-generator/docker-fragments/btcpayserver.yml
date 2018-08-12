@@ -4,7 +4,7 @@ services:
 
   btcpayserver:
     restart: unless-stopped
-    image: nicolasdorier/btcpayserver:1.0.2.87
+    image: nicolasdorier/btcpayserver:1.0.2.90
     expose:
       - "49392"
     environment:
@@ -14,6 +14,8 @@ services:
       BTCPAY_BIND: 0.0.0.0:49392
       BTCPAY_EXTERNALURL: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/
       BTCPAY_ROOTPATH: ${BTCPAY_ROOTPATH:-/}
+      BTCPAY_SSHTRUSTEDFINGERPRINTS: ${BTCPAY_SSHTRUSTEDFINGERPRINTS}
+      BTCPAY_SSHKEYFILE: ${BTCPAY_SSHKEYFILE}
 
       # NGINX settings
       VIRTUAL_NETWORK: nginx-proxy
