@@ -46,7 +46,7 @@ services:
     - nginx-gen
   btcpayserver:
     restart: unless-stopped
-    image: nicolasdorier/btcpayserver:1.0.2.36
+    image: nicolasdorier/btcpayserver:1.0.2.93
     expose:
     - "49392"
     environment:
@@ -55,6 +55,8 @@ services:
       BTCPAY_BIND: 0.0.0.0:49392
       BTCPAY_EXTERNALURL: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/
       BTCPAY_ROOTPATH: ${BTCPAY_ROOTPATH:-/}
+      BTCPAY_SSHTRUSTEDFINGERPRINTS: ${BTCPAY_SSHTRUSTEDFINGERPRINTS}
+      BTCPAY_SSHKEYFILE: ${BTCPAY_SSHKEYFILE}
       VIRTUAL_NETWORK: nginx-proxy
       VIRTUAL_PORT: 49392
       VIRTUAL_HOST: ${BTCPAY_HOST}
@@ -63,9 +65,9 @@ services:
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}
       BTCPAY_LTCEXPLORERURL: http://nbxplorer:32838/
       BTCPAY_CHAINS: "ltc,btc"
-      BTCPAY_LTCLIGHTNING: "/etc/clightning_litecoin/lightning-rpc"
+      BTCPAY_LTCLIGHTNING: "type=clightning;server=unix://etc/clightning_litecoin/lightning-rpc"
       BTCPAY_BTCEXPLORERURL: http://nbxplorer:32838/
-      BTCPAY_BTCLIGHTNING: "/etc/clightning_bitcoin/lightning-rpc"
+      BTCPAY_BTCLIGHTNING: "type=clightning;server=unix://etc/clightning_bitcoin/lightning-rpc"
     links:
     - nbxplorer
     - postgres
@@ -78,7 +80,7 @@ services:
     - "clightning_bitcoin_datadir:/etc/clightning_bitcoin"
   nbxplorer:
     restart: unless-stopped
-    image: nicolasdorier/nbxplorer:1.0.2.9
+    image: nicolasdorier/nbxplorer:1.0.2.23
     expose:
     - "32838"
     environment:
@@ -117,10 +119,13 @@ services:
     volumes:
     - "litecoin_datadir:/data"
   clightning_litecoin:
-    image: nicolasdorier/clightning:0.0.0.23
+    image: nicolasdorier/clightning:aeafe4dbe7d5c61f664c18417698866b0d70252f-2
     container_name: btcpayserver_clightning_litecoin
     restart: unless-stopped
     environment:
+      LIGHTNINGD_NETWORK: ${NBITCOIN_NETWORK:-regtest}
+      LIGHTNINGD_CHAIN: ltc
+      LIGHTNINGD_EXPLORERURL: "http://nbxplorer:32838/"
       LIGHTNINGD_OPT: |
         bitcoin-datadir=/etc/litecoin
         bitcoin-rpcconnect=litecoind
@@ -132,9 +137,11 @@ services:
     volumes:
     - "clightning_litecoin_datadir:/root/.lightning"
     - "litecoin_datadir:/etc/litecoin"
+    - "nbxplorer_datadir:/root/.nbxplorer"
     ports:
     - "9736:9735"
     links:
+    - nbxplorer
     - litecoind
   bitcoind:
     restart: unless-stopped
@@ -152,10 +159,13 @@ services:
     volumes:
     - "bitcoin_datadir:/data"
   clightning_bitcoin:
-    image: nicolasdorier/clightning:0.0.0.23
+    image: nicolasdorier/clightning:aeafe4dbe7d5c61f664c18417698866b0d70252f-2
     container_name: btcpayserver_clightning_bitcoin
     restart: unless-stopped
     environment:
+      LIGHTNINGD_NETWORK: ${NBITCOIN_NETWORK:-regtest}
+      LIGHTNINGD_CHAIN: btc
+      LIGHTNINGD_EXPLORERURL: "http://nbxplorer:32838/"
       LIGHTNINGD_OPT: |
         bitcoin-datadir=/etc/bitcoin
         bitcoin-rpcconnect=bitcoind
@@ -167,9 +177,11 @@ services:
     volumes:
     - "clightning_bitcoin_datadir:/root/.lightning"
     - "bitcoin_datadir:/etc/bitcoin"
+    - "nbxplorer_datadir:/root/.nbxplorer"
     ports:
     - "9735:9735"
     links:
+    - nbxplorer
     - bitcoind
 volumes:
   nginx_conf: 

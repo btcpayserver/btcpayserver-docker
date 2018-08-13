@@ -58,6 +58,7 @@ Environment variables:
     BTCPAYGEN_REVERSEPROXY: Whether to use or not a reverse proxy. NGinx setup HTTPS for you. (eg. nginx, none. Default: nginx)
     BTCPAYGEN_LIGHTNING: Lightning network implementation to use (eg. clightning, none)
     ACME_CA_URI: The API endpoint to ask for HTTPS certificate (default: https://acme-v01.api.letsencrypt.org/directory)
+    BTCPAY_HOST_SSHKEYFILE: Optional, SSH private key that BTCPay can use to connect to this VM's SSH server. This key will be copied on BTCPay's data directory
 
 END
 }
@@ -147,10 +148,21 @@ fi
 
 BTCPAY_ENV_FILE="$BTCPAY_BASE_DIRECTORY/.env"
 
+BTCPAY_SSHKEYFILE=""
+BTCPAY_SSHTRUSTEDFINGERPRINTS=""
+if [[ -f "$BTCPAY_HOST_SSHKEYFILE" ]]; then
+    BTCPAY_SSHKEYFILE="/datadir/id_rsa"
+    for pubkey in /etc/ssh/ssh_host_*.pub; do
+        fingerprint="$(ssh-keygen -l -f $pubkey | awk '{print $2}')"
+        BTCPAY_SSHTRUSTEDFINGERPRINTS="$fingerprint;$BTCPAY_SSHTRUSTEDFINGERPRINTS"
+    done
+fi
+
 echo "
 -------SETUP-----------
 Parameters passed:
 BTCPAY_HOST:$BTCPAY_HOST
+BTCPAY_HOST_SSHKEYFILE:$BTCPAY_HOST_SSHKEYFILE
 LETSENCRYPT_EMAIL:$LETSENCRYPT_EMAIL
 NBITCOIN_NETWORK:$NBITCOIN_NETWORK
 LIGHTNING_ALIAS:$LIGHTNING_ALIAS
@@ -172,6 +184,8 @@ BTCPAY_DOCKER_COMPOSE=$BTCPAY_DOCKER_COMPOSE
 BTCPAY_BASE_DIRECTORY=$BTCPAY_BASE_DIRECTORY
 BTCPAY_ENV_FILE=$BTCPAY_ENV_FILE
 BTCPAYGEN_OLD_PREGEN=$BTCPAYGEN_OLD_PREGEN
+BTCPAY_SSHKEYFILE=$BTCPAY_SSHKEYFILE
+BTCPAY_SSHTRUSTEDFINGERPRINTS:$BTCPAY_SSHTRUSTEDFINGERPRINTS
 ----------------------
 "
 
@@ -207,12 +221,15 @@ export BTCPAYGEN_REVERSEPROXY=\"$BTCPAYGEN_REVERSEPROXY\"
 export BTCPAY_DOCKER_COMPOSE=\"$BTCPAY_DOCKER_COMPOSE\"
 export BTCPAY_BASE_DIRECTORY=\"$BTCPAY_BASE_DIRECTORY\"
 export BTCPAY_ENV_FILE=\"$BTCPAY_ENV_FILE\"
+export BTCPAY_HOST_SSHKEYFILE=\"$BTCPAY_HOST_SSHKEYFILE\"
 if cat \$BTCPAY_ENV_FILE &> /dev/null; then
 export BTCPAY_HOST=\"\$(cat \$BTCPAY_ENV_FILE | sed -n 's/^BTCPAY_HOST=\(.*\)$/\1/p')\"
 export LETSENCRYPT_EMAIL=\"\$(cat \$BTCPAY_ENV_FILE | sed -n 's/^LETSENCRYPT_EMAIL=\(.*\)$/\1/p')\"
 export NBITCOIN_NETWORK=\"\$(cat \$BTCPAY_ENV_FILE | sed -n 's/^NBITCOIN_NETWORK=\(.*\)$/\1/p')\"
 export LIGHTNING_ALIAS=\"\$(cat \$BTCPAY_ENV_FILE | sed -n 's/^LIGHTNING_ALIAS=\(.*\)$/\1/p')\"
 export ACME_CA_URI=\"\$(cat \$BTCPAY_ENV_FILE | sed -n 's/^ACME_CA_URI=\(.*\)$/\1/p')\"
+export BTCPAY_SSHKEYFILE=\"\$(cat \$BTCPAY_ENV_FILE | sed -n 's/^BTCPAY_SSHKEYFILE=\(.*\)$/\1/p')\"
+export BTCPAY_SSHTRUSTEDFINGERPRINTS=\"\$(cat \$BTCPAY_ENV_FILE | sed -n 's/^BTCPAY_SSHTRUSTEDFINGERPRINTS=\(.*\)$/\1/p')\"
 fi
 " > /etc/profile.d/btcpay-env.sh
 chmod +x /etc/profile.d/btcpay-env.sh
@@ -226,7 +243,9 @@ BTCPAY_HOST=$BTCPAY_HOST
 ACME_CA_URI=$ACME_CA_URI
 NBITCOIN_NETWORK=$NBITCOIN_NETWORK
 LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL
-LIGHTNING_ALIAS=$LIGHTNING_ALIAS" > $BTCPAY_ENV_FILE
+LIGHTNING_ALIAS=$LIGHTNING_ALIAS
+BTCPAY_SSHTRUSTEDFINGERPRINTS=$BTCPAY_SSHTRUSTEDFINGERPRINTS
+BTCPAY_SSHKEYFILE=$BTCPAY_SSHKEYFILE" > $BTCPAY_ENV_FILE
 echo -e "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE\n"
 
 . /etc/profile.d/btcpay-env.sh
@@ -331,12 +350,18 @@ fi
 
 cd "$(dirname $BTCPAY_ENV_FILE)"
 
-if [ $OLD_BTCPAY_DOCKER_COMPOSE != $BTCPAY_DOCKER_COMPOSE ]; then
+if [ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ] && [ "$OLD_BTCPAY_DOCKER_COMPOSE" != "$BTCPAY_DOCKER_COMPOSE" ]; then
     echo "Closing old docker-compose at $OLD_BTCPAY_DOCKER_COMPOSE..."
     docker-compose -f "$OLD_BTCPAY_DOCKER_COMPOSE" down
 fi
 
 docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d --remove-orphans
+
+# Give SSH key to BTCPay
+if [[ -f "$BTCPAY_HOST_SSHKEYFILE" ]]; then
+    echo "Copying $BTCPAY_SSHKEYFILE to BTCPayServer container"
+    docker cp "$BTCPAY_HOST_SSHKEYFILE" $(docker ps --filter "name=_btcpayserver_" -q):$BTCPAY_SSHKEYFILE
+fi
 
 cd $ORIGINAL_DIRECTORY
 
