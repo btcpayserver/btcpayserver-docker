@@ -71,6 +71,21 @@ export BTCPAYGEN_LIGHTNING="clightning"
 * Add BTCPay utilities in /usr/bin
 * Start BTCPay
 
+# Environment variables
+
+`btcpay-setup.sh` will use the following environment variables:
+* `BTCPAY_HOST`: The hostname of your website (eg. btcpay.example.com)
+* `LETSENCRYPT_EMAIL`: A mail will be sent to this address if certificate expires and fail to renew automatically (eg. me@example.com)
+* `NBITCOIN_NETWORK`: The type of network to use (eg. mainnet, testnet or regtest. Default`: mainnet)
+* `LIGHTNING_ALIAS`: An alias for your lightning network node if used
+* `BTCPAYGEN_CRYPTO1`: First supported crypto currency (eg. btc, ltc, none. Default`: btc)
+* `BTCPAYGEN_CRYPTO2`: Second supported crypto currency (eg. btc, ltc, none. Default`: empty)
+* `BTCPAYGEN_CRYPTON`: N th supported crypto currency where N is maximum at maximum 9. (eg. btc, ltc. Default: none)
+* `BTCPAYGEN_REVERSEPROXY`: Whether to use or not a reverse proxy. NGinx setup HTTPS for you. (eg. nginx, none. Default: nginx)
+* `BTCPAYGEN_LIGHTNING`: Lightning network implementation to use (eg. clightning, none)
+* `ACME_CA_URI`: The API endpoint to ask for HTTPS certificate (default: https://acme-v01.api.letsencrypt.org/directory)
+* `BTCPAY_HOST_SSHKEYFILE`: Optional, SSH private key that BTCPay can use to connect to this VM's SSH server. This key will be copied on BTCPay's data directory
+
 # Tooling <a name="tooling"></a>
 
 A wide range of tooling get available on your system when btcpay is installed:
@@ -163,12 +178,15 @@ export BTCPAYGEN_REVERSEPROXY="nginx"
 export BTCPAY_DOCKER_COMPOSE="/var/lib/waagent/custom-script/download/0/btcpayserver-docker/Production/docker-compose.generated.yml"
 export BTCPAY_BASE_DIRECTORY="/var/lib/waagent/custom-script/download/0"
 export BTCPAY_ENV_FILE="/var/lib/waagent/custom-script/download/0/.env"
+export BTCPAY_HOST_SSHKEYFILE="/root/.ssh/id_rsa_btcpay"
 if cat $BTCPAY_ENV_FILE &> /dev/null; then
 export BTCPAY_HOST="$(cat $BTCPAY_ENV_FILE | sed -n 's/^BTCPAY_HOST=\(.*\)$/\1/p')"
 export LETSENCRYPT_EMAIL="$(cat $BTCPAY_ENV_FILE | sed -n 's/^LETSENCRYPT_EMAIL=\(.*\)$/\1/p')"
 export NBITCOIN_NETWORK="$(cat $BTCPAY_ENV_FILE | sed -n 's/^NBITCOIN_NETWORK=\(.*\)$/\1/p')"
 export LIGHTNING_ALIAS="$(cat $BTCPAY_ENV_FILE | sed -n 's/^LIGHTNING_ALIAS=\(.*\)$/\1/p')"
 export ACME_CA_URI="$(cat $BTCPAY_ENV_FILE | sed -n 's/^ACME_CA_URI=\(.*\)$/\1/p')"
+export BTCPAY_SSHKEYFILE="$(cat $BTCPAY_ENV_FILE | sed -n 's/^BTCPAY_SSHKEYFILE=\(.*\)$/\1/p')"
+export BTCPAY_SSHTRUSTEDFINGERPRINTS="$(cat $BTCPAY_ENV_FILE | sed -n 's/^BTCPAY_SSHTRUSTEDFINGERPRINTS=\(.*\)$/\1/p')"
 fi
 ```
 
@@ -199,6 +217,8 @@ BTCPAY_HOST=btcpay.example.com
 ACME_CA_URI=https://acme-v01.api.letsencrypt.org/directory
 NBITCOIN_NETWORK=mainnet
 LETSENCRYPT_EMAIL=me@example.com
+BTCPAY_SSHTRUSTEDFINGERPRINTS=SHA256:eSCD7NtQ/Q6IBl2iRB9caAQ3lDZd8s8iUL6SdeNnhpA
+BTCPAY_SSHKEYFILE=/datadir/id_rsa
 ```
 
 # How to extend with your own crypto?

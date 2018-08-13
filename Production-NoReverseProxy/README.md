@@ -25,6 +25,8 @@ The relevant environment variables are:
 * `BTCPAY_ROOTPATH`: The root path directory where BTCPay is accessed, more information below. (default: /)
 * `BTCPAY_PROTOCOL`: the protocol used to access this website from the internet (valid values: `http` and `https`, default: `https`)
 * `LIGHTNING_ALIAS`: Optional, if using the integrated lightning feature, customize the alias of your nodes
+* `BTCPAY_SSHKEYFILE`: Optional, SSH private key that BTCPay can use to connect to this VM's SSH server (You need to copy the key file on BTCPay's datadir volume)
+* `BTCPAY_SSHTRUSTEDFINGERPRINTS`: Optional, BTCPay will ensure that it is connecting to the expected SSH server by checking the host public's key against those fingerprints
 
 The ports mapped on the host are:
 
