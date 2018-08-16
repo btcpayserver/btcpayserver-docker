@@ -26,7 +26,7 @@ namespace DockerGenerator
 		{
 			get;
 			set;
-		}
+		} = new string[0];
 
 		public static DockerComposition FromEnvironmentVariables()
 		{

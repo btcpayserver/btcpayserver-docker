@@ -302,14 +302,10 @@ Then modify the file to your taste
 ```diff
 @@ -14,8 +14,7 @@ version: "3"
  services:
-   nbxplorer:
-     environment:
--      NBXPLORER_BTCPRUNEBEFOREHEIGHT: ${NBXPLORER_PRUNEBEFOREHEIGHT:-504500}
--      NBXPLORER_PRUNEKEEPONLY: ${NBXPLORER_PRUNEKEEPONLY:-50000}
-+      NBXPLORER_PRUNEKEEPONLY: ${NBXPLORER_PRUNEKEEPONLY:-2500}
-
    bitcoind:
      environment:
+-       BITCOIN_EXTRA_ARGS: prune=100000
++       BITCOIN_EXTRA_ARGS: prune=5000
 ```
 
 Then set it up:
