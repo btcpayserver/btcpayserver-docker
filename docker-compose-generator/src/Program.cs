@@ -94,7 +94,8 @@ namespace DockerGenerator
 
             foreach(var fragment in composition.AdditionalFragments)
             {
-                fragments.Add(fragment.Trim());
+				if(!string.IsNullOrWhiteSpace(fragment))
+                	fragments.Add(fragment.Trim());
             }
 
 			var def = new DockerComposeDefinition(name, fragments);
