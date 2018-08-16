@@ -4,8 +4,8 @@ using System.Text;
 
 namespace DockerGenerator
 {
-    public class DockerComposition
-    {
+	public class DockerComposition
+	{
 		public HashSet<string> SelectedCryptos
 		{
 			get;
@@ -17,6 +17,11 @@ namespace DockerGenerator
 			set;
 		}
 		public string SelectedLN
+		{
+			get;
+			set;
+		}
+		public string[] AdditionalFragments
 		{
 			get;
 			set;
@@ -35,7 +40,8 @@ namespace DockerGenerator
 			}
 			composition.SelectedProxy = (Environment.GetEnvironmentVariable("BTCPAYGEN_REVERSEPROXY") ?? "").ToLowerInvariant();
 			composition.SelectedLN = (Environment.GetEnvironmentVariable("BTCPAYGEN_LIGHTNING") ?? "").ToLowerInvariant();
+			composition.AdditionalFragments = (Environment.GetEnvironmentVariable("BTCPAYGEN_ADDITIONAL_FRAGMENTS") ?? "").ToLowerInvariant().Split(';');
 			return composition;
 		}
-    }
+	}
 }
