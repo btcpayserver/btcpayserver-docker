@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  nbxplorer:
+    environment:
+      NBXPLORER_BTCPRUNEBEFOREHEIGHT: ${NBXPLORER_PRUNEBEFOREHEIGHT:-504500}
+
+  bitcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: prune=1
