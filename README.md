@@ -281,6 +281,15 @@ $Env:COMPOSE_CONVERT_WINDOWS_PATHS=1
 
 This bug comes from Docker for Windows and is [tracked on github](https://github.com/docker/for-win/issues/1829).
 
+## How I can prune my nodes?
+
+This will prune your full node to keep maximum 100GB of blocks 
+
+```bash
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage"
+. ./btcpay-setup.sh -i
+```
+
 ## The generated docker-compose is almost what I want... but not quite, how to customize?
 
 In some instance, you might want to customize your environment in more details. Will you could modify `Generated/docker-compose.generated.yml` manually, your changes would be overwritten the next time you run `btcpay-update.sh`.
