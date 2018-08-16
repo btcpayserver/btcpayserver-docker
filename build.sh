@@ -14,6 +14,7 @@ docker run -v "$(pwd)/Generated:/app/Generated" \
            -e "BTCPAYGEN_CRYPTO8=$BTCPAYGEN_CRYPTO8" \
            -e "BTCPAYGEN_CRYPTO9=$BTCPAYGEN_CRYPTO9" \
            -e "BTCPAYGEN_REVERSEPROXY=$BTCPAYGEN_REVERSEPROXY" \
+           -e "BTCPAYGEN_ADDITIONAL_FRAGMENTS=$BTCPAYGEN_ADDITIONAL_FRAGMENTS" \
            -e "BTCPAYGEN_LIGHTNING=$BTCPAYGEN_LIGHTNING" \
            -e "BTCPAYGEN_SUBNAME=$BTCPAYGEN_SUBNAME" \
            --rm btcpayserver/docker-compose-generator

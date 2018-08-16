@@ -37,7 +37,7 @@ If, for some reason, you don't want or can't use the Azure deployment explained 
 First step is to make sure you have a domain name pointing to your host, and that port `443` and `80` and externally accessible.
 Let's assume it is `btcpay.example.com`.
 
-You also want to support litecoin, bitcoin and clightning and having HTTPS automatically configured by nginx.
+If you want to support litecoin, bitcoin and clightning and having HTTPS automatically configured by nginx.
 
 ```bash
 # Log as root
@@ -83,6 +83,7 @@ export BTCPAYGEN_LIGHTNING="clightning"
 * `BTCPAYGEN_CRYPTON`: N th supported crypto currency where N is maximum at maximum 9. (eg. btc, ltc. Default: none)
 * `BTCPAYGEN_REVERSEPROXY`: Whether to use or not a reverse proxy. NGinx setup HTTPS for you. (eg. nginx, none. Default: nginx)
 * `BTCPAYGEN_LIGHTNING`: Lightning network implementation to use (eg. clightning, none)
+* `BTCPAYGEN_ADDITIONAL_FRAGMENTS`: Semi colon separated list of additional fragments you want to use (eg. `opt-save-storage`)
 * `ACME_CA_URI`: The API endpoint to ask for HTTPS certificate (default: https://acme-v01.api.letsencrypt.org/directory)
 * `BTCPAY_HOST_SSHKEYFILE`: Optional, SSH private key that BTCPay can use to connect to this VM's SSH server. This key will be copied on BTCPay's data directory
 
@@ -113,6 +114,7 @@ To configure your custom docker-compose, the following environment variables are
 * `BTCPAYGEN_REVERSEPROXY`: Specify the reverse proxy to use (Valid value: `nginx`, `none`)
 * `BTCPAYGEN_LIGHTNING`: Specify the lightning network implementation (Valid value: `clightning`, `none`)
 * `BTCPAYGEN_SUBNAME`: The sub name of the generated docker-compose file, where the full name will be `Generated/docker-compose.SUBNAME.yml` (Default: `generated`)
+* `BTCPAYGEN_ADDITIONAL_FRAGMENTS`: Semi colon separated list of additional fragments you want to use, eg. `opt-save-storage`. (Default: empty)
 
 For example, if you want `btc` and `ltc` support with `nginx` and `clightning` inside `Generated/docker-compose.custom.yml`:
 Note: The first run might take a while, but next run are instantaneous.
@@ -175,6 +177,7 @@ export BTCPAYGEN_CRYPTO8=""
 export BTCPAYGEN_CRYPTO9=""
 export BTCPAYGEN_LIGHTNING="clightning"
 export BTCPAYGEN_REVERSEPROXY="nginx"
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS=""
 export BTCPAY_DOCKER_COMPOSE="/var/lib/waagent/custom-script/download/0/btcpayserver-docker/Production/docker-compose.generated.yml"
 export BTCPAY_BASE_DIRECTORY="/var/lib/waagent/custom-script/download/0"
 export BTCPAY_ENV_FILE="/var/lib/waagent/custom-script/download/0/.env"
@@ -241,36 +244,6 @@ dotnet run
 This will generate your docker-compose in the `Generated` folder, which you can then try by yourself.
 Note that BTCPayServer developers will not spend time testing your image, so make sure it works.
 
-# For docker noobs <a name="fornoobs"></a>
-
-If you are a docker noob here is how you would create a HTTPS ready server.
-
-First step is to make sure you have a domain name pointing to your host, and that port `443` and `80` and externally accessible.
-Let's assume it is `btcpay.example.com`.
-
-Clone the repository:
-```
-git clone https://github.com/btcpayserver/btcpayserver-docker
-cd btcpayserver-docker
-```
-
-Create an `.env` file with the parameters documented in [Production](Production):
-
-```
-NBITCOIN_NETWORK=mainnet
-BTCPAY_HOST=btcpay.example.com
-LETSENCRYPT_EMAIL=me@example.com
-ACME_CA_URI=https://acme-v01.api.letsencrypt.org/directory
-```
-
-Save, then run it:
-
-```
-docker-compose -f "$(pwd)/Production/docker-compose.btc-ltc.yml" up -d
-```
-
-Wait a little bit, then you can now browse `https://btcpay.example.com/`.
-
 # FAQ
 
 ## How can I modify my environment?
@@ -307,3 +280,41 @@ $Env:COMPOSE_CONVERT_WINDOWS_PATHS=1
 ```
 
 This bug comes from Docker for Windows and is [tracked on github](https://github.com/docker/for-win/issues/1829).
+
+## The generated docker-compose is almost what I want... but not quite, how to customize?
+
+In some instance, you might want to customize your environment in more details. Will you could modify `Generated/docker-compose.generated.yml` manually, your changes would be overwritten the next time you run `btcpay-update.sh`.
+
+Luckily, you can leverage `BTCPAYGEN_ADDITIONAL_FRAGMENTS` like this:
+
+```bash
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage"
+. ./btcpay-setup.sh -i
+```
+
+[opt-save-storage](docker-compose-generator/docker-fragments/opt-save-storage.yml) will allow you to prune your node for targetting around 100 GB of space.
+
+But what if you want to target 5 GB of space (For example, if you do not need lightning)?
+
+First, Copy/Paste [opt-save-storage](docker-compose-generator/docker-fragments/opt-save-storage.yml) in the [the docker fragment folder](docker-compose-generator/docker-fragments) and name the file `opt-save-storage.custom`. (Ending with `.custom` is the important part, as it makes sure your fragment will not make a git conflict when you will run `btcpay-update.sh`)
+
+Then modify the file to your taste
+```diff
+@@ -14,8 +14,7 @@ version: "3"
+ services:
+   nbxplorer:
+     environment:
+-      NBXPLORER_BTCPRUNEBEFOREHEIGHT: ${NBXPLORER_PRUNEBEFOREHEIGHT:-504500}
+-      NBXPLORER_PRUNEKEEPONLY: ${NBXPLORER_PRUNEKEEPONLY:-50000}
++      NBXPLORER_PRUNEKEEPONLY: ${NBXPLORER_PRUNEKEEPONLY:-2500}
+
+   bitcoind:
+     environment:
+```
+
+Then set it up:
+
+```bash
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage.custom"
+. ./btcpay-setup.sh -i
+```
