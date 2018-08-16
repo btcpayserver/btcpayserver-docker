@@ -1,9 +1,21 @@
+# This will help activate pruning on your nodes to save storage cost:
+
+# BTCPRUNEBEFOREHEIGHT is chosen to be 504500, the date when lightning was starting to be used
+# NBXPLORER_PRUNEKEEPONLY is aiming for 100 GB of storage
+# Calculation input: 2 MB per Block (mbPerBlock), 1 Block every 10 Min (blockPerMin), Target size 100 GB (targetSizeGB)
+# Formula:
+# blocksPerDay = 24*60/blockPerMin = 144
+# gbPerDay = blocksPerDay * mbPerBlock = 288
+# daysToKeep = targetSizeGB / gbPerDay = 347.2
+# blocksToKeep = daysToKeep * blocksPerDay = 50000
+
 version: "3"
 
 services:
   nbxplorer:
     environment:
       NBXPLORER_BTCPRUNEBEFOREHEIGHT: ${NBXPLORER_PRUNEBEFOREHEIGHT:-504500}
+      NBXPLORER_PRUNEKEEPONLY: ${NBXPLORER_PRUNEKEEPONLY:-50000}
 
   bitcoind:
     environment:
