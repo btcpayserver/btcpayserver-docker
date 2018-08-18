@@ -118,9 +118,9 @@ To configure your custom docker-compose, the following environment variables are
 
 Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 
-* `opt-save-storage` will keep around 1 year of blocks (prune BTC for 100 GB)
-* `opt-save-storage-s` will keep around 6 months of blocks (prune BTC for 50 GB)
-* `opt-save-storage-xxs` will keep around 2 weeks of blocks (prune BTC for 5 GB)
+* [opt-save-storage](docker-compose-generator/docker-fragments/opt-save-storage.yml) will keep around 1 year of blocks (prune BTC for 100 GB)
+* [opt-save-storage-s](docker-compose-generator/docker-fragments/opt-save-storage-s.yml) will keep around 6 months of blocks (prune BTC for 50 GB)
+* [opt-save-storage-xxs](docker-compose-generator/docker-fragments/opt-save-storage-xxs.yml) will keep around 2 weeks of blocks (prune BTC for 5 GB)
 
 You can also create your [own fragments](#custom-fragments).
 
