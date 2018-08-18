@@ -305,7 +305,7 @@ export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage"
 
 But what if you want to target 5 GB of space (For example, if you do not need lightning)?
 
-First, Copy/Paste [opt-save-storage](docker-compose-generator/docker-fragments/opt-save-storage.yml) in the [the docker fragment folder](docker-compose-generator/docker-fragments) and name the file `opt-save-storage.custom`. (Ending with `.custom` is the important part, as it makes sure your fragment will not make a git conflict when you will run `btcpay-update.sh`)
+First, Copy/Paste [opt-save-storage](docker-compose-generator/docker-fragments/opt-save-storage.yml) in the [the docker fragment folder](docker-compose-generator/docker-fragments) and name the file `opt-save-storage.custom.yml`. (Ending with `.custom.yml` is the important part, as it makes sure your fragment will not make a git conflict when you will run `btcpay-update.sh`)
 
 Then modify the file to your taste
 ```diff
