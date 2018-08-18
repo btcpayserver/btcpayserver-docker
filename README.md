@@ -116,6 +116,15 @@ To configure your custom docker-compose, the following environment variables are
 * `BTCPAYGEN_SUBNAME`: The sub name of the generated docker-compose file, where the full name will be `Generated/docker-compose.SUBNAME.yml` (Default: `generated`)
 * `BTCPAYGEN_ADDITIONAL_FRAGMENTS`: Semi colon separated list of additional fragments you want to use, eg. `opt-save-storage`. (Default: empty)
 
+Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
+
+* `opt-save-storage` will keep around 1 year of blocks (prune BTC for 100 GB)
+* `opt-save-storage-s` will keep around 6 months of blocks (prune BTC for 50 GB)
+* `opt-save-storage-xxs` will keep around 2 weeks of blocks (prune BTC for 5 GB)
+
+You can also create your [own fragments](#custom-fragments).
+
+
 For example, if you want `btc` and `ltc` support with `nginx` and `clightning` inside `Generated/docker-compose.custom.yml`:
 Note: The first run might take a while, but next run are instantaneous.
 
@@ -290,7 +299,7 @@ export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage"
 . ./btcpay-setup.sh -i
 ```
 
-## The generated docker-compose is almost what I want... but not quite, how to customize?
+## The generated docker-compose is almost what I want... but not quite, how to customize? <a name="custom-fragments"></a>
 
 In some instance, you might want to customize your environment in more details. Will you could modify `Generated/docker-compose.generated.yml` manually, your changes would be overwritten the next time you run `btcpay-update.sh`.
 
