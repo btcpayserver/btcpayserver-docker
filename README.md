@@ -8,13 +8,25 @@ First, [open an Azure account](https://azure.microsoft.com/en-us/account/), then
 
 [![Deploy to Azure](https://azuredeploy.net/deploybutton.svg)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fbtcpayserver%2Fbtcpayserver-azure%2Fmaster%2Fazuredeploy.json)
 
-Follow this video for the remaining steps:
+Final installation steps:
 
-[![BTCPay - One Click Setup](http://img.youtube.com/vi/Bxs95BdEMHY/mqdefault.jpg)](http://www.youtube.com/watch?v=Bxs95BdEMHY "BTCPay - One Click Setup")
+* Fill in the options: Resource Group, Admin Password, Network
+* Click 'Purchase'
+* (Wait for deployment)
+* View the deployment (in Notifications or Resource Groups)
+* [SSH](#ssh-guide) into it: `ssh SSH-USERNAME@SSH-SERVER-AZURE-DNS`
+* (At your domain registrar, make sure you have [DNS](#dns-guide) pointing your domain at your Azure deployment's IP)
+* Run `sudo -i; ./change-domain.sh MYDOMAIN.com`
 
-This will cost you around 60 USD per month (unpruned).
+That's it!
+* Run `docker ps` and `docker logs xxx` to view running processes
+* Run `btcpay-down.sh` and `btcpay-up.sh` to stop and start the BTCPayServer
 
-After all your nodes have synced and you've confirmed everything works, follow [this guide](https://github.com/btcpayserver/btcpayserver-doc/blob/master/PennyPinching.md) to fine-tune for savings; costs should drop to 30 or 40 USD per month.
+This video by Nicolas also demonstrates the above steps: [![BTCPay - One Click Setup](http://img.youtube.com/vi/Bxs95BdEMHY/mqdefault.jpg)](http://www.youtube.com/watch?v=Bxs95BdEMHY "BTCPay - One Click Setup")
+
+Approximate Cost (unpruned, Bitcoin-only): **60 USD per month**
+
+After all your nodes have synced and you've confirmed everything works, follow [this guide](https://github.com/btcpayserver/btcpayserver-doc/blob/master/PennyPinching.md) to fine-tune for savings; costs should drop to **30 or 40 USD per month**.
 
 ## Architecture
 
