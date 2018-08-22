@@ -1,6 +1,22 @@
-# Introduction
+#### Start accepting Bitcoin today with BTCPayServer! This guide will walk you through the installation.
 
-This repository will help you install BTCPayServer, its environment, and all its dependencies.
+## One-click deployment
+
+For the easiest and fastest setup, host BTCPayServer on Microsoft Azure:
+
+First, [open an Azure account](https://azure.microsoft.com/en-us/account/), then:
+
+[![Deploy to Azure](https://azuredeploy.net/deploybutton.svg)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fbtcpayserver%2Fbtcpayserver-azure%2Fmaster%2Fazuredeploy.json)
+
+Follow this video for the remaining steps:
+
+[![BTCPay - One Click Setup](http://img.youtube.com/vi/Bxs95BdEMHY/mqdefault.jpg)](http://www.youtube.com/watch?v=Bxs95BdEMHY "BTCPay - One Click Setup")
+
+This will cost you around 60 USD per month (unpruned).
+
+After all your nodes have synced and you've confirmed everything works, follow [this guide](https://github.com/btcpayserver/btcpayserver-doc/blob/master/PennyPinching.md) to fine-tune for savings; costs should drop to 30 or 40 USD per month.
+
+## Architecture
 
 ![Architecture](https://github.com/btcpayserver/btcpayserver-doc/raw/master/img/Architecture.png)
 
@@ -18,24 +34,7 @@ There can be more dependencies if you support more than just standard Bitcoin tr
 
 Note: The setup process can be time consuming, but is heavily automated to make it a fun and easy experience.
 
-# How do I use this?
-
-## One-click deployment
-
-If you have no knowledge of Linux administration or Docker, we advise you to host BTCPay on Microsoft Azure:
-
-First, [open an Azure account](https://azure.microsoft.com/en-us/account/), then:
-
-[![Deploy to Azure](https://azuredeploy.net/deploybutton.svg)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fbtcpayserver%2Fbtcpayserver-azure%2Fmaster%2Fazuredeploy.json)
-
-Follow this video for the remaining steps:
-
-[![BTCPay - One Click Setup](http://img.youtube.com/vi/Bxs95BdEMHY/mqdefault.jpg)](http://www.youtube.com/watch?v=Bxs95BdEMHY "BTCPay - One Click Setup")
-
-This installation is convenient, but will cost you around 60 USD per month (unpruned).
-After all your nodes are synched and you confirm everything works, you can fine-tune (to save additional money) by following [this guide](https://github.com/btcpayserver/btcpayserver-doc/blob/master/PennyPinching.md); this will drop costs to 30 or 40 USD per month.
-
-## For technical users
+## Full installation (for technical users)
 
 You can also install BTCPayServer on your own machine or VPS instance.
 
@@ -69,7 +68,7 @@ export BTCPAYGEN_LIGHTNING="clightning"
 exit
 ```
 
-`btcpay-setup.sh` will:
+`btcpay-setup.sh` will then:
 
 * Install Docker
 * Install Docker-Compose
@@ -100,15 +99,15 @@ exit
 
 A wide variety of scripts are available once BTCPay is installed:
 
-* `bitcoin-cli.sh`: Access your bitcoin node instance
-* `bitcoin-lightning-cli.sh`: Access your clightning node instance
+* `bitcoin-cli.sh`: Access your Bitcoin node instance (for RPC)
+* `bitcoin-lightning-cli.sh`: Access your C-Lightning node instance (for RPC)
 * `changedomain.sh`: Change the domain of your BTCPayServer
-* `btcpay-update.sh`: Update BTCPay to the latest version
+* `btcpay-update.sh`: Update BTCPayServer to the latest version
 * `btcpay-up.sh`: Run `docker-compose up`
 * `btcpay-down.sh`: Run `docker-compose down`
 * `btcpay-setup.sh`: Change the settings of your server
 * `. ./btcpay-setup.sh`: Information about additional parameters
-* `. ./btcpay-setup.sh -i`: Setup your BTCPayServer
+* `. ./btcpay-setup.sh -i`: Set up your BTCPayServer
 
 # Under the hood
 
@@ -138,7 +137,7 @@ For example, if you want `btc` and `ltc` support with `nginx` and `clightning` i
 
 Note: The first run might take a while, but following runs are instantaneous.
 
-On Windows:
+On Windows (run in powershell):
 
 ```powershell
 Invoke-Command {
