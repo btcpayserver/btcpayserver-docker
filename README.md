@@ -1,50 +1,70 @@
-# Introduction
+#### Start accepting Bitcoin today with BTCPayServer! This guide will walk you through the installation.
 
-This repository will help you to setup BTCPay and all its dependencies in a simple way:
+# One-click deployment
 
-![Architecture](https://github.com/btcpayserver/btcpayserver-doc/raw/master/img/Architecture.png)
-
-As you can see, BTCPay depends on several piece of infrastructure, mainly:
-
-* A lightweight block explorer (NBXplorer), 
-* A database (Postgres, or SQLite),
-* A full node (Bitcoin Core)
-
-There is more dependencies, if you support more than just Bitcoin. (C-Lightning, LitecoinD etc...)
-Setting up the dependencies correctly in a production environment might be time consuming. 
-
-This repository is meant to setup your environment easily.
-
-# How to use this?
-
-## For complete noobs
-
-If you have no knowledge of Linux administration or Docker, we advise you to host BTCPay on Microsoft Azure by opening an account then clicking here
+For the easiest and fastest setup, host BTCPayServer on Microsoft Azure:
 
 [![Deploy to Azure](https://azuredeploy.net/deploybutton.svg)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fbtcpayserver%2Fbtcpayserver-azure%2Fmaster%2Fazuredeploy.json)
 
-Follow this video
+You can log into [Azure](https://azure.microsoft.com/en-us/account/) with your Microsoft account.
 
-[![BTCPay - One Click Setup](http://img.youtube.com/vi/Bxs95BdEMHY/mqdefault.jpg)](http://www.youtube.com/watch?v=Bxs95BdEMHY "BTCPay - One Click Setup")
+Final installation steps:
 
-This installation is convenient but will cost you around 60 USD per month.
-After all your nodes are synched and you confirm things work fine, you can fine tune save additional money by following [this guide](https://github.com/btcpayserver/btcpayserver-doc/blob/master/PennyPinching.md), and drop to 30 or 40 USD per month.
+* Fill in the options: Resource Group, Admin Password, Network
+* Click 'Purchase' to confirm
+* (Wait for deployment)
+* View the deployment (in Notifications or Resource Groups)
+* SSH into it: `ssh SSH-USERNAME@SSH-SERVER-AZURE-DNS`
+* (At your domain registrar, make sure you have [DNS](https://github.com/btcpayserver/btcpayserver-doc/blob/master/ChangeDomain.md#setting-up-your-dns-record) pointing your domain at your Azure deployment's IP)
+* Run `sudo -i; ./change-domain.sh MYDOMAIN.com`
 
-## For technical user
+That's it!
 
-If, for some reason, you don't want or can't use the Azure deployment explained above then you can install BTCPayServer on your own instance.
+* Run `docker ps` and `docker logs xxx` to view running processes
+* Run `btcpay-down.sh` and `btcpay-up.sh` to stop and start the BTCPayServer
 
-First step is to make sure you have a domain name pointing to your host, and that port `443` and `80` and externally accessible.
+This video by Nicolas also demonstrates the above steps:
+
+[![BTCPay - One Click Setup](http://img.youtube.com/vi/Bxs95BdEMHY/mqdefault.jpg)](https://www.youtube.com/watch?v=Bxs95BdEMHY "BTCPay - One Click Setup")
+
+Approximate Cost (unpruned, Bitcoin-only): **60 USD per month**
+
+After all your nodes have synced and you've confirmed everything works, follow [this guide](https://github.com/btcpayserver/btcpayserver-doc/blob/master/PennyPinching.md) to fine-tune for savings; costs should drop to **30 or 40 USD per month**.
+
+# Architecture
+
+![Architecture](https://github.com/btcpayserver/btcpayserver-doc/raw/master/img/Architecture.png)
+
+As you can see, BTCPay depends on several pieces of infrastructure, mainly:
+
+* A lightweight block explorer (NBXplorer),
+* A database (PostgreSQL or SQLite),
+* A full node (eg. Bitcoin Core)
+
+There can be more dependencies if you support more than just standard Bitcoin transactions, including:
+
+* [C-Lightning](https://github.com/ElementsProject/lightning)
+* [LitecoinD](https://github.com/litecoin-project/litecoin) and other coin daemons
+* And more...
+
+Note: The setup process can be time consuming, but is heavily automated to make it a fun and easy experience.
+
+# Full installation (for technical users)
+
+You can also install BTCPayServer on your own machine or VPS instance.
+
+First, make sure you have a domain name pointing to your host, with ports `443` and `80` externally accessible (and perhaps additional ports like `9735` and `9736` for Bitcoin and Litecoin lightning).
+
 Let's assume it is `btcpay.example.com`.
 
-If you want to support litecoin, bitcoin and clightning and having HTTPS automatically configured by nginx.
+If you want to support Litecoin, Bitcoin, and C-Lightning, and want HTTPS automatically configured by Nginx:
 
 ```bash
-# Log as root
+# Login as root
 sudo su -
 
 # Create a folder for BTCPay
-mkdir BTCPayServer 
+mkdir BTCPayServer
 cd BTCPayServer
 
 # Clone this repository
@@ -60,9 +80,10 @@ export BTCPAYGEN_REVERSEPROXY="nginx"
 export BTCPAYGEN_LIGHTNING="clightning"
 . ./btcpay-setup.sh -i
 
+exit
 ```
 
-`btcpay-setup.sh` will :
+`btcpay-setup.sh` will then:
 
 * Install Docker
 * Install Docker-Compose
@@ -74,61 +95,57 @@ export BTCPAYGEN_LIGHTNING="clightning"
 # Environment variables
 
 `btcpay-setup.sh` will use the following environment variables:
-* `BTCPAY_HOST`: The hostname of your website (eg. btcpay.example.com)
-* `LETSENCRYPT_EMAIL`: A mail will be sent to this address if certificate expires and fail to renew automatically (eg. me@example.com)
-* `NBITCOIN_NETWORK`: The type of network to use (eg. mainnet, testnet or regtest. Default`: mainnet)
-* `LIGHTNING_ALIAS`: An alias for your lightning network node if used
-* `BTCPAYGEN_CRYPTO1`: First supported crypto currency (eg. btc, ltc, none. Default`: btc)
-* `BTCPAYGEN_CRYPTO2`: Second supported crypto currency (eg. btc, ltc, none. Default`: empty)
-* `BTCPAYGEN_CRYPTON`: N th supported crypto currency where N is maximum at maximum 9. (eg. btc, ltc. Default: none)
-* `BTCPAYGEN_REVERSEPROXY`: Whether to use or not a reverse proxy. NGinx setup HTTPS for you. (eg. nginx, none. Default: nginx)
-* `BTCPAYGEN_LIGHTNING`: Lightning network implementation to use (eg. clightning, none)
-* `BTCPAYGEN_ADDITIONAL_FRAGMENTS`: Semi colon separated list of additional fragments you want to use (eg. `opt-save-storage`)
-* `ACME_CA_URI`: The API endpoint to ask for HTTPS certificate (default: https://acme-v01.api.letsencrypt.org/directory)
-* `BTCPAY_HOST_SSHKEYFILE`: Optional, SSH private key that BTCPay can use to connect to this VM's SSH server. This key will be copied on BTCPay's data directory
 
-# Tooling <a name="tooling"></a>
+* `BTCPAY_HOST`: The hostname of your website (eg. `btcpay.example.com`)
+* `NBITCOIN_NETWORK`: The type of network to use (eg. `mainnet`, `testnet`, or `regtest`. Default: `mainnet`)
+* `LIGHTNING_ALIAS`: An alias for your lightning network node, if used
+* `BTCPAYGEN_CRYPTO1`: First supported crypto currency (eg. `btc`, `ltc`. Default: `btc`)
+* `BTCPAYGEN_CRYPTO2`: Second supported crypto currency (eg. `btc`, `ltc`. Default: `(empty)`)
+* `BTCPAYGEN_CRYPTON`: N'th supported crypto currency where N is 9 at maximum. (eg. `btc`, `ltc`. Default: `(empty)`)
+* `BTCPAYGEN_REVERSEPROXY`: Specify reverse proxy to use; NGinx has HTTPS support. (eg. `nginx`, `(empty)`. Default: `nginx`)
+* `BTCPAYGEN_LIGHTNING`: Lightning network implementation to use (eg. `clightning`, `(empty)`)
+* `BTCPAYGEN_SUBNAME`: The subname of the generated docker-compose file, where the full name is `Generated/docker-compose.SUBNAME.yml` (Default: `generated`)
+* `BTCPAYGEN_ADDITIONAL_FRAGMENTS`: Semicolon-separated list of additional fragments you want to use (eg. `opt-save-storage`)
+* `LETSENCRYPT_EMAIL`: An email will be sent to this address if certificate expires and fails to renew automatically (eg. `me@example.com`)
+* `ACME_CA_URI`: The API endpoint to ask for HTTPS certificate (Default: `https://acme-v01.api.letsencrypt.org/directory`)
+* `BTCPAY_HOST_SSHKEYFILE`: Optional, SSH private key that BTCPay can use to connect to this VM's SSH server. This key will be copied to BTCPay's data directory
+* `BTCPAY_SSHTRUSTEDFINGERPRINTS`: Optional, BTCPay will ensure that it is connecting to the expected SSH server by checking the host's public key against these fingerprints
 
-A wide range of tooling get available on your system when btcpay is installed:
+# Tooling
 
-* `bitcoin-cli.sh` access your bitcoin node instance
-* `bitcoin-lightning-cli.sh` access your clightning node instance
-* `changedomain.sh` change the domain of your BTCPayServer
-* `btcpay-update.sh` update BTCPay to the latest version
-* `btcpay-up.sh` Run docker-compose up
-* `btcpay-down.sh` Run docker-compose down
-* `btcpay-setup.sh` change the settings of your server (run `. ./btcpay-setup.sh` to get more information about additional parameters, run `. ./btcpay-setup.sh -i` to setup again your btcpay server)
+A wide variety of useful scripts are available once BTCPay is installed:
+
+* `bitcoin-cli.sh`: Access your Bitcoin node instance (for RPC)
+* `bitcoin-lightning-cli.sh`: Access your C-Lightning node instance (for RPC)
+* `changedomain.sh`: Change the domain of your BTCPayServer
+* `btcpay-update.sh`: Update BTCPayServer to the latest version
+* `btcpay-up.sh`: Run `docker-compose up`
+* `btcpay-down.sh`: Run `docker-compose down`
+* `btcpay-setup.sh`: Change the settings of your server
+* `. ./btcpay-setup.sh`: Information about additional parameters
+* `. ./btcpay-setup.sh -i`: Set up your BTCPayServer
 
 # Under the hood
 
 ## Generated docker-compose
 
-Under the hood, your environment variable are used by [build.sh](build.sh) (or [build.ps1](build.ps1)) to generate a docker-compose adapted for your need.
-By default, this script will generate `Generated/docker-compose.generated.yml`.
+When you run `btcpay-setup.sh`, your environment variables are used by [build.sh](build.sh) (or [build.ps1](build.ps1)) to generate a docker-compose adapted for your needs. For the full list of options, see: [Environment variables](#environment-variables)
 
-The build script is generating the docker-compose by gluing together the relevant [docker fragment](docker-compose-generator/docker-fragments) for your setup.
-
-To configure your custom docker-compose, the following environment variables are supported:
-
-* `BTCPAYGEN_CRYPTO1` to `BTCPAYGEN_CRYPTO9`: Specify support for a crypto currency. (Valid value: `btc`, `ltc`)
-* `BTCPAYGEN_REVERSEPROXY`: Specify the reverse proxy to use (Valid value: `nginx`, `none`)
-* `BTCPAYGEN_LIGHTNING`: Specify the lightning network implementation (Valid value: `clightning`, `none`)
-* `BTCPAYGEN_SUBNAME`: The sub name of the generated docker-compose file, where the full name will be `Generated/docker-compose.SUBNAME.yml` (Default: `generated`)
-* `BTCPAYGEN_ADDITIONAL_FRAGMENTS`: Semi colon separated list of additional fragments you want to use, eg. `opt-save-storage`. (Default: empty)
+By default, the generated file is `Generated/docker-compose.generated.yml`, constructed from the relevant [Docker fragments](docker-compose-generator/docker-fragments) for your setup.
 
 Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 
 * [opt-save-storage](docker-compose-generator/docker-fragments/opt-save-storage.yml) will keep around 1 year of blocks (prune BTC for 100 GB)
 * [opt-save-storage-s](docker-compose-generator/docker-fragments/opt-save-storage-s.yml) will keep around 6 months of blocks (prune BTC for 50 GB)
-* [opt-save-storage-xxs](docker-compose-generator/docker-fragments/opt-save-storage-xxs.yml) will keep around 2 weeks of blocks (prune BTC for 5 GB)
+* [opt-save-storage-xxs](docker-compose-generator/docker-fragments/opt-save-storage-xxs.yml) will keep around 2 weeks of blocks (prune BTC for 5 GB) (lightning not supported)
 
-You can also create your [own fragments](#custom-fragments).
-
+You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).
 
 For example, if you want `btc` and `ltc` support with `nginx` and `clightning` inside `Generated/docker-compose.custom.yml`:
-Note: The first run might take a while, but next run are instantaneous.
 
-On Windows:
+Note: The first run might take a while, but following runs are instantaneous.
+
+On Windows (run in [powershell](https://docs.microsoft.com/en-us/powershell/scripting/setup/starting-windows-powershell?view=powershell-6)):
 
 ```powershell
 Invoke-Command {
@@ -152,27 +169,27 @@ BTCPAYGEN_SUBNAME="custom" \
 ./build.sh
 ```
 
-Next, you will need to configure the runtime environment variable for `Generated/docker-compose.custom.yml`. 
+Next, you will need to configure the runtime environment variables for `Generated/docker-compose.custom.yml`:
 
-* If you are using [NGinx](Production/README.md)
-* If you are [not using NGinx](Production-NoReverseProxy/README.md)
+* If you are using NGinx, [read this](Production/README.md).
+* If you are not using NGinx, [read this instead](Production-NoReverseProxy/README.md).
 
-## What btcpay-setup do
+## Again, what does `btcpay-setup.sh` do?
 
-`btcpay-setup.sh` utility is a tool which:
+`btcpay-setup.sh` is a utility which does the following:
 
-1. Make sure docker and docker-compose are installed on your system
-2. Generate a docker-compose via `./build.sh`
-3. Setup an [Environment File](https://docs.docker.com/compose/env-file/) to configure your docker-compose
-4. Setup environment variables so the tools described in [tooling](#tooling) can work.
-5. Add symbolic links of those tools in `/usr/bin`
-6. Start docker-compose
-7. Make sure it restart at reboot via upstart or systemd.
+1. Makes sure docker and docker-compose are installed on your system
+2. Generates a docker-compose via `./build.sh`
+3. Sets up an [Environment File](https://docs.docker.com/compose/env-file/) to configure your docker-compose
+4. Sets up environment variables so the tools described in [Tooling](#tooling) can work
+5. Adds symlinks of those tools into `/usr/bin`
+6. Makes sure BTCPay restarts on reboot via upstart or systemd
+7. Starts BTCPay via docker-compose
 
+## Overview of files generated by `btcpay-setup.sh`
 
-Here is an overview of the files generated by `btcpay-setup.sh`.
+`/etc/profile.d/btcpay-env.sh` ensures that your environment variables are correctly setup when you login, so you can use the tools:
 
-`/etc/profile.d/btcpay-env.sh` ensures that your environment variable are correctly setup when you log in, so you can use the tools.
 ```bash
 export BTCPAYGEN_OLD_PREGEN="false"
 export BTCPAYGEN_CRYPTO1="btc"
@@ -202,7 +219,7 @@ export BTCPAY_SSHTRUSTEDFINGERPRINTS="$(cat $BTCPAY_ENV_FILE | sed -n 's/^BTCPAY
 fi
 ```
 
-`/etc/systemd/system/btcpayserver.service` file ensure that you can control btcpay via `systemctl`, and that btcpay server start on reboot:
+`/etc/systemd/system/btcpayserver.service` ensures that you can control btcpay via `systemctl`, and that BTCPayServer starts on reboot:
 
 ```ini
 [Unit]
@@ -222,7 +239,7 @@ ExecReload=/bin/bash -c '. /etc/profile.d/btcpay-env.sh && cd "$(dirname $BTCPAY
 WantedBy=multi-user.target
 ```
 
-`.env` file (`$BTCPAY_ENV_FILE`) are the environment variable passed to the containers managed by your docker-compose:
+`.env` (`$BTCPAY_ENV_FILE`) contains environment variables passed to the containers managed by your docker-compose:
 
 ```ini
 BTCPAY_HOST=btcpay.example.com
@@ -233,15 +250,16 @@ BTCPAY_SSHTRUSTEDFINGERPRINTS=SHA256:eSCD7NtQ/Q6IBl2iRB9caAQ3lDZd8s8iUL6SdeNnhpA
 BTCPAY_SSHKEYFILE=/datadir/id_rsa
 ```
 
-# How to extend with your own crypto?
+# How can I add an altcoin to BTCPayServer?
 
-1. Support for your crypto on [NBitcoin](https://github.com/MetacoSA/NBitcoin/tree/master/NBitcoin.Altcoins)/[NBxplorer](https://github.com/dgarage/NBXplorer)/[BTCPay Server](https://github.com/btcpayserver/btcpayserver). (Take example on other coins)
+1. Add support for your crypto to [NBitcoin](https://github.com/MetacoSA/NBitcoin/tree/master/NBitcoin.Altcoins), [NBxplorer](https://github.com/dgarage/NBXplorer), and [BTCPayServer](https://github.com/btcpayserver/btcpayserver). (Use examples from other coins)
 2. Create your own docker image ([Example for BTC](https://hub.docker.com/r/nicolasdorier/docker-bitcoin/))
 3. Create a docker-compose fragment ([Example for BTC](docker-compose-generator/docker-fragments/bitcoin.yml))
-4. Add your Crypto Definition ([Example for BTC](docker-compose-generator/src/CryptoDefinition.cs))
+4. Add your CryptoDefinition ([Example for BTC](docker-compose-generator/src/CryptoDefinition.cs))
 
-Now if you want to test, DOT NOT USE `build.sh`, because this utility is a pre-built docker image.
-Instead, install [.NET Core 2.1 SDK](https://www.microsoft.com/net/download/windows) then run:
+When testing your coin, **DO NOT USE `build.sh`**, since it uses a pre-built docker image.
+
+Instead, install [.NET Core 2.1 SDK](https://www.microsoft.com/net/download/windows) and run:
 
 ```bash
 BTCPAYGEN_CRYPTO1="xxx"
@@ -250,80 +268,82 @@ cd docker-compose-generator/src
 dotnet run
 ```
 
-This will generate your docker-compose in the `Generated` folder, which you can then try by yourself.
-Note that BTCPayServer developers will not spend time testing your image, so make sure it works.
+This will generate your docker-compose in the `Generated` folder, which you can then run and test.
+
+Note that BTCPayServer developers will not spend excessive time testing your image, so make sure it works.
 
 # FAQ
 
 ## How can I modify my environment?
 
-As root, run `. btcpay-setup.sh`, this will show you the environment variable it is expecting.
-For example if you support `btc` and `ltc` already, and wants to add `btg`.
+As root, run `. btcpay-setup.sh`; this will show you the environment variable it is expecting.
+For example, if you support `btc` and `ltc` already, and want to add `btg`:
 
 ```bash
 export BTCPAYGEN_CRYPTO3='btg'
 . btcpay-setup.sh -i
 ```
 
-## I deployed before btcpay-setup.sh existed, can I migrate to this new system? <a name="migration"></a>
+## I deployed before `btcpay-setup.sh` existed (before May 17), can I migrate to this new system?
 
-Yes, the following command will migrate you to this new system:
+Yes, run the following commands to update:
 
 ```bash
 sudo su -
+
 btcpay-update.sh
 cd $DOWNLOAD_ROOT/btcpayserver-docker
 . ./btcpay-setup.sh -i
+
+exit
 ```
 
-## Windows user error: Cannot create container for service docker: Mount denied
+## I'm getting an error on Windows: `Cannot create container for service docker: Mount denied`?
 
 If you see this error:
 
 `Cannot create container for service docker: b'Mount denied:\nThe source path "\\\\var\\\\run\\\\docker.sock:/var/run/docker.sock"\nis not a valid Windows path'`.
 
-Run this command and run again `docker-compose -f <your.yml> up`.
+Run this in [powershell](https://docs.microsoft.com/en-us/powershell/scripting/setup/starting-windows-powershell?view=powershell-6):
 
 ```powershell
 $Env:COMPOSE_CONVERT_WINDOWS_PATHS=1
 ```
 
-This bug comes from Docker for Windows and is [tracked on github](https://github.com/docker/for-win/issues/1829).
+Then, run `docker-compose -f EXAMPLE.yml up`.
 
-## How I can prune my nodes?
+This bug comes from Docker for Windows and is [tracked on Github](https://github.com/docker/for-win/issues/1829).
 
-This will prune your full node to keep maximum 100GB of blocks 
+## How I can prune my node(s)?
 
-```bash
-export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage"
-. ./btcpay-setup.sh -i
-```
-
-## The generated docker-compose is almost what I want... but not quite, how to customize? <a name="custom-fragments"></a>
-
-In some instance, you might want to customize your environment in more details. Will you could modify `Generated/docker-compose.generated.yml` manually, your changes would be overwritten the next time you run `btcpay-update.sh`.
-
-Luckily, you can leverage `BTCPAYGEN_ADDITIONAL_FRAGMENTS` like this:
+This will prune your Bitcoin full node to a maximum of 100GB (of blocks):
 
 ```bash
 export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage"
 . ./btcpay-setup.sh -i
 ```
 
-[opt-save-storage](docker-compose-generator/docker-fragments/opt-save-storage.yml) will allow you to prune your node for targetting around 100 GB of space.
+Other options are `opt-save-storage-s` (50 GB), `opt-save-storage-xxs` (5 GB), or custom (see below).
 
-But what if you want to target 5 GB of space (For example, if you do not need lightning)?
+## How can I customize the generated docker-compose file?
 
-First, Copy/Paste [opt-save-storage](docker-compose-generator/docker-fragments/opt-save-storage.yml) in the [the docker fragment folder](docker-compose-generator/docker-fragments) and name the file `opt-save-storage.custom.yml`. (Ending with `.custom.yml` is the important part, as it makes sure your fragment will not make a git conflict when you will run `btcpay-update.sh`)
+In some instances, you might want to customize your environment in more detail. While you could modify `Generated/docker-compose.generated.yml` manually, your changes would be overwritten the next time you run `btcpay-update.sh`.
 
-Then modify the file to your taste
+Luckily, you can leverage `BTCPAYGEN_ADDITIONAL_FRAGMENTS` for this!
+
+Let's enable **pruning to 60 GB**, for example:
+
+First, copy [opt-save-storage](docker-compose-generator/docker-fragments/opt-save-storage.yml) into the [the docker fragment folder](docker-compose-generator/docker-fragments) as `opt-save-storage.custom.yml`. **Important:** the file must end with `.custom.yml`, or there will be git conflicts whenever you run `btcpay-update.sh`.
+
+Modify the new `opt-save-storage.custom.yml` file to your taste:
+
 ```diff
 @@ -14,8 +14,7 @@ version: "3"
  services:
    bitcoind:
      environment:
 -       BITCOIN_EXTRA_ARGS: prune=100000
-+       BITCOIN_EXTRA_ARGS: prune=5000
++       BITCOIN_EXTRA_ARGS: prune=60000
 ```
 
 Then set it up:
