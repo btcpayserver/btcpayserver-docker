@@ -63,7 +63,7 @@ The officially supported setup is driven by Docker (and Docker-Compose).
 
 First, make sure you have a domain name pointing to your host, with ports `443` and `80` externally accessible (and perhaps additional ports like `9735` and `9736` for Bitcoin and Litecoin lightning).
 
-Let's assume it is `btcpay.example.com`.
+Let's assume it is `btcpay.EXAMPLE.com`.
 
 If you want to support Litecoin, Bitcoin, and C-Lightning, and want HTTPS automatically configured by Nginx:
 
@@ -80,7 +80,7 @@ git clone https://github.com/btcpayserver/btcpayserver-docker
 cd btcpayserver-docker
 
 # Run btcpay-setup.sh with the right parameters
-export BTCPAY_HOST="btcpay.example.com"
+export BTCPAY_HOST="btcpay.EXAMPLE.com"
 export NBITCOIN_NETWORK="mainnet"
 export BTCPAYGEN_CRYPTO1="btc"
 export BTCPAYGEN_CRYPTO2="ltc"
@@ -255,10 +255,10 @@ WantedBy=multi-user.target
 `.env` (`$BTCPAY_ENV_FILE`) contains environment variables passed to the containers managed by your docker-compose:
 
 ```ini
-BTCPAY_HOST=btcpay.example.com
+BTCPAY_HOST=btcpay.EXAMPLE.com
 ACME_CA_URI=https://acme-v01.api.letsencrypt.org/directory
 NBITCOIN_NETWORK=mainnet
-LETSENCRYPT_EMAIL=me@example.com
+LETSENCRYPT_EMAIL=me@EXAMPLE.com
 BTCPAY_SSHTRUSTEDFINGERPRINTS=SHA256:eSCD7NtQ/Q6IBl2iRB9caAQ3lDZd8s8iUL6SdeNnhpA
 BTCPAY_SSHKEYFILE=/datadir/id_rsa
 ```
@@ -275,7 +275,7 @@ When testing your coin, **DO NOT USE `build.sh`**, since it uses a pre-built doc
 Instead, install [.NET Core 2.1 SDK](https://www.microsoft.com/net/download/windows) and run:
 
 ```bash
-BTCPAYGEN_CRYPTO1="xxx"
+BTCPAYGEN_CRYPTO1="EXAMPLE-COIN"
 BTCPAYGEN_SUBNAME="test"
 cd docker-compose-generator/src
 dotnet run
