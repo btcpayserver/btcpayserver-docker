@@ -22,7 +22,7 @@ Final installation steps:
 * Enter your domain name and click on confirm
 * (Wait 1 to 5 minutes)
 
-That's it, you can now browse to `https://btcpay.YOUR-DOMAIN/`!
+That's it, you can now browse to `https://btcpay.YOUR-DOMAIN/` to create your store!
 
 For advanced users, you can connect via SSH with information on `https://btcpay.YOUR-DOMAIN/server/services/ssh`, then you can:
 
