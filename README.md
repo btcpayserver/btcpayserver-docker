@@ -19,10 +19,10 @@ Final installation steps:
 * Browse to `https://SERVER-AZURE-DNS/`
 * Register a new account (this account will be granted server administrator rights)
 * Go to `https://SERVER-AZURE-DNS/server/maintenance`
-* Enter your DNS name and click on confirm
-* Wait 1 to 5 minutes
+* Enter your domain name and click on confirm
+* (Wait 1 to 5 minutes)
 
-That's it, you can now browse `https://btcpay.YOUR-DOMAIN/`
+That's it, you can now browse to `https://btcpay.YOUR-DOMAIN/`!
 
 For advanced users, you can connect via SSH with information on `https://btcpay.YOUR-DOMAIN/server/services/ssh`, then you can:
 
@@ -58,6 +58,8 @@ Note: The setup process can be time consuming, but is heavily automated to make 
 # Full installation (for technical users)
 
 You can also install BTCPayServer on your own machine or VPS instance.
+
+The officially supported setup is driven by Docker (and Docker-Compose).
 
 First, make sure you have a domain name pointing to your host, with ports `443` and `80` externally accessible (and perhaps additional ports like `9735` and `9736` for Bitcoin and Litecoin lightning).
 
@@ -99,6 +101,9 @@ exit
 * Start BTCPay
 
 You can read [the article](https://medium.com/@BtcpayServer/hosting-btcpay-server-for-cheap-2b27761fdb9d) for step by step instructions.
+
+[![Docker automated build](https://img.shields.io/docker/automated/nicolasdorier/btcpayserver.svg)](https://hub.docker.com/r/nicolasdorier/btcpayserver/)
+
 
 # Environment variables
 
