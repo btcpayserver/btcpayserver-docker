@@ -10,15 +10,21 @@ You can log into [Azure](https://azure.microsoft.com/en-us/account/) with your M
 
 Final installation steps:
 
-* Fill in the options: Resource Group, Admin Password, Network
+* Fill in the options: Resource Group
 * Click 'Purchase' to confirm
 * (Wait for deployment)
 * View the deployment (in Notifications or Resource Groups)
-* SSH into it: `ssh SSH-USERNAME@SSH-SERVER-AZURE-DNS`
-* (At your domain registrar, make sure you have [DNS](https://github.com/btcpayserver/btcpayserver-doc/blob/master/ChangeDomain.md#setting-up-your-dns-record) pointing your domain at your Azure deployment's IP)
-* Run `sudo -i; ./change-domain.sh MYDOMAIN.com`
+* Verify you can connect to your instance with a browser: `https://SERVER-AZURE-DNS/`
+* At your domain registrar, make sure you have [DNS](https://github.com/btcpayserver/btcpayserver-doc/blob/master/ChangeDomain.md#setting-up-your-dns-record) pointing your domain at your Azure deployment's IP.
+* Browse to `https://SERVER-AZURE-DNS/`
+* Register a new account (this account will be granted server administrator rights)
+* Go to `https://SERVER-AZURE-DNS/server/maintenance`
+* Enter your DNS name and click on confirm
+* Wait 1 to 5 minutes
 
-That's it!
+That's it, you can now browse `https://btcpay.YOUR-DOMAIN/`
+
+For advanced users, you can connect via SSH with information on `https://btcpay.YOUR-DOMAIN/server/services/ssh`, then you can:
 
 * Run `docker ps` and `docker logs xxx` to view running processes
 * Run `btcpay-down.sh` and `btcpay-up.sh` to stop and start the BTCPayServer
