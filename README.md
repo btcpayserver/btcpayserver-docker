@@ -98,6 +98,8 @@ exit
 * Add BTCPay utilities in /usr/bin
 * Start BTCPay
 
+You can read [the article](https://medium.com/@BtcpayServer/hosting-btcpay-server-for-cheap-2b27761fdb9d) for step by step instructions.
+
 # Environment variables
 
 `btcpay-setup.sh` will use the following environment variables:
