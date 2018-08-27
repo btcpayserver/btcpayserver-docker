@@ -140,7 +140,7 @@ A wide variety of useful scripts are available once BTCPay is installed:
 
 # Under the hood
 
-## Generated docker-compose
+## Generated docker-compose <a id="generated-docker-compose"></a>
 
 When you run `btcpay-setup.sh`, your environment variables are used by [build.sh](build.sh) (or [build.ps1](build.ps1)) to generate a docker-compose adapted for your needs. For the full list of options, see: [Environment variables](#environment-variables)
 
@@ -150,6 +150,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 
 * [opt-save-storage](docker-compose-generator/docker-fragments/opt-save-storage.yml) will keep around 1 year of blocks (prune BTC for 100 GB)
 * [opt-save-storage-s](docker-compose-generator/docker-fragments/opt-save-storage-s.yml) will keep around 6 months of blocks (prune BTC for 50 GB)
+* [opt-save-storage-xs](docker-compose-generator/docker-fragments/opt-save-storage-xs.yml) will keep around 3 months of blocks (prune BTC for 25 GB)
 * [opt-save-storage-xxs](docker-compose-generator/docker-fragments/opt-save-storage-xxs.yml) will keep around 2 weeks of blocks (prune BTC for 5 GB) (lightning not supported)
 * [opt-lnd-autopilot](docker-compose-generator/docker-fragments/opt-lnd-autopilot.yml) will activate auto pilot on LND. (5 channels, 60% of allocation)
 
@@ -337,7 +338,7 @@ export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage"
 . ./btcpay-setup.sh -i
 ```
 
-Other options are `opt-save-storage-s` (50 GB), `opt-save-storage-xxs` (5 GB), or custom (see below).
+Other options are [documented here](#generated-docker-compose).
 
 ## How can I customize the generated docker-compose file?
 
