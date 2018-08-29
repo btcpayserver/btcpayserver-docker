@@ -3,7 +3,7 @@ version: "3"
 services:
   nginx:
     restart: unless-stopped
-    image: nginx
+    image: nginx:stable
     container_name: nginx
     ports:
       - "80:80"
