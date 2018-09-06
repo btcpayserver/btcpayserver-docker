@@ -50,6 +50,17 @@ services:
     expose:
       - "28332"
       - "28333"
+  
+  nginx:
+    links:
+      - "lnd_bitcoin"
+    volumes:
+      - "lnd_bitcoin_datadir:/lnd"
+  nginx-gen:
+    links:
+      - "lnd_bitcoin"
+    volumes:
+      - "lnd_bitcoin_datadir:/lnd"
 
 volumes:
   lnd_bitcoin_datadir:
