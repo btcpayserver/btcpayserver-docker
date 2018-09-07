@@ -298,11 +298,13 @@ server {
 		{{ end }}
 	}
 
-	{{ if (exists "/lnd/tls.cert") }}
-	location /lnrpc.Lightning {
-		grpc_pass grpcs://lnd_bitcoin:10009;
-		grpc_ssl_trusted_certificate /lnd/tls.cert;
-	}
+	{{ range $container := $ }}
+		{{ $serviceName := (index $container.Labels "com.docker.compose.service") }}
+		{{ if (eq $serviceName "lnd_bitcoin") }}
+				location /lnrpc.Lightning {
+						grpc_pass grpcs://lnd_bitcoin:10009;
+				}
+		{{ end }}
 	{{ end }}
 }
 
