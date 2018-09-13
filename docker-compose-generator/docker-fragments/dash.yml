@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  dashd:
+      restart: unless-stopped
+      container_name: btcpayserver_dashd
+      image: uphold/docker-dash-core:0.12.2.3
+      expose:
+        - "43782"
+        - "39388"
+      volumes:
+        - "dash_datadir:/home/dash/.dashcore"
+      command:
+        -${NBITCOIN_NETWORK:-regtest}=1
+        -rpcport=43782
+        -port=39388
+        -whitelist=0.0.0.0/0
+  nbxplorer:
+      environment:
+        NBXPLORER_CHAINS: "DASH"
+        NBXPLORER_DASHRPCURL: http://dashd:43782/
+        NBXPLORER_DASHNODEENDPOINT: dashd:39388
+      links:
+        - dashd
+      volumes:
+        - "dash_datadir:/root/.dash"
+  btcpayserver:
+      environment:
+        BTCPAY_CHAINS: "DASH"
+        BTCPAY_DASHEXPLORERURL: http://nbxplorer:32838/
+volumes:
+  dash_datadir:
