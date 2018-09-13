@@ -22,3 +22,11 @@ docker run -v "$(pwd)/Generated:/app/Generated" \
 if [ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]; then
     cp Production/nginx.tmpl Generated/nginx.tmpl
 fi
+
+if [ "$BTCPAYGEN_REVERSEPROXY" == "traefik" ]; then
+    cp Production/traefik.toml Generated/traefik.toml
+fi
+
+
+
+
