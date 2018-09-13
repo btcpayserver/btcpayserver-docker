@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  bitcoin-rpc-explorer:
+    restart: unless-stopped
+    image: oktapodia/btc-rpc-explorer
+    environment:
+      RPC_HOST: bitcoind
+      RPC_PORT: 43782
+    links:
+      - bitcoind
+    volumes:
+    - "bitcoin_datadir:/deps/.bitcoin" 
+  bitcoind:
+    environment:
+      # If you don't use Lightning Network, you want this
+      # This save about 2 weeks worth of block
+      BITCOIN_EXTRA_ARGS: prune=5000
