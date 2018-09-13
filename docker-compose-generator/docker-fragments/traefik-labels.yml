@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  btcpayserver:
+    labels:
+      - "traefik.backend=btcpayserver"
+      - "traefik.backend.loadbalancer.sticky=true"
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:${BTCPAY_HOST}"
+      - "traefik.port.rule=49392"
