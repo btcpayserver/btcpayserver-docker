@@ -1,6 +1,6 @@
 defaultEntryPoints = ["https","http"]
 
-logLevel="ERROR"
+logLevel = "ERROR"
 
 [entryPoints]
 	useXForwardedFor = true
