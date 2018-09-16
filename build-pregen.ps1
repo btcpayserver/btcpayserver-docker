@@ -3,5 +3,6 @@
 docker pull btcpayserver/docker-compose-generator
 docker run -v "$(Get-Location)\Production:/app/Production" `
            -v "$(Get-Location)\Production-NoReverseProxy:/app/Production-NoReverseProxy" `
+           -v "$(Get-Location)\Production-Traefik:/app/Production-Traefik" `
            -v "$(Get-Location)\docker-compose-generator\docker-fragments:/app/docker-fragments" `
            --rm btcpayserver/docker-compose-generator pregen

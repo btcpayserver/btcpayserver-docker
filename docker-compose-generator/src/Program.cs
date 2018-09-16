@@ -8,18 +8,21 @@ namespace DockerGenerator
 {
 	class Program
 	{
-
 		static void Main(string[] args)
 		{
 			var root = Environment.GetEnvironmentVariable("INSIDE_CONTAINER") == "1" ? FindRoot("app")
 				: Path.GetFullPath(Path.Combine(FindRoot("docker-compose-generator"), ".."));
-
+			
+			Dictionary<string,string> ProxyMapping = new Dictionary<string, string>()
+			{
+				{"nginx", Path.GetFullPath(Path.Combine(root, "Production"))},
+				{"no-reverseproxy", Path.GetFullPath(Path.Combine(root, "Production-NoReverseProxy"))},
+				{"traefik", Path.GetFullPath(Path.Combine(root, "Production-Traefik"))}
+			};
 			if(args.Any(a => a == "pregen"))
 			{
-				var productionLocation = Path.GetFullPath(Path.Combine(root, "Production"));
-				var testLocation = Path.GetFullPath(Path.Combine(root, "Production-NoReverseProxy"));
 
-				foreach(var proxy in new[] { "nginx", "no-reverseproxy", "traefik" })
+				foreach(var proxy in ProxyMapping.Keys)
 				{
 					foreach(var lightning in new[] { "clightning", "" })
 					{
@@ -40,11 +43,7 @@ namespace DockerGenerator
 								composition.SelectedCryptos.Add(ltc);
 								composition.SelectedLN = lightning;
 								composition.SelectedProxy = proxy;
-								if (composition.SelectedProxy == "traefik")
-								{
-									composition.AdditionalFragments = new []{"traefik-labels"};
-								}
-								new Program().Run(composition, name, new string[] {"nginx", "traefik"}.Contains(proxy)? productionLocation : testLocation);
+								new Program().Run(composition, name, ProxyMapping[proxy]);
 							}
 						}
 					}
@@ -76,15 +75,19 @@ namespace DockerGenerator
 				case "nginx":
 
 					fragments.Add("nginx");
+					fragments.Add("btcpayserver-nginx");
 					break;
 				case "traefik":
 					fragments.Add("traefik");
+					fragments.Add("traefik-labels");
 					break;
 				case "no-reverseproxy":
 					fragments.Add("btcpayserver-noreverseproxy");
 					break;
 			}
 			fragments.Add("btcpayserver");
+			fragments.Add("nbxplorer");
+			fragments.Add("postgres");
 			foreach(var crypto in CryptoDefinition.GetDefinitions())
 			{
 				if(!composition.SelectedCryptos.Contains(crypto.Crypto))

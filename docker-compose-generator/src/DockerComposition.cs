@@ -42,15 +42,6 @@ namespace DockerGenerator
 			composition.SelectedProxy = (Environment.GetEnvironmentVariable("BTCPAYGEN_REVERSEPROXY") ?? "").ToLowerInvariant();
 			composition.SelectedLN = (Environment.GetEnvironmentVariable("BTCPAYGEN_LIGHTNING") ?? "").ToLowerInvariant();
 			composition.AdditionalFragments = (Environment.GetEnvironmentVariable("BTCPAYGEN_ADDITIONAL_FRAGMENTS") ?? "").ToLowerInvariant().Split(';').Where(t => !string.IsNullOrWhiteSpace(t)).ToArray();
-			if (composition.SelectedProxy == "traefik" && !composition.AdditionalFragments.Contains("traefik-labels"))
-			{
-				var additionalFragments = new List<string>();
-				additionalFragments.AddRange(composition.AdditionalFragments);
-				additionalFragments.Add("traefik-labels");
-
-				composition.AdditionalFragments = additionalFragments.ToArray();
-			}
-
 			return composition;
 		}
 	}

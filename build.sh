@@ -24,7 +24,7 @@ if [ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]; then
 fi
 
 if [ "$BTCPAYGEN_REVERSEPROXY" == "traefik" ]; then
-    cp Production/traefik.toml Generated/traefik.toml
+    cp Production-Traefik/traefik.toml Generated/traefik.toml
 fi
 
 
