@@ -1,6 +1,7 @@
 # This script will run docker-compose-generator in a container to generate the yml files
+if (-not ($BTCPAYGEN_DOCKER_IMAGE)) { $BTCPAYGEN_DOCKER_IMAGE = "btcpayserver/docker-compose-generator" }
 
-docker pull btcpayserver/docker-compose-generator
+docker pull $BTCPAYGEN_DOCKER_IMAGE:
 docker run -v "$(Get-Location)\Generated:/app/Generated" `
            -v "$(Get-Location)\docker-compose-generator\docker-fragments:/app/docker-fragments" `
            -e "BTCPAYGEN_CRYPTO1=$BTCPAYGEN_CRYPTO1" `

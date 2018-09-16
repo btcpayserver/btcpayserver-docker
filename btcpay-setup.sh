@@ -88,6 +88,9 @@ if [ ! -z $BTCPAY_DOCKER_COMPOSE ] && [ ! -z $DOWNLOAD_ROOT ] && [ -z $BTCPAYGEN
     if [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production ]]; then
         BTCPAYGEN_REVERSEPROXY='nginx'
     fi
+	if [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production-Traefik ]]; then
+        BTCPAYGEN_REVERSEPROXY='traefik'
+    fi
     if [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production-NoReverseProxy ]]; then
         BTCPAYGEN_REVERSEPROXY='none'
     fi
