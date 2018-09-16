@@ -25,7 +25,8 @@ fi
 
 if [ "$BTCPAYGEN_REVERSEPROXY" == "traefik" ]; then
     cp Production-Traefik/traefik.toml Generated/traefik.toml
-    chmod 600 acme.json>>!#:2
+    :> Generated/acme.json
+    chmod 600 Generated/acme.json
 fi
 
 
