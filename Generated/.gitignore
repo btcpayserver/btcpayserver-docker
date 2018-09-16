@@ -1,3 +1,4 @@
 *.yml
 *.tmpl
 *.toml
+*.json
