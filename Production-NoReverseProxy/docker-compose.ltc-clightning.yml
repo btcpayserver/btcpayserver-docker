@@ -13,12 +13,6 @@ services:
       BTCPAY_ROOTPATH: ${BTCPAY_ROOTPATH:-/}
       BTCPAY_SSHTRUSTEDFINGERPRINTS: ${BTCPAY_SSHTRUSTEDFINGERPRINTS}
       BTCPAY_SSHKEYFILE: ${BTCPAY_SSHKEYFILE}
-      VIRTUAL_NETWORK: nginx-proxy
-      VIRTUAL_PORT: 49392
-      VIRTUAL_HOST: ${BTCPAY_HOST}
-      SSL_POLICY: Mozilla-Modern
-      LETSENCRYPT_HOST: ${BTCPAY_HOST}
-      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}
       BTCPAY_LTCEXPLORERURL: http://nbxplorer:32838/
       BTCPAY_CHAINS: "ltc"
       BTCPAY_LTCLIGHTNING: "type=clightning;server=unix://etc/clightning_litecoin/lightning-rpc"
@@ -94,8 +88,8 @@ services:
     - nbxplorer
     - litecoind
 volumes:
-  postgres_datadir: 
   btcpay_datadir: 
   nbxplorer_datadir: 
+  postgres_datadir: 
   litecoin_datadir: 
   clightning_litecoin_datadir: 

@@ -188,9 +188,9 @@ volumes:
   nginx_vhost: 
   nginx_html: 
   nginx_certs: 
-  postgres_datadir: 
   btcpay_datadir: 
   nbxplorer_datadir: 
+  postgres_datadir: 
   litecoin_datadir: 
   clightning_litecoin_datadir: 
   bitcoin_datadir: 
