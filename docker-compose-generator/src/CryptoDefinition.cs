@@ -68,7 +68,7 @@ namespace DockerGenerator
                 },
 	            new CryptoDefinition()
                 {
-                    Crypto = "DASH",
+                    Crypto = "dash",
                     CryptoFragment = "dash"
                 }
             };
