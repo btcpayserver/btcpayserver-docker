@@ -8,6 +8,11 @@ services:
       expose:
         - "43782"
         - "39388"
+      ports:
+        -"9999:9999"
+        -"9998:9998"
+        -"19999:19999"
+        -"19998:19998"
       volumes:
         - "dash_datadir:/home/dash/.dashcore"
       command:
