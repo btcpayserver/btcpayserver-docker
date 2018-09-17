@@ -15,6 +15,7 @@ services:
         -rpcport=43782
         -port=39388
         -whitelist=0.0.0.0/0
+        -printtoconsole
   nbxplorer:
       environment:
         NBXPLORER_CHAINS: "DASH"
