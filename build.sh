@@ -28,7 +28,3 @@ if [ "$BTCPAYGEN_REVERSEPROXY" == "traefik" ]; then
     :> Generated/acme.json
     chmod 600 Generated/acme.json
 fi
-
-
-
-

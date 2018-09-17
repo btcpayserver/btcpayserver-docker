@@ -9,34 +9,4 @@
   <ItemGroup>
 	  <PackageReference Include="YamlDotNet" Version="4.3.1" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="..\docker-fragments\.gitignore" />
-    <Content Include="..\docker-fragments\bgold-lnd.yml" />
-    <Content Include="..\docker-fragments\bgold.yml" />
-    <Content Include="..\docker-fragments\bitcoin-clightning.yml" />
-    <Content Include="..\docker-fragments\bitcoin-lnd.yml" />
-    <Content Include="..\docker-fragments\bitcoin.yml" />
-    <Content Include="..\docker-fragments\btcpayserver-noreverseproxy.yml" />
-    <Content Include="..\docker-fragments\btcpayserver.yml" />
-    <Content Include="..\docker-fragments\feathercoin.yml" />
-    <Content Include="..\docker-fragments\groestlcoin.yml" />
-    <Content Include="..\docker-fragments\litecoin-clightning.yml" />
-    <Content Include="..\docker-fragments\litecoin-lnd.yml" />
-    <Content Include="..\docker-fragments\litecoin.yml" />
-    <Content Include="..\docker-fragments\nginx.yml" />
-    <Content Include="..\docker-fragments\opt-lnd-autopilot.yml" />
-    <Content Include="..\docker-fragments\opt-save-storage-s.yml" />
-    <Content Include="..\docker-fragments\opt-save-storage-xs.yml" />
-    <Content Include="..\docker-fragments\opt-save-storage-xxs.yml" />
-    <Content Include="..\docker-fragments\opt-save-storage.yml" />
-    <Content Include="..\docker-fragments\traefik-labels.yml">
-      <Link>opt-save-storage.yml</Link>
-    </Content>
-    <Content Include="..\docker-fragments\traefik.yml">
-      <Link>nginx.yml</Link>
-    </Content>
-    <Content Include="..\docker-fragments\viacoin.yml" />
-  </ItemGroup>
-
 </Project>
