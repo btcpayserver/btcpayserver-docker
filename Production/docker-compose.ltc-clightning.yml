@@ -2,7 +2,7 @@ version: "3"
 services:
   nginx:
     restart: unless-stopped
-    image: nginx
+    image: nginx:stable
     container_name: nginx
     ports:
     - "80:80"
@@ -46,7 +46,7 @@ services:
     - nginx-gen
   btcpayserver:
     restart: unless-stopped
-    image: nicolasdorier/btcpayserver:1.0.2.93
+    image: nicolasdorier/btcpayserver:1.0.2.103
     expose:
     - "49392"
     environment:
@@ -76,7 +76,7 @@ services:
     - "clightning_litecoin_datadir:/etc/clightning_litecoin"
   nbxplorer:
     restart: unless-stopped
-    image: nicolasdorier/nbxplorer:1.0.2.23
+    image: nicolasdorier/nbxplorer:1.0.2.31
     expose:
     - "32838"
     environment:
@@ -111,7 +111,7 @@ services:
     volumes:
     - "litecoin_datadir:/data"
   clightning_litecoin:
-    image: nicolasdorier/clightning:aeafe4dbe7d5c61f664c18417698866b0d70252f-2
+    image: nicolasdorier/clightning:634f19a7b230edc686be56ab950b80784e56252c
     container_name: btcpayserver_clightning_litecoin
     restart: unless-stopped
     environment:

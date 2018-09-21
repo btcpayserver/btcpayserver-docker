@@ -2,7 +2,7 @@ version: "3"
 services:
   nginx:
     restart: unless-stopped
-    image: nginx
+    image: nginx:stable
     container_name: nginx
     ports:
     - "80:80"
@@ -46,7 +46,7 @@ services:
     - nginx-gen
   btcpayserver:
     restart: unless-stopped
-    image: nicolasdorier/btcpayserver:1.0.2.93
+    image: nicolasdorier/btcpayserver:1.0.2.103
     expose:
     - "49392"
     environment:
@@ -73,7 +73,7 @@ services:
     - "nbxplorer_datadir:/root/.nbxplorer"
   nbxplorer:
     restart: unless-stopped
-    image: nicolasdorier/nbxplorer:1.0.2.23
+    image: nicolasdorier/nbxplorer:1.0.2.31
     expose:
     - "32838"
     environment:

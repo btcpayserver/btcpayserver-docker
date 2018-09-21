@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  bitcoind:
+    environment:
+      # If you don't use Lightning Network, you want this
+      # This save about 2 weeks worth of block
+      BITCOIN_EXTRA_ARGS: prune=5000

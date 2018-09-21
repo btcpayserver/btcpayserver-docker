@@ -52,11 +52,12 @@ Environment variables:
     LETSENCRYPT_EMAIL: A mail will be sent to this address if certificate expires and fail to renew automatically (eg. me@example.com)
     NBITCOIN_NETWORK: The type of network to use (eg. mainnet, testnet or regtest. Default: mainnet)
     LIGHTNING_ALIAS: An alias for your lightning network node if used
-    BTCPAYGEN_CRYPTO1: First supported crypto currency (eg. btc, ltc, none. Default: btc)
-    BTCPAYGEN_CRYPTO2: Second supported crypto currency (eg. btc, ltc, none. Default: empty)
-    BTCPAYGEN_CRYPTON: N th supported crypto currency where N is maximum at maximum 9. (eg. btc, ltc. Default: none)
+    BTCPAYGEN_CRYPTO1: First supported crypto currency (eg. btc, ltc, btg, grs, ftc, via, none. Default: btc)
+    BTCPAYGEN_CRYPTO2: Second supported crypto currency (Default: empty)
+    BTCPAYGEN_CRYPTON: N th supported crypto currency where N is maximum at maximum 9. (Default: none)
     BTCPAYGEN_REVERSEPROXY: Whether to use or not a reverse proxy. NGinx setup HTTPS for you. (eg. nginx, none. Default: nginx)
-    BTCPAYGEN_LIGHTNING: Lightning network implementation to use (eg. clightning, none)
+    BTCPAYGEN_LIGHTNING: Lightning network implementation to use (eg. clightning, lnd, none)
+    BTCPAYGEN_ADDITIONAL_FRAGMENTS: Semi colon separated list of additional fragments you want to use (eg. opt-save-storage)
     ACME_CA_URI: The API endpoint to ask for HTTPS certificate (default: https://acme-v01.api.letsencrypt.org/directory)
     BTCPAY_HOST_SSHKEYFILE: Optional, SSH private key that BTCPay can use to connect to this VM's SSH server. This key will be copied on BTCPay's data directory
 
@@ -177,6 +178,7 @@ BTCPAYGEN_CRYPTO8:$BTCPAYGEN_CRYPTO8
 BTCPAYGEN_CRYPTO9:$BTCPAYGEN_CRYPTO9
 BTCPAYGEN_REVERSEPROXY:$BTCPAYGEN_REVERSEPROXY
 BTCPAYGEN_LIGHTNING:$BTCPAYGEN_LIGHTNING
+BTCPAYGEN_ADDITIONAL_FRAGMENTS:$BTCPAYGEN_ADDITIONAL_FRAGMENTS
 ACME_CA_URI:$ACME_CA_URI
 ----------------------
 Additional exported variables:
@@ -218,6 +220,7 @@ export BTCPAYGEN_CRYPTO8=\"$BTCPAYGEN_CRYPTO8\"
 export BTCPAYGEN_CRYPTO9=\"$BTCPAYGEN_CRYPTO9\"
 export BTCPAYGEN_LIGHTNING=\"$BTCPAYGEN_LIGHTNING\"
 export BTCPAYGEN_REVERSEPROXY=\"$BTCPAYGEN_REVERSEPROXY\"
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS=\"$BTCPAYGEN_ADDITIONAL_FRAGMENTS\"
 export BTCPAY_DOCKER_COMPOSE=\"$BTCPAY_DOCKER_COMPOSE\"
 export BTCPAY_BASE_DIRECTORY=\"$BTCPAY_BASE_DIRECTORY\"
 export BTCPAY_ENV_FILE=\"$BTCPAY_ENV_FILE\"
