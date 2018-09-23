@@ -2,7 +2,7 @@ version: "3"
 services:
   btcpayserver:
     restart: unless-stopped
-    image: nicolasdorier/btcpayserver:1.0.2.103
+    image: nicolasdorier/btcpayserver:1.0.2.105
     expose:
     - "49392"
     environment:
@@ -50,7 +50,7 @@ services:
   bitcoind:
     restart: unless-stopped
     container_name: btcpayserver_bitcoind
-    image: nicolasdorier/docker-bitcoin:0.16.0
+    image: nicolasdorier/docker-bitcoin:0.16.3
     environment:
       BITCOIN_EXTRA_ARGS: |
         rpcport=43782

@@ -4,7 +4,7 @@ services:
   bgoldd:
       restart: unless-stopped
       container_name: btcpayserver_bgoldd
-      image: kamigawabul/docker-bitcoingold:0.15.1
+      image: kamigawabul/docker-bitcoingold:0.15.2
       environment:
         BITCOIN_EXTRA_ARGS: |
           rpcport=43782
