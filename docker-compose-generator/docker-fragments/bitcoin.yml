@@ -4,7 +4,7 @@ services:
   bitcoind:
       restart: unless-stopped
       container_name: btcpayserver_bitcoind
-      image: nicolasdorier/docker-bitcoin:0.16.0
+      image: nicolasdorier/docker-bitcoin:0.16.3
       environment:
         BITCOIN_EXTRA_ARGS: |
           rpcport=43782
