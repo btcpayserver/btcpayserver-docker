@@ -19,7 +19,7 @@ It is composed of:
 2. A lightweight block explorer ([NBxplorer](https://github.com/dgarage/NBXplorer))
 3. A [BTCPay Server](https://github.com/btcpayserver/btcpayserver)
 4. A database (Postgres)
-5. A reverse proxy (Traefik) xontainer that also handles SSL certificate renewal
+5. A reverse proxy (Traefik) container that also handles SSL certificate renewal
 
 ![Architecture](Production.png)
 
