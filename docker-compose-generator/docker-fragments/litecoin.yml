@@ -4,7 +4,7 @@ services:
   litecoind:
     restart: unless-stopped
     container_name: btcpayserver_litecoind
-    image: nicolasdorier/docker-litecoin:0.15.1
+    image: nicolasdorier/docker-litecoin:0.16.3
     environment:
       BITCOIN_EXTRA_ARGS: |
         rpcport=43782
