@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  bitcoind:
+    environment:
+      # If you don't use Lightning Network, use opt-save-store-xxs instead
+      # This save about 6 months of block, your lightning node won't be able to see channel created 6 months since the time you start it.
+      BITCOIN_EXTRA_ARGS: prune=50000
