@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  bitcoin-rpc-explorer:
+    restart: unless-stopped
+    image: oktapodia/btc-rpc-explorer
+    environment:
+      RPC_HOST: bitcoind
+      RPC_PORT: 43782
+      RPC_COOKIEFILE: /nodes/bitcoin/.cookie
+    links:
+      - bitcoind
+    volumes:
+    - "bitcoin_datadir:/nodes/bitcoin" 
