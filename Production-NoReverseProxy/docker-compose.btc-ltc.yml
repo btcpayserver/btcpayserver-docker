@@ -2,7 +2,7 @@ version: "3"
 services:
   btcpayserver:
     restart: unless-stopped
-    image: nicolasdorier/btcpayserver:1.0.2.105
+    image: nicolasdorier/btcpayserver:1.0.2.106
     expose:
     - "49392"
     environment:
@@ -64,10 +64,14 @@ services:
         rpcport=43782
         ${NBITCOIN_NETWORK:-regtest}=1
         port=39388
+        zmqpubrawblock=tcp://0.0.0.0:28332
+        zmqpubrawtx=tcp://0.0.0.0:28333
         whitelist=0.0.0.0/0
     expose:
     - "43782"
     - "39388"
+    - "28332"
+    - "28333"
     volumes:
     - "litecoin_datadir:/data"
   bitcoind:
@@ -80,9 +84,13 @@ services:
         ${NBITCOIN_NETWORK:-regtest}=1
         port=39388
         whitelist=0.0.0.0/0
+        zmqpubrawblock=tcp://0.0.0.0:28332
+        zmqpubrawtx=tcp://0.0.0.0:28333
     expose:
     - "43782"
     - "39388"
+    - "28332"
+    - "28333"
     volumes:
     - "bitcoin_datadir:/data"
 volumes:
