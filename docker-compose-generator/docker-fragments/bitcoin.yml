@@ -11,13 +11,9 @@ services:
           ${NBITCOIN_NETWORK:-regtest}=1
           port=39388
           whitelist=0.0.0.0/0
-          zmqpubrawblock=tcp://0.0.0.0:28332
-          zmqpubrawtx=tcp://0.0.0.0:28333
       expose:
         - "43782"
         - "39388"
-        - "28332" # ZMQ
-        - "28333" # ZMQ
       volumes:
         - "bitcoin_datadir:/data"
   nbxplorer:
