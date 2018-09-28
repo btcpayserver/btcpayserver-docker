@@ -200,7 +200,7 @@ fi
 
 if [ -z "$BTCPAY_PORT" ]; then
     echo "BTCPAY_PORT defaulting to 80"
-	$BTCPAY_PORT = 80
+    $BTCPAY_PORT = 80
 fi
 
 if [ -z "$BTCPAYGEN_CRYPTO1" ]; then
