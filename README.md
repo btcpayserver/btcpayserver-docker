@@ -306,9 +306,12 @@ Yes, run the following commands to update:
 ```bash
 sudo su -
 
-btcpay-update.sh
 cd $DOWNLOAD_ROOT/btcpayserver-docker
+git checkout 9acb5d8067cb5c46f59858137feb699b41ac9f19
+btcpay-update.sh
 . ./btcpay-setup.sh -i
+git checkout master
+btcpay-update.sh
 
 exit
 ```
