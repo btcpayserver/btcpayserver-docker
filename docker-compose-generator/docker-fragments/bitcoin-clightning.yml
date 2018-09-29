@@ -2,7 +2,7 @@ version: "3"
 
 services:
   clightning_bitcoin:
-    image: nicolasdorier/clightning:634f19a7b230edc686be56ab950b80784e56252c
+    image: nicolasdorier/clightning:v0.6.1
     container_name: btcpayserver_clightning_bitcoin
     restart: unless-stopped
     environment:

@@ -2,7 +2,7 @@ version: "3"
 
 services:
   lnd_litecoin:
-    image: btcpayserver/lnd:0.4.2.0.1
+    image: btcpayserver/lnd:0.5-beta
     container_name: btcpayserver_lnd_litecoin
     restart: unless-stopped
     environment:
@@ -13,10 +13,12 @@ services:
         restlisten=0.0.0.0:8080
         litecoin.node=litecoind
         litecoind.rpchost=litecoind:43782
-        litecoind.zmqpath=tcp://litecoind:28332
+        litecoind.zmqpubrawblock=tcp://litecoind:28332
+        litecoind.zmqpubrawtx=tcp://litecoind:28333
         externalip=${BTCPAY_HOST}:9736
         alias=${LIGHTNING_ALIAS}
-        noencryptwallet=1
+        adminmacaroonpath=/data/admin.macaroon
+        noseedbackup=1
         notls=1
     ports:
       - "9736:9735"
@@ -42,10 +44,11 @@ services:
   litecoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
-        zmqpubrawtx=tcp://0.0.0.0:28332
         zmqpubrawblock=tcp://0.0.0.0:28332
+        zmqpubrawtx=tcp://0.0.0.0:28333
     expose:
       - "28332"
+      - "28333"
 
 volumes:
   lnd_litecoin_datadir:

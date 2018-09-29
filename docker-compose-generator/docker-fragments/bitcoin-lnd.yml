@@ -2,7 +2,7 @@ version: "3"
 
 services:
   lnd_bitcoin:
-    image: btcpayserver/lnd:0.4.2.0.1
+    image: btcpayserver/lnd:0.5-beta
     container_name: btcpayserver_lnd_bitcoin
     restart: unless-stopped
     environment:
@@ -15,10 +15,12 @@ services:
         rpclisten=0.0.0.0:10009
         bitcoin.node=bitcoind
         bitcoind.rpchost=bitcoind:43782
-        bitcoind.zmqpath=tcp://bitcoind:28332
+        bitcoind.zmqpubrawblock=tcp://bitcoind:28332
+        bitcoind.zmqpubrawtx=tcp://bitcoind:28333
         externalip=${BTCPAY_HOST}:9735
         alias=${LIGHTNING_ALIAS}
-        noencryptwallet=1
+        adminmacaroonpath=/data/admin.macaroon
+        noseedbackup=1
         notls=1
     ports:
       - "9735:9735"
@@ -45,8 +47,8 @@ services:
   bitcoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
-        zmqpubrawtx=tcp://0.0.0.0:28332
         zmqpubrawblock=tcp://0.0.0.0:28332
+        zmqpubrawtx=tcp://0.0.0.0:28333
     expose:
       - "28332"
       - "28333"
