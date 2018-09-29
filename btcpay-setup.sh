@@ -71,56 +71,9 @@ fi
 
 ######### Migration: old pregen environment to new environment ############
 if [ ! -z $BTCPAY_DOCKER_COMPOSE ] && [ ! -z $DOWNLOAD_ROOT ] && [ -z $BTCPAYGEN_OLD_PREGEN ]; then 
-    echo "Old pregen docker deployment detected. Migrating..."
-    rm "$DOWNLOAD_ROOT/btcpay-restart.sh"
-    rm "$DOWNLOAD_ROOT/btcpay-update.sh"
-    rm "$DOWNLOAD_ROOT/changedomain.sh"
-    rm "$DOWNLOAD_ROOT/entrypoint.sh"
-    DOWNLOAD_ROOT=""
-    BTCPAYGEN_OLD_PREGEN="true"
-    # Migration: old deployment store those in BTCPAY_ENV_FILE
-    BTCPAY_HOST=$(cat $BTCPAY_ENV_FILE | sed -n 's/^BTCPAY_HOST=\(.*\)$/\1/p')
-    ACME_CA_URI=$(cat $BTCPAY_ENV_FILE | sed -n 's/^ACME_CA_URI=\(.*\)$/\1/p')
-    NBITCOIN_NETWORK=$(cat $BTCPAY_ENV_FILE | sed -n 's/^NBITCOIN_NETWORK=\(.*\)$/\1/p')
-    LETSENCRYPT_EMAIL=$(cat $BTCPAY_ENV_FILE | sed -n 's/^LETSENCRYPT_EMAIL=\(.*\)$/\1/p')
-    LIGHTNING_ALIAS=$(cat $BTCPAY_ENV_FILE | sed -n 's/^LIGHTNING_ALIAS=\(.*\)$/\1/p')
-
-    if [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production ]]; then
-        BTCPAYGEN_REVERSEPROXY='nginx'
-    fi
-	if [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production-Traefik ]]; then
-        BTCPAYGEN_REVERSEPROXY='traefik'
-    fi
     if [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production-NoReverseProxy ]]; then
-        BTCPAYGEN_REVERSEPROXY='none'
-    fi
-
-    if [[ $BTCPAY_DOCKER_COMPOSE == *docker-compose.btc.yml ]]; then
-        BTCPAYGEN_CRYPTO1='btc'
-        BTCPAYGEN_LIGHTNING='none'
-    fi
-    if [[ $BTCPAY_DOCKER_COMPOSE == *docker-compose.btc-clightning.yml ]]; then
-        BTCPAYGEN_CRYPTO1='btc'
-        BTCPAYGEN_LIGHTNING='clightning'
-    fi
-    if [[ $BTCPAY_DOCKER_COMPOSE == *docker-compose.ltc.yml ]]; then
-        BTCPAYGEN_CRYPTO1='ltc'
-        BTCPAYGEN_LIGHTNING='none'
-    fi
-    if [[ $BTCPAY_DOCKER_COMPOSE == *docker-compose.ltc-clightning.yml ]]; then
-        BTCPAYGEN_CRYPTO1='ltc'
-        BTCPAYGEN_LIGHTNING='clightning'
-    fi
-    if [[ $BTCPAY_DOCKER_COMPOSE == *docker-compose.btc-ltc.yml ]]; then
-        BTCPAYGEN_CRYPTO1='btc'
-        BTCPAYGEN_CRYPTO2='ltc'
-        BTCPAYGEN_LIGHTNING='none'
-    fi
-    if [[ $BTCPAY_DOCKER_COMPOSE == *docker-compose.btc-ltc-clightning.yml ]]; then
-        BTCPAYGEN_CRYPTO1='btc'
-        BTCPAYGEN_CRYPTO2='ltc'
-        BTCPAYGEN_LIGHTNING='clightning'
-    fi
+    echo "Your deployment is too old, you need to migrate by following instructions on this link https://github.com/btcpayserver/btcpayserver-docker/tree/master#i-deployed-before-btcpay-setupsh-existed-before-may-17-can-i-migrate-to-this-new-system"
+    return
 fi
 #########################################################
 
