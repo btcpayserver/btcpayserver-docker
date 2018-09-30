@@ -1,10 +1,11 @@
 #!/bin/bash
 
+: "${BTCPAYGEN_DOCKER_IMAGE:=btcpayserver/docker-compose-generator}"
 if [ "$BTCPAYGEN_DOCKER_IMAGE" == "btcpayserver/docker-compose-generator:local" ]
 then
     docker build docker-compose-generator --tag $BTCPAYGEN_DOCKER_IMAGE
 else
-    docker pull ${BTCPAYGEN_DOCKER_IMAGE:-"btcpayserver/docker-compose-generator"}
+    docker pull $BTCPAYGEN_DOCKER_IMAGE
 fi
 
 # This script will run docker-compose-generator in a container to generate the yml files
@@ -23,7 +24,7 @@ docker run -v "$(pwd)/Generated:/app/Generated" \
            -e "BTCPAYGEN_ADDITIONAL_FRAGMENTS=$BTCPAYGEN_ADDITIONAL_FRAGMENTS" \
            -e "BTCPAYGEN_LIGHTNING=$BTCPAYGEN_LIGHTNING" \
            -e "BTCPAYGEN_SUBNAME=$BTCPAYGEN_SUBNAME" \
-           --rm ${BTCPAYGEN_DOCKER_IMAGE:-"btcpayserver/docker-compose-generator"}
+           --rm $BTCPAYGEN_DOCKER_IMAGE
 
 if [ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]; then
     cp Production/nginx.tmpl Generated/nginx.tmpl

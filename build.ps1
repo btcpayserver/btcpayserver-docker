@@ -1,7 +1,8 @@
 # This script will run docker-compose-generator in a container to generate the yml files
 
 If (-not ($BTCPAYGEN_DOCKER_IMAGE)) { $BTCPAYGEN_DOCKER_IMAGE = "btcpayserver/docker-compose-generator" }
-If($BTCPAYGEN_DOCKER_IMAGE -eq "btcpayserver/docker-compose-generator:local"){
+
+If ($BTCPAYGEN_DOCKER_IMAGE -eq "btcpayserver/docker-compose-generator:local"){
 	docker build docker-compose-generator --tag $BTCPAYGEN_DOCKER_IMAGE
 } Else {
 	docker pull $BTCPAYGEN_DOCKER_IMAGE
