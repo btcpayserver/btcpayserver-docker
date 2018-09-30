@@ -30,7 +30,7 @@ if [ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]; then
 fi
 
 if [ "$BTCPAYGEN_REVERSEPROXY" == "traefik" ]; then
-    cp Production-Traefik/traefik.toml Generated/traefik.toml
+    cp Traefik/traefik.toml Generated/traefik.toml
     :> Generated/acme.json
     chmod 600 Generated/acme.json
 fi
