@@ -51,7 +51,7 @@ Environment variables:
     BTCPAY_HOST: The hostname of your website (eg. btcpay.example.com)
     LETSENCRYPT_EMAIL: A mail will be sent to this address if certificate expires and fail to renew automatically (eg. me@example.com)
     NBITCOIN_NETWORK: The type of network to use (eg. mainnet, testnet or regtest. Default: mainnet)
-    LIGHTNING_ALIAS: An alias for your lightning network node if used    
+    LIGHTNING_ALIAS: An alias for your lightning network node if used
     BTCPAYGEN_CRYPTO1: First supported crypto currency (eg. btc, ltc, btg, grs, ftc, via, none. Default: btc)
     BTCPAYGEN_CRYPTO2: Second supported crypto currency (Default: empty)
     BTCPAYGEN_CRYPTON: N th supported crypto currency where N is maximum at maximum 9. (Default: none)
@@ -71,7 +71,6 @@ fi
 
 ######### Migration: old pregen environment to new environment ############
 if [ ! -z $BTCPAY_DOCKER_COMPOSE ] && [ ! -z $DOWNLOAD_ROOT ] && [ -z $BTCPAYGEN_OLD_PREGEN ]; then 
-    if [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production-NoReverseProxy ]]; then
     echo "Your deployment is too old, you need to migrate by following instructions on this link https://github.com/btcpayserver/btcpayserver-docker/tree/master#i-deployed-before-btcpay-setupsh-existed-before-may-17-can-i-migrate-to-this-new-system"
     return
 fi
