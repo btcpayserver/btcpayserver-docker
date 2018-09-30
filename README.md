@@ -270,19 +270,23 @@ BTCPAY_SSHKEYFILE=/datadir/id_rsa
 1. Add support for your crypto to [NBitcoin](https://github.com/MetacoSA/NBitcoin/tree/master/NBitcoin.Altcoins), [NBxplorer](https://github.com/dgarage/NBXplorer), and [BTCPayServer](https://github.com/btcpayserver/btcpayserver). (Use examples from other coins)
 2. Create your own docker image ([Example for BTC](https://hub.docker.com/r/nicolasdorier/docker-bitcoin/))
 3. Create a docker-compose fragment ([Example for BTC](docker-compose-generator/docker-fragments/bitcoin.yml))
-4. Add your CryptoDefinition ([Example for BTC](docker-compose-generator/src/CryptoDefinition.cs))
+4. Add your `CryptoDefinition` ([Example for BTC](docker-compose-generator/src/CryptoDefinition.cs))
 
-When testing your coin, **DO NOT USE `build.sh`**, since it uses a pre-built docker image.
-
-Instead, install [.NET Core 2.1 SDK](https://www.microsoft.com/net/download/windows) and run:
+`build.sh` is using a pre-built image of the `docker-compose generator` on [docker hub](https://hub.docker.com/r/btcpayserver/docker-compose-generator/).
+If you modify the code source of `docker-compose generator` (for example, the `CryptoDefinition` [Example for BTC](docker-compose-generator/src/CryptoDefinition.cs)), you need to configure `build.sh` to use your own image by setting the environment variable `BTCPAYGEN_DOCKER_IMAGE` to `btcpayserver/docker-compose-generator:local`.
 
 ```bash
-BTCPAYGEN_CRYPTO1="EXAMPLE-COIN"
-BTCPAYGEN_SUBNAME="test"
-cd docker-compose-generator/src
-dotnet run
+cd docker-compose-generator
+BTCPAYGEN_DOCKER_IMAGE="btcpayserver/docker-compose-generator:local"
 ```
 
+Or on powershell:
+```powershell
+cd docker-compose-generator
+$BTCPAYGEN_DOCKER_IMAGE="btcpayserver/docker-compose-generator:local"
+```
+
+Then run `./build.sh` or `. .\build.ps1`.
 This will generate your docker-compose in the `Generated` folder, which you can then run and test.
 
 Note that BTCPayServer developers will not spend excessive time testing your image, so make sure it works.
