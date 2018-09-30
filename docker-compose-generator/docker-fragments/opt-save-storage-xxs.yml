@@ -6,3 +6,28 @@ services:
       # If you don't use Lightning Network, you want this
       # This save about 2 weeks worth of block
       BITCOIN_EXTRA_ARGS: prune=5000
+  bgoldd:
+    environment:
+      # If you don't use Lightning Network, you want this
+      # This save about 2 weeks worth of block
+      BITCOIN_EXTRA_ARGS: prune=5000
+  feathercoind:
+    environment:
+      # If you don't use Lightning Network, you want this
+      # This save about 2 weeks worth of block
+      BITCOIN_EXTRA_ARGS: prune=5000
+  groestlcoind:
+    environment:
+      # If you don't use Lightning Network, you want this
+      # This save about 2 weeks worth of block
+      BITCOIN_EXTRA_ARGS: prune=5000
+  litecoind:
+    environment:
+      # If you don't use Lightning Network, you want this
+      # This save about 2 weeks worth of block
+      BITCOIN_EXTRA_ARGS: prune=5000
+  viacoind:
+    environment:
+      # If you don't use Lightning Network, you want this
+      # This save about 2 weeks worth of block
+      BITCOIN_EXTRA_ARGS: prune=5000
