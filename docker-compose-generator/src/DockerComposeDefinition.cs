@@ -42,12 +42,13 @@ namespace DockerGenerator
 			var serializer = new SerializerBuilder().Build();
 
 			Console.WriteLine($"With fragments:");
-			foreach (var fragment in Fragments)
+			foreach (var fragment in Fragments.ToList())
 			{
 				var fragmentPath = GetFragmentLocation(fragment);
 				if (!File.Exists(fragmentPath))
 				{
 					Console.WriteLine($"\t{fragment} not found in {fragmentPath}, ignoring...");
+					Fragments.Remove(fragment);
 				}
 				else
 				{
