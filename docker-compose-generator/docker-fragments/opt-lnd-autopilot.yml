@@ -7,3 +7,15 @@ services:
         autopilot.active=1
         autopilot.maxchannels=5
         autopilot.allocation=0.6
+  lnd_litecoin:
+    environment:
+      LND_EXTRA_ARGS: |
+        autopilot.active=1
+        autopilot.maxchannels=5
+        autopilot.allocation=0.6
+  lnd_bitcoingold:
+    environment:
+      LND_EXTRA_ARGS: |
+        autopilot.active=1
+        autopilot.maxchannels=5
+        autopilot.allocation=0.6

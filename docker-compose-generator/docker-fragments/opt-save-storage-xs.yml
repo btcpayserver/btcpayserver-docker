@@ -1,8 +1,23 @@
 version: "3"
+# If you don't use Lightning Network, use opt-save-store-xxs instead
+# This save about 3 months of block, your lightning node won't be able to see channel created 3 months since the time you start it.
 
 services:
   bitcoind:
     environment:
-      # If you don't use Lightning Network, use opt-save-store-xxs instead
-      # This save about 3 months of block, your lightning node won't be able to see channel created 3 months since the time you start it.
+      BITCOIN_EXTRA_ARGS: prune=25000
+  bgoldd:
+    environment:
+      BITCOIN_EXTRA_ARGS: prune=25000
+  feathercoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: prune=25000
+   groestlcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: prune=25000
+  litecoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: prune=25000
+  viacoind:
+    environment:
       BITCOIN_EXTRA_ARGS: prune=25000
