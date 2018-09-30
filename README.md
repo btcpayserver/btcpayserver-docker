@@ -123,6 +123,7 @@ You can read [the article](https://medium.com/@BtcpayServer/hosting-btcpay-serve
 * `ACME_CA_URI`: The API endpoint to ask for HTTPS certificate (Default: `https://acme-v01.api.letsencrypt.org/directory`)
 * `BTCPAY_HOST_SSHKEYFILE`: Optional, SSH private key that BTCPay can use to connect to this VM's SSH server. This key will be copied to BTCPay's data directory
 * `BTCPAY_SSHTRUSTEDFINGERPRINTS`: Optional, BTCPay will ensure that it is connecting to the expected SSH server by checking the host's public key against these fingerprints
+* `BTCPAYGEN_DOCKER_IMAGE`: Optional, Specify which generator image to use if you have customized the C# generator. Set to `btcpayserver/docker-compose-generator:local` to build the generator locally at runtime.
 
 # Tooling
 
@@ -270,20 +271,9 @@ BTCPAY_SSHKEYFILE=/datadir/id_rsa
 1. Add support for your crypto to [NBitcoin](https://github.com/MetacoSA/NBitcoin/tree/master/NBitcoin.Altcoins), [NBxplorer](https://github.com/dgarage/NBXplorer), and [BTCPayServer](https://github.com/btcpayserver/btcpayserver). (Use examples from other coins)
 2. Create your own docker image ([Example for BTC](https://hub.docker.com/r/nicolasdorier/docker-bitcoin/))
 3. Create a docker-compose fragment ([Example for BTC](docker-compose-generator/docker-fragments/bitcoin.yml))
-4. Add your CryptoDefinition ([Example for BTC](docker-compose-generator/src/CryptoDefinition.cs))
-
-When testing your coin, **DO NOT USE `build.sh`**, since it uses a pre-built docker image.
-
-Instead, install [.NET Core 2.1 SDK](https://www.microsoft.com/net/download/windows) and run:
-
-```bash
-BTCPAYGEN_CRYPTO1="EXAMPLE-COIN"
-BTCPAYGEN_SUBNAME="test"
-cd docker-compose-generator/src
-dotnet run
-```
-
-This will generate your docker-compose in the `Generated` folder, which you can then run and test.
+4. Add your coin to CryptoDefinition ([Example for BTC](docker-compose-generator/src/CryptoDefinition.cs))
+5. Tell the setup script to build the docker compose generator image locally by specifying the environment variable `BTCPAYGEN_DOCKER_IMAGE` to `btcpayserver/docker-compose-generator:local`
+6. Configure the BtcPay environment variables as usual and run [build.sh](build.sh) (or [build.ps1](build.ps1)) to generate the docker compose script under `Generated`
 
 Note that BTCPayServer developers will not spend excessive time testing your image, so make sure it works.
 
