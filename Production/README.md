@@ -1,6 +1,6 @@
 # How to use docker-compose with NGinx
 
-NGinx acts as a reverse proxy, and take care of renewing HTTPS certificates for you.
+NGinx acts as a reverse proxy, and takes care of renewing HTTPS certificates for you.
 BTCPay Server deployment using NGinx are typically composed of:
 
 1. One full node per supported cryptocurrency (bitcoind/litecoind)
