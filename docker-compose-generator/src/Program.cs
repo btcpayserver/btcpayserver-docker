@@ -32,15 +32,24 @@ namespace DockerGenerator
 			fragmentLocation = Path.GetFullPath(Path.Combine(fragmentLocation, "docker-fragments"));
 
 			var fragments = new List<string>();
-			if (composition.SelectedProxy == "nginx")
+			switch (composition.SelectedProxy)
 			{
-				fragments.Add("nginx");
-			}
-			else
-			{
-				fragments.Add("btcpayserver-noreverseproxy");
+				case "nginx":
+
+					fragments.Add("nginx");
+					fragments.Add("btcpayserver-nginx");
+					break;
+				case "traefik":
+					fragments.Add("traefik");
+					fragments.Add("traefik-labels");
+					break;
+				case "no-reverseproxy":
+					fragments.Add("btcpayserver-noreverseproxy");
+					break;
 			}
 			fragments.Add("btcpayserver");
+			fragments.Add("nbxplorer");
+			fragments.Add("postgres");
 			foreach (var crypto in CryptoDefinition.GetDefinitions())
 			{
 				if (!composition.SelectedCryptos.Contains(crypto.Crypto))

@@ -55,12 +55,12 @@ Environment variables:
     BTCPAYGEN_CRYPTO1: First supported crypto currency (eg. btc, ltc, btg, grs, ftc, via, none. Default: btc)
     BTCPAYGEN_CRYPTO2: Second supported crypto currency (Default: empty)
     BTCPAYGEN_CRYPTON: N th supported crypto currency where N is maximum at maximum 9. (Default: none)
-    BTCPAYGEN_REVERSEPROXY: Whether to use or not a reverse proxy. NGinx setup HTTPS for you. (eg. nginx, none. Default: nginx)
+    BTCPAYGEN_REVERSEPROXY: Whether to use or not a reverse proxy. NGinx setup HTTPS for you. (eg. nginx, traefik, none. Default: nginx)
     BTCPAYGEN_LIGHTNING: Lightning network implementation to use (eg. clightning, lnd, none)
     BTCPAYGEN_ADDITIONAL_FRAGMENTS: Semi colon separated list of additional fragments you want to use (eg. opt-save-storage)
     ACME_CA_URI: The API endpoint to ask for HTTPS certificate (default: https://acme-v01.api.letsencrypt.org/directory)
     BTCPAY_HOST_SSHKEYFILE: Optional, SSH private key that BTCPay can use to connect to this VM's SSH server. This key will be copied on BTCPay's data directory
-
+    BTCPAYGEN_DOCKER_IMAGE: Allows you to specify a custom docker image for the generator (Default: btcpayserver/docker-compose-generator)
 END
 }
 

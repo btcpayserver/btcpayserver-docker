@@ -1,0 +1,17 @@
+version: "3"
+
+services:
+
+  nbxplorer:
+    restart: unless-stopped
+    image: nicolasdorier/nbxplorer:1.0.2.31
+    expose: 
+      - "32838"
+    environment:
+      NBXPLORER_NETWORK: ${NBITCOIN_NETWORK:-regtest}
+      NBXPLORER_BIND: 0.0.0.0:32838
+    volumes:
+      - "nbxplorer_datadir:/datadir"
+
+volumes:
+    nbxplorer_datadir:

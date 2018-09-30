@@ -115,7 +115,7 @@ You can read [the article](https://medium.com/@BtcpayServer/hosting-btcpay-serve
 * `BTCPAYGEN_CRYPTO1`: First supported crypto currency (eg. `btc`, `ltc`. Default: `btc`)
 * `BTCPAYGEN_CRYPTO2`: Second supported crypto currency (eg. `btc`, `ltc`. Default: `(empty)`)
 * `BTCPAYGEN_CRYPTON`: N'th supported crypto currency where N is 9 at maximum. (eg. `btc`, `ltc`. Default: `(empty)`)
-* `BTCPAYGEN_REVERSEPROXY`: Specify reverse proxy to use; NGinx has HTTPS support. (eg. `nginx`, `(empty)`. Default: `nginx`)
+* `BTCPAYGEN_REVERSEPROXY`: Specify reverse proxy to use; NGinx has HTTPS support. (eg. `nginx`, `traefik`,  `(empty)`. Default: `nginx`)
 * `BTCPAYGEN_LIGHTNING`: Lightning network implementation to use (eg. `clightning`, `(empty)`)
 * `BTCPAYGEN_SUBNAME`: The subname of the generated docker-compose file, where the full name is `Generated/docker-compose.SUBNAME.yml` (Default: `generated`)
 * `BTCPAYGEN_ADDITIONAL_FRAGMENTS`: Semicolon-separated list of additional fragments you want to use (eg. `opt-save-storage`)
@@ -123,6 +123,7 @@ You can read [the article](https://medium.com/@BtcpayServer/hosting-btcpay-serve
 * `ACME_CA_URI`: The API endpoint to ask for HTTPS certificate (Default: `https://acme-v01.api.letsencrypt.org/directory`)
 * `BTCPAY_HOST_SSHKEYFILE`: Optional, SSH private key that BTCPay can use to connect to this VM's SSH server. This key will be copied to BTCPay's data directory
 * `BTCPAY_SSHTRUSTEDFINGERPRINTS`: Optional, BTCPay will ensure that it is connecting to the expected SSH server by checking the host's public key against these fingerprints
+* `BTCPAYGEN_DOCKER_IMAGE`: Optional, Specify which generator image to use if you have customized the C# generator. Set to `btcpayserver/docker-compose-generator:local` to build the generator locally at runtime.
 
 # Tooling
 

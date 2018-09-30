@@ -1,6 +1,6 @@
 # How to use docker-compose with NGinx
 
-NGinx acts as a reverse proxy, and take care of renewing HTTPS certificates for you.
+NGinx acts as a reverse proxy, and takes care of renewing HTTPS certificates for you.
 BTCPay Server deployment using NGinx are typically composed of:
 
 1. One full node per supported cryptocurrency (bitcoind/litecoind)
@@ -26,8 +26,6 @@ The relevant environment variables are:
 * `BTCPAY_SSHTRUSTEDFINGERPRINTS`: Optional, BTCPay will ensure that it is connecting to the expected SSH server by checking the host public's key against those fingerprints
 
 If `BTCPAY_HOST` is `btcpay.example.com` and `BTCPAY_ROOTPATH` is `/btcpay`, then you can access the site via `https://btcpay.example.com/btcpay`
-
-Use `docker-compose.btc-ltc.yml` for bitcoin and litecoin support, or `docker-compose.btc.yml` for only bitcoin.
 
 Any unset or empty environment variable will be set for a `regtest` deployment.
 

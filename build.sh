@@ -29,3 +29,9 @@ docker run -v "$(pwd)/Generated:/app/Generated" \
 if [ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]; then
     cp Production/nginx.tmpl Generated/nginx.tmpl
 fi
+
+if [ "$BTCPAYGEN_REVERSEPROXY" == "traefik" ]; then
+    cp Traefik/traefik.toml Generated/traefik.toml
+    :> Generated/acme.json
+    chmod 600 Generated/acme.json
+fi
