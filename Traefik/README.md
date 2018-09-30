@@ -37,8 +37,6 @@ The relevant environment variables are:
 
 If `BTCPAY_HOST` is `btcpay.example.com` and `BTCPAY_ROOTPATH` is `/btcpay`, then you can access the site via `https://btcpay.example.com/btcpay`
 
-Use `docker-compose.btc-ltc.yml` for bitcoin and litecoin support, or `docker-compose.btc.yml` for only bitcoin.
-
 Any unset or empty environment variable will be set for a `regtest` deployment.
 
 The ports mapped on the host are:
