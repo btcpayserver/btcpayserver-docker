@@ -6,7 +6,7 @@ RUN dotnet restore
 COPY src/. .
 RUN dotnet publish --output /app/ --configuration Release
 
-FROM microsoft/dotnet:2.1.0-runtime-alpine3.7
+FROM microsoft/dotnet:2.1.1-runtime-alpine3.7
 WORKDIR /app
 
 RUN mkdir /datadir
