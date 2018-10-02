@@ -17,13 +17,11 @@ fi
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"  
 git pull --force
 
-if [[ $BTCPAY_DOCKER_COMPOSE == *docker-compose.generated.yml ]]; then
-    # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
-    . ./build.sh
-    if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then
-        cp Generated/docker-compose.generated.yml $BTCPAY_DOCKER_COMPOSE
-    fi
+. ./build.sh
+if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then
+    cp Generated/docker-compose.generated.yml $BTCPAY_DOCKER_COMPOSE
 fi
+
 
 for scriptname in *.sh; do
     if [ "$scriptname" == "build.sh" ] || \
