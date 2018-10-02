@@ -12,7 +12,7 @@ services:
   feathercoind:
     environment:
       BITCOIN_EXTRA_ARGS: prune=25000
-   groestlcoind:
+  groestlcoind:
     environment:
       BITCOIN_EXTRA_ARGS: prune=25000
   litecoind:
