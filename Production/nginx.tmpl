@@ -251,6 +251,9 @@ server {
 	ssl_session_timeout 5m;
 	ssl_session_cache shared:SSL:50m;
 	ssl_session_tickets off;
+	proxy_connect_timeout 1d;
+	proxy_send_timeout 1d;
+	proxy_read_timeout 1d;	
 
 	ssl_certificate /etc/nginx/certs/{{ (printf "%s.crt" $cert) }};
 	ssl_certificate_key /etc/nginx/certs/{{ (printf "%s.key" $cert) }};
