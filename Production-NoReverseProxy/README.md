@@ -33,7 +33,8 @@ With Powershell:
 $env:BTCPAY_ROOTPATH="/test";
 $env:BTCPAY_PROTOCOL="http";
 $env:BTCPAY_HOST="btcpay.example.com";
-docker-compose -f docker-compose.btc.yml up
+.\build.ps1
+docker-compose -f "Generated/docker-compose.generated.yml" up --remove-orphans -d
 ```
 
 With Linux:
@@ -42,7 +43,8 @@ With Linux:
 export BTCPAY_ROOTPATH="/test"
 export BTCPAY_PROTOCOL="http"
 export BTCPAY_HOST="btcpay.example.com"
-docker-compose -f docker-compose.btc.yml up
+./build.sh
+docker-compose -f "Generated/docker-compose.generated.yml" up --remove-orphans -d
 ```
 
 Then edit your [host file](https://www.howtogeek.com/howto/27350/beginner-geek-how-to-edit-your-hosts-file/) with
