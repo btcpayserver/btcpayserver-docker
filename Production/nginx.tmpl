@@ -296,13 +296,17 @@ server {
 		{{ else if (exists "/etc/nginx/vhost.d/default_location") }}
 		include /etc/nginx/vhost.d/default_location;
 		{{ end }}
-	}
+	} 
 
 	{{ range $container := $ }}
 		{{ $serviceName := (index $container.Labels "com.docker.compose.service") }}
 		{{ if (eq $serviceName "lnd_bitcoin") }}
 				location /lnrpc.Lightning {
-						grpc_pass grpcs://lnd_bitcoin:10009;
+					grpc_pass grpcs://lnd_bitcoin:10009;
+				}
+				location /lnd-rest/btc/ {
+					rewrite ^/lnd-rest/btc/(.*) /$1 break;
+					proxy_pass http://lnd_bitcoin:8080/;
 				}
 		{{ end }}
 	{{ end }}
