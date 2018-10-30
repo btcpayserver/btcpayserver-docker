@@ -2,7 +2,7 @@ version: "3"
 
 services:
   clightning_litecoin:
-    image: nicolasdorier/clightning:v0.6.1-1
+    image: nicolasdorier/clightning:v0.6.2
     container_name: btcpayserver_clightning_litecoin
     restart: unless-stopped
     environment:
