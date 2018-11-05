@@ -36,4 +36,4 @@ for scriptname in *.sh; do
 done
 
 cd "`dirname $BTCPAY_ENV_FILE`"
-docker-compose -f $BTCPAY_DOCKER_COMPOSE up -d --remove-orphans
+docker-compose -f $BTCPAY_DOCKER_COMPOSE up -d --remove-orphans -t 180
