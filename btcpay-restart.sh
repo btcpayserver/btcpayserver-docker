@@ -3,5 +3,5 @@
 . /etc/profile.d/btcpay-env.sh
 
 cd "`dirname $BTCPAY_ENV_FILE`" 
-docker-compose -f $BTCPAY_DOCKER_COMPOSE down -t 180
-docker-compose -f $BTCPAY_DOCKER_COMPOSE up -d -t 180
+docker-compose -f $BTCPAY_DOCKER_COMPOSE down 
+docker-compose -f $BTCPAY_DOCKER_COMPOSE up -d
