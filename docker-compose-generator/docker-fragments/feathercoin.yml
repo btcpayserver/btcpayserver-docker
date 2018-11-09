@@ -4,7 +4,7 @@ services:
   feathercoind:
       restart: unless-stopped
       container_name: btcpayserver_feathercoind
-      image: chekaz/docker-feathercoin:0.16.0
+      image: chekaz/docker-feathercoin:0.16.3
       environment:
         BITCOIN_EXTRA_ARGS: |
           rpcport=43782

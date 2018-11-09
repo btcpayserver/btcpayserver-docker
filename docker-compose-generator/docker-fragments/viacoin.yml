@@ -4,7 +4,7 @@ services:
   viacoind:
       restart: unless-stopped
       container_name: btcpayserver_viacoind
-      image: romanornr/docker-viacoin:0.15.1
+      image: romanornr/docker-viacoin:0.15.2
       environment:
         BITCOIN_EXTRA_ARGS: |
           rpcport=43782

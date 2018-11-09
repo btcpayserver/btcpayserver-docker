@@ -1,7 +1,13 @@
 # This script will run docker-compose-generator in a container to generate the yml files
-if (-not ($BTCPAYGEN_DOCKER_IMAGE)) { $BTCPAYGEN_DOCKER_IMAGE = "btcpayserver/docker-compose-generator" }
 
-docker pull $BTCPAYGEN_DOCKER_IMAGE:
+If (-not ($BTCPAYGEN_DOCKER_IMAGE)) { $BTCPAYGEN_DOCKER_IMAGE = "btcpayserver/docker-compose-generator" }
+
+If ($BTCPAYGEN_DOCKER_IMAGE -eq "btcpayserver/docker-compose-generator:local"){
+	docker build docker-compose-generator --tag $BTCPAYGEN_DOCKER_IMAGE
+} Else {
+	docker pull $BTCPAYGEN_DOCKER_IMAGE
+}
+
 docker run -v "$(Get-Location)\Generated:/app/Generated" `
            -v "$(Get-Location)\docker-compose-generator\docker-fragments:/app/docker-fragments" `
            -e "BTCPAYGEN_CRYPTO1=$BTCPAYGEN_CRYPTO1" `
@@ -21,4 +27,10 @@ docker run -v "$(Get-Location)\Generated:/app/Generated" `
 
 If ($BTCPAYGEN_REVERSEPROXY -eq "nginx") {
     Copy-Item ".\Production\nginx.tmpl" -Destination ".\Generated"
+}
+
+If ($BTCPAYGEN_REVERSEPROXY -eq "traefik") {
+    Copy-Item ".\Traefik\traefik.toml" -Destination ".\Generated"
+    
+    New-Item  ".\Generated\acme.json" -type file
 }

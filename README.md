@@ -115,7 +115,7 @@ You can read [the article](https://medium.com/@BtcpayServer/hosting-btcpay-serve
 * `BTCPAYGEN_CRYPTO1`: First supported crypto currency (eg. `btc`, `ltc`. Default: `btc`)
 * `BTCPAYGEN_CRYPTO2`: Second supported crypto currency (eg. `btc`, `ltc`. Default: `(empty)`)
 * `BTCPAYGEN_CRYPTON`: N'th supported crypto currency where N is 9 at maximum. (eg. `btc`, `ltc`. Default: `(empty)`)
-* `BTCPAYGEN_REVERSEPROXY`: Specify reverse proxy to use; NGinx has HTTPS support. (eg. `nginx`, `(empty)`. Default: `nginx`)
+* `BTCPAYGEN_REVERSEPROXY`: Specify reverse proxy to use; NGinx has HTTPS support. (eg. `nginx`, `traefik`,  `(empty)`. Default: `nginx`)
 * `BTCPAYGEN_LIGHTNING`: Lightning network implementation to use (eg. `clightning`, `(empty)`)
 * `BTCPAYGEN_SUBNAME`: The subname of the generated docker-compose file, where the full name is `Generated/docker-compose.SUBNAME.yml` (Default: `generated`)
 * `BTCPAYGEN_ADDITIONAL_FRAGMENTS`: Semicolon-separated list of additional fragments you want to use (eg. `opt-save-storage`)
@@ -123,6 +123,7 @@ You can read [the article](https://medium.com/@BtcpayServer/hosting-btcpay-serve
 * `ACME_CA_URI`: The API endpoint to ask for HTTPS certificate (Default: `https://acme-v01.api.letsencrypt.org/directory`)
 * `BTCPAY_HOST_SSHKEYFILE`: Optional, SSH private key that BTCPay can use to connect to this VM's SSH server. This key will be copied to BTCPay's data directory
 * `BTCPAY_SSHTRUSTEDFINGERPRINTS`: Optional, BTCPay will ensure that it is connecting to the expected SSH server by checking the host's public key against these fingerprints
+* `BTCPAYGEN_DOCKER_IMAGE`: Optional, Specify which generator image to use if you have customized the C# generator. Set to `btcpayserver/docker-compose-generator:local` to build the generator locally at runtime.
 
 # Tooling
 
@@ -270,19 +271,23 @@ BTCPAY_SSHKEYFILE=/datadir/id_rsa
 1. Add support for your crypto to [NBitcoin](https://github.com/MetacoSA/NBitcoin/tree/master/NBitcoin.Altcoins), [NBxplorer](https://github.com/dgarage/NBXplorer), and [BTCPayServer](https://github.com/btcpayserver/btcpayserver). (Use examples from other coins)
 2. Create your own docker image ([Example for BTC](https://hub.docker.com/r/nicolasdorier/docker-bitcoin/))
 3. Create a docker-compose fragment ([Example for BTC](docker-compose-generator/docker-fragments/bitcoin.yml))
-4. Add your CryptoDefinition ([Example for BTC](docker-compose-generator/src/CryptoDefinition.cs))
+4. Add your `CryptoDefinition` ([Example for BTC](docker-compose-generator/src/CryptoDefinition.cs))
 
-When testing your coin, **DO NOT USE `build.sh`**, since it uses a pre-built docker image.
-
-Instead, install [.NET Core 2.1 SDK](https://www.microsoft.com/net/download/windows) and run:
+`build.sh` is using a pre-built image of the `docker-compose generator` on [docker hub](https://hub.docker.com/r/btcpayserver/docker-compose-generator/).
+If you modify the code source of `docker-compose generator` (for example, the `CryptoDefinition` [Example for BTC](docker-compose-generator/src/CryptoDefinition.cs)), you need to configure `build.sh` to use your own image by setting the environment variable `BTCPAYGEN_DOCKER_IMAGE` to `btcpayserver/docker-compose-generator:local`.
 
 ```bash
-BTCPAYGEN_CRYPTO1="EXAMPLE-COIN"
-BTCPAYGEN_SUBNAME="test"
-cd docker-compose-generator/src
-dotnet run
+cd docker-compose-generator
+BTCPAYGEN_DOCKER_IMAGE="btcpayserver/docker-compose-generator:local"
 ```
 
+Or on powershell:
+```powershell
+cd docker-compose-generator
+$BTCPAYGEN_DOCKER_IMAGE="btcpayserver/docker-compose-generator:local"
+```
+
+Then run `./build.sh` or `. .\build.ps1`.
 This will generate your docker-compose in the `Generated` folder, which you can then run and test.
 
 Note that BTCPayServer developers will not spend excessive time testing your image, so make sure it works.
@@ -306,9 +311,14 @@ Yes, run the following commands to update:
 ```bash
 sudo su -
 
-btcpay-update.sh
 cd $DOWNLOAD_ROOT/btcpayserver-docker
+git checkout master
+git pull
+git checkout 9acb5d8067cb5c46f59858137feb699b41ac9f19
+btcpay-update.sh
 . ./btcpay-setup.sh -i
+git checkout master
+btcpay-update.sh
 
 exit
 ```

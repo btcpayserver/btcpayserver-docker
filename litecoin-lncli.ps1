@@ -1,1 +1,1 @@
-docker exec -ti btcpayserver_lnd_litecoin lncli $args
+docker exec -ti btcpayserver_lnd_litecoin lncli --macaroonpath /root/.lnd/admin.macaroon $args
