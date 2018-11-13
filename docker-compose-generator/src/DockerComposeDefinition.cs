@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
@@ -89,8 +89,11 @@ namespace DockerGenerator
 				.GroupBy(s => s.Key.ToString(), s => s.Value)
 				.Select(group =>
 					(GroupName: group.Key,
-					 MainNode: group.OfType<YamlMappingNode>().SingleOrDefault(n => n.Children.ContainsKey("image")),
-					 MergedNodes: group.OfType<YamlMappingNode>().Where(n => !n.Children.ContainsKey("image"))))
+						MainNode: group.OfType<YamlMappingNode>().FirstOrDefault(n => n.Children.ContainsKey("image")),
+						MergedNodes: group.OfType<YamlMappingNode>()
+							.Where(n => !n.Children.ContainsKey("image") ||
+							            (n != group.OfType<YamlMappingNode>()
+								             .FirstOrDefault(ny => ny.Children.ContainsKey("image"))))))
 				.Where(_ => _.MainNode != null)
 				.Select(_ =>
 				{
