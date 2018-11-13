@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
@@ -138,6 +138,11 @@ namespace DockerGenerator
 								{
 									mainSequence.Add(c);
 								}
+							}
+							else if (childValue is YamlScalarNode childScalarNode &&
+							         mainChildValue is YamlScalarNode mainScalarNode)
+							{
+								mainScalarNode.Value = childScalarNode.Value;
 							}
 						}
 					}
