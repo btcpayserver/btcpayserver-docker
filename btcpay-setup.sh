@@ -115,6 +115,15 @@ if [[ -f "$BTCPAY_HOST_SSHKEYFILE" ]]; then
     done
 fi
 
+if [[ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]]; then
+    DOMAIN_NAME="$(echo "$BTCPAY_HOST" | grep -P '(?=^.{4,253}$)(^(?:[a-zA-Z0-9](?:(?:[a-zA-Z0-9\-]){0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$)')"
+    if [[ ! "$DOMAIN_NAME" ]]; then
+        echo "BTCPAYGEN_REVERSEPROXY is set to nginx, so BTCPAY_HOST must point on a domain name, but the current value ('$BTCPAY_HOST') is not a valid domain name."
+        return
+    fi
+    BTCPAY_HOST="$DOMAIN_NAME"
+fi
+
 echo "
 -------SETUP-----------
 Parameters passed:
