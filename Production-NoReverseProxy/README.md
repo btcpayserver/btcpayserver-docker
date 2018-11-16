@@ -33,6 +33,7 @@ With Powershell:
 $env:BTCPAY_ROOTPATH="/test";
 $env:BTCPAY_PROTOCOL="http";
 $env:BTCPAY_HOST="btcpay.example.com";
+$env:BTCPAYGEN_REVERSEPROXY="none";
 .\build.ps1
 docker-compose -f "Generated/docker-compose.generated.yml" up --remove-orphans -d
 ```
@@ -43,6 +44,7 @@ With Linux:
 export BTCPAY_ROOTPATH="/test"
 export BTCPAY_PROTOCOL="http"
 export BTCPAY_HOST="btcpay.example.com"
+export BTCPAYGEN_REVERSEPROXY="none"
 ./build.sh
 docker-compose -f "Generated/docker-compose.generated.yml" up --remove-orphans -d
 ```
