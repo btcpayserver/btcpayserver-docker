@@ -57,6 +57,7 @@ namespace DockerGenerator
 			}
 			var services = new List<KeyValuePair<YamlNode, YamlNode>>();
 			var volumes = new List<KeyValuePair<YamlNode, YamlNode>>();
+			var networks = new List<KeyValuePair<YamlNode, YamlNode>>();
 
 			foreach (var doc in Fragments.Select(f => ParseDocument(f)))
 			{
@@ -69,6 +70,10 @@ namespace DockerGenerator
 				{
 					volumes.AddRange(fragmentVolumesRoot.Children);
 				}
+				if (doc.Children.ContainsKey("networks") && doc.Children["networks"] is YamlMappingNode fragmentNetworksRoot)
+				{
+					networks.AddRange(fragmentNetworksRoot.Children);
+				}
 			}
 
 
@@ -76,6 +81,7 @@ namespace DockerGenerator
 			output.Add("version", new YamlScalarNode("3") { Style = YamlDotNet.Core.ScalarStyle.DoubleQuoted });
 			output.Add("services", new YamlMappingNode(Merge(services)));
 			output.Add("volumes", new YamlMappingNode(volumes));
+			output.Add("networks", new YamlMappingNode(networks));
 			var result = serializer.Serialize(output);
 			var outputFile = GetFilePath();
 			File.WriteAllText(outputFile, result.Replace("''", ""));

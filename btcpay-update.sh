@@ -22,6 +22,11 @@ if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then
     cp Generated/docker-compose.generated.yml $BTCPAY_DOCKER_COMPOSE
 fi
 
+if ! grep -Fxq "export COMPOSE_HTTP_TIMEOUT=\"180\"" "/etc/profile.d/btcpay-env.sh"; then
+    echo "export COMPOSE_HTTP_TIMEOUT=\"180\"" >> /etc/profile.d/btcpay-env.sh
+    export COMPOSE_HTTP_TIMEOUT=180
+    echo "Adding COMPOSE_HTTP_TIMEOUT=180 in btcpay-env.sh"
+fi
 
 for scriptname in *.sh; do
     if [ "$scriptname" == "build.sh" ] || \

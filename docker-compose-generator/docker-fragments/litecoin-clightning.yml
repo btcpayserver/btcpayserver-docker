@@ -2,7 +2,8 @@ version: "3"
 
 services:
   clightning_litecoin:
-    image: nicolasdorier/clightning:v0.6.2
+    image: nicolasdorier/clightning:v0.6.2-3
+    stop_signal: SIGKILL
     container_name: btcpayserver_clightning_litecoin
     restart: unless-stopped
     environment:

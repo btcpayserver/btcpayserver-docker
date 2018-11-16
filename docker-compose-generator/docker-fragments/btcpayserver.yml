@@ -4,7 +4,7 @@ services:
 
   btcpayserver:
     restart: unless-stopped
-    image: nicolasdorier/btcpayserver:1.0.3.4
+    image: ${BTCPAY_IMAGE:-nicolasdorier/btcpayserver:1.0.3.9}
     expose:
       - "49392"
     environment:
@@ -16,7 +16,7 @@ services:
       BTCPAY_ROOTPATH: ${BTCPAY_ROOTPATH:-/}
       BTCPAY_SSHTRUSTEDFINGERPRINTS: ${BTCPAY_SSHTRUSTEDFINGERPRINTS}
       BTCPAY_SSHKEYFILE: ${BTCPAY_SSHKEYFILE}
-      
+      BTCPAY_DEBUGLOG: btcpay.log
     links:
       - nbxplorer
       - postgres
