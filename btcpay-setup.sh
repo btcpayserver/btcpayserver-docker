@@ -226,37 +226,19 @@ if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; t
     apt-get update 2>error
     apt-get install -y \
         curl \
-        apt-transport-https \
-        ca-certificates \
         software-properties-common \
         2>error
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-    if [ $(lsb_release -cs) == "bionic" ]; then
-        # Bionic not in the repo yet, see https://linuxconfig.org/how-to-install-docker-on-ubuntu-18-04-bionic-beaver
-        add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu artful stable"
-    else
-        add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-    fi
-    apt-get update 2>error
-fi
-
-if ! [ -x "$(command -v docker)" ]; then
-    if apt-get install -y docker-ce ; then
-        echo "Docker installed"
-    else
-        echo "Failed to install docker"
-        return
-    fi
+    curl -fsSL https://get.docker.com -o get-docker.sh
+	sh get-docker.sh
+	if [ $? -eq 0 ]
+	then
+	  echo "Installed docker & docker compose"
+	else
+	  echo "Could not install docker & docker compose" >&2
+	  return
+	fi
 else
-    echo -e "docker is already installed\n"
-fi
-
-# Install docker-compose
-if ! [ -x "$(command -v docker-compose)" ]; then
-    curl -L https://github.com/docker/compose/releases/download/1.17.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-    chmod +x /usr/local/bin/docker-compose
-else
-    echo -e "docker-compose is already installed\n"
+	echo "docker & docker compose already installed"
 fi
 
 # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
