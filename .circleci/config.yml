@@ -57,15 +57,15 @@ workflows:
       - publish_docker_linuxamd64:
           filters:
             branches:
-              only: feature/circleci
+              only: dcg-latest
       - publish_docker_linuxarm:
           filters:
             branches:
-              only: feature/circleci
+              only: dcg-latest
       - publish_docker_multiarch:
           requires:
             - publish_docker_linuxamd64
             - publish_docker_linuxarm
           filters:
             branches:
-              only: feature/circleci
+              only: dcg-latest
