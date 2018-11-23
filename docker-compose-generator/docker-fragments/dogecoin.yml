@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+  dogecoind:
+      restart: unless-stopped
+      container_name: btcpayserver_dogecoind
+      image: btcpayserver/dogecoin:1.10.0
+      environment:
+        BITCOIN_EXTRA_ARGS: |
+          rpcuser=ceiwHEbqWI83
+          rpcpassword=DwubwWsoo3
+          ${NBITCOIN_NETWORK:-regtest}=1
+          server=1
+          rpcport=22555
+          port=22556
+          whitelist=0.0.0.0/0
+      ports: 
+        - "22555:22555"
+      expose:
+        - "22555" # RPC
+        - "22556" # P2P
+      volumes:
+        - "dogecoin_datadir:/data"
+  nbxplorer:
+      environment:
+        NBXPLORER_CHAINS: "doge"
+        NBXPLORER_VIARPCURL: http://dogecoind:22555/
+        NBXPLORER_VIANODEENDPOINT: dogecoind:22556
+        NBXPLORER_DOGERPCUSER: ceiwHEbqWI83
+        NBXPLORER_DOGERPCPASSWORD: DwubwWsoo3
+      links:
+        - dogecoind
+      volumes:
+        - "dogecoin_datadir:/root/.dogecoin"
+  btcpayserver:
+      environment:
+        BTCPAY_CHAINS: "doge"
+        BTCPAY_DOGEEXPLORERURL: http://nbxplorer:32838/
+volumes:
+  dogecoin_datadir:
