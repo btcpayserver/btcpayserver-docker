@@ -1,3 +1,4 @@
+#
 FROM microsoft/dotnet:2.1.500-sdk-alpine3.7 AS builder
 WORKDIR /source
 COPY src/docker-compose-generator.csproj docker-compose-generator.csproj
@@ -6,10 +7,11 @@ RUN dotnet restore
 COPY src/. .
 RUN dotnet publish --output /app/ --configuration Release
 
+#
 FROM microsoft/dotnet:2.1.6-runtime-alpine3.7
-WORKDIR /app
+WORKDIR /datadir
 
-RUN mkdir /datadir
+WORKDIR /app
 ENV APP_DATADIR=/datadir
 VOLUME /datadir
 
