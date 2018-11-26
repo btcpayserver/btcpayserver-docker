@@ -285,6 +285,7 @@ ExecReload=/bin/bash -c '. /etc/profile.d/btcpay-env.sh && cd \"\$(dirname \$BTC
 WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
 
 echo -e "BTCPay Server systemd configured in /etc/systemd/system/btcpayserver.service\n"
+echo "BTCPay Server starting... this can take 5 to 10 minutes..."
 systemctl daemon-reload
 systemctl enable btcpayserver
 systemctl start btcpayserver
