@@ -230,14 +230,14 @@ if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; t
         sh get-docker.sh
         rm get-docker.sh
     fi
-    if ! [ -x "$(command -v docker-compose)" ]; then
-        if [[ "$(uname -s)" == "x86_64" ]]; then
-            DOCKER_COMPOSE_DOWNLOAD="https://github.com/docker/compose/releases/download/1.17.1/docker-compose-$(uname -s)-$(uname -m)"
-            echo "Trying to install docker-compose by downloading on $DOCKER_COMPOSE_DOWNLOAD"
-            curl -L "$DOCKER_COMPOSE_DOWNLOAD" -o /usr/local/bin/docker-compose
-            chmod +x /usr/local/bin/docker-compose
-        fi
+if ! [ -x "$(command -v docker-compose)" ]; then
+    if [[ "$(uname -m)" == "x86_64" ]]; then
+        DOCKER_COMPOSE_DOWNLOAD="https://github.com/docker/compose/releases/download/1.17.1/docker-compose-$(uname -s)-$(uname -m)"
+        echo "Trying to install docker-compose by downloading on $DOCKER_COMPOSE_DOWNLOAD"
+        curl -L "$DOCKER_COMPOSE_DOWNLOAD" -o /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
     fi
+fi
 fi
 
 if ! [ -x "$(command -v docker)" ]; then
