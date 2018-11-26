@@ -223,33 +223,31 @@ if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; t
         ca-certificates \
         software-properties-common \
         2>error
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-    if [ $(lsb_release -cs) == "bionic" ]; then
-        # Bionic not in the repo yet, see https://linuxconfig.org/how-to-install-docker-on-ubuntu-18-04-bionic-beaver
-        add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu artful stable"
-    else
-        add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    if ! [ -x "$(command -v docker)" ]; then
+        echo "Trying to install docker..."
+        curl -fsSL https://get.docker.com -o get-docker.sh
+        chmod +x get-docker.sh
+        sh get-docker.sh
+        rm get-docker.sh
     fi
-    apt-get update 2>error
+    if ! [ -x "$(command -v docker-compose)" ]; then
+        if [[ "$(uname -s)" == "x86_64" ]]; then
+            DOCKER_COMPOSE_DOWNLOAD="https://github.com/docker/compose/releases/download/1.17.1/docker-compose-$(uname -s)-$(uname -m)"
+            echo "Trying to install docker-compose by downloading on $DOCKER_COMPOSE_DOWNLOAD"
+            curl -L "$DOCKER_COMPOSE_DOWNLOAD" -o /usr/local/bin/docker-compose
+            chmod +x /usr/local/bin/docker-compose
+        fi
+    fi
 fi
 
 if ! [ -x "$(command -v docker)" ]; then
-    if apt-get install -y docker-ce ; then
-        echo "Docker installed"
-    else
-        echo "Failed to install docker"
-        return
-    fi
-else
-    echo -e "docker is already installed\n"
+    echo "Failed to install docker"
+    return
 fi
 
-# Install docker-compose
 if ! [ -x "$(command -v docker-compose)" ]; then
-    curl -L https://github.com/docker/compose/releases/download/1.17.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-    chmod +x /usr/local/bin/docker-compose
-else
-    echo -e "docker-compose is already installed\n"
+    echo "Failed to install docker-compose"
+    return
 fi
 
 # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
