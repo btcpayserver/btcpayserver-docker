@@ -5,19 +5,19 @@ version: "3"
 services:
   bitcoind:
     environment:
-      BITCOIN_EXTRA_ARGS: dbcache=300
+      BITCOIN_EXTRA_ARGS: dbcache=200
   bgoldd:
     environment:
-      BITCOIN_EXTRA_ARGS: dbcache=300
+      BITCOIN_EXTRA_ARGS: dbcache=200
   feathercoind:
     environment:
-      BITCOIN_EXTRA_ARGS: dbcache=300
+      BITCOIN_EXTRA_ARGS: dbcache=200
   groestlcoind:
     environment:
-      BITCOIN_EXTRA_ARGS: dbcache=300
+      BITCOIN_EXTRA_ARGS: dbcache=200
   litecoind:
     environment:
-      BITCOIN_EXTRA_ARGS: dbcache=300
+      BITCOIN_EXTRA_ARGS: dbcache=200
   viacoind:
     environment:
-      BITCOIN_EXTRA_ARGS: dbcache=300
+      BITCOIN_EXTRA_ARGS: dbcache=200
