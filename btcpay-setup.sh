@@ -216,13 +216,15 @@ echo -e "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE\n"
 . /etc/profile.d/btcpay-env.sh
 
 if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; then
-    apt-get update 2>error
-    apt-get install -y \
-        curl \
-        apt-transport-https \
-        ca-certificates \
-        software-properties-common \
-        2>error
+    if ! [ -x "$(command -v curl)" ]; then
+        apt-get update 2>error
+        apt-get install -y \
+            curl \
+            apt-transport-https \
+            ca-certificates \
+            software-properties-common \
+            2>error
+    fi
     if ! [ -x "$(command -v docker)" ]; then
         echo "Trying to install docker..."
         curl -fsSL https://get.docker.com -o get-docker.sh
