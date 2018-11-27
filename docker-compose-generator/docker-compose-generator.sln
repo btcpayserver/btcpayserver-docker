@@ -8,8 +8,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{8C1C711D-DEF1-474C-A9F6-AAE142412528}"
 	ProjectSection(SolutionItems) = preProject
 		..\.circleci\config.yml = ..\.circleci\config.yml
-		Dockerfile.linuxamd64 = Dockerfile.linuxamd64
-		Dockerfile.linuxarm32v7 = Dockerfile.linuxarm32v7
+		linuxamd64.Dockerfile = linuxamd64.Dockerfile
+		linuxarm32v7.Dockerfile = linuxarm32v7.Dockerfile
 	EndProjectSection
 EndProject
 Global

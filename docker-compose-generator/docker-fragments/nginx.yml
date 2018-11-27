@@ -18,7 +18,7 @@ services:
 
   nginx-gen:
     restart: unless-stopped
-    image: jwilder/docker-gen
+    image: btcpayserver/docker-gen:0.7.4
     container_name: nginx-gen
     volumes:
       - "/var/run/docker.sock:/tmp/docker.sock:ro"
@@ -33,7 +33,7 @@ services:
 
   letsencrypt-nginx-proxy-companion:
     restart: unless-stopped
-    image: jrcs/letsencrypt-nginx-proxy-companion
+    image: btcpayserver/letsencrypt-nginx-proxy-companion:1.10.0
     container_name: letsencrypt-nginx-proxy-companion
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
