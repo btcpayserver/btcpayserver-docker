@@ -7,11 +7,9 @@ services:
       image: snogcel/docker-dash:0.12.3
       environment:
         BITCOIN_EXTRA_ARGS: |
-          printtoconsole=1
-          rpcallowip=::/0
-          rpcport=9998
           ${NBITCOIN_NETWORK:-regtest}=1
           port=9999
+          rpcport=9998
           whitelist=0.0.0.0/0
       expose:
         - "9998"
