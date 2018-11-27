@@ -1,6 +1,5 @@
 version: "3"
-# If you don't use Lightning Network, you want this
-# This save about 2 weeks worth of block
+# If your machine has less than 1GB of memory, use this
 
 services:
   bitcoind:
