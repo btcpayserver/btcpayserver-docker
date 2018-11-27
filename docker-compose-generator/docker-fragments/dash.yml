@@ -4,9 +4,9 @@ services:
   dashd:
       restart: unless-stopped
       container_name: btcpayserver_dashd
-      image: snogcel/docker-dash-core:latest
+      image: snogcel/docker-dash:0.12.3
       environment:
-        DASH_EXTRA_ARGS: |
+        BITCOIN_EXTRA_ARGS: |
           printtoconsole=1
           rpcallowip=::/0
           rpcport=9998
@@ -17,7 +17,7 @@ services:
         - "9998"
         - "9999"
       volumes:
-        - "dash_datadir:/home/dash/.dashcore"
+        - "dash_datadir:/data"
   nbxplorer:
       environment:
         NBXPLORER_CHAINS: "dash"
