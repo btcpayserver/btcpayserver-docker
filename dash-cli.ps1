@@ -1,1 +1,1 @@
-docker exec -ti btcpayserver_dashd dash-cli -datadir="/home/dash/.dashcore" $args
+docker exec -ti btcpayserver_dashd dash-cli -datadir="/data" $args
