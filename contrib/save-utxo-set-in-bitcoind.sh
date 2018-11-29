@@ -13,16 +13,16 @@ echo "Waiting bitcoind to stop..."
 $BITCOIN_CLI stop
 wait $BITCOIND_PID
 
-NETWORK_DIRECTORY=$NETWORK
-if [[ $NETWORK == "mainnet" ]]; then
+NETWORK_DIRECTORY=$NBITCOIN_NETWORK
+if [[ $NBITCOIN_NETWORK == "mainnet" ]]; then
   NETWORK_DIRECTORY="."
 fi
-if [[ $NETWORK == "testnet" ]]; then
+if [[ $NBITCOIN_NETWORK == "testnet" ]]; then
   NETWORK_DIRECTORY="testnet3"
 fi
 
 cd /data
-TAR_NAME="utxo-snapshot-bitcoin-$NETWORK-$PRUNED_HEIGHT.tar"
+TAR_NAME="utxo-snapshot-bitcoin-$NBITCOIN_NETWORK-$PRUNED_HEIGHT.tar"
 echo "Creating $TAR_NAME..."
 tar -cf "$TAR_NAME" "$NETWORK_DIRECTORY/blocks/"
 tar -rf "$TAR_NAME" "$NETWORK_DIRECTORY/chainstate/"
