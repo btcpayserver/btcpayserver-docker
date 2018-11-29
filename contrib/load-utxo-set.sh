@@ -1,6 +1,11 @@
 #!/bin/bash
 
-# This script shows the steps to download and update an archive of the current UTXO Set
+# This script shows the steps to download and deploy an archive of the current UTXO Set
+# It will:
+#   1. Download the UTXO Set from UTXO_DOWNLOAD_LINK, if UTXO_DOWNLOAD_LINK is empty, use NBITCOIN_NETWORK to find a default
+#   2. Check the tarball against trusted hashes
+#   3. Create the container's folders for blocks and chainstate, or empty them if they exists
+#   4. Unzip the tarball
 
 if ! [ "$0" = "$BASH_SOURCE" ]; then
     echo "This script must not be sourced" 
@@ -12,11 +17,20 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-: "${UTXO_DOWNLOAD_LINK:=http://utxosets.blob.core.windows.net/public/utxo-snapshot-bitcoin-mainnet-551636.tar}"
-NETWORK=""
-[[ $DOWNLOAD_LINK == *-testnet-* ]] && NETWORK="testnet"
-[[ $DOWNLOAD_LINK == *-mainnet-* ]] && NETWORK="mainnet"
-[[ $DOWNLOAD_LINK == *-regtest-* ]] && NETWORK="regtest"
+if [[ "$NBITCOIN_NETWORK" ]]; then
+    echo "NBITCOIN_NETWORK should be set to mainnet, testnet or regtest" 
+    exit 1
+fi
+
+if ! [[ "$UTXO_DOWNLOAD_LINK" ]]; then
+    [[ $NBITCOIN_NETWORK == "mainnet" ]] && UTXO_DOWNLOAD_LINK="http://utxosets.blob.core.windows.net/public/utxo-snapshot-bitcoin-mainnet-551636.tar"
+    [[ $NBITCOIN_NETWORK == "testnet" ]] && UTXO_DOWNLOAD_LINK="http://utxosets.blob.core.windows.net/public/utxo-snapshot-bitcoin-testnet-1445586.tar"
+fi
+
+if ! [[ "$UTXO_DOWNLOAD_LINK" ]]; then
+    echo "No default UTXO_DOWNLOAD_LINK for $NBITCOIN_NETWORK" 
+    exit 1
+fi
 
 BITCOIN_DATA_DIR="/var/lib/docker/volumes/generated_bitcoin_datadir/_data"
 [ ! -d "$BITCOIN_DATA_DIR" ] && mkdir -p "$BITCOIN_DATA_DIR"
@@ -48,11 +62,11 @@ fi
 rm "sig.asc"
 cd -
 
-NETWORK_DIRECTORY=$NETWORK
-if [[ $NETWORK == "mainnet" ]]; then
+NETWORK_DIRECTORY=$NBITCOIN_NETWORK
+if [[ $NBITCOIN_NETWORK == "mainnet" ]]; then
   NETWORK_DIRECTORY="."
 fi
-if [[ $NETWORK == "testnet" ]]; then
+if [[ $NBITCOIN_NETWORK == "testnet" ]]; then
   NETWORK_DIRECTORY="testnet3"
 fi
 

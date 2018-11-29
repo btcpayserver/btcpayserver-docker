@@ -1,3 +1,4 @@
+# This file is internal and meant to be run by save-utxo-set.sh
 BITCOIND="bitcoind -datadir=/data"
 BITCOIN_CLI="bitcoin-cli -datadir=/data"
 
@@ -26,3 +27,4 @@ TAR_NAME="utxo-snapshot-bitcoin-$NBITCOIN_NETWORK-$PRUNED_HEIGHT.tar"
 echo "Creating $TAR_NAME..."
 tar -cf "$TAR_NAME" "$NETWORK_DIRECTORY/blocks/"
 tar -rf "$TAR_NAME" "$NETWORK_DIRECTORY/chainstate/"
+exit

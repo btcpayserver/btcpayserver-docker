@@ -1,12 +1,17 @@
 #!/bin/bash
 
 # This script shows the steps to create an archive of the current UTXO Set
+# It will:
+#   1. Shutdown BTCPay Server
+#   2. Start bitcoind
+#   3. Prune it to up to 289 blocks from the tip
+#   4. Stop bitcoind
+#   5. Archive in a tarball the blocks and chainstate directories
+#   6. Restart BTCPay
+#   7. If AZURE_STORAGE_CONNECTION_STRING is set, then upload to azure storage and make the blob public, else print hash and tarball
 
 : "${AZURE_STORAGE_CONTAINER:=public}"
 
-# IN THE HOST #############################################################
-
-# Stop btcpay
 btcpay-down.sh
 
 for i in /var/lib/docker/volumes/generated_bitcoin_datadir/_data/utxo-snapshot-*; do
