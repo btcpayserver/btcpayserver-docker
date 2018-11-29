@@ -21,3 +21,6 @@ services:
   viacoind:
     environment:
       BITCOIN_EXTRA_ARGS: prune=5000
+  dogecoind:
+    environment:
+      DOGECOIN_EXTRA_ARGS: prune=5000
