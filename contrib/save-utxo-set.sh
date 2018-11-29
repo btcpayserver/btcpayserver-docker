@@ -2,11 +2,11 @@
 
 # This script shows the steps to create an archive of the current UTXO Set
 
-exit # This script is not meant to run automatically
+exit 1 # This script is not meant to run automatically
 
 
 ## ARGS#
-NETWORK="testnet"
+NETWORK="mainnet"
 export AZURE_STORAGE_CONTAINER="public"
 export AZURE_STORAGE_CONNECTION_STRING=""
 #######
@@ -17,46 +17,9 @@ export AZURE_STORAGE_CONNECTION_STRING=""
 btcpay-down.sh
 
 # Run only bitcoind and connect to it
+SCRIPT="$(cat save-utxo-set-in-bitcoind.sh)"
 cd "`dirname $BTCPAY_ENV_FILE`"
-docker-compose -f $BTCPAY_DOCKER_COMPOSE run -e "NETWORK=$NETWORK" bitcoind bash
-
-# IN THE CONTAINER #############################################################
-ENVIRONMENT=""
-BITCOIND="bitcoind -datadir=/data"
-BITCOIN_CLI="bitcoin-cli -datadir=/data"
-
-$BITCOIND &
-BITCOIND_PID=$!
-CURRENT_HEIGHT="$($BITCOIN_CLI -rpcwait getblockcount)"
-let "PRUNED_HEIGHT=$CURRENT_HEIGHT - 289"
-
-echo "Pruning to $PRUNED_HEIGHT"
-$BITCOIN_CLI pruneblockchain "$PRUNED_HEIGHT"
-
-echo "Waiting bitcoind to stop..."
-$BITCOIN_CLI stop
-wait $BITCOIND_PID
-
-NETWORK_DIRECTORY=$NETWORK
-if [[ $NETWORK == "mainnet" ]]; then
-  NETWORK_DIRECTORY="."
-fi
-if [[ $NETWORK == "testnet" ]]; then
-  NETWORK_DIRECTORY="testnet3"
-fi
-
-cd /data
-TAR_NAME="utxo-snapshot-bitcoin-$NETWORK-$PRUNED_HEIGHT.tar"
-echo "Creating $TAR_NAME..."
-tar -cf "$TAR_NAME" "$NETWORK_DIRECTORY/blocks/"
-tar -rf "$TAR_NAME" "$NETWORK_DIRECTORY/chainstate/"
-
-# Exit from the container
-exit
-
-# IN THE HOST #############################################################
-
-# Restart btcpay
+docker-compose -f $BTCPAY_DOCKER_COMPOSE run -e "NETWORK=$NETWORK" bitcoind bash -c "$SCRIPT"
 btcpay-up.sh
 
 TAR_FILE="$(echo /var/lib/docker/volumes/generated_bitcoin_datadir/_data/utxo-snapshot-*)"
