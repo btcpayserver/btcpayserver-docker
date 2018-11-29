@@ -35,13 +35,13 @@ fi
 BITCOIN_DATA_DIR="/var/lib/docker/volumes/generated_bitcoin_datadir/_data"
 [ ! -d "$BITCOIN_DATA_DIR" ] && mkdir -p "$BITCOIN_DATA_DIR"
 
-TAR_NAME="$(basename $DOWNLOAD_LINK)"
+TAR_NAME="$(basename $UTXO_DOWNLOAD_LINK)"
 TAR_FILE="$BITCOIN_DATA_DIR/$TAR_NAME"
 
-echo "Downloading $DOWNLOAD_LINK to $TAR_FILE"
 cd "$BITCOIN_DATA_DIR"
 if [ ! -f "$TAR_FILE" ]; then
-  wget "$DOWNLOAD_LINK" -q --show-progress
+  echo "Downloading $UTXO_DOWNLOAD_LINK to $TAR_FILE"
+  wget "$UTXO_DOWNLOAD_LINK" -q --show-progress
 else
   echo "$TAR_FILE already exists"
 fi
