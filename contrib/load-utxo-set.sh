@@ -17,7 +17,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-if [[ "$NBITCOIN_NETWORK" ]]; then
+if ! [[ "$NBITCOIN_NETWORK" ]]; then
     echo "NBITCOIN_NETWORK should be set to mainnet, testnet or regtest" 
     exit 1
 fi
