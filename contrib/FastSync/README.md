@@ -94,7 +94,7 @@ bitcoin-cli.sh gettxoutsetinfo
 
 5. Verify that the output of `Synchy` and `Trusty` are **exactly** identical.
 
-NOTE: Completing those steps, under the assumption the software you are running is not malicious, **Prove that the UTXO set snapshot is legit**.
+NOTE: Completing those steps, under the assumption the software you are running is not malicious, **correctly prove that the UTXO set snapshot is legit**.
 
 ## FAQ
 ### Can I add my signature to this repository?
