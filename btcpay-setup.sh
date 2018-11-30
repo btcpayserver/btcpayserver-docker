@@ -234,14 +234,14 @@ if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; t
     fi
     if ! [ -x "$(command -v docker-compose)" ]; then
         if [[ "$(uname -m)" == "x86_64" ]]; then
-            DOCKER_COMPOSE_DOWNLOAD="https://github.com/docker/compose/releases/download/1.17.1/docker-compose-$(uname -s)-$(uname -m)"
+            DOCKER_COMPOSE_DOWNLOAD="https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m`"
             echo "Trying to install docker-compose by downloading on $DOCKER_COMPOSE_DOWNLOAD ($(uname -m))"
             curl -L "$DOCKER_COMPOSE_DOWNLOAD" -o /usr/local/bin/docker-compose
             chmod +x /usr/local/bin/docker-compose
         else
             echo "Trying to install docker-compose by using the docker-compose-builder ($(uname -m))"
             ! [ -d "dist" ] && mkdir dist
-            docker run --rm -ti -v "$(pwd)/dist:/dist" btcpayserver/docker-compose-builder:1.22.0
+            docker run --rm -ti -v "$(pwd)/dist:/dist" btcpayserver/docker-compose-builder:1.23.2
             mv dist/docker-compose /usr/local/bin/docker-compose
             chmod +x /usr/local/bin/docker-compose
             rm -rf "dist"
