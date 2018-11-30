@@ -94,8 +94,6 @@ bitcoin-cli.sh gettxoutsetinfo
 
 5. Verify that the output of `Synchy` and `Trusty` are **exactly** identical.
 
-If you have a trusted BTCPay Server node somewhere, you can ust `bitcoin-cli.sh gettxoutsetinfo` instead.
-
 NOTE: Completing those steps, under the assumption the software you are running is not malicious, **Prove that the UTXO set snapshot is legit**.
 
 ## FAQ
