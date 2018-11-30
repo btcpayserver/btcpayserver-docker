@@ -61,13 +61,13 @@ NOTE: **Completing those steps does not mean that the UTXO set snapshot is legit
 
 ### If you trust someone else...
 
-This repository contains the signatures of some developers, for example `NicolasDorier.utxo-sets.asc` contains the hashes that `NicolasDorier` verified himself.
+This repository contains the signatures of some developers, for example [sigs/NicolasDorier.utxo-sets.asc](sigs/NicolasDorier.utxo-sets.asc) contains the hashes that `NicolasDorier` verified himself.
 
 You need to verify with [KeyBase command line](https://keybase.io/docs/command_line) that the signature is legit:
 ```bash
-keybase pgp verify -i NicolasDorier.utxo-sets.asc
+keybase pgp verify -i sigs/NicolasDorier.utxo-sets.asc
 ```
-If you don't like command line, you can verify against [keybase verify page](https://keybase.io/verify) by just copying and pasting the content of [NicolasDorier.utxo-sets.asc](NicolasDorier.utxo-sets.asc).
+If you don't like command line, you can verify against [keybase verify page](https://keybase.io/verify) by just copying and pasting the content of [sigs/NicolasDorier.utxo-sets.asc](sigs/NicolasDorier.utxo-sets.asc).
 
 
 You can verify that the handle `NicolasDorier` refers to the person who controls `NicolasDorier` twitter, github and reddit handle on [the keybase profile page](https://keybase.io/NicolasDorier).
@@ -106,10 +106,11 @@ If you are a bitcoin developer or public figure, feel free to add your signature
 3. Create a file with same format as [utxo-sets](utxo-sets) with the snapshots you validated. (Let's call this file `YOU.utxo-sets`)
 4. Run the following command line
 
-```
-keybase pgp sign -i YOU.utxo-sets -c -t -o YOU.utxo-sets.asc
+```bash
+# Assuming your are inside the FastSync directory
+keybase pgp sign -i YOU.utxo-sets -c -t -o sigs/YOU.utxo-sets.asc
 rm YOU.utxo-sets
-git add YOU.utxo-sets.asc
+git add sigs/YOU.utxo-sets.asc
 git commit -m "Add YOU utxo-set signature" -all
 ```
 And make a pull request to `btcpayserver-docker` repository.
