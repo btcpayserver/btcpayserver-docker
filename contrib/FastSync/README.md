@@ -152,13 +152,13 @@ What if somebody start spreading a corrupted snapshot on wild scale?
 
 I think this issue can be mitigated at the social layer. If several person start using social media for spreading their `bitcoin-cli getutxosetinfo` every 10 000 blocks, any corrupt snapshot would be soon detected. We plan to make expose the hash via `BTCPayServer` and make it easy for people to share.
 
-### Why you don't just: Run BTCPayServer as SPV
+### Why you don't just: Make BTCPayServer relies on SPV
 
 All SPV solution brings a systemic risk to Bitcoin. If everybody relies on SPV to accept payment and miners want to change consensus rules, then you will have no leverage as individual, nor as a community to decide against.
 
 Even with `UTXO Set snapshots` you continue to validate consensus rules from the block of the snapshot.
 
-### Why you don't just: Run BTCPayServer an external node
+### Why you don't just: Make BTCPayServer relies on an external trusted node
 
 Why not just hosting BTCPayServer on the raspberry pi, but the bitcoin full node on another machine?
 
