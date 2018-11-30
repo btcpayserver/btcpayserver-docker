@@ -107,9 +107,9 @@ If you are a bitcoin developer or public figure, feel free to add your signature
 4. Run the following command line
 
 ```
-keybase pgp sign -i YOU.utxo-sets -c -t -o YOU.utxo-set.asc
-rm YOU.utxo-set
-git add YOU.utxo-set.asc
+keybase pgp sign -i YOU.utxo-sets -c -t -o YOU.utxo-sets.asc
+rm YOU.utxo-sets
+git add YOU.utxo-sets.asc
 git commit -m "Add YOU utxo-set signature" -all
 ```
 And make a pull request to `btcpayserver-docker` repository.
