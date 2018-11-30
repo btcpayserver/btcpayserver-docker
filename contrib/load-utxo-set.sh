@@ -38,6 +38,7 @@ BITCOIN_DATA_DIR="/var/lib/docker/volumes/generated_bitcoin_datadir/_data"
 TAR_NAME="$(basename $UTXO_DOWNLOAD_LINK)"
 TAR_FILE="$BITCOIN_DATA_DIR/$TAR_NAME"
 
+cp "utxo-sets" "$BITCOIN_DATA_DIR/utxo-sets"
 cd "$BITCOIN_DATA_DIR"
 if [ ! -f "$TAR_FILE" ]; then
   echo "Downloading $UTXO_DOWNLOAD_LINK to $TAR_FILE"
@@ -46,20 +47,15 @@ else
   echo "$TAR_FILE already exists"
 fi
 
-echo "
-fab994299273080bf7124c8c45c4ada867974ca747900178496a69e450cf713f  utxo-snapshot-bitcoin-mainnet-551636.tar
-eabaaa717bb8eeaf603e383dd8642d9d34df8e767fccbd208b0c936b79c82742  utxo-snapshot-bitcoin-testnet-1445586.tar
-" > "trusted-utxo-sets.asc"
-
-grep "$TAR_NAME" "trusted-utxo-sets.asc" | tee "sig.asc"
-rm "trusted-utxo-sets.asc"
-if ! sha256sum -c "sig.asc"; then  
+grep "$TAR_NAME" "utxo-sets" | tee "utxo-set"
+rm "utxo-sets"
+if ! sha256sum -c "utxo-set"; then
   echo "$TAR_FILE is not trusted"
-  rm "sig.asc"
+  rm "utxo-set"
   cd -
   exit 1
 fi
-rm "sig.asc"
+rm "utxo-set"
 cd -
 
 NETWORK_DIRECTORY=$NBITCOIN_NETWORK
