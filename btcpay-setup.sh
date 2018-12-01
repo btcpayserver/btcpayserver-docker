@@ -52,7 +52,7 @@ Environment variables:
     LETSENCRYPT_EMAIL: A mail will be sent to this address if certificate expires and fail to renew automatically (eg. me@example.com)
     NBITCOIN_NETWORK: The type of network to use (eg. mainnet, testnet or regtest. Default: mainnet)
     LIGHTNING_ALIAS: An alias for your lightning network node if used
-    BTCPAYGEN_CRYPTO1: First supported crypto currency (eg. btc, ltc, btg, grs, ftc, via, mona, none. Default: btc)
+    BTCPAYGEN_CRYPTO1: First supported crypto currency (eg. btc, ltc, btg, grs, ftc, via, doge, mona, none. Default: btc)
     BTCPAYGEN_CRYPTO2: Second supported crypto currency (Default: empty)
     BTCPAYGEN_CRYPTON: N th supported crypto currency where N is maximum at maximum 9. (Default: none)
     BTCPAYGEN_REVERSEPROXY: Whether to use or not a reverse proxy. NGinx setup HTTPS for you. (eg. nginx, traefik, none. Default: nginx)
