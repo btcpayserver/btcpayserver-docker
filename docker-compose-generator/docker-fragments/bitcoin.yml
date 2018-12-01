@@ -8,9 +8,9 @@ services:
       environment:
         BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
         BITCOIN_EXTRA_ARGS: |
-          deprecatedrpc=signrawtransaction
           rpcport=43782
           port=39388
+          disablewallet=1
           whitelist=0.0.0.0/0
       expose:
         - "43782"
