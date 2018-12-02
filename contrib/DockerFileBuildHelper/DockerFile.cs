@@ -7,7 +7,17 @@ namespace DockerFileBuildHelper
     public class DockerFile
     {
         public string DockerFileName { get; private set; }
-        public string DockerFilePath { get; private set; }
+        public string DockerDirectoryPath { get; private set; }
+        public string DockerFullPath
+        {
+            get
+            {
+                if (DockerDirectoryPath == ".")
+                    return $"{DockerFileName}";
+                else
+                    return $"{DockerDirectoryPath}/{DockerFileName}";
+            }
+        }
 
         public static DockerFile Parse(string str)
         {
@@ -16,11 +26,11 @@ namespace DockerFileBuildHelper
             file.DockerFileName = str.Substring(lastPart + 1);
             if (lastPart == -1)
             {
-                file.DockerFilePath = ".";
+                file.DockerDirectoryPath = ".";
             }
             else
             {
-                file.DockerFilePath = str.Substring(0, lastPart);
+                file.DockerDirectoryPath = str.Substring(0, lastPart);
             }
             return file;
         }
