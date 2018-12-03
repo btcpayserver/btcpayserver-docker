@@ -1,0 +1,39 @@
+version: "3"
+# If your machine has less than 1GB of memory, use this
+
+services:
+  bitcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        dbcache=150
+        maxmempool=100
+  bgoldd:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        dbcache=150
+        maxmempool=100
+  feathercoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        dbcache=150
+        maxmempool=100
+  groestlcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        dbcache=150
+        maxmempool=100
+  litecoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        dbcache=150
+        maxmempool=100
+  viacoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        dbcache=150
+        maxmempool=100
+  monacoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        dbcache=150
+        maxmempool=100

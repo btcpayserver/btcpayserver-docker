@@ -66,10 +66,20 @@ namespace DockerGenerator
                     Crypto = "via",
                     CryptoFragment = "viacoin"
                 },
-	            new CryptoDefinition()
+                new CryptoDefinition()
                 {
                     Crypto = "dash",
                     CryptoFragment = "dash"
+                },
+                new CryptoDefinition()
+                {
+                    Crypto = "doge",
+                    CryptoFragment = "dogecoin"
+                },
+                new CryptoDefinition()
+                {
+                    Crypto = "mona",
+                    CryptoFragment = "monacoin"
                 }
             };
         }

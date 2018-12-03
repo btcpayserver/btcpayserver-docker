@@ -3,7 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "docker-compose-generator", "src/docker-compose-generator.csproj", "{0900AF35-48E8-46E2-85B3-BA3847EE0844}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "docker-compose-generator", "src\docker-compose-generator.csproj", "{0900AF35-48E8-46E2-85B3-BA3847EE0844}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{8C1C711D-DEF1-474C-A9F6-AAE142412528}"
+	ProjectSection(SolutionItems) = preProject
+		..\.circleci\config.yml = ..\.circleci\config.yml
+		linuxamd64.Dockerfile = linuxamd64.Dockerfile
+		linuxarm32v7.Dockerfile = linuxarm32v7.Dockerfile
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,9 +20,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0900AF35-48E8-46E2-85B3-BA3847EE0844}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -30,5 +34,11 @@ Global
 		{0900AF35-48E8-46E2-85B3-BA3847EE0844}.Release|x64.Build.0 = Release|Any CPU
 		{0900AF35-48E8-46E2-85B3-BA3847EE0844}.Release|x86.ActiveCfg = Release|Any CPU
 		{0900AF35-48E8-46E2-85B3-BA3847EE0844}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CADA76A8-7F2E-4132-900B-330F0D2D722B}
 	EndGlobalSection
 EndGlobal
