@@ -71,14 +71,16 @@ cd - && cd ..
 
 
 # Build lnd
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5-beta-2/BTCPayServer.Dockerfile
-DOCKERFILE="BTCPayServer.Dockerfile"
-echo "Building btcpayserver/lnd:0.5-beta-2"
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5-beta-3/linuxamd64.Dockerfile
+DOCKERFILE="linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5-beta-3/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
+echo "Building btcpayserver/lnd:v0.5-beta-3"
 git clone https://github.com/btcpayserver/lnd lnd
 cd lnd
-git checkout basedon-v0.5-beta-2
+git checkout basedon-v0.5-beta-3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:0.5-beta-2" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.5-beta-3" .
 cd - && cd ..
 
 
@@ -189,14 +191,16 @@ cd - && cd ..
 
 
 # Build lnd
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5-beta-2/BTCPayServer.Dockerfile
-DOCKERFILE="BTCPayServer.Dockerfile"
-echo "Building btcpayserver/lnd:0.5-beta-2"
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5-beta-3/linuxamd64.Dockerfile
+DOCKERFILE="linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5-beta-3/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
+echo "Building btcpayserver/lnd:v0.5-beta-3"
 git clone https://github.com/btcpayserver/lnd lnd
 cd lnd
-git checkout basedon-v0.5-beta-2
+git checkout basedon-v0.5-beta-3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:0.5-beta-2" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.5-beta-3" .
 cd - && cd ..
 
 

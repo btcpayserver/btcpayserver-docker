@@ -181,9 +181,10 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"basedon-{image.Tag}";
                     break;
                 case "lnd":
-                    dockerInfo.DockerFilePath = "BTCPayServer.Dockerfile";
+                    dockerInfo.DockerFilePath = "linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "linuxarm32v7.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/lnd";
-                    dockerInfo.GitRef = $"basedon-v{image.Tag}";
+                    dockerInfo.GitRef = $"basedon-{image.Tag}";
                     break;
                 case "bitcoin":
                     dockerInfo.DockerFilePath = $"Bitcoin/{image.Tag}/linuxamd64.Dockerfile";
