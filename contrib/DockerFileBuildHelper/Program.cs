@@ -216,6 +216,11 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/rockstardev/docker-bitcoin";
                     dockerInfo.GitRef = "feature/dogecoin";
                     break;
+                case "docker-bitcore":
+                    dockerInfo.DockerFilePath = "btx-debian/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/dalijolijo/btcpayserver-docker-bitcore";
+                    dockerInfo.GitRef = "master";
+                    break;
                 case "docker-feathercoin":
                     dockerInfo.DockerFilePath = $"feathercoin/{image.Tag}/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/ChekaZ/docker";
