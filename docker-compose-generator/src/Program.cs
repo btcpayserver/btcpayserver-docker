@@ -44,6 +44,8 @@ namespace DockerGenerator
 					fragments.Add("traefik-labels");
 					break;
 				case "no-reverseproxy":
+				case "none":
+				case "":
 					fragments.Add("btcpayserver-noreverseproxy");
 					break;
 			}

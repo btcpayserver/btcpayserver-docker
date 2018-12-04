@@ -98,6 +98,18 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoin:0.17.0" .
 cd - && cd ..
 
 
+# Build docker-bitcore
+# https://raw.githubusercontent.com/dalijolijo/btcpayserver-docker-bitcore/master/btx-debian/Dockerfile
+DOCKERFILE="btx-debian/Dockerfile"
+echo "Building dalijolijo/docker-bitcore:0.15.2"
+git clone https://github.com/dalijolijo/btcpayserver-docker-bitcore docker-bitcore
+cd docker-bitcore
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "dalijolijo/docker-bitcore:0.15.2" .
+cd - && cd ..
+
+
 # Build btcpayserver
 # https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.23/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
@@ -109,6 +121,22 @@ cd btcpayserver
 git checkout v1.0.3.23
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.23" .
+cd - && cd ..
+
+
+# Build dash
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.12.3/Dash/0.12.3/linuxamd64.Dockerfile
+DOCKERFILE="Dash/0.12.3/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.12.3/Dash/0.12.3/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dash/0.12.3/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.12.3/Dash/0.12.3/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dash/0.12.3/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/dash:0.12.3"
+git clone https://github.com/btcpayserver/dockerfile-deps dash
+cd dash
+git checkout Dash/0.12.3
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/dash:0.12.3" .
 cd - && cd ..
 
 
@@ -197,16 +225,16 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.1/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.2/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.1/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.2/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-echo "Building nicolasdorier/nbxplorer:2.0.0.1"
+echo "Building nicolasdorier/nbxplorer:2.0.0.2"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.0.0.1
+git checkout v2.0.0.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.0.0.1" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.0.0.2" .
 cd - && cd ..
 
 
