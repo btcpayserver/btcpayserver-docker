@@ -124,6 +124,22 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.23" .
 cd - && cd ..
 
 
+# Build dash
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.12.3/Dash/0.12.3/linuxamd64.Dockerfile
+DOCKERFILE="Dash/0.12.3/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.12.3/Dash/0.12.3/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dash/0.12.3/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.12.3/Dash/0.12.3/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dash/0.12.3/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/dash:0.12.3"
+git clone https://github.com/btcpayserver/dockerfile-deps dash
+cd dash
+git checkout Dash/0.12.3
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/dash:0.12.3" .
+cd - && cd ..
+
+
 # Build dogecoin
 # https://raw.githubusercontent.com/rockstardev/docker-bitcoin/feature/dogecoin/dogecoin/1.10.0/Dockerfile
 DOCKERFILE="dogecoin/1.10.0/Dockerfile"
