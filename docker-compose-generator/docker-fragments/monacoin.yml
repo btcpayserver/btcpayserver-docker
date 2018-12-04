@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  monacoind:
+    restart: unless-stopped
+    container_name: btcpayserver_monacoind
+    image: wakiyamap/docker-monacoin:0.16.3
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        rpcport=43782
+        ${NBITCOIN_NETWORK:-regtest}=1
+        port=39388
+        whitelist=0.0.0.0/0
+    expose:
+      - "43782"
+      - "39388"
+    volumes:
+      - "monacoin_datadir:/data"
+  nbxplorer:
+      environment:
+        NBXPLORER_CHAINS: "mona"
+        NBXPLORER_MONARPCURL: http://monacoind:43782/
+        NBXPLORER_MONANODEENDPOINT: monacoind:39388
+      links:
+        - monacoind
+      volumes:
+        - "monacoin_datadir:/root/.monacoin"
+  btcpayserver:
+      environment:
+        BTCPAY_MONAEXPLORERURL: http://nbxplorer:32838/
+        BTCPAY_CHAINS: "mona"
+
+volumes:
+    monacoin_datadir:

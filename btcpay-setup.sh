@@ -52,7 +52,7 @@ Environment variables:
     LETSENCRYPT_EMAIL: A mail will be sent to this address if certificate expires and fail to renew automatically (eg. me@example.com)
     NBITCOIN_NETWORK: The type of network to use (eg. mainnet, testnet or regtest. Default: mainnet)
     LIGHTNING_ALIAS: An alias for your lightning network node if used
-    BTCPAYGEN_CRYPTO1: First supported crypto currency (eg. btc, ltc, btg, grs, ftc, via, none. Default: btc)
+    BTCPAYGEN_CRYPTO1: First supported crypto currency (eg. btc, ltc, btx, btg, grs, ftc, via, doge, mona, dash, none. Default: btc)
     BTCPAYGEN_CRYPTO2: Second supported crypto currency (Default: empty)
     BTCPAYGEN_CRYPTON: N th supported crypto currency where N is maximum at maximum 9. (Default: none)
     BTCPAYGEN_REVERSEPROXY: Whether to use or not a reverse proxy. NGinx setup HTTPS for you. (eg. nginx, traefik, none. Default: nginx)
@@ -234,14 +234,14 @@ if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; t
     fi
     if ! [ -x "$(command -v docker-compose)" ]; then
         if [[ "$(uname -m)" == "x86_64" ]]; then
-            DOCKER_COMPOSE_DOWNLOAD="https://github.com/docker/compose/releases/download/1.17.1/docker-compose-$(uname -s)-$(uname -m)"
+            DOCKER_COMPOSE_DOWNLOAD="https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m`"
             echo "Trying to install docker-compose by downloading on $DOCKER_COMPOSE_DOWNLOAD ($(uname -m))"
             curl -L "$DOCKER_COMPOSE_DOWNLOAD" -o /usr/local/bin/docker-compose
             chmod +x /usr/local/bin/docker-compose
         else
             echo "Trying to install docker-compose by using the docker-compose-builder ($(uname -m))"
             ! [ -d "dist" ] && mkdir dist
-            docker run --rm -ti -v "$(pwd)/dist:/dist" btcpayserver/docker-compose-builder:1.22.0
+            docker run --rm -ti -v "$(pwd)/dist:/dist" btcpayserver/docker-compose-builder:1.23.2
             mv dist/docker-compose /usr/local/bin/docker-compose
             chmod +x /usr/local/bin/docker-compose
             rm -rf "dist"

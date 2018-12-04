@@ -27,8 +27,8 @@ services:
   nbxplorer:
       environment:
         NBXPLORER_CHAINS: "doge"
-        NBXPLORER_VIARPCURL: http://dogecoind:22555/
-        NBXPLORER_VIANODEENDPOINT: dogecoind:22556
+        NBXPLORER_DOGERPCURL: http://dogecoind:22555/
+        NBXPLORER_DOGENODEENDPOINT: dogecoind:22556
         NBXPLORER_DOGERPCUSER: ceiwHEbqWI83
         NBXPLORER_DOGERPCPASSWORD: DwubwWsoo3
       links:

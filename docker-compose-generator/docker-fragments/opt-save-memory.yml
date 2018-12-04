@@ -32,3 +32,8 @@ services:
       BITCOIN_EXTRA_ARGS: |
         dbcache=150
         maxmempool=100
+  monacoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        dbcache=150
+        maxmempool=100

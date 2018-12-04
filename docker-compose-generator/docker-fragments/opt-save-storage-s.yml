@@ -6,6 +6,9 @@ services:
   bitcoind:
     environment:
       BITCOIN_EXTRA_ARGS: prune=50000
+  bitcored:
+    environment:
+      BITCOIN_EXTRA_ARGS: prune=50000
   bgoldd:
     environment:
       BITCOIN_EXTRA_ARGS: prune=50000
@@ -19,5 +22,11 @@ services:
     environment:
       BITCOIN_EXTRA_ARGS: prune=50000
   viacoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: prune=50000
+  dogecoind:
+    environment:
+      DOGECOIN_EXTRA_ARGS: prune=50000
+  monacoind:
     environment:
       BITCOIN_EXTRA_ARGS: prune=50000
