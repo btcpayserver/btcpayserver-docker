@@ -192,6 +192,13 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
                     dockerInfo.GitRef = $"Bitcoin/{image.Tag}";
                     break;
+                case "dash":
+                    dockerInfo.DockerFilePath = $"Dash/{image.Tag}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Dash/{image.Tag}/linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dash/{image.Tag}/linuxarm64v8.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"Dash/{image.Tag}";
+                    break;
                 case "btcpayserver":
                     dockerInfo.DockerFilePath = "Dockerfile.linuxamd64";
                     dockerInfo.DockerFilePathARM32v7 = "Dockerfile.linuxarm32v7";
