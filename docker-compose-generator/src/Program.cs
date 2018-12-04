@@ -51,7 +51,9 @@ namespace DockerGenerator
 			}
 			fragments.Add("btcpayserver");
 			fragments.Add("nbxplorer");
-			fragments.Add("postgres");
+			if(composition.SelectedDatabase != "sqlite"){
+				fragments.Add(composition.SelectedDatabase);
+			}
 			foreach (var crypto in CryptoDefinition.GetDefinitions())
 			{
 				if (!composition.SelectedCryptos.Contains(crypto.Crypto))

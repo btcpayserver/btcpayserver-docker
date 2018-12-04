@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  mysql:
+    restart: unless-stopped
+    image:  mysql:8.0
+    volumes:
+      - "mysql_datadir:/var/lib/mysql"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+
+  btcpayserver:
+    environment:
+      BTCPAY_POSTGRES: Server=mysql;Database=btcpayserver${NBITCOIN_NETWORK:-regtest};Uid=root;Pwd=;Port=3306;
+    links:
+      - mysql
+
+volumes:
+    mysql_datadir:
