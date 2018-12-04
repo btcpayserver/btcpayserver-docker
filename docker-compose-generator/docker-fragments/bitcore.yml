@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  bitcored:
+    restart: unless-stopped
+    container_name: btcpayserver_bitcored
+    image: dalijolijo/docker-bitcore:0.15.2
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        rpcport=43782
+        ${NBITCOIN_NETWORK:-regtest}=1
+        port=39388
+        whitelist=0.0.0.0/0
+    expose:
+      - "43782"
+      - "39388"
+    volumes:
+      - "bitcore_datadir:/data"
+  nbxplorer:
+      environment:
+        NBXPLORER_CHAINS: "btx"
+        NBXPLORER_BTXRPCURL: http://bitcored:43782/
+        NBXPLORER_BTXNODEENDPOINT: bitcored:39388
+      links:
+        - bitcored
+      volumes:
+        - "bitcore_datadir:/root/.bitcore"
+  btcpayserver:
+      environment:
+        BTCPAY_BTXEXPLORERURL: http://nbxplorer:32838/
+        BTCPAY_CHAINS: "btx"
+
+volumes:
+    bitcore_datadir:
