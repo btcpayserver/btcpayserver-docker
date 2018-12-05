@@ -17,3 +17,8 @@ services:
       - "8001"
   redis:
     image: redis:5.0.2-alpine
+    volumes:
+      - "redis_datadir:/data"
+
+volumes:
+    redis_datadir:
