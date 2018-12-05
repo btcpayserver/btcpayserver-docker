@@ -11,7 +11,7 @@ services:
 
   btcpayserver:
     environment:
-      BTCPAY_POSTGRES: Server=mysql;Database=btcpayserver${NBITCOIN_NETWORK:-regtest};Uid=root;Pwd=;Port=3306;
+      BTCPAY_MYSQL: Server=mysql;Database=btcpayserver${NBITCOIN_NETWORK:-regtest};Uid=root;Pwd=;Port=3306;
     links:
       - mysql
 
