@@ -310,6 +310,19 @@ server {
 	}
 		{{ end }}
 	{{ end }}
+
+	{{ range $container := $ }}
+		{{ $serviceName := (index $container.Labels "com.docker.compose.service") }}
+		{{ if (eq $serviceName "btcqbo") }}
+	location /btcqbo/ {
+		proxy_pass http://btcqbo:8001;
+		proxy_redirect off;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	}
+		{{ end }}
+	{{ end }}
 }
 
 {{ end }}
