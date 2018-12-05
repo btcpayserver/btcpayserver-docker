@@ -7,6 +7,8 @@ services:
       REDIS_URL: "redis://redis:6379/0"
     expose:
       - "8001"
+    link: 
+      - redis
   rq-worker:
     image: jvandrew/btcqbo:0.1.0
     entrypoint: /usr/local/bin/rq
@@ -15,8 +17,12 @@ services:
       REDIS_URL: "redis://redis:6379/0"
     expose:
       - "8001"
+    link: 
+      - redis
   redis:
     image: redis:5.0.2-alpine
+    expose:
+      - "6379"
     volumes:
       - "redis_datadir:/data"
 
