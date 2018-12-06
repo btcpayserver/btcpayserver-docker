@@ -23,7 +23,6 @@ echo "{
 \"log-opts\": {\"max-size\": \"5m\", \"max-file\": \"3\"}
 }" > /etc/docker/daemon.json
 echo "Setting limited log files in /etc/docker/daemon.json"
-[ -x "$(command -v systemctl)" ] && systemctl restart docker
 fi
 
 . ./build.sh
