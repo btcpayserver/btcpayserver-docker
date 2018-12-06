@@ -227,7 +227,7 @@ export BTCPAY_BASE_DIRECTORY="/var/lib/waagent/custom-script/download/0"
 export BTCPAY_ENV_FILE="/var/lib/waagent/custom-script/download/0/.env"
 export BTCPAY_HOST_SSHKEYFILE="/root/.ssh/id_rsa_btcpay"
 if cat $BTCPAY_ENV_FILE &> /dev/null; then
-export $(grep -v '^#' "$BTCPAY_ENV_FILE" | xargs)
+  export $(grep -v '^#' "$BTCPAY_ENV_FILE" | xargs)
 fi
 ```
 
