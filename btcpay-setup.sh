@@ -300,6 +300,7 @@ echo "{
 \"log-driver\": \"json-file\",
 \"log-opts\": {\"max-size\": \"5m\", \"max-file\": \"3\"}
 }" > /etc/docker/daemon.json
+echo "Setting limited log files in /etc/docker/daemon.json"
 systemctl restart docker
 fi
 
