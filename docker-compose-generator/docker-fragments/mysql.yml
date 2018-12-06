@@ -7,7 +7,7 @@ services:
     volumes:
       - "mysql_datadir:/var/lib/mysql"
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_ALLOW_EMPTY_PASSWORD:"yes"
 
   btcpayserver:
     environment:
