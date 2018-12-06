@@ -227,13 +227,7 @@ export BTCPAY_BASE_DIRECTORY="/var/lib/waagent/custom-script/download/0"
 export BTCPAY_ENV_FILE="/var/lib/waagent/custom-script/download/0/.env"
 export BTCPAY_HOST_SSHKEYFILE="/root/.ssh/id_rsa_btcpay"
 if cat $BTCPAY_ENV_FILE &> /dev/null; then
-export BTCPAY_HOST="$(cat $BTCPAY_ENV_FILE | sed -n 's/^BTCPAY_HOST=\(.*\)$/\1/p')"
-export LETSENCRYPT_EMAIL="$(cat $BTCPAY_ENV_FILE | sed -n 's/^LETSENCRYPT_EMAIL=\(.*\)$/\1/p')"
-export NBITCOIN_NETWORK="$(cat $BTCPAY_ENV_FILE | sed -n 's/^NBITCOIN_NETWORK=\(.*\)$/\1/p')"
-export LIGHTNING_ALIAS="$(cat $BTCPAY_ENV_FILE | sed -n 's/^LIGHTNING_ALIAS=\(.*\)$/\1/p')"
-export ACME_CA_URI="$(cat $BTCPAY_ENV_FILE | sed -n 's/^ACME_CA_URI=\(.*\)$/\1/p')"
-export BTCPAY_SSHKEYFILE="$(cat $BTCPAY_ENV_FILE | sed -n 's/^BTCPAY_SSHKEYFILE=\(.*\)$/\1/p')"
-export BTCPAY_SSHTRUSTEDFINGERPRINTS="$(cat $BTCPAY_ENV_FILE | sed -n 's/^BTCPAY_SSHTRUSTEDFINGERPRINTS=\(.*\)$/\1/p')"
+  export $(grep -v '^#' "$BTCPAY_ENV_FILE" | xargs)
 fi
 ```
 

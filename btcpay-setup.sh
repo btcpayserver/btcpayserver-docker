@@ -70,6 +70,15 @@ if [ "$1" != "-i" ]; then
     return
 fi
 
+if [ -z "$BTCPAY_HOST" ]; then
+    if [ -f "/etc/profile.d/btcpay-env.sh" ]; then
+        echo "This script must be run as root after running \"sudo su -\""
+    else
+        echo "BTCPAY_HOST should not be empty"
+    fi
+    return
+fi
+
 ######### Migration: old pregen environment to new environment ############
 if [ ! -z $BTCPAY_DOCKER_COMPOSE ] && [ ! -z $DOWNLOAD_ROOT ] && [ -z $BTCPAYGEN_OLD_PREGEN ]; then 
     echo "Your deployment is too old, you need to migrate by following instructions on this link https://github.com/btcpayserver/btcpayserver-docker/tree/master#i-deployed-before-btcpay-setupsh-existed-before-may-17-can-i-migrate-to-this-new-system"
@@ -156,11 +165,6 @@ BTCPAY_SSHKEYFILE=$BTCPAY_SSHKEYFILE
 BTCPAY_SSHTRUSTEDFINGERPRINTS:$BTCPAY_SSHTRUSTEDFINGERPRINTS
 ----------------------
 "
-
-if [ -z "$BTCPAY_HOST" ]; then
-    echo "BTCPAY_HOST should not be empty"
-    return
-fi
 
 if [ -z "$BTCPAYGEN_CRYPTO1" ]; then
     echo "BTCPAYGEN_CRYPTO1 should not be empty"
