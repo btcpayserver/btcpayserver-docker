@@ -301,13 +301,26 @@ server {
 	{{ range $container := $ }}
 		{{ $serviceName := (index $container.Labels "com.docker.compose.service") }}
 		{{ if (eq $serviceName "lnd_bitcoin") }}
-				location /lnrpc.Lightning {
-					grpc_pass grpcs://lnd_bitcoin:10009;
-				}
-				location /lnd-rest/btc/ {
-					rewrite ^/lnd-rest/btc/(.*) /$1 break;
-					proxy_pass http://lnd_bitcoin:8080/;
-				}
+	location /lnrpc.Lightning {
+		grpc_pass grpcs://lnd_bitcoin:10009;
+	}
+	location /lnd-rest/btc/ {
+		rewrite ^/lnd-rest/btc/(.*) /$1 break;
+		proxy_pass http://lnd_bitcoin:8080/;
+	}
+		{{ end }}
+	{{ end }}
+
+	{{ range $container := $ }}
+		{{ $serviceName := (index $container.Labels "com.docker.compose.service") }}
+		{{ if (eq $serviceName "btcqbo") }}
+	location /btcqbo/ {
+		proxy_pass http://btcqbo:8001;
+		proxy_redirect off;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	}
 		{{ end }}
 	{{ end }}
 }

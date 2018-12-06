@@ -264,6 +264,16 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/btcpayserver/docker-letsencrypt-nginx-proxy-companion";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     break;
+                case "btcqbo":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/JeffVandrewJr/btcqbo";
+                    dockerInfo.GitRef = $"v{image.Tag}";
+                    break;
+                case "redis":
+                    dockerInfo.DockerFilePath = $"5.0/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/docker-library/redis";
+                    dockerInfo.GitRef = $"f1a8498333ae3ab340b5b39fbac1d7e1dc0d628c";
+                    break;
                 case "postgres":
                     dockerInfo.DockerFilePath = $"9.6/Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"9.6/Dockerfile";

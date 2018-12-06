@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  btcqbo:
+    image: jvandrew/btcqbo:0.1.1
+    environment:
+      REDIS_URL: "redis://redis:6379/0"
+      BTCPAY_HOST: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}
+      CALLBACK_URL: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/btcqbo/qbologged
+    expose:
+      - "8001"
+    links: 
+      - redis
+  rq-worker:
+    image: jvandrew/btcqbo:0.1.1
+    entrypoint: /usr/local/bin/rq
+    command: worker -u redis://redis:6379/0 btcqbo
+    environment:
+      REDIS_URL: "redis://redis:6379/0"
+    expose:
+      - "8001"
+    links: 
+      - redis
+  redis:
+    image: redis:5.0.2-alpine
+    expose:
+      - "6379"
+    volumes:
+      - "redis_datadir:/data"
+
+volumes:
+    redis_datadir:
