@@ -181,9 +181,10 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"basedon-{image.Tag}";
                     break;
                 case "lnd":
-                    dockerInfo.DockerFilePath = "BTCPayServer.Dockerfile";
+                    dockerInfo.DockerFilePath = "linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "linuxarm32v7.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/lnd";
-                    dockerInfo.GitRef = $"basedon-v{image.Tag}";
+                    dockerInfo.GitRef = $"basedon-{image.Tag}";
                     break;
                 case "bitcoin":
                     dockerInfo.DockerFilePath = $"Bitcoin/{image.Tag}/linuxamd64.Dockerfile";
@@ -262,6 +263,16 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePathARM32v7 = $"linuxarm32v7.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/docker-letsencrypt-nginx-proxy-companion";
                     dockerInfo.GitRef = $"v{image.Tag}";
+                    break;
+                case "btcqbo":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/JeffVandrewJr/btcqbo";
+                    dockerInfo.GitRef = $"v{image.Tag}";
+                    break;
+                case "redis":
+                    dockerInfo.DockerFilePath = $"5.0/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/docker-library/redis";
+                    dockerInfo.GitRef = $"f1a8498333ae3ab340b5b39fbac1d7e1dc0d628c";
                     break;
                 case "postgres":
                     dockerInfo.DockerFilePath = $"9.6/Dockerfile";

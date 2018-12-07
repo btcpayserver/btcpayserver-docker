@@ -71,14 +71,16 @@ cd - && cd ..
 
 
 # Build lnd
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5-beta-2/BTCPayServer.Dockerfile
-DOCKERFILE="BTCPayServer.Dockerfile"
-echo "Building btcpayserver/lnd:0.5-beta-2"
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5-beta-3/linuxamd64.Dockerfile
+DOCKERFILE="linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5-beta-3/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
+echo "Building btcpayserver/lnd:v0.5-beta-3"
 git clone https://github.com/btcpayserver/lnd lnd
 cd lnd
-git checkout basedon-v0.5-beta-2
+git checkout basedon-v0.5-beta-3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:0.5-beta-2" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.5-beta-3" .
 cd - && cd ..
 
 
@@ -111,16 +113,16 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.23/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.24/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.23/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.24/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-echo "Building btcpayserver/btcpayserver:1.0.3.23"
+echo "Building btcpayserver/btcpayserver:1.0.3.24"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.0.3.23
+git checkout v1.0.3.24
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.23" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.24" .
 cd - && cd ..
 
 
@@ -189,14 +191,16 @@ cd - && cd ..
 
 
 # Build lnd
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5-beta-2/BTCPayServer.Dockerfile
-DOCKERFILE="BTCPayServer.Dockerfile"
-echo "Building btcpayserver/lnd:0.5-beta-2"
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5-beta-3/linuxamd64.Dockerfile
+DOCKERFILE="linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5-beta-3/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
+echo "Building btcpayserver/lnd:v0.5-beta-3"
 git clone https://github.com/btcpayserver/lnd lnd
 cd lnd
-git checkout basedon-v0.5-beta-2
+git checkout basedon-v0.5-beta-3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:0.5-beta-2" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.5-beta-3" .
 cd - && cd ..
 
 
@@ -275,6 +279,42 @@ cd letsencrypt-nginx-proxy-companion
 git checkout v1.10.0
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/letsencrypt-nginx-proxy-companion:1.10.0" .
+cd - && cd ..
+
+
+# Build btcqbo
+# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.1.1/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building jvandrew/btcqbo:0.1.1"
+git clone https://github.com/JeffVandrewJr/btcqbo btcqbo
+cd btcqbo
+git checkout v0.1.1
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.1.1" .
+cd - && cd ..
+
+
+# Build btcqbo
+# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.1.1/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building jvandrew/btcqbo:0.1.1"
+git clone https://github.com/JeffVandrewJr/btcqbo btcqbo
+cd btcqbo
+git checkout v0.1.1
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.1.1" .
+cd - && cd ..
+
+
+# Build redis
+# https://raw.githubusercontent.com/docker-library/redis/f1a8498333ae3ab340b5b39fbac1d7e1dc0d628c/5.0/Dockerfile
+DOCKERFILE="5.0/Dockerfile"
+echo "Building redis:5.0.2-alpine"
+git clone https://github.com/docker-library/redis redis
+cd redis
+git checkout f1a8498333ae3ab340b5b39fbac1d7e1dc0d628c
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "redis:5.0.2-alpine" .
 cd - && cd ..
 
 

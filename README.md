@@ -117,6 +117,7 @@ You can read [the article](https://medium.com/@BtcpayServer/hosting-btcpay-serve
 * `BTCPAYGEN_CRYPTON`: N'th supported crypto currency where N is 9 at maximum. (eg. `btc`, `ltc`. Default: `(empty)`)
 * `BTCPAYGEN_REVERSEPROXY`: Specify reverse proxy to use; NGinx has HTTPS support. (eg. `nginx`, `traefik`,  `(empty)`. Default: `nginx`)
 * `BTCPAYGEN_LIGHTNING`: Lightning network implementation to use (eg. `clightning`, `(empty)`)
+* `BTCPAYGEN_DATABASE`: Database Engine to use(eg. `postgres`, `mysql`, `sqlite`. Default: `postgres`)
 * `BTCPAYGEN_SUBNAME`: The subname of the generated docker-compose file, where the full name is `Generated/docker-compose.SUBNAME.yml` (Default: `generated`)
 * `BTCPAYGEN_ADDITIONAL_FRAGMENTS`: Semicolon-separated list of additional fragments you want to use (eg. `opt-save-storage`)
 * `LETSENCRYPT_EMAIL`: An email will be sent to this address if certificate expires and fails to renew automatically (eg. `me@example.com`)
@@ -227,13 +228,7 @@ export BTCPAY_BASE_DIRECTORY="/var/lib/waagent/custom-script/download/0"
 export BTCPAY_ENV_FILE="/var/lib/waagent/custom-script/download/0/.env"
 export BTCPAY_HOST_SSHKEYFILE="/root/.ssh/id_rsa_btcpay"
 if cat $BTCPAY_ENV_FILE &> /dev/null; then
-export BTCPAY_HOST="$(cat $BTCPAY_ENV_FILE | sed -n 's/^BTCPAY_HOST=\(.*\)$/\1/p')"
-export LETSENCRYPT_EMAIL="$(cat $BTCPAY_ENV_FILE | sed -n 's/^LETSENCRYPT_EMAIL=\(.*\)$/\1/p')"
-export NBITCOIN_NETWORK="$(cat $BTCPAY_ENV_FILE | sed -n 's/^NBITCOIN_NETWORK=\(.*\)$/\1/p')"
-export LIGHTNING_ALIAS="$(cat $BTCPAY_ENV_FILE | sed -n 's/^LIGHTNING_ALIAS=\(.*\)$/\1/p')"
-export ACME_CA_URI="$(cat $BTCPAY_ENV_FILE | sed -n 's/^ACME_CA_URI=\(.*\)$/\1/p')"
-export BTCPAY_SSHKEYFILE="$(cat $BTCPAY_ENV_FILE | sed -n 's/^BTCPAY_SSHKEYFILE=\(.*\)$/\1/p')"
-export BTCPAY_SSHTRUSTEDFINGERPRINTS="$(cat $BTCPAY_ENV_FILE | sed -n 's/^BTCPAY_SSHTRUSTEDFINGERPRINTS=\(.*\)$/\1/p')"
+  export $(grep -v '^#' "$BTCPAY_ENV_FILE" | xargs)
 fi
 ```
 
