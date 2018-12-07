@@ -45,7 +45,7 @@ namespace DockerGenerator
 					continue;
 				composition.SelectedCryptos.Add(selectedCrypto.ToLowerInvariant());
 			}
-			composition.SelectedDatabase = (Environment.GetEnvironmentVariable("BTCPAYGEN_DATABASE") ?? "postgtres").ToLowerInvariant();
+			composition.SelectedDatabase = (Environment.GetEnvironmentVariable("BTCPAYGEN_DATABASE") ?? "postgres").ToLowerInvariant();
 			composition.SelectedProxy = (Environment.GetEnvironmentVariable("BTCPAYGEN_REVERSEPROXY") ?? "").ToLowerInvariant();
 			composition.SelectedLN = (Environment.GetEnvironmentVariable("BTCPAYGEN_LIGHTNING") ?? "").ToLowerInvariant();
 			composition.AdditionalFragments = (Environment.GetEnvironmentVariable("BTCPAYGEN_ADDITIONAL_FRAGMENTS") ?? "").ToLowerInvariant()
