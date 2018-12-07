@@ -71,16 +71,16 @@ cd - && cd ..
 
 
 # Build lnd
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5-beta-3/linuxamd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5.1-beta/linuxamd64.Dockerfile
 DOCKERFILE="linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5-beta-3/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5.1-beta/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
-echo "Building btcpayserver/lnd:v0.5-beta-3"
+echo "Building btcpayserver/lnd:v0.5.1-beta"
 git clone https://github.com/btcpayserver/lnd lnd
 cd lnd
-git checkout basedon-v0.5-beta-3
+git checkout basedon-v0.5.1-beta
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.5-beta-3" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.5.1-beta" .
 cd - && cd ..
 
 
@@ -113,16 +113,16 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.24/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.26/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.24/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.26/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-echo "Building btcpayserver/btcpayserver:1.0.3.24"
+echo "Building btcpayserver/btcpayserver:1.0.3.26"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.0.3.24
+git checkout v1.0.3.26
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.24" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.26" .
 cd - && cd ..
 
 
@@ -191,16 +191,16 @@ cd - && cd ..
 
 
 # Build lnd
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5-beta-3/linuxamd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5.1-beta/linuxamd64.Dockerfile
 DOCKERFILE="linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5-beta-3/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5.1-beta/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
-echo "Building btcpayserver/lnd:v0.5-beta-3"
+echo "Building btcpayserver/lnd:v0.5.1-beta"
 git clone https://github.com/btcpayserver/lnd lnd
 cd lnd
-git checkout basedon-v0.5-beta-3
+git checkout basedon-v0.5.1-beta
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.5-beta-3" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.5.1-beta" .
 cd - && cd ..
 
 
@@ -283,26 +283,26 @@ cd - && cd ..
 
 
 # Build btcqbo
-# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.1.1/Dockerfile
+# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.1.8/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building jvandrew/btcqbo:0.1.1"
+echo "Building jvandrew/btcqbo:0.1.8"
 git clone https://github.com/JeffVandrewJr/btcqbo btcqbo
 cd btcqbo
-git checkout v0.1.1
+git checkout v0.1.8
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.1.1" .
+docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.1.8" .
 cd - && cd ..
 
 
 # Build btcqbo
-# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.1.1/Dockerfile
+# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.1.8/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building jvandrew/btcqbo:0.1.1"
+echo "Building jvandrew/btcqbo:0.1.8"
 git clone https://github.com/JeffVandrewJr/btcqbo btcqbo
 cd btcqbo
-git checkout v0.1.1
+git checkout v0.1.8
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.1.1" .
+docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.1.8" .
 cd - && cd ..
 
 

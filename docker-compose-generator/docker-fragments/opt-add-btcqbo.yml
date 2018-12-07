@@ -27,6 +27,8 @@ services:
       - "6379"
     volumes:
       - "redis_datadir:/data"
-
+  btcpayserver:
+    environment:
+      BTCPAY_EXTERNALSERVICES: "Quickbooks Online Connector:btcqbo;"
 volumes:
     redis_datadir:
