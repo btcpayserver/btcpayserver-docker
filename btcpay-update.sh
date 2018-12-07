@@ -17,6 +17,14 @@ fi
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"  
 git pull --force
 
+if ! [ -f "/etc/docker/daemon.json" ]; then
+echo "{
+\"log-driver\": \"json-file\",
+\"log-opts\": {\"max-size\": \"5m\", \"max-file\": \"3\"}
+}" > /etc/docker/daemon.json
+echo "Setting limited log files in /etc/docker/daemon.json"
+fi
+
 . ./build.sh
 if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then
     cp Generated/docker-compose.generated.yml $BTCPAY_DOCKER_COMPOSE

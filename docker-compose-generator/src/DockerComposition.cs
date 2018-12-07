@@ -17,12 +17,6 @@ namespace DockerGenerator
 			get;
 			set;
 		}
-
-		public string SelectedDatabase
-		{
-			get;
-			set;
-		}
 		public string SelectedLN
 		{
 			get;
@@ -44,7 +38,7 @@ namespace DockerGenerator
 				if(string.IsNullOrEmpty(selectedCrypto))
 					continue;
 				composition.SelectedCryptos.Add(selectedCrypto.ToLowerInvariant());
-			}
+			}      
 			composition.SelectedDatabase = (Environment.GetEnvironmentVariable("BTCPAYGEN_DATABASE") ?? "postgres").ToLowerInvariant();
 			composition.SelectedProxy = (Environment.GetEnvironmentVariable("BTCPAYGEN_REVERSEPROXY") ?? "").ToLowerInvariant();
 			composition.SelectedLN = (Environment.GetEnvironmentVariable("BTCPAYGEN_LIGHTNING") ?? "").ToLowerInvariant();
