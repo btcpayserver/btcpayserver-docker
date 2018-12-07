@@ -8,10 +8,10 @@ namespace DockerGenerator
 {
 	class Program
 	{
+
 		static void Main(string[] args)
 		{
-			var root = Environment.GetEnvironmentVariable("INSIDE_CONTAINER") == "1"
-				? FindRoot("app")
+			var root = Environment.GetEnvironmentVariable("INSIDE_CONTAINER") == "1" ? FindRoot("app")
 				: Path.GetFullPath(Path.Combine(FindRoot("docker-compose-generator"), ".."));
 
 			var composition = DockerComposition.FromEnvironmentVariables();
@@ -27,9 +27,7 @@ namespace DockerGenerator
 
 		private void Run(DockerComposition composition, string name, string output)
 		{
-			var fragmentLocation = Environment.GetEnvironmentVariable("INSIDE_CONTAINER") == "1"
-				? "app"
-				: "docker-compose-generator";
+			var fragmentLocation = Environment.GetEnvironmentVariable("INSIDE_CONTAINER") == "1" ? "app" : "docker-compose-generator";
 			fragmentLocation = FindRoot(fragmentLocation);
 			fragmentLocation = Path.GetFullPath(Path.Combine(fragmentLocation, "docker-fragments"));
 
@@ -51,14 +49,9 @@ namespace DockerGenerator
 					fragments.Add("btcpayserver-noreverseproxy");
 					break;
 			}
-
 			fragments.Add("btcpayserver");
 			fragments.Add("nbxplorer");
-			if (composition.SelectedDatabase != "sqlite")
-			{
-				fragments.Add(composition.SelectedDatabase);
-			}
-
+			fragments.Add("postgres");
 			foreach (var crypto in CryptoDefinition.GetDefinitions())
 			{
 				if (!composition.SelectedCryptos.Contains(crypto.Crypto))
@@ -69,7 +62,6 @@ namespace DockerGenerator
 				{
 					fragments.Add(crypto.CLightningFragment);
 				}
-
 				if (composition.SelectedLN == "lnd" && crypto.LNDFragment != null)
 				{
 					fragments.Add(crypto.LNDFragment);
