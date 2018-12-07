@@ -17,12 +17,6 @@ namespace DockerGenerator
 			get;
 			set;
 		}
-
-		public string SelectedDatabase
-		{
-			get;
-			set;
-		}
 		public string SelectedLN
 		{
 			get;

@@ -57,7 +57,6 @@ Environment variables:
     BTCPAYGEN_CRYPTON: N th supported crypto currency where N is maximum at maximum 9. (Default: none)
     BTCPAYGEN_REVERSEPROXY: Whether to use or not a reverse proxy. NGinx setup HTTPS for you. (eg. nginx, traefik, none. Default: nginx)
     BTCPAYGEN_LIGHTNING: Lightning network implementation to use (eg. clightning, lnd, none)
-    BTCPAYGEN_DATABASE: Database Engine to use(eg. postgres, mysql, sqlite. Default: postgres)
     BTCPAYGEN_ADDITIONAL_FRAGMENTS: Semi colon separated list of additional fragments you want to use (eg. opt-save-storage)
     ACME_CA_URI: The API endpoint to ask for HTTPS certificate (default: https://acme-v01.api.letsencrypt.org/directory)
     BTCPAY_HOST_SSHKEYFILE: Optional, SSH private key that BTCPay can use to connect to this VM's SSH server. This key will be copied on BTCPay's data directory
@@ -95,7 +94,6 @@ fi
 : "${BTCPAYGEN_CRYPTO1:=btc}"
 : "${BTCPAYGEN_REVERSEPROXY:=nginx}"
 : "${BTCPAYGEN_LIGHTNING:=none}"
-: "${BTCPAYGEN_DATABASE:=postgres}"
 : "${ACME_CA_URI:=https://acme-v01.api.letsencrypt.org/directory}"
 
 OLD_BTCPAY_DOCKER_COMPOSE=$BTCPAY_DOCKER_COMPOSE
@@ -154,7 +152,6 @@ BTCPAYGEN_CRYPTO8:$BTCPAYGEN_CRYPTO8
 BTCPAYGEN_CRYPTO9:$BTCPAYGEN_CRYPTO9
 BTCPAYGEN_REVERSEPROXY:$BTCPAYGEN_REVERSEPROXY
 BTCPAYGEN_LIGHTNING:$BTCPAYGEN_LIGHTNING
-BTCPAYGEN_DATABASE:$BTCPAYGEN_DATABASE
 BTCPAYGEN_ADDITIONAL_FRAGMENTS:$BTCPAYGEN_ADDITIONAL_FRAGMENTS
 BTCPAY_IMAGE:$BTCPAY_IMAGE
 ACME_CA_URI:$ACME_CA_URI
@@ -193,7 +190,6 @@ export BTCPAYGEN_CRYPTO7=\"$BTCPAYGEN_CRYPTO7\"
 export BTCPAYGEN_CRYPTO8=\"$BTCPAYGEN_CRYPTO8\"
 export BTCPAYGEN_CRYPTO9=\"$BTCPAYGEN_CRYPTO9\"
 export BTCPAYGEN_LIGHTNING=\"$BTCPAYGEN_LIGHTNING\"
-export BTCPAYGEN_DATABASE=\"$BTCPAYGEN_DATABASE\"
 export BTCPAYGEN_REVERSEPROXY=\"$BTCPAYGEN_REVERSEPROXY\"
 export BTCPAYGEN_ADDITIONAL_FRAGMENTS=\"$BTCPAYGEN_ADDITIONAL_FRAGMENTS\"
 export BTCPAY_DOCKER_COMPOSE=\"$BTCPAY_DOCKER_COMPOSE\"
@@ -298,6 +294,15 @@ ExecReload=/bin/bash -c '. /etc/profile.d/btcpay-env.sh && cd \"\$(dirname \$BTC
 
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
+
+if ! [ -f "/etc/docker/daemon.json" ]; then
+echo "{
+\"log-driver\": \"json-file\",
+\"log-opts\": {\"max-size\": \"5m\", \"max-file\": \"3\"}
+}" > /etc/docker/daemon.json
+echo "Setting limited log files in /etc/docker/daemon.json"
+systemctl restart docker
+fi
 
 echo -e "BTCPay Server systemd configured in /etc/systemd/system/btcpayserver.service\n"
 echo "BTCPay Server starting... this can take 5 to 10 minutes..."
