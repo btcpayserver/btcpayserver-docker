@@ -3,7 +3,7 @@
 If (-not ($BTCPAYGEN_DOCKER_IMAGE)) { $BTCPAYGEN_DOCKER_IMAGE = "btcpayserver/docker-compose-generator" }
 
 If ($BTCPAYGEN_DOCKER_IMAGE -eq "btcpayserver/docker-compose-generator:local"){
-	docker build docker-compose-generator --tag $BTCPAYGEN_DOCKER_IMAGE
+	docker build docker-compose-generator -f docker-compose-generator/linuxamd64.Dockerfile --tag $BTCPAYGEN_DOCKER_IMAGE
 } Else {
 	docker pull $BTCPAYGEN_DOCKER_IMAGE
 }
