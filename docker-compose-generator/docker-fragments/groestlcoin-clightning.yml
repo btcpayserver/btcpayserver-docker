@@ -16,7 +16,7 @@ services:
         bitcoin-rpcport=43782
         log-level=debug
         announce-addr=${BTCPAY_HOST}:9737
-        bind-addr=0.0.0.0:9737
+        bind-addr=0.0.0.0:9735
         
         network=${NBITCOIN_NETWORK:-regtest}
         alias=${LIGHTNING_ALIAS}
@@ -26,7 +26,7 @@ services:
       - "groestlcoin_datadir:/etc/groestlcoin"
       - "nbxplorer_datadir:/root/.nbxplorer"
     ports:
-      - "9737:9737"
+      - "9737:9735"
     links:
       - nbxplorer
       - groestlcoind
