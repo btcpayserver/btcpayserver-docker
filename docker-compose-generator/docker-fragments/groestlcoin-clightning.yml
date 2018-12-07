@@ -20,7 +20,7 @@ services:
         chain=grs
     volumes:
       - "clightning_groestlcoin_datadir:/root/.lightning"
-      - "bitcoin_datadir:/etc/groestlcoin"
+      - "groestlcoin_datadir:/etc/groestlcoin"
       - "nbxplorer_datadir:/root/.nbxplorer"
     ports:
       - "9737:9737"
