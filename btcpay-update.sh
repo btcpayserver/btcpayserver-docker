@@ -16,7 +16,7 @@ fi
 
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"  
 git pull --force
-export BTCPAYGEN_DATABASE="postgres"
+
 if ! [ -f "/etc/docker/daemon.json" ]; then
 echo "{
 \"log-driver\": \"json-file\",
