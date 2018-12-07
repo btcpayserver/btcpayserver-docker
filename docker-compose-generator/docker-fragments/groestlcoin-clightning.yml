@@ -13,6 +13,7 @@ services:
       LIGHTNINGD_OPT: |
         bitcoin-datadir=/etc/groestlcoin
         bitcoin-rpcconnect=groestlcoind
+        log-level=debug
         announce-addr=${BTCPAY_HOST}:9737
         bind-addr=0.0.0.0:9737
         network=${NBITCOIN_NETWORK:-regtest}
