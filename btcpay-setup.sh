@@ -295,6 +295,15 @@ ExecReload=/bin/bash -c '. /etc/profile.d/btcpay-env.sh && cd \"\$(dirname \$BTC
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
 
+if ! [ -f "/etc/docker/daemon.json" ]; then
+echo "{
+\"log-driver\": \"json-file\",
+\"log-opts\": {\"max-size\": \"5m\", \"max-file\": \"3\"}
+}" > /etc/docker/daemon.json
+echo "Setting limited log files in /etc/docker/daemon.json"
+systemctl restart docker
+fi
+
 echo -e "BTCPay Server systemd configured in /etc/systemd/system/btcpayserver.service\n"
 echo "BTCPay Server starting... this can take 5 to 10 minutes..."
 systemctl daemon-reload
