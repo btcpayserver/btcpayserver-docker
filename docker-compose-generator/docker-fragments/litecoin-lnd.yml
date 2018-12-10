@@ -36,7 +36,7 @@ services:
 
   btcpayserver:
     environment:
-      BTCPAY_LTCLIGHTNING: "type=lnd-rest;server=http://lnd_litecoin:8080/;macaroonfilepath=/etc/lnd_litecoin/admin.macaroon;allowinsecure=true"
+      BTCPAY_LTCLIGHTNING: "type=lnd-rest;server=http://lnd_litecoin:8080/;macaroonfilepath=/etc/lnd_litecoin/admin.macaroon;restrictedmacaroonfilepath=/etc/lnd_litecoin/invoice.macaroon;allowinsecure=true"
     volumes:
       - "lnd_litecoin_datadir:/etc/lnd_litecoin"
     links:
