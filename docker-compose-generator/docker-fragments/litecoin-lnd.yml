@@ -18,6 +18,7 @@ services:
         externalip=${BTCPAY_HOST}:9736
         alias=${LIGHTNING_ALIAS}
         adminmacaroonpath=/data/admin.macaroon
+        invoicemacaroonpath=/data/invoice.macaroon
         noseedbackup=1
         notls=1
     ports:
