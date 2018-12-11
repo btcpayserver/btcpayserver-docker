@@ -3,4 +3,4 @@
 . /etc/profile.d/btcpay-env.sh
 
 cd "`dirname $BTCPAY_ENV_FILE`"
-docker-compose -f $BTCPAY_DOCKER_COMPOSE up --remove-orphans -d
+docker-compose -f $BTCPAY_DOCKER_COMPOSE up --remove-orphans -d -t "${COMPOSE_HTTP_TIMEOUT:-180}"
