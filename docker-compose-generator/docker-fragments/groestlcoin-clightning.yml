@@ -2,7 +2,7 @@ version: "3"
 
 services:
   clightning_groestlcoin:
-    image: kukks/grs-clightning:latest
+    image: kukksgroestlcoin/lightning:v0.6.2-1
     stop_signal: SIGKILL
     container_name: btcpayserver_clightning_groestlcoin
     restart: unless-stopped
