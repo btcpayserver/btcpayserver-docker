@@ -309,10 +309,6 @@ server {
 		proxy_pass http://lnd_bitcoin:8080/;
 	}
 		{{ end }}
-	{{ end }}
-
-	{{ range $container := $ }}
-		{{ $serviceName := (index $container.Labels "com.docker.compose.service") }}
 		{{ if (eq $serviceName "btcqbo") }}
 	location /btcqbo/ {
 		proxy_pass http://btcqbo:8001;
@@ -320,6 +316,11 @@ server {
 		proxy_set_header Host $host;
 		proxy_set_header X-Real-IP $remote_addr;
 		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	}
+		{{ end }}
+		{{ if (eq $serviceName "clightning_bitcoin_spark") }}
+	location /spark/btc/ {
+		proxy_pass http://clightning_bitcoin_spark:9737/;
 	}
 		{{ end }}
 	{{ end }}
