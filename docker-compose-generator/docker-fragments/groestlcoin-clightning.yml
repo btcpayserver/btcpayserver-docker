@@ -15,7 +15,7 @@ services:
         bitcoin-rpcconnect=groestlcoind
         bitcoin-rpcport=43782
         log-level=debug
-        announce-addr=${BTCPAY_HOST}:9737
+        announce-addr=${BTCPAY_HOST}:9738
         bind-addr=0.0.0.0:9735
         network=${NBITCOIN_NETWORK:-regtest}
         alias=${LIGHTNING_ALIAS}
@@ -50,7 +50,7 @@ services:
     links:
     - clightning_groestlcoin
     expose:
-    - "9739"
+    - "9739:9737"
 volumes:
   clightning_groestlcoin_datadir:
   clightning_groestlcoin_spark:
