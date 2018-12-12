@@ -24,7 +24,7 @@ services:
       - "groestlcoin_datadir:/etc/groestlcoin"
       - "nbxplorer_datadir:/root/.nbxplorer"
     ports:
-      - "9737:9735"
+      - "9738:9735"
     links:
       - nbxplorer
       - groestlcoind
