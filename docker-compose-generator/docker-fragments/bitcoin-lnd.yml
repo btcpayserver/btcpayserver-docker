@@ -21,6 +21,7 @@ services:
         alias=${LIGHTNING_ALIAS}
         adminmacaroonpath=/data/admin.macaroon
         invoicemacaroonpath=/data/invoice.macaroon
+        readonlymacaroonpath=/data/readonly.macaroon
         noseedbackup=1
         notls=1
     ports:
