@@ -70,6 +70,18 @@ docker build -f "$DOCKERFILE" -t "nicolasdorier/clightning:v0.6.2-3" .
 cd - && cd ..
 
 
+# Build spark-wallet
+# https://raw.githubusercontent.com/shesek/spark-wallet/v0.2.0/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building shesek/spark-wallet:0.2.0-WIP"
+git clone https://github.com/shesek/spark-wallet spark-wallet
+cd spark-wallet
+git checkout v0.2.0
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "shesek/spark-wallet:0.2.0-WIP" .
+cd - && cd ..
+
+
 # Build lnd
 # https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5.1-beta/linuxamd64.Dockerfile
 DOCKERFILE="linuxamd64.Dockerfile"
@@ -113,16 +125,16 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.26/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.30/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.26/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.30/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-echo "Building btcpayserver/btcpayserver:1.0.3.26"
+echo "Building btcpayserver/btcpayserver:1.0.3.30"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.0.3.26
+git checkout v1.0.3.30
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.26" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.30" .
 cd - && cd ..
 
 
@@ -283,26 +295,26 @@ cd - && cd ..
 
 
 # Build btcqbo
-# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.1.8/Dockerfile
+# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.1.20/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building jvandrew/btcqbo:0.1.8"
+echo "Building jvandrew/btcqbo:0.1.20"
 git clone https://github.com/JeffVandrewJr/btcqbo btcqbo
 cd btcqbo
-git checkout v0.1.8
+git checkout v0.1.20
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.1.8" .
+docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.1.20" .
 cd - && cd ..
 
 
 # Build btcqbo
-# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.1.8/Dockerfile
+# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.1.20/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building jvandrew/btcqbo:0.1.8"
+echo "Building jvandrew/btcqbo:0.1.20"
 git clone https://github.com/JeffVandrewJr/btcqbo btcqbo
 cd btcqbo
-git checkout v0.1.8
+git checkout v0.1.20
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.1.8" .
+docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.1.20" .
 cd - && cd ..
 
 

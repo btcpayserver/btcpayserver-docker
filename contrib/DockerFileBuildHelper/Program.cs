@@ -286,6 +286,11 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/containous/traefik-library-image";
                     dockerInfo.GitRef = $"master";
                     break;
+                case "spark-wallet":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/shesek/spark-wallet";
+                    dockerInfo.GitRef = $"v{image.Tag.Split('-')[0]}";
+                    break;
                 default:
                     return null;
             }
