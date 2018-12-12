@@ -92,7 +92,7 @@ bitcoin-cli.sh gettxoutsetinfo
 ```
 
 
-5. Verify that the output of `Synchy` and `Trusty` are **exactly** identical.
+5. Verify that the output of `Synchy` and `Trusty` are identical (you can ignore `disk_size`).
 
 NOTE: Completing those steps, under the assumption the software you are running is not malicious, **correctly prove that the UTXO set snapshot is legit**.
 
