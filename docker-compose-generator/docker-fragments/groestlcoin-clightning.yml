@@ -43,7 +43,7 @@ services:
     restart: unless-stopped
     environment:
       NETWORK: ${NBITCOIN_NETWORK:-regtest}
-      SPARK_OPT: --no-tls -C /data/.cookie --port 9739
+      SPARK_OPT: --no-tls  --port 9739 -C /data/.cookie
     volumes:
     - "clightning_groestlcoin_datadir:/etc/lightning"
     - "clightning_groestlcoin_spark:/data"

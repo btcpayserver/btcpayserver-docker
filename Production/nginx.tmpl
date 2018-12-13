@@ -324,7 +324,7 @@ server {
 	}
 		{{ end }}
 		{{ if (eq $serviceName "clightning_groestlcoin_spark") }}
-	location /spark/btc/ {
+	location /spark/grs/ {
 		proxy_pass http://clightning_groestlcoin_spark:9739/;
 	}
 		{{ end }}		
