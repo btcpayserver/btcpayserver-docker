@@ -28,7 +28,7 @@ services:
       - nbxplorer
       - bitcoind
   clightning_bitcoin_spark:
-    image: shesek/spark-wallet:0.2.0-WIP
+    image: shesek/spark-wallet:0.2.1-standalone
     stop_signal: SIGKILL
     restart: unless-stopped
     environment:
