@@ -12,12 +12,12 @@ fi
 
 # Verify we are in right folder. If we are not, let's go in the parent folder of the current docker-compose.
 if ! git -C . rev-parse &> /dev/null || [ ! -d "Generated" ]; then
-    if [ ! -z $BTCPAY_DOCKER_COMPOSE ]; then
-        cd $(dirname $BTCPAY_DOCKER_COMPOSE)
+    if [ ! -z $mappum/htlc_DOCKER_COMPOSE ]; then
+        cd $(dirname $mappum/htlc_DOCKER_COMPOSE)
         cd ..
     fi
     if ! git -C . rev-parse || [ ! -d "Generated" ]; then
-        echo "You must run this script inside the git repository of btcpayserver-docker"
+        echo "You must run this script inside the git repository of mappum/htlc-docker"
         return
     fi
 fi
@@ -27,7 +27,7 @@ cat <<-END
 Usage:
 ------
 
-Install BTCPay on this server
+Install mappum/htlc on this server
 This script must be run as root
 
     -i : Run install
@@ -36,10 +36,10 @@ This script will:
 
 * Install Docker
 * Install Docker-Compose
-* Setup BTCPay settings
+* Setup mappum/htlc settings
 * Make sure it starts at reboot via upstart or systemd
-* Add BTCPay utilities in /usr/bin
-* Start BTCPay
+* Add mappum/htlc utilities in /usr/bin
+* Start mappum/htlc
 
 You can run again this script if you desire to change your configuration.
 Except BTC and LTC, other crypto currencies are maintained by their own community. Run at your own risk.
@@ -48,20 +48,20 @@ Make sure you own a domain with DNS record pointing to your website and that por
 This will be used to properly setup HTTPS via let's encrypt.
 
 Environment variables:
-    BTCPAY_HOST: The hostname of your website (eg. btcpay.example.com)
+    htlc_HOST: The hostname of your website (eg. mappum/htlc.example.com)
     LETSENCRYPT_EMAIL: A mail will be sent to this address if certificate expires and fail to renew automatically (eg. me@example.com)
     NBITCOIN_NETWORK: The type of network to use (eg. mainnet, testnet or regtest. Default: mainnet)
     LIGHTNING_ALIAS: An alias for your lightning network node if used
-    BTCPAYGEN_CRYPTO1: First supported crypto currency (eg. btc, ltc, btx, btg, grs, ftc, via, doge, mona, dash, none. Default: btc)
-    BTCPAYGEN_CRYPTO2: Second supported crypto currency (Default: empty)
-    BTCPAYGEN_CRYPTON: N th supported crypto currency where N is maximum at maximum 9. (Default: none)
-    BTCPAYGEN_REVERSEPROXY: Whether to use or not a reverse proxy. NGinx setup HTTPS for you. (eg. nginx, traefik, none. Default: nginx)
-    BTCPAYGEN_LIGHTNING: Lightning network implementation to use (eg. clightning, lnd, none)
-    BTCPAYGEN_ADDITIONAL_FRAGMENTS: Semi colon separated list of additional fragments you want to use (eg. opt-save-storage)
+    mappum/htlcGEN_CRYPTO1: First supported crypto currency (eg. btc, ltc, btx, btg, grs, ftc, via, doge, mona, dash, none. Default: btc)
+    mappum/htlcGEN_CRYPTO2: Second supported crypto currency (Default: empty)
+    mappum/htlcGEN_CRYPTON: N th supported crypto currency where N is maximum at maximum 9. (Default: none)
+    mappum/htlcGEN_REVERSEPROXY: Whether to use or not a reverse proxy. NGinx setup HTTPS for you. (eg. nginx, traefik, none. Default: nginx)
+    mappum/htlcGEN_LIGHTNING: Lightning network implementation to use (eg. clightning, lnd, none)
+    mappum/htlcGEN_ADDITIONAL_FRAGMENTS: Semi colon separated list of additional fragments you want to use (eg. opt-save-storage)
     ACME_CA_URI: The API endpoint to ask for HTTPS certificate (default: https://acme-v01.api.letsencrypt.org/directory)
-    BTCPAY_HOST_SSHKEYFILE: Optional, SSH private key that BTCPay can use to connect to this VM's SSH server. This key will be copied on BTCPay's data directory
-    BTCPAYGEN_DOCKER_IMAGE: Allows you to specify a custom docker image for the generator (Default: btcpayserver/docker-compose-generator)
-    BTCPAY_IMAGE: Allows you to specify the btcpayserver docker image to use over the default version. (Default: current stable version of btcpayserver)
+    mappum/htlc_HOST_SSHKEYFILE: Optional, SSH private key that mappum/htlc can use to connect to this VM's SSH server. This key will be copied on mappum/htlc's data directory
+    mappum/htlcGEN_DOCKER_IMAGE: Allows you to specify a custom docker image for the generator (Default: mappum/htlcserver/docker-compose-generator)
+    mappum/htlc_IMAGE: Allows you to specify the mappum/htlcserver docker image to use over the default version. (Default: current stable version of mappum/htlcserver)
 END
 }
 
@@ -70,18 +70,18 @@ if [ "$1" != "-i" ]; then
     return
 fi
 
-if [ -z "$BTCPAY_HOST" ]; then
-    if [ -f "/etc/profile.d/btcpay-env.sh" ]; then
+if [ -z "$mappum/htlc_HOST" ]; then
+    if [ -f "/etc/profile.d/mappum/htlc-env.sh" ]; then
         echo "This script must be run as root after running \"sudo su -\""
     else
-        echo "BTCPAY_HOST should not be empty"
+        echo "mappum/htlc_HOST should not be empty"
     fi
     return
 fi
 
 ######### Migration: old pregen environment to new environment ############
-if [ ! -z $BTCPAY_DOCKER_COMPOSE ] && [ ! -z $DOWNLOAD_ROOT ] && [ -z $BTCPAYGEN_OLD_PREGEN ]; then 
-    echo "Your deployment is too old, you need to migrate by following instructions on this link https://github.com/btcpayserver/btcpayserver-docker/tree/master#i-deployed-before-btcpay-setupsh-existed-before-may-17-can-i-migrate-to-this-new-system"
+if [ ! -z $mappum/htlc_DOCKER_COMPOSE ] && [ ! -z $DOWNLOAD_ROOT ] && [ -z $mappum/htlcGEN_OLD_PREGEN ]; then 
+    echo "Your deployment is too old, you need to migrate by following instructions on this link https://github.com/btcpayserver/mappum/htlcserver-docker/tree/master#i-deployed-before-mappum/htlc-setupsh-existed-before-may-17-can-i-migrate-to-this-new-system"
     return
 fi
 #########################################################
@@ -89,85 +89,85 @@ fi
 [[ $LETSENCRYPT_EMAIL == *@example.com ]] && echo "LETSENCRYPT_EMAIL ends with @example.com, setting to empty email instead" && LETSENCRYPT_EMAIL=""
 
 : "${LETSENCRYPT_EMAIL:=}"
-: "${BTCPAYGEN_OLD_PREGEN:=false}"
+: "${mappum/hltcGEN_OLD_PREGEN:=false}"
 : "${NBITCOIN_NETWORK:=mainnet}"
-: "${BTCPAYGEN_CRYPTO1:=btc}"
-: "${BTCPAYGEN_REVERSEPROXY:=nginx}"
-: "${BTCPAYGEN_LIGHTNING:=none}"
+: "${mappum/htlcGEN_CRYPTO1:=btc}"
+: "${mappum/htlcGEN_REVERSEPROXY:=nginx}"
+: "${mappum/htlcGEN_LIGHTNING:=none}"
 : "${ACME_CA_URI:=https://acme-v01.api.letsencrypt.org/directory}"
 
-OLD_BTCPAY_DOCKER_COMPOSE=$BTCPAY_DOCKER_COMPOSE
+OLD_mappum/htlc_DOCKER_COMPOSE=$mappum/htlc_DOCKER_COMPOSE
 ORIGINAL_DIRECTORY=$(pwd)
-BTCPAY_BASE_DIRECTORY="$(dirname $(pwd))"
+mappum/htlc_BASE_DIRECTORY="$(dirname $(pwd))"
 
-if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then
-    if [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production ]]; then
-        BTCPAY_DOCKER_COMPOSE="$(pwd)/Production/docker-compose.generated.yml"
+if [ "$mappum/htlcGEN_OLD_PREGEN" == "true" ]; then
+    if [[ $(dirname $mappum/htlc_DOCKER_COMPOSE) == *Production ]]; then
+        mappum/htlc_DOCKER_COMPOSE="$(pwd)/Production/docker-compose.generated.yml"
     elif [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production-NoReverseProxy ]]; then
-        BTCPAY_DOCKER_COMPOSE="$(pwd)/Production-NoReverseProxy/docker-compose.generated.yml"
+        mappum/htlc_DOCKER_COMPOSE="$(pwd)/Production-NoReverseProxy/docker-compose.generated.yml"
     else
-        BTCPAY_DOCKER_COMPOSE="$(pwd)/Production/docker-compose.generated.yml"
+        mappum/htlc_DOCKER_COMPOSE="$(pwd)/Production/docker-compose.generated.yml"
     fi
 else # new deployments must be in Generated
-    BTCPAY_DOCKER_COMPOSE="$(pwd)/Generated/docker-compose.generated.yml"
+    mappum/htlc_DOCKER_COMPOSE="$(pwd)/Generated/docker-compose.generated.yml"
 fi
 
-BTCPAY_ENV_FILE="$BTCPAY_BASE_DIRECTORY/.env"
+mappum/htlc_ENV_FILE="$mappum/htlc_BASE_DIRECTORY/.env"
 
-BTCPAY_SSHKEYFILE=""
-BTCPAY_SSHTRUSTEDFINGERPRINTS=""
-if [[ -f "$BTCPAY_HOST_SSHKEYFILE" ]]; then
-    BTCPAY_SSHKEYFILE="/datadir/id_rsa"
+mappum/htlc_SSHKEYFILE=""
+mappum/htlc_SSHTRUSTEDFINGERPRINTS=""
+if [[ -f "$mappum/htlc_HOST_SSHKEYFILE" ]]; then
+    mappum/htlc_SSHKEYFILE="/datadir/id_rsa"
     for pubkey in /etc/ssh/ssh_host_*.pub; do
         fingerprint="$(ssh-keygen -l -f $pubkey | awk '{print $2}')"
-        BTCPAY_SSHTRUSTEDFINGERPRINTS="$fingerprint;$BTCPAY_SSHTRUSTEDFINGERPRINTS"
+        mappum/htlc_SSHTRUSTEDFINGERPRINTS="$fingerprint;$mappum/htlc_SSHTRUSTEDFINGERPRINTS"
     done
 fi
 
-if [[ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]]; then
-    DOMAIN_NAME="$(echo "$BTCPAY_HOST" | grep -P '(?=^.{4,253}$)(^(?:[a-zA-Z0-9](?:(?:[a-zA-Z0-9\-]){0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$)')"
+if [[ "$mappum/htlcGEN_REVERSEPROXY" == "nginx" ]]; then
+    DOMAIN_NAME="$(echo "$mappum/htlc_HOST" | grep -P '(?=^.{4,253}$)(^(?:[a-zA-Z0-9](?:(?:[a-zA-Z0-9\-]){0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$)')"
     if [[ ! "$DOMAIN_NAME" ]]; then
-        echo "BTCPAYGEN_REVERSEPROXY is set to nginx, so BTCPAY_HOST must be a domain name which point to this server (with port 80 and 443 open), but the current value of BTCPAY_HOST ('$BTCPAY_HOST') is not a valid domain name."
+        echo "mappum/htlcGEN_REVERSEPROXY is set to nginx, so mappum/htlc_HOST must be a domain name which point to this server (with port 80 and 443 open), but the current value of mappum/htlc_HOST ('$mappum/htlc_HOST') is not a valid domain name."
         return
     fi
-    BTCPAY_HOST="$DOMAIN_NAME"
+    mappum/htlc_HOST="$DOMAIN_NAME"
 fi
 
 echo "
 -------SETUP-----------
 Parameters passed:
-BTCPAY_HOST:$BTCPAY_HOST
-BTCPAY_HOST_SSHKEYFILE:$BTCPAY_HOST_SSHKEYFILE
+mappum/htlc_HOST:$mappum/htlc_HOST
+mappum/htlc_HOST_SSHKEYFILE:$mappum/hltc_HOST_SSHKEYFILE
 LETSENCRYPT_EMAIL:$LETSENCRYPT_EMAIL
 NBITCOIN_NETWORK:$NBITCOIN_NETWORK
 LIGHTNING_ALIAS:$LIGHTNING_ALIAS
-BTCPAYGEN_CRYPTO1:$BTCPAYGEN_CRYPTO1
-BTCPAYGEN_CRYPTO2:$BTCPAYGEN_CRYPTO2
-BTCPAYGEN_CRYPTO3:$BTCPAYGEN_CRYPTO3
-BTCPAYGEN_CRYPTO4:$BTCPAYGEN_CRYPTO4
-BTCPAYGEN_CRYPTO5:$BTCPAYGEN_CRYPTO5
-BTCPAYGEN_CRYPTO6:$BTCPAYGEN_CRYPTO6
-BTCPAYGEN_CRYPTO7:$BTCPAYGEN_CRYPTO7
-BTCPAYGEN_CRYPTO8:$BTCPAYGEN_CRYPTO8
-BTCPAYGEN_CRYPTO9:$BTCPAYGEN_CRYPTO9
-BTCPAYGEN_REVERSEPROXY:$BTCPAYGEN_REVERSEPROXY
-BTCPAYGEN_LIGHTNING:$BTCPAYGEN_LIGHTNING
-BTCPAYGEN_ADDITIONAL_FRAGMENTS:$BTCPAYGEN_ADDITIONAL_FRAGMENTS
-BTCPAY_IMAGE:$BTCPAY_IMAGE
+mappum/htlcGEN_CRYPTO1:$mappum/htlcGEN_CRYPTO1
+mappum/htlcGEN_CRYPTO2:$mappum/htlcGEN_CRYPTO2
+mappum/htlcGEN_CRYPTO3:$mappum/htlcGEN_CRYPTO3
+mappum/htlcGEN_CRYPTO4:$mappum/htlcGEN_CRYPTO4
+mappum/htlcGEN_CRYPTO5:$mappum/htlcGEN_CRYPTO5
+mappum/hltcGEN_CRYPTO6:$mappum/hltcGEN_CRYPTO6
+mappum/htlcGEN_CRYPTO7:$mappum/htlcGEN_CRYPTO7
+mappum/htlcGEN_CRYPTO8:$mappum/htlcGEN_CRYPTO8
+mappum/htlcGEN_CRYPTO9:$mappum/htlcGEN_CRYPTO9
+mappum/htlcGEN_REVERSEPROXY:$mappum/htlcGEN_REVERSEPROXY
+mappum/htlcGEN_LIGHTNING:mappum/htlc
+mappum/htlcGEN_ADDITIONAL_FRAGMENTS:$mappum/htlcGEN_ADDITIONAL_FRAGMENTS
+mappum/htlc_IMAGE:$mappum/htlc_IMAGE
 ACME_CA_URI:$ACME_CA_URI
 ----------------------
 Additional exported variables:
-BTCPAY_DOCKER_COMPOSE=$BTCPAY_DOCKER_COMPOSE
-BTCPAY_BASE_DIRECTORY=$BTCPAY_BASE_DIRECTORY
-BTCPAY_ENV_FILE=$BTCPAY_ENV_FILE
-BTCPAYGEN_OLD_PREGEN=$BTCPAYGEN_OLD_PREGEN
-BTCPAY_SSHKEYFILE=$BTCPAY_SSHKEYFILE
-BTCPAY_SSHTRUSTEDFINGERPRINTS:$BTCPAY_SSHTRUSTEDFINGERPRINTS
+mappum/htlc_DOCKER_COMPOSE=$mappum/htlc_DOCKER_COMPOSE
+mappum/htlc_BASE_DIRECTORY=$mappum/htlc_BASE_DIRECTORY
+mappum/htlc_ENV_FILE=$mappum/htlc_ENV_FILE
+mappum/htlcGEN_OLD_PREGEN=$mappum/htlcGEN_OLD_PREGEN
+mappum/htlc_SSHKEYFILE=$mappum/htlc_SSHKEYFILE
+mappum/htlc_SSHTRUSTEDFINGERPRINTS:$mappum/htlc_SSHTRUSTEDFINGERPRINTS
 ----------------------
 "
 
-if [ -z "$BTCPAYGEN_CRYPTO1" ]; then
-    echo "BTCPAYGEN_CRYPTO1 should not be empty"
+if [ -z "$mappum/htlcGEN_CRYPTO1" ]; then
+    echo "mappum/htlcGEN_CRYPTO1 should not be empty"
     return
 fi
 
@@ -179,45 +179,45 @@ fi
 touch "/etc/profile.d/btcpay-env.sh"
 echo "
 export COMPOSE_HTTP_TIMEOUT=\"180\"
-export BTCPAYGEN_OLD_PREGEN=\"$BTCPAYGEN_OLD_PREGEN\"
-export BTCPAYGEN_CRYPTO1=\"$BTCPAYGEN_CRYPTO1\"
-export BTCPAYGEN_CRYPTO2=\"$BTCPAYGEN_CRYPTO2\"
-export BTCPAYGEN_CRYPTO3=\"$BTCPAYGEN_CRYPTO3\"
-export BTCPAYGEN_CRYPTO4=\"$BTCPAYGEN_CRYPTO4\"
-export BTCPAYGEN_CRYPTO5=\"$BTCPAYGEN_CRYPTO5\"
-export BTCPAYGEN_CRYPTO6=\"$BTCPAYGEN_CRYPTO6\"
-export BTCPAYGEN_CRYPTO7=\"$BTCPAYGEN_CRYPTO7\"
-export BTCPAYGEN_CRYPTO8=\"$BTCPAYGEN_CRYPTO8\"
-export BTCPAYGEN_CRYPTO9=\"$BTCPAYGEN_CRYPTO9\"
-export BTCPAYGEN_LIGHTNING=\"$BTCPAYGEN_LIGHTNING\"
-export BTCPAYGEN_REVERSEPROXY=\"$BTCPAYGEN_REVERSEPROXY\"
-export BTCPAYGEN_ADDITIONAL_FRAGMENTS=\"$BTCPAYGEN_ADDITIONAL_FRAGMENTS\"
-export BTCPAY_DOCKER_COMPOSE=\"$BTCPAY_DOCKER_COMPOSE\"
-export BTCPAY_BASE_DIRECTORY=\"$BTCPAY_BASE_DIRECTORY\"
-export BTCPAY_ENV_FILE=\"$BTCPAY_ENV_FILE\"
-export BTCPAY_HOST_SSHKEYFILE=\"$BTCPAY_HOST_SSHKEYFILE\"
-if cat \"\$BTCPAY_ENV_FILE\" &> /dev/null; then
-    export \$(grep -v '^#' \"\$BTCPAY_ENV_FILE\" | xargs)
+export mappum/htlcGEN_OLD_PREGEN=\"$mappum/htlcGEN_OLD_PREGEN\"
+export mappum/htlcGEN_CRYPTO1=\"$mappum/htlcGEN_CRYPTO1\"
+export mappum/htlcGEN_CRYPTO2=\"$mappum/htlcGEN_CRYPTO2\"
+export mappum/htlcGEN_CRYPTO3=\"$mappum/htlcGEN_CRYPTO3\"
+export mappum/htlcGEN_CRYPTO4=\"$mappum/htlcGEN_CRYPTO4\"
+export mappum/htlcGEN_CRYPTO5=\"$mappum/htlcGEN_CRYPTO5\"
+export mappum/htlcGEN_CRYPTO6=\"$mappum/htlcGEN_CRYPTO6\"
+export mappum/htlcGEN_CRYPTO7=\"$mappum/htlcGEN_CRYPTO7\"
+export mappum/htlcGEN_CRYPTO8=\"$mappum/hltcGEN_CRYPTO8\"
+export mappum/htlcGEN_CRYPTO9=\"$mappum/hltcGEN_CRYPTO9\"
+export mappum/htlcGEN_LIGHTNING=\"$mappum/hltcGEN_LIGHTNING\"
+export mappum/htlcGEN_REVERSEPROXY=\"$mappum/htlcGEN_REVERSEPROXY\"
+export mappum/htlcGEN_ADDITIONAL_FRAGMENTS=\"$mappum/hltcGEN_ADDITIONAL_FRAGMENTS\"
+export mappum/htlc_DOCKER_COMPOSE=\"$mappum/hltc_DOCKER_COMPOSE\"
+export mappum/htlc_BASE_DIRECTORY=\"$mappum/htlc_BASE_DIRECTORY\"
+export mappum/htlc_ENV_FILE=\"$mappum/htlc_ENV_FILE\"
+export mappum/htlc_HOST_SSHKEYFILE=\"$mappum/htlc_HOST_SSHKEYFILE\"
+if cat \"\$mappum/htlc_ENV_FILE\" &> /dev/null; then
+    export \$(grep -v '^#' \"\$mappum/htlc_ENV_FILE\" | xargs)
 fi
-" > /etc/profile.d/btcpay-env.sh
-chmod +x /etc/profile.d/btcpay-env.sh
+" > /etc/profile.d/mappum/htlc-env.sh
+chmod +x /etc/profile.d/mappum/htlc-env.sh
 
-echo -e "BTCPay Server environment variables successfully saved in /etc/profile.d/btcpay-env.sh\n"
+echo -e "mappum/htlc Server environment variables successfully saved in /etc/profile.d/mappum/htlc-env.sh\n"
 
 # Set .env file
-touch $BTCPAY_ENV_FILE
+touch $mappum/htlc_ENV_FILE
 echo "
-BTCPAY_HOST=$BTCPAY_HOST
-BTCPAY_IMAGE=$BTCPAY_IMAGE
+mappum/htlc_HOST=$mappum/htlc_HOST
+mappum/htlc_IMAGE=$mappum/htlc_IMAGE
 ACME_CA_URI=$ACME_CA_URI
 NBITCOIN_NETWORK=$NBITCOIN_NETWORK
 LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL
 LIGHTNING_ALIAS=$LIGHTNING_ALIAS
-BTCPAY_SSHTRUSTEDFINGERPRINTS=$BTCPAY_SSHTRUSTEDFINGERPRINTS
-BTCPAY_SSHKEYFILE=$BTCPAY_SSHKEYFILE" > $BTCPAY_ENV_FILE
-echo -e "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE\n"
+mappum/htlc_SSHTRUSTEDFINGERPRINTS=$mappum/htlc_SSHTRUSTEDFINGERPRINTS
+mappum/htlc_SSHKEYFILE=$mappum/htlc_SSHKEYFILE" > $mappum/htlc_ENV_FILE
+echo -e "mappum/htlc Server docker-compose parameters saved in $mappum/htlc_ENV_FILE\n"
 
-. /etc/profile.d/btcpay-env.sh
+. /etc/profile.d/mappum/htlc-env.sh
 
 if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; then
     if ! [ -x "$(command -v curl)" ]; then
@@ -245,7 +245,7 @@ if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; t
         else
             echo "Trying to install docker-compose by using the docker-compose-builder ($(uname -m))"
             ! [ -d "dist" ] && mkdir dist
-            docker run --rm -ti -v "$(pwd)/dist:/dist" btcpayserver/docker-compose-builder:1.23.2
+            docker run --rm -ti -v "$(pwd)/dist:/dist" mappum/htlc/docker-compose-builder:1.23.2
             mv dist/docker-compose /usr/local/bin/docker-compose
             chmod +x /usr/local/bin/docker-compose
             rm -rf "dist"
@@ -263,11 +263,11 @@ if ! [ -x "$(command -v docker-compose)" ]; then
     return
 fi
 
-# Generate the docker compose in BTCPAY_DOCKER_COMPOSE
+# Generate the docker compose in mappum/htlc_DOCKER_COMPOSE
 . ./build.sh
 
-if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then
-    cp Generated/docker-compose.generated.yml $BTCPAY_DOCKER_COMPOSE
+if [ "$mappum/htlc_OLD_PREGEN" == "true" ]; then
+    cp Generated/docker-compose.generated.yml $mappum/htlc_DOCKER_COMPOSE
 fi
 
 # Schedule for reboot
@@ -277,10 +277,10 @@ if [ -e "/etc/init/start_containers.conf" ]; then
     rm "/etc/init/start_containers.conf"
     initctl reload-configuration
 fi
-echo "Adding btcpayserver.service to systemd"
+echo "Adding mappum/htlc.service to systemd"
 echo "
 [Unit]
-Description=BTCPayServer service
+Description=mappum/htlc service
 After=docker.service network-online.target
 Requires=docker.service network-online.target
 
@@ -288,12 +288,12 @@ Requires=docker.service network-online.target
 Type=oneshot
 RemainAfterExit=yes
 
-ExecStart=/bin/bash -c '. /etc/profile.d/btcpay-env.sh && cd \"\$(dirname \$BTCPAY_ENV_FILE)\" && docker-compose -f \"\$BTCPAY_DOCKER_COMPOSE\" up -d -t \"\$COMPOSE_HTTP_TIMEOUT\"'
-ExecStop=/bin/bash -c '. /etc/profile.d/btcpay-env.sh && cd \"\$(dirname \$BTCPAY_ENV_FILE)\" && docker-compose -f \"\$BTCPAY_DOCKER_COMPOSE\" stop -t \"\$COMPOSE_HTTP_TIMEOUT\"'
-ExecReload=/bin/bash -c '. /etc/profile.d/btcpay-env.sh && cd \"\$(dirname \$BTCPAY_ENV_FILE)\" && docker-compose -f \"\$BTCPAY_DOCKER_COMPOSE\" restart -t \"\$COMPOSE_HTTP_TIMEOUT\"'
+ExecStart=/bin/bash -c '. /etc/profile.d/mappum/htlc-env.sh && cd \"\$(dirname \$mappum/htlc_ENV_FILE)\" && docker-compose -f \"\$mappum/htlc_DOCKER_COMPOSE\" up -d -t \"\$COMPOSE_HTTP_TIMEOUT\"'
+ExecStop=/bin/bash -c '. /etc/profile.d/mappum/htlc-env.sh && cd \"\$(dirname \$mappum/htlc_ENV_FILE)\" && docker-compose -f \"\$mappum/htlc_DOCKER_COMPOSE\" stop -t \"\$COMPOSE_HTTP_TIMEOUT\"'
+ExecReload=/bin/bash -c '. /etc/profile.d/mappum/htlc-env.sh && cd \"\$(dirname \$mappum/hltc_ENV_FILE)\" && docker-compose -f \"\$mappum/htlc_DOCKER_COMPOSE\" restart -t \"\$COMPOSE_HTTP_TIMEOUT\"'
 
 [Install]
-WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
+WantedBy=multi-user.target" > /etc/systemd/system/mappum/htlc.service
 
 if ! [ -f "/etc/docker/daemon.json" ]; then
 echo "{
@@ -304,12 +304,12 @@ echo "Setting limited log files in /etc/docker/daemon.json"
 systemctl restart docker
 fi
 
-echo -e "BTCPay Server systemd configured in /etc/systemd/system/btcpayserver.service\n"
-echo "BTCPay Server starting... this can take 5 to 10 minutes..."
+echo -e "mappum/htlc Server systemd configured in /etc/systemd/system/mappum/htlc.service\n"
+echo "mappum/htlc Server starting... this can take 5 to 10 minutes..."
 systemctl daemon-reload
-systemctl enable btcpayserver
-systemctl start btcpayserver
-echo "BTCPay Server started"
+systemctl enable mappum/htlc
+systemctl start mappum/htlc
+echo "mappum/htlc Server started"
 else # Use upstart
 echo "Using upstart"
 echo "
@@ -325,28 +325,28 @@ stop on runlevel [!2345]
 # respawn # might cause over charge
 
 script
-    . /etc/profile.d/btcpay-env.sh
-    cd \"\$(dirname \$BTCPAY_ENV_FILE)\"
-    docker-compose -f \"\$BTCPAY_DOCKER_COMPOSE\" up -d
+    . /etc/profile.d/mappum/htlc-env.sh
+    cd \"\$(dirname \$mappum/htlc_ENV_FILE)\"
+    docker-compose -f \"\$mappum/htlc_DOCKER_COMPOSE\" up -d
 end script" > /etc/init/start_containers.conf
-    echo -e "BTCPay Server upstart configured in /etc/init/start_containers.conf\n"
+    echo -e "mappum/htlc Server upstart configured in /etc/init/start_containers.conf\n"
     initctl reload-configuration
-    echo "BTCPay Server started"
+    echo "mappum/htlc Server started"
 fi
 
-cd "$(dirname $BTCPAY_ENV_FILE)"
+cd "$(dirname $mappum/htlc_ENV_FILE)"
 
-if [ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ] && [ "$OLD_BTCPAY_DOCKER_COMPOSE" != "$BTCPAY_DOCKER_COMPOSE" ]; then
-    echo "Closing old docker-compose at $OLD_BTCPAY_DOCKER_COMPOSE..."
-    docker-compose -f "$OLD_BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
+if [ ! -z "$OLD_mappum/htlc_DOCKER_COMPOSE" ] && [ "$OLD_mappum/htlc_DOCKER_COMPOSE" != "$mappum/htlc_DOCKER_COMPOSE" ]; then
+    echo "Closing old docker-compose at $OLD_mappum/htlc_DOCKER_COMPOSE..."
+    docker-compose -f "$OLD_mappum/htlc_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
 fi
 
-docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d --remove-orphans -t "${COMPOSE_HTTP_TIMEOUT:-180}"
+docker-compose -f "$mappumlhtlc_DOCKER_COMPOSE" up -d --remove-orphans -t "${COMPOSE_HTTP_TIMEOUT:-180}"
 
-# Give SSH key to BTCPay
-if [[ -f "$BTCPAY_HOST_SSHKEYFILE" ]]; then
-    echo "Copying $BTCPAY_SSHKEYFILE to BTCPayServer container"
-    docker cp "$BTCPAY_HOST_SSHKEYFILE" $(docker ps --filter "name=_btcpayserver_" -q):$BTCPAY_SSHKEYFILE
+# Give SSH key to mappum/htlc
+if [[ -f "$mappum/htlc_HOST_SSHKEYFILE" ]]; then
+    echo "Copying $mappum/htlc_SSHKEYFILE to BTCPayServer container"
+    docker cp "$mappum/htlc_HOST_SSHKEYFILE" $(docker ps --filter "name=_mappum/htlc_" -q):$mappum/htlc_SSHKEYFILE
 fi
 
 cd $ORIGINAL_DIRECTORY
