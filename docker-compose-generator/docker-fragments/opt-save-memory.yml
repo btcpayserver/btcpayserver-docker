@@ -5,35 +5,35 @@ services:
   bitcoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
-        dbcache=150
-        maxmempool=100
+        dbcache=50
+        maxmempool=50
   bgoldd:
     environment:
       BITCOIN_EXTRA_ARGS: |
-        dbcache=150
-        maxmempool=100
+        dbcache=50
+        maxmempool=50
   feathercoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
-        dbcache=150
-        maxmempool=100
+        dbcache=50
+        maxmempool=50
   groestlcoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
-        dbcache=150
-        maxmempool=100
+        dbcache=50
+        maxmempool=50
   litecoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
-        dbcache=150
-        maxmempool=100
+        dbcache=50
+        maxmempool=50
   viacoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
-        dbcache=150
-        maxmempool=100
+        dbcache=50
+        maxmempool=50
   monacoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
-        dbcache=150
-        maxmempool=100
+        dbcache=50
+        maxmempool=50
