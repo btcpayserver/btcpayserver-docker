@@ -38,7 +38,7 @@ services:
     links:
       - clightning_groestlcoin
   clightning_groestlcoin_spark:
-    image: shesek/spark-wallet:0.2.0-WIP
+    image: groestlcoin/spark-wallet:latest
     stop_signal: SIGKILL
     restart: unless-stopped
     environment:
