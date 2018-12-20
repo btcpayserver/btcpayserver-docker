@@ -21,8 +21,6 @@ services:
         NBXPLORER_CHAINS: "btg"
         NBXPLORER_BTGRPCURL: http://bgoldd:43782/
         NBXPLORER_BTGNODEENDPOINT: bgoldd:39388
-      links:
-        - bgoldd
       volumes:
         - "bgold_datadir:/root/.bitcoingold"
   btcpayserver:

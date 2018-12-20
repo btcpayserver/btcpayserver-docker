@@ -21,8 +21,6 @@ services:
         NBXPLORER_CHAINS: "grs"
         NBXPLORER_GRSRPCURL: http://groestlcoind:43782/
         NBXPLORER_GRSNODEENDPOINT: groestlcoind:39388
-      links:
-        - groestlcoind
       volumes:
         - "groestlcoin_datadir:/root/.groestlcoin"
   btcpayserver:
