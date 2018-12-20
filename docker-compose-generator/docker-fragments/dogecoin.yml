@@ -31,8 +31,6 @@ services:
         NBXPLORER_DOGENODEENDPOINT: dogecoind:22556
         NBXPLORER_DOGERPCUSER: ceiwHEbqWI83
         NBXPLORER_DOGERPCPASSWORD: DwubwWsoo3
-      links:
-        - dogecoind
       volumes:
         - "dogecoin_datadir:/root/.dogecoin"
   btcpayserver:

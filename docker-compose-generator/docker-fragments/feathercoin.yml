@@ -21,8 +21,6 @@ services:
         NBXPLORER_CHAINS: "ftc"
         NBXPLORER_FTCRPCURL: http://feathercoind:43782/
         NBXPLORER_FTCNODEENDPOINT: feathercoind:39388
-      links:
-        - feathercoind
       volumes:
         - "feathercoin_datadir:/root/.feathercoin"
   btcpayserver:

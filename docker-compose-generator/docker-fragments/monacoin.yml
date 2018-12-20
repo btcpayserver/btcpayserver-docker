@@ -21,8 +21,6 @@ services:
         NBXPLORER_CHAINS: "mona"
         NBXPLORER_MONARPCURL: http://monacoind:43782/
         NBXPLORER_MONANODEENDPOINT: monacoind:39388
-      links:
-        - monacoind
       volumes:
         - "monacoin_datadir:/root/.monacoin"
   btcpayserver:

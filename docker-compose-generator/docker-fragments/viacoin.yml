@@ -21,8 +21,6 @@ services:
         NBXPLORER_CHAINS: "via"
         NBXPLORER_VIARPCURL: http://viacoind:43782/
         NBXPLORER_VIANODEENDPOINT: viacoind:39388
-      links:
-        - viacoind
       volumes:
         - "viacoin_datadir:/root/.viacoin"
   btcpayserver:
