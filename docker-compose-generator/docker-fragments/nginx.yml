@@ -13,8 +13,6 @@ services:
       - "nginx_vhost:/etc/nginx/vhost.d"
       - "nginx_html:/usr/share/nginx/html"
       - "nginx_certs:/etc/nginx/certs:ro"
-    links:
-      - btcpayserver
 
   nginx-gen:
     restart: unless-stopped
@@ -29,6 +27,7 @@ services:
       - "nginx_certs:/etc/nginx/certs:ro"
     entrypoint: /usr/local/bin/docker-gen -notify-sighup nginx -watch -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
     links:
+      - btcpayserver
       - nginx
 
   letsencrypt-nginx-proxy-companion:
