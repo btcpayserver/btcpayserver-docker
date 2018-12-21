@@ -33,7 +33,7 @@ services:
     environment:
       NETWORK: ${NBITCOIN_NETWORK:-regtest}
       COOKIE_FILE: /data/.cookie
-      CHARGE_URL: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}${BTCPAY_ROOTPATH:-/}ligthning-charge/btc/
+      CHARGE_URL: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}${BTCPAY_ROOTPATH:-/}lightning-charge/btc/
     volumes:
       - "clightning_bitcoin_datadir:/etc/lightning"
       - "clightning_bitcoin_charge:/data"
@@ -59,7 +59,7 @@ services:
     environment:
       BTCPAY_BTCLIGHTNING: "type=clightning;server=unix://etc/clightning_bitcoin/lightning-rpc"
       BTCPAY_BTCEXTERNALSPARK: "server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}${BTCPAY_ROOTPATH:-/}spark/btc/;cookiefile=/etc/clightning_bitcoin_spark/.cookie"
-      BTCPAY_BTCEXTERNALCHARGE: "server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}${BTCPAY_ROOTPATH:-/}ligthning-charge/btc/;cookiefilepath=/etc/clightning_bitcoin_charge/.cookie"
+      BTCPAY_BTCEXTERNALCHARGE: "server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}${BTCPAY_ROOTPATH:-/}lightning-charge/btc/;cookiefilepath=/etc/clightning_bitcoin_charge/.cookie"
     volumes:
       - "clightning_bitcoin_datadir:/etc/clightning_bitcoin"
       - "clightning_bitcoin_spark:/etc/clightning_bitcoin_spark"
