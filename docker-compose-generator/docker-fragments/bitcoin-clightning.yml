@@ -33,7 +33,7 @@ services:
     environment:
       NETWORK: ${NBITCOIN_NETWORK:-regtest}
       COOKIE_FILE: /data/.cookie
-      CHARGE_URL: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}${BTCPAY_ROOTPATH:-/}lightning-charge/btc/
+      URL: {BTCPAY_ROOTPATH:-/}lightning-charge/btc/
     volumes:
       - "clightning_bitcoin_datadir:/etc/lightning"
       - "clightning_bitcoin_charge:/data"
