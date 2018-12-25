@@ -42,8 +42,7 @@ services:
     links:
       - clightning_bitcoin
   clightning_bitcoin_spark:
-    image: shesek/spark-wallet:0.2.1-standalone
-    stop_signal: SIGKILL
+    image: shesek/spark-wallet:0.2.2-standalone
     restart: unless-stopped
     environment:
       NETWORK: ${NBITCOIN_NETWORK:-regtest}
