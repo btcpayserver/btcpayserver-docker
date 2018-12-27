@@ -3,6 +3,7 @@ version: "3"
 services:
   lnd_bitcoin:
     image: btcpayserver/lnd:v0.5.1-beta
+    stop_signal: SIGKILL
     container_name: btcpayserver_lnd_bitcoin
     restart: unless-stopped
     environment:
@@ -40,8 +41,8 @@ services:
   btcpayserver:
     environment:
       BTCPAY_BTCLIGHTNING: "type=lnd-rest;server=http://lnd_bitcoin:8080/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon;allowinsecure=true"
-      BTCPAY_BTCEXTERNALLNDGRPC: "type=lnd-grpc;server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon"
-      BTCPAY_BTCEXTERNALLNDREST: "type=lnd-rest;server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/lnd-rest/btc/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon"
+      BTCPAY_BTCEXTERNALLNDGRPC: "type=lnd-grpc;server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon;macaroondirectorypath=/etc/lnd_bitcoin"
+      BTCPAY_BTCEXTERNALLNDREST: "type=lnd-rest;server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/lnd-rest/btc/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon;macaroondirectorypath=/etc/lnd_bitcoin"
     volumes:
       - "lnd_bitcoin_datadir:/etc/lnd_bitcoin"
     links:

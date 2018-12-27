@@ -22,8 +22,6 @@ services:
         NBXPLORER_CHAINS: "btc"
         NBXPLORER_BTCRPCURL: http://bitcoind:43782/
         NBXPLORER_BTCNODEENDPOINT: bitcoind:39388
-      links:
-        - bitcoind
       volumes:
         - "bitcoin_datadir:/root/.bitcoin"
   btcpayserver:

@@ -21,8 +21,6 @@ services:
         NBXPLORER_CHAINS: "dash"
         NBXPLORER_DASHRPCURL: http://dashd:9998/
         NBXPLORER_DASHNODEENDPOINT: dashd:9999
-      links:
-        - dashd
       volumes:
         - "dash_datadir:/root/.dashcore"
   btcpayserver:

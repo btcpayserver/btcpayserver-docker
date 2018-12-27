@@ -175,7 +175,6 @@ upstream {{ $upstream_name }} {
 {{/* Get the VIRTUAL_ROOT By containers w/ use fastcgi root */}}
 {{ $vhost_root := or (first (groupByKeys $containers "Env.VIRTUAL_ROOT")) "/var/www/public" }}
 
-
 {{/* Get the first cert name defined by containers w/ the same vhost */}}
 {{ $certName := (first (groupByKeys $containers "Env.CERT_NAME")) }}
 
@@ -321,6 +320,11 @@ server {
 		{{ if (eq $serviceName "clightning_bitcoin_spark") }}
 	location /spark/btc/ {
 		proxy_pass http://clightning_bitcoin_spark:9737/;
+	}
+		{{ end }}
+		{{ if (eq $serviceName "clightning_bitcoin_charge") }}
+	location /lightning-charge/btc/ {
+		proxy_pass http://clightning_bitcoin_charge:9112/;
 	}
 		{{ end }}
 		{{ if (eq $serviceName "clightning_groestlcoin_spark") }}
