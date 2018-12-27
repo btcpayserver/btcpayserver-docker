@@ -333,7 +333,7 @@ server {
 	}
 		{{ end }}	
 		{{ if (eq $serviceName "clightning_groestlcoin_charge") }}
-	location /lightning-charge/btc/ {
+	location /lightning-charge/grs/ {
 		proxy_pass http://clightning_groestlcoin_charge:9112/;
 	}
 		

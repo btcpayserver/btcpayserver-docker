@@ -46,7 +46,7 @@ services:
     environment:
       BTCPAY_GRSLIGHTNING: "type=clightning;server=unix://etc/clightning_groestlcoin/lightning-rpc"
       BTCPAY_GRSEXTERNALSPARK: "server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}${BTCPAY_ROOTPATH:-/}spark/grs;cookiefile=/etc/clightning_groestlcoin_spark/.cookie"
-      BTCPAY_BTCEXTERNALCHARGE: "server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}${BTCPAY_ROOTPATH:-/}lightning-charge/grs/;cookiefilepath=/etc/clightning_groestlcoin_charge/.cookie"
+      BTCPAY_GRSEXTERNALCHARGE: "server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}${BTCPAY_ROOTPATH:-/}lightning-charge/grs/;cookiefilepath=/etc/clightning_groestlcoin_charge/.cookie"
     volumes:
       - "clightning_groestlcoin_datadir:/etc/clightning_groestlcoin"
       - "clightning_groestlcoin_spark:/etc/clightning_groestlcoin_spark"
@@ -54,7 +54,7 @@ services:
     links:
       - clightning_groestlcoin
   clightning_groestlcoin_spark:
-    image: groestlcoin/spark-wallet:v0.2.1-2
+    image: groestlcoin/spark-wallet:v0.2.2
     stop_signal: SIGKILL
     restart: unless-stopped
     environment:
