@@ -28,17 +28,33 @@ services:
     links:
       - nbxplorer
       - groestlcoind
+  clightning_groestlcoin_charge:
+    image: groestlcoin/groestlcoin-lightning-charge:version-0.4.6
+    restart: unless-stopped
+    environment:
+      NETWORK: ${NBITCOIN_NETWORK:-regtest}
+      COOKIE_FILE: /data/.cookie
+      URL: ${BTCPAY_ROOTPATH:-/}lightning-charge/grs/
+    volumes:
+      - "clightning_groestlcoin_datadir:/etc/lightning"
+      - "clightning_groestlcoin_charge:/data"
+    expose:
+      - "9112"
+    links:
+      - clightning_groestlcoin
   btcpayserver:
     environment:
       BTCPAY_GRSLIGHTNING: "type=clightning;server=unix://etc/clightning_groestlcoin/lightning-rpc"
       BTCPAY_GRSEXTERNALSPARK: "server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}${BTCPAY_ROOTPATH:-/}spark/grs;cookiefile=/etc/clightning_groestlcoin_spark/.cookie"
+      BTCPAY_BTCEXTERNALCHARGE: "server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}${BTCPAY_ROOTPATH:-/}lightning-charge/grs/;cookiefilepath=/etc/clightning_groestlcoin_charge/.cookie"
     volumes:
       - "clightning_groestlcoin_datadir:/etc/clightning_groestlcoin"
       - "clightning_groestlcoin_spark:/etc/clightning_groestlcoin_spark"
+      - "clightning_groestlcoin_charge:/etc/clightning_groestlcoin_charge"
     links:
       - clightning_groestlcoin
   clightning_groestlcoin_spark:
-    image: groestlcoin/spark-wallet:v0.2.1-1
+    image: groestlcoin/spark-wallet:v0.2.1-2
     stop_signal: SIGKILL
     restart: unless-stopped
     environment:
@@ -53,4 +69,5 @@ services:
     - "9739"
 volumes:
   clightning_groestlcoin_datadir:
+  clightning_groestlcoin_charge:
   clightning_groestlcoin_spark:

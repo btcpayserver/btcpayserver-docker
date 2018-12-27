@@ -331,7 +331,13 @@ server {
 	location /spark/grs/ {
 		proxy_pass http://clightning_groestlcoin_spark:9739/;
 	}
-		{{ end }}		
+		{{ end }}	
+		{{ if (eq $serviceName "clightning_groestlcoin_charge") }}
+	location /lightning-charge/btc/ {
+		proxy_pass http://clightning_groestlcoin_charge:9112/;
+	}
+		
+		
 	{{ end }}
 }
 
