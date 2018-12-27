@@ -2,7 +2,7 @@ version: "3"
 
 services:
   clightning_groestlcoin:
-    image: groestlcoin/lightning:latest
+    image: groestlcoin/lightning:v0.6.2-2
     stop_signal: SIGKILL
     container_name: btcpayserver_clightning_groestlcoin
     restart: unless-stopped
@@ -38,7 +38,7 @@ services:
     links:
       - clightning_groestlcoin
   clightning_groestlcoin_spark:
-    image: groestlcoin/spark-wallet:latest
+    image: groestlcoin/spark-wallet:v0.2.1-1
     stop_signal: SIGKILL
     restart: unless-stopped
     environment:
