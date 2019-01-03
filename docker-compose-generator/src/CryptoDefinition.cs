@@ -64,7 +64,8 @@ namespace DockerGenerator
                 new CryptoDefinition()
                 {
                     Crypto = "grs",
-                    CryptoFragment = "groestlcoin"
+                    CryptoFragment = "groestlcoin",
+                    CLightningFragment = "groestlcoin-clightning",
                 },
                 new CryptoDefinition()
                 {
