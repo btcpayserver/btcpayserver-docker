@@ -2,7 +2,7 @@ version: "3"
 
 services:
   clightning_bitcoin:
-    image: nicolasdorier/clightning:v0.6.2-3
+    image: btcpayserver/lightning:v0.6.3-rc1-dev
     stop_signal: SIGKILL
     container_name: btcpayserver_clightning_bitcoin
     restart: unless-stopped
