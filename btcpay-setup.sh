@@ -230,11 +230,23 @@ if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; t
             2>error
     fi
     if ! [ -x "$(command -v docker)" ]; then
-        echo "Trying to install docker..."
-        curl -fsSL https://get.docker.com -o get-docker.sh
-        chmod +x get-docker.sh
-        sh get-docker.sh
-        rm get-docker.sh
+        if [[ "$(uname -m)" == "x86_64" ]] || [[ "$(uname -m)" == "armv7l" ]]; then
+            echo "Trying to install docker..."
+            curl -fsSL https://get.docker.com -o get-docker.sh
+            chmod +x get-docker.sh
+            sh get-docker.sh
+            rm get-docker.sh
+        elif [[ "$(uname -m)" == "aarch64" ]]; then
+            echo "Trying to install docker for armv7 on a aarch64 board..."
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+            RELEASE=$(lsb_release -cs)
+            if [[ "$RELEASE" == "bionic" ]]; then
+                RELEASE=xenial
+            fi
+            add-apt-repository "deb https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") $RELEASE stable"
+            apt-get update -y
+            apt-get install -y docker-ce:armhf
+        fi
     fi
     if ! [ -x "$(command -v docker-compose)" ]; then
         if [[ "$(uname -m)" == "x86_64" ]]; then
