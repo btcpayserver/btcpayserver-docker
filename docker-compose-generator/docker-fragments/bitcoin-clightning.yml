@@ -2,8 +2,7 @@ version: "3"
 
 services:
   clightning_bitcoin:
-    image: btcpayserver/lightning:v0.6.3-2
-    stop_signal: SIGKILL
+    image: btcpayserver/lightning:v0.6.3-3
     container_name: btcpayserver_clightning_bitcoin
     restart: unless-stopped
     environment:
