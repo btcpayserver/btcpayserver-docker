@@ -2,8 +2,7 @@ version: "3"
 
 services:
   lnd_litecoin:
-    image: btcpayserver/lnd:v0.5.1-beta
-    stop_signal: SIGKILL
+    image: btcpayserver/lnd:v0.5.1-beta-2
     container_name: btcpayserver_lnd_litecoin
     restart: unless-stopped
     environment:
