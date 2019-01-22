@@ -1,0 +1,37 @@
+version: '3'
+services:
+    librepatron:
+        container_name: librepatron
+        restart: unless-stopped
+        image: jvandrew/librepatron:0.6.69
+        expose:
+            - "8006"
+        volumes:
+            - data-volume:/var/lib/db
+            - config-volume:/var/lib/config
+        environment:
+            COMMENTS_SUBURI: "1"
+            SITEURL: ${BTCPAY_PROTOCOL:-https}://${LIBREPATRON_HOST}
+            SECRET_KEY_LOCATION: /var/lib/db/key
+            DATABASE_URL: sqlite:////var/lib/db/app.db
+            VIRTUAL_HOST: ${LIBREPATRON_HOST}
+            LETSENCRYPT_HOST: ${LIBREPATRON_HOST}
+            LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}
+            VIRTUAL_SERVICE_NAME: "librepatron"
+
+    isso:
+        container_name: isso
+        restart: unless-stopped
+        stop_signal: SIGKILL
+        image: jvandrew/isso:atron.22
+        expose:
+            - "8080"
+        volumes:
+            - data-volume:/var/lib/db
+            - config-volume:/var/lib/config
+    btcpayserver:
+        environment:
+            BTCPAY_EXTERNALSERVICES: "LibrePatron:${BTCPAY_PROTOCOL:-https}://${LIBREPATRON_HOST};"
+volumes:
+    data-volume:
+    config-volume:

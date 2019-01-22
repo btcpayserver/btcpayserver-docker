@@ -126,6 +126,10 @@ You can read [the article](https://medium.com/@BtcpayServer/hosting-btcpay-serve
 * `BTCPAYGEN_DOCKER_IMAGE`: Optional, Specify which generator image to use if you have customized the C# generator. Set to `btcpayserver/docker-compose-generator:local` to build the generator locally at runtime.
 * `BTCPAY_IMAGE`: Optional, Specify which btcpayserver image to use if you have a customized btcpayserver.
 
+Additionally, there are specific environment variables for some addons:
+
+* `LIBREPATRON_HOST`: If libre patron is activated, The hostname of your libre patron website (eg. `librepatron.example.com`)
+
 # Tooling
 
 A wide variety of useful scripts are available once BTCPay is installed:
@@ -156,9 +160,16 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-save-storage-xxs](docker-compose-generator/docker-fragments/opt-save-storage-xxs.yml) will keep around 2 weeks of blocks (prune BTC for 5 GB) (lightning not supported)
 * [opt-lnd-autopilot](docker-compose-generator/docker-fragments/opt-lnd-autopilot.yml) will activate auto pilot on LND. (5 channels, 60% of allocation)
 * [opt-save-memory](docker-compose-generator/docker-fragments/opt-save-memory.yml) will decrease the default dbcache at the expense of longer synchronization time (Useful if your machine is less than 2GB)
-* [opt-add-btcqbo](docker-compose-generator/docker-fragments/opt-add-btcqbo.yml) will allow you to create an invoice on Quickbooks which include a way for your customer to pay on BTCPay Server (More information on this [github repository](https://github.com/JeffVandrewJr/btcqbo/), this plugin is maintained by [JeffVandrewJr](https://github.com/JeffVandrewJr), see more on [this video](https://www.youtube.com/watch?v=srgwL9ozg6c))
+* [opt-add-btcqbo](docker-compose-generator/docker-fragments/opt-add-btcqbo.yml) will allow you to create an invoice on Quickbooks which include a way for your customer to pay on BTCPay Server (More information on this [github repository](https://github.com/JeffVandrewJr/btcqbo/), this add-on is maintained by [JeffVandrewJr](https://github.com/JeffVandrewJr), see more on [this video](https://www.youtube.com/watch?v=srgwL9ozg6c))
+* [opt-add-librepatron](docker-compose-generator/docker-fragments/opt-add-librepatron.yml), for a self-hosted Patreon alternative backed by BTCPay (More information on this [github repository](https://github.com/JeffVandrewJr/patron), this add-on is maintained by [JeffVandrewJr](https://github.com/JeffVandrewJr).
 
 You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).
+
+If you want to add an option to `BTCPAYGEN_ADDITIONAL_FRAGMENTS` and re-configure your install:
+```bash
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-lnd-autopilot"
+. btcpay-setup.sh -i
+```
 
 For example, if you want `btc` and `ltc` support with `nginx` and `clightning` inside `Generated/docker-compose.custom.yml`:
 

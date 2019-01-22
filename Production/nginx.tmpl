@@ -344,6 +344,21 @@ server {
 		
 	{{ end }}
 	{{ end }}
+
+	{{ if eq $service_name "librepatron" }}
+	{{ range $container := $ }}
+		{{ $serviceName := (index $container.Labels "com.docker.compose.service") }}
+		{{ if (eq $serviceName "isso") }}
+	location /isso {
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header X-Script-Name /isso;
+		proxy_set_header Host $host;
+		proxy_set_header X-Forwarded-Proto $scheme;
+		proxy_pass http://isso:8080;
+	}
+		{{ end }}
+	{{ end }}
+	{{ end }}
 }
 
 {{ end }}
