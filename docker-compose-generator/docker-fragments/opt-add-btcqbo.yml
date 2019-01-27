@@ -2,7 +2,7 @@ version: "3"
 
 services:
   btcqbo:
-    image: jvandrew/btcqbo:0.1.20
+    image: jvandrew/btcqbo:0.2.12
     environment:
       REDIS_URL: "redis://redis:6379/0"
       BTCPAY_HOST: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}
@@ -12,7 +12,7 @@ services:
     links: 
       - redis
   rq-worker:
-    image: jvandrew/btcqbo:0.1.20
+    image: jvandrew/btcqbo:0.2.12
     entrypoint: /usr/local/bin/rq
     command: worker -u redis://redis:6379/0 btcqbo
     environment:
