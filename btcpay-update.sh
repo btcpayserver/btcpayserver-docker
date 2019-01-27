@@ -36,17 +36,8 @@ if ! grep -Fxq "export COMPOSE_HTTP_TIMEOUT=\"180\"" "/etc/profile.d/btcpay-env.
     echo "Adding COMPOSE_HTTP_TIMEOUT=180 in btcpay-env.sh"
 fi
 
-for scriptname in *.sh; do
-    if [ "$scriptname" == "build.sh" ] || \
-       [ "$scriptname" == "build-pregen.sh" ] || \
-       [ "$scriptname" == "btcpay-setclocale.sh" ]; then
-        continue;
-    fi
-    echo "Adding symlink of $scriptname to /usr/bin"
-    chmod +x $scriptname
-    [ -e /usr/bin/$scriptname ] && rm /usr/bin/$scriptname
-    ln -s "$(pwd)/$scriptname" /usr/bin
-done
+. helpers.sh
+install_tooling
 
 cd "`dirname $BTCPAY_ENV_FILE`"
 docker-compose -f $BTCPAY_DOCKER_COMPOSE up -d --remove-orphans -t "${COMPOSE_HTTP_TIMEOUT:-180}"
