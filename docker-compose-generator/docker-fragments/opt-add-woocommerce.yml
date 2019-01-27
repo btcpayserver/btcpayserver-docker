@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  woocommerce:
+    image: btcpayserver/docker-woocommerce:3.0.5
+    environment:
+      WOOCOMMERCE_HOST: ${WOOCOMMERCE_HOST}
+      WORDPRESS_DB_HOST: mariadb
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      LETSENCRYPT_HOST: ${WOOCOMMERCE_HOST}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}
+      VIRTUAL_HOST: ${WOOCOMMERCE_HOST}
+      VIRTUAL_SERVICE_NAME: "woocommerce"
+    expose:
+      - "80"
+    links:
+      - mariadb
+    volumes:
+      - "woocommerce_html:/var/www/html"
+
+  mariadb:
+    image: mariadb:10.3
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpressdb
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    expose:
+      - "3306"
+    volumes:
+      - "mariadb_datadir:/var/lib/mysql"
+
+  btcpayserver:
+      environment:
+          BTCPAY_EXTERNALSERVICES: "WooCommerce:${BTCPAY_PROTOCOL:-https}://${WOOCOMMERCE_HOST};"
+volumes:
+  woocommerce_html:
+  mariadb_datadir:
