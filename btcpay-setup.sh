@@ -365,15 +365,8 @@ if [[ -f "$BTCPAY_HOST_SSHKEYFILE" ]]; then
     docker cp "$BTCPAY_HOST_SSHKEYFILE" $(docker ps --filter "name=_btcpayserver_" -q):$BTCPAY_SSHKEYFILE
 fi
 
+cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"  
+. helpers.sh
+install_tooling
+
 cd $ORIGINAL_DIRECTORY
-
-for scriptname in *.sh; do
-    if [ "$scriptname" == "build.sh" -o "$scriptname" == "build-pregen.sh" ] ; then
-        continue;
-    fi
-    echo "Adding symlink of $scriptname to /usr/bin"
-    chmod +x $scriptname
-    rm /usr/bin/$scriptname &> /dev/null
-    ln -s "$(pwd)/$scriptname" /usr/bin
-done
-
