@@ -152,7 +152,10 @@ namespace DockerFileBuildHelper
         private DockerInfo GetDockerInfo(Image image)
         {
             DockerInfo dockerInfo = new DockerInfo();
-            switch (image.Name)
+            var name = $"{image.User}/{image.Name}";
+            bool firstTry = true;
+            retry:
+            switch (name)
             {
                 case "btglnd":
                     dockerInfo.DockerFilePath = "BTCPayServer.Dockerfile";
@@ -175,10 +178,61 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/Vutov/docker-bitcoin";
                     dockerInfo.GitRef = "master";
                     break;
-                case "clightning":
+                case "lightning":
                     dockerInfo.DockerFilePath = $"Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/NicolasDorier/lightning";
+                    dockerInfo.DockerFilePathARM32v7 = "linuxarm32v7.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/lightning";
                     dockerInfo.GitRef = $"basedon-{image.Tag}";
+                    break;
+                case "groestlcoin/lightning":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/Groestlcoin/lightning";
+                    dockerInfo.GitRef = $"{image.Tag}";
+                    break;
+                case "lightning-charge":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/ElementsProject/lightning-charge";
+                    dockerInfo.GitRef = $"v{image.Tag.Replace("-standalone", "")}";
+                    break;
+                case "docker-bitcoinplus":
+                    dockerInfo.DockerFilePath = $"bitcoinplus/{image.Tag}/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/ChekaZ/docker";
+                    dockerInfo.GitRef = "master";
+                    break;
+                case "groestlcoin-lightning-charge":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/Groestlcoin/groestlcoin-lightning-charge";
+                    dockerInfo.GitRef = $"v{image.Tag.Substring("version-".Length)}";
+                    break;
+                case "groestlcoin-spark":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/Groestlcoin/groestlcoin-spark";
+                    dockerInfo.GitRef = $"v{image.Tag.Substring("version-".Length)}-1";
+                    break;
+                case "librepatron":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/JeffVandrewJr/patron";
+                    dockerInfo.GitRef = $"v{image.Tag}";
+                    break;
+                case "isso":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/JeffVandrewJr/isso";
+                    dockerInfo.GitRef = $"patron.{image.Tag.Substring("atron.".Length)}";
+                    break;
+                case "docker-woocommerce":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/docker-woocommerce";
+                    dockerInfo.GitRef = $"v{image.Tag}";
+                    break;
+                case "mariadb":
+                    dockerInfo.DockerFilePath = $"{image.Tag}/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/docker-library/mariadb";
+                    dockerInfo.GitRef = $"master";
+                    break;
+                case "docker-trezarcoin":
+                    dockerInfo.DockerFilePath = $"trezarcoin/1.2.0/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/ChekaZ/docker";
+                    dockerInfo.GitRef = "master";
                     break;
                 case "lnd":
                     dockerInfo.DockerFilePath = "linuxamd64.Dockerfile";
@@ -292,7 +346,14 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"v{image.Tag.Split('-')[0]}";
                     break;
                 default:
-                    return null;
+                    if (firstTry)
+                    {
+                        name = $"{image.Name}";
+                        firstTry = false;
+                        goto retry;
+                    }
+                    else
+                        return null;
             }
             dockerInfo.DockerHubLink = image.DockerHubLink;
             dockerInfo.Image = image;

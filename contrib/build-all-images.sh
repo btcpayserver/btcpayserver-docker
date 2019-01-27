@@ -58,41 +58,55 @@ docker build -f "$DOCKERFILE" -t "kamigawabul/docker-bitcoingold:0.15.2" .
 cd - && cd ..
 
 
-# Build clightning
-# https://raw.githubusercontent.com/NicolasDorier/lightning/basedon-v0.6.2-3/Dockerfile
+# Build lightning
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.6.3-3/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building nicolasdorier/clightning:v0.6.2-3"
-git clone https://github.com/NicolasDorier/lightning clightning
-cd clightning
-git checkout basedon-v0.6.2-3
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.6.3-3/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
+echo "Building btcpayserver/lightning:v0.6.3-3"
+git clone https://github.com/btcpayserver/lightning lightning
+cd lightning
+git checkout basedon-v0.6.3-3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/clightning:v0.6.2-3" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v0.6.3-3" .
+cd - && cd ..
+
+
+# Build lightning-charge
+# https://raw.githubusercontent.com/ElementsProject/lightning-charge/v0.4.6/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building shesek/lightning-charge:0.4.6-standalone"
+git clone https://github.com/ElementsProject/lightning-charge lightning-charge
+cd lightning-charge
+git checkout v0.4.6
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "shesek/lightning-charge:0.4.6-standalone" .
 cd - && cd ..
 
 
 # Build spark-wallet
-# https://raw.githubusercontent.com/shesek/spark-wallet/v0.2.0/Dockerfile
+# https://raw.githubusercontent.com/shesek/spark-wallet/v0.2.2/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building shesek/spark-wallet:0.2.0-WIP"
+echo "Building shesek/spark-wallet:0.2.2-standalone"
 git clone https://github.com/shesek/spark-wallet spark-wallet
 cd spark-wallet
-git checkout v0.2.0
+git checkout v0.2.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shesek/spark-wallet:0.2.0-WIP" .
+docker build -f "$DOCKERFILE" -t "shesek/spark-wallet:0.2.2-standalone" .
 cd - && cd ..
 
 
 # Build lnd
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5.1-beta/linuxamd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5.1-beta-2/linuxamd64.Dockerfile
 DOCKERFILE="linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5.1-beta/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5.1-beta-2/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
-echo "Building btcpayserver/lnd:v0.5.1-beta"
+echo "Building btcpayserver/lnd:v0.5.1-beta-2"
 git clone https://github.com/btcpayserver/lnd lnd
 cd lnd
-git checkout basedon-v0.5.1-beta
+git checkout basedon-v0.5.1-beta-2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.5.1-beta" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.5.1-beta-2" .
 cd - && cd ..
 
 
@@ -112,6 +126,18 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoin:0.17.0" .
 cd - && cd ..
 
 
+# Build docker-bitcoinplus
+# https://raw.githubusercontent.com/ChekaZ/docker/master/bitcoinplus/2.7.0/Dockerfile
+DOCKERFILE="bitcoinplus/2.7.0/Dockerfile"
+echo "Building chekaz/docker-bitcoinplus:2.7.0"
+git clone https://github.com/ChekaZ/docker docker-bitcoinplus
+cd docker-bitcoinplus
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "chekaz/docker-bitcoinplus:2.7.0" .
+cd - && cd ..
+
+
 # Build docker-bitcore
 # https://raw.githubusercontent.com/dalijolijo/btcpayserver-docker-bitcore/master/btx-debian/Dockerfile
 DOCKERFILE="btx-debian/Dockerfile"
@@ -125,16 +151,16 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.30/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.47/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.30/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.47/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-echo "Building btcpayserver/btcpayserver:1.0.3.30"
+echo "Building btcpayserver/btcpayserver:1.0.3.47"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.0.3.30
+git checkout v1.0.3.47
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.30" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.47" .
 cd - && cd ..
 
 
@@ -178,6 +204,42 @@ docker build -f "$DOCKERFILE" -t "chekaz/docker-feathercoin:0.16.3" .
 cd - && cd ..
 
 
+# Build lightning
+# https://raw.githubusercontent.com/Groestlcoin/lightning/v0.6.2-2/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building groestlcoin/lightning:v0.6.2-2"
+git clone https://github.com/Groestlcoin/lightning lightning
+cd lightning
+git checkout v0.6.2-2
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "groestlcoin/lightning:v0.6.2-2" .
+cd - && cd ..
+
+
+# Build groestlcoin-lightning-charge
+# https://raw.githubusercontent.com/Groestlcoin/groestlcoin-lightning-charge/v0.4.6/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building groestlcoin/groestlcoin-lightning-charge:version-0.4.6"
+git clone https://github.com/Groestlcoin/groestlcoin-lightning-charge groestlcoin-lightning-charge
+cd groestlcoin-lightning-charge
+git checkout v0.4.6
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "groestlcoin/groestlcoin-lightning-charge:version-0.4.6" .
+cd - && cd ..
+
+
+# Build groestlcoin-spark
+# https://raw.githubusercontent.com/Groestlcoin/groestlcoin-spark/v0.2.2-1/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building groestlcoin/groestlcoin-spark:version-0.2.2"
+git clone https://github.com/Groestlcoin/groestlcoin-spark groestlcoin-spark
+cd groestlcoin-spark
+git checkout v0.2.2-1
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "groestlcoin/groestlcoin-spark:version-0.2.2" .
+cd - && cd ..
+
+
 # Build docker-groestlcoin
 # https://raw.githubusercontent.com/NicolasDorier/docker-bitcoin/master/groestlcoin/2.16.3/Dockerfile
 DOCKERFILE="groestlcoin/2.16.3/Dockerfile"
@@ -190,29 +252,31 @@ docker build -f "$DOCKERFILE" -t "nicolasdorier/docker-groestlcoin:2.16.3" .
 cd - && cd ..
 
 
-# Build clightning
-# https://raw.githubusercontent.com/NicolasDorier/lightning/basedon-v0.6.2-3/Dockerfile
+# Build lightning
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.6.3-3/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building nicolasdorier/clightning:v0.6.2-3"
-git clone https://github.com/NicolasDorier/lightning clightning
-cd clightning
-git checkout basedon-v0.6.2-3
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.6.3-3/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
+echo "Building btcpayserver/lightning:v0.6.3-3"
+git clone https://github.com/btcpayserver/lightning lightning
+cd lightning
+git checkout basedon-v0.6.3-3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/clightning:v0.6.2-3" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v0.6.3-3" .
 cd - && cd ..
 
 
 # Build lnd
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5.1-beta/linuxamd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5.1-beta-2/linuxamd64.Dockerfile
 DOCKERFILE="linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5.1-beta/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.5.1-beta-2/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
-echo "Building btcpayserver/lnd:v0.5.1-beta"
+echo "Building btcpayserver/lnd:v0.5.1-beta-2"
 git clone https://github.com/btcpayserver/lnd lnd
 cd lnd
-git checkout basedon-v0.5.1-beta
+git checkout basedon-v0.5.1-beta-2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.5.1-beta" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.5.1-beta-2" .
 cd - && cd ..
 
 
@@ -241,16 +305,16 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.2/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.11/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.2/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.11/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-echo "Building nicolasdorier/nbxplorer:2.0.0.2"
+echo "Building nicolasdorier/nbxplorer:2.0.0.11"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.0.0.2
+git checkout v2.0.0.11
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.0.0.2" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.0.0.11" .
 cd - && cd ..
 
 
@@ -295,26 +359,26 @@ cd - && cd ..
 
 
 # Build btcqbo
-# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.1.20/Dockerfile
+# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.2.12/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building jvandrew/btcqbo:0.1.20"
+echo "Building jvandrew/btcqbo:0.2.12"
 git clone https://github.com/JeffVandrewJr/btcqbo btcqbo
 cd btcqbo
-git checkout v0.1.20
+git checkout v0.2.12
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.1.20" .
+docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.2.12" .
 cd - && cd ..
 
 
 # Build btcqbo
-# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.1.20/Dockerfile
+# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.2.12/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building jvandrew/btcqbo:0.1.20"
+echo "Building jvandrew/btcqbo:0.2.12"
 git clone https://github.com/JeffVandrewJr/btcqbo btcqbo
 cd btcqbo
-git checkout v0.1.20
+git checkout v0.2.12
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.1.20" .
+docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.2.12" .
 cd - && cd ..
 
 
@@ -327,6 +391,54 @@ cd redis
 git checkout f1a8498333ae3ab340b5b39fbac1d7e1dc0d628c
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "redis:5.0.2-alpine" .
+cd - && cd ..
+
+
+# Build librepatron
+# https://raw.githubusercontent.com/JeffVandrewJr/patron/v0.6.71/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building jvandrew/librepatron:0.6.71"
+git clone https://github.com/JeffVandrewJr/patron librepatron
+cd librepatron
+git checkout v0.6.71
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "jvandrew/librepatron:0.6.71" .
+cd - && cd ..
+
+
+# Build isso
+# https://raw.githubusercontent.com/JeffVandrewJr/isso/patron.22/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building jvandrew/isso:atron.22"
+git clone https://github.com/JeffVandrewJr/isso isso
+cd isso
+git checkout patron.22
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "jvandrew/isso:atron.22" .
+cd - && cd ..
+
+
+# Build docker-woocommerce
+# https://raw.githubusercontent.com/btcpayserver/docker-woocommerce/v3.0.5/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building btcpayserver/docker-woocommerce:3.0.5"
+git clone https://github.com/btcpayserver/docker-woocommerce docker-woocommerce
+cd docker-woocommerce
+git checkout v3.0.5
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/docker-woocommerce:3.0.5" .
+cd - && cd ..
+
+
+# Build mariadb
+# https://raw.githubusercontent.com/docker-library/mariadb/master/10.3/Dockerfile
+DOCKERFILE="10.3/Dockerfile"
+echo "Building mariadb:10.3"
+git clone https://github.com/docker-library/mariadb mariadb
+cd mariadb
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "mariadb:10.3" .
 cd - && cd ..
 
 
@@ -355,6 +467,18 @@ cd traefik
 git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "traefik:latest" .
+cd - && cd ..
+
+
+# Build docker-trezarcoin
+# https://raw.githubusercontent.com/ChekaZ/docker/master/trezarcoin/1.2.0/Dockerfile
+DOCKERFILE="trezarcoin/1.2.0/Dockerfile"
+echo "Building chekaz/docker-trezarcoin:0.13.0"
+git clone https://github.com/ChekaZ/docker docker-trezarcoin
+cd docker-trezarcoin
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "chekaz/docker-trezarcoin:0.13.0" .
 cd - && cd ..
 
 
