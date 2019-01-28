@@ -302,6 +302,8 @@ This will generate your docker-compose in the `Generated` folder, which you can 
 
 Note that BTCPayServer developers will not spend excessive time testing your image, so make sure it works.
 
+# Support
+
 # FAQ
 
 ## How can I modify my environment?
