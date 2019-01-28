@@ -21,11 +21,13 @@ namespace DockerFileBuildHelper
             }
         }
 
+        public string Source { get; set; }
+
         public static Image Parse(string str)
         {
             //${BTCPAY_IMAGE: -btcpayserver / btcpayserver:1.0.3.21}
             var variableMatch = Regex.Match(str, @"\$\{[^-]+-([^\}]+)\}");
-            if(variableMatch.Success)
+            if (variableMatch.Success)
             {
                 str = variableMatch.Groups[1].Value;
             }
@@ -40,15 +42,21 @@ namespace DockerFileBuildHelper
                 img.Tag = "latest";
             return img;
         }
-
         public override string ToString()
+        {
+            return ToString(true);
+        }
+        public string ToString(bool includeTag)
         {
             StringBuilder builder = new StringBuilder();
             if (!String.IsNullOrWhiteSpace(User))
                 builder.Append($"{User}/");
             builder.Append($"{Name}");
-            if (!String.IsNullOrWhiteSpace(Tag))
-                builder.Append($":{Tag}");
+            if (includeTag)
+            {
+                if (!String.IsNullOrWhiteSpace(Tag))
+                    builder.Append($":{Tag}");
+            }
             return builder.ToString();
         }
     }
