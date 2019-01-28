@@ -59,16 +59,16 @@ cd - && cd ..
 
 
 # Build lightning
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.6.3-3/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.6.3-4/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.6.3-3/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.6.3-4/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
-echo "Building btcpayserver/lightning:v0.6.3-3"
+echo "Building btcpayserver/lightning:v0.6.3-4"
 git clone https://github.com/btcpayserver/lightning lightning
 cd lightning
-git checkout basedon-v0.6.3-3
+git checkout basedon-v0.6.3-4
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v0.6.3-3" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v0.6.3-4" .
 cd - && cd ..
 
 
@@ -151,16 +151,16 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.47/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.48/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.47/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.48/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-echo "Building btcpayserver/btcpayserver:1.0.3.47"
+echo "Building btcpayserver/btcpayserver:1.0.3.48"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.0.3.47
+git checkout v1.0.3.48
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.47" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.48" .
 cd - && cd ..
 
 
@@ -253,16 +253,16 @@ cd - && cd ..
 
 
 # Build lightning
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.6.3-3/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.6.3-4/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.6.3-3/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.6.3-4/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
-echo "Building btcpayserver/lightning:v0.6.3-3"
+echo "Building btcpayserver/lightning:v0.6.3-4"
 git clone https://github.com/btcpayserver/lightning lightning
 cd lightning
-git checkout basedon-v0.6.3-3
+git checkout basedon-v0.6.3-4
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v0.6.3-3" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v0.6.3-4" .
 cd - && cd ..
 
 
@@ -321,6 +321,8 @@ cd - && cd ..
 # Build nginx
 # https://raw.githubusercontent.com/nginxinc/docker-nginx/master/stable/stretch/Dockerfile
 DOCKERFILE="stable/stretch/Dockerfile"
+# https://raw.githubusercontent.com/nginxinc/docker-nginx/master/stable/stretch/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="stable/stretch/Dockerfile"
 echo "Building nginx:stable"
 git clone https://github.com/nginxinc/docker-nginx nginx
 cd nginx

@@ -382,6 +382,7 @@ namespace DockerFileBuildHelper
                     break;
                 case "nginx":
                     dockerInfo.DockerFilePath = $"stable/stretch/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"stable/stretch/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/nginxinc/docker-nginx";
                     dockerInfo.GitRef = $"master";
                     break;
