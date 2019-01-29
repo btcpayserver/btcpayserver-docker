@@ -151,16 +151,16 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.49/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.50/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.49/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.50/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-echo "Building btcpayserver/btcpayserver:1.0.3.49"
+echo "Building btcpayserver/btcpayserver:1.0.3.50"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.0.3.49
+git checkout v1.0.3.50
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.49" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.50" .
 cd - && cd ..
 
 
@@ -361,26 +361,26 @@ cd - && cd ..
 
 
 # Build btcqbo
-# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.2.12/Dockerfile
+# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.3.13/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building jvandrew/btcqbo:0.2.12"
+echo "Building jvandrew/btcqbo:0.3.13"
 git clone https://github.com/JeffVandrewJr/btcqbo btcqbo
 cd btcqbo
-git checkout v0.2.12
+git checkout v0.3.13
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.2.12" .
+docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.3.13" .
 cd - && cd ..
 
 
 # Build btcqbo
-# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.2.12/Dockerfile
+# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.3.13/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building jvandrew/btcqbo:0.2.12"
+echo "Building jvandrew/btcqbo:0.3.13"
 git clone https://github.com/JeffVandrewJr/btcqbo btcqbo
 cd btcqbo
-git checkout v0.2.12
+git checkout v0.3.13
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.2.12" .
+docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.3.13" .
 cd - && cd ..
 
 
@@ -397,14 +397,14 @@ cd - && cd ..
 
 
 # Build librepatron
-# https://raw.githubusercontent.com/JeffVandrewJr/patron/v0.6.71/Dockerfile
+# https://raw.githubusercontent.com/JeffVandrewJr/patron/v0.6.76/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building jvandrew/librepatron:0.6.71"
+echo "Building jvandrew/librepatron:0.6.76"
 git clone https://github.com/JeffVandrewJr/patron librepatron
 cd librepatron
-git checkout v0.6.71
+git checkout v0.6.76
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/librepatron:0.6.71" .
+docker build -f "$DOCKERFILE" -t "jvandrew/librepatron:0.6.76" .
 cd - && cd ..
 
 
