@@ -3,13 +3,14 @@ services:
     librepatron:
         container_name: librepatron
         restart: unless-stopped
-        image: jvandrew/librepatron:0.6.76
+        image: jvandrew/librepatron:0.6.78
         expose:
             - "8006"
         volumes:
             - data-volume:/var/lib/db
             - config-volume:/var/lib/config
         environment:
+            BTCPAY_HOST: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}
             COMMENTS_SUBURI: "1"
             SITEURL: ${BTCPAY_PROTOCOL:-https}://${LIBREPATRON_HOST}
             SECRET_KEY_LOCATION: /var/lib/db/key
