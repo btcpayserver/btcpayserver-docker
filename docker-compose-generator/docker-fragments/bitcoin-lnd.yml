@@ -48,7 +48,7 @@ services:
       BITCOIND_CONFIG_PATH: /etc/bitcoin/bitcoin.conf
       RTL_SSO: 1
       RTL_COOKIE_PATH: /data/.cookie
-      LOGOUT_REDIRECT_LINK: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/server/users
+      LOGOUT_REDIRECT_LINK: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/server/services
       VIRTUAL_SERVICE_NAME: "rtl"
     volumes:
       - "bitcoin_datadir:/etc/bitcoin"
