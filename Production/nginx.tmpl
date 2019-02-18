@@ -320,6 +320,15 @@ server {
 		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 	}
 		{{ end }}
+		{{ if (eq $serviceName "lnd_bitcoin_rtl") }}
+	location /rtl/ {
+		proxy_pass http://lnd_bitcoin_rtl:3000;
+		proxy_redirect off;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	}
+		{{ end }}
 		{{ if (eq $serviceName "clightning_bitcoin_spark") }}
 	location /spark/btc/ {
 		proxy_pass http://clightning_bitcoin_spark:9737/;
