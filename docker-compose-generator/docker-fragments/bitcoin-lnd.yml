@@ -45,17 +45,14 @@ services:
       MACAROON_PATH: /etc/lnd
       LND_CONFIG_PATH: /etc/lnd/lnd.conf
       RTL_CONFIG_PATH: /data/RTL.conf
-      BITCOIND_CONFIG_PATH: /etc/bitcoin/bitcoin.conf
+      BITCOIND_CONFIG_PATH: etc/bitcoin/bitcoin.conf
       RTL_SSO: 1
       RTL_COOKIE_PATH: /data/.cookie
       LOGOUT_REDIRECT_LINK: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/server/services
-      VIRTUAL_SERVICE_NAME: "rtl"
     volumes:
       - "bitcoin_datadir:/etc/bitcoin"
       - "lnd_bitcoin_datadir:/etc/lnd"
       - "lnd_bitcoin_rtl_datadir:/data"
-    links:
-      - lnd_bitcoin
     expose:
       - "3000"
 
@@ -69,7 +66,6 @@ services:
       - "lnd_bitcoin_rtl_datadir:/etc/lnd_bitcoin_rtl"
     links:
       - lnd_bitcoin
-      - lnd_bitcoin_rtl
 
   bitcoind:
     environment:
