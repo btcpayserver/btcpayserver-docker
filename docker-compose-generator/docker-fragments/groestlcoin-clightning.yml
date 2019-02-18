@@ -54,7 +54,7 @@ services:
     links:
       - clightning_groestlcoin
   clightning_groestlcoin_spark:
-    image: groestlcoin/groestlcoin-spark:version-0.2.2
+    image: groestlcoin/groestlcoin-spark:version-0.2.4
     stop_signal: SIGKILL
     restart: unless-stopped
     environment:
