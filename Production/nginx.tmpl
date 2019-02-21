@@ -207,6 +207,7 @@ server {
 {{ end }}
 
 server {
+	client_max_body_size 100M;
 	server_name {{ $host }};
 	listen 443 ssl http2 {{ $default_server }};
 	{{ if $enable_ipv6 }}
