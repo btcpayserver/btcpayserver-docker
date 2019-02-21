@@ -38,16 +38,17 @@ services:
       - bitcoind
 
   lnd_bitcoin_rtl:
-    image: shahanafarooqui/rtl:0.2.5
+    image: shahanafarooqui/rtl:0.2.6
     restart: unless-stopped
     environment:
       LND_SERVER_URL: http://lnd_bitcoin:8080/v1
       MACAROON_PATH: /etc/lnd
       LND_CONFIG_PATH: /etc/lnd/lnd.conf
       RTL_CONFIG_PATH: /data/RTL.conf
-      BITCOIND_CONFIG_PATH: /etc/bitcoin/bitcoin.conf
+      BITCOIND_CONFIG_PATH: etc/bitcoin/bitcoin.conf
       RTL_SSO: 1
       RTL_COOKIE_PATH: /data/.cookie
+      REVERSE_PROXY: 1
       LOGOUT_REDIRECT_LINK: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/server/services
     volumes:
       - "bitcoin_datadir:/etc/bitcoin"
