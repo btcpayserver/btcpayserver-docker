@@ -311,7 +311,7 @@ server {
 	}
 		{{ end }}
 		{{ if (eq $serviceName "lnd_bitcoin_rtl") }}
-	location /rtl/btc/ {
+	location /rtl/ {
 		proxy_pass http://lnd_bitcoin_rtl:3000/rtl/;
 	}
 		{{ end }}
