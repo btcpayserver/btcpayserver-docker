@@ -59,7 +59,7 @@ services:
   btcpayserver:
     environment:
       BTCPAY_BTCLIGHTNING: "type=lnd-rest;server=http://lnd_bitcoin:8080/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon;allowinsecure=true"
-      BTCPAY_BTCEXTERNALSPARK: "server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}${BTCPAY_ROOTPATH:-/}rtl/btc/;cookiefile=/etc/lnd_bitcoin_rtl/.cookie"
+      BTCPAY_BTCEXTERNALRTL: "server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}${BTCPAY_ROOTPATH:-/}rtl/btc/;cookiefile=/etc/lnd_bitcoin_rtl/.cookie"
       BTCPAY_BTCEXTERNALLNDGRPC: "type=lnd-grpc;server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon;macaroondirectorypath=/etc/lnd_bitcoin"
       BTCPAY_BTCEXTERNALLNDREST: "type=lnd-rest;server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/lnd-rest/btc/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon;macaroondirectorypath=/etc/lnd_bitcoin"
     volumes:
