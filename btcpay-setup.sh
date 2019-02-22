@@ -62,6 +62,7 @@ Environment variables:
     BTCPAY_HOST_SSHKEYFILE: Optional, SSH private key that BTCPay can use to connect to this VM's SSH server. This key will be copied on BTCPay's data directory
     BTCPAYGEN_DOCKER_IMAGE: Allows you to specify a custom docker image for the generator (Default: btcpayserver/docker-compose-generator)
     BTCPAY_IMAGE: Allows you to specify the btcpayserver docker image to use over the default version. (Default: current stable version of btcpayserver)
+    BTCPAY_PROTOCOL: Allows you to specify the external transport protocol of BTCPayServer. (Default: https)
 Add-on specific variables:
     LIBREPATRON_HOST: If libre patron is activated with opt-add-librepatron, the hostname of your libre patron website (eg. librepatron.example.com)
     WOOCOMMERCE_HOST: If woocommerce is activated with opt-add-woocommerce, the hostname of your woocommerce website (eg. store.example.com)
@@ -98,6 +99,7 @@ fi
 : "${BTCPAYGEN_REVERSEPROXY:=nginx}"
 : "${BTCPAYGEN_LIGHTNING:=none}"
 : "${ACME_CA_URI:=https://acme-v01.api.letsencrypt.org/directory}"
+: "${BTCPAY_PROTOCOL:=https}"
 
 OLD_BTCPAY_DOCKER_COMPOSE=$BTCPAY_DOCKER_COMPOSE
 ORIGINAL_DIRECTORY=$(pwd)
@@ -139,6 +141,7 @@ fi
 echo "
 -------SETUP-----------
 Parameters passed:
+BTCPAY_PROTOCOL:$BTCPAY_PROTOCOL
 BTCPAY_HOST:$BTCPAY_HOST
 LIBREPATRON_HOST:$LIBREPATRON_HOST
 WOOCOMMERCE_HOST:$WOOCOMMERCE_HOST
@@ -212,6 +215,7 @@ echo -e "BTCPay Server environment variables successfully saved in /etc/profile.
 # Set .env file
 touch $BTCPAY_ENV_FILE
 echo "
+BTCPAY_PROTOCOL=$BTCPAY_PROTOCOL
 BTCPAY_HOST=$BTCPAY_HOST
 BTCPAY_IMAGE=$BTCPAY_IMAGE
 ACME_CA_URI=$ACME_CA_URI
