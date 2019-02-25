@@ -41,3 +41,4 @@ install_tooling
 
 cd "`dirname $BTCPAY_ENV_FILE`"
 docker-compose -f $BTCPAY_DOCKER_COMPOSE up -d --remove-orphans -t "${COMPOSE_HTTP_TIMEOUT:-180}"
+docker image prune -af
