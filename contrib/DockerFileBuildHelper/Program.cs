@@ -286,7 +286,7 @@ namespace DockerFileBuildHelper
                 case "groestlcoin-spark":
                     dockerInfo.DockerFilePath = $"Dockerfile";
                     dockerInfo.GitLink = "https://github.com/Groestlcoin/groestlcoin-spark";
-                    dockerInfo.GitRef = $"v{image.Tag.Substring("version-".Length)}-1";
+                    dockerInfo.GitRef = $"v{image.Tag.Substring("version-".Length)}";
                     break;
                 case "librepatron":
                     dockerInfo.DockerFilePath = $"Dockerfile";
@@ -337,6 +337,12 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePath = "Dockerfile.linuxamd64";
                     dockerInfo.DockerFilePathARM32v7 = "Dockerfile.linuxarm32v7";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/btcpayserver";
+                    dockerInfo.GitRef = $"v{image.Tag}";
+                    break;
+                case "rtl":
+                    dockerInfo.DockerFilePath = "Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "Dockerfile.arm32v7";
+                    dockerInfo.GitLink = "https://github.com/ShahanaFarooqui/RTL";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     break;
                 case "nbxplorer":
