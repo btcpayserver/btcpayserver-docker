@@ -48,7 +48,7 @@ services:
       BITCOIND_CONFIG_PATH: /etc/bitcoin/bitcoin.conf
       RTL_SSO: 1
       RTL_COOKIE_PATH: /data/.cookie
-      LOGOUT_REDIRECT_LINK: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/server/services
+      LOGOUT_REDIRECT_LINK: /server/services
     volumes:
       - "bitcoin_datadir:/etc/bitcoin"
       - "lnd_bitcoin_datadir:/etc/lnd"
@@ -59,9 +59,9 @@ services:
   btcpayserver:
     environment:
       BTCPAY_BTCLIGHTNING: "type=lnd-rest;server=http://lnd_bitcoin:8080/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon;allowinsecure=true"
-      BTCPAY_BTCEXTERNALRTL: "server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}${BTCPAY_ROOTPATH:-/}rtl/api/authenticate/cookie;cookiefile=/etc/lnd_bitcoin_rtl/.cookie"
-      BTCPAY_BTCEXTERNALLNDGRPC: "type=lnd-grpc;server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon;macaroondirectorypath=/etc/lnd_bitcoin"
-      BTCPAY_BTCEXTERNALLNDREST: "type=lnd-rest;server=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/lnd-rest/btc/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon;macaroondirectorypath=/etc/lnd_bitcoin"
+      BTCPAY_BTCEXTERNALRTL: "server=/rtl/api/authenticate/cookie;cookiefile=/etc/lnd_bitcoin_rtl/.cookie"
+      BTCPAY_BTCEXTERNALLNDGRPC: "server=/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon;macaroondirectorypath=/etc/lnd_bitcoin"
+      BTCPAY_BTCEXTERNALLNDREST: "server=/lnd-rest/btc/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon;macaroondirectorypath=/etc/lnd_bitcoin"
     volumes:
       - "lnd_bitcoin_datadir:/etc/lnd_bitcoin"
       - "lnd_bitcoin_rtl_datadir:/etc/lnd_bitcoin_rtl"
