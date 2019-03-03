@@ -12,6 +12,11 @@
 
 : "${AZURE_STORAGE_CONTAINER:=public}"
 
+if [[ "$AZURE_STORAGE_CONNECTION_STRING" ]] && ! [ -x "$(command -v az)" ]; then
+    echo "You want to upload the utxoset to azure, but az is not installed. See https://docs.microsoft.com/en-us/cli/azure/ to install it."
+    exit
+fi
+
 btcpay-down.sh
 
 for i in /var/lib/docker/volumes/generated_bitcoin_datadir/_data/utxo-snapshot-*; do
