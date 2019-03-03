@@ -17,6 +17,7 @@ if [[ "$AZURE_STORAGE_CONNECTION_STRING" ]] && ! [ -x "$(command -v az)" ]; then
     exit
 fi
 
+echo "Closing down btcpay... it can take a while"
 btcpay-down.sh
 
 for i in /var/lib/docker/volumes/generated_bitcoin_datadir/_data/utxo-snapshot-*; do
