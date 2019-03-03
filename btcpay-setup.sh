@@ -59,6 +59,7 @@ Environment variables:
     BTCPAYGEN_LIGHTNING: Lightning network implementation to use (eg. clightning, lnd, none)
     BTCPAYGEN_ADDITIONAL_FRAGMENTS: Semi colon separated list of additional fragments you want to use (eg. opt-save-storage)
     ACME_CA_URI: The API endpoint to ask for HTTPS certificate (default: https://acme-v01.api.letsencrypt.org/directory)
+    BTCPAY_HOST_AUTO_SSH: Optional, if true, the setup will generate a SSH key for your BTCPay instance and set BTCPAY_HOST_SSHKEYFILE.
     BTCPAY_HOST_SSHKEYFILE: Optional, SSH private key that BTCPay can use to connect to this VM's SSH server. This key will be copied on BTCPay's data directory
     BTCPAYGEN_DOCKER_IMAGE: Allows you to specify a custom docker image for the generator (Default: btcpayserver/docker-compose-generator)
     BTCPAY_IMAGE: Allows you to specify the btcpayserver docker image to use over the default version. (Default: current stable version of btcpayserver)
@@ -92,6 +93,7 @@ fi
 
 [[ $LETSENCRYPT_EMAIL == *@example.com ]] && echo "LETSENCRYPT_EMAIL ends with @example.com, setting to empty email instead" && LETSENCRYPT_EMAIL=""
 
+: "${BTCPAY_HOST_AUTO_SSH:=false}"
 : "${LETSENCRYPT_EMAIL:=}"
 : "${BTCPAYGEN_OLD_PREGEN:=false}"
 : "${NBITCOIN_NETWORK:=mainnet}"
@@ -119,6 +121,15 @@ fi
 
 BTCPAY_ENV_FILE="$BTCPAY_BASE_DIRECTORY/.env"
 
+if [[ "$BTCPAY_HOST_AUTO_SSH" == "true" ]]; then
+    ID_RSA_BTCPAY="$HOME/.ssh/id_rsa_btcpay"
+    if ! [[ -f "$ID_RSA_BTCPAY" ]]; then
+        echo "BTCPAY_HOST_AUTO_SSH is true, let's create a new SSH key for BTCPay ($ID_RSA_BTCPAY)"
+        ssh-keygen -t rsa -f "$ID_RSA_BTCPAY" -q -P ""
+        BTCPAY_HOST_SSHKEYFILE="$ID_RSA_BTCPAY"
+    fi
+fi
+
 BTCPAY_SSHKEYFILE=""
 BTCPAY_SSHTRUSTEDFINGERPRINTS=""
 if [[ -f "$BTCPAY_HOST_SSHKEYFILE" ]]; then
@@ -145,6 +156,7 @@ BTCPAY_PROTOCOL:$BTCPAY_PROTOCOL
 BTCPAY_HOST:$BTCPAY_HOST
 LIBREPATRON_HOST:$LIBREPATRON_HOST
 WOOCOMMERCE_HOST:$WOOCOMMERCE_HOST
+BTCPAY_HOST_AUTO_SSH:$BTCPAY_HOST_AUTO_SSH
 BTCPAY_HOST_SSHKEYFILE:$BTCPAY_HOST_SSHKEYFILE
 LETSENCRYPT_EMAIL:$LETSENCRYPT_EMAIL
 NBITCOIN_NETWORK:$NBITCOIN_NETWORK
@@ -203,6 +215,7 @@ export BTCPAYGEN_ADDITIONAL_FRAGMENTS=\"$BTCPAYGEN_ADDITIONAL_FRAGMENTS\"
 export BTCPAY_DOCKER_COMPOSE=\"$BTCPAY_DOCKER_COMPOSE\"
 export BTCPAY_BASE_DIRECTORY=\"$BTCPAY_BASE_DIRECTORY\"
 export BTCPAY_ENV_FILE=\"$BTCPAY_ENV_FILE\"
+export BTCPAY_HOST_AUTO_SSH=\"$BTCPAY_HOST_AUTO_SSH\"
 export BTCPAY_HOST_SSHKEYFILE=\"$BTCPAY_HOST_SSHKEYFILE\"
 if cat \"\$BTCPAY_ENV_FILE\" &> /dev/null; then
     export \$(grep -v '^#' \"\$BTCPAY_ENV_FILE\" | xargs)
