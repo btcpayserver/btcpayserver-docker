@@ -34,6 +34,7 @@ btcpay-up.sh
 
 echo "Calculating the hash of the tar file..."
 TAR_FILE="$(echo /var/lib/docker/volumes/generated_bitcoin_datadir/_data/utxo-snapshot-*)"
+echo "Tar file of size $(ls -s -h $TAR_FILE) at $TAR_FILE"
 TAR_FILE_HASH="$(sha256sum "$TAR_FILE" | cut -d " " -f 1)"
 
 if [[ "$AZURE_STORAGE_CONNECTION_STRING" ]]; then
