@@ -29,7 +29,7 @@ rm /var/lib/docker/volumes/generated_bitcoin_datadir/_data/utxo-snapshot-*
 # Run only bitcoind and connect to it
 SCRIPT="$(cat save-utxo-set-in-bitcoind.sh)"
 cd "`dirname $BTCPAY_ENV_FILE`"
-docker-compose -f $BTCPAY_DOCKER_COMPOSE run -e "NBITCOIN_NETWORK=$NBITCOIN_NETWORK" bitcoind bash -c "$SCRIPT"
+docker-compose -f $BTCPAY_DOCKER_COMPOSE run --rm -e "NBITCOIN_NETWORK=$NBITCOIN_NETWORK" bitcoind bash -c "$SCRIPT"
 btcpay-up.sh
 
 echo "Calculating the hash of the tar file..."

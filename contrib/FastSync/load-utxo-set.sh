@@ -23,7 +23,7 @@ if ! [[ "$NBITCOIN_NETWORK" ]]; then
 fi
 
 if ! [[ "$UTXO_DOWNLOAD_LINK" ]]; then
-    [[ $NBITCOIN_NETWORK == "mainnet" ]] && UTXO_DOWNLOAD_LINK="http://utxosets.blob.core.windows.net/public/utxo-snapshot-bitcoin-mainnet-551636.tar"
+    [[ $NBITCOIN_NETWORK == "mainnet" ]] && UTXO_DOWNLOAD_LINK="http://utxosets.blob.core.windows.net/public/utxo-snapshot-bitcoin-mainnet-565305.tar"
     [[ $NBITCOIN_NETWORK == "testnet" ]] && UTXO_DOWNLOAD_LINK="http://utxosets.blob.core.windows.net/public/utxo-snapshot-bitcoin-testnet-1445586.tar"
 fi
 
