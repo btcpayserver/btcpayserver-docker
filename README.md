@@ -138,6 +138,8 @@ Additionally, there are specific environment variables for some addons:
 
 * `LIBREPATRON_HOST`: If libre patron is activated with [opt-add-librepatron](docker-compose-generator/docker-fragments/opt-add-librepatron.yml), the hostname of your libre patron website (eg. `librepatron.example.com`)
 * `WOOCOMMERCE_HOST`: If woocommerce is activated with [opt-add-woocommerce](docker-compose-generator/docker-fragments/opt-add-woocommerce.yml), the hostname of your woocommerce website (eg. `store.example.com`)
+* `BTCTRANSMUTER_HOST`: If btctransmuter is activated with [opt-add-btctransmuter](docker-compose-generator/docker-fragments/opt-add-btctransmuter.yml), the hostname of your btctransmuter website (eg. `transmuter.example.com`)
+* `BTCTRANSMUTER_CRYPTOS`: If btctransmuter is activated with [opt-add-btctransmuter](docker-compose-generator/docker-fragments/opt-add-btctransmuter.yml), the coins enabled to set up (eg. `BTC,LTC`)
 
 # Tooling
 
@@ -173,6 +175,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-librepatron](docker-compose-generator/docker-fragments/opt-add-librepatron.yml), for a self-hosted Patreon alternative backed by BTCPay (More information on this [github repository](https://github.com/JeffVandrewJr/patron), this add-on is maintained by [JeffVandrewJr](https://github.com/JeffVandrewJr).
 * [opt-add-woocommerce](docker-compose-generator/docker-fragments/opt-add-woocommerce.yml), for a self-hosted woocommerce with BTCPay Server plugin pre installed.
 * [opt-add-tor](docker-compose-generator/docker-fragments/opt-add-tor.yml), for exposing BTCPayServer, Woocommerce, your lightning nodes as hidden services and accept onion peers for your full node. Warning: This options is for working around NAT and firewall problems as well as to help protect your customer's privacy. This will not protect your privacy against a targeted attack against you.
+* [opt-add-btctransmuter](docker-compose-generator/docker-fragments/opt-add-btctransmuter.yml), for a self-hosted IFTTT style service for crypto services such as fiat settlement.
 
 You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).
 
