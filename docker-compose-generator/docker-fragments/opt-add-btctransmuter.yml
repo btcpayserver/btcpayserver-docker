@@ -11,10 +11,9 @@ services:
       LETSENCRYPT_HOST: ${BTCTRANSMUTER_HOST}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}
       VIRTUAL_HOST: ${BTCTRANSMUTER_HOST}
-      VIRTUAL_PORT: 5000
       VIRTUAL_SERVICE_NAME: "btctransmuter"
     expose:
-      - "5000"
+      - "80:5000"
     links: 
       - nbxplorer
   btcpayserver:
