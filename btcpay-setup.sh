@@ -67,6 +67,8 @@ Add-on specific variables:
     LIBREPATRON_HOST: If libre patron is activated with opt-add-librepatron, the hostname of your libre patron website (eg. librepatron.example.com)
     WOOCOMMERCE_HOST: If woocommerce is activated with opt-add-woocommerce, the hostname of your woocommerce website (eg. store.example.com)
     BTCPAYGEN_EXCLUDE_FRAGMENTS:  Semicolon-separated list of fragments you want to forcefully exclude (eg. litecoin-clightning)
+    BTCTRANSMUTER_HOST: If btc transmuter is activated with opt-add-btctransmuter, the hostname of your btc transmuter website (eg. store.example.com)
+    BTCTRANSMUTER_CRYPTOS: If btc transmuter is activated with opt-add-btctransmuter, the coisn to enable on it
 END
 }
 
@@ -146,6 +148,8 @@ BTCPAY_PROTOCOL:$BTCPAY_PROTOCOL
 BTCPAY_HOST:$BTCPAY_HOST
 LIBREPATRON_HOST:$LIBREPATRON_HOST
 WOOCOMMERCE_HOST:$WOOCOMMERCE_HOST
+BTCTRANSMUTER_HOST:$BTCTRANSMUTER_HOST
+BTCTRANSMUTER_CRYPTOS:$BTCTRANSMUTER_CRYPTOS
 BTCPAY_HOST_SSHKEYFILE:$BTCPAY_HOST_SSHKEYFILE
 LETSENCRYPT_EMAIL:$LETSENCRYPT_EMAIL
 NBITCOIN_NETWORK:$NBITCOIN_NETWORK
@@ -228,6 +232,8 @@ LIGHTNING_ALIAS=$LIGHTNING_ALIAS
 BTCPAY_SSHTRUSTEDFINGERPRINTS=$BTCPAY_SSHTRUSTEDFINGERPRINTS
 BTCPAY_SSHKEYFILE=$BTCPAY_SSHKEYFILE
 LIBREPATRON_HOST=$LIBREPATRON_HOST
+BTCTRANSMUTER_CRYPTOS=$BTCTRANSMUTER_CRYPTOS
+BTCTRANSMUTER_HOST=$BTCTRANSMUTER_HOST
 WOOCOMMERCE_HOST=$WOOCOMMERCE_HOST" > $BTCPAY_ENV_FILE
 echo -e "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE\n"
 
