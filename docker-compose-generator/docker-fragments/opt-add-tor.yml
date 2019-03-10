@@ -1,0 +1,119 @@
+version: "3"
+
+services:
+
+  btcpayserver:
+    environment:
+      HIDDENSERVICE_NAME: BTCPayServer
+      HIDDENSERVICE_REVERSEPROXY: nginx
+      BTCPAY_TORRCFILE: /usr/local/etc/tor/torrc-2
+      BTCPAY_SOCKSENDPOINT: tor:9050
+    volumes:
+      - "tor_servicesdir:/var/lib/tor/hidden_services"
+      - "tor_torrcdir:/usr/local/etc/tor/"
+
+  woocommerce:
+    environment:
+      HIDDENSERVICE_NAME: WooCommerce
+      WOOCOMMERCE_HIDDENSERVICE_HOSTNAME_FILE: /var/lib/tor/hidden_services/WooCommerce/hostname
+    volumes:
+      - "tor_servicesdir:/var/lib/tor/hidden_services"
+
+  bitcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        onion=tor:9050
+    volumes:
+    - "tor_datadir:/home/tor/.tor"
+    links:
+    - tor
+
+  nginx:
+    volumes:
+      - "tor_servicesdir:/var/lib/tor/hidden_services"
+  nginx-gen:
+    volumes:
+      - "tor_servicesdir:/var/lib/tor/hidden_services"
+
+  tor:
+    restart: unless-stopped
+    image: btcpayserver/tor:0.3.5.8
+    container_name: tor
+    environment:
+      TOR_PASSWORD: btcpayserver
+      TOR_ADDITIONAL_CONFIG: /usr/local/etc/tor/torrc-2
+      TOR_EXTRA_ARGS: |
+        CookieAuthentication 1
+    expose:
+      - "9050" # SOCKS
+      - "9051" # Tor Control
+    volumes:
+      - "tor_datadir:/home/tor/.tor"
+      - "tor_torrcdir:/usr/local/etc/tor"
+      - "tor_servicesdir:/var/lib/tor/hidden_services"
+
+  clightning_bitcoin:
+    environment:
+      HIDDENSERVICE_NAME: c-lightning
+      HIDDENSERVICE_PORT: 9735
+      LIGHTNINGD_HIDDENSERVICE_HOSTNAME_FILE: /var/lib/tor/hidden_services/c-lightning/hostname
+      LIGHTNINGD_OPT: |
+        proxy=tor:9050
+    volumes:
+      - "tor_servicesdir:/var/lib/tor/hidden_services"
+    links:
+      - tor
+  clightning_litecoin:
+    environment:
+      HIDDENSERVICE_NAME: c-lightning-ltc
+      HIDDENSERVICE_PORT: 9736
+      LIGHTNINGD_HIDDENSERVICE_HOSTNAME_FILE: /var/lib/tor/hidden_services/c-lightning-ltc/hostname
+      LIGHTNINGD_OPT: |
+        proxy=tor:9050
+    volumes:
+      - "tor_servicesdir:/var/lib/tor/hidden_services"
+    links:
+      - tor
+
+  tor-gen:
+    restart: unless-stopped
+    image: btcpayserver/docker-gen:0.7.5
+    container_name: tor-gen
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+      - "./torrc.tmpl:/etc/docker-gen/templates/torrc.tmpl:ro"
+      - "tor_torrcdir:/usr/local/etc/tor"
+    entrypoint: /usr/local/bin/docker-gen -notify-sighup tor -watch -wait 5s:30s /etc/docker-gen/templates/torrc.tmpl /usr/local/etc/tor/torrc-2
+    links:
+      - tor
+
+  lnd_bitcoin:
+    environment:
+      HIDDENSERVICE_NAME: lnd
+      HIDDENSERVICE_PORT: 9735
+      LND_HIDDENSERVICE_HOSTNAME_FILE: /var/lib/tor/hidden_services/lnd/hostname
+      LND_EXTRA_ARGS: |
+        tor.socks=tor:9050
+    links:
+      - tor
+    volumes:
+      - "tor_datadir:/home/tor/.tor"
+      - "tor_servicesdir:/var/lib/tor/hidden_services"
+
+  lnd_litecoin:
+    environment:
+      HIDDENSERVICE_NAME: lnd-ltc
+      HIDDENSERVICE_PORT: 9736
+      LND_HIDDENSERVICE_HOSTNAME_FILE: /var/lib/tor/hidden_services/lnd-ltc/hostname
+      LND_EXTRA_ARGS: |
+        tor.socks=tor:9050
+    links:
+      - tor
+    volumes:
+      - "tor_datadir:/home/tor/.tor"
+      - "tor_servicesdir:/var/lib/tor/hidden_services"
+
+volumes:
+    tor_datadir:
+    tor_torrcdir:
+    tor_servicesdir:

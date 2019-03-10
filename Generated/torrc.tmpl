@@ -1,0 +1,26 @@
+{{ $CurrentContainer := where $ "ID" .Docker.CurrentContainerID | first }}
+
+{{ range $name, $containers := groupByMulti $ "Env.HIDDENSERVICE_NAME" "," }}
+# For the hidden service {{ $name }}
+HiddenServiceDir /var/lib/tor/hidden_services/{{ $name }}
+{{ range $container := $containers }}
+	{{ range $knownNetwork := $CurrentContainer.Networks }}
+		{{ range $containerNetwork := $container.Networks }}
+			{{ if eq $knownNetwork.Name $containerNetwork.Name }}
+			    {{ $containerOrReverseProxyName := coalesce $container.Env.HIDDENSERVICE_REVERSEPROXY $container.Name }}
+
+				{{ range $reverseProxyContainer := where $ "Name" $containerOrReverseProxyName }}
+					{{ range $containerNetwork := where $reverseProxyContainer.Networks "Name" $knownNetwork.Name }}
+						{{ $port := coalesce $container.Env.HIDDENSERVICE_PORT "80" }}
+						{{ $virtualPort := coalesce $container.Env.HIDDENSERVICE_VIRTUAL_PORT $port }}
+						{{ if ne $containerNetwork.IP "" }}
+# Redirecting to {{ $containerOrReverseProxyName }}
+HiddenServicePort {{ $virtualPort }} {{ $containerNetwork.IP }}:{{ $port }}
+						{{ end }}
+					{{ end }}
+				{{ end }}
+			{{ end }}
+		{{ end }}
+	{{ end }}
+{{ end }}
+{{ end }}
