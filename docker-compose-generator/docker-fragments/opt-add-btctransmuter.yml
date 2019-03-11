@@ -8,16 +8,21 @@ services:
       NBXplorer_Cryptos: ${BTCTRANSMUTER_CRYPTOS}
       NBXplorer_Uri: http://nbxplorer:32838/
       NBXplorer_NetworkType: ${NBITCOIN_NETWORK:-regtest}
+      NBXplorer_UseDefaultCookie: true
       LETSENCRYPT_HOST: ${BTCTRANSMUTER_HOST}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}
       VIRTUAL_HOST: ${BTCTRANSMUTER_HOST}
+      ConnectionStrings_Database: /datadir/db.db
       VIRTUAL_SERVICE_NAME: "btctransmuter"
     expose:
       - "80"
     links: 
       - nbxplorer
     volumes:
+     - "btctransmuter_datadir:/datadir"
      - "nbxplorer_datadir:/root/.nbxplorer"
   btcpayserver:
     environment:
       BTCPAY_EXTERNALSERVICES: "BTC Transmuter:${BTCPAY_PROTOCOL:-https}://${BTCTRANSMUTER_HOST};"
+volumes:
+    btctransmuter_datadir:
