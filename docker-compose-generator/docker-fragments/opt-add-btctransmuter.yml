@@ -17,11 +17,7 @@ services:
     links: 
       - nbxplorer
     volumes:
-     - "btctransmuter_dir:/"
      - "nbxplorer_datadir:/root/.nbxplorer"
   btcpayserver:
     environment:
       BTCPAY_EXTERNALSERVICES: "BTC Transmuter:${BTCPAY_PROTOCOL:-https}://${BTCTRANSMUTER_HOST};"
-
-volumes:
-    btctransmuter_dir:
