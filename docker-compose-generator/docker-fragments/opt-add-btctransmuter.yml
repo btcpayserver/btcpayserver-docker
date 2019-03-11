@@ -24,5 +24,4 @@ services:
       BTCPAY_EXTERNALSERVICES: "BTC Transmuter:${BTCPAY_PROTOCOL:-https}://${BTCTRANSMUTER_HOST};"
 
 volumes:
-    btctransmuter_datadir:
-    btctransmuter_extensions:
+    btctransmuter_dir:
