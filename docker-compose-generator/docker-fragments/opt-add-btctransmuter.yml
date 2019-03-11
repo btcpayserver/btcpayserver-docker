@@ -18,7 +18,7 @@ services:
     links: 
       - nbxplorer
     volumes:
-     - "btctransmuter_datadir:/data"
+     - "btctransmuter_datadir:/app/data"
      - "nbxplorer_datadir:/root/.nbxplorer"
   btcpayserver:
     environment:
