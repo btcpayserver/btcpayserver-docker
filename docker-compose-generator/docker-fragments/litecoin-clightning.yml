@@ -2,21 +2,19 @@ version: "3"
 
 services:
   clightning_litecoin:
-    image: btcpayserver/lightning:v0.7.0-1
+    image: btcpayserver/lightning:v0.7.0-2
     container_name: btcpayserver_clightning_litecoin
     restart: unless-stopped
     environment:
       LIGHTNINGD_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       LIGHTNINGD_CHAIN: ltc
-      LIGHTNINGD_EXPLORERURL: "http://nbxplorer:32838/"
+      LIGHTNINGD_ALIAS: ${LIGHTNING_ALIAS}
+      LIGHTNINGD_ANNOUNCEADDR: ${BTCPAY_HOST}:9735
+      LIGHTNINGD_NBXPLORER_ROOT: /root/.nbxplorer
       LIGHTNINGD_OPT: |
         bitcoin-datadir=/etc/litecoin
         bitcoin-rpcconnect=litecoind
         bind-addr=0.0.0.0:9735
-        announce-addr=${BTCPAY_HOST}:9736
-        network=${NBITCOIN_NETWORK:-regtest}
-        alias=${LIGHTNING_ALIAS}
-        chain=ltc
     volumes:
       - "clightning_litecoin_datadir:/root/.lightning"
       - "litecoin_datadir:/etc/litecoin"
@@ -24,7 +22,6 @@ services:
     ports:
       - "9736:9735"
     links:
-      - nbxplorer
       - litecoind
   btcpayserver:
     environment:

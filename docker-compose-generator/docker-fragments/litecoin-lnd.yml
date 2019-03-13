@@ -2,23 +2,26 @@ version: "3"
 
 services:
   lnd_litecoin:
-    image: btcpayserver/lnd:v0.5.2-beta
+    image: btcpayserver/lnd:v0.5.2-beta-2
     container_name: btcpayserver_lnd_litecoin
     restart: unless-stopped
     environment:
       LND_CHAIN: "ltc"
+      LND_EXTERNALIP: ${BTCPAY_HOST}:9735
+      LND_ALIAS: ${LIGHTNING_ALIAS}
       LND_ENVIRONMENT: "${NBITCOIN_NETWORK:-regtest}"
-      LND_EXPLORERURL: "http://nbxplorer:32838/"
+      LND_NBXPLORER_ROOT: /root/.nbxplorer
       LND_EXTRA_ARGS: |
         restlisten=0.0.0.0:8080
+        rpclisten=127.0.0.1:10008
+        rpclisten=0.0.0.0:10009
         litecoin.node=litecoind
         litecoind.rpchost=litecoind:43782
         litecoind.zmqpubrawblock=tcp://litecoind:28332
         litecoind.zmqpubrawtx=tcp://litecoind:28333
-        externalip=${BTCPAY_HOST}:9736
-        alias=${LIGHTNING_ALIAS}
         adminmacaroonpath=/data/admin.macaroon
         invoicemacaroonpath=/data/invoice.macaroon
+        readonlymacaroonpath=/data/readonly.macaroon
         noseedbackup=1
         notls=1
     ports:
@@ -31,7 +34,6 @@ services:
       - "litecoin_datadir:/deps/.litecoin"
       - "nbxplorer_datadir:/root/.nbxplorer"
     links:
-      - nbxplorer
       - litecoind
 
   btcpayserver:
