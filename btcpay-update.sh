@@ -14,8 +14,13 @@ if [[ $BTCPAY_DOCKER_COMPOSE != *docker-compose.generated.yml ]]; then
     exit
 fi
 
-cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"  
-git pull --force
+cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
+
+if [[ "$1" != "--skip-git-pull" ]]; then
+    git pull --force
+    exec "btcpay-update.sh" --skip-git-pull
+    return
+fi
 
 if ! [ -f "/etc/docker/daemon.json" ]; then
 echo "{
