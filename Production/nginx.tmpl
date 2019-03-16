@@ -183,13 +183,11 @@ server {
 }
 {{ end }}
 
-{{ range $host, $containers := groupByMulti $ "Env.VIRTUAL_HOST" "," }}
+{{ range $host_name, $containers := groupByMulti $ "Env.VIRTUAL_HOST_NAME" "," }}
 
-{{ $host := trim $host }}
-{{ $is_regexp := hasPrefix "~" $host }}
-{{ $upstream_name := when $is_regexp (sha1 $host) $host }}
+{{ $host_name := trim $host_name }}
+{{ $upstream_name := $host_name }}
 
-# {{ $host }}
 upstream {{ $upstream_name }} {
 
 {{ range $container := $containers }}
@@ -218,14 +216,13 @@ upstream {{ $upstream_name }} {
 	{{ end }}
 {{ end }}
 }
-
+{{ range $host, $containers := groupByMulti $containers "Env.VIRTUAL_HOST" "," }}
+{{ $host := trim $host }}
 {{ $default_host := or ($.Env.DEFAULT_HOST) "" }}
 {{ $default_server := index (dict $host "" $default_host "default_server") $host }}
 
 {{/* Get the VIRTUAL_PROTO defined by containers w/ the same vhost, falling back to "http" */}}
 {{ $proto := trim (or (first (groupByKeys $containers "Env.VIRTUAL_PROTO")) "http") }}
-
-{{ $host_name := trim (or (first (groupByKeys $containers "Env.VIRTUAL_HOST_NAME")) "") }}
 
 {{/* Get the NETWORK_ACCESS defined by containers w/ the same vhost, falling back to "external" */}}
 {{ $network_tag := or (first (groupByKeys $containers "Env.NETWORK_ACCESS")) "external" }}
@@ -428,5 +425,6 @@ server {
 }
 {{ end }}
 
+{{ end }}
 {{ end }}
 {{ end }}
