@@ -159,7 +159,7 @@ upstream {{ $upstream_name }} {
 {{/* Get the VIRTUAL_PROTO defined by containers w/ the same vhost, falling back to "http" */}}
 {{ $proto := trim (or (first (groupByKeys $containers "Env.VIRTUAL_PROTO")) "http") }}
 
-{{ $service_name := trim (or (first (groupByKeys $containers "Env.VIRTUAL_SERVICE_NAME")) "") }}
+{{ $host_name := trim (or (first (groupByKeys $containers "Env.VIRTUAL_HOST_NAME")) "") }}
 
 {{/* Get the NETWORK_ACCESS defined by containers w/ the same vhost, falling back to "external" */}}
 {{ $network_tag := or (first (groupByKeys $containers "Env.NETWORK_ACCESS")) "external" }}
@@ -299,7 +299,7 @@ server {
 		{{ end }}
 	} 
 
-	{{ if eq $service_name "btcpay" }}
+	{{ if eq $host_name "btcpay" }}
 	{{ range $container := $ }}
 		{{ $serviceName := (index $container.Labels "com.docker.compose.service") }}
 		{{ if (eq $serviceName "lnd_bitcoin") }}
@@ -350,7 +350,7 @@ server {
 	{{ end }}
 	{{ end }}
 
-	{{ if eq $service_name "librepatron" }}
+	{{ if eq $host_name "librepatron" }}
 	{{ range $container := $ }}
 		{{ $serviceName := (index $container.Labels "com.docker.compose.service") }}
 		{{ if (eq $serviceName "isso") }}

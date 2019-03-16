@@ -18,7 +18,7 @@ services:
             VIRTUAL_HOST: ${LIBREPATRON_HOST}
             LETSENCRYPT_HOST: ${LIBREPATRON_HOST}
             LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}
-            VIRTUAL_SERVICE_NAME: "librepatron"
+            VIRTUAL_HOST_NAME: "librepatron"
 
     isso:
         container_name: isso
