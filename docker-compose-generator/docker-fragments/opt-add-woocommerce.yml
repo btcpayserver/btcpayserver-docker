@@ -11,7 +11,7 @@ services:
       LETSENCRYPT_HOST: ${WOOCOMMERCE_HOST}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}
       VIRTUAL_HOST: ${WOOCOMMERCE_HOST}
-      VIRTUAL_SERVICE_NAME: "woocommerce"
+      VIRTUAL_HOST_NAME: "woocommerce"
     expose:
       - "80"
     links:
