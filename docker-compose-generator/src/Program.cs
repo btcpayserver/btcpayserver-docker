@@ -31,7 +31,7 @@ namespace DockerGenerator
 			fragmentLocation = FindRoot(fragmentLocation);
 			fragmentLocation = Path.GetFullPath(Path.Combine(fragmentLocation, "docker-fragments"));
 
-			var fragments = new List<string>();
+			var fragments = new HashSet<string>();
 			switch (composition.SelectedProxy)
 			{
 				case "nginx":
@@ -72,8 +72,7 @@ namespace DockerGenerator
 			{
 				fragments.Add(fragment.Trim());
 			}
-
-			var def = new DockerComposeDefinition(name, fragments);
+			var def = new DockerComposeDefinition(name, fragments.ToList());
 			def.FragmentLocation = fragmentLocation;
 			def.BuildOutputDirectory = output;
 			def.Build();
