@@ -16,7 +16,7 @@ services:
     - btcpayserver
   nginx-gen:
     restart: unless-stopped
-    image: jwilder/docker-gen
+    image: btcpayserver/docker-gen:0.7.5
     container_name: nginx-gen
     volumes:
     - "/var/run/docker.sock:/tmp/docker.sock:ro"
