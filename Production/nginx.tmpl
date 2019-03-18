@@ -224,7 +224,7 @@ upstream {{ $upstream_name }} {
 	{{ if ne $onionHost "" }}
 server {
 	server_name {{ trim $onionHost }};
-	listen nginx:80 ;
+	listen 80 ;
 	access_log /var/log/nginx/access.log vhost;
 	{{ if (exists "/etc/nginx/vhost.d/default") }}
 	include /etc/nginx/vhost.d/default;
