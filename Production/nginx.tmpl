@@ -226,6 +226,9 @@ server {
 	server_name {{ trim $onionHost }};
 	listen nginx:80 ;
 	access_log /var/log/nginx/access.log vhost;
+	{{ if (exists "/etc/nginx/vhost.d/default") }}
+	include /etc/nginx/vhost.d/default;
+	{{ end }}
 	location / {
 		proxy_pass http://{{ trim $upstream_name }};
 	}
