@@ -326,6 +326,12 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
                     dockerInfo.GitRef = $"Bitcoin/{image.Tag}";
                     break;
+                case "tor":
+                    dockerInfo.DockerFilePath = $"Tor/{image.Tag}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Tor/{image.Tag}/linuxarm32v7.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"Tor/{image.Tag}";
+                    break;
                 case "dash":
                     dockerInfo.DockerFilePath = $"Dash/{image.Tag}/linuxamd64.Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"Dash/{image.Tag}/linuxarm32v7.Dockerfile";
@@ -395,6 +401,7 @@ namespace DockerFileBuildHelper
                 case "docker-gen":
                     dockerInfo.DockerFilePath = $"linuxamd64.Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"linuxarm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/docker-gen";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     break;
