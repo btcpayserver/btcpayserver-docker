@@ -1,3 +1,7 @@
+# This will expose BTCPayServer, Woocommerce, your lightning nodes as hidden services and accept onion peers for your full node. 
+# Warning: This options is for working around NAT and firewall problems as well as to help protect your customer's privacy. 
+# This will not protect your privacy against a targeted attack against your own privacy.
+# All outbound traffic is not channeled through the TOR SOCKS proxy
 version: "3"
 
 services:
