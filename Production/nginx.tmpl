@@ -216,8 +216,27 @@ upstream {{ $upstream_name }} {
 	{{ end }}
 {{ end }}
 }
+
+{{ $hiddenReverseProxy := trim (or (first (groupByKeys $containers "Env.HIDDENSERVICE_REVERSEPROXY")) "") }}
+{{ if (eq $hiddenReverseProxy "nginx")}}
+	{{ $hiddenHostName := trim (or (first (groupByKeys $containers "Env.HIDDENSERVICE_NAME")) "") }}
+	{{ $onionHost := read (printf "/var/lib/tor/hidden_services/%s/hostname" $hiddenHostName) }}
+	{{ if ne $onionHost "" }}
+server {
+	server_name {{ trim $onionHost }};
+	listen nginx:80 ;
+	access_log /var/log/nginx/access.log vhost;
+	location / {
+		proxy_pass http://{{ trim $upstream_name }};
+	}
+	{{ template "redirects" (dict "HostName" $host_name "Containers" $) }}
+}
+	{{ end }}
+{{ end }}
+
 {{ range $host, $containers := groupByMulti $containers "Env.VIRTUAL_HOST" "," }}
 {{ $host := trim $host }}
+{{ if ne $host "" }}
 {{ $default_host := or ($.Env.DEFAULT_HOST) "" }}
 {{ $default_server := index (dict $host "" $default_host "default_server") $host }}
 
@@ -424,7 +443,7 @@ server {
 	ssl_certificate_key /etc/nginx/certs/default.key;
 }
 {{ end }}
-
+{{ end }}
 {{ end }}
 {{ end }}
 {{ end }}

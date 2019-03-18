@@ -1,4 +1,4 @@
 *.yml
-*.tmpl
+nginx.tmpl
 *.toml
 *.json
