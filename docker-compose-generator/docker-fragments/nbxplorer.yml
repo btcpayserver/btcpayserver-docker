@@ -4,12 +4,13 @@ services:
 
   nbxplorer:
     restart: unless-stopped
-    image: nicolasdorier/nbxplorer:2.0.0.17
+    image: nicolasdorier/nbxplorer:2.0.0.19
     expose: 
       - "32838"
     environment:
       NBXPLORER_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       NBXPLORER_BIND: 0.0.0.0:32838
+      NBXPLORER_SIGNALFILESDIR: /datadir
     volumes:
       - "nbxplorer_datadir:/datadir"
 

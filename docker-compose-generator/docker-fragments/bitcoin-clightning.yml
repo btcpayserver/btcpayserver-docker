@@ -2,19 +2,19 @@ version: "3"
 
 services:
   clightning_bitcoin:
-    image: btcpayserver/lightning:v0.7.0-2
+    image: btcpayserver/lightning:v0.7.0-3
     container_name: btcpayserver_clightning_bitcoin
     restart: unless-stopped
     environment:
       LIGHTNINGD_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       LIGHTNINGD_CHAIN: btc
       LIGHTNINGD_ALIAS: ${LIGHTNING_ALIAS}
-      LIGHTNINGD_ANNOUNCEADDR: ${BTCPAY_HOST}:9735
-      LIGHTNINGD_NBXPLORER_ROOT: /root/.nbxplorer
+      LIGHTNINGD_ANNOUNCEADDR: ${BTCPAY_HOST}
+      LIGHTNINGD_PORT: 9735
+      LIGHTNINGD_READY_FILE: /root/.nbxplorer/btc_fully_synched
       LIGHTNINGD_OPT: |
         bitcoin-datadir=/etc/bitcoin
         bitcoin-rpcconnect=bitcoind
-        bind-addr=0.0.0.0:9735
     volumes:
       - "clightning_bitcoin_datadir:/root/.lightning"
       - "bitcoin_datadir:/etc/bitcoin"
