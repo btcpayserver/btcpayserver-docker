@@ -2,15 +2,16 @@ version: "3"
 
 services:
   lnd_bitcoin:
-    image: btcpayserver/lnd:v0.5.2-beta-2
+    image: btcpayserver/lnd:v0.5.2-beta-3
     container_name: btcpayserver_lnd_bitcoin
     restart: unless-stopped
     environment:
       LND_CHAIN: "btc"
-      LND_EXTERNALIP: ${BTCPAY_HOST}:9735
+      LND_EXTERNALIP: ${BTCPAY_HOST}
+      LND_PORT: 9735
       LND_ALIAS: ${LIGHTNING_ALIAS}
       LND_ENVIRONMENT: "${NBITCOIN_NETWORK:-regtest}"
-      LND_NBXPLORER_ROOT: /root/.nbxplorer
+      LND_READY_FILE: /root/.nbxplorer/btc_fully_synched
       LND_EXTRA_ARGS: |
         restlisten=0.0.0.0:8080
         rpclisten=127.0.0.1:10008
