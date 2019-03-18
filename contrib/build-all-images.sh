@@ -377,14 +377,14 @@ cd - && cd ..
 
 
 # Build btcqbo
-# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.3.25/Dockerfile
+# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.3.32/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building jvandrew/btcqbo:0.3.25"
+echo "Building jvandrew/btcqbo:0.3.32"
 git clone https://github.com/JeffVandrewJr/btcqbo btcqbo
 cd btcqbo
-git checkout v0.3.25
+git checkout v0.3.32
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.3.25" .
+docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.3.32" .
 cd - && cd ..
 
 
@@ -455,14 +455,14 @@ cd - && cd ..
 
 
 # Build docker-woocommerce
-# https://raw.githubusercontent.com/btcpayserver/docker-woocommerce/v3.0.6-2/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/docker-woocommerce/v3.0.6-3/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/docker-woocommerce:3.0.6-2"
+echo "Building btcpayserver/docker-woocommerce:3.0.6-3"
 git clone https://github.com/btcpayserver/docker-woocommerce docker-woocommerce
 cd docker-woocommerce
-git checkout v3.0.6-2
+git checkout v3.0.6-3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/docker-woocommerce:3.0.6-2" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/docker-woocommerce:3.0.6-3" .
 cd - && cd ..
 
 
