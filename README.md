@@ -55,6 +55,10 @@ There can be more dependencies if you support more than just standard Bitcoin tr
 
 Note: The setup process can be time consuming, but is heavily automated to make it a fun and easy experience.
 
+Here is a presentation of the global architecture at Advancing Bitcoin conference.
+
+[![BTCPay - Architecture overview](https://i.vimeocdn.com/video/758684368_520x252.jpg)](https://vimeo.com/316630434 "BTCPay - Architecture overview")
+
 # Full installation (for technical users)
 
 You can also install BTCPayServer on your own machine or VPS instance.
