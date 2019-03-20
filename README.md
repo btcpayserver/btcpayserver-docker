@@ -35,7 +35,7 @@ This video by Nicolas also demonstrates the above steps:
 
 Approximate Cost (unpruned, Bitcoin-only): **60 USD per month**
 
-After all your nodes have synced and you've confirmed everything works, follow [this guide](https://github.com/btcpayserver/btcpayserver-doc/blob/master/PennyPinching.md) to fine-tune for savings; costs should drop to **30 or 40 USD per month**.
+After all your nodes have synced and you've confirmed everything works, follow [this guide](https://github.com/btcpayserver/btcpayserver-doc/blob/master/AzurePennyPinching.md) to fine-tune for savings; costs should drop to **30 or 40 USD per month**.
 
 # Architecture
 
