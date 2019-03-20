@@ -1,5 +1,5 @@
 # This is a manifest image, will pull the image with the same arch as the builder machine
-FROM microsoft/dotnet:2.1.500-sdk AS builder
+FROM mcr.microsoft.com/dotnet/core/sdk:2.1.505 AS builder
 WORKDIR /source
 COPY src/docker-compose-generator.csproj docker-compose-generator.csproj
 # Cache some dependencies
@@ -8,7 +8,7 @@ COPY src/. .
 RUN dotnet publish --output /app/ --configuration Release
 
 # Force the builder machine to take make an arm runtime image. This is fine as long as the builder does not run any program
-FROM microsoft/dotnet:2.1.6-aspnetcore-runtime-stretch-slim-arm32v7
+FROM mcr.microsoft.com/dotnet/core/runtime:2.1.9-stretch-slim-arm32v7
 WORKDIR /datadir
 
 WORKDIR /app
