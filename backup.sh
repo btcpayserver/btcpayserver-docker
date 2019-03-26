@@ -22,11 +22,19 @@ elif [ ${BACKUP_PROVIDER="Dropbox"} ]; then
         echo "Set DROPBOX_TOKEN environmental variable and try again."
         exit 1
     fi
+    if [ -z ${1+x} ]; then
+	filename="backup.tar.gz"
+    else
+	filename=$1
+    fi	
     if [ ! -d /var/lib/docker/volumes/backup_datadir ]; then
         docker volume create backup_datadir
     fi	
     btcpay-down.sh
-    tar --exclude='/var/lib/docker/volumes/backup_datadir/*' --exclude='/var/lib/docker/volumes/generated_bitcoin_datadir/*' -cvzf /var/lib/docker/volumes/backup_datadir/_data/backup.tar.gz /var/lib/docker
+    tar --exclude='/var/lib/docker/volumes/backup_datadir/*' --exclude='/var/lib/docker/volumes/generated_bitcoin_datadir/*' -cvzf /var/lib/docker/volumes/backup_datadir/_data/${filename} /var/lib/docker
     btcpay-up.sh
-    docker run -v backup_datadir:/data --env DROPBOX_TOKEN=$DROPBOX_TOKEN jvandrew/btcpay-dropbox:1.0.1
+    echo "Uploading to Dropbox..."
+    docker run --name backup --env DROPBOX_TOKEN=$DROPBOX_TOKEN -v backup_datadir:/data jvandrew/btcpay-dropbox:1.0.5 $filename
+    echo "Deleting local backup..."
+    rm /var/lib/docker/volumes/backup_datadir/_data/${filename}
 fi
