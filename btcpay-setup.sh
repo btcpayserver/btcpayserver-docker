@@ -259,7 +259,8 @@ if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; t
             fi
             add-apt-repository "deb https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") $RELEASE stable"
             apt-get update -y
-            apt-get install -y docker-ce:armhf
+            # zlib1g:armhf is needed for docker-compose, but we install it here as we changed dpkg here
+            apt-get install -y docker-ce:armhf zlib1g:armhf
         fi
     fi
     if ! [ -x "$(command -v docker-compose)" ]; then
