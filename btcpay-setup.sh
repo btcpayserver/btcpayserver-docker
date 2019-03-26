@@ -254,6 +254,9 @@ if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; t
             if [[ "$RELEASE" == "bionic" ]]; then
                 RELEASE=xenial
             fi
+            if [ -x "$(command -v dpkg)" ]; then
+                dpkg --add-architecture armhf
+            fi
             add-apt-repository "deb https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") $RELEASE stable"
             apt-get update -y
             apt-get install -y docker-ce:armhf
