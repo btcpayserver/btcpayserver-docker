@@ -3,7 +3,7 @@ version: "3"
 services:
   btctransmuter:
     restart: unless-stopped
-    image: kukks/btctransmuter:0.0.6
+    image: kukks/btctransmuter:0.0.7
     environment:
       NBXplorer_Cryptos: ${BTCTRANSMUTER_CRYPTOS}
       NBXplorer_Uri: http://nbxplorer:32838/
