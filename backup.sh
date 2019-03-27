@@ -31,7 +31,7 @@ elif [ ${BACKUP_PROVIDER="Dropbox"} ]; then
         docker volume create backup_datadir
     fi	
     btcpay-down.sh
-    tar --exclude='/var/lib/docker/volumes/backup_datadir/*' --exclude='/var/lib/docker/volumes/generated_bitcoin_datadir/*' -cvzf /var/lib/docker/volumes/backup_datadir/_data/${filename} /var/lib/docker
+    tar --exclude='/var/lib/docker/volumes/backup_datadir/*' --exclude='/var/lib/docker/volumes/generated_bitcoin_datadir/*' -cvzf /var/lib/docker/volumes/backup_datadir/_data/${filename} /var/lib/docker/volumes
     btcpay-up.sh
     echo "Uploading to Dropbox..."
     docker run --name backup --env DROPBOX_TOKEN=$DROPBOX_TOKEN -v backup_datadir:/data jvandrew/btcpay-dropbox:1.0.5 $filename
