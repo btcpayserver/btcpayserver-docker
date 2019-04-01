@@ -3,11 +3,12 @@ version: "3"
 services:
   btctransmuter:
     restart: unless-stopped
-    image: kukks/btctransmuter:0.0.9
+    image: kukks/btctransmuter:0.0.11
     environment:
       TRANSMUTER_Database: User ID=postgres;Host=postgres;Port=5432;Database=btctransmuter${NBITCOIN_NETWORK:-regtest}
       TRANSMUTER_DatabaseType: postgres
-      TRANSMUTER_DataProtectionDir: data/keys
+      TRANSMUTER_DataProtectionDir: data/keys      
+      TRANSMUTER_ExtensionsDir: data/extensions
       NBXplorer_Cryptos: ${BTCTRANSMUTER_CRYPTOS}
       NBXplorer_Uri: http://nbxplorer:32838/
       NBXplorer_NetworkType: ${NBITCOIN_NETWORK:-regtest}
