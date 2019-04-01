@@ -17,6 +17,7 @@ install_tooling() {
                 "btcpayserver_monacoind" "monacoin-cli.sh" "Command line for your Monacoin instance" \
                 "btcpayserver_trezarcoind" "trezarcoin-cli.sh" "Command line for your Trezar instance" \
                 "btcpayserver_viacoind" "viacoin-cli.sh" "Command line for your Viacoin instance" \
+                "*" "btcpay-clean.sh" "Command line for deleting old unused docker images" \
                 "*" "btcpay-down.sh" "Command line for stopping all services related to BTCPay Server" \
                 "*" "btcpay-restart.sh" "Command line for restarting all services related to BTCPay Server" \
                 "*" "btcpay-setup.sh" "Command line for restarting all services related to BTCPay Server" \
