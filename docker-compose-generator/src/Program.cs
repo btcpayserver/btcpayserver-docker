@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -72,6 +72,7 @@ namespace DockerGenerator
 			{
 				fragments.Add(fragment.Trim());
 			}
+			fragments = fragments.Where(s => !composition.ExcludeFragments.Contains(s)).ToHashSet();
 			var def = new DockerComposeDefinition(name, fragments.ToList());
 			def.FragmentLocation = fragmentLocation;
 			def.BuildOutputDirectory = output;
