@@ -35,7 +35,7 @@ namespace DockerGenerator
 		{
 			return Path.Combine(BuildOutputDirectory, $"docker-compose.{_Name}.yml");
 		}
-		public void Build()
+		public void Build(Dictionary<string, string> data = null)
 		{
 			Console.WriteLine($"Generating {GetFilePath()}");
 			var deserializer = new DeserializerBuilder().Build();
@@ -82,9 +82,19 @@ namespace DockerGenerator
 			output.Add("services", new YamlMappingNode(Merge(services)));
 			output.Add("volumes", new YamlMappingNode(volumes));
 			output.Add("networks", new YamlMappingNode(networks));
-			var result = serializer.Serialize(output);
+			var result = serializer.Serialize(output)
+				.Replace("''", "");
+			if (data != null && data.Any())
+			{
+				foreach (var keyValuePair in data)
+				{
+					result = result.Replace($"#{keyValuePair.Key}#", keyValuePair.Value);
+				}
+			}
 			var outputFile = GetFilePath();
-			File.WriteAllText(outputFile, result.Replace("''", ""));
+			File.WriteAllText(outputFile, result);
+			
+			
 			Console.WriteLine($"Generated {outputFile}");
 			Console.WriteLine();
 		}

@@ -35,7 +35,6 @@ namespace DockerGenerator
 			switch (composition.SelectedProxy)
 			{
 				case "nginx":
-
 					fragments.Add("nginx");
 					fragments.Add("btcpayserver-nginx");
 					break;
@@ -76,7 +75,10 @@ namespace DockerGenerator
 			var def = new DockerComposeDefinition(name, fragments.ToList());
 			def.FragmentLocation = fragmentLocation;
 			def.BuildOutputDirectory = output;
-			def.Build();
+			def.Build(new Dictionary<string, string>()
+			{
+				{ "CRYPTOS", string.Join(';', composition.SelectedCryptos)}
+			} );
 		}
 
 		private static string FindRoot(string rootDirectory)
