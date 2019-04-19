@@ -11,7 +11,6 @@ services:
           rpcport=43782
           rpcbind=0.0.0.0:43782
           port=39388
-          disablewallet=1
           whitelist=0.0.0.0/0
       expose:
         - "43782"
