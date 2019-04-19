@@ -26,6 +26,12 @@ namespace DockerGenerator
             get;
             private set;
         }
+        
+        public string EclairFragment
+        {
+	        get;
+	        private set;
+        }
 
         public static CryptoDefinition[] GetDefinitions()
         {
@@ -43,7 +49,8 @@ namespace DockerGenerator
                     Crypto = "btc",
                     CryptoFragment = "bitcoin",
                     CLightningFragment = "bitcoin-clightning",
-                    LNDFragment = "bitcoin-lnd"
+                    LNDFragment = "bitcoin-lnd",
+                    EclairFragment = "bitcoin-eclair"
                 },
                 new CryptoDefinition()
                 {

@@ -1,0 +1,52 @@
+version: "3"
+
+services:
+  bitcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        zmqpubrawblock=tcp://0.0.0.0:28332
+        zmqpubrawtx=tcp://0.0.0.0:28333
+        rpcauth=eclair:d3a244200d5c946f6bef48e6583ec979$$215049513aef33245dfec8ff3ab5e749458fde51ede931dec04c767c0732d468
+  eclair_bitcoin:
+    container_name: btcpayserver_eclair_bitcoin
+    restart: unless-stopped
+    stop_signal: SIGINT
+    image: acinq/eclair:v0.3.2
+    environment:
+      PUBLIC_HOST: ${BTCPAY_HOST}
+      JAVA_OPTS: |
+        -Xmx256m
+        -Declair.printToConsole
+        -Declair.headless
+        -Declair.chain=${NBITCOIN_NETWORK:-regtest}
+        -Declair.server.binding-ip=0.0.0.0
+        -Declair.server.public-ips.0=${BTCPAY_HOST}
+        -Declair.server.port=9735
+        -Declair.api.enabled=true
+        -Declair.api.binding-ip=0.0.0.0
+        -Declair.api.port=8080
+        -Declair.node-alias=${LIGHTNING_ALIAS}
+        -Declair.api.password=DwubwWsoo3
+        -Declair.bitcoind.host=bitcoind
+        -Declair.bitcoind.rpcport=43782
+        -Declair.bitcoind.rpcuser=eclair
+        -Declair.bitcoind.rpcpassword=sFLjcg99Puh4k3CAZCQkLvC-fcoFUFRyKwKcXQKa7dw=
+        -Declair.bitcoind.zmqblock=tcp://bitcoind:28332
+        -Declair.bitcoind.zmqtx=tcp://bitcoind:28333
+    expose:
+      - "9735" # server port
+      - "8080" # api port
+    volumes:
+      - "bitcoin_datadir:/etc/bitcoin"
+      - "eclair_bitcoin_datadir:/data"
+    links:
+      - bitcoind
+  btcpayserver:
+    environment:
+      BTCPAY_BTCLIGHTNING: "type=eclair;server=http://eclair_bitcoin:8080;password=DwubwWsoo3"
+    volumes:
+      - "eclair_bitcoin_datadir:/etc/eclair_bitcoin"
+    links:
+      - eclair_bitcoin
+volumes:
+  eclair_bitcoin_datadir:
