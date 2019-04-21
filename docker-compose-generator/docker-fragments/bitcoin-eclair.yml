@@ -49,5 +49,6 @@ services:
       - "eclair_bitcoin_datadir:/etc/eclair_bitcoin"
     links:
       - eclair_bitcoin
+      - bitcoind
 volumes:
   eclair_bitcoin_datadir:
