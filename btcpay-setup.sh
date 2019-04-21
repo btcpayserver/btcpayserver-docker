@@ -150,7 +150,7 @@ do
         BTCPAY_CRYPTOS="$BTCPAY_CRYPTOS$i"
     fi
 done
-export BTCPAY_CRYPTOS="$BTCPAY_CRYPTOS"
+export BTCPAY_CRYPTOS
 
 
 echo "
