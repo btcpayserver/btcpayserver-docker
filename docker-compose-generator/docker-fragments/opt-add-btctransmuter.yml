@@ -9,7 +9,7 @@ services:
       TRANSMUTER_DatabaseType: postgres
       TRANSMUTER_DataProtectionDir: data/keys      
       TRANSMUTER_ExtensionsDir: data/extensions
-      NBXplorer_Cryptos: ${BTCTRANSMUTER_CRYPTOS}
+      NBXplorer_Cryptos: ${BTCPAY_CRYPTOS}
       NBXplorer_Uri: http://nbxplorer:32838/
       NBXplorer_NetworkType: ${NBITCOIN_NETWORK:-regtest}
       NBXplorer_UseDefaultCookie: 1

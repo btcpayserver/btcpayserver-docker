@@ -139,7 +139,6 @@ Additionally, there are specific environment variables for some addons:
 * `LIBREPATRON_HOST`: If libre patron is activated with [opt-add-librepatron](docker-compose-generator/docker-fragments/opt-add-librepatron.yml), the hostname of your libre patron website (eg. `librepatron.example.com`)
 * `WOOCOMMERCE_HOST`: If woocommerce is activated with [opt-add-woocommerce](docker-compose-generator/docker-fragments/opt-add-woocommerce.yml), the hostname of your woocommerce website (eg. `store.example.com`)
 * `BTCTRANSMUTER_HOST`: If btctransmuter is activated with [opt-add-btctransmuter](docker-compose-generator/docker-fragments/opt-add-btctransmuter.yml), the hostname of your btctransmuter website (eg. `transmuter.example.com`)
-* `BTCTRANSMUTER_CRYPTOS`: If btctransmuter is activated with [opt-add-btctransmuter](docker-compose-generator/docker-fragments/opt-add-btctransmuter.yml), the coins enabled to set up (eg. `BTC,LTC`)
 
 # Tooling
 
