@@ -125,18 +125,18 @@ cd - && cd ..
 
 
 # Build bitcoin
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.17.0/Bitcoin/0.17.0/linuxamd64.Dockerfile
-DOCKERFILE="Bitcoin/0.17.0/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.17.0/Bitcoin/0.17.0/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Bitcoin/0.17.0/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.17.0/Bitcoin/0.17.0/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Bitcoin/0.17.0/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/bitcoin:0.17.0"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.18.0/Bitcoin/0.18.0/linuxamd64.Dockerfile
+DOCKERFILE="Bitcoin/0.18.0/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.18.0/Bitcoin/0.18.0/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Bitcoin/0.18.0/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.18.0/Bitcoin/0.18.0/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Bitcoin/0.18.0/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/bitcoin:0.18.0"
 git clone https://github.com/btcpayserver/dockerfile-deps bitcoin
 cd bitcoin
-git checkout Bitcoin/0.17.0
+git checkout Bitcoin/0.18.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoin:0.17.0" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoin:0.18.0" .
 cd - && cd ..
 
 
@@ -319,16 +319,16 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.28/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.37/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.28/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.37/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-echo "Building nicolasdorier/nbxplorer:2.0.0.28"
+echo "Building nicolasdorier/nbxplorer:2.0.0.37"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.0.0.28
+git checkout v2.0.0.37
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.0.0.28" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.0.0.37" .
 cd - && cd ..
 
 
@@ -337,12 +337,12 @@ cd - && cd ..
 DOCKERFILE="stable/stretch/Dockerfile"
 # https://raw.githubusercontent.com/nginxinc/docker-nginx/master/stable/stretch/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="stable/stretch/Dockerfile"
-echo "Building nginx:stable"
+echo "Building nginx:latest"
 git clone https://github.com/nginxinc/docker-nginx nginx
 cd nginx
 git checkout master
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nginx:stable" .
+docker build -f "$DOCKERFILE" -t "nginx:latest" .
 cd - && cd ..
 
 
@@ -401,14 +401,14 @@ cd - && cd ..
 
 
 # Build librepatron
-# https://raw.githubusercontent.com/JeffVandrewJr/patron/v0.7.31/Dockerfile
+# https://raw.githubusercontent.com/JeffVandrewJr/patron/v0.7.35/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building jvandrew/librepatron:0.7.31"
+echo "Building jvandrew/librepatron:0.7.35"
 git clone https://github.com/JeffVandrewJr/patron librepatron
 cd librepatron
-git checkout v0.7.31
+git checkout v0.7.35
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/librepatron:0.7.31" .
+docker build -f "$DOCKERFILE" -t "jvandrew/librepatron:0.7.35" .
 cd - && cd ..
 
 

@@ -4,7 +4,7 @@ services:
 
   nbxplorer:
     restart: unless-stopped
-    image: nicolasdorier/nbxplorer:2.0.0.31
+    image: nicolasdorier/nbxplorer:2.0.0.37
     expose: 
       - "32838"
     environment:
