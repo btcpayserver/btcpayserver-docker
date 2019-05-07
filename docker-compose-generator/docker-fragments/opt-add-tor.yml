@@ -19,12 +19,16 @@ services:
   woocommerce:
     environment:
       HIDDENSERVICE_NAME: WooCommerce
+      HIDDENSERVICE_REVERSEPROXY: nginx
       WOOCOMMERCE_HIDDENSERVICE_HOSTNAME_FILE: /var/lib/tor/hidden_services/WooCommerce/hostname
     volumes:
       - "tor_servicesdir:/var/lib/tor/hidden_services"
 
   bitcoind:
     environment:
+      HIDDENSERVICE_NAME: BitcoinP2P
+      HIDDENSERVICE_VIRTUAL_PORT: 8333
+      HIDDENSERVICE_PORT: 39388
       BITCOIN_EXTRA_ARGS: |
         onion=tor:9050
     volumes:
