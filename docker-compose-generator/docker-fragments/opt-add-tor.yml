@@ -25,6 +25,9 @@ services:
 
   bitcoind:
     environment:
+      HIDDENSERVICE_NAME: BTC-P2P
+      HIDDENSERVICE_VIRTUAL_PORT: 8333
+      HIDDENSERVICE_PORT: 39388
       BITCOIN_EXTRA_ARGS: |
         onion=tor:9050
     volumes:
