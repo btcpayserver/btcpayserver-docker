@@ -13,6 +13,11 @@ services:
           port=39388
           disablewallet=1
           whitelist=0.0.0.0/0
+          # rpcuser=lnd
+          # rpcpassword=afixedpasswordbecauselndsuckswithcookiefile
+          # We need to use rpcauth because we also need cookieauth. rpcpassword disabled cookie file auth.
+          # Be careful if you copy the line below from the docker-compose.yml! A dollar sign is escaped
+          rpcauth=lnd:d031f7567c5b02ba95524170e51c77f4$$827ce5412f653d6613c2f480e521eb437c866b999bdeb2ee4f9c41d3b00dff1c
       expose:
         - "43782"
         - "39388"
