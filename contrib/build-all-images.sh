@@ -294,15 +294,17 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.6-beta" .
 cd - && cd ..
 
 
-# Build docker-litecoin
-# https://raw.githubusercontent.com/NicolasDorier/docker-bitcoin/master/litecoin/0.16.3/Dockerfile
-DOCKERFILE="litecoin/0.16.3/Dockerfile"
-echo "Building nicolasdorier/docker-litecoin:0.16.3"
-git clone https://github.com/NicolasDorier/docker-bitcoin docker-litecoin
-cd docker-litecoin
-git checkout master
+# Build litecoin
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.17.1/Litecoin/0.17.1/linuxamd64.Dockerfile
+DOCKERFILE="Litecoin/0.17.1/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.17.1/Litecoin/0.17.1/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Litecoin/0.17.1/linuxarm32v7.Dockerfile"
+echo "Building btcpayserver/litecoin:0.17.1"
+git clone https://github.com/btcpayserver/dockerfile-deps litecoin
+cd litecoin
+git checkout Litecoin/0.17.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/docker-litecoin:0.16.3" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/litecoin:0.17.1" .
 cd - && cd ..
 
 

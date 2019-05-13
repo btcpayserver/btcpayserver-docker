@@ -382,10 +382,11 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/viacoin/docker-viacoin";
                     dockerInfo.GitRef = "master";
                     break;
-                case "docker-litecoin":
-                    dockerInfo.DockerFilePath = $"litecoin/{image.Tag}/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/NicolasDorier/docker-bitcoin";
-                    dockerInfo.GitRef = "master";
+                case "litecoin":
+                    dockerInfo.DockerFilePath = $"Litecoin/{image.Tag}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Litecoin/{image.Tag}/linuxarm32v7.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"Litecoin/{image.Tag}";
                     break;
                 case "docker-monacoin":
                     dockerInfo.DockerFilePath = $"monacoin/{image.Tag}/Dockerfile";
