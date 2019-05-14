@@ -33,9 +33,8 @@ This video by Nicolas also demonstrates the above steps:
 
 [![BTCPay - One Click Setup](http://img.youtube.com/vi/Bxs95BdEMHY/mqdefault.jpg)](https://www.youtube.com/watch?v=Bxs95BdEMHY "BTCPay - One Click Setup")
 
-Approximate Cost (unpruned, Bitcoin-only): **60 USD per month**
-
-After all your nodes have synced and you've confirmed everything works, follow [this guide](https://github.com/btcpayserver/btcpayserver-doc/blob/master/AzurePennyPinching.md) to fine-tune for savings; costs should drop to **30 or 40 USD per month**.
+Approximate Cost (pruned, Bitcoin-only with lightning network): **10 USD per month**.
+You can use the wizard of the [lunanode deployment](https://docs.btcpayserver.org/deployment/lunanodewebdeployment) to deploy a BTCPay Server or just use the `btcpay-setup.sh -i` script as described in this README.
 
 # Architecture
 
