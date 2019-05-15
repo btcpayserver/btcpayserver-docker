@@ -23,7 +23,7 @@ services:
     isso:
         container_name: isso
         restart: unless-stopped
-        image: jvandrew/isso:atron.22
+        image: jvandrew/isso:atron.23
         expose:
             - "8080"
         volumes:
