@@ -165,16 +165,16 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.103/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.104/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.103/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.104/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-echo "Building btcpayserver/btcpayserver:1.0.3.103"
+echo "Building btcpayserver/btcpayserver:1.0.3.104"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.0.3.103
+git checkout v1.0.3.104
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.103" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.104" .
 cd - && cd ..
 
 
@@ -321,16 +321,16 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.39/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.41/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.39/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.41/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-echo "Building nicolasdorier/nbxplorer:2.0.0.39"
+echo "Building nicolasdorier/nbxplorer:2.0.0.41"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.0.0.39
+git checkout v2.0.0.41
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.0.0.39" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.0.0.41" .
 cd - && cd ..
 
 
@@ -415,14 +415,14 @@ cd - && cd ..
 
 
 # Build isso
-# https://raw.githubusercontent.com/JeffVandrewJr/isso/patron.22/Dockerfile
+# https://raw.githubusercontent.com/JeffVandrewJr/isso/patron.23/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building jvandrew/isso:atron.22"
+echo "Building jvandrew/isso:atron.23"
 git clone https://github.com/JeffVandrewJr/isso isso
 cd isso
-git checkout patron.22
+git checkout patron.23
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/isso:atron.22" .
+docker build -f "$DOCKERFILE" -t "jvandrew/isso:atron.23" .
 cd - && cd ..
 
 
