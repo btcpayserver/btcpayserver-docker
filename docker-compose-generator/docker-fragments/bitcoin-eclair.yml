@@ -13,7 +13,7 @@ services:
         rpcpassword=DwubwWsoo3
   eclair_bitcoin:
     restart: unless-stopped
-    stop_signal: SIGKILL
+    stop_signal: SIGINT
     image: acinq/eclair:v0.3
     environment:
       PUBLIC_HOST: ${BTCPAY_HOST}
