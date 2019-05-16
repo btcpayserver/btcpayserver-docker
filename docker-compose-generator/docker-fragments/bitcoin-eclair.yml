@@ -14,7 +14,7 @@ services:
   eclair_bitcoin:
     restart: unless-stopped
     stop_signal: SIGKILL
-    image: kukks/eclair:fc1df9
+    image: acinq/eclair:v0.3
     environment:
       PUBLIC_HOST: ${BTCPAY_HOST}
       JAVA_OPTS: |
@@ -22,6 +22,7 @@ services:
         -Declair.headless
         -Declair.chain=${NBITCOIN_NETWORK:-regtest}
         -Declair.server.binding-ip=0.0.0.0
+        -Declair.server.public-ips.0=${BTCPAY_HOST}
         -Declair.server.port=9735
         -Declair.api.enabled=true
         -Declair.api.binding-ip=0.0.0.0
