@@ -18,6 +18,7 @@ services:
     environment:
       PUBLIC_HOST: ${BTCPAY_HOST}
       JAVA_OPTS: |
+        -Xmx256m
         -Declair.printToConsole
         -Declair.headless
         -Declair.chain=${NBITCOIN_NETWORK:-regtest}
