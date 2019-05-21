@@ -100,6 +100,7 @@ services:
       HIDDENSERVICE_PORT: 9735
       LND_HIDDENSERVICE_HOSTNAME_FILE: /var/lib/tor/hidden_services/lnd/hostname
       LND_EXTRA_ARGS: |
+        tor.active=1
         tor.socks=tor:9050
     links:
       - tor
@@ -113,6 +114,7 @@ services:
       HIDDENSERVICE_PORT: 9736
       LND_HIDDENSERVICE_HOSTNAME_FILE: /var/lib/tor/hidden_services/lnd-ltc/hostname
       LND_EXTRA_ARGS: |
+        tor.active=1
         tor.socks=tor:9050
     links:
       - tor
