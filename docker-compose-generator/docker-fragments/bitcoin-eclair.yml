@@ -46,7 +46,7 @@ services:
       - bitcoind
   btcpayserver:
     environment:
-      BTCPAY_BTCLIGHTNING: "type=eclair;server=http://eclair_bitcoin:8080;password=DwubwWsoo3;bitcoin-host=bitcoind:43782;bitcoin-auth=ceiwHEbqWI83:DwubwWsoo3"
+      BTCPAY_BTCLIGHTNING: "type=eclair;server=http://eclair_bitcoin:8080;password=DwubwWsoo3"
     volumes:
       - "eclair_bitcoin_datadir:/etc/eclair_bitcoin"
     links:
