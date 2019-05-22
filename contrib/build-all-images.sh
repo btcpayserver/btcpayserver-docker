@@ -402,27 +402,41 @@ docker build -f "$DOCKERFILE" -t "redis:5.0.2-alpine" .
 cd - && cd ..
 
 
+# Build btctransmuter
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.19/BtcTransmuter/Dockerfile.linuxamd64
+DOCKERFILE="BtcTransmuter/Dockerfile.linuxamd64"
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.19/BtcTransmuter/Dockerfile.linuxarm32v7
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="BtcTransmuter/Dockerfile.linuxarm32v7"
+echo "Building btcpayserver/btctransmuter:0.0.19"
+git clone https://github.com/btcpayserver/btctransmuter btctransmuter
+cd btctransmuter
+git checkout v0.0.19
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.19" .
+cd - && cd ..
+
+
 # Build librepatron
-# https://raw.githubusercontent.com/JeffVandrewJr/patron/v0.7.35/Dockerfile
+# https://raw.githubusercontent.com/JeffVandrewJr/patron/v0.7.37/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building jvandrew/librepatron:0.7.35"
+echo "Building jvandrew/librepatron:0.7.37"
 git clone https://github.com/JeffVandrewJr/patron librepatron
 cd librepatron
-git checkout v0.7.35
+git checkout v0.7.37
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/librepatron:0.7.35" .
+docker build -f "$DOCKERFILE" -t "jvandrew/librepatron:0.7.37" .
 cd - && cd ..
 
 
 # Build isso
-# https://raw.githubusercontent.com/JeffVandrewJr/isso/patron.23/Dockerfile
+# https://raw.githubusercontent.com/JeffVandrewJr/isso/patron.22/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building jvandrew/isso:atron.23"
+echo "Building jvandrew/isso:atron.22"
 git clone https://github.com/JeffVandrewJr/isso isso
 cd isso
-git checkout patron.23
+git checkout patron.22
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/isso:atron.23" .
+docker build -f "$DOCKERFILE" -t "jvandrew/isso:atron.22" .
 cd - && cd ..
 
 

@@ -357,6 +357,12 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/dgarage/nbxplorer";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     break;
+                case "btctransmuter":
+                    dockerInfo.DockerFilePath = "BtcTransmuter/Dockerfile.linuxamd64";
+                    dockerInfo.DockerFilePathARM32v7 = "BtcTransmuter/Dockerfile.linuxarm32v7";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/btctransmuter";
+                    dockerInfo.GitRef = $"v{image.Tag}";
+                    break;
                 case "dogecoin":
                     dockerInfo.DockerFilePath = $"dogecoin/{image.Tag}/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/rockstardev/docker-bitcoin";
