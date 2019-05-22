@@ -67,6 +67,7 @@ Add-on specific variables:
     LIBREPATRON_HOST: If libre patron is activated with opt-add-librepatron, the hostname of your libre patron website (eg. librepatron.example.com)
     WOOCOMMERCE_HOST: If woocommerce is activated with opt-add-woocommerce, the hostname of your woocommerce website (eg. store.example.com)
     BTCPAYGEN_EXCLUDE_FRAGMENTS:  Semicolon-separated list of fragments you want to forcefully exclude (eg. litecoin-clightning)
+    BTCTRANSMUTER_HOST: If btc transmuter is activated with opt-add-btctransmuter, the hostname of your btc transmuter website (eg. store.example.com)
 END
 }
 
@@ -139,6 +140,17 @@ if [[ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]] && [[ "$BTCPAY_HOST" ]]; then
     BTCPAY_HOST="$DOMAIN_NAME"
 fi
 
+BTCPAY_CRYPTOS=""
+for i in "$BTCPAYGEN_CRYPTO1" "$BTCPAYGEN_CRYPTO2" "$BTCPAYGEN_CRYPTO3" "$BTCPAYGEN_CRYPTO4" "$BTCPAYGEN_CRYPTO5" "$BTCPAYGEN_CRYPTO5" "$BTCPAYGEN_CRYPTO6" "$BTCPAYGEN_CRYPTO7" "$BTCPAYGEN_CRYPTO8"
+do  
+    if [ ! -z "$i" ]; then 
+        if [ ! -z "$BTCPAY_CRYPTOS" ]; then 
+            BTCPAY_CRYPTOS="$BTCPAY_CRYPTOS;"
+        fi
+        BTCPAY_CRYPTOS="$BTCPAY_CRYPTOS$i"
+    fi
+done
+
 echo "
 -------SETUP-----------
 Parameters passed:
@@ -146,6 +158,7 @@ BTCPAY_PROTOCOL:$BTCPAY_PROTOCOL
 BTCPAY_HOST:$BTCPAY_HOST
 LIBREPATRON_HOST:$LIBREPATRON_HOST
 WOOCOMMERCE_HOST:$WOOCOMMERCE_HOST
+BTCTRANSMUTER_HOST:$BTCTRANSMUTER_HOST
 BTCPAY_HOST_SSHKEYFILE:$BTCPAY_HOST_SSHKEYFILE
 LETSENCRYPT_EMAIL:$LETSENCRYPT_EMAIL
 NBITCOIN_NETWORK:$NBITCOIN_NETWORK
@@ -173,6 +186,7 @@ BTCPAY_ENV_FILE=$BTCPAY_ENV_FILE
 BTCPAYGEN_OLD_PREGEN=$BTCPAYGEN_OLD_PREGEN
 BTCPAY_SSHKEYFILE=$BTCPAY_SSHKEYFILE
 BTCPAY_SSHTRUSTEDFINGERPRINTS:$BTCPAY_SSHTRUSTEDFINGERPRINTS
+BTCPAY_CRYPTOS:$BTCPAY_CRYPTOS
 ----------------------
 "
 
@@ -228,6 +242,8 @@ LIGHTNING_ALIAS=$LIGHTNING_ALIAS
 BTCPAY_SSHTRUSTEDFINGERPRINTS=$BTCPAY_SSHTRUSTEDFINGERPRINTS
 BTCPAY_SSHKEYFILE=$BTCPAY_SSHKEYFILE
 LIBREPATRON_HOST=$LIBREPATRON_HOST
+BTCTRANSMUTER_HOST=$BTCTRANSMUTER_HOST
+BTCPAY_CRYPTOS=$BTCPAY_CRYPTOS
 WOOCOMMERCE_HOST=$WOOCOMMERCE_HOST" > $BTCPAY_ENV_FILE
 echo -e "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE\n"
 
