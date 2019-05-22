@@ -3,7 +3,7 @@ services:
     librepatron:
         container_name: librepatron
         restart: unless-stopped
-        image: jvandrew/librepatron:0.7.35
+        image: jvandrew/librepatron:0.7.37
         expose:
             - "8006"
         volumes:
@@ -23,7 +23,7 @@ services:
     isso:
         container_name: isso
         restart: unless-stopped
-        image: jvandrew/isso:atron.23
+        image: jvandrew/isso:atron.22
         expose:
             - "8080"
         volumes:
