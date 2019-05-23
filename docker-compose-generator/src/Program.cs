@@ -73,7 +73,7 @@ namespace DockerGenerator
 				fragments.Add(fragment.Trim());
 			}
 			fragments = fragments.Where(s => !composition.ExcludeFragments.Contains(s)).ToHashSet();
-			var def = new DockerComposeDefinition(name, fragments.ToList());
+			var def = new DockerComposeDefinition(name, fragments);
 			def.FragmentLocation = fragmentLocation;
 			def.BuildOutputDirectory = output;
 			def.Build();

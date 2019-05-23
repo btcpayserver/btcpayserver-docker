@@ -389,8 +389,8 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = "master";
                     break;
                 case "litecoin":
-                    dockerInfo.DockerFilePath = $"Litecoin/{image.Tag}/linuxamd64.Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"Litecoin/{image.Tag}/linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePath = $"Litecoin/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Litecoin/{NoRevision(image.Tag)}/linuxarm32v7.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
                     dockerInfo.GitRef = $"Litecoin/{image.Tag}";
                     break;
@@ -459,7 +459,10 @@ namespace DockerFileBuildHelper
             dockerInfo.Image = image;
             return dockerInfo;
         }
-
+        string NoRevision(string str)
+        {
+            return str.Split('-').First();
+        }
         private YamlMappingNode ParseDocument(string fragment)
         {
             var input = new StringReader(File.ReadAllText(fragment));

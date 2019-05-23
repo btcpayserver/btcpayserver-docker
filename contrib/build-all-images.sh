@@ -295,16 +295,16 @@ cd - && cd ..
 
 
 # Build litecoin
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.17.1/Litecoin/0.17.1/linuxamd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.17.1-1/Litecoin/0.17.1/linuxamd64.Dockerfile
 DOCKERFILE="Litecoin/0.17.1/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.17.1/Litecoin/0.17.1/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.17.1-1/Litecoin/0.17.1/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Litecoin/0.17.1/linuxarm32v7.Dockerfile"
-echo "Building btcpayserver/litecoin:0.17.1"
+echo "Building btcpayserver/litecoin:0.17.1-1"
 git clone https://github.com/btcpayserver/dockerfile-deps litecoin
 cd litecoin
-git checkout Litecoin/0.17.1
+git checkout Litecoin/0.17.1-1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/litecoin:0.17.1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/litecoin:0.17.1-1" .
 cd - && cd ..
 
 
