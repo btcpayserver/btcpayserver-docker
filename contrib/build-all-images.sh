@@ -179,18 +179,18 @@ cd - && cd ..
 
 
 # Build dash
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.13.0/Dash/0.13.0/linuxamd64.Dockerfile
-DOCKERFILE="Dash/0.13.0/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.13.0/Dash/0.13.0/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dash/0.13.0/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.13.0/Dash/0.13.0/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dash/0.13.0/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/dash:0.13.0"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.14.0/Dash/0.14.0/linuxamd64.Dockerfile
+DOCKERFILE="Dash/0.14.0/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.14.0/Dash/0.14.0/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dash/0.14.0/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.14.0/Dash/0.14.0/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dash/0.14.0/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/dash:0.14.0"
 git clone https://github.com/btcpayserver/dockerfile-deps dash
 cd dash
-git checkout Dash/0.13.0
+git checkout Dash/0.14.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/dash:0.13.0" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/dash:0.14.0" .
 cd - && cd ..
 
 
