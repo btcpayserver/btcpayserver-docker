@@ -56,26 +56,6 @@ namespace DockerGenerator
 				}
 			}
 
-			var deps = new HashSet<string>();
-			foreach (var doc in Fragments.Select(f => ParseDocument(f)))
-			{
-				GetDeps(deps, doc);
-			}
-
-			foreach (var fragment in deps.Where(d => Fragments.Add(d)))
-			{
-				var fragmentPath = GetFragmentLocation(fragment);
-				if (!File.Exists(fragmentPath))
-				{
-					Console.WriteLine($"\t{fragment} not found in {fragmentPath}, ignoring...");
-					Fragments.Remove(fragment);
-				}
-				else
-				{
-					Console.WriteLine($"\t{fragment}");
-				}
-			}
-
 			var services = new List<KeyValuePair<YamlNode, YamlNode>>();
 			var volumes = new List<KeyValuePair<YamlNode, YamlNode>>();
 			var networks = new List<KeyValuePair<YamlNode, YamlNode>>();
@@ -108,11 +88,6 @@ namespace DockerGenerator
 			File.WriteAllText(outputFile, result.Replace("''", ""));
 			Console.WriteLine($"Generated {outputFile}");
 			Console.WriteLine();
-		}
-
-		private void GetDeps(HashSet<string> deps, YamlMappingNode doc)
-		{
-			throw new NotImplementedException();
 		}
 
 		private KeyValuePair<YamlNode, YamlNode>[] Merge(List<KeyValuePair<YamlNode, YamlNode>> services)
