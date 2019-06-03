@@ -340,8 +340,8 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"Dash/{image.Tag}";
                     break;
                 case "btcpayserver":
-                    dockerInfo.DockerFilePath = "Dockerfile.linuxamd64";
-                    dockerInfo.DockerFilePathARM32v7 = "Dockerfile.linuxarm32v7";
+                    dockerInfo.DockerFilePath = "amd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "arm32v7.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/btcpayserver";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     break;
