@@ -359,7 +359,7 @@ fi
 echo -e "BTCPay Server systemd configured in /etc/systemd/system/btcpayserver.service\n"
 systemctl daemon-reload
 systemctl enable btcpayserver
-if START; then
+if $START; then
     echo "BTCPay Server starting... this can take 5 to 10 minutes..."
     systemctl start btcpayserver
     echo "BTCPay Server started"
@@ -384,7 +384,7 @@ script
     docker-compose -f \"\$BTCPAY_DOCKER_COMPOSE\" up -d
 end script" > /etc/init/start_containers.conf
     echo -e "BTCPay Server upstart configured in /etc/init/start_containers.conf\n"
-if START; then
+if $START; then
     initctl reload-configuration
     echo "BTCPay Server started"
 fi
@@ -397,8 +397,8 @@ if [ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ] && [ "$OLD_BTCPAY_DOCKER_COMPOSE" != "$
     docker-compose -f "$OLD_BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
 fi
 
-START && docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d --remove-orphans -t "${COMPOSE_HTTP_TIMEOUT:-180}"
-! START && docker-compose -f "$BTCPAY_DOCKER_COMPOSE" pull
+$START && docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d --remove-orphans -t "${COMPOSE_HTTP_TIMEOUT:-180}"
+! $START && docker-compose -f "$BTCPAY_DOCKER_COMPOSE" pull
 
 # Give SSH key to BTCPay
 if [[ -f "$BTCPAY_HOST_SSHKEYFILE" ]]; then
