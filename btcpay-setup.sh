@@ -30,7 +30,8 @@ Usage:
 Install BTCPay on this server
 This script must be run as root
 
-    -i : Run install
+    -i : Run install and start BTCPay Server
+    --install-only : Run install only
 
 This script will:
 
@@ -71,9 +72,14 @@ Add-on specific variables:
 END
 }
 
-if [ "$1" != "-i" ]; then
+if [ "$1" != "-i" ] && [ "$1" != "--install-only" ]; then
     display_help
     return
+fi
+
+START=true
+if [ "$1" == "--install-only" ]; then
+    START=false
 fi
 
 if [ -z "$BTCPAYGEN_CRYPTO1" ]; then
@@ -351,11 +357,13 @@ systemctl restart docker
 fi
 
 echo -e "BTCPay Server systemd configured in /etc/systemd/system/btcpayserver.service\n"
-echo "BTCPay Server starting... this can take 5 to 10 minutes..."
 systemctl daemon-reload
 systemctl enable btcpayserver
-systemctl start btcpayserver
-echo "BTCPay Server started"
+if $START; then
+    echo "BTCPay Server starting... this can take 5 to 10 minutes..."
+    systemctl start btcpayserver
+    echo "BTCPay Server started"
+fi
 else # Use upstart
 echo "Using upstart"
 echo "
@@ -376,8 +384,10 @@ script
     docker-compose -f \"\$BTCPAY_DOCKER_COMPOSE\" up -d
 end script" > /etc/init/start_containers.conf
     echo -e "BTCPay Server upstart configured in /etc/init/start_containers.conf\n"
+if $START; then
     initctl reload-configuration
     echo "BTCPay Server started"
+fi
 fi
 
 cd "$(dirname $BTCPAY_ENV_FILE)"
@@ -387,7 +397,8 @@ if [ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ] && [ "$OLD_BTCPAY_DOCKER_COMPOSE" != "$
     docker-compose -f "$OLD_BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
 fi
 
-docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d --remove-orphans -t "${COMPOSE_HTTP_TIMEOUT:-180}"
+$START && docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d --remove-orphans -t "${COMPOSE_HTTP_TIMEOUT:-180}"
+! $START && docker-compose -f "$BTCPAY_DOCKER_COMPOSE" pull
 
 # Give SSH key to BTCPay
 if [[ -f "$BTCPAY_HOST_SSHKEYFILE" ]]; then
