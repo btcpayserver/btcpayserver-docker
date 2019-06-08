@@ -6,8 +6,8 @@ services:
     image: nginx:latest
     container_name: nginx
     ports:
-      - "80:80"
-      - "443:443"
+      - "${BTCPAY_HTTP_PORT:-80}:80"
+      - "${BTCPAY_HTTPS_PORT:-443}:443"
     volumes:
       - "nginx_conf:/etc/nginx/conf.d"
       - "nginx_vhost:/etc/nginx/vhost.d"
