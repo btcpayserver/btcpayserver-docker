@@ -85,14 +85,14 @@ cd - && cd ..
 
 
 # Build spark-wallet
-# https://raw.githubusercontent.com/shesek/spark-wallet/v0.2.4/Dockerfile
+# https://raw.githubusercontent.com/shesek/spark-wallet/v0.2.8/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building shesek/spark-wallet:0.2.4-standalone"
+echo "Building shesek/spark-wallet:0.2.8-standalone"
 git clone https://github.com/shesek/spark-wallet spark-wallet
 cd spark-wallet
-git checkout v0.2.4
+git checkout v0.2.8
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shesek/spark-wallet:0.2.4-standalone" .
+docker build -f "$DOCKERFILE" -t "shesek/spark-wallet:0.2.8-standalone" .
 cd - && cd ..
 
 
