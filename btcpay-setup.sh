@@ -45,11 +45,14 @@ This script will:
 You can run again this script if you desire to change your configuration.
 Except BTC and LTC, other crypto currencies are maintained by their own community. Run at your own risk.
 
-Make sure you own a domain with DNS record pointing to your website and that port 80 is accessible before running this script.
-This will be used to properly setup HTTPS via let's encrypt.
+Make sure you own a domain with DNS record pointing to your website.
+If you want HTTPS setup automatically with Let's Encrypt, leave BTCPAY_HTTP_PORT at it's default value of 80 and make sure this port is accessible from the internet.
+Or, if you want to offload SSL because you have an existing web proxy, change BTCPAY_HTTP_PORT to any port you want. You can then forward the traffic. Just don't forget to pass the X-Forwarded-Proto header.
 
 Environment variables:
     BTCPAY_HOST: The hostname of your website (eg. btcpay.example.com)
+    BTCPAY_HTTP_PORT: The port to bind to for public HTTP requests. Default: 80
+    BTCPAY_HTTPS_PORT: The port to bind to for public HTTPS requests. Default: 443
     LETSENCRYPT_EMAIL: A mail will be sent to this address if certificate expires and fail to renew automatically (eg. me@example.com)
     NBITCOIN_NETWORK: The type of network to use (eg. mainnet, testnet or regtest. Default: mainnet)
     LIGHTNING_ALIAS: An alias for your lightning network node if used
@@ -140,7 +143,7 @@ fi
 if [[ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]] && [[ "$BTCPAY_HOST" ]]; then
     DOMAIN_NAME="$(echo "$BTCPAY_HOST" | grep -P '(?=^.{4,253}$)(^(?:[a-zA-Z0-9](?:(?:[a-zA-Z0-9\-]){0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$)')"
     if [[ ! "$DOMAIN_NAME" ]]; then
-        echo "BTCPAYGEN_REVERSEPROXY is set to nginx, so BTCPAY_HOST must be a domain name which point to this server (with port 80 and 443 open), but the current value of BTCPAY_HOST ('$BTCPAY_HOST') is not a valid domain name."
+        echo "BTCPAYGEN_REVERSEPROXY is set to nginx, so BTCPAY_HOST must be a domain name which point to this server, but the current value of BTCPAY_HOST ('$BTCPAY_HOST') is not a valid domain name."
         return
     fi
     BTCPAY_HOST="$DOMAIN_NAME"
@@ -162,6 +165,8 @@ echo "
 Parameters passed:
 BTCPAY_PROTOCOL:$BTCPAY_PROTOCOL
 BTCPAY_HOST:$BTCPAY_HOST
+BTCPAY_HTTP_PORT:$BTCPAY_HTTP_PORT
+BTCPAY_HTTPS_PORT:$BTCPAY_HTTPS_PORT
 LIBREPATRON_HOST:$LIBREPATRON_HOST
 WOOCOMMERCE_HOST:$WOOCOMMERCE_HOST
 BTCTRANSMUTER_HOST:$BTCTRANSMUTER_HOST
@@ -240,6 +245,8 @@ touch $BTCPAY_ENV_FILE
 echo "
 BTCPAY_PROTOCOL=$BTCPAY_PROTOCOL
 BTCPAY_HOST=$BTCPAY_HOST
+BTCPAY_HTTP_PORT=$BTCPAY_HTTP_PORT
+BTCPAY_HTTPS_PORT=$BTCPAY_HTTPS_PORT
 BTCPAY_IMAGE=$BTCPAY_IMAGE
 ACME_CA_URI=$ACME_CA_URI
 NBITCOIN_NETWORK=$NBITCOIN_NETWORK
