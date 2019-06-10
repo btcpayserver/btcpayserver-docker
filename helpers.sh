@@ -36,8 +36,8 @@ install_tooling() {
         if [ -e "$scriptname" ]; then
             if [ "$dependency" == "*" ] || grep -q "$dependency" "$BTCPAY_DOCKER_COMPOSE"; then
                 chmod +x $scriptname
-                ln -s "$(pwd)/$scriptname" /usr/bin
-                echo "Installed $scriptname to /usr/bin: $comment"
+                ln -s "$(pwd)/$scriptname" /usr/local/bin
+                echo "Installed $scriptname to /usr/local/bin: $comment"
             fi
         else
             echo "WARNING: Script $scriptname referenced, but not existing"
