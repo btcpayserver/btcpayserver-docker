@@ -50,7 +50,7 @@ namespace DockerGenerator
 					break;
 			}
 			fragments.Add("btcpayserver");
-			fragments.Add("tor");
+			fragments.Add("opt-add-tor");
 			fragments.Add("nbxplorer");
 			fragments.Add("postgres");
 			foreach (var crypto in CryptoDefinition.GetDefinitions())
