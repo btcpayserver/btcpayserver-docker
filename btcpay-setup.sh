@@ -46,13 +46,13 @@ You can run again this script if you desire to change your configuration.
 Except BTC and LTC, other crypto currencies are maintained by their own community. Run at your own risk.
 
 Make sure you own a domain with DNS record pointing to your website.
-If you want HTTPS setup automatically with Let's Encrypt, leave BTCPAY_HTTP_PORT at it's default value of 80 and make sure this port is accessible from the internet.
-Or, if you want to offload SSL because you have an existing web proxy, change BTCPAY_HTTP_PORT to any port you want. You can then forward the traffic. Just don't forget to pass the X-Forwarded-Proto header.
+If you want HTTPS setup automatically with Let's Encrypt, leave REVERSEPROXY_HTTP_PORT at it's default value of 80 and make sure this port is accessible from the internet.
+Or, if you want to offload SSL because you have an existing web proxy, change REVERSEPROXY_HTTP_PORT to any port you want. You can then forward the traffic. Just don't forget to pass the X-Forwarded-Proto header.
 
 Environment variables:
     BTCPAY_HOST: The hostname of your website (eg. btcpay.example.com)
-    BTCPAY_HTTP_PORT: The port to bind to for public HTTP requests. Default: 80
-    BTCPAY_HTTPS_PORT: The port to bind to for public HTTPS requests. Default: 443
+    REVERSEPROXY_HTTP_PORT: The port the reverse proxy binds to for public HTTP requests. Default: 80
+    REVERSEPROXY_HTTPS_PORT: The port the reverse proxy binds to for public HTTPS requests. Default: 443
     LETSENCRYPT_EMAIL: A mail will be sent to this address if certificate expires and fail to renew automatically (eg. me@example.com)
     NBITCOIN_NETWORK: The type of network to use (eg. mainnet, testnet or regtest. Default: mainnet)
     LIGHTNING_ALIAS: An alias for your lightning network node if used
@@ -111,6 +111,8 @@ fi
 : "${BTCPAYGEN_LIGHTNING:=none}"
 : "${ACME_CA_URI:=https://acme-v01.api.letsencrypt.org/directory}"
 : "${BTCPAY_PROTOCOL:=https}"
+: "${REVERSEPROXY_HTTP_PORT:=80}"
+: "${REVERSEPROXY_HTTPS_PORT:=443}"
 
 OLD_BTCPAY_DOCKER_COMPOSE=$BTCPAY_DOCKER_COMPOSE
 ORIGINAL_DIRECTORY=$(pwd)
@@ -165,8 +167,8 @@ echo "
 Parameters passed:
 BTCPAY_PROTOCOL:$BTCPAY_PROTOCOL
 BTCPAY_HOST:$BTCPAY_HOST
-BTCPAY_HTTP_PORT:$BTCPAY_HTTP_PORT
-BTCPAY_HTTPS_PORT:$BTCPAY_HTTPS_PORT
+REVERSEPROXY_HTTP_PORT:$REVERSEPROXY_HTTP_PORT
+REVERSEPROXY_HTTPS_PORT:$REVERSEPROXY_HTTPS_PORT
 LIBREPATRON_HOST:$LIBREPATRON_HOST
 WOOCOMMERCE_HOST:$WOOCOMMERCE_HOST
 BTCTRANSMUTER_HOST:$BTCTRANSMUTER_HOST
@@ -245,8 +247,8 @@ touch $BTCPAY_ENV_FILE
 echo "
 BTCPAY_PROTOCOL=$BTCPAY_PROTOCOL
 BTCPAY_HOST=$BTCPAY_HOST
-BTCPAY_HTTP_PORT=$BTCPAY_HTTP_PORT
-BTCPAY_HTTPS_PORT=$BTCPAY_HTTPS_PORT
+REVERSEPROXY_HTTP_PORT=$REVERSEPROXY_HTTP_PORT
+REVERSEPROXY_HTTPS_PORT=$REVERSEPROXY_HTTPS_PORT
 BTCPAY_IMAGE=$BTCPAY_IMAGE
 ACME_CA_URI=$ACME_CA_URI
 NBITCOIN_NETWORK=$NBITCOIN_NETWORK
