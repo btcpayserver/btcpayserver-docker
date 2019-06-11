@@ -109,9 +109,9 @@ fi
 : "${ACME_CA_URI:=https://acme-v01.api.letsencrypt.org/directory}"
 : "${BTCPAY_PROTOCOL:=https}"
 
-OLD_BTCPAY_DOCKER_COMPOSE=$BTCPAY_DOCKER_COMPOSE
-ORIGINAL_DIRECTORY=$(pwd)
-BTCPAY_BASE_DIRECTORY="$(dirname $(pwd))"
+OLD_BTCPAY_DOCKER_COMPOSE="$BTCPAY_DOCKER_COMPOSE"
+ORIGINAL_DIRECTORY="$(pwd)"
+BTCPAY_BASE_DIRECTORY="$(dirname "$(pwd)")"
 
 if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then
     if [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production ]]; then
@@ -150,7 +150,7 @@ cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 . helpers.sh
 btcpay_expand_variables
 
-cd $ORIGINAL_DIRECTORY
+cd "$ORIGINAL_DIRECTORY"
 
 echo "
 -------SETUP-----------
