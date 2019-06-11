@@ -32,7 +32,7 @@ install_tooling() {
         dependency="${scripts[$i+0]}"
         comment="${scripts[$i+2]}"
 
-        [ -e /usr/bin/$scriptname ] && rm /usr/bin/$scriptname
+        [ -e /usr/local/bin/$scriptname ] && rm /usr/local/bin/$scriptname
         if [ -e "$scriptname" ]; then
             if [ "$dependency" == "*" ] || grep -q "$dependency" "$BTCPAY_DOCKER_COMPOSE"; then
                 chmod +x $scriptname
