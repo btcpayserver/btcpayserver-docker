@@ -232,6 +232,7 @@ chmod +x /etc/profile.d/btcpay-env.sh
 echo -e "BTCPay Server environment variables successfully saved in /etc/profile.d/btcpay-env.sh\n"
 
 btcpay_update_env
+echo -e "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE\n"
 
 . /etc/profile.d/btcpay-env.sh
 
