@@ -64,7 +64,7 @@ btcpay_expand_variables() {
 }
 
 # Set .env file
-btcpay_update_env() {
+btcpay_update_docker_env() {
 btcpay_expand_variables
 touch $BTCPAY_ENV_FILE
 echo "

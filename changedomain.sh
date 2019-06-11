@@ -17,7 +17,7 @@ ORIGINAL_DIRECTORY="$(pwd)"
 # Modify environment file
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 . helpers.sh
-btcpay_update_env
+btcpay_update_docker_env
 cd "$ORIGINAL_DIRECTORY"
 
 cd "`dirname $BTCPAY_ENV_FILE`"
