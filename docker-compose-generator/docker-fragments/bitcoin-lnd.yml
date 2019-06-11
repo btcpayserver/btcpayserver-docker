@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     environment:
       LND_CHAIN: "btc"
-      LND_EXTERNALIP: ${BTCPAY_HOST}
+      LND_EXTERNALIP: ${BTCPAY_ANNOUNCEABLE_HOST}
       LND_PORT: 9735
       LND_ALIAS: ${LIGHTNING_ALIAS}
       LND_ENVIRONMENT: "${NBITCOIN_NETWORK:-regtest}"
