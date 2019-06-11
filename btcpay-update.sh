@@ -43,6 +43,7 @@ fi
 
 . helpers.sh
 install_tooling
+btcpay_update_docker_env
 
 cd "`dirname $BTCPAY_ENV_FILE`"
 docker-compose -f $BTCPAY_DOCKER_COMPOSE up -d --remove-orphans -t "${COMPOSE_HTTP_TIMEOUT:-180}"
