@@ -10,6 +10,8 @@ However, on some low powered devices like raspberry PI, synchronization time wil
 
 Fast sync provides a solution to decrease dramatically the synchronization time to minutes or few hours.
 
+__Current UTXO Set snapshots only work for Bitcoin Core 0.17.0 or higher. Do NOT use these sets on older versions of Bitcoin Core (0.16.3 or lower)__
+
 ## How does Fast Sync solve it?
 
 In order for Bitcoin software to operate, you do not need all the history of blocks from the genesis. 

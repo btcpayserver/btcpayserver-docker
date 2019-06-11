@@ -2,23 +2,26 @@ version: "3"
 
 services:
   lnd_bitcoin:
-    image: btcpayserver/lnd:v0.5.2-beta
+    image: btcpayserver/lnd:v0.6.1-beta
     container_name: btcpayserver_lnd_bitcoin
     restart: unless-stopped
     environment:
       LND_CHAIN: "btc"
+      LND_EXTERNALIP: ${BTCPAY_ANNOUNCEABLE_HOST}
+      LND_PORT: 9735
+      LND_ALIAS: ${LIGHTNING_ALIAS}
       LND_ENVIRONMENT: "${NBITCOIN_NETWORK:-regtest}"
-      LND_EXPLORERURL: "http://nbxplorer:32838/"
+      LND_READY_FILE: /root/.nbxplorer/btc_fully_synched
       LND_EXTRA_ARGS: |
         restlisten=0.0.0.0:8080
         rpclisten=127.0.0.1:10008
         rpclisten=0.0.0.0:10009
         bitcoin.node=bitcoind
+        bitcoind.rpcuser=lnd
+        bitcoind.rpcpass=afixedpasswordbecauselndsuckswithcookiefile
         bitcoind.rpchost=bitcoind:43782
         bitcoind.zmqpubrawblock=tcp://bitcoind:28332
         bitcoind.zmqpubrawtx=tcp://bitcoind:28333
-        externalip=${BTCPAY_HOST}:9735
-        alias=${LIGHTNING_ALIAS}
         adminmacaroonpath=/data/admin.macaroon
         invoicemacaroonpath=/data/invoice.macaroon
         readonlymacaroonpath=/data/readonly.macaroon
@@ -34,11 +37,10 @@ services:
       - "bitcoin_datadir:/deps/.bitcoin"
       - "nbxplorer_datadir:/root/.nbxplorer"
     links:
-      - nbxplorer
       - bitcoind
 
   lnd_bitcoin_rtl:
-    image: shahanafarooqui/rtl:0.2.14
+    image: shahanafarooqui/rtl:0.3.2
     restart: unless-stopped
     environment:
       LND_SERVER_URL: http://lnd_bitcoin:8080/v1
@@ -73,6 +75,11 @@ services:
       BITCOIN_EXTRA_ARGS: |
         zmqpubrawblock=tcp://0.0.0.0:28332
         zmqpubrawtx=tcp://0.0.0.0:28333
+        # rpcuser=lnd
+        # rpcpassword=afixedpasswordbecauselndsuckswithcookiefile
+        # We need to use rpcauth because we also need cookieauth. rpcpassword disabled cookie file auth.
+        # Be careful if you copy the line below from the docker-compose.yml! A dollar sign is escaped.
+        rpcauth=lnd:d031f7567c5b02ba95524170e51c77f4$$827ce5412f653d6613c2f480e521eb437c866b999bdeb2ee4f9c41d3b00dff1c
     expose:
       - "28332"
       - "28333"

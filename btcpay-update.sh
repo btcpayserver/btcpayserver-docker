@@ -14,8 +14,13 @@ if [[ $BTCPAY_DOCKER_COMPOSE != *docker-compose.generated.yml ]]; then
     exit
 fi
 
-cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"  
-git pull --force
+cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
+
+if [[ "$1" != "--skip-git-pull" ]]; then
+    git pull --force
+    exec "btcpay-update.sh" --skip-git-pull
+    return
+fi
 
 if ! [ -f "/etc/docker/daemon.json" ]; then
 echo "{
@@ -38,6 +43,7 @@ fi
 
 . helpers.sh
 install_tooling
+btcpay_update_docker_env
 
 cd "`dirname $BTCPAY_ENV_FILE`"
 docker-compose -f $BTCPAY_DOCKER_COMPOSE up -d --remove-orphans -t "${COMPOSE_HTTP_TIMEOUT:-180}"

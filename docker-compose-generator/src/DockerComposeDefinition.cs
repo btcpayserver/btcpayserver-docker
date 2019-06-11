@@ -10,13 +10,13 @@ namespace DockerGenerator
 {
 	public class DockerComposeDefinition
 	{
-		public List<string> Fragments
+		public HashSet<string> Fragments
 		{
 			get; set;
 		}
 		private string _Name;
 
-		public DockerComposeDefinition(string name, List<string> fragments)
+		public DockerComposeDefinition(string name, HashSet<string> fragments)
 		{
 			Fragments = fragments;
 			_Name = name;
@@ -55,6 +55,7 @@ namespace DockerGenerator
 					Console.WriteLine($"\t{fragment}");
 				}
 			}
+
 			var services = new List<KeyValuePair<YamlNode, YamlNode>>();
 			var volumes = new List<KeyValuePair<YamlNode, YamlNode>>();
 			var networks = new List<KeyValuePair<YamlNode, YamlNode>>();

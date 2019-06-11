@@ -17,7 +17,7 @@ services:
     - btcpayserver
   nginx-gen:
     restart: unless-stopped
-    image: jwilder/docker-gen
+    image: btcpayserver/docker-gen:0.7.5
     container_name: nginx-gen
     volumes:
     - "/var/run/docker.sock:/tmp/docker.sock:ro"
@@ -61,6 +61,7 @@ services:
       VIRTUAL_NETWORK: nginx-proxy
       VIRTUAL_PORT: 49392
       VIRTUAL_HOST: ${BTCPAY_HOST}
+      VIRTUAL_HOST_NAME: "btcpay"
       SSL_POLICY: Mozilla-Modern
       LETSENCRYPT_HOST: ${BTCPAY_HOST}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}

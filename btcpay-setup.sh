@@ -30,7 +30,8 @@ Usage:
 Install BTCPay on this server
 This script must be run as root
 
-    -i : Run install
+    -i : Run install and start BTCPay Server
+    --install-only : Run install only
 
 This script will:
 
@@ -66,19 +67,26 @@ Environment variables:
 Add-on specific variables:
     LIBREPATRON_HOST: If libre patron is activated with opt-add-librepatron, the hostname of your libre patron website (eg. librepatron.example.com)
     WOOCOMMERCE_HOST: If woocommerce is activated with opt-add-woocommerce, the hostname of your woocommerce website (eg. store.example.com)
+    BTCPAYGEN_EXCLUDE_FRAGMENTS:  Semicolon-separated list of fragments you want to forcefully exclude (eg. litecoin-clightning)
+    BTCTRANSMUTER_HOST: If btc transmuter is activated with opt-add-btctransmuter, the hostname of your btc transmuter website (eg. store.example.com)
 END
 }
 
-if [ "$1" != "-i" ]; then
+if [ "$1" != "-i" ] && [ "$1" != "--install-only" ]; then
     display_help
     return
 fi
 
-if [ -z "$BTCPAY_HOST" ]; then
+START=true
+if [ "$1" == "--install-only" ]; then
+    START=false
+fi
+
+if [ -z "$BTCPAYGEN_CRYPTO1" ]; then
     if [ -f "/etc/profile.d/btcpay-env.sh" ]; then
         echo "This script must be run as root after running \"sudo su -\""
     else
-        echo "BTCPAY_HOST should not be empty"
+        echo "BTCPAYGEN_CRYPTO1 should not be empty"
     fi
     return
 fi
@@ -101,9 +109,9 @@ fi
 : "${ACME_CA_URI:=https://acme-v01.api.letsencrypt.org/directory}"
 : "${BTCPAY_PROTOCOL:=https}"
 
-OLD_BTCPAY_DOCKER_COMPOSE=$BTCPAY_DOCKER_COMPOSE
-ORIGINAL_DIRECTORY=$(pwd)
-BTCPAY_BASE_DIRECTORY="$(dirname $(pwd))"
+OLD_BTCPAY_DOCKER_COMPOSE="$BTCPAY_DOCKER_COMPOSE"
+ORIGINAL_DIRECTORY="$(pwd)"
+BTCPAY_BASE_DIRECTORY="$(dirname "$(pwd)")"
 
 if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then
     if [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production ]]; then
@@ -129,14 +137,20 @@ if [[ -f "$BTCPAY_HOST_SSHKEYFILE" ]]; then
     done
 fi
 
-if [[ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]]; then
-    DOMAIN_NAME="$(echo "$BTCPAY_HOST" | grep -P '(?=^.{4,253}$)(^(?:[a-zA-Z0-9](?:(?:[a-zA-Z0-9\-]){0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$)')"
+if [[ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]] && [[ "$BTCPAY_HOST" ]]; then
+    DOMAIN_NAME="$(echo "$BTCPAY_HOST" | grep -E '^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$')"
     if [[ ! "$DOMAIN_NAME" ]]; then
         echo "BTCPAYGEN_REVERSEPROXY is set to nginx, so BTCPAY_HOST must be a domain name which point to this server (with port 80 and 443 open), but the current value of BTCPAY_HOST ('$BTCPAY_HOST') is not a valid domain name."
         return
     fi
     BTCPAY_HOST="$DOMAIN_NAME"
 fi
+
+cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
+. helpers.sh
+btcpay_expand_variables
+
+cd "$ORIGINAL_DIRECTORY"
 
 echo "
 -------SETUP-----------
@@ -145,6 +159,7 @@ BTCPAY_PROTOCOL:$BTCPAY_PROTOCOL
 BTCPAY_HOST:$BTCPAY_HOST
 LIBREPATRON_HOST:$LIBREPATRON_HOST
 WOOCOMMERCE_HOST:$WOOCOMMERCE_HOST
+BTCTRANSMUTER_HOST:$BTCTRANSMUTER_HOST
 BTCPAY_HOST_SSHKEYFILE:$BTCPAY_HOST_SSHKEYFILE
 LETSENCRYPT_EMAIL:$LETSENCRYPT_EMAIL
 NBITCOIN_NETWORK:$NBITCOIN_NETWORK
@@ -161,6 +176,7 @@ BTCPAYGEN_CRYPTO9:$BTCPAYGEN_CRYPTO9
 BTCPAYGEN_REVERSEPROXY:$BTCPAYGEN_REVERSEPROXY
 BTCPAYGEN_LIGHTNING:$BTCPAYGEN_LIGHTNING
 BTCPAYGEN_ADDITIONAL_FRAGMENTS:$BTCPAYGEN_ADDITIONAL_FRAGMENTS
+BTCPAYGEN_EXCLUDE_FRAGMENTS:$BTCPAYGEN_EXCLUDE_FRAGMENTS
 BTCPAY_IMAGE:$BTCPAY_IMAGE
 ACME_CA_URI:$ACME_CA_URI
 ----------------------
@@ -171,6 +187,8 @@ BTCPAY_ENV_FILE=$BTCPAY_ENV_FILE
 BTCPAYGEN_OLD_PREGEN=$BTCPAYGEN_OLD_PREGEN
 BTCPAY_SSHKEYFILE=$BTCPAY_SSHKEYFILE
 BTCPAY_SSHTRUSTEDFINGERPRINTS:$BTCPAY_SSHTRUSTEDFINGERPRINTS
+BTCPAY_CRYPTOS:$BTCPAY_CRYPTOS
+BTCPAY_ANNOUNCEABLE_HOST:$BTCPAY_ANNOUNCEABLE_HOST
 ----------------------
 "
 
@@ -200,6 +218,7 @@ export BTCPAYGEN_CRYPTO9=\"$BTCPAYGEN_CRYPTO9\"
 export BTCPAYGEN_LIGHTNING=\"$BTCPAYGEN_LIGHTNING\"
 export BTCPAYGEN_REVERSEPROXY=\"$BTCPAYGEN_REVERSEPROXY\"
 export BTCPAYGEN_ADDITIONAL_FRAGMENTS=\"$BTCPAYGEN_ADDITIONAL_FRAGMENTS\"
+export BTCPAYGEN_EXCLUDE_FRAGMENTS=\"$BTCPAYGEN_EXCLUDE_FRAGMENTS\"
 export BTCPAY_DOCKER_COMPOSE=\"$BTCPAY_DOCKER_COMPOSE\"
 export BTCPAY_BASE_DIRECTORY=\"$BTCPAY_BASE_DIRECTORY\"
 export BTCPAY_ENV_FILE=\"$BTCPAY_ENV_FILE\"
@@ -212,20 +231,7 @@ chmod +x /etc/profile.d/btcpay-env.sh
 
 echo -e "BTCPay Server environment variables successfully saved in /etc/profile.d/btcpay-env.sh\n"
 
-# Set .env file
-touch $BTCPAY_ENV_FILE
-echo "
-BTCPAY_PROTOCOL=$BTCPAY_PROTOCOL
-BTCPAY_HOST=$BTCPAY_HOST
-BTCPAY_IMAGE=$BTCPAY_IMAGE
-ACME_CA_URI=$ACME_CA_URI
-NBITCOIN_NETWORK=$NBITCOIN_NETWORK
-LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL
-LIGHTNING_ALIAS=$LIGHTNING_ALIAS
-BTCPAY_SSHTRUSTEDFINGERPRINTS=$BTCPAY_SSHTRUSTEDFINGERPRINTS
-BTCPAY_SSHKEYFILE=$BTCPAY_SSHKEYFILE
-LIBREPATRON_HOST=$LIBREPATRON_HOST
-WOOCOMMERCE_HOST=$WOOCOMMERCE_HOST" > $BTCPAY_ENV_FILE
+btcpay_update_docker_env
 echo -e "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE\n"
 
 . /etc/profile.d/btcpay-env.sh
@@ -254,9 +260,13 @@ if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; t
             if [[ "$RELEASE" == "bionic" ]]; then
                 RELEASE=xenial
             fi
+            if [ -x "$(command -v dpkg)" ]; then
+                dpkg --add-architecture armhf
+            fi
             add-apt-repository "deb https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") $RELEASE stable"
             apt-get update -y
-            apt-get install -y docker-ce:armhf
+            # zlib1g:armhf is needed for docker-compose, but we install it here as we changed dpkg here
+            apt-get install -y docker-ce:armhf zlib1g:armhf
         fi
     fi
     if ! [ -x "$(command -v docker-compose)" ]; then
@@ -328,11 +338,13 @@ systemctl restart docker
 fi
 
 echo -e "BTCPay Server systemd configured in /etc/systemd/system/btcpayserver.service\n"
-echo "BTCPay Server starting... this can take 5 to 10 minutes..."
 systemctl daemon-reload
 systemctl enable btcpayserver
-systemctl start btcpayserver
-echo "BTCPay Server started"
+if $START; then
+    echo "BTCPay Server starting... this can take 5 to 10 minutes..."
+    systemctl start btcpayserver
+    echo "BTCPay Server started"
+fi
 else # Use upstart
 echo "Using upstart"
 echo "
@@ -353,8 +365,10 @@ script
     docker-compose -f \"\$BTCPAY_DOCKER_COMPOSE\" up -d
 end script" > /etc/init/start_containers.conf
     echo -e "BTCPay Server upstart configured in /etc/init/start_containers.conf\n"
+if $START; then
     initctl reload-configuration
     echo "BTCPay Server started"
+fi
 fi
 
 cd "$(dirname $BTCPAY_ENV_FILE)"
@@ -364,7 +378,8 @@ if [ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ] && [ "$OLD_BTCPAY_DOCKER_COMPOSE" != "$
     docker-compose -f "$OLD_BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
 fi
 
-docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d --remove-orphans -t "${COMPOSE_HTTP_TIMEOUT:-180}"
+$START && docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d --remove-orphans -t "${COMPOSE_HTTP_TIMEOUT:-180}"
+! $START && docker-compose -f "$BTCPAY_DOCKER_COMPOSE" pull
 
 # Give SSH key to BTCPay
 if [[ -f "$BTCPAY_HOST_SSHKEYFILE" ]]; then
@@ -372,8 +387,7 @@ if [[ -f "$BTCPAY_HOST_SSHKEYFILE" ]]; then
     docker cp "$BTCPAY_HOST_SSHKEYFILE" $(docker ps --filter "name=_btcpayserver_" -q):$BTCPAY_SSHKEYFILE
 fi
 
-cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"  
-. helpers.sh
+cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 install_tooling
 
 cd $ORIGINAL_DIRECTORY

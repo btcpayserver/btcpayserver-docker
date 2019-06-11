@@ -326,6 +326,12 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
                     dockerInfo.GitRef = $"Bitcoin/{image.Tag}";
                     break;
+                case "tor":
+                    dockerInfo.DockerFilePath = $"Tor/{image.Tag}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Tor/{image.Tag}/linuxarm32v7.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"Tor/{image.Tag}";
+                    break;
                 case "dash":
                     dockerInfo.DockerFilePath = $"Dash/{image.Tag}/linuxamd64.Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"Dash/{image.Tag}/linuxarm32v7.Dockerfile";
@@ -334,8 +340,8 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"Dash/{image.Tag}";
                     break;
                 case "btcpayserver":
-                    dockerInfo.DockerFilePath = "Dockerfile.linuxamd64";
-                    dockerInfo.DockerFilePathARM32v7 = "Dockerfile.linuxarm32v7";
+                    dockerInfo.DockerFilePath = "amd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "arm32v7.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/btcpayserver";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     break;
@@ -349,6 +355,12 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePath = "Dockerfile.linuxamd64";
                     dockerInfo.DockerFilePathARM32v7 = "Dockerfile.linuxarm32v7";
                     dockerInfo.GitLink = "https://github.com/dgarage/nbxplorer";
+                    dockerInfo.GitRef = $"v{image.Tag}";
+                    break;
+                case "btctransmuter":
+                    dockerInfo.DockerFilePath = "BtcTransmuter/Dockerfile.linuxamd64";
+                    dockerInfo.DockerFilePathARM32v7 = "BtcTransmuter/Dockerfile.linuxarm32v7";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/btctransmuter";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     break;
                 case "dogecoin":
@@ -376,10 +388,11 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/viacoin/docker-viacoin";
                     dockerInfo.GitRef = "master";
                     break;
-                case "docker-litecoin":
-                    dockerInfo.DockerFilePath = $"litecoin/{image.Tag}/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/NicolasDorier/docker-bitcoin";
-                    dockerInfo.GitRef = "master";
+                case "litecoin":
+                    dockerInfo.DockerFilePath = $"Litecoin/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Litecoin/{NoRevision(image.Tag)}/linuxarm32v7.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"Litecoin/{image.Tag}";
                     break;
                 case "docker-monacoin":
                     dockerInfo.DockerFilePath = $"monacoin/{image.Tag}/Dockerfile";
@@ -395,6 +408,7 @@ namespace DockerFileBuildHelper
                 case "docker-gen":
                     dockerInfo.DockerFilePath = $"linuxamd64.Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"linuxarm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/docker-gen";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     break;
@@ -445,7 +459,10 @@ namespace DockerFileBuildHelper
             dockerInfo.Image = image;
             return dockerInfo;
         }
-
+        string NoRevision(string str)
+        {
+            return str.Split('-').First();
+        }
         private YamlMappingNode ParseDocument(string fragment)
         {
             var input = new StringReader(File.ReadAllText(fragment));

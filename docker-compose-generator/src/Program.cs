@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -31,11 +31,11 @@ namespace DockerGenerator
 			fragmentLocation = FindRoot(fragmentLocation);
 			fragmentLocation = Path.GetFullPath(Path.Combine(fragmentLocation, "docker-fragments"));
 
-			var fragments = new List<string>();
+			var fragments = new HashSet<string>();
 			switch (composition.SelectedProxy)
 			{
 				case "nginx":
-
+					fragments.Add("nginx-https");
 					fragments.Add("nginx");
 					fragments.Add("btcpayserver-nginx");
 					break;
@@ -50,6 +50,7 @@ namespace DockerGenerator
 					break;
 			}
 			fragments.Add("btcpayserver");
+			fragments.Add("opt-add-tor");
 			fragments.Add("nbxplorer");
 			fragments.Add("postgres");
 			foreach (var crypto in CryptoDefinition.GetDefinitions())
@@ -72,7 +73,7 @@ namespace DockerGenerator
 			{
 				fragments.Add(fragment.Trim());
 			}
-
+			fragments = fragments.Where(s => !composition.ExcludeFragments.Contains(s)).ToHashSet();
 			var def = new DockerComposeDefinition(name, fragments);
 			def.FragmentLocation = fragmentLocation;
 			def.BuildOutputDirectory = output;
