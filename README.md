@@ -117,6 +117,7 @@ You can read [the article](https://medium.com/@BtcpayServer/hosting-btcpay-serve
 `btcpay-setup.sh` will use the following environment variables:
 
 * `BTCPAY_HOST`: The hostname of your website (eg. `btcpay.example.com`)
+* `REVERSEPROXY_DEFAULT_HOST`: Optional, if using a reverse proxy nginx, specify which website should be presented if the server is accessed by its IP.
 * `NBITCOIN_NETWORK`: The type of network to use (eg. `mainnet`, `testnet`, or `regtest`. Default: `mainnet`)
 * `LIGHTNING_ALIAS`: An alias for your lightning network node, if used
 * `BTCPAYGEN_CRYPTO1`: First supported crypto currency (eg. `btc`, `ltc`. Default: `btc`)
