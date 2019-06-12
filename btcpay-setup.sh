@@ -206,7 +206,8 @@ fi
 
 # Put the variables in /etc/profile.d when a user log interactively
 touch "/etc/profile.d/btcpay-env.sh"
-echo "
+echo "#!/bin/bash
+
 export COMPOSE_HTTP_TIMEOUT=\"180\"
 export BTCPAYGEN_OLD_PREGEN=\"$BTCPAYGEN_OLD_PREGEN\"
 export BTCPAYGEN_CRYPTO1=\"$BTCPAYGEN_CRYPTO1\"
@@ -227,7 +228,9 @@ export BTCPAY_BASE_DIRECTORY=\"$BTCPAY_BASE_DIRECTORY\"
 export BTCPAY_ENV_FILE=\"$BTCPAY_ENV_FILE\"
 export BTCPAY_HOST_SSHKEYFILE=\"$BTCPAY_HOST_SSHKEYFILE\"
 if cat \"\$BTCPAY_ENV_FILE\" &> /dev/null; then
-    export \$(grep -v '^#' \"\$BTCPAY_ENV_FILE\" | xargs)
+  while IFS= read -r line; do
+    ! [[ \"\$line\" == \"#\"* ]] && [[ \"\$line\" == *\"=\"* ]] && export \"\$line\"
+  done < \"\$BTCPAY_ENV_FILE\"
 fi
 " > /etc/profile.d/btcpay-env.sh
 chmod +x /etc/profile.d/btcpay-env.sh
