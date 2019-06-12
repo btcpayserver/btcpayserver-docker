@@ -321,9 +321,9 @@ Requires=docker.service network-online.target
 Type=oneshot
 RemainAfterExit=yes
 
-ExecStart=/bin/bash -c '. /etc/profile.d/btcpay-env.sh && cd \"\$(dirname \$BTCPAY_ENV_FILE)\" && docker-compose -f \"\$BTCPAY_DOCKER_COMPOSE\" up -d -t \"\$COMPOSE_HTTP_TIMEOUT\"'
-ExecStop=/bin/bash -c '. /etc/profile.d/btcpay-env.sh && cd \"\$(dirname \$BTCPAY_ENV_FILE)\" && docker-compose -f \"\$BTCPAY_DOCKER_COMPOSE\" stop -t \"\$COMPOSE_HTTP_TIMEOUT\"'
-ExecReload=/bin/bash -c '. /etc/profile.d/btcpay-env.sh && cd \"\$(dirname \$BTCPAY_ENV_FILE)\" && docker-compose -f \"\$BTCPAY_DOCKER_COMPOSE\" restart -t \"\$COMPOSE_HTTP_TIMEOUT\"'
+ExecStart=/bin/bash -c  '. /etc/profile.d/btcpay-env.sh && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_up'
+ExecStop=/bin/bash -c   '. /etc/profile.d/btcpay-env.sh && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_down'
+ExecReload=/bin/bash -c '. /etc/profile.d/btcpay-env.sh && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_restart'
 
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
@@ -361,8 +361,9 @@ stop on runlevel [!2345]
 
 script
     . /etc/profile.d/btcpay-env.sh
-    cd \"\$(dirname \$BTCPAY_ENV_FILE)\"
-    docker-compose -f \"\$BTCPAY_DOCKER_COMPOSE\" up -d
+    cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\"
+    . helpers.sh
+    btcpay_up
 end script" > /etc/init/start_containers.conf
     echo -e "BTCPay Server upstart configured in /etc/init/start_containers.conf\n"
 if $START; then
@@ -378,7 +379,7 @@ if [ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ] && [ "$OLD_BTCPAY_DOCKER_COMPOSE" != "$
     docker-compose -f "$OLD_BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
 fi
 
-$START && docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d --remove-orphans -t "${COMPOSE_HTTP_TIMEOUT:-180}"
+$START && btcpay_up
 ! $START && docker-compose -f "$BTCPAY_DOCKER_COMPOSE" pull
 
 # Give SSH key to BTCPay
