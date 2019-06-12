@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  letsencrypt-nginx-proxy-companion:
+    restart: unless-stopped
+    image: btcpayserver/letsencrypt-nginx-proxy-companion:1.10.0
+    container_name: letsencrypt-nginx-proxy-companion
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "nginx_conf:/etc/nginx/conf.d"
+      - "nginx_vhost:/etc/nginx/vhost.d"
+      - "nginx_html:/usr/share/nginx/html"
+      - "nginx_certs:/etc/nginx/certs:rw"
+    environment:
+      NGINX_DOCKER_GEN_CONTAINER: "nginx-gen"
+      NGINX_PROXY_CONTAINER: "nginx"
+      ACME_CA_URI: ${ACME_CA_URI:-https://acme-staging.api.letsencrypt.org/directory}
+    links:
+      - nginx-gen

@@ -9,7 +9,7 @@ services:
       LIGHTNINGD_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       LIGHTNINGD_CHAIN: btc
       LIGHTNINGD_ALIAS: ${LIGHTNING_ALIAS}
-      LIGHTNINGD_ANNOUNCEADDR: ${BTCPAY_HOST}
+      LIGHTNINGD_ANNOUNCEADDR: ${BTCPAY_ANNOUNCEABLE_HOST}
       LIGHTNINGD_PORT: 9735
       LIGHTNINGD_READY_FILE: /root/.nbxplorer/btc_fully_synched
       LIGHTNINGD_OPT: |
@@ -38,7 +38,7 @@ services:
     links:
       - clightning_bitcoin
   clightning_bitcoin_spark:
-    image: shesek/spark-wallet:0.2.4-standalone
+    image: shesek/spark-wallet:0.2.8-standalone
     restart: unless-stopped
     environment:
       NETWORK: ${NBITCOIN_NETWORK:-regtest}

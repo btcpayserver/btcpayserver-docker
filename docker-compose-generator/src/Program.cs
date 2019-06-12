@@ -35,7 +35,7 @@ namespace DockerGenerator
 			switch (composition.SelectedProxy)
 			{
 				case "nginx":
-
+					fragments.Add("nginx-https");
 					fragments.Add("nginx");
 					fragments.Add("btcpayserver-nginx");
 					break;
@@ -50,6 +50,7 @@ namespace DockerGenerator
 					break;
 			}
 			fragments.Add("btcpayserver");
+			fragments.Add("opt-add-tor");
 			fragments.Add("nbxplorer");
 			fragments.Add("postgres");
 			foreach (var crypto in CryptoDefinition.GetDefinitions())
