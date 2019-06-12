@@ -229,7 +229,7 @@ export BTCPAY_ENV_FILE=\"$BTCPAY_ENV_FILE\"
 export BTCPAY_HOST_SSHKEYFILE=\"$BTCPAY_HOST_SSHKEYFILE\"
 if cat \"\$BTCPAY_ENV_FILE\" &> /dev/null; then
   while IFS= read -r line; do
-    export \"\$line\"
+    ! [[ \"\$line\" == \"#\"* ]] && [[ \"\$line\" == *\"=\"* ]] && export \"\$line\"
   done < \"\$BTCPAY_ENV_FILE\"
 fi
 " > /etc/profile.d/btcpay-env.sh
