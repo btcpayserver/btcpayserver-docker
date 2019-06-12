@@ -46,8 +46,8 @@ You can run again this script if you desire to change your configuration.
 Except BTC and LTC, other crypto currencies are maintained by their own community. Run at your own risk.
 
 Make sure you own a domain with DNS record pointing to your website.
-If you want HTTPS setup automatically with Let's Encrypt, leave REVERSEPROXY_HTTP_PORT at it's default value of 80 and make sure this port is accessible from the internet.
-Or, if you want to offload SSL because you have an existing web proxy, change REVERSEPROXY_HTTP_PORT to any port you want. You can then forward the traffic. Just don't forget to pass the X-Forwarded-Proto header.
+If you want HTTPS setup automatically with Let's Encrypt, leave `REVERSEPROXY_HTTP_PORT` at it's default value of 80 and make sure this port is accessible from the internet.
+Or, if you want to offload SSL because you have an existing web proxy, change `REVERSEPROXY_HTTP_PORT` to any port you want. You can then forward the traffic. Just don't forget to pass the X-Forwarded-Proto header.
 
 Environment variables:
     BTCPAY_HOST: The hostname of your website (eg. btcpay.example.com)
