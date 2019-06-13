@@ -19,4 +19,4 @@ cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 . helpers.sh
 btcpay_update_docker_env
 btcpay_up
-popd
+popd > /dev/null
