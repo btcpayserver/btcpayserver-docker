@@ -117,6 +117,9 @@ You can read [the article](https://medium.com/@BtcpayServer/hosting-btcpay-serve
 `btcpay-setup.sh` will use the following environment variables:
 
 * `BTCPAY_HOST`: The hostname of your website (eg. `btcpay.example.com`)
+* `REVERSEPROXY_HTTP_PORT`: The public port the reverse proxy binds to for HTTP traffic (default: 80)
+* `REVERSEPROXY_HTTPS_PORT`: The public port the reverse proxy binds to for HTTPS traffic (default: 443)
+* `BTCPAY_HOST`: The hostname of your website (eg. `btcpay.example.com`)
 * `REVERSEPROXY_DEFAULT_HOST`: Optional, if using a reverse proxy nginx, specify which website should be presented if the server is accessed by its IP.
 * `NBITCOIN_NETWORK`: The type of network to use (eg. `mainnet`, `testnet`, or `regtest`. Default: `mainnet`)
 * `LIGHTNING_ALIAS`: An alias for your lightning network node, if used
@@ -447,3 +450,17 @@ Then set it up:
 export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage.custom"
 . ./btcpay-setup.sh -i
 ```
+
+## Can I run BTCPay Server on ports other than 80 and 443?
+
+You can change the ports for HTTP and HTTPS by setting the environment variables `REVERSEPROXY_HTTP_PORT` and `REVERSEPROXY_HTTPS_PORT`. This is handy when ports 80 and 443 are already in use on your host, or you want to offload SSL termination with an existing web proxy.
+
+When you set `REVERSEPROXY_HTTP_PORT` to another value than 80, the built-in Let's Encrypt certificate will not work, as Let's Encrypt will try to validate your SSL certificate request by connecting from the internet to your domain on port 80. This validation request should be able to reach BTCPay Server in order to receive the certificate.
+
+If you need to run on a different port, it's best to terminate SSL using another web proxy and foreard your traffic. 
+
+## Can I offload HTTPS termination? 
+
+Yes. To offload SSL termination, just forward the requests to the port specified by `REVERSEPROXY_HTTP_PORT` and make sure you are setting the header `X-Forwarded-Proto: https` so BTC Pay Server can know the original request was HTTPS. If you forget this extra header, BTCPay Server will work, but it will believe the connection is insecure and display a warning message.
+
+Because you are offloading HTTPS, you won't need the built-in Let's Encrypt anymore and can exclude `nginx-https` by adding it to `BTCPAYGEN_EXCLUDE_FRAGMENTS`.
