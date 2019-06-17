@@ -302,13 +302,15 @@ if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; t
         	if [[ "$OSTYPE" == "darwin"* ]]; then
         		# Mac OS
         		if ! [ -x "$(command -v brew)" ]; then
-        			# Brew is not installed, install it now
+        			echo "Homebrew, the package manager for Mac OS, is not installed. Installing it now..."
         			/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
         		fi
 
         		if [ -x "$(command -v brew)" ]; then
-        			# Brew is installed, install docker now
+        			echo "Homebrew is installed, but Docker isn't. Installing it now using brew..."
         			brew cask install docker
+        			brew cask install docker
+        			brew link docker
         		fi
 
         	else
