@@ -342,38 +342,35 @@ if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; t
         fi
     fi
 
-    if ! [ -x "$(command -v docker-compose)" ]; then
-        if [[ "$(uname -m)" == "x86_64" ]]; then
-            DOCKER_COMPOSE_DOWNLOAD="https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m`"
-            echo "Trying to install docker-compose by downloading on $DOCKER_COMPOSE_DOWNLOAD ($(uname -m))"
-            curl -L "$DOCKER_COMPOSE_DOWNLOAD" -o /usr/local/bin/docker-compose
-            chmod +x /usr/local/bin/docker-compose
-        else
-            echo "Trying to install docker-compose by using the docker-compose-builder ($(uname -m))"
-            ! [ -d "dist" ] && mkdir dist
-            docker run --rm -ti -v "$(pwd)/dist:/dist" btcpayserver/docker-compose-builder:1.23.2
-            mv dist/docker-compose /usr/local/bin/docker-compose
-            chmod +x /usr/local/bin/docker-compose
-            rm -rf "dist"
-        fi
-    fi
-
-
+	if ! [[ "$OSTYPE" == "darwin"* ]]; then
+		# Not Mac OS
+		if ! [ -x "$(command -v docker-compose)" ]; then
+			if [[ "$(uname -m)" == "x86_64" ]]; then
+				DOCKER_COMPOSE_DOWNLOAD="https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m`"
+				echo "Trying to install docker-compose by downloading on $DOCKER_COMPOSE_DOWNLOAD ($(uname -m))"
+				curl -L "$DOCKER_COMPOSE_DOWNLOAD" -o /usr/local/bin/docker-compose
+				chmod +x /usr/local/bin/docker-compose
+			else
+				echo "Trying to install docker-compose by using the docker-compose-builder ($(uname -m))"
+				! [ -d "dist" ] && mkdir dist
+				docker run --rm -ti -v "$(pwd)/dist:/dist" btcpayserver/docker-compose-builder:1.23.2
+				mv dist/docker-compose /usr/local/bin/docker-compose
+				chmod +x /usr/local/bin/docker-compose
+				rm -rf "dist"
+			fi
+		fi
+	fi
 fi
 
 if ! [ -x "$(command -v docker)" ]; then
-    echo "Failed to install docker"
+    echo "Failed to install 'docker'. Please install docker manually, then retry."
     return
 fi
 
 if ! [ -x "$(command -v docker-compose)" ]; then
-    echo "Failed to install docker-compose"
+    echo "Failed to install 'docker-compose'. Please install docker-compose manually, then retry."
     return
 fi
-
-
-# For debugging only - don't really create docker containers
-# return;
 
 
 # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
