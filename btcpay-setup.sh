@@ -381,9 +381,9 @@ if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then
 fi
 
 # Schedule for reboot
-if [ -x "$(command -v systemctl)" ]; then
+if [[ -x "$(command -v systemctl)" ]]; then
 	# Use systemd
-	if [ -e "/etc/init/start_containers.conf" ]; then
+	if [[ -e "/etc/init/start_containers.conf" ]]; then
 		echo -e "Uninstalling upstart script /etc/init/start_containers.conf"
 		rm "/etc/init/start_containers.conf"
 		initctl reload-configuration
@@ -406,7 +406,7 @@ if [ -x "$(command -v systemctl)" ]; then
 	[Install]
 	WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
 
-	if ! [ -f "/etc/docker/daemon.json" ]; then
+	if ! [[ -f "/etc/docker/daemon.json" ]]; then
 		echo "{
 	\"log-driver\": \"json-file\",
 	\"log-opts\": {\"max-size\": \"5m\", \"max-file\": \"3\"}
@@ -423,8 +423,9 @@ if [ -x "$(command -v systemctl)" ]; then
 		systemctl start btcpayserver
 		echo "BTCPay Server started"
 	fi
+fi
 
-elseif [ -x "$(command -v initctl)" ]; then
+if [[ -x "$(command -v initctl)" ]]; then
 	# Use upstart
 	echo "Using upstart"
 	echo "
@@ -451,16 +452,16 @@ end script" > /etc/init/start_containers.conf
 		initctl reload-configuration
 		echo "BTCPay Server started"
 	fi
-elseif [ "$OSTYPE" == "darwin"* ]; then
-	# Mac OS
-
-	# TODO create an auto-start script on boot. Not sure if we can use Mac's launchd for this...
-
 fi
+
+# else if [ "$OSTYPE" == "darwin"* ]; then
+	# Mac OS
+	# TODO create an auto-start script on boot. Not sure if we really need this as docker can start on it's own? Maybe we can use Mac's launchd for this, but not sure...
+#fi
 
 cd "$(dirname $BTCPAY_ENV_FILE)"
 
-if [ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ] && [ "$OLD_BTCPAY_DOCKER_COMPOSE" != "$BTCPAY_DOCKER_COMPOSE" ]; then
+if [[ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ]] && [[ "$OLD_BTCPAY_DOCKER_COMPOSE" != "$BTCPAY_DOCKER_COMPOSE" ]]; then
     echo "Closing old docker-compose at $OLD_BTCPAY_DOCKER_COMPOSE..."
     docker-compose -f "$OLD_BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
 fi
