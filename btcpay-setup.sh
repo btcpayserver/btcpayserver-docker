@@ -311,6 +311,14 @@ if ! [ -x "$(command -v docker-compose)" ]; then
     return
 fi
 
+if $START && [ -x "$(command -v ischroot)" ] && ischroot; then
+    echo "chroot detected, running dockerd in background..."
+    dockerd &
+    echo "Waiting /var/run/docker.sock to be created..."
+    while [ ! -f "/var/run/docker.sock" ]; do sleep 1; done
+    echo "/var/run/docker.sock is created"
+fi
+
 # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
 . ./build.sh
 
@@ -405,5 +413,10 @@ fi
 
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 install_tooling
+
+if $START && [ -x "$(command -v ischroot)" ] && ischroot; then
+    echo "Killing dockerd in the background..."
+    kill %-
+fi
 
 cd $ORIGINAL_DIRECTORY
