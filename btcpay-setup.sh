@@ -308,8 +308,10 @@ if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; t
 
         		if [ -x "$(command -v brew)" ]; then
         			echo "Homebrew is installed, but Docker isn't. Installing it now using brew..."
+
+        			# This sequence is a bit strange, but it's what what needed to get it working on a fresh Mac OS X Mojave install
         			brew cask install docker
-        			brew cask install docker
+        			brew install docker
         			brew link docker
         		fi
 
