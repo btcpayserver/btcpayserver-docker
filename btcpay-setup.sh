@@ -19,7 +19,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 	BASH_PROFILE_SCRIPT="$HOME/btcpay-env.sh"
 
 	# Mac OS doesn't use /etc/profile.d/xxx.sh. Instead we create a new file and load that from ~/.bash_profile
-	if [ ! -f "$FILE" ]; then
+	if [[ ! -f "$HOME/.bash_profile" ]]; then
 		touch "$HOME/.bash_profile"
     fi
 	if [[ -z $(grep "./$BASH_PROFILE_SCRIPT" "$HOME/.bash_profile") ]]; then
