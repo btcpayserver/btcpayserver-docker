@@ -2,7 +2,7 @@
 
 set +x
 
-if [ "$0" = "$BASH_SOURCE" ]; then
+if [[ "$0" = "$BASH_SOURCE" ]]; then
     echo "This script must be sourced \". btcpay-setup.sh\"" 
     exit 1
 fi
@@ -21,10 +21,10 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 	# Mac OS doesn't use /etc/profile.d/xxx.sh. Instead we create a new file and load that from ~/.bash_profile
 	if [ ! -f "$FILE" ]; then
 		touch "$HOME/.bash_profile"
-		if [ -z $(grep "./$BASH_PROFILE_SCRIPT" "$HOME/.bash_profile") ]; then
-			# Line does not exist, add it
-			echo ". $BASH_PROFILE_SCRIPT" >> "$HOME/.bash_profile"
-		fi
+    fi
+	if [[ -z $(grep "./$BASH_PROFILE_SCRIPT" "$HOME/.bash_profile") ]]; then
+		# Line does not exist, add it
+		echo ". $BASH_PROFILE_SCRIPT" >> "$HOME/.bash_profile"
 	fi
 
 else
@@ -39,11 +39,11 @@ fi
 
 # Verify we are in right folder. If we are not, let's go in the parent folder of the current docker-compose.
 if ! git -C . rev-parse &> /dev/null || [ ! -d "Generated" ]; then
-    if [ ! -z $BTCPAY_DOCKER_COMPOSE ]; then
+    if [[ ! -z $BTCPAY_DOCKER_COMPOSE ]]; then
         cd $(dirname $BTCPAY_DOCKER_COMPOSE)
         cd ..
     fi
-    if ! git -C . rev-parse || [ ! -d "Generated" ]; then
+    if ! git -C . rev-parse || [[ ! -d "Generated" ]]; then
         echo "You must run this script inside the git repository of btcpayserver-docker"
         return
     fi
@@ -103,20 +103,20 @@ Add-on specific variables:
 END
 }
 
-if [ "$1" != "-i" ] && [ "$1" != "--install-only" ]; then
+if [[ "$1" != "-i" ]] && [[ "$1" != "--install-only" ]]; then
     display_help
     return
 fi
 
 START=true
-if [ "$1" == "--install-only" ]; then
+if [[ "$1" == "--install-only" ]]; then
     START=false
 fi
 
-if [ -z "$BTCPAYGEN_CRYPTO1" ]; then
+if [[ -z "$BTCPAYGEN_CRYPTO1" ]]; then
 	if [[ "$OSTYPE" != "darwin"* ]]; then
 		# Not Mac OS - Mac OS uses it's own env file
-    	if [ -f "$BASH_PROFILE_SCRIPT" ]; then
+    	if [[ -f "$BASH_PROFILE_SCRIPT" ]]; then
         	echo "This script must be run as root after running \"sudo su -\""
     	else
         	echo "BTCPAYGEN_CRYPTO1 should not be empty"
@@ -126,7 +126,7 @@ if [ -z "$BTCPAYGEN_CRYPTO1" ]; then
 fi
 
 ######### Migration: old pregen environment to new environment ############
-if [ ! -z $BTCPAY_DOCKER_COMPOSE ] && [ ! -z $DOWNLOAD_ROOT ] && [ -z $BTCPAYGEN_OLD_PREGEN ]; then 
+if [[ ! -z $BTCPAY_DOCKER_COMPOSE ]] && [[ ! -z $DOWNLOAD_ROOT ]] && [[ -z $BTCPAYGEN_OLD_PREGEN ]]; then
     echo "Your deployment is too old, you need to migrate by following instructions on this link https://github.com/btcpayserver/btcpayserver-docker/tree/master#i-deployed-before-btcpay-setupsh-existed-before-may-17-can-i-migrate-to-this-new-system"
     return
 fi
@@ -150,7 +150,7 @@ OLD_BTCPAY_DOCKER_COMPOSE="$BTCPAY_DOCKER_COMPOSE"
 ORIGINAL_DIRECTORY="$(pwd)"
 BTCPAY_BASE_DIRECTORY="$(dirname "$(pwd)")"
 
-if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then
+if [[ "$BTCPAYGEN_OLD_PREGEN" == "true" ]]; then
     if [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production ]]; then
         BTCPAY_DOCKER_COMPOSE="$(pwd)/Production/docker-compose.generated.yml"
     elif [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production-NoReverseProxy ]]; then
@@ -232,12 +232,12 @@ BTCPAY_ANNOUNCEABLE_HOST:$BTCPAY_ANNOUNCEABLE_HOST
 ----------------------
 "
 
-if [ -z "$BTCPAYGEN_CRYPTO1" ]; then
+if [[ -z "$BTCPAYGEN_CRYPTO1" ]]; then
     echo "BTCPAYGEN_CRYPTO1 should not be empty"
     return
 fi
 
-if [ "$NBITCOIN_NETWORK" != "mainnet" ] && [ "$NBITCOIN_NETWORK" != "testnet" ] && [ "$NBITCOIN_NETWORK" != "regtest" ]; then
+if [[ "$NBITCOIN_NETWORK" != "mainnet" ]] && [[ "$NBITCOIN_NETWORK" != "testnet" ]] && [[ "$NBITCOIN_NETWORK" != "regtest" ]]; then
     echo "NBITCOIN_NETWORK should be equal to mainnet, testnet or regtest"
 fi
 
@@ -286,8 +286,8 @@ echo -e "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE\n"
 
 . ${BASH_PROFILE_SCRIPT}
 
-if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; then
-    if ! [ -x "$(command -v curl)" ]; then
+if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]]; then
+    if ! [[ -x "$(command -v curl)" ]]; then
         apt-get update 2>error
         apt-get install -y \
             curl \
@@ -296,20 +296,21 @@ if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; t
             software-properties-common \
             2>error
     fi
-    if ! [ -x "$(command -v docker)" ]; then
+    if ! [[ -x "$(command -v docker)" ]]; then
         if [[ "$(uname -m)" == "x86_64" ]] || [[ "$(uname -m)" == "armv7l" ]]; then
 
         	if [[ "$OSTYPE" == "darwin"* ]]; then
-        		# Mac OS
-        		if ! [ -x "$(command -v brew)" ]; then
-        			echo "Homebrew, the package manager for Mac OS, is not installed. Installing it now..."
+        		# Mac OS	
+        		if ! [[ -x "$(command -v brew)" ]]; then
+        			# Brew is not installed, install it now
+                    echo "Homebrew, the package manager for Mac OS, is not installed. Installing it now..."
         			/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
         		fi
 
-        		if [ -x "$(command -v brew)" ]; then
-        			echo "Homebrew is installed, but Docker isn't. Installing it now using brew..."
-
-        			# This sequence is a bit strange, but it's what what needed to get it working on a fresh Mac OS X Mojave install
+        		if [[ -x "$(command -v brew)" ]]; then
+                    echo "Homebrew is installed, but Docker isn't. Installing it now using brew..."
+        			# Brew is installed, install docker now
+                    # This sequence is a bit strange, but it's what what needed to get it working on a fresh Mac OS X Mojave install
         			brew cask install docker
         			brew install docker
         			brew link docker
@@ -342,6 +343,7 @@ if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; t
         fi
     fi
 
+
 	if ! [[ "$OSTYPE" == "darwin"* ]]; then
 		# Not Mac OS
 		if ! [ -x "$(command -v docker-compose)" ]; then
@@ -362,12 +364,12 @@ if ! [ -x "$(command -v docker)" ] || ! [ -x "$(command -v docker-compose)" ]; t
 	fi
 fi
 
-if ! [ -x "$(command -v docker)" ]; then
+if ! [[ -x "$(command -v docker)" ]]; then
     echo "Failed to install 'docker'. Please install docker manually, then retry."
     return
 fi
 
-if ! [ -x "$(command -v docker-compose)" ]; then
+if ! [[ -x "$(command -v docker-compose)" ]]; then
     echo "Failed to install 'docker-compose'. Please install docker-compose manually, then retry."
     return
 fi
@@ -383,7 +385,7 @@ fi
 # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
 . ./build.sh
 
-if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then
+if [[ "$BTCPAYGEN_OLD_PREGEN" == "true" ]]; then
     cp Generated/docker-compose.generated.yml $BTCPAY_DOCKER_COMPOSE
 fi
 
@@ -397,27 +399,27 @@ if [[ -x "$(command -v systemctl)" ]]; then
 	fi
 	echo "Adding btcpayserver.service to systemd"
 	echo "
-	[Unit]
-	Description=BTCPayServer service
-	After=docker.service network-online.target
-	Requires=docker.service network-online.target
+[Unit]
+Description=BTCPayServer service
+After=docker.service network-online.target
+Requires=docker.service network-online.target
 
-	[Service]
-	Type=oneshot
-	RemainAfterExit=yes
+[Service]
+Type=oneshot
+RemainAfterExit=yes
 
-	ExecStart=/bin/bash -c  '. $BASH_PROFILE_SCRIPT && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_up'
-	ExecStop=/bin/bash -c   '. $BASH_PROFILE_SCRIPT && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_down'
-	ExecReload=/bin/bash -c '. $BASH_PROFILE_SCRIPT && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_restart'
+ExecStart=/bin/bash -c  '. $BASH_PROFILE_SCRIPT && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_up'
+ExecStop=/bin/bash -c   '. $BASH_PROFILE_SCRIPT && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_down'
+ExecReload=/bin/bash -c '. $BASH_PROFILE_SCRIPT && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_restart'
 
-	[Install]
-	WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
 
 	if ! [[ -f "/etc/docker/daemon.json" ]]; then
 		echo "{
-	\"log-driver\": \"json-file\",
-	\"log-opts\": {\"max-size\": \"5m\", \"max-file\": \"3\"}
-	}" > /etc/docker/daemon.json
+\"log-driver\": \"json-file\",
+\"log-opts\": {\"max-size\": \"5m\", \"max-file\": \"3\"}
+}" > /etc/docker/daemon.json
 		echo "Setting limited log files in /etc/docker/daemon.json"
 		systemctl restart docker
 	fi
@@ -461,10 +463,10 @@ end script" > /etc/init/start_containers.conf
 	fi
 fi
 
-# else if [ "$OSTYPE" == "darwin"* ]; then
+if [ "$OSTYPE" == "darwin"* ]; then
 	# Mac OS
 	# TODO create an auto-start script on boot. Not sure if we really need this as docker can start on it's own? Maybe we can use Mac's launchd for this, but not sure...
-#fi
+fi
 
 cd "$(dirname $BTCPAY_ENV_FILE)"
 
@@ -473,7 +475,6 @@ if [[ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ]] && [[ "$OLD_BTCPAY_DOCKER_COMPOSE" !=
     docker-compose -f "$OLD_BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
 fi
 
-return
 
 $START && btcpay_up
 ! $START && docker-compose -f "$BTCPAY_DOCKER_COMPOSE" pull
