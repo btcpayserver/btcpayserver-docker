@@ -463,10 +463,10 @@ end script" > /etc/init/start_containers.conf
 	fi
 fi
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
+#if [[ "$OSTYPE" == "darwin"* ]]; then
 	# Mac OS
 	# TODO create an auto-start script on boot. Not sure if we really need this as docker can start on it's own? Maybe we can use Mac's launchd for this, but not sure...
-fi
+#fi
 
 cd "$(dirname $BTCPAY_ENV_FILE)"
 
