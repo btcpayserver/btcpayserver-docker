@@ -333,7 +333,7 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
             if [[ "$RELEASE" == "bionic" ]]; then
                 RELEASE=xenial
             fi
-            if [ -x "$(command -v dpkg)" ]; then
+            if [[ -x "$(command -v dpkg)" ]]; then
                 dpkg --add-architecture armhf
             fi
             add-apt-repository "deb https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") $RELEASE stable"
@@ -346,7 +346,7 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
 
 	if ! [[ "$OSTYPE" == "darwin"* ]]; then
 		# Not Mac OS
-		if ! [ -x "$(command -v docker-compose)" ]; then
+		if ! [[ -x "$(command -v docker-compose)" ]]; then
 			if [[ "$(uname -m)" == "x86_64" ]]; then
 				DOCKER_COMPOSE_DOWNLOAD="https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m`"
 				echo "Trying to install docker-compose by downloading on $DOCKER_COMPOSE_DOWNLOAD ($(uname -m))"
@@ -354,7 +354,7 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
 				chmod +x /usr/local/bin/docker-compose
 			else
 				echo "Trying to install docker-compose by using the docker-compose-builder ($(uname -m))"
-				! [ -d "dist" ] && mkdir dist
+				! [[ -d "dist" ]] && mkdir dist
 				docker run --rm -ti -v "$(pwd)/dist:/dist" btcpayserver/docker-compose-builder:1.23.2
 				mv dist/docker-compose /usr/local/bin/docker-compose
 				chmod +x /usr/local/bin/docker-compose
@@ -374,11 +374,11 @@ if ! [[ -x "$(command -v docker-compose)" ]]; then
     return
 fi
 
-if $START && [ -x "$(command -v ischroot)" ] && ischroot; then
+if $START && [[ -x "$(command -v ischroot)" ]] && ischroot; then
     echo "chroot detected, running dockerd in background..."
     dockerd &
     echo "Waiting /var/run/docker.sock to be created..."
-    while [ ! -f "/var/run/docker.sock" ]; do sleep 1; done
+    while [[ ! -f "/var/run/docker.sock" ]]; do sleep 1; done
     echo "/var/run/docker.sock is created"
 fi
 
@@ -463,7 +463,7 @@ end script" > /etc/init/start_containers.conf
 	fi
 fi
 
-if [ "$OSTYPE" == "darwin"* ]; then
+if [[ "$OSTYPE" == "darwin"* ]]; then
 	# Mac OS
 	# TODO create an auto-start script on boot. Not sure if we really need this as docker can start on it's own? Maybe we can use Mac's launchd for this, but not sure...
 fi
@@ -488,7 +488,7 @@ fi
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 install_tooling
 
-if $START && [ -x "$(command -v ischroot)" ] && ischroot; then
+if $START && [[ -x "$(command -v ischroot)" ]] && ischroot; then
     echo "Killing dockerd in the background..."
     kill %-
 fi
