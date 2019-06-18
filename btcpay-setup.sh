@@ -22,7 +22,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 	if [[ ! -f "$HOME/.bash_profile" ]]; then
 		touch "$HOME/.bash_profile"
     fi
-	if [[ -z $(grep "./$BASH_PROFILE_SCRIPT" "$HOME/.bash_profile") ]]; then
+	if [[ -z $(grep ". \"$BASH_PROFILE_SCRIPT\"" "$HOME/.bash_profile") ]]; then
 		# Line does not exist, add it
 		echo ". \"$BASH_PROFILE_SCRIPT\"" >> "$HOME/.bash_profile"
 	fi
