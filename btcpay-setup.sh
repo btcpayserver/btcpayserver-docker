@@ -430,9 +430,8 @@ WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
 		systemctl start btcpayserver
 		echo "BTCPay Server started"
 	fi
-fi
 
-if [[ -x "$(command -v initctl)" ]]; then
+elif [[ -x "$(command -v initctl)" ]]; then
 	# Use upstart
 	echo "Using upstart"
 	echo "
@@ -461,10 +460,8 @@ end script" > /etc/init/start_containers.conf
 	fi
 fi
 
-#if [[ "$OSTYPE" == "darwin"* ]]; then
-	# Mac OS
-	# TODO create an auto-start script on boot. Not sure if we really need this as docker can start on it's own? Maybe we can use Mac's launchd for this, but not sure...
-#fi
+
+# TODO create an auto-start script on boot for Mac OS. Not sure if we really need this as docker can start on it's own? Maybe we can use Mac's launchd for this, but not sure...
 
 cd "$(dirname $BTCPAY_ENV_FILE)"
 
