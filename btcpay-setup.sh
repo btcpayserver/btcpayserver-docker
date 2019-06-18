@@ -461,8 +461,6 @@ end script" > /etc/init/start_containers.conf
 fi
 
 
-# TODO create an auto-start script on boot for Mac OS. Not sure if we really need this as docker can start on it's own? Maybe we can use Mac's launchd for this, but not sure...
-
 cd "$(dirname $BTCPAY_ENV_FILE)"
 
 if [[ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ]] && [[ "$OLD_BTCPAY_DOCKER_COMPOSE" != "$BTCPAY_DOCKER_COMPOSE" ]]; then
