@@ -9,7 +9,7 @@ else
 	BASH_PROFILE_SCRIPT="/etc/profile.d/btcpay-env.sh"
 fi
 
-. ${BASH_PROFILE_SCRIPT}
+. "$BASH_PROFILE_SCRIPT"
 
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 . helpers.sh
