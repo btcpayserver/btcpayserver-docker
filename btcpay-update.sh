@@ -52,7 +52,7 @@ if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then
 fi
 
 if ! grep -Fxq "export COMPOSE_HTTP_TIMEOUT=\"180\"" "$BASH_PROFILE_SCRIPT"; then
-    echo "export COMPOSE_HTTP_TIMEOUT=\"180\"" >> ${BASH_PROFILE_SCRIPT}
+    echo "export COMPOSE_HTTP_TIMEOUT=\"180\"" >> "$BASH_PROFILE_SCRIPT"
     export COMPOSE_HTTP_TIMEOUT=180
     echo "Adding COMPOSE_HTTP_TIMEOUT=180 in btcpay-env.sh"
 fi
