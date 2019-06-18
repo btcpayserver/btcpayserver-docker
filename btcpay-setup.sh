@@ -24,7 +24,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     fi
 	if [[ -z $(grep "./$BASH_PROFILE_SCRIPT" "$HOME/.bash_profile") ]]; then
 		# Line does not exist, add it
-		echo ". $BASH_PROFILE_SCRIPT" >> "$HOME/.bash_profile"
+		echo ". \"$BASH_PROFILE_SCRIPT\"" >> "$HOME/.bash_profile"
 	fi
 
 else
@@ -244,8 +244,6 @@ fi
 
 
 # Init the variables when a user log interactively
-touch ${BASH_PROFILE_SCRIPT}
-
 touch "$BASH_PROFILE_SCRIPT"
 echo "
 #!/bin/bash
@@ -284,7 +282,7 @@ btcpay_update_docker_env
 
 echo -e "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE\n"
 
-. ${BASH_PROFILE_SCRIPT}
+. "$BASH_PROFILE_SCRIPT"
 
 if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]]; then
     if ! [[ -x "$(command -v curl)" ]]; then
@@ -408,9 +406,9 @@ Requires=docker.service network-online.target
 Type=oneshot
 RemainAfterExit=yes
 
-ExecStart=/bin/bash -c  '. $BASH_PROFILE_SCRIPT && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_up'
-ExecStop=/bin/bash -c   '. $BASH_PROFILE_SCRIPT && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_down'
-ExecReload=/bin/bash -c '. $BASH_PROFILE_SCRIPT && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_restart'
+ExecStart=/bin/bash -c  '. \"$BASH_PROFILE_SCRIPT\" && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_up'
+ExecStop=/bin/bash -c   '. \"$BASH_PROFILE_SCRIPT\" && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_down'
+ExecReload=/bin/bash -c '. \"$BASH_PROFILE_SCRIPT\" && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_restart'
 
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
@@ -450,7 +448,7 @@ stop on runlevel [!2345]
 # respawn # might cause over charge
 
 script
-    . $BASH_PROFILE_SCRIPT
+    . \"$BASH_PROFILE_SCRIPT\"
     cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\"
     . helpers.sh
     btcpay_up
