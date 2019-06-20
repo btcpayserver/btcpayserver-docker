@@ -2,7 +2,7 @@ version: "3"
 
 services:
   btcqbo:
-    image: jvandrew/btcqbo:0.3.32
+    image: jvandrew/btcqbo:0.3.36
     environment:
       REFRESH_MINS: 50
       REDIS_HOST: "redis"
