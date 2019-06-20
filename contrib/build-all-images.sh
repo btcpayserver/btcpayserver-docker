@@ -179,18 +179,18 @@ cd - && cd ..
 
 
 # Build dash
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.13.0/Dash/0.13.0/linuxamd64.Dockerfile
-DOCKERFILE="Dash/0.13.0/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.13.0/Dash/0.13.0/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dash/0.13.0/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.13.0/Dash/0.13.0/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dash/0.13.0/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/dash:0.13.0"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.14.0.1/Dash/0.14.0.1/linuxamd64.Dockerfile
+DOCKERFILE="Dash/0.14.0.1/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.14.0.1/Dash/0.14.0.1/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dash/0.14.0.1/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.14.0.1/Dash/0.14.0.1/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dash/0.14.0.1/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/dash:0.14.0.1"
 git clone https://github.com/btcpayserver/dockerfile-deps dash
 cd dash
-git checkout Dash/0.13.0
+git checkout Dash/0.14.0.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/dash:0.13.0" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/dash:0.14.0.1" .
 cd - && cd ..
 
 
@@ -379,14 +379,14 @@ cd - && cd ..
 
 
 # Build btcqbo
-# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.3.32/Dockerfile
+# https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.3.36/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building jvandrew/btcqbo:0.3.32"
+echo "Building jvandrew/btcqbo:0.3.36"
 git clone https://github.com/JeffVandrewJr/btcqbo btcqbo
 cd btcqbo
-git checkout v0.3.32
+git checkout v0.3.36
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.3.32" .
+docker build -f "$DOCKERFILE" -t "jvandrew/btcqbo:0.3.36" .
 cd - && cd ..
 
 
