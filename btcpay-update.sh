@@ -33,6 +33,7 @@ fi
 . ./build.sh
 if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then
     cp Generated/docker-compose.generated.yml $BTCPAY_DOCKER_COMPOSE
+    cp Generated/torrc.tmpl "$(dirname "$BTCPAY_DOCKER_COMPOSE")/torrc.tmpl"
 fi
 
 if ! grep -Fxq "export COMPOSE_HTTP_TIMEOUT=\"180\"" "/etc/profile.d/btcpay-env.sh"; then
