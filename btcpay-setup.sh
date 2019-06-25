@@ -296,7 +296,6 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
     fi
     if ! [[ -x "$(command -v docker)" ]]; then
         if [[ "$(uname -m)" == "x86_64" ]] || [[ "$(uname -m)" == "armv7l" ]]; then
-
         	if [[ "$OSTYPE" == "darwin"* ]]; then
         		# Mac OS	
         		if ! [[ -x "$(command -v brew)" ]]; then
@@ -304,7 +303,6 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
                     echo "Homebrew, the package manager for Mac OS, is not installed. Installing it now..."
         			/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
         		fi
-
         		if [[ -x "$(command -v brew)" ]]; then
                     echo "Homebrew is installed, but Docker isn't. Installing it now using brew..."
         			# Brew is installed, install docker now
@@ -313,7 +311,6 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
         			brew install docker
         			brew link docker
         		fi
-
         	else
         		# Not Mac OS
 				echo "Trying to install docker..."
@@ -322,8 +319,6 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
 				sh get-docker.sh
 				rm get-docker.sh
             fi
-
-
         elif [[ "$(uname -m)" == "aarch64" ]]; then
             echo "Trying to install docker for armv7 on a aarch64 board..."
             curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
@@ -339,26 +334,31 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
             # zlib1g:armhf is needed for docker-compose, but we install it here as we changed dpkg here
             apt-get install -y docker-ce:armhf zlib1g:armhf
         fi
+        if [[ -x "$(command -v ischroot)" ]] && ischroot; then
+            echo "chroot detected, running dockerd in background..."
+            dockerd &
+            echo "Waiting /var/run/docker.sock to be created..."
+            while [[ ! -f "/var/run/docker.sock" ]]; do sleep 1; done
+            echo "/var/run/docker.sock is created"
+        fi
     fi
 
-
-	if ! [[ "$OSTYPE" == "darwin"* ]]; then
-		# Not Mac OS
-		if ! [[ -x "$(command -v docker-compose)" ]]; then
-			if [[ "$(uname -m)" == "x86_64" ]]; then
-				DOCKER_COMPOSE_DOWNLOAD="https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m`"
-				echo "Trying to install docker-compose by downloading on $DOCKER_COMPOSE_DOWNLOAD ($(uname -m))"
-				curl -L "$DOCKER_COMPOSE_DOWNLOAD" -o /usr/local/bin/docker-compose
-				chmod +x /usr/local/bin/docker-compose
-			else
-				echo "Trying to install docker-compose by using the docker-compose-builder ($(uname -m))"
-				! [[ -d "dist" ]] && mkdir dist
-				docker run --rm -ti -v "$(pwd)/dist:/dist" btcpayserver/docker-compose-builder:1.23.2
-				mv dist/docker-compose /usr/local/bin/docker-compose
-				chmod +x /usr/local/bin/docker-compose
-				rm -rf "dist"
-			fi
-		fi
+    if ! [[ -x "$(command -v docker-compose)" ]]; then
+        if ! [[ "$OSTYPE" == "darwin"* ]]; then
+            if [[ "$(uname -m)" == "x86_64" ]]; then
+                DOCKER_COMPOSE_DOWNLOAD="https://github.com/docker/compose/releases/download/1.23.2/docker-compose-`uname -s`-`uname -m`"
+                echo "Trying to install docker-compose by downloading on $DOCKER_COMPOSE_DOWNLOAD ($(uname -m))"
+                curl -L "$DOCKER_COMPOSE_DOWNLOAD" -o /usr/local/bin/docker-compose
+                chmod +x /usr/local/bin/docker-compose
+            else
+                echo "Trying to install docker-compose by using the docker-compose-builder ($(uname -m))"
+                ! [[ -d "dist" ]] && mkdir dist
+                docker run --rm -ti -v "$(pwd)/dist:/dist" btcpayserver/docker-compose-builder:1.23.2
+                mv dist/docker-compose /usr/local/bin/docker-compose
+                chmod +x /usr/local/bin/docker-compose
+                rm -rf "dist"
+            fi
+        fi
 	fi
 fi
 
@@ -370,14 +370,6 @@ fi
 if ! [[ -x "$(command -v docker-compose)" ]]; then
     echo "Failed to install 'docker-compose'. Please install docker-compose manually, then retry."
     return
-fi
-
-if [[ -x "$(command -v ischroot)" ]] && ischroot; then
-    echo "chroot detected, running dockerd in background..."
-    dockerd &
-    echo "Waiting /var/run/docker.sock to be created..."
-    while [[ ! -f "/var/run/docker.sock" ]]; do sleep 1; done
-    echo "/var/run/docker.sock is created"
 fi
 
 # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
@@ -481,7 +473,7 @@ fi
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 install_tooling
 
-if $START && [[ -x "$(command -v ischroot)" ]] && ischroot; then
+if ! $START && [[ -x "$(command -v ischroot)" ]] && ischroot; then
     echo "Killing dockerd in the background..."
     kill %-
 fi
