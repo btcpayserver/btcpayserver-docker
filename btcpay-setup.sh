@@ -372,7 +372,7 @@ if ! [[ -x "$(command -v docker-compose)" ]]; then
     return
 fi
 
-if $START && [[ -x "$(command -v ischroot)" ]] && ischroot; then
+if [[ -x "$(command -v ischroot)" ]] && ischroot; then
     echo "chroot detected, running dockerd in background..."
     dockerd &
     echo "Waiting /var/run/docker.sock to be created..."
