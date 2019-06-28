@@ -14,12 +14,12 @@ fi
 . ${BASH_PROFILE_SCRIPT}
 
 if [ ! -z $BTCPAY_DOCKER_COMPOSE ] && [ ! -z $DOWNLOAD_ROOT ] && [ -z $BTCPAYGEN_OLD_PREGEN ]; then 
-    echo "Your deployment is too old, you need to migrate by following instructions on this link https://github.com/btcpayserver/btcpayserver-docker/tree/master#i-deployed-before-btcpay-setupsh-existed-before-may-17-can-i-migrate-to-this-new-system"
+    echo "Your deployment is too old, you need to migrate by following instructions on this link https://github.com/bitopayway/btcpayserver-docker/tree/master#i-deployed-before-btcpay-setupsh-existed-before-may-17-can-i-migrate-to-this-new-system"
     exit
 fi
 
 if [[ $BTCPAY_DOCKER_COMPOSE != *docker-compose.generated.yml ]]; then
-    echo "Your deployment is too old, you need to migrate by following instructions on this link https://github.com/btcpayserver/btcpayserver-docker/tree/master#i-deployed-before-btcpay-setupsh-existed-before-may-17-can-i-migrate-to-this-new-system"
+    echo "Your deployment is too old, you need to migrate by following instructions on this link https://github.com/bitopayway/btcpayserver-docker/tree/master#i-deployed-before-btcpay-setupsh-existed-before-may-17-can-i-migrate-to-this-new-system"
     exit
 fi
 
