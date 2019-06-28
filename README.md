@@ -68,7 +68,15 @@ You can also install BTCPayServer on your own machine or VPS instance.
 
 The officially supported setup is driven by Docker (and Docker-Compose).
 
-First, make sure you have a domain name pointing to your host (CNAME), with ports `443` and `80` externally accessible (and perhaps additional ports like `9735` and `9736` for Bitcoin and Litecoin lightning). Otherwise, you will have to set it manually by running `changedomain.sh`.
+Prior to performing any additional steps be sure to clone and build the `bitopayway/btcpayserver`
+
+```shell
+git clone git@github.com:bitopayway/btcpayserver.git
+cd btcpayserver
+docker build -t bitopayway/btcpayserver --file=Dockerfile.linuxamd64 .
+```
+
+Next, make sure you have a domain name pointing to your host (CNAME), with ports `443` and `80` externally accessible (and perhaps additional ports like `9735` and `9736` for Bitcoin and Litecoin lightning). Otherwise, you will have to set it manually by running `changedomain.sh`.
 
 Let's assume it is `btcpay.EXAMPLE.com`.
 
