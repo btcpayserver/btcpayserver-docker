@@ -104,6 +104,7 @@ namespace DockerGenerator
 			outputFile = GetFilePath();
 			File.WriteAllText(outputFile, result.Replace("''", ""));
 			Console.WriteLine($"Generated {outputFile}");
+			Console.WriteLine();
 		}
 
 		private KeyValuePair<YamlNode, YamlNode>[] Merge(List<KeyValuePair<YamlNode, YamlNode>> services)
