@@ -68,12 +68,12 @@ You can also install BTCPayServer on your own machine or VPS instance.
 
 The officially supported setup is driven by Docker (and Docker-Compose).
 
-Prior to performing any additional steps be sure to clone and build the `bitopayway/btcpayserver`
+Prior to performing any additional steps be sure to clone and build the `bitopay/btcpayserver`
 
 ```shell
-git clone git@github.com:bitopayway/btcpayserver.git
+git clone git@github.com:bitopay/btcpayserver.git
 cd btcpayserver
-docker build -t bitopayway/btcpayserver --file=Dockerfile.linuxamd64 .
+docker build -t bitopay/btcpayserver --file=Dockerfile.linuxamd64 .
 ```
 
 Next, make sure you have a domain name pointing to your host (CNAME), with ports `443` and `80` externally accessible (and perhaps additional ports like `9735` and `9736` for Bitcoin and Litecoin lightning). Otherwise, you will have to set it manually by running `changedomain.sh`.
@@ -91,7 +91,7 @@ mkdir BTCPayServer
 cd BTCPayServer
 
 # Clone this repository
-git clone https://github.com/bitopayway/btcpayserver-docker
+git clone https://github.com/bitopay/btcpayserver-docker
 cd btcpayserver-docker
 
 # Run btcpay-setup.sh with the right parameters
@@ -332,7 +332,7 @@ We are trying to update our dependencies to run on `arm32v7` and `x64` boards. H
 
 | Source | Image | Version | x64 | arm32v7 | links |
 |---|---|---|:-:|:-:|:-:|
-| * | btcpayserver/docker-compose-generator | latest | [✔️](https://raw.githubusercontent.com/bitopayway/btcpayserver-docker/dcg-latest/docker-compose-generator/linuxamd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/bitopayway/btcpayserver-docker/dcg-latest/docker-compose-generator/linuxarm32v7.Dockerfile) | [Github](https://github.com/bitopayway/btcpayserver-docker) - [DockerHub](https://hub.docker.com/r/btcpayserver/docker-compose-generator) |
+| * | btcpayserver/docker-compose-generator | latest | [✔️](https://raw.githubusercontent.com/bitopay/btcpayserver-docker/dcg-latest/docker-compose-generator/linuxamd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/bitopay/btcpayserver-docker/dcg-latest/docker-compose-generator/linuxarm32v7.Dockerfile) | [Github](https://github.com/bitopay/btcpayserver-docker) - [DockerHub](https://hub.docker.com/r/btcpayserver/docker-compose-generator) |
 | * | btcpayserver/docker-compose-builder | 1.23.2 | ️❌ | [✔️](https://raw.githubusercontent.com/btcpayserver/docker-compose-builder/v1.23.2/linuxarm32v7.Dockerfile) | [Github](https://github.com/btcpayserver/docker-compose-builder) - [DockerHub](https://hub.docker.com/r/btcpayserver/docker-compose-builder) |
 | bitcoin.yml | btcpayserver/bitcoin | 0.18.0 | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.18.0/Bitcoin/0.18.0/linuxamd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.18.0/Bitcoin/0.18.0/linuxarm32v7.Dockerfile) | [Github](https://github.com/btcpayserver/dockerfile-deps) - [DockerHub](https://hub.docker.com/r/btcpayserver/bitcoin) |
 | bitcoin-clightning.yml | btcpayserver/lightning | v0.7.1 | [✔️](https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.7.1/Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.7.1/contrib/linuxarm32v7.Dockerfile) | [Github](https://github.com/btcpayserver/lightning) - [DockerHub](https://hub.docker.com/r/btcpayserver/lightning) |

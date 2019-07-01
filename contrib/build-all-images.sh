@@ -6,12 +6,12 @@ DOCKERFILE=""
 
 
 # Build docker-compose-generator
-# https://raw.githubusercontent.com/bitopayway/btcpayserver-docker/dcg-latest/docker-compose-generator/linuxamd64.Dockerfile
+# https://raw.githubusercontent.com/bitopay/btcpayserver-docker/dcg-latest/docker-compose-generator/linuxamd64.Dockerfile
 DOCKERFILE="docker-compose-generator/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/bitopayway/btcpayserver-docker/dcg-latest/docker-compose-generator/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/bitopay/btcpayserver-docker/dcg-latest/docker-compose-generator/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker-compose-generator/linuxarm32v7.Dockerfile"
 echo "Building btcpayserver/docker-compose-generator:latest"
-git clone https://github.com/bitopayway/btcpayserver-docker docker-compose-generator
+git clone https://github.com/bitopay/btcpayserver-docker docker-compose-generator
 cd docker-compose-generator
 git checkout dcg-latest
 cd "$(dirname $DOCKERFILE)"
@@ -170,13 +170,13 @@ cd - && cd ..
 DOCKERFILE="amd64.Dockerfile"
 # https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.124/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-echo "Building bitopayway/btcpayserver:latest"
-git clone https://github.com/bitopayway/btcpayserver btcpayserver
+echo "Building bitopay/btcpayserver:latest"
+git clone https://github.com/bitopay/btcpayserver btcpayserver
 cd btcpayserver
-# TODO tag bitopayway/btcpayserver
+# TODO tag bitopay/btcpayserver
 # git checkout v1.0.3.118
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "bitopayway/btcpayserver:latest" .
+docker build -f "$DOCKERFILE" -t "bitopay/btcpayserver:latest" .
 cd - && cd ..
 
 
