@@ -416,7 +416,7 @@ WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
 \"log-opts\": {\"max-size\": \"5m\", \"max-file\": \"3\"}
 }" > /etc/docker/daemon.json
 		echo "Setting limited log files in /etc/docker/daemon.json"
-		systemctl restart docker
+		$START && ! $IS_CHROOT && systemctl restart docker
 	fi
 
 	echo -e "BTCPay Server systemd configured in /etc/systemd/system/btcpayserver.service\n"
@@ -465,9 +465,11 @@ if [[ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ]] && [[ "$OLD_BTCPAY_DOCKER_COMPOSE" !=
     docker-compose -f "$OLD_BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
 fi
 
-
-$START && btcpay_up
-! $START && docker-compose -f "$BTCPAY_DOCKER_COMPOSE" pull
+if $START; then
+    btcpay_up
+else
+    btcpay_pull
+fi
 
 # Give SSH key to BTCPay
 if [[ -f "$BTCPAY_HOST_SSHKEYFILE" ]]; then

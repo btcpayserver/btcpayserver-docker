@@ -33,7 +33,11 @@ namespace DockerGenerator
 
 		public string GetFilePath()
 		{
-			return Path.Combine(BuildOutputDirectory, $"docker-compose.{_Name}.yml");
+			return GetFilePath($"docker-compose.{_Name}.yml");
+		}
+		public string GetFilePath(string fileName)
+		{
+			return Path.Combine(BuildOutputDirectory, fileName);
 		}
 		public void Build()
 		{
@@ -83,11 +87,23 @@ namespace DockerGenerator
 			output.Add("services", new YamlMappingNode(Merge(services)));
 			output.Add("volumes", new YamlMappingNode(volumes));
 			output.Add("networks", new YamlMappingNode(networks));
+
+
+			var dockerImages = ((YamlMappingNode)output["services"]).Children.Select(kv => kv.Value["image"].ToString()).ToArray();
+			StringBuilder pullImageSh = new StringBuilder();
+			pullImageSh.Append($"#!/bin/bash\n\n");
+			foreach (var image in dockerImages)
+			{
+				pullImageSh.Append($"docker pull \"{image}\"\n");
+			}
+			var outputFile = GetFilePath("pull-images.sh");
+			File.WriteAllText(outputFile, pullImageSh.ToString());
+			Console.WriteLine($"Generated {outputFile}");
+
 			var result = serializer.Serialize(output);
-			var outputFile = GetFilePath();
+			outputFile = GetFilePath();
 			File.WriteAllText(outputFile, result.Replace("''", ""));
 			Console.WriteLine($"Generated {outputFile}");
-			Console.WriteLine();
 		}
 
 		private KeyValuePair<YamlNode, YamlNode>[] Merge(List<KeyValuePair<YamlNode, YamlNode>> services)

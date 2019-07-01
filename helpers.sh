@@ -98,6 +98,10 @@ btcpay_up() {
     popd > /dev/null
 }
 
+btcpay_pull() {
+    . $BTCPAY_BASE_DIRECTORY/Generated/pull-images.sh
+}
+
 btcpay_down() {
     pushd . > /dev/null
     cd "$(dirname "$BTCPAY_ENV_FILE")"
