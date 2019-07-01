@@ -29,6 +29,7 @@ docker run -v "$(pwd)/Generated:/app/Generated" \
 
 if [ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]; then
     cp Production/nginx.tmpl Generated/nginx.tmpl
+    chmod +x Generated/pull-images.sh
 fi
 
 if [ "$BTCPAYGEN_REVERSEPROXY" == "traefik" ]; then
