@@ -113,11 +113,6 @@ if [[ "$1" == "--install-only" ]]; then
     START=false
 fi
 
-IS_CHROOT=false
-if [[ -x "$(command -v ischroot)" ]] && ischroot; then
-    IS_CHROOT=true
-fi
-
 if [[ -z "$BTCPAYGEN_CRYPTO1" ]]; then
 	if [[ "$OSTYPE" != "darwin"* ]]; then
 		# Not Mac OS - Mac OS uses it's own env file
@@ -339,13 +334,6 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
             # zlib1g:armhf is needed for docker-compose, but we install it here as we changed dpkg here
             apt-get install -y docker-ce:armhf zlib1g:armhf
         fi
-        if $IS_CHROOT; then
-            echo "chroot detected, running dockerd in background..."
-            dockerd &
-            echo "Waiting /var/run/docker.sock to be created..."
-            while [[ ! -f "/var/run/docker.sock" ]]; do sleep 1; done
-            echo "/var/run/docker.sock is created"
-        fi
     fi
 
     if ! [[ -x "$(command -v docker-compose)" ]]; then
@@ -416,18 +404,18 @@ WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
 \"log-opts\": {\"max-size\": \"5m\", \"max-file\": \"3\"}
 }" > /etc/docker/daemon.json
 		echo "Setting limited log files in /etc/docker/daemon.json"
-		$START && ! $IS_CHROOT && systemctl restart docker
+		$START && systemctl restart docker
 	fi
 
 	echo -e "BTCPay Server systemd configured in /etc/systemd/system/btcpayserver.service\n"
 	systemctl daemon-reload
 	systemctl enable btcpayserver
-	if $START && ! $IS_CHROOT; then
+	if $START; then
 		echo "BTCPay Server starting... this can take 5 to 10 minutes..."
 		systemctl start btcpayserver
 		echo "BTCPay Server started"
 	fi
-    $START && $IS_CHROOT && echo "Impossible to start a systemctl service in chroot... skipping"
+    $START && echo "Impossible to start a systemctl service in chroot... skipping"
 elif [[ -x "$(command -v initctl)" ]]; then
 	# Use upstart
 	echo "Using upstart"
@@ -480,7 +468,7 @@ fi
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 install_tooling
 
-if ! $START && $IS_CHROOT; then
+if ! $START; then
     echo "Killing dockerd in the background..."
     kill %-
 fi
