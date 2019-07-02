@@ -99,7 +99,10 @@ btcpay_up() {
 }
 
 btcpay_pull() {
-    . $BTCPAY_BASE_DIRECTORY/Generated/pull-images.sh
+    pushd . > /dev/null
+    cd "$(dirname "$BTCPAY_ENV_FILE")"
+    docker-compose -f "$BTCPAY_DOCKER_COMPOSE" pull
+    popd > /dev/null
 }
 
 btcpay_down() {
