@@ -102,7 +102,7 @@ Add-on specific variables:
     BTCTRANSMUTER_HOST: If btc transmuter is activated with opt-add-btctransmuter, the hostname of your btc transmuter website (eg. store.example.com)
 END
 }
-
+START=""
 while (( "$#" )); do
   case "$1" in
     -i)
@@ -130,7 +130,7 @@ while (( "$#" )); do
 done
 
 # If start does not have a value, stophere
-if [[ "$START" ]]; then
+if ! [[ "$START" ]]; then
     display_help
     return
 fi
