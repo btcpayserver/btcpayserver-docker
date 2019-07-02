@@ -103,14 +103,36 @@ Add-on specific variables:
 END
 }
 
-if [[ "$1" != "-i" ]] && [[ "$1" != "--install-only" ]]; then
+while (( "$#" )); do
+  case "$1" in
+    -i)
+      START=true
+      shift 1
+      ;;
+    --install-only)
+      START=false
+      shift 1
+      ;;
+    --) # end argument parsing
+      shift
+      break
+      ;;
+    -*|--*=) # unsupported flags
+      echo "Error: Unsupported flag $1" >&2
+      display_help
+      return
+      ;;
+    *) # preserve positional arguments
+      PARAMS="$PARAMS $1"
+      shift
+      ;;
+  esac
+done
+
+# If start does not have a value, stophere
+if [[ "$START" ]]; then
     display_help
     return
-fi
-
-START=true
-if [[ "$1" == "--install-only" ]]; then
-    START=false
 fi
 
 if [[ -z "$BTCPAYGEN_CRYPTO1" ]]; then
