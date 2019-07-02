@@ -490,9 +490,4 @@ fi
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 install_tooling
 
-if ! $START; then
-    echo "Killing dockerd in the background..."
-    kill %-
-fi
-
 cd $ORIGINAL_DIRECTORY
