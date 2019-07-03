@@ -403,7 +403,7 @@ if $HAS_DOCKER; then
 fi
 
 # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
-. ./build.sh
+$HAS_DOCKER && . ./build.sh
 
 if [[ "$BTCPAYGEN_OLD_PREGEN" == "true" ]]; then
     cp Generated/docker-compose.generated.yml $BTCPAY_DOCKER_COMPOSE
