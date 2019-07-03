@@ -10,6 +10,7 @@ services:
         rpcuser=ceiwHEbqWI83
         rpcpassword=DwubwWsoo3
   eclair_bitcoin:
+    container_name: btcpayserver_eclair_bitcoin
     restart: unless-stopped
     stop_signal: SIGINT
     image: acinq/eclair:v0.3
