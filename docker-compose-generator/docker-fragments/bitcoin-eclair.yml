@@ -40,7 +40,7 @@ services:
       - "9735" # server port
       - "8080" # api port
     volumes:
-      - "bitcoind_dir:/etc/bitcoin"
+      - "bitcoin_datadir:/etc/bitcoin"
       - "eclair_bitcoin_datadir:/data"
     links:
       - bitcoind
