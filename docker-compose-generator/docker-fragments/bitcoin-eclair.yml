@@ -29,7 +29,7 @@ services:
         -Declair.node-alias=${LIGHTNING_ALIAS}
         -Declair.api.password=DwubwWsoo3
         -Declair.bitcoind.host=bitcoind
-        -Declair.bitcoind.rpcport=8080
+        -Declair.bitcoind.rpcport=43782
         -Declair.bitcoind.rpcuser=ceiwHEbqWI83
         -Declair.bitcoind.rpcpassword=DwubwWsoo3
         -Declair.bitcoind.zmqblock=tcp://bitcoind:28332
