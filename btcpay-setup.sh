@@ -58,8 +58,9 @@ Install BTCPay on this server
 This script must be run as root, except on Mac OS
 
     -i : Run install and start BTCPay Server
-    --install-only : Run install only
-    --docker-unavailable : If specified, same as --install-only, but will also skip install steps requiring docker 
+    --install-only: Run install only
+    --docker-unavailable: Same as --install-only, but will also skip install steps requiring docker
+    --no-startup-register: Do not register BTCPayServer to start via systemctl or upstart
 
 This script will:
 
@@ -105,6 +106,7 @@ END
 }
 START=""
 HAS_DOCKER=true
+STARTUP_REGISTER=true
 while (( "$#" )); do
   case "$1" in
     -i)
@@ -118,6 +120,10 @@ while (( "$#" )); do
     --docker-unavailable)
       START=false
       HAS_DOCKER=false
+      shift 1
+      ;;
+    --no-startup-register)
+      STARTUP_REGISTER=false
       shift 1
       ;;
     --) # end argument parsing
@@ -406,7 +412,7 @@ if [[ "$BTCPAYGEN_OLD_PREGEN" == "true" ]]; then
 fi
 
 # Schedule for reboot
-if [[ -x "$(command -v systemctl)" ]]; then
+if $STARTUP_REGISTER && [[ -x "$(command -v systemctl)" ]]; then
 	# Use systemd
 	if [[ -e "/etc/init/start_containers.conf" ]]; then
 		echo -e "Uninstalling upstart script /etc/init/start_containers.conf"
@@ -449,7 +455,7 @@ WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
 		echo "BTCPay Server started"
 	fi
     $START && echo "Impossible to start a systemctl service in chroot... skipping"
-elif [[ -x "$(command -v initctl)" ]]; then
+elif $STARTUP_REGISTER && [[ -x "$(command -v initctl)" ]]; then
 	# Use upstart
 	echo "Using upstart"
 	echo "
