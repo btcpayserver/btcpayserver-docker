@@ -378,15 +378,13 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
                 echo "Trying to install docker-compose by downloading on $DOCKER_COMPOSE_DOWNLOAD ($(uname -m))"
                 curl -L "$DOCKER_COMPOSE_DOWNLOAD" -o /usr/local/bin/docker-compose
                 chmod +x /usr/local/bin/docker-compose
-            else
+            elif $HAS_DOCKER; then
                 echo "Trying to install docker-compose by using the docker-compose-builder ($(uname -m))"
                 ! [[ -d "dist" ]] && mkdir dist
-                if $HAS_DOCKER; then
-                    docker run --rm -ti -v "$(pwd)/dist:/dist" btcpayserver/docker-compose-builder:1.23.2
-                    mv dist/docker-compose /usr/local/bin/docker-compose
-                    chmod +x /usr/local/bin/docker-compose
-                    rm -rf "dist"
-                fi
+                docker run --rm -ti -v "$(pwd)/dist:/dist" btcpayserver/docker-compose-builder:1.23.2
+                mv dist/docker-compose /usr/local/bin/docker-compose
+                chmod +x /usr/local/bin/docker-compose
+                rm -rf "dist"
             fi
         fi
 	fi
