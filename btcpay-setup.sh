@@ -59,6 +59,7 @@ This script must be run as root, except on Mac OS
 
     -i : Run install and start BTCPay Server
     --install-only : Run install only
+    --docker-unavailable : If specified, same as --install-only, but will also skip install steps requiring docker 
 
 This script will:
 
@@ -103,6 +104,7 @@ Add-on specific variables:
 END
 }
 START=""
+HAS_DOCKER=true
 while (( "$#" )); do
   case "$1" in
     -i)
@@ -111,6 +113,11 @@ while (( "$#" )); do
       ;;
     --install-only)
       START=false
+      shift 1
+      ;;
+    --docker-unavailable)
+      START=false
+      HAS_DOCKER=false
       shift 1
       ;;
     --) # end argument parsing
@@ -368,23 +375,27 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
             else
                 echo "Trying to install docker-compose by using the docker-compose-builder ($(uname -m))"
                 ! [[ -d "dist" ]] && mkdir dist
-                docker run --rm -ti -v "$(pwd)/dist:/dist" btcpayserver/docker-compose-builder:1.23.2
-                mv dist/docker-compose /usr/local/bin/docker-compose
-                chmod +x /usr/local/bin/docker-compose
-                rm -rf "dist"
+                if $HAS_DOCKER; then
+                    docker run --rm -ti -v "$(pwd)/dist:/dist" btcpayserver/docker-compose-builder:1.23.2
+                    mv dist/docker-compose /usr/local/bin/docker-compose
+                    chmod +x /usr/local/bin/docker-compose
+                    rm -rf "dist"
+                fi
             fi
         fi
 	fi
 fi
 
-if ! [[ -x "$(command -v docker)" ]]; then
-    echo "Failed to install 'docker'. Please install docker manually, then retry."
-    return
-fi
+if $HAS_DOCKER; then
+    if ! [[ -x "$(command -v docker)" ]]; then
+        echo "Failed to install 'docker'. Please install docker manually, then retry."
+        return
+    fi
 
-if ! [[ -x "$(command -v docker-compose)" ]]; then
-    echo "Failed to install 'docker-compose'. Please install docker-compose manually, then retry."
-    return
+    if ! [[ -x "$(command -v docker-compose)" ]]; then
+        echo "Failed to install 'docker-compose'. Please install docker-compose manually, then retry."
+        return
+    fi
 fi
 
 # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
@@ -470,14 +481,14 @@ fi
 
 cd "$(dirname $BTCPAY_ENV_FILE)"
 
-if [[ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ]] && [[ "$OLD_BTCPAY_DOCKER_COMPOSE" != "$BTCPAY_DOCKER_COMPOSE" ]]; then
+if $HAS_DOCKER && [[ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ]] && [[ "$OLD_BTCPAY_DOCKER_COMPOSE" != "$BTCPAY_DOCKER_COMPOSE" ]]; then
     echo "Closing old docker-compose at $OLD_BTCPAY_DOCKER_COMPOSE..."
     docker-compose -f "$OLD_BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
 fi
 
 if $START; then
     btcpay_up
-else
+elif $HAS_DOCKER; then
     btcpay_pull
 fi
 
