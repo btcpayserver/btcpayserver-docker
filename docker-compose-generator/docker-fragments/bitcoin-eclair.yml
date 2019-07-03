@@ -3,14 +3,12 @@ version: "3"
 services:
   bitcoind:
     environment:
-      BITCOIN_WALLETDIR: "/wallet"
+      BITCOIN_WALLETDIR: "/data/wallet"
       BITCOIN_EXTRA_ARGS: |
         zmqpubrawblock=tcp://0.0.0.0:28332
         zmqpubrawtx=tcp://0.0.0.0:28333
         rpcuser=ceiwHEbqWI83
         rpcpassword=DwubwWsoo3
-  volumes:
-    - "bitcoin_wallet_dir:/wallet"
   eclair_bitcoin:
     container_name: btcpayserver_eclair_bitcoin
     restart: unless-stopped
@@ -54,4 +52,3 @@ services:
       - eclair_bitcoin
 volumes:
   eclair_bitcoin_datadir:
-  bitcoin_wallet_dir:
