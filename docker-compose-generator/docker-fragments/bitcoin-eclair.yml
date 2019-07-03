@@ -50,5 +50,9 @@ services:
       - "eclair_bitcoin_datadir:/etc/eclair_bitcoin"
     links:
       - eclair_bitcoin
+  nbxplorer:
+    environment:
+      NBXPLORER_BTCRPCUSER: ceiwHEbqWI83
+      NBXPLORER_BTCRPCPASSWORD: DwubwWsoo3
 volumes:
   eclair_bitcoin_datadir:
