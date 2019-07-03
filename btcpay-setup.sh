@@ -452,7 +452,6 @@ WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
 		systemctl start btcpayserver
 		echo "BTCPay Server started"
 	fi
-    $START && echo "Impossible to start a systemctl service in chroot... skipping"
 elif $STARTUP_REGISTER && [[ -x "$(command -v initctl)" ]]; then
 	# Use upstart
 	echo "Using upstart"
