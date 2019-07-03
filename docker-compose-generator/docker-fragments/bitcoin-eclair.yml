@@ -3,7 +3,6 @@ version: "3"
 services:
   bitcoind:
     environment:
-      BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       BITCOIN_WALLETDIR: wallet
       BITCOIN_EXTRA_ARGS: |
         zmqpubrawblock=tcp://0.0.0.0:28332
