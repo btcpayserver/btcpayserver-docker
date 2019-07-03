@@ -58,7 +58,9 @@ Install BTCPay on this server
 This script must be run as root, except on Mac OS
 
     -i : Run install and start BTCPay Server
-    --install-only : Run install only
+    --install-only: Run install only
+    --docker-unavailable: Same as --install-only, but will also skip install steps requiring docker
+    --no-startup-register: Do not register BTCPayServer to start via systemctl or upstart
 
 This script will:
 
@@ -102,15 +104,48 @@ Add-on specific variables:
     BTCTRANSMUTER_HOST: If btc transmuter is activated with opt-add-btctransmuter, the hostname of your btc transmuter website (eg. store.example.com)
 END
 }
+START=""
+HAS_DOCKER=true
+STARTUP_REGISTER=true
+while (( "$#" )); do
+  case "$1" in
+    -i)
+      START=true
+      shift 1
+      ;;
+    --install-only)
+      START=false
+      shift 1
+      ;;
+    --docker-unavailable)
+      START=false
+      HAS_DOCKER=false
+      shift 1
+      ;;
+    --no-startup-register)
+      STARTUP_REGISTER=false
+      shift 1
+      ;;
+    --) # end argument parsing
+      shift
+      break
+      ;;
+    -*|--*=) # unsupported flags
+      echo "Error: Unsupported flag $1" >&2
+      display_help
+      return
+      ;;
+    *) # preserve positional arguments
+      PARAMS="$PARAMS $1"
+      shift
+      ;;
+  esac
+done
 
-if [[ "$1" != "-i" ]] && [[ "$1" != "--install-only" ]]; then
+# If start does not have a value, stophere
+if ! [[ "$START" ]]; then
     display_help
     return
-fi
-
-START=true
-if [[ "$1" == "--install-only" ]]; then
-    START=false
 fi
 
 if [[ -z "$BTCPAYGEN_CRYPTO1" ]]; then
@@ -343,7 +378,7 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
                 echo "Trying to install docker-compose by downloading on $DOCKER_COMPOSE_DOWNLOAD ($(uname -m))"
                 curl -L "$DOCKER_COMPOSE_DOWNLOAD" -o /usr/local/bin/docker-compose
                 chmod +x /usr/local/bin/docker-compose
-            else
+            elif $HAS_DOCKER; then
                 echo "Trying to install docker-compose by using the docker-compose-builder ($(uname -m))"
                 ! [[ -d "dist" ]] && mkdir dist
                 docker run --rm -ti -v "$(pwd)/dist:/dist" btcpayserver/docker-compose-builder:1.23.2
@@ -355,25 +390,27 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
 	fi
 fi
 
-if ! [[ -x "$(command -v docker)" ]]; then
-    echo "Failed to install 'docker'. Please install docker manually, then retry."
-    return
-fi
+if $HAS_DOCKER; then
+    if ! [[ -x "$(command -v docker)" ]]; then
+        echo "Failed to install 'docker'. Please install docker manually, then retry."
+        return
+    fi
 
-if ! [[ -x "$(command -v docker-compose)" ]]; then
-    echo "Failed to install 'docker-compose'. Please install docker-compose manually, then retry."
-    return
+    if ! [[ -x "$(command -v docker-compose)" ]]; then
+        echo "Failed to install 'docker-compose'. Please install docker-compose manually, then retry."
+        return
+    fi
 fi
 
 # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
-. ./build.sh
+$HAS_DOCKER && . ./build.sh
 
 if [[ "$BTCPAYGEN_OLD_PREGEN" == "true" ]]; then
     cp Generated/docker-compose.generated.yml $BTCPAY_DOCKER_COMPOSE
 fi
 
 # Schedule for reboot
-if [[ -x "$(command -v systemctl)" ]]; then
+if $STARTUP_REGISTER && [[ -x "$(command -v systemctl)" ]]; then
 	# Use systemd
 	if [[ -e "/etc/init/start_containers.conf" ]]; then
 		echo -e "Uninstalling upstart script /etc/init/start_containers.conf"
@@ -416,7 +453,7 @@ WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
 		echo "BTCPay Server started"
 	fi
     $START && echo "Impossible to start a systemctl service in chroot... skipping"
-elif [[ -x "$(command -v initctl)" ]]; then
+elif $STARTUP_REGISTER && [[ -x "$(command -v initctl)" ]]; then
 	# Use upstart
 	echo "Using upstart"
 	echo "
@@ -448,14 +485,14 @@ fi
 
 cd "$(dirname $BTCPAY_ENV_FILE)"
 
-if [[ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ]] && [[ "$OLD_BTCPAY_DOCKER_COMPOSE" != "$BTCPAY_DOCKER_COMPOSE" ]]; then
+if $HAS_DOCKER && [[ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ]] && [[ "$OLD_BTCPAY_DOCKER_COMPOSE" != "$BTCPAY_DOCKER_COMPOSE" ]]; then
     echo "Closing old docker-compose at $OLD_BTCPAY_DOCKER_COMPOSE..."
     docker-compose -f "$OLD_BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
 fi
 
 if $START; then
     btcpay_up
-else
+elif $HAS_DOCKER; then
     btcpay_pull
 fi
 
@@ -467,10 +504,5 @@ fi
 
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 install_tooling
-
-if ! $START; then
-    echo "Killing dockerd in the background..."
-    kill %-
-fi
 
 cd $ORIGINAL_DIRECTORY
