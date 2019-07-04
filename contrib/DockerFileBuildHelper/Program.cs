@@ -237,7 +237,7 @@ namespace DockerFileBuildHelper
             switch (name)
             {
                 case "btglnd":
-                    dockerInfo.DockerFilePath = "BTCPayServer.Dockerfile";
+                    dockerInfo.DockerFilePath = "Dockerfile";
                     dockerInfo.GitLink = "https://github.com/vutov/lnd";
                     dockerInfo.GitRef = "master";
                     break;
