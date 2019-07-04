@@ -94,7 +94,7 @@ namespace DockerGenerator
 			pullImageSh.Append($"#!/bin/bash\n\n");
 			foreach (var image in dockerImages)
 			{
-				pullImageSh.Append($"docker pull \"{image}\"\n");
+				pullImageSh.Append($"docker pull $BTCPAY_DOCKER_PULL_FLAGS \"{image}\"\n");
 			}
 			var outputFile = GetFilePath("pull-images.sh");
 			File.WriteAllText(outputFile, pullImageSh.ToString());
