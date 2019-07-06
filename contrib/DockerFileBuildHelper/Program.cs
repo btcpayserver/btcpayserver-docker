@@ -242,7 +242,9 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = "master";
                     break;
                 case "docker-compose-builder":
+                    dockerInfo.DockerFilePath = "linuxamd64.Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = "linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "linuxarm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/docker-compose-builder";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     break;
