@@ -7,10 +7,10 @@ services:
       # NGINX settings
       VIRTUAL_NETWORK: nginx-proxy
       VIRTUAL_PORT: 49392
-      VIRTUAL_HOST: ${BTCPAY_HOST}
+      VIRTUAL_HOST: ${BTCPAY_HOST},${BTCPAY_ADDITIONAL_HOSTS}
       VIRTUAL_HOST_NAME: "btcpay"
       SSL_POLICY: Mozilla-Modern 
 
       # Let's encrypt settings
-      LETSENCRYPT_HOST: ${BTCPAY_HOST}
+      LETSENCRYPT_HOST: ${BTCPAY_HOST},${BTCPAY_ADDITIONAL_HOSTS}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}
