@@ -61,10 +61,6 @@ btcpay_expand_variables() {
     if [[ "$BTCPAY_HOST" != *.local ]] && [[ "$BTCPAY_HOST" != *.lan ]]; then
         BTCPAY_ANNOUNCEABLE_HOST="$BTCPAY_HOST"
     fi
-    
-    if [ ! -z "$BTCPAY_ADDITIONAL_HOSTS" ]; then 
-        BTCPAY_ADDITIONAL_HOSTS=",${BTCPAY_ADDITIONAL_HOSTS// }"
-    fi
 }
 
 # Set .env file
