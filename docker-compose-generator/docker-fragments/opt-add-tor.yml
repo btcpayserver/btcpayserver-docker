@@ -84,7 +84,7 @@ services:
 
   tor-gen:
     restart: unless-stopped
-    image: btcpayserver/docker-gen:0.7.5
+    image: btcpayserver/docker-gen:0.7.6
     container_name: tor-gen
     volumes:
       - "/var/run/docker.sock:/tmp/docker.sock:ro"
