@@ -161,7 +161,7 @@ if [[ -z "$BTCPAYGEN_CRYPTO1" ]]; then
     fi
 fi
 
-if [ ! -z "$BTCPAY_ADDITIONAL_HOSTS" ] && [[ "$BTCPAY_ADDITIONAL_HOSTS" == *[';']*]]; then 
+if [ ! -z "$BTCPAY_ADDITIONAL_HOSTS" ] && [[ "$BTCPAY_ADDITIONAL_HOSTS" == *[';']* ]]; then 
     echo "$BTCPAY_ADDITIONAL_HOSTS should be separated by a , not ;"
     return;
 fi
