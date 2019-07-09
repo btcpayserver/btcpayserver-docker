@@ -161,6 +161,10 @@ if [[ -z "$BTCPAYGEN_CRYPTO1" ]]; then
     fi
 fi
 
+if [ ! -z "$BTCPAY_ADDITIONAL_HOSTS" ] && [["$BTCPAY_ADDITIONAL_HOSTS" == *[';']*]]; then 
+    echo "$BTCPAY_ADDITIONAL_HOSTS should be separated by a , not ;"
+    return;
+fi
 ######### Migration: old pregen environment to new environment ############
 if [[ ! -z $BTCPAY_DOCKER_COMPOSE ]] && [[ ! -z $DOWNLOAD_ROOT ]] && [[ -z $BTCPAYGEN_OLD_PREGEN ]]; then
     echo "Your deployment is too old, you need to migrate by following instructions on this link https://github.com/btcpayserver/btcpayserver-docker/tree/master#i-deployed-before-btcpay-setupsh-existed-before-may-17-can-i-migrate-to-this-new-system"
