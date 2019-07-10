@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # This script shows the steps to download and deploy an archive of the current UTXO Set
 # It will:
 #   1. Download the UTXO Set from UTXO_DOWNLOAD_LINK, if UTXO_DOWNLOAD_LINK is empty, use NBITCOIN_NETWORK to find a default
@@ -22,12 +24,14 @@ if ! [[ "$NBITCOIN_NETWORK" ]]; then
     exit 1
 fi
 
+TAR_FILE="$1"
+
 if ! [[ "$UTXO_DOWNLOAD_LINK" ]]; then
     [[ $NBITCOIN_NETWORK == "mainnet" ]] && UTXO_DOWNLOAD_LINK="http://utxosets.blob.core.windows.net/public/utxo-snapshot-bitcoin-mainnet-565305.tar"
     [[ $NBITCOIN_NETWORK == "testnet" ]] && UTXO_DOWNLOAD_LINK="http://utxosets.blob.core.windows.net/public/utxo-snapshot-bitcoin-testnet-1445586.tar"
 fi
 
-if ! [[ "$UTXO_DOWNLOAD_LINK" ]]; then
+if ! [[ "$UTXO_DOWNLOAD_LINK" ]] && ! [[ "$TAR_FILE" ]]; then
     echo "No default UTXO_DOWNLOAD_LINK for $NBITCOIN_NETWORK" 
     exit 1
 fi
@@ -35,14 +39,20 @@ fi
 BITCOIN_DATA_DIR="/var/lib/docker/volumes/generated_bitcoin_datadir/_data"
 [ ! -d "$BITCOIN_DATA_DIR" ] && mkdir -p "$BITCOIN_DATA_DIR"
 
-TAR_NAME="$(basename $UTXO_DOWNLOAD_LINK)"
-TAR_FILE="$BITCOIN_DATA_DIR/$TAR_NAME"
+if [[ "$TAR_FILE" ]]; then
+  TAR_NAME="$(basename $TAR_FILE)"
+else
+  TAR_NAME="$(basename $UTXO_DOWNLOAD_LINK)"
+  TAR_FILE="$BITCOIN_DATA_DIR/$TAR_NAME"
+fi
 
 cp "utxo-sets" "$BITCOIN_DATA_DIR/utxo-sets"
 cd "$BITCOIN_DATA_DIR"
+IS_DOWNLOADED=false
 if [ ! -f "$TAR_FILE" ]; then
   echo "Downloading $UTXO_DOWNLOAD_LINK to $TAR_FILE"
   wget "$UTXO_DOWNLOAD_LINK" -q --show-progress
+  IS_DOWNLOADED=true
 else
   echo "$TAR_FILE already exists"
 fi
@@ -76,7 +86,7 @@ if ! tar -xf "$TAR_FILE" -C "$BITCOIN_DATA_DIR"; then
   echo "Failed extracting, did you turned bitcoin off? (btcpay-down.sh)"
   exit 1
 fi
-rm "$TAR_FILE"
+$IS_DOWNLOADED && rm -f "$TAR_FILE"
 
 BTCPAY_DATA_DIR="/var/lib/docker/volumes/generated_btcpay_datadir/_data"
 [ ! -d "$BTCPAY_DATA_DIR" ] && mkdir -p "$BTCPAY_DATA_DIR"
