@@ -8,6 +8,10 @@ set -e
 #   2. Check the tarball against trusted hashes
 #   3. Create the container's folders for blocks and chainstate, or empty them if they exists
 #   4. Unzip the tarball
+# This will download the utxo set and untar it in bitcoin's folder
+# Usage: ./load-utxo-set.sh
+# This will use the tar to load the utxo in bitcoin's folder
+# Usage: ./load-utxo-set.sh utxo-snapshot-bitcoin-mainnet-565305.tar
 
 if ! [ "$0" = "$BASH_SOURCE" ]; then
     echo "This script must not be sourced" 
