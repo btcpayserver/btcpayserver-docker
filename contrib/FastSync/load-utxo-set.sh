@@ -36,11 +36,12 @@ if ! [[ "$UTXO_DOWNLOAD_LINK" ]] && ! [[ "$TAR_FILE" ]]; then
     exit 1
 fi
 
+BITCOIN_DATA_DIR="/var/lib/docker/volumes/generated_bitcoin_datadir/_data"
+[ ! -d "$BITCOIN_DATA_DIR" ] && mkdir -p "$BITCOIN_DATA_DIR"
+
 if [[ "$TAR_FILE" ]]; then
   TAR_NAME="$(basename $TAR_FILE)"
 else
-  BITCOIN_DATA_DIR="/var/lib/docker/volumes/generated_bitcoin_datadir/_data"
-  [ ! -d "$BITCOIN_DATA_DIR" ] && mkdir -p "$BITCOIN_DATA_DIR"
   TAR_NAME="$(basename $UTXO_DOWNLOAD_LINK)"
   TAR_FILE="$BITCOIN_DATA_DIR/$TAR_NAME"
 fi
