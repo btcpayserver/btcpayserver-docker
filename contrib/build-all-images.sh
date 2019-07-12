@@ -166,16 +166,16 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.120/amd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.121/amd64.Dockerfile
 DOCKERFILE="amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.120/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.121/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-echo "Building btcpayserver/btcpayserver:1.0.3.120"
+echo "Building btcpayserver/btcpayserver:1.0.3.121"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.0.3.120
+git checkout v1.0.3.121
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.120" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.121" .
 cd - && cd ..
 
 
@@ -350,16 +350,16 @@ cd - && cd ..
 
 
 # Build nginx
-# https://raw.githubusercontent.com/nginxinc/docker-nginx/master/stable/stretch/Dockerfile
+# https://raw.githubusercontent.com/nginxinc/docker-nginx/1.16.0/stable/stretch/Dockerfile
 DOCKERFILE="stable/stretch/Dockerfile"
-# https://raw.githubusercontent.com/nginxinc/docker-nginx/master/stable/stretch/Dockerfile
+# https://raw.githubusercontent.com/nginxinc/docker-nginx/1.16.0/stable/stretch/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="stable/stretch/Dockerfile"
-echo "Building nginx:latest"
+echo "Building nginx:1.16.0"
 git clone https://github.com/nginxinc/docker-nginx nginx
 cd nginx
-git checkout master
+git checkout 1.16.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nginx:latest" .
+docker build -f "$DOCKERFILE" -t "nginx:1.16.0" .
 cd - && cd ..
 
 

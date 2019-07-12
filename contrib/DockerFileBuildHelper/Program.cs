@@ -405,7 +405,7 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePath = $"stable/stretch/Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"stable/stretch/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/nginxinc/docker-nginx";
-                    dockerInfo.GitRef = $"master";
+                    dockerInfo.GitRef = image.Tag;
                     break;
                 case "docker-gen":
                     dockerInfo.DockerFilePath = $"linuxamd64.Dockerfile";
