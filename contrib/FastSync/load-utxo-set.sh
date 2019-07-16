@@ -31,7 +31,7 @@ fi
 TAR_FILE="$1"
 
 if ! [[ "$UTXO_DOWNLOAD_LINK" ]]; then
-    [[ $NBITCOIN_NETWORK == "mainnet" ]] && UTXO_DOWNLOAD_LINK="http://utxosets.blob.core.windows.net/public/utxo-snapshot-bitcoin-mainnet-565305.tar"
+    [[ $NBITCOIN_NETWORK == "mainnet" ]] && UTXO_DOWNLOAD_LINK="http://utxosets.blob.core.windows.net/public/utxo-snapshot-bitcoin-mainnet-585333.tar"
     [[ $NBITCOIN_NETWORK == "testnet" ]] && UTXO_DOWNLOAD_LINK="http://utxosets.blob.core.windows.net/public/utxo-snapshot-bitcoin-testnet-1445586.tar"
 fi
 
@@ -82,7 +82,7 @@ if [[ $NBITCOIN_NETWORK == "testnet" ]]; then
 fi
 
 NETWORK_DIRECTORY="$BITCOIN_DATA_DIR/$NETWORK_DIRECTORY"
-[ -d "$NETWORK_DIRECTORY/blocks" ] && rm -rf "$NETWORK_DIRECTORY/blocks"
+[ -d "$NETWORK_DIRECTORY/blocks" ] && ( rm -rf "$NETWORK_DIRECTORY/blocks" || rm -rf $NETWORK_DIRECTORY/blocks/* )
 [ -d "$NETWORK_DIRECTORY/chainstate" ] && rm -rf "$NETWORK_DIRECTORY/chainstate"
 [ ! -d "$NETWORK_DIRECTORY" ] && mkdir "$NETWORK_DIRECTORY"
 
