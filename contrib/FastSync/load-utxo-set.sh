@@ -82,7 +82,7 @@ if [[ $NBITCOIN_NETWORK == "testnet" ]]; then
 fi
 
 NETWORK_DIRECTORY="$BITCOIN_DATA_DIR/$NETWORK_DIRECTORY"
-[ -d "$NETWORK_DIRECTORY/blocks" ] && rm -rf "$NETWORK_DIRECTORY/blocks"
+[ -d "$NETWORK_DIRECTORY/blocks" ] && ( rm -rf "$NETWORK_DIRECTORY/blocks" || rm -rf $NETWORK_DIRECTORY/blocks/* )
 [ -d "$NETWORK_DIRECTORY/chainstate" ] && rm -rf "$NETWORK_DIRECTORY/chainstate"
 [ ! -d "$NETWORK_DIRECTORY" ] && mkdir "$NETWORK_DIRECTORY"
 
