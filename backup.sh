@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# This script might look like a good idea. Please be aware of these important issues:
+#
+# - The backup file is not encrypted and it contains your lightning private keys.
+#   Consider encrypting before uploading or using another backup tool like duplicity.
+# - Old channel state is toxic and you can loose all your funds, if you or someone
+#   else closes a channel based on the backup with old state - and the state changes
+#   often! If you publish an old state (say from yesterday's backup) on chain, you
+#   WILL LOSE ALL YOUR FUNDS IN A CHANNEL, because the counterparty will publish a
+#   revocation key!
+
 if [ "$(id -u)" != "0" ]; then
     echo "This script must be run as root."
     echo "Use the command 'sudo su -' (include the trailing hypen) and try again"
