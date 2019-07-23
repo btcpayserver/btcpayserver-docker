@@ -62,3 +62,6 @@ fi
 install_tooling
 btcpay_update_docker_env
 btcpay_up
+
+set +e
+docker image prune -af

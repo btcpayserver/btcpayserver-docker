@@ -112,16 +112,16 @@ cd - && cd ..
 
 
 # Build rtl
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.3.2/Dockerfile
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.4.3/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.3.2/Dockerfile.arm32v7
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.4.3/Dockerfile.arm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.arm32v7"
-echo "Building shahanafarooqui/rtl:0.3.2"
+echo "Building shahanafarooqui/rtl:0.4.3"
 git clone https://github.com/ShahanaFarooqui/RTL rtl
 cd rtl
-git checkout v0.3.2
+git checkout v0.4.3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.3.2" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.4.3" .
 cd - && cd ..
 
 
