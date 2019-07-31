@@ -29,7 +29,7 @@ services:
       - nbxplorer
       - groestlcoind
   clightning_groestlcoin_charge:
-    image: groestlcoin/groestlcoin-lightning-charge:version-0.4.7
+    image: groestlcoin/groestlcoin-lightning-charge:version-0.4.9
     restart: unless-stopped
     environment:
       NETWORK: ${NBITCOIN_NETWORK:-regtest}
@@ -54,7 +54,7 @@ services:
     links:
       - clightning_groestlcoin
   clightning_groestlcoin_spark:
-    image: groestlcoin/groestlcoin-spark:version-0.2.4
+    image: groestlcoin/groestlcoin-spark:version-0.2.8
     stop_signal: SIGKILL
     restart: unless-stopped
     environment:
