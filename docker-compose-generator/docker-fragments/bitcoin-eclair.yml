@@ -7,8 +7,7 @@ services:
       BITCOIN_EXTRA_ARGS: |
         zmqpubrawblock=tcp://0.0.0.0:28332
         zmqpubrawtx=tcp://0.0.0.0:28333
-        rpcuser=ceiwHEbqWI83
-        rpcpassword=DwubwWsoo3
+        rpcauth=eclair:d3a244200d5c946f6bef48e6583ec979$215049513aef33245dfec8ff3ab5e749458fde51ede931dec04c767c0732d468
   eclair_bitcoin:
     container_name: btcpayserver_eclair_bitcoin
     restart: unless-stopped
@@ -31,8 +30,8 @@ services:
         -Declair.api.password=DwubwWsoo3
         -Declair.bitcoind.host=bitcoind
         -Declair.bitcoind.rpcport=43782
-        -Declair.bitcoind.rpcuser=ceiwHEbqWI83
-        -Declair.bitcoind.rpcpassword=DwubwWsoo3
+        -Declair.bitcoind.rpcuser=eclair
+        -Declair.bitcoind.rpcpassword=sFLjcg99Puh4k3CAZCQkLvC-fcoFUFRyKwKcXQKa7dw=
         -Declair.bitcoind.zmqblock=tcp://bitcoind:28332
         -Declair.bitcoind.zmqtx=tcp://bitcoind:28333
     expose:
@@ -50,9 +49,5 @@ services:
       - "eclair_bitcoin_datadir:/etc/eclair_bitcoin"
     links:
       - eclair_bitcoin
-  nbxplorer:
-    environment:
-      NBXPLORER_BTCRPCUSER: ceiwHEbqWI83
-      NBXPLORER_BTCRPCPASSWORD: DwubwWsoo3
 volumes:
   eclair_bitcoin_datadir:
