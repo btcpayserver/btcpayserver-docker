@@ -378,7 +378,7 @@ export BTCPAYGEN_CRYPTO3='btg'
 . btcpay-setup.sh -i
 ```
 
-## I deployed before `btcpay-setup.sh` existed (before May 17), can I migrate to this new system?
+## I deployed before `btcpay-setup.sh` existed (before May 17, 2018), can I migrate to this new system?
 
 Yes, run the following commands to update:
 
