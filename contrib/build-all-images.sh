@@ -354,6 +354,8 @@ cd - && cd ..
 DOCKERFILE="stable/stretch/Dockerfile"
 # https://raw.githubusercontent.com/nginxinc/docker-nginx/1.16.0/stable/stretch/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="stable/stretch/Dockerfile"
+# https://raw.githubusercontent.com/nginxinc/docker-nginx/1.16.0/stable/stretch/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="stable/stretch/Dockerfile"
 echo "Building nginx:1.16.0"
 git clone https://github.com/nginxinc/docker-nginx nginx
 cd nginx
@@ -500,6 +502,8 @@ cd - && cd ..
 DOCKERFILE="9.6/Dockerfile"
 # https://raw.githubusercontent.com/docker-library/postgres/b7cb3c6eacea93be2259381033be3cc435649369/9.6/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="9.6/Dockerfile"
+# https://raw.githubusercontent.com/docker-library/postgres/b7cb3c6eacea93be2259381033be3cc435649369/9.6/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="9.6/Dockerfile"
 echo "Building postgres:9.6.5"
 git clone https://github.com/docker-library/postgres postgres
 cd postgres

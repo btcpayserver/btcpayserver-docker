@@ -142,8 +142,8 @@ namespace DockerFileBuildHelper
 
                 StringBuilder tb = new StringBuilder();
                 tb.Append(readme.Substring(0, start));
-                tb.AppendLine("| Source | Image | Version | x64 | arm32v7 | links |");
-                tb.AppendLine("|---|---|---|:-:|:-:|:-:|");
+                tb.AppendLine("| Source | Image | Version | x64 | arm32v7 | arm64v8 | links |");
+                tb.AppendLine("|---|---|---|:-:|:-:|:-:|:-:|");
                 dockerInfos = dockerInfos.OrderBy(i => i.Image.Source).ToList();
 
                 // Make sure bitcoin appears before shitcoin
@@ -171,6 +171,14 @@ namespace DockerFileBuildHelper
                     if (!string.IsNullOrEmpty(image.DockerFilePathARM32v7))
                     {
                         tb.Append($" [✔️]({image.GetGithubLinkOf(image.DockerFilePathARM32v7)}) |");
+                    }
+                    else
+                    {
+                        tb.Append($" ️❌ |");
+                    }
+                    if (!string.IsNullOrEmpty(image.DockerFilePathARM64v8))
+                    {
+                        tb.Append($" [✔️]({image.GetGithubLinkOf(image.DockerFilePathARM64v8)}) |");
                     }
                     else
                     {
@@ -404,6 +412,7 @@ namespace DockerFileBuildHelper
                 case "nginx":
                     dockerInfo.DockerFilePath = $"stable/stretch/Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"stable/stretch/Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"stable/stretch/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/nginxinc/docker-nginx";
                     dockerInfo.GitRef = image.Tag;
                     break;
@@ -433,6 +442,7 @@ namespace DockerFileBuildHelper
                 case "postgres":
                     dockerInfo.DockerFilePath = $"9.6/Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"9.6/Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"9.6/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/docker-library/postgres";
                     dockerInfo.GitRef = $"b7cb3c6eacea93be2259381033be3cc435649369";
                     break;
