@@ -229,6 +229,15 @@ if [[ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]] && [[ "$BTCPAY_HOST" ]]; then
     BTCPAY_HOST="$DOMAIN_NAME"
 fi
 
+# Since opt-txindex requires unpruned node, throw an error if both
+# opt-txindex and opt-save-storage-* are enabled together
+if [[ "${BTCPAYGEN_ADDITIONAL_FRAGMENTS}" == *opt-txindex* ]] && \
+   [[ "${BTCPAYGEN_ADDITIONAL_FRAGMENTS}" == *opt-save-storage* ]];then
+        echo "Error: BTCPAYGEN_ADDITIONAL_FRAGMENTS contains both opt-txindex and opt-save-storage*"
+		echo "opt-txindex requires an unpruned node, so you cannot use opt-save-storage with it"
+        return
+fi
+
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 . helpers.sh
 btcpay_expand_variables

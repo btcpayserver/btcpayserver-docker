@@ -1,0 +1,32 @@
+version: "3"
+# must not use opt-save-storage
+
+services:
+  bitcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        txindex=1
+  bgoldd:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        txindex=1
+  feathercoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        txindex=1
+  groestlcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        txindex=1
+  litecoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        txindex=1
+  viacoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        txindex=1
+  monacoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        txindex=1
