@@ -66,6 +66,8 @@ cd - && cd ..
 DOCKERFILE="Dockerfile"
 # https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.7.1/contrib/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="contrib/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.7.1/contrib/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="contrib/linuxarm64v8.Dockerfile"
 echo "Building btcpayserver/lightning:v0.7.1"
 git clone https://github.com/btcpayserver/lightning lightning
 cd lightning
@@ -276,6 +278,8 @@ cd - && cd ..
 DOCKERFILE="Dockerfile"
 # https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.7.1/contrib/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="contrib/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.7.1/contrib/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="contrib/linuxarm64v8.Dockerfile"
 echo "Building btcpayserver/lightning:v0.7.1"
 git clone https://github.com/btcpayserver/lightning lightning
 cd lightning
