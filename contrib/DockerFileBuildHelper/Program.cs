@@ -327,6 +327,7 @@ namespace DockerFileBuildHelper
                 case "lnd":
                     dockerInfo.DockerFilePath = "linuxamd64.Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = "linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "linuxarm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/lnd";
                     dockerInfo.GitRef = $"basedon-{image.Tag}";
                     break;
