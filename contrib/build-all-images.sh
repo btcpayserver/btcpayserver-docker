@@ -526,6 +526,8 @@ cd - && cd ..
 DOCKERFILE="scratch/amd64/Dockerfile"
 # https://raw.githubusercontent.com/containous/traefik-library-image/master/scratch/arm/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="scratch/arm/Dockerfile"
+# https://raw.githubusercontent.com/containous/traefik-library-image/master/scratch/arm64/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="scratch/arm64/Dockerfile"
 echo "Building traefik:latest"
 git clone https://github.com/containous/traefik-library-image traefik
 cd traefik

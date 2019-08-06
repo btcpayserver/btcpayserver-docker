@@ -452,6 +452,7 @@ namespace DockerFileBuildHelper
                 case "traefik":
                     dockerInfo.DockerFilePath = $"scratch/amd64/Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"scratch/arm/Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"scratch/arm64/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/containous/traefik-library-image";
                     dockerInfo.GitRef = $"master";
                     break;
