@@ -71,6 +71,10 @@ workflows:
           filters:
             branches:
               only: dcg-latest
+      - arm64v8:
+          filters:
+            branches:
+              only: dcg-latest
       - multiarch:
           requires:
             - amd64
