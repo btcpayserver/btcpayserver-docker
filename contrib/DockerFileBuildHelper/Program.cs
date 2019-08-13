@@ -368,6 +368,7 @@ namespace DockerFileBuildHelper
                 case "nbxplorer":
                     dockerInfo.DockerFilePath = "Dockerfile.linuxamd64";
                     dockerInfo.DockerFilePathARM32v7 = "Dockerfile.linuxarm32v7";
+                    dockerInfo.DockerFilePathARM64v8 = "Dockerfile.linuxarm64v8";
                     dockerInfo.GitLink = "https://github.com/dgarage/nbxplorer";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     break;
