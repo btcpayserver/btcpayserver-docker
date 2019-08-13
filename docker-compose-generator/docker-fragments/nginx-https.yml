@@ -3,7 +3,7 @@ version: "3"
 services:
   letsencrypt-nginx-proxy-companion:
     restart: unless-stopped
-    image: btcpayserver/letsencrypt-nginx-proxy-companion:1.10.0
+    image: btcpayserver/letsencrypt-nginx-proxy-companion:1.10.1
     container_name: letsencrypt-nginx-proxy-companion
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
