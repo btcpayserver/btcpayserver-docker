@@ -459,7 +459,7 @@ You can change the ports for HTTP and HTTPS by setting the environment variables
 
 When you set `REVERSEPROXY_HTTP_PORT` to another value than 80, the built-in Let's Encrypt certificate will not work, as Let's Encrypt will try to validate your SSL certificate request by connecting from the internet to your domain on port 80. This validation request should be able to reach BTCPay Server in order to receive the certificate.
 
-If you need to run on a different port, it's best to terminate SSL using another web proxy and foreard your traffic. 
+If you need to run on a different port, it's best to terminate SSL using another web proxy and forward your traffic. 
 
 ## Can I offload HTTPS termination? 
 
