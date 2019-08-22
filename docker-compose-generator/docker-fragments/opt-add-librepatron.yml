@@ -3,7 +3,7 @@ services:
     librepatron:
         container_name: librepatron
         restart: unless-stopped
-        image: jvandrew/librepatron:0.7.37
+        image: jvandrew/librepatron:0.7.39
         expose:
             - "8006"
         volumes:
