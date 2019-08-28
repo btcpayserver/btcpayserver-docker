@@ -332,18 +332,18 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.56/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.57/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.56/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.57/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.56/Dockerfile.linuxarm64v8
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.57/Dockerfile.linuxarm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.linuxarm64v8"
-echo "Building nicolasdorier/nbxplorer:2.0.0.56"
+echo "Building nicolasdorier/nbxplorer:2.0.0.57"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.0.0.56
+git checkout v2.0.0.57
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.0.0.56" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.0.0.57" .
 cd - && cd ..
 
 
@@ -530,12 +530,8 @@ cd - && cd ..
 
 
 # Build traefik
-# https://raw.githubusercontent.com/containous/traefik-library-image/master/scratch/amd64/Dockerfile
-DOCKERFILE="scratch/amd64/Dockerfile"
-# https://raw.githubusercontent.com/containous/traefik-library-image/master/scratch/arm/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="scratch/arm/Dockerfile"
-# https://raw.githubusercontent.com/containous/traefik-library-image/master/scratch/arm64/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="scratch/arm64/Dockerfile"
+# https://raw.githubusercontent.com/containous/traefik-library-image/master/scratch/Dockerfile
+DOCKERFILE="scratch/Dockerfile"
 echo "Building traefik:latest"
 git clone https://github.com/containous/traefik-library-image traefik
 cd traefik
