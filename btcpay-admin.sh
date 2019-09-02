@@ -5,17 +5,23 @@ query()
 }
 
 case "$1" in
-    reset-u2f)
-        query "SELECT * FROM \"U2FDevices\""
-        query "UPDATE public.\"AspNetUsers\" SET \"TwoFactorEnabled\"=false WHERE upper('\$1') = \"NormalizedEmail\""
-        query "SELECT * FROM \"U2FDevices\""
+    disable-multifactor)
+        query "DELETE FROM \"U2FDevices\" WHERE \"ApplicationUserId\" = (SELECT \"Id\" FROM \"AspNetUsers\" WHERE upper('$2') = \"NormalizedEmail\")"
+        query "UPDATE public.\"AspNetUsers\" SET \"TwoFactorEnabled\"=false WHERE upper('\$2') = \"NormalizedEmail\""
+        ;;
+	set-user-admin)
+        query "INSERT INTO \"AspNetUserRoles\" Values ( (SELECT \"Id\" FROM \"AspNetUsers\" WHERE upper('\$2') = \"NormalizedEmail\"), (SELECT \"Id\" FROM \"AspNetRoles\" WHERE \"NormalizedName\"='SERVERADMIN'))"
+        ;;
+    reset-server-policy)
+        query "DELETE FROM \"Settings\" WHERE \"Id\" = 'BTCPayServer.Services.PoliciesSettings'"
         ;;
     *)
         echo "Usage: $0 [command]"
         echo
         echo "Commands:"
-        echo "         reset-u2f"
-        echo "         reset-u2f"
+        echo "         disable-multifactor <email>"
+        echo "         set-user-admin <email>"
+        echo "         reset-server-policy"
 esac
 
 exit 0
