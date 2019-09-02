@@ -22,6 +22,7 @@ install_tooling() {
                 "*" "btcpay-restart.sh" "Command line for restarting all services related to BTCPay Server" \
                 "*" "btcpay-setup.sh" "Command line for restarting all services related to BTCPay Server" \
                 "*" "btcpay-up.sh" "Command line for starting all services related to BTCPay Server" \
+                "*" "btcpay-admin.sh" "Command line for some administrative operation in BTCPay Server" \
                 "*" "btcpay-update.sh" "Command line for updating your BTCPay Server to the latest commit of this repository" \
                 "*" "changedomain.sh" "Command line for changing the external domain of your BTCPay Server" \
             )
