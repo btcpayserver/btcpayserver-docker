@@ -118,16 +118,18 @@ cd - && cd ..
 
 
 # Build rtl
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.4.3/Dockerfile
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.4.7/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.4.3/Dockerfile.arm32v7
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.4.7/Dockerfile.arm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.arm32v7"
-echo "Building shahanafarooqui/rtl:0.4.3"
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.4.7/Dockerfile.arm64v8
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.arm64v8"
+echo "Building shahanafarooqui/rtl:0.4.7"
 git clone https://github.com/ShahanaFarooqui/RTL rtl
 cd rtl
-git checkout v0.4.3
+git checkout v0.4.7
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.4.3" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.4.7" .
 cd - && cd ..
 
 
@@ -420,28 +422,28 @@ cd - && cd ..
 
 
 # Build btctransmuter
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.26/BtcTransmuter/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.33/BtcTransmuter/Dockerfile.linuxamd64
 DOCKERFILE="BtcTransmuter/Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.26/BtcTransmuter/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.33/BtcTransmuter/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="BtcTransmuter/Dockerfile.linuxarm32v7"
-echo "Building btcpayserver/btctransmuter:0.0.26"
+echo "Building btcpayserver/btctransmuter:0.0.33"
 git clone https://github.com/btcpayserver/btctransmuter btctransmuter
 cd btctransmuter
-git checkout v0.0.26
+git checkout v0.0.33
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.26" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.33" .
 cd - && cd ..
 
 
 # Build librepatron
-# https://raw.githubusercontent.com/JeffVandrewJr/patron/v0.7.37/Dockerfile
+# https://raw.githubusercontent.com/JeffVandrewJr/patron/v0.7.39/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building jvandrew/librepatron:0.7.37"
+echo "Building jvandrew/librepatron:0.7.39"
 git clone https://github.com/JeffVandrewJr/patron librepatron
 cd librepatron
-git checkout v0.7.37
+git checkout v0.7.39
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/librepatron:0.7.37" .
+docker build -f "$DOCKERFILE" -t "jvandrew/librepatron:0.7.39" .
 cd - && cd ..
 
 

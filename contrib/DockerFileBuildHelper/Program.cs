@@ -362,6 +362,7 @@ namespace DockerFileBuildHelper
                 case "rtl":
                     dockerInfo.DockerFilePath = "Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = "Dockerfile.arm32v7";
+                    dockerInfo.DockerFilePathARM64v8 = "Dockerfile.arm64v8";
                     dockerInfo.GitLink = "https://github.com/ShahanaFarooqui/RTL";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     break;
