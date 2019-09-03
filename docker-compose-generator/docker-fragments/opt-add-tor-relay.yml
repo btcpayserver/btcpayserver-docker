@@ -3,7 +3,7 @@ services:
   tor-relay-gen:
     restart: unless-stopped
     image: btcpayserver/docker-gen:0.7.6
-    container_name: tor-gen
+    container_name: tor-relay-gen
     volumes:
       - "/var/run/docker.sock:/tmp/docker.sock:ro"
       - "./torrc-relay.tmpl:/etc/docker-gen/templates/torrc.tmpl:ro"
