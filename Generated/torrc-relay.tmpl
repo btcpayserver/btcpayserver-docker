@@ -1,10 +1,7 @@
-SocksPort 0
 RunAsDaemon 1
 ORPort 9001
 DirPort 9030
 ExitPolicy reject *:*
-DisableDebuggerAttachment 0
-ControlPort 9051
 CookieAuthentication 1
 
 Nickname {{ $.Env.TOR_RELAY_NICKNAME}}
