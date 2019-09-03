@@ -403,7 +403,7 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
         if ! [[ "$OSTYPE" == "darwin"* ]] && $HAS_DOCKER; then
             echo "Trying to install docker-compose by using the docker-compose-builder ($(uname -m))"
             ! [[ -d "dist" ]] && mkdir dist
-            docker run --rm -v "$(pwd)/dist:/dist" btcpayserver/docker-compose-builder:1.23.2
+            docker run --rm -v "$(pwd)/dist:/dist" btcpayserver/docker-compose-builder:1.24.1
             mv dist/docker-compose /usr/local/bin/docker-compose
             chmod +x /usr/local/bin/docker-compose
             rm -rf "dist"
