@@ -22,8 +22,6 @@ services:
     environment:
       TOR_PASSWORD: btcpayserver
       TOR_ADDITIONAL_CONFIG: /usr/local/etc/tor/torrc-2
-      TOR_EXTRA_ARGS: |
-        CookieAuthentication 1
     volumes:
       - "tor_relay_datadir:/home/tor/.tor"
       - "tor_relay_torrcdir:/usr/local/etc/tor"
