@@ -96,9 +96,6 @@ services:
     restart: unless-stopped
     image: btcpayserver/docker-gen:0.7.6
     container_name: tor-gen
-    environment:
-      ADDITIONAL_TORRC_CONFIG: |
-        ${ADDITIONAL_TORRC_CONFIG}
     volumes:
       - "/var/run/docker.sock:/tmp/docker.sock:ro"
       - "./torrc.tmpl:/etc/docker-gen/templates/torrc.tmpl:ro"

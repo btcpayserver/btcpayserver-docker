@@ -106,7 +106,6 @@ Add-on specific variables:
     BTCTRANSMUTER_HOST: If btc transmuter is activated with opt-add-btctransmuter, the hostname of your btc transmuter website (eg. store.example.com)
     TOR_RELAY_NICKNAME: If tor relay is activated with opt-add-tor-relay, the relay nickname
     TOR_RELAY_EMAIL: If tor relay is activated with opt-add-tor-relay, the email for Tor to contact you regarding your relay
-    ADDITIONAL_TORRC_CONFIG: Additional config settings to pass to tor
 END
 }
 START=""
@@ -306,7 +305,6 @@ BTCPAY_IMAGE:$BTCPAY_IMAGE
 ACME_CA_URI:$ACME_CA_URI
 TOR_RELAY_NICKNAME: $TOR_RELAY_NICKNAME
 TOR_RELAY_EMAIL: $TOR_RELAY_EMAIL
-ADDITIONAL_TORRC_CONFIG: $ADDITIONAL_TORRC_CONFIG
 ----------------------
 Additional exported variables:
 BTCPAY_DOCKER_COMPOSE=$BTCPAY_DOCKER_COMPOSE

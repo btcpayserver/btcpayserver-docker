@@ -110,7 +110,6 @@ You can read [the article](https://medium.com/@BtcpayServer/hosting-btcpay-serve
 * `BTCPAYGEN_EXCLUDE_FRAGMENTS`:  Semicolon-separated list of fragments you want to forcefully exclude (eg. `litecoin-clightning`)
 * `TOR_RELAY_NICKNAME`: If tor relay is activated with opt-add-tor-relay, the relay nickname
 * `TOR_RELAY_EMAIL`: If tor relay is activated with opt-add-tor-relay, the email for Tor to contact you regarding your relay
-* `ADDITIONAL_TORRC_CONFIG`: Additional config settings to pass to tor
 
 Additionally, there are specific environment variables for some addons:
 

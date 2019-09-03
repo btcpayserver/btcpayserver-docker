@@ -1,17 +1,35 @@
 version: "3"
 services:
-  tor-gen:
+  tor-relay-gen:
+    restart: unless-stopped
+    image: btcpayserver/docker-gen:0.7.6
+    container_name: tor-gen
+    volumes:
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+      - "./torrc-relay.tmpl:/etc/docker-gen/templates/torrc.tmpl:ro"
+      - "tor_relay_torrcdir:/usr/local/etc/tor"
+    entrypoint: /usr/local/bin/docker-gen -notify-sighup tor-relay -watch -wait 5s:30s /etc/docker-gen/templates/torrc.tmpl /usr/local/etc/tor/torrc-2
+    links:
+      - tor-relay
     environment:
-      ADDITIONAL_TORRC_CONFIG: |
-        ORPort 9001
-        DirPort 9030
-        ExitPolicy reject *:*
-        ExitPolicy reject6 *:*
-        ExitRelay 1
-        IPv6Exit 1
-        Nickname ${TOR_RELAY_NICKNAME}
-        ContactInfo ${TOR_RELAY_EMAIL}
-  tor:
+      TOR_RELAY_NICKNAME: ${TOR_RELAY_NICKNAME}
+      TOR_RELAY_EMAIL: ${TOR_RELAY_EMAIL}
+        
+  tor-relay:
+    restart: unless-stopped
+    image: btcpayserver/tor:0.4.1.5
+    container_name: tor-relay
+    environment:
+      TOR_PASSWORD: btcpayserver
+      TOR_ADDITIONAL_CONFIG: /usr/local/etc/tor/torrc-2
+      TOR_EXTRA_ARGS: |
+        CookieAuthentication 1
+    volumes:
+      - "tor_relay_datadir:/home/tor/.tor"
+      - "tor_relay_torrcdir:/usr/local/etc/tor"
     ports: 
       - "9001"
       - "9030" 
+volumes:
+  tor_relay_datadir:
+  tor_relay_torrcdir:
