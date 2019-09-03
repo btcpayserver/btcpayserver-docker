@@ -28,8 +28,8 @@ services:
       - "tor_relay_datadir:/home/tor/.tor"
       - "tor_relay_torrcdir:/usr/local/etc/tor"
     ports: 
-      - "9001"
-      - "9030" 
+      - "9001:9001"
+      - "9030:9030" 
 volumes:
   tor_relay_datadir:
   tor_relay_torrcdir:
