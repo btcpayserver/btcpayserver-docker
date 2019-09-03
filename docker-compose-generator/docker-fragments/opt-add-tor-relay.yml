@@ -1,16 +1,19 @@
 version: "3"
 services:
-  tor-relay:
-    container_name: tor-relay
-    image: chriswayg/tor-alpine
-    restart: unless-stopped
+  tor-gen:
     environment:
-      TOR_NICKNAME: ${TOR_RELAY_NICKNAME}
-      CONTACT_EMAIL: ${TOR_RELAY_EMAIL}
-    volumes:
-      - "relay_tordatadir:/var/lib/tor/"
-      - "relay_torrc_dir:/etc/tor/"
-    network_mode: host
-volumes:
-    relay_tordatadir:
-    relay_torrc_dir:
+      ADDITIONAL_TORRC_CONFIG: |
+        ORPort 9001
+        DirPort 9030
+        ExitPolicy reject *:*
+        ExitPolicy reject6 *:*
+        ExitRelay 1
+        IPv6Exit 1
+        Nickname ${TOR_RELAY_NICKNAME}
+        ContactInfo ${TOR_RELAY_EMAIL}
+  tor:
+    ports: 
+      - "9001"
+      - "9030"
+
+        
