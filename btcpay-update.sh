@@ -31,20 +31,13 @@ if [[ "$1" != "--skip-git-pull" ]]; then
     return
 fi
 
-
-if ! [[ "$OSTYPE" == "darwin"* ]]; then
-	# Not Mac OS
-	# TODO Should we configure logging for Mac OS too? The file path will be different and access rights need to be considered too...
-
-	if ! [ -f "/etc/docker/daemon.json" ]; then
-		echo "{
+if ! [[ "$OSTYPE" == "darwin"* ]] && ! [ -f "/etc/docker/daemon.json" ] && [ -w "/etc/docker" ]; then
+    echo "{
 \"log-driver\": \"json-file\",
 \"log-opts\": {\"max-size\": \"5m\", \"max-file\": \"3\"}
 }" > /etc/docker/daemon.json
-		echo "Setting limited log files in /etc/docker/daemon.json"
-	fi
+    echo "Setting limited log files in /etc/docker/daemon.json"
 fi
-
 
 . ./build.sh
 if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then

@@ -17,9 +17,8 @@ export BTCPAYGEN_REVERSEPROXY="nginx"
 export BTCPAYGEN_LIGHTNING="clightning"
 source ./btcpay-setup.sh -i
 
-timeout 10m bash .circleci/test-connectivity.sh
+timeout 5m bash .circleci/test-connectivity.sh
 
 # Testing scripts are not crashing and installed
 btcpay-up.sh
-btcpay-update.sh
 btcpay-down.sh
