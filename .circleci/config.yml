@@ -1,5 +1,14 @@
 version: 2
 jobs:
+  cansetup:
+    machine:
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - run:
+          command: |
+            cd .circleci
+            sudo test-install.sh
   # Define in CircleCi Project Variables: $DOCKERHUB_REPO, $DOCKERHUB_USER, $DOCKERHUB_PASS
   # Publish jobs require those variables
   amd64:
@@ -63,6 +72,10 @@ workflows:
   version: 2
   publish:
     jobs:
+      - cansetup:
+          filters:
+            branches:
+              only: master
       - amd64:
           filters:
             branches:
