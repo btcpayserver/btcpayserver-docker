@@ -2,7 +2,11 @@
 
 set -e
 
-cd ..
+cd ../..
+
+[ -d btcpayserver-docker ] || mv project btcpayserver-docker
+
+cd btcpayserver-docker
 
 export BTCPAY_HOST="btcpay.local"
 export REVERSEPROXY_DEFAULT_HOST="btcpay.local"
