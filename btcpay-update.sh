@@ -31,7 +31,7 @@ if [[ "$1" != "--skip-git-pull" ]]; then
     return
 fi
 
-if ! [[ "$OSTYPE" == "darwin"* ]] && ! [ -f "/etc/docker/daemon.json" ] && [ -w "/etc/docker" ]; then
+if ! [ -f "/etc/docker/daemon.json" ] && [ -w "/etc/docker" ]; then
     echo "{
 \"log-driver\": \"json-file\",
 \"log-opts\": {\"max-size\": \"5m\", \"max-file\": \"3\"}

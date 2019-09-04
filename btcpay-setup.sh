@@ -456,7 +456,7 @@ ExecReload=/bin/bash -c '. \"$BASH_PROFILE_SCRIPT\" && cd \"\$BTCPAY_BASE_DIRECT
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
 
-	if ! [[ -f "/etc/docker/daemon.json" ]]; then
+	if ! [[ -f "/etc/docker/daemon.json" ]] && [ -w "/etc/docker" ]; then
 		echo "{
 \"log-driver\": \"json-file\",
 \"log-opts\": {\"max-size\": \"5m\", \"max-file\": \"3\"}
