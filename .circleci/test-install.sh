@@ -2,6 +2,9 @@
 
 set -e
 
+apt-get remove docker-ce
+rm -rf /usr/local/bin/docker-compose
+
 cd ../..
 
 [ -d btcpayserver-docker ] || mv project btcpayserver-docker
