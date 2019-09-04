@@ -4,7 +4,8 @@ set -e
 
 cd ..
 
-export BTCPAY_HOST="btcpay.example.local"
+export BTCPAY_HOST="btcpay.local"
+export REVERSEPROXY_DEFAULT_HOST="btcpay.local"
 export NBITCOIN_NETWORK="mainnet"
 export BTCPAYGEN_CRYPTO1="btc"
 export BTCPAYGEN_CRYPTO2="ltc"
@@ -12,7 +13,7 @@ export BTCPAYGEN_REVERSEPROXY="nginx"
 export BTCPAYGEN_LIGHTNING="clightning"
 source ./btcpay-setup.sh -i
 
-timeout 10m bash test-connectivity.sh
+timeout 10m bash .circleci/test-connectivity.sh
 
 # Testing scripts are not crashing and installed
 btcpay-up.sh

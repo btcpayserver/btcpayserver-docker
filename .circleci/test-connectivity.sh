@@ -1,7 +1,8 @@
 #!/bin/bash
 
 while true; do
-    if curl -sL -w "%{http_code}\\n" "http://localhost/" -o /dev/null > /dev/null; then
+    if [ "$(curl -sL -w "%{http_code}\\n" "http://localhost/" -o /dev/null)" == "200" ]; then
+        echo "Successfully contacted BTCPayServer"
         break
     fi
     sleep 1
