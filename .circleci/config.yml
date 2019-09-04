@@ -8,7 +8,7 @@ jobs:
       - run:
           command: |
             cd .circleci
-            sudo test-install.sh
+            sudo ./test-install.sh
   # Define in CircleCi Project Variables: $DOCKERHUB_REPO, $DOCKERHUB_USER, $DOCKERHUB_PASS
   # Publish jobs require those variables
   amd64:
