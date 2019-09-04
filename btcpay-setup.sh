@@ -367,20 +367,13 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
         			brew install docker
         			brew link docker
         		fi
-            elif grep -i raspbian /etc/*-release >/dev/null 2>&1;then
-                # Raspbian Linux
-                echo "Trying to install docker using Raspbian 10 patch..."
-                curl -fsSL https://get.docker.com|sed -e 's/buster/stretch/' > get-docker.sh
-                chmod +x get-docker.sh
-                sh get-docker.sh
-                rm get-docker.sh
-            else
-                # Not Raspbian Linux or Mac OS
-                echo "Trying to install docker..."
-                curl -fsSL https://get.docker.com -o get-docker.sh
-                chmod +x get-docker.sh
-                sh get-docker.sh
-                rm get-docker.sh
+        	else
+        		# Not Mac OS
+				echo "Trying to install docker..."
+				curl -fsSL https://get.docker.com -o get-docker.sh
+				chmod +x get-docker.sh
+				sh get-docker.sh
+				rm get-docker.sh
             fi
         elif [[ "$(uname -m)" == "aarch64" ]]; then
             echo "Trying to install docker for armv7 on a aarch64 board..."
