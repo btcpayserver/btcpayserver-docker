@@ -8,24 +8,24 @@ if [[ "$0" = "$BASH_SOURCE" ]]; then
 fi
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-	# Mac OS
+    # Mac OS
 
-	if [[ $EUID -eq 0 ]]; then
-		# Running as root is discouraged on Mac OS. Run under the current user instead.
+    if [[ $EUID -eq 0 ]]; then
+        # Running as root is discouraged on Mac OS. Run under the current user instead.
         echo "This script should not be run as root."
         return
     fi
 
-	BASH_PROFILE_SCRIPT="$HOME/btcpay-env.sh"
+    BASH_PROFILE_SCRIPT="$HOME/btcpay-env.sh"
 
-	# Mac OS doesn't use /etc/profile.d/xxx.sh. Instead we create a new file and load that from ~/.bash_profile
-	if [[ ! -f "$HOME/.bash_profile" ]]; then
-		touch "$HOME/.bash_profile"
+    # Mac OS doesn't use /etc/profile.d/xxx.sh. Instead we create a new file and load that from ~/.bash_profile
+    if [[ ! -f "$HOME/.bash_profile" ]]; then
+        touch "$HOME/.bash_profile"
     fi
-	if [[ -z $(grep ". \"$BASH_PROFILE_SCRIPT\"" "$HOME/.bash_profile") ]]; then
-		# Line does not exist, add it
-		echo ". \"$BASH_PROFILE_SCRIPT\"" >> "$HOME/.bash_profile"
-	fi
+    if [[ -z $(grep ". \"$BASH_PROFILE_SCRIPT\"" "$HOME/.bash_profile") ]]; then
+        # Line does not exist, add it
+        echo ". \"$BASH_PROFILE_SCRIPT\"" >> "$HOME/.bash_profile"
+    fi
 
 else
     # Root user is not needed for Mac OS
@@ -150,14 +150,14 @@ if ! [[ "$START" ]]; then
 fi
 
 if [[ -z "$BTCPAYGEN_CRYPTO1" ]]; then
-	if [[ "$OSTYPE" != "darwin"* ]]; then
-		# Not Mac OS - Mac OS uses it's own env file
-    	if [[ -f "$BASH_PROFILE_SCRIPT" ]]; then
-        	echo "This script must be run as root after running \"sudo su -\""
-    	else
-        	echo "BTCPAYGEN_CRYPTO1 should not be empty"
-    	fi
-    	return
+    if [[ "$OSTYPE" != "darwin"* ]]; then
+        # Not Mac OS - Mac OS uses it's own env file
+        if [[ -f "$BASH_PROFILE_SCRIPT" ]]; then
+            echo "This script must be run as root after running \"sudo su -\""
+        else
+            echo "BTCPAYGEN_CRYPTO1 should not be empty"
+        fi
+        return
     fi
 fi
 
@@ -234,7 +234,7 @@ fi
 if [[ "${BTCPAYGEN_ADDITIONAL_FRAGMENTS}" == *opt-txindex* ]] && \
    [[ "${BTCPAYGEN_ADDITIONAL_FRAGMENTS}" == *opt-save-storage* ]];then
         echo "Error: BTCPAYGEN_ADDITIONAL_FRAGMENTS contains both opt-txindex and opt-save-storage*"
-		echo "opt-txindex requires an unpruned node, so you cannot use opt-save-storage with it"
+        echo "opt-txindex requires an unpruned node, so you cannot use opt-save-storage with it"
         return
 fi
 
@@ -352,28 +352,28 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
     fi
     if ! [[ -x "$(command -v docker)" ]]; then
         if [[ "$(uname -m)" == "x86_64" ]] || [[ "$(uname -m)" == "armv7l" ]]; then
-        	if [[ "$OSTYPE" == "darwin"* ]]; then
-        		# Mac OS	
-        		if ! [[ -x "$(command -v brew)" ]]; then
-        			# Brew is not installed, install it now
+            if [[ "$OSTYPE" == "darwin"* ]]; then
+                # Mac OS	
+                if ! [[ -x "$(command -v brew)" ]]; then
+                    # Brew is not installed, install it now
                     echo "Homebrew, the package manager for Mac OS, is not installed. Installing it now..."
-        			/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-        		fi
-        		if [[ -x "$(command -v brew)" ]]; then
+                    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+                fi
+                if [[ -x "$(command -v brew)" ]]; then
                     echo "Homebrew is installed, but Docker isn't. Installing it now using brew..."
-        			# Brew is installed, install docker now
+                    # Brew is installed, install docker now
                     # This sequence is a bit strange, but it's what what needed to get it working on a fresh Mac OS X Mojave install
-        			brew cask install docker
-        			brew install docker
-        			brew link docker
-        		fi
-        	else
-        		# Not Mac OS
-				echo "Trying to install docker..."
-				curl -fsSL https://get.docker.com -o get-docker.sh
-				chmod +x get-docker.sh
-				sh get-docker.sh
-				rm get-docker.sh
+                    brew cask install docker
+                    brew install docker
+                    brew link docker
+                fi
+            else
+                # Not Mac OS
+                echo "Trying to install docker..."
+                curl -fsSL https://get.docker.com -o get-docker.sh
+                chmod +x get-docker.sh
+                sh get-docker.sh
+                rm get-docker.sh
             fi
         elif [[ "$(uname -m)" == "aarch64" ]]; then
             echo "Trying to install docker for armv7 on a aarch64 board..."
@@ -401,7 +401,7 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
             chmod +x /usr/local/bin/docker-compose
             rm -rf "dist"
         fi
-	fi
+    fi
 fi
 
 if $HAS_DOCKER; then
@@ -425,14 +425,14 @@ fi
 
 # Schedule for reboot
 if $STARTUP_REGISTER && [[ -x "$(command -v systemctl)" ]]; then
-	# Use systemd
-	if [[ -e "/etc/init/start_containers.conf" ]]; then
-		echo -e "Uninstalling upstart script /etc/init/start_containers.conf"
-		rm "/etc/init/start_containers.conf"
-		initctl reload-configuration
-	fi
-	echo "Adding btcpayserver.service to systemd"
-	echo "
+    # Use systemd
+    if [[ -e "/etc/init/start_containers.conf" ]]; then
+        echo -e "Uninstalling upstart script /etc/init/start_containers.conf"
+        rm "/etc/init/start_containers.conf"
+        initctl reload-configuration
+    fi
+    echo "Adding btcpayserver.service to systemd"
+    echo "
 [Unit]
 Description=BTCPayServer service
 After=docker.service network-online.target
@@ -449,27 +449,27 @@ ExecReload=/bin/bash -c '. \"$BASH_PROFILE_SCRIPT\" && cd \"\$BTCPAY_BASE_DIRECT
 [Install]
 WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
 
-	if ! [[ -f "/etc/docker/daemon.json" ]] && [ -w "/etc/docker" ]; then
-		echo "{
+    if ! [[ -f "/etc/docker/daemon.json" ]] && [ -w "/etc/docker" ]; then
+        echo "{
 \"log-driver\": \"json-file\",
 \"log-opts\": {\"max-size\": \"5m\", \"max-file\": \"3\"}
 }" > /etc/docker/daemon.json
-		echo "Setting limited log files in /etc/docker/daemon.json"
-		$START && systemctl restart docker
-	fi
+        echo "Setting limited log files in /etc/docker/daemon.json"
+        $START && systemctl restart docker
+    fi
 
-	echo -e "BTCPay Server systemd configured in /etc/systemd/system/btcpayserver.service\n"
-	systemctl daemon-reload
-	systemctl enable btcpayserver
-	if $START; then
-		echo "BTCPay Server starting... this can take 5 to 10 minutes..."
-		systemctl start btcpayserver
-		echo "BTCPay Server started"
-	fi
+    echo -e "BTCPay Server systemd configured in /etc/systemd/system/btcpayserver.service\n"
+    systemctl daemon-reload
+    systemctl enable btcpayserver
+    if $START; then
+        echo "BTCPay Server starting... this can take 5 to 10 minutes..."
+        systemctl start btcpayserver
+        echo "BTCPay Server started"
+    fi
 elif $STARTUP_REGISTER && [[ -x "$(command -v initctl)" ]]; then
-	# Use upstart
-	echo "Using upstart"
-	echo "
+    # Use upstart
+    echo "Using upstart"
+    echo "
 # File is saved under /etc/init/start_containers.conf
 # After file is modified, update config with : $ initctl reload-configuration
 
@@ -489,10 +489,10 @@ script
 end script" > /etc/init/start_containers.conf
     echo -e "BTCPay Server upstart configured in /etc/init/start_containers.conf\n"
 
-	if $START; then
-		initctl reload-configuration
-		echo "BTCPay Server started"
-	fi
+    if $START; then
+        initctl reload-configuration
+        echo "BTCPay Server started"
+    fi
 fi
 
 
