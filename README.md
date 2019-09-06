@@ -1,40 +1,12 @@
+[![CircleCI](https://circleci.com/gh/btcpayserver/btcpayserver-docker.svg?style=svg)](https://circleci.com/gh/btcpayserver/btcpayserver-docker)
+
 #### Start accepting Bitcoin today with BTCPayServer! This guide will walk you through the installation.
 
-# One-click deployment
+# Introduction
 
-For the easiest and fastest setup, host BTCPayServer on Microsoft Azure:
+While [our instructions](https://docs.btcpayserver.org/deployment/lunanodewebdeployment) cover how to install BTCPayServer in one click on Azure or Lunanode, BTCPay Server is not limited to those options.
 
-[![Deploy to Azure](https://azuredeploy.net/deploybutton.svg)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fbtcpayserver%2Fbtcpayserver-azure%2Fmaster%2Fazuredeploy.json)
-
-You can log into [Azure](https://azure.microsoft.com/en-us/account/) with your Microsoft account.
-
-Final installation steps:
-
-* Fill in the options: Resource Group
-* Click 'Purchase' to confirm
-* (Wait for deployment)
-* View the deployment (in Notifications or Resource Groups)
-* Verify you can connect to your instance with a browser: `https://SERVER-AZURE-DNS/`
-* At your domain registrar, make sure you have [DNS](https://github.com/btcpayserver/btcpayserver-doc/blob/master/ChangeDomain.md#setting-up-your-dns-record) pointing your domain at your Azure deployment's IP.
-* Browse to `https://SERVER-AZURE-DNS/`
-* Register a new account (this account will be granted server administrator rights)
-* Go to `https://SERVER-AZURE-DNS/server/maintenance`
-* Enter your domain name and click on confirm
-* (Wait 1 to 5 minutes)
-
-That's it, you can now browse to `https://btcpay.YOUR-DOMAIN/` to create your store!
-
-For advanced users, you can connect via SSH with information on `https://btcpay.YOUR-DOMAIN/server/services/ssh`, then you can:
-
-* Run `docker ps` and `docker logs xxx` to view running processes
-* Run `btcpay-down.sh` and `btcpay-up.sh` to stop and start the BTCPayServer
-
-This video by Nicolas also demonstrates the above steps:
-
-[![BTCPay - One Click Setup](http://img.youtube.com/vi/Bxs95BdEMHY/mqdefault.jpg)](https://www.youtube.com/watch?v=Bxs95BdEMHY "BTCPay - One Click Setup")
-
-Approximate Cost (pruned, Bitcoin-only with lightning network): **10 USD per month**.
-You can use the wizard of the [lunanode deployment](https://docs.btcpayserver.org/deployment/lunanodewebdeployment) to deploy a BTCPay Server or just use the `btcpay-setup.sh -i` script as described in this README.
+You will find below information about how you can install BTCPay Server easily in any environment having docker available.
 
 # Architecture
 
