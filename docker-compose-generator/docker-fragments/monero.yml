@@ -14,19 +14,13 @@ services:
     restart: unless-stopped
     container_name: btcpayserver_monerod
     image: kukks/docker-monero:test
-    environment:
-      NBXPLORER_CHAINS: "btc"
-      NBXPLORER_BTCRPCURL: http://bitcoind:43782/
-      NBXPLORER_BTCNODEENDPOINT: bitcoind:39388
-    volumes:
-      - "bitcoin_datadir:/root/.bitcoin"
     entrypoint: monero-wallet-rpc --testnet --rpc-bind-ip=0.0.0.0 --disable-rpc-login --confirm-external-bind --rpc-bind-port=18082 --non-interactive --trusted-daemon  --daemon-address=127.0.0.1:18081 --wallet-file=/wallet/wallet.keys --tx-notify="/scripts/notifier.sh https://127.0.0.1:14142/monerolikedaemoncallback/tx?cryptoCode=xmr&hash=%s"
-      expose:
-        - "18082"
-      volumes:
-        - "xmr_wallet:/root/xmr_wallet"
-      depends_on:
-        - monerod
+    expose:
+      - "18082"
+    volumes:
+      - "xmr_wallet:/root/xmr_wallet"
+    depends_on:
+      - monerod
   btcpayserver:
     environment:
       BTCPAY_CHAINS: "xmr"
