@@ -61,6 +61,7 @@ This script must be run as root, except on Mac OS
     --install-only: Run install only
     --docker-unavailable: Same as --install-only, but will also skip install steps requiring docker
     --no-startup-register: Do not register BTCPayServer to start via systemctl or upstart
+    --no-systemd-reload: Do not reload systemd configuration
 
 This script will:
 
@@ -108,6 +109,7 @@ END
 START=""
 HAS_DOCKER=true
 STARTUP_REGISTER=true
+SYSTEMD_RELOAD=true
 while (( "$#" )); do
   case "$1" in
     -i)
@@ -125,6 +127,10 @@ while (( "$#" )); do
       ;;
     --no-startup-register)
       STARTUP_REGISTER=false
+      shift 1
+      ;;
+    --no-systemd-reload)
+      SYSTEMD_RELOAD=false
       shift 1
       ;;
     --) # end argument parsing
@@ -489,9 +495,8 @@ script
 end script" > /etc/init/start_containers.conf
     echo -e "BTCPay Server upstart configured in /etc/init/start_containers.conf\n"
 
-    if $START; then
+    if $START && $SYSTEMD_RELOAD; then
         initctl reload-configuration
-        echo "BTCPay Server started"
     fi
 fi
 
@@ -510,7 +515,7 @@ elif $HAS_DOCKER; then
 fi
 
 # Give SSH key to BTCPay
-if [[ -f "$BTCPAY_HOST_SSHKEYFILE" ]]; then
+if $START && [[ -f "$BTCPAY_HOST_SSHKEYFILE" ]]; then
     echo "Copying $BTCPAY_SSHKEYFILE to BTCPayServer container"
     docker cp "$BTCPAY_HOST_SSHKEYFILE" $(docker ps --filter "name=_btcpayserver_" -q):$BTCPAY_SSHKEYFILE
 fi
