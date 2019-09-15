@@ -465,12 +465,16 @@ WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
     fi
 
     echo -e "BTCPay Server systemd configured in /etc/systemd/system/btcpayserver.service\n"
-    systemctl daemon-reload
-    systemctl enable btcpayserver
-    if $START; then
-        echo "BTCPay Server starting... this can take 5 to 10 minutes..."
-        systemctl start btcpayserver
-        echo "BTCPay Server started"
+    if $SYSTEMD_RELOAD; then
+        systemctl daemon-reload
+        systemctl enable btcpayserver
+        if $START; then
+            echo "BTCPay Server starting... this can take 5 to 10 minutes..."
+            systemctl start btcpayserver
+            echo "BTCPay Server started"
+        fi
+    else
+        systemctl --no-reload enable btcpayserver
     fi
 elif $STARTUP_REGISTER && [[ -x "$(command -v initctl)" ]]; then
     # Use upstart
@@ -495,7 +499,7 @@ script
 end script" > /etc/init/start_containers.conf
     echo -e "BTCPay Server upstart configured in /etc/init/start_containers.conf\n"
 
-    if $START && $SYSTEMD_RELOAD; then
+    if $START; then
         initctl reload-configuration
     fi
 fi
