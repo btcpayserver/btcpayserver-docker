@@ -238,6 +238,7 @@ if $BTCPAY_ENABLE_SSH && [[ "$BTCPAY_HOST_SSHAUTHORIZEDKEYS" ]]; then
         touch $BTCPAY_HOST_SSHAUTHORIZEDKEYS
     fi
     BTCPAY_SSHAUTHORIZEDKEYS="/datadir/host_authorized_keys"
+    BTCPAY_SSHKEYFILE="/datadir/host_id_rsa"
     use_ssh=true
 fi
 
