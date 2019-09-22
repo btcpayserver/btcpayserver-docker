@@ -93,10 +93,10 @@ WOOCOMMERCE_HOST=$WOOCOMMERCE_HOST" > $BTCPAY_ENV_FILE
 btcpay_up() {
     pushd . > /dev/null
     cd "$(dirname "$BTCPAY_ENV_FILE")"
-    docker-compose -f $BTCPAY_DOCKER_COMPOSE up --remove-orphans -d -t "${COMPOSE_HTTP_TIMEOUT:-180}"
+    docker-compose -f $BTCPAY_DOCKER_COMPOSE up --compatibility --remove-orphans -d -t "${COMPOSE_HTTP_TIMEOUT:-180}"
     # Depending on docker-compose, either the timeout does not work, or "compose -d and --timeout cannot be combined"
     if ! [ $? -eq 0 ]; then
-        docker-compose -f $BTCPAY_DOCKER_COMPOSE up --remove-orphans -d
+        docker-compose -f $BTCPAY_DOCKER_COMPOSE up --compatibility --remove-orphans -d
     fi
     popd > /dev/null
 }
