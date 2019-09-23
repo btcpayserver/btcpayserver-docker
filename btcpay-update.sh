@@ -57,4 +57,4 @@ btcpay_update_docker_env
 btcpay_up
 
 set +e
-docker image prune -af
+docker image prune -af --filter "label!=org.btcpayserver.image=docker-compose-generator"
