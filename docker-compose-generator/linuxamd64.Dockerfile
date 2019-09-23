@@ -9,8 +9,8 @@ RUN dotnet publish --output /app/ --configuration Release
 
 #
 FROM mcr.microsoft.com/dotnet/core/runtime:2.1.9-alpine3.7
+LABEL org.btcpayserver.image=docker-compose-generator
 WORKDIR /datadir
-
 WORKDIR /app
 ENV APP_DATADIR=/datadir
 VOLUME /datadir

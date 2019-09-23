@@ -9,6 +9,7 @@ RUN dotnet publish --output /app/ --configuration Release
 
 # Force the builder machine to take make an arm runtime image. This is fine as long as the builder does not run any program
 FROM mcr.microsoft.com/dotnet/core/runtime:2.1.9-stretch-slim-arm32v7
+LABEL org.btcpayserver.image=docker-compose-generator
 WORKDIR /datadir
 
 WORKDIR /app
