@@ -242,13 +242,6 @@ if $BTCPAY_ENABLE_SSH && [[ "$BTCPAY_HOST_SSHAUTHORIZEDKEYS" ]]; then
     use_ssh=true
 fi
 
-if $use_ssh; then
-    for pubkey in /etc/ssh/ssh_host_*.pub; do
-        fingerprint="$(ssh-keygen -l -f $pubkey | awk '{print $2}')"
-        BTCPAY_SSHTRUSTEDFINGERPRINTS="$fingerprint;$BTCPAY_SSHTRUSTEDFINGERPRINTS"
-    done
-fi
-
 if [[ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]] && [[ "$BTCPAY_HOST" ]]; then
     DOMAIN_NAME="$(echo "$BTCPAY_HOST" | grep -E '^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$')"
     if [[ ! "$DOMAIN_NAME" ]]; then
