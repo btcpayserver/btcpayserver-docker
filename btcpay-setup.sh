@@ -242,6 +242,9 @@ if $BTCPAY_ENABLE_SSH && [[ "$BTCPAY_HOST_SSHAUTHORIZEDKEYS" ]]; then
     use_ssh=true
 fi
 
+# Do not set BTCPAY_SSHTRUSTEDFINGERPRINTS in the setup, since we connect from inside the docker container to the host, this is fine
+BTCPAY_SSHTRUSTEDFINGERPRINTS=""
+
 if [[ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]] && [[ "$BTCPAY_HOST" ]]; then
     DOMAIN_NAME="$(echo "$BTCPAY_HOST" | grep -E '^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$')"
     if [[ ! "$DOMAIN_NAME" ]]; then
