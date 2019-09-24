@@ -155,7 +155,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-btctransmuter](docker-compose-generator/docker-fragments/opt-add-btctransmuter.yml), for a self-hosted IFTTT style service for crypto services such as fiat settlement.
 * [opt-txindex](docker-compose-generator/docker-fragments/opt-txindex.yml), to enable txindex=1 in bitcoin.conf if you require txindexing for Bisq, DOJO, Esplora, etc.
 * [opt-unsafe-expose](docker-compose-generator/docker-fragments/opt-unsafe-expose.yml), to unsafely expose bitcoind P2P port 8333 if you require P2P for Bisq, DOJO, Esplora, etc. WARNING: ONLY USE ON TRUSTED LAN OR WITH FIREWALL RULES WHITELISTING SPECIFIC HOSTS
-* [opt-add-tor-relay](docker-compose-generator/docker-fragments/opt-add-tor-relay.yml), for a non-exit tor relay 
+* [opt-add-tor-relay](docker-compose-generator/docker-fragments/opt-add-tor-relay.yml), for a non-exit tor relay. Make sure to have ports 9001 and 9030 accessible externally. [Please read the legal implications of running a tor relay](https://www.eff.org/torchallenge/faq.html) and [what resources are used to operate the relay](https://trac.torproject.org/projects/tor/wiki/TorRelayGuide#RelayRequirements).
 
 You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).
 
