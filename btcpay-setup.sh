@@ -488,7 +488,7 @@ WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
 \"log-opts\": {\"max-size\": \"5m\", \"max-file\": \"3\"}
 }" > /etc/docker/daemon.json
         echo "Setting limited log files in /etc/docker/daemon.json"
-        $START && systemctl restart docker
+        $SYSTEMD_RELOAD && $START && systemctl restart docker
     fi
 
     echo -e "BTCPay Server systemd configured in /etc/systemd/system/btcpayserver.service\n"
