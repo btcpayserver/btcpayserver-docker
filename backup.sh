@@ -47,4 +47,21 @@ elif [ ${BACKUP_PROVIDER="Dropbox"} ]; then
     docker run --name backup --env DROPBOX_TOKEN=$DROPBOX_TOKEN -v backup_datadir:/data jvandrew/btcpay-dropbox:1.0.5 $filename
     echo "Deleting local backup..."
     rm /var/lib/docker/volumes/backup_datadir/_data/${filename}
+elif [ ${BACKUP_PROVIDER="BTCPayDropFolder"} ]; then
+    if [ -z ${1+x} ]; then
+	filename="backup.tar.gz"
+    else
+	filename=$1
+    fi	
+    if [ ! -d /var/lib/docker/volumes/backup_datadir ]; then
+        docker volume create backup_datadir
+    fi	
+    btcpay-down.sh
+    tar --exclude='/var/lib/docker/volumes/backup_datadir/*' \
+    --exclude='/var/lib/docker/volumes/generated_bitcoin_datadir/*' \
+    --exclude='/var/lib/docker/volumes/generated_litecoin_datadir/*' \
+    --exclude='/var/lib/docker/volumes/generated_btcpay_dropdir/*' \
+    -cvzf /var/lib/docker/volumes/generated_btcpay_dropdir/${filename} /var/lib/docker/volumes
+    btcpay-up.sh
+    echo "Backup created and sent to BTCPay's drop folder, queued for upload"
 fi

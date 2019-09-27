@@ -18,12 +18,15 @@ services:
       BTCPAY_SSHKEYFILE: ${BTCPAY_SSHKEYFILE}
       BTCPAY_SSHAUTHORIZEDKEYS: ${BTCPAY_SSHAUTHORIZEDKEYS}
       BTCPAY_DEBUGLOG: btcpay.log
+      BTCPAy_STORAGEDROPFOLDER: dropfolder
     links:
       - postgres
     volumes:
      - "btcpay_datadir:/datadir"
+     - "btcpay_dropdir:/dropfolder"
      - "nbxplorer_datadir:/root/.nbxplorer"
      - "$<BTCPAY_HOST_SSHAUTHORIZEDKEYS>?:${BTCPAY_SSHAUTHORIZEDKEYS}"
 
 volumes:
     btcpay_datadir:
+    btcpay_dropdir:
