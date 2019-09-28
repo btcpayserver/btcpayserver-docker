@@ -15,7 +15,17 @@ services:
     volumes:
       - "tor_servicesdir:/var/lib/tor/hidden_services"
       - "tor_torrcdir:/usr/local/etc/tor/"
-
+      
+  btctransmuter:
+    environment:
+      HIDDENSERVICE_NAME: BTCTransmuter
+      HIDDENSERVICE_REVERSEPROXY: nginx
+      TRANSMUTER_TORRCFILE: /usr/local/etc/tor/torrc-2
+      TRANSMUTER_SOCKSENDPOINT: tor:9050
+    volumes:
+      - "tor_servicesdir:/var/lib/tor/hidden_services"
+      - "tor_torrcdir:/usr/local/etc/tor/"
+      
   woocommerce:
     environment:
       HIDDENSERVICE_NAME: WooCommerce
