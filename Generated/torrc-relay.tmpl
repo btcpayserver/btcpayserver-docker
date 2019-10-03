@@ -1,0 +1,12 @@
+ORPort 9001
+DirPort 9030
+ExitPolicy reject *:*
+CookieAuthentication 1
+
+Nickname {{ $.Env.TOR_RELAY_NICKNAME}}
+ContactInfo {{ $.Env.TOR_RELAY_EMAIL}}
+
+
+{{ if $.Env.ADDITIONAL_TORRC_CONFIG }}
+{{ $.Env.ADDITIONAL_TORRC_CONFIG}}
+{{ end }}

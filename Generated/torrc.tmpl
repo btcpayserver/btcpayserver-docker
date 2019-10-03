@@ -28,3 +28,7 @@ HiddenServicePort {{ $virtualPort }} {{ $containerNetwork.IP }}:{{ $port }}
 	{{ end }}
 {{ end }}
 {{ end }}
+
+{{ if $.Env.ADDITIONAL_TORRC_CONFIG }}
+{{ $.Env.ADDITIONAL_TORRC_CONFIG}}
+{{ end }}
