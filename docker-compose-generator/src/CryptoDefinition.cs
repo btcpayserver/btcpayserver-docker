@@ -86,6 +86,11 @@ namespace DockerGenerator
                 {
                     Crypto = "mona",
                     CryptoFragment = "monacoin"
+                },
+                new CryptoDefinition()
+                {
+	                Crypto = "xmr",
+	                CryptoFragment = "monero"
                 }
             };
         }

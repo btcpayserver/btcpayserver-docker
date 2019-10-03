@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  monerod:
+    restart: unless-stopped
+    container_name: btcpayserver_monerod
+    image: kukks/monero:v0.14.1.2
+    entrypoint: monerod --rpc-bind-ip=0.0.0.0 --confirm-external-bind --rpc-bind-port=18081 --non-interactive --block-notify="/bin/sh ./scripts/notifier.sh -X GET http://btcpayserver:49392/monerolikedaemoncallback/block?cryptoCode=xmr&hash=%s" --hide-my-port --prune-blockchain
+    expose:
+      - "18081"
+    volumes:
+      - "xmr_data:/home/monero/.bitmonero"
+  monerod_wallet:
+    restart: unless-stopped
+    container_name: btcpayserver_monero_wallet
+    image: kukks/monero:v0.14.1.2
+    entrypoint: monero-wallet-rpc --rpc-bind-ip=0.0.0.0 --disable-rpc-login --confirm-external-bind --rpc-bind-port=18082 --non-interactive --trusted-daemon  --daemon-address=monerod:18081 --wallet-file=/wallet/wallet --password-file=/wallet/password --tx-notify="/bin/sh ./scripts/notifier.sh  -X GET http://btcpayserver:49392/monerolikedaemoncallback/tx?cryptoCode=xmr&hash=%s"
+    expose:
+      - "18082"
+    volumes:
+      - "xmr_wallet:/wallet"
+    depends_on:
+      - monerod
+  btcpayserver:
+    environment:
+      BTCPAY_CHAINS: "xmr"
+      BTCPAY_XMR_DAEMON_URI: http://monerod:18081
+      BTCPAY_XMR_WALLET_DAEMON_URI: http://monerod_wallet:18082
+      BTCPAY_XMR_WALLET_DAEMON_WALLETDIR: /root/xmr_wallet
+    volumes:
+      - "xmr_wallet:/root/xmr_wallet"
+volumes:
+  xmr_wallet:
+  xmr_data:
