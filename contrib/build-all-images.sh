@@ -333,6 +333,30 @@ docker build -f "$DOCKERFILE" -t "wakiyamap/docker-monacoin:0.16.3" .
 cd - && cd ..
 
 
+# Build monero
+# https://raw.githubusercontent.com/Kukks/monero-docker/x86_64/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building kukks/monero:v0.14.1.2"
+git clone https://github.com/Kukks/monero-docker monero
+cd monero
+git checkout x86_64
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "kukks/monero:v0.14.1.2" .
+cd - && cd ..
+
+
+# Build monero
+# https://raw.githubusercontent.com/Kukks/monero-docker/x86_64/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building kukks/monero:v0.14.1.2"
+git clone https://github.com/Kukks/monero-docker monero
+cd monero
+git checkout x86_64
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "kukks/monero:v0.14.1.2" .
+cd - && cd ..
+
+
 # Build nbxplorer
 # https://raw.githubusercontent.com/dgarage/nbxplorer/v2.0.0.57/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
@@ -422,16 +446,16 @@ cd - && cd ..
 
 
 # Build btctransmuter
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.33/BtcTransmuter/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.37/BtcTransmuter/Dockerfile.linuxamd64
 DOCKERFILE="BtcTransmuter/Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.33/BtcTransmuter/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.37/BtcTransmuter/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="BtcTransmuter/Dockerfile.linuxarm32v7"
-echo "Building btcpayserver/btctransmuter:0.0.33"
+echo "Building btcpayserver/btctransmuter:0.0.37"
 git clone https://github.com/btcpayserver/btctransmuter btctransmuter
 cd btctransmuter
-git checkout v0.0.33
+git checkout v0.0.37
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.33" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.37" .
 cd - && cd ..
 
 
@@ -456,6 +480,38 @@ cd isso
 git checkout patron.22
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "jvandrew/isso:atron.22" .
+cd - && cd ..
+
+
+# Build docker-gen
+# https://raw.githubusercontent.com/btcpayserver/docker-gen/v0.7.6/linuxamd64.Dockerfile
+DOCKERFILE="linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/docker-gen/v0.7.6/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/docker-gen/v0.7.6/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/docker-gen:0.7.6"
+git clone https://github.com/btcpayserver/docker-gen docker-gen
+cd docker-gen
+git checkout v0.7.6
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/docker-gen:0.7.6" .
+cd - && cd ..
+
+
+# Build tor
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.1.5/Tor/0.4.1.5/linuxamd64.Dockerfile
+DOCKERFILE="Tor/0.4.1.5/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.1.5/Tor/0.4.1.5/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Tor/0.4.1.5/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.1.5/Tor/0.4.1.5/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Tor/0.4.1.5/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/tor:0.4.1.5"
+git clone https://github.com/btcpayserver/dockerfile-deps tor
+cd tor
+git checkout Tor/0.4.1.5
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/tor:0.4.1.5" .
 cd - && cd ..
 
 
