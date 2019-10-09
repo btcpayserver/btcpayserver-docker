@@ -68,6 +68,13 @@ btcpay_expand_variables() {
 btcpay_update_docker_env() {
 btcpay_expand_variables
 touch $BTCPAY_ENV_FILE
+
+# Fix up of a bug before
+if [[ "$BTCPAY_ENABLE_SSH" == "true" ]] && ! [[ "$BTCPAY_HOST_SSHAUTHORIZEDKEYS" ]]; then
+    BTCPAY_HOST_SSHAUTHORIZEDKEYS=~/.ssh/authorized_keys
+    BTCPAY_HOST_SSHKEYFILE=""
+fi
+
 echo "
 BTCPAY_PROTOCOL=$BTCPAY_PROTOCOL
 BTCPAY_HOST=$BTCPAY_HOST
