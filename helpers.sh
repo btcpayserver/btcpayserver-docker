@@ -69,7 +69,9 @@ btcpay_update_docker_env() {
 btcpay_expand_variables
 touch $BTCPAY_ENV_FILE
 
-# Fix up of a bug before
+# In a previous release, BTCPAY_HOST_SSHAUTHORIZEDKEYS was not saved into the .env, so the next update after setup
+# with BTCPAY_ENABLE_SSH set, BTCPAY_HOST_SSHAUTHORIZEDKEYS would get empty and break the SSH feature in btcpayserver
+# This condition detect this situation, and fix up BTCPAY_HOST_SSHAUTHORIZEDKEYS
 if [[ "$BTCPAY_ENABLE_SSH" == "true" ]] && ! [[ "$BTCPAY_HOST_SSHAUTHORIZEDKEYS" ]]; then
     BTCPAY_HOST_SSHAUTHORIZEDKEYS=~/.ssh/authorized_keys
     BTCPAY_HOST_SSHKEYFILE=""
