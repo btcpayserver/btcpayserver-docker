@@ -65,6 +65,7 @@ export BTCPAYGEN_CRYPTO1="btc"
 export BTCPAYGEN_CRYPTO2="ltc"
 export BTCPAYGEN_REVERSEPROXY="nginx"
 export BTCPAYGEN_LIGHTNING="clightning"
+export BTCPAY_ENABLE_SSH=true
 . ./btcpay-setup.sh -i
 
 exit
