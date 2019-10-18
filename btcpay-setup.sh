@@ -93,7 +93,7 @@ Environment variables:
     BTCPAYGEN_REVERSEPROXY: Whether to use or not a reverse proxy. NGinx setup HTTPS for you. (eg. nginx, traefik, none. Default: nginx)
     BTCPAYGEN_LIGHTNING: Lightning network implementation to use (eg. clightning, lnd, none)
     BTCPAYGEN_ADDITIONAL_FRAGMENTS: Semi colon separated list of additional fragments you want to use (eg. opt-save-storage)
-    ACME_CA_URI: The API endpoint to ask for HTTPS certificate (default: https://acme-v01.api.letsencrypt.org/directory)
+    ACME_CA_URI: The API endpoint to ask for HTTPS certificate (default: https://acme-v02.api.letsencrypt.org/directory)
     BTCPAY_ENABLE_SSH: Optional, gives BTCPay Server SSH access to the host by allowing it to edit authorized_keys of the host, it can be used for managing the authorized_keys or updating BTCPay Server directly through the website. (Default: false)
     BTCPAYGEN_DOCKER_IMAGE: Allows you to specify a custom docker image for the generator (Default: btcpayserver/docker-compose-generator)
     BTCPAY_IMAGE: Allows you to specify the btcpayserver docker image to use over the default version. (Default: current stable version of btcpayserver)
@@ -194,7 +194,7 @@ fi
 : "${BTCPAYGEN_REVERSEPROXY:=nginx}"
 : "${BTCPAYGEN_LIGHTNING:=none}"
 : "${REVERSEPROXY_DEFAULT_HOST:=none}"
-: "${ACME_CA_URI:=https://acme-v01.api.letsencrypt.org/directory}"
+: "${ACME_CA_URI:=https://acme-v02.api.letsencrypt.org/directory}"
 : "${BTCPAY_PROTOCOL:=https}"
 : "${BTCPAY_ADDITIONAL_HOSTS:=}"
 : "${REVERSEPROXY_HTTP_PORT:=80}"

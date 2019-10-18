@@ -104,7 +104,7 @@ You can read [the article](https://medium.com/@BtcpayServer/hosting-btcpay-serve
 * `BTCPAYGEN_SUBNAME`: The subname of the generated docker-compose file, where the full name is `Generated/docker-compose.SUBNAME.yml` (Default: `generated`)
 * `BTCPAYGEN_ADDITIONAL_FRAGMENTS`: Semicolon-separated list of additional fragments you want to use (eg. `opt-save-storage`)
 * `LETSENCRYPT_EMAIL`: An email will be sent to this address if certificate expires and fails to renew automatically (eg. `me@example.com`)
-* `ACME_CA_URI`: The API endpoint to ask for HTTPS certificate (Default: `https://acme-v01.api.letsencrypt.org/directory`)
+* `ACME_CA_URI`: The API endpoint to ask for HTTPS certificate (Default: `https://acme-v02.api.letsencrypt.org/directory`)
 * `BTCPAY_ENABLE_SSH`: Optional, gives BTCPay Server SSH access to the host by allowing it to edit authorized_keys of the host, it can be used for managing the authorized_keys or updating BTCPay Server directly through the website. (Default: false)
 * `BTCPAYGEN_DOCKER_IMAGE`: Optional, Specify which generator image to use if you have customized the C# generator. Set to `btcpayserver/docker-compose-generator:local` to build the generator locally at runtime.
 * `BTCPAY_IMAGE`: Optional, Specify which btcpayserver image to use if you have a customized btcpayserver.
@@ -262,7 +262,7 @@ WantedBy=multi-user.target
 
 ```ini
 BTCPAY_HOST=btcpay.EXAMPLE.com
-ACME_CA_URI=https://acme-v01.api.letsencrypt.org/directory
+ACME_CA_URI=https://acme-v02.api.letsencrypt.org/directory
 NBITCOIN_NETWORK=mainnet
 LETSENCRYPT_EMAIL=me@EXAMPLE.com
 BTCPAY_SSHTRUSTEDFINGERPRINTS=SHA256:eSCD7NtQ/Q6IBl2iRB9caAQ3lDZd8s8iUL6SdeNnhpA

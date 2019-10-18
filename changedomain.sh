@@ -11,7 +11,7 @@ export OLD_HOST=`cat $BTCPAY_ENV_FILE | sed -n 's/^BTCPAY_HOST=\(.*\)$/\1/p'`
 echo "Changing domain from \"$OLD_HOST\" to \"$NEW_HOST\""
 
 export BTCPAY_HOST="$NEW_HOST"
-export ACME_CA_URI="https://acme-v01.api.letsencrypt.org/directory"
+export ACME_CA_URI="https://acme-v02.api.letsencrypt.org/directory"
 [[ "$OLD_HOST" == "$REVERSEPROXY_DEFAULT_HOST" ]] && export REVERSEPROXY_DEFAULT_HOST="$NEW_HOST"
 pushd . > /dev/null
 # Modify environment file
