@@ -20,7 +20,7 @@ The relevant environment variables are:
 * `BTCPAY_HOST`: The external url used to access the NGINX server from internet. This domain name must point to this machine for Let's Encrypt to create your certificate. (typically with a CNAME or A record)
 * `BTCPAY_ROOTPATH`: The root path directory where BTCPay is accessed, more information below. (default: /)
 * `LETSENCRYPT_EMAIL`: The email Let's Encrypt will use to notify you about certificate expiration.
-* `ACME_CA_URI`: Let's encrypt API endpoint (`https://acme-staging.api.letsencrypt.org/directory` for a staging certificate, `https://acme-v02.api.letsencrypt.org/directory` for a production one)
+* `ACME_CA_URI`: Let's encrypt API endpoint (`https://acme-staging-v02.api.letsencrypt.org/directory` for a staging certificate, `https://acme-v02.api.letsencrypt.org/directory` for a production one)
 * `LIGHTNING_ALIAS`: Optional, if using the integrated lightning feature, customize the alias of your nodes
 * `BTCPAY_SSHKEYFILE`: Optional, SSH private key that BTCPay can use to connect to this VM's SSH server (You need to copy the key file on BTCPay's datadir volume)
 * `BTCPAY_SSHTRUSTEDFINGERPRINTS`: Optional, BTCPay will ensure that it is connecting to the expected SSH server by checking the host public's key against those fingerprints
