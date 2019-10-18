@@ -2,7 +2,7 @@ version: 2
 jobs:
   cansetup:
     machine:
-      docker_layer_caching: true
+      enabled: true
     steps:
       - checkout
       - run:
@@ -13,7 +13,7 @@ jobs:
   # Publish jobs require those variables
   amd64:
     machine:
-      docker_layer_caching: true
+      enabled: true
     steps:
       - checkout  
       - run:
@@ -25,7 +25,7 @@ jobs:
 
   arm32v7:
     machine:
-      docker_layer_caching: true
+      enabled: true
     steps:
       - checkout  
       - run:
@@ -38,7 +38,7 @@ jobs:
             sudo docker push $DOCKERHUB_REPO:latest-arm32v7
   arm64v8:
     machine:
-      docker_layer_caching: true
+      enabled: true
     steps:
       - checkout  
       - run:
