@@ -51,6 +51,18 @@ if ! grep -Fxq "export COMPOSE_HTTP_TIMEOUT=\"180\"" "$BASH_PROFILE_SCRIPT"; the
     echo "Adding COMPOSE_HTTP_TIMEOUT=180 in btcpay-env.sh"
 fi
 
+if [[ "$ACME_CA_URI" == "https://acme-v01.api.letsencrypt.org/directory" ]]; then
+    original_acme="$ACME_CA_URI"
+    export ACME_CA_URI="proudction"
+    echo "Info: Rewriting ACME_CA_URI from $original_acme to $ACME_CA_URI"
+fi
+
+if [[ "$ACME_CA_URI" == "https://acme-staging.api.letsencrypt.org/directory" ]]; then
+    original_acme="$ACME_CA_URI"
+    export ACME_CA_URI="staging"
+    echo "Info: Rewriting ACME_CA_URI from $original_acme to $ACME_CA_URI"
+fi
+
 . helpers.sh
 install_tooling
 btcpay_update_docker_env
