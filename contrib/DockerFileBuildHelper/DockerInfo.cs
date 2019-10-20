@@ -12,6 +12,7 @@ namespace DockerFileBuildHelper
         public string DockerHubLink { get; set; }
         public string GitLink { get; set; }
         public string GitRef { get; set; }
+        public bool SupportedByUs { get; set; }
         public Image Image { get; internal set; }
 
         public string GetGithubLinkOf(string path)
