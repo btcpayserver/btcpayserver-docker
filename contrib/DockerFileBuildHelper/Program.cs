@@ -465,6 +465,8 @@ namespace DockerFileBuildHelper
                     break;
                 case "spark-wallet":
                     dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"arm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"arm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/shesek/spark-wallet";
                     dockerInfo.GitRef = $"v{image.Tag.Split('-')[0]}";
                     break;
