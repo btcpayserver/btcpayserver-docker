@@ -144,7 +144,7 @@ namespace DockerFileBuildHelper
                 tb.Append(readme.Substring(0, start));
                 tb.AppendLine("| Image | Version | x64 | arm32v7 | arm64v8 | links |");
                 tb.AppendLine("|---|---|:-:|:-:|:-:|:-:|");
-				dockerInfos = dockerInfos.GroupBy(d => d.Image.Source).Select(c => c.First()).ToList();
+				dockerInfos = dockerInfos.GroupBy(d => d.Image.ToString(false)).Select(c => c.First()).ToList();
                 RenderTable(tb, dockerInfos.Where(d => d.SupportedByUs));
                 RenderTable(tb, dockerInfos.Where(d => !d.SupportedByUs));
                 tb.Append(readme.Substring(end));
