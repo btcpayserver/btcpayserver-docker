@@ -124,7 +124,7 @@ namespace DockerFileBuildHelper
             if (!string.IsNullOrEmpty(options.READMEOutput))
             {
                 var readme = File.ReadAllText(options.READMEOutput);
-                var start = readme.IndexOf("| Source |");
+                var start = readme.IndexOf("| Image |");
                 var end = start;
                 for (; end < readme.Length; end++)
                 {
@@ -142,8 +142,9 @@ namespace DockerFileBuildHelper
 
                 StringBuilder tb = new StringBuilder();
                 tb.Append(readme.Substring(0, start));
-                tb.AppendLine("| Source | Image | Version | x64 | arm32v7 | arm64v8 | links |");
-                tb.AppendLine("|---|---|---|:-:|:-:|:-:|:-:|");
+                tb.AppendLine("| Image | Version | x64 | arm32v7 | arm64v8 | links |");
+                tb.AppendLine("|---|---|:-:|:-:|:-:|:-:|");
+				dockerInfos = dockerInfos.GroupBy(d => d.Image.Source).Select(c => c.First()).ToList();
                 RenderTable(tb, dockerInfos.Where(d => d.SupportedByUs));
                 RenderTable(tb, dockerInfos.Where(d => !d.SupportedByUs));
                 tb.Append(readme.Substring(end));
@@ -157,15 +158,9 @@ namespace DockerFileBuildHelper
         void RenderTable(StringBuilder tb, IEnumerable<DockerInfo> dockerInfos)
         {
             dockerInfos = dockerInfos.OrderBy(i => i.Image.Source).ToList();
-
             foreach (var image in dockerInfos)
             {
-                string source = "*";
-                if (image.Image.Source != null)
-                {
-                    source = Path.GetFileName(image.Image.Source);
-                }
-                tb.Append($"| {source} | {image.Image.ToString(false)} | {image.Image.Tag} |");
+                tb.Append($"| {image.Image.ToString(false)} | {image.Image.Tag} |");
                 if (!string.IsNullOrEmpty(image.DockerFilePath))
                 {
                     tb.Append($" [✔️]({image.GetGithubLinkOf(image.DockerFilePath)}) |");
