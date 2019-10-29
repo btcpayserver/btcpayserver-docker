@@ -82,7 +82,9 @@ exit
 
 You can read [the article](https://medium.com/@BtcpayServer/hosting-btcpay-server-for-cheap-2b27761fdb9d) for step by step instructions.
 
-[![Docker automated build](https://img.shields.io/docker/automated/nicolasdorier/btcpayserver.svg)](https://hub.docker.com/r/nicolasdorier/btcpayserver/)
+Check out this video if you're interested in learning more about setting up [BTCPay with Docker Compose](https://www.youtube.com/playlist?list=PLH4m2oS2ratfaprAFx9E3ZDjwxNKvCk4e).
+
+[![Docker automated build](https://img.shields.io/docker/automated/btcpayserver/btcpayserver.svg)](https://hub.docker.com/r/btcpayserver/btcpayserver/)
 
 
 # Environment variables
@@ -100,7 +102,7 @@ You can read [the article](https://medium.com/@BtcpayServer/hosting-btcpay-serve
 * `BTCPAYGEN_CRYPTO2`: Second supported crypto currency (eg. `btc`, `ltc`. Default: `(empty)`)
 * `BTCPAYGEN_CRYPTON`: N'th supported crypto currency where N is 9 at maximum. (eg. `btc`, `ltc`. Default: `(empty)`)
 * `BTCPAYGEN_REVERSEPROXY`: Specify reverse proxy to use; NGinx has HTTPS support. (eg. `nginx`, `traefik`,  `(empty)`. Default: `nginx`)
-* `BTCPAYGEN_LIGHTNING`: Lightning network implementation to use (eg. `clightning`, `(empty)`)
+* `BTCPAYGEN_LIGHTNING`: Lightning network implementation to use (eg. `clightning`, `lnd`, Default: `(empty)`)
 * `BTCPAYGEN_SUBNAME`: The subname of the generated docker-compose file, where the full name is `Generated/docker-compose.SUBNAME.yml` (Default: `generated`)
 * `BTCPAYGEN_ADDITIONAL_FRAGMENTS`: Semicolon-separated list of additional fragments you want to use (eg. `opt-save-storage`)
 * `LETSENCRYPT_EMAIL`: An email will be sent to this address if certificate expires and fails to renew automatically (eg. `me@example.com`)
