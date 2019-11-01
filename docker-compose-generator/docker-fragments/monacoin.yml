@@ -4,7 +4,7 @@ services:
   monacoind:
     restart: unless-stopped
     container_name: btcpayserver_monacoind
-    image: wakiyamap/docker-monacoin:0.16.3
+    image: wakiyamap/docker-monacoin:0.17.1
     environment:
       BITCOIN_EXTRA_ARGS: |
         rpcport=43782
