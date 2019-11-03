@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  electrumx:
+    image: lukechilds/electrumx
+    ports:
+      - "50002:50002"
+    volumes:
+      - /path/to/somedrive/ElectrumX_data:/data
+    environment:
+      - DAEMON_URL=lnd:afixedpasswordbecauselndsuckswithcookiefile@bitcoind:43782
+      - COIN=BitcoinSegwit
