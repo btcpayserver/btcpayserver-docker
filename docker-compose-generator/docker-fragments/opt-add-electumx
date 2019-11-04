@@ -1,6 +1,10 @@
 version: "3"
 
 services:
+  bitcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        txindex=1
   electrumx:
     image: lukechilds/electrumx
     ports:
