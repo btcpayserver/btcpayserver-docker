@@ -10,8 +10,8 @@
 
 				{{ range $reverseProxyContainer := where $ "Name" $containerOrReverseProxyName }}
 					{{ range $containerNetwork := where $reverseProxyContainer.Networks "Name" $knownNetwork.Name }}
-						{{ $port := coalesce $container.Env.HIDDENSERVICE_PORT "80" }}
-						{{ $virtualPort := coalesce $container.Env.HIDDENSERVICE_VIRTUAL_PORT $port }}
+						{{ $port := coalesceempty (index $container.Env (print $name "_HIDDENSERVICE_PORT")) $container.Env.HIDDENSERVICE_PORT "80" }}
+						{{ $virtualPort := coalesceempty (index $container.Env (print $name "_HIDDENSERVICE_VIRTUAL_PORT")) $container.Env.HIDDENSERVICE_VIRTUAL_PORT $port }}
 						{{ if ne $containerNetwork.IP "" }}
 							{{ if $firstServicePort }}
 # For the hidden service {{ $name }}
