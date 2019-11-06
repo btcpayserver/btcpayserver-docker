@@ -4,3 +4,6 @@ services:
   btcpayserver:
       ports:
       - "80:49392"
+
+exclusive:
+  - proxy

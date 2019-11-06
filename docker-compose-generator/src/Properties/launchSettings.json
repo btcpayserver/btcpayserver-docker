@@ -10,7 +10,9 @@
         "BTCPAYGEN_CRYPTO3": "btg",
         "BTCPAYGEN_CRYPTO2": "ltc",
         "BTCPAYGEN_CRYPTO1": "btc",
-        "BTCPAYGEN_REVERSEPROXY": "nginx"
+        "BTCPAYGEN_REVERSEPROXY": "nginx",
+        "BTCPAYGEN_ADDITIONAL_FRAGMENTS": "opt-save-storage",
+        "BTCPAYGEN_EXCLUDE_FRAGMENTS": "postgres"
       }
     }
   }

@@ -20,3 +20,8 @@ services:
 
 volumes:
   traefik_logs:
+
+exclusive:
+  - proxy
+required:
+  - "traefik"

@@ -30,7 +30,7 @@ docker run -v "$(pwd)/Generated:/app/Generated" \
            -e "BTCPAYGEN_LIGHTNING=$BTCPAYGEN_LIGHTNING" \
            -e "BTCPAYGEN_SUBNAME=$BTCPAYGEN_SUBNAME" \
            -e "BTCPAY_HOST_SSHAUTHORIZEDKEYS=$BTCPAY_HOST_SSHAUTHORIZEDKEYS" \
-           --rm $BTCPAYGEN_DOCKER_IMAGE
+           --rm $BTCPAYGEN_DOCKER_IMAGE || echo "Building the fragment failed"
 
 if [ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]; then
     cp Production/nginx.tmpl Generated/nginx.tmpl
