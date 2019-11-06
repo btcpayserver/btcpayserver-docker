@@ -10,13 +10,13 @@ namespace DockerGenerator
 {
 	public class DockerComposeDefinition
 	{
-		public HashSet<string> Fragments
+		public HashSet<FragmentName> Fragments
 		{
 			get; set;
 		}
 		private string _Name;
 
-		public DockerComposeDefinition(string name, HashSet<string> fragments)
+		public DockerComposeDefinition(string name, HashSet<FragmentName> fragments)
 		{
 			Fragments = fragments;
 			_Name = name;
@@ -30,6 +30,7 @@ namespace DockerGenerator
 		{
 			get; set;
 		}
+		public HashSet<FragmentName> ExcludeFragments { get; internal set; }
 
 		public string GetFilePath()
 		{
@@ -44,28 +45,33 @@ namespace DockerGenerator
 			Console.WriteLine($"Generating {GetFilePath()}");
 			var deserializer = new DeserializerBuilder().Build();
 			var serializer = new SerializerBuilder().Build();
+			var fragmentsNotFound = new HashSet<FragmentName>();
+			var requiredFragments = new HashSet<FragmentName>();
+			var recommendedFragments = new HashSet<FragmentName>();
+			var processedFragments = new HashSet<FragmentName>();
+			var unprocessedFragments = new HashSet<FragmentName>();
+			var services = new List<KeyValuePair<YamlNode, YamlNode>>();
+			var volumes = new List<KeyValuePair<YamlNode, YamlNode>>();
+			var networks = new List<KeyValuePair<YamlNode, YamlNode>>();
+			var exclusives = new List<(FragmentName FragmentName, string Exclusivity)>();
 
-			Console.WriteLine($"With fragments:");
-			foreach (var fragment in Fragments.ToList())
+			foreach (var fragment in Fragments.Where(NotExcluded))
+			{
+				unprocessedFragments.Add(fragment);
+			}
+		reprocessFragments:
+			foreach (var fragment in unprocessedFragments)
 			{
 				var fragmentPath = GetFragmentLocation(fragment);
 				if (!File.Exists(fragmentPath))
 				{
-					Console.WriteLine($"\t{fragment} not found in {fragmentPath}, ignoring...");
-					Fragments.Remove(fragment);
-				}
-				else
-				{
-					Console.WriteLine($"\t{fragment}");
+					fragmentsNotFound.Add(fragment);
 				}
 			}
-
-			var services = new List<KeyValuePair<YamlNode, YamlNode>>();
-			var volumes = new List<KeyValuePair<YamlNode, YamlNode>>();
-			var networks = new List<KeyValuePair<YamlNode, YamlNode>>();
-
-			foreach (var doc in Fragments.Select(f => ParseDocument(f)))
+			foreach (var o in unprocessedFragments.Select(f => (f, ParseDocument(f))).ToList())
 			{
+				var doc = o.Item2;
+				var fragment = o.f;
 				if (doc.Children.ContainsKey("services") && doc.Children["services"] is YamlMappingNode fragmentServicesRoot)
 				{
 					services.AddRange(fragmentServicesRoot.Children);
@@ -79,8 +85,57 @@ namespace DockerGenerator
 				{
 					networks.AddRange(fragmentNetworksRoot.Children);
 				}
+				if (doc.Children.ContainsKey("exclusive") && doc.Children["exclusive"] is YamlSequenceNode fragmentExclusiveRoot)
+				{
+					foreach (var node in fragmentExclusiveRoot)
+					{
+						exclusives.Add((fragment, node.ToString()));
+					}
+				}
+				if (doc.Children.ContainsKey("required") && doc.Children["required"] is YamlSequenceNode fragmentRequireRoot)
+				{
+					foreach (var node in fragmentRequireRoot)
+					{
+						if (ExcludeFragments.Contains(new FragmentName(node.ToString())))
+							throw new YamlBuildException($"You excluded fragment {new FragmentName(node.ToString())} but it is required by {fragment}");
+						requiredFragments.Add(new FragmentName(node.ToString()));
+					}
+				}
+				if (doc.Children.ContainsKey("recommended") && doc.Children["recommended"] is YamlSequenceNode fragmentRecommendedRoot)
+				{
+					foreach (var node in fragmentRecommendedRoot)
+					{
+						if (!ExcludeFragments.Contains(new FragmentName(node.ToString())))
+							recommendedFragments.Add(new FragmentName(node.ToString()));
+					}
+				}
+				processedFragments.Add(fragment);
+				unprocessedFragments.Remove(fragment);
 			}
 
+			foreach (var fragment in requiredFragments.Concat(recommendedFragments).Where(f => !processedFragments.Contains(f)))
+			{
+				unprocessedFragments.Add(fragment);
+			}
+			if (unprocessedFragments.Count != 0)
+				goto reprocessFragments;
+
+			var exclusiveConflict = exclusives.GroupBy(e => e.Exclusivity)
+			.Where(e => e.Count() != 1)
+			.FirstOrDefault();
+			if (exclusiveConflict != null)
+				throw new YamlBuildException($"The fragments {String.Join(", ", exclusiveConflict.Select(e => e.FragmentName))} can't be used simultaneously (group '{exclusiveConflict.Key}')");
+
+			Console.WriteLine($"Selected fragments:");
+			foreach (var fragment in processedFragments)
+			{
+				Console.WriteLine($"\t{fragment}");
+			}
+			foreach (var fragment in fragmentsNotFound)
+			{
+				var fragmentPath = GetFragmentLocation(fragment);
+				ConsoleUtils.WriteLine($"\t{fragment} not found in {fragmentPath}, ignoring...", ConsoleColor.Yellow);
+			}
 
 			YamlMappingNode output = new YamlMappingNode();
 			output.Add("version", new YamlScalarNode("3") { Style = YamlDotNet.Core.ScalarStyle.DoubleQuoted });
@@ -117,6 +172,11 @@ namespace DockerGenerator
 			File.WriteAllText(outputFile, result.Replace("''", ""));
 			Console.WriteLine($"Generated {outputFile}");
 			Console.WriteLine();
+		}
+
+		private bool NotExcluded(FragmentName arg)
+		{
+			return !ExcludeFragments.Contains(arg);
 		}
 
 		private void PostProcess(YamlMappingNode output)
@@ -192,7 +252,7 @@ namespace DockerGenerator
 			return null;
 		}
 
-		private YamlMappingNode ParseDocument(string fragment)
+		private YamlMappingNode ParseDocument(FragmentName fragment)
 		{
 			var input = new StringReader(File.ReadAllText(GetFragmentLocation(fragment)));
 			YamlStream stream = new YamlStream();
@@ -200,9 +260,9 @@ namespace DockerGenerator
 			return (YamlMappingNode)stream.Documents[0].RootNode;
 		}
 
-		private string GetFragmentLocation(string fragment)
+		private string GetFragmentLocation(FragmentName fragment)
 		{
-			return Path.Combine(FragmentLocation, $"{fragment}.yml");
+			return Path.Combine(FragmentLocation, $"{fragment.Name}.yml");
 		}
 	}
 }

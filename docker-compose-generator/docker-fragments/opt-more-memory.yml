@@ -30,3 +30,5 @@ services:
     environment:
       BITCOIN_EXTRA_ARGS: |
         dbcache=1024
+exclusive:
+  - pruning

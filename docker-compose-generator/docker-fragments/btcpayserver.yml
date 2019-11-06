@@ -26,4 +26,11 @@ services:
      - "$<BTCPAY_HOST_SSHAUTHORIZEDKEYS>?:${BTCPAY_SSHAUTHORIZEDKEYS}"
 
 volumes:
-    btcpay_datadir:
+  btcpay_datadir:
+
+required:
+  - "postgres"
+  - "nbxplorer"
+  - "btcpayserver"
+recommended:
+  - "opt-add-tor"

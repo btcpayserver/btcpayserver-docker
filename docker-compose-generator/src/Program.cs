@@ -22,7 +22,15 @@ namespace DockerGenerator
 
 			var name = Environment.GetEnvironmentVariable("BTCPAYGEN_SUBNAME");
 			name = string.IsNullOrEmpty(name) ? "generated" : name;
-			new Program().Run(composition, name, generatedLocation);
+			try
+			{
+				new Program().Run(composition, name, generatedLocation);
+			}
+			catch (YamlBuildException ex)
+			{
+				ConsoleUtils.WriteLine(ex.Message, ConsoleColor.Red);
+				Environment.ExitCode = 1;
+			}
 		}
 
 		private void Run(DockerComposition composition, string name, string output)
@@ -35,13 +43,10 @@ namespace DockerGenerator
 			switch (composition.SelectedProxy)
 			{
 				case "nginx":
-					fragments.Add("nginx-https");
 					fragments.Add("nginx");
-					fragments.Add("btcpayserver-nginx");
 					break;
 				case "traefik":
 					fragments.Add("traefik");
-					fragments.Add("traefik-labels");
 					break;
 				case "no-reverseproxy":
 				case "none":
@@ -50,9 +55,6 @@ namespace DockerGenerator
 					break;
 			}
 			fragments.Add("btcpayserver");
-			fragments.Add("opt-add-tor");
-			fragments.Add("nbxplorer");
-			fragments.Add("postgres");
 			foreach (var crypto in CryptoDefinition.GetDefinitions())
 			{
 				if (!composition.SelectedCryptos.Contains(crypto.Crypto))
@@ -71,10 +73,12 @@ namespace DockerGenerator
 
 			foreach (var fragment in composition.AdditionalFragments)
 			{
-				fragments.Add(fragment.Trim());
+				fragments.Add(fragment);
 			}
-			fragments = fragments.Where(s => !composition.ExcludeFragments.Contains(s)).ToHashSet();
-			var def = new DockerComposeDefinition(name, fragments);
+			var def = new DockerComposeDefinition(name, fragments.Select(f => new FragmentName(f)).ToHashSet())
+			{
+				ExcludeFragments = composition.ExcludeFragments.Select(f => new FragmentName(f)).ToHashSet()
+			};
 			def.FragmentLocation = fragmentLocation;
 			def.BuildOutputDirectory = output;
 			def.Build();

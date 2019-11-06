@@ -30,3 +30,5 @@ services:
   monacoind:
     environment:
       BITCOIN_EXTRA_ARGS: prune=25000
+exclusive:
+  - pruning

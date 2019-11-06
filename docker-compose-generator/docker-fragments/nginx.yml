@@ -35,3 +35,10 @@ volumes:
     nginx_vhost:
     nginx_html:
     nginx_certs:
+
+exclusive:
+  - proxy
+required:
+  - "btcpayserver-nginx"
+recommended:
+  - "nginx-https"
