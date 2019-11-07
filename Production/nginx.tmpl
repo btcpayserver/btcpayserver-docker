@@ -272,15 +272,18 @@ server {
 {{/* Get the first cert name defined by containers w/ the same vhost */}}
 {{ $certName := (first (groupByKeys $containers "Env.CERT_NAME")) }}
 
-{{/* Get the best matching cert  by name for the vhost. */}}
-{{ $vhostCert := (closest (dir "/etc/nginx/certs") (printf "%s.crt" $host))}}
+{{ $cert := "" }}
+{{ if exists "/etc/nginx/certs" }}
+	{{/* Get the best matching cert  by name for the vhost. */}}
+	{{ $vhostCert := (closest (dir "/etc/nginx/certs") (printf "%s.crt" $host))}}
 
-{{/* vhostCert is actually a filename so remove any suffixes since they are added later */}}
-{{ $vhostCert := trimSuffix ".crt" $vhostCert }}
-{{ $vhostCert := trimSuffix ".key" $vhostCert }}
+	{{/* vhostCert is actually a filename so remove any suffixes since they are added later */}}
+	{{ $vhostCert := trimSuffix ".crt" $vhostCert }}
+	{{ $vhostCert := trimSuffix ".key" $vhostCert }}
 
-{{/* Use the cert specified on the container or fallback to the best vhost match */}}
-{{ $cert := (coalesce $certName $vhostCert) }}
+	{{/* Use the cert specified on the container or fallback to the best vhost match */}}
+	{{ $cert = (coalesce $certName $vhostCert) }}
+{{ end }}
 
 {{ $is_https := (and (ne $https_method "nohttps") (ne $cert "") (exists (printf "/etc/nginx/certs/%s.crt" $cert)) (exists (printf "/etc/nginx/certs/%s.key" $cert))) }}
 

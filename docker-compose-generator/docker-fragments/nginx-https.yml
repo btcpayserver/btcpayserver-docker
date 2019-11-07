@@ -17,3 +17,13 @@ services:
       ACME_CA_URI: ${ACME_CA_URI:-staging}
     links:
       - nginx-gen
+
+  nginx:
+    ports:
+      - "${REVERSEPROXY_HTTPS_PORT:-443}:443"
+    volumes:
+      - "nginx_certs:/etc/nginx/certs:ro"
+
+  nginx-gen:
+    volumes:
+      - "nginx_certs:/etc/nginx/certs:ro"
