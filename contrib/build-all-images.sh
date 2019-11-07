@@ -182,16 +182,16 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.136/amd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.137/amd64.Dockerfile
 DOCKERFILE="amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.136/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.137/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-echo "Building btcpayserver/btcpayserver:1.0.3.136"
+echo "Building btcpayserver/btcpayserver:1.0.3.137"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.0.3.136
+git checkout v1.0.3.137
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.136" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.137" .
 cd - && cd ..
 
 
@@ -330,14 +330,14 @@ cd - && cd ..
 
 
 # Build docker-monacoin
-# https://raw.githubusercontent.com/wakiyamap/docker-bitcoin/master/monacoin/0.16.3/Dockerfile
-DOCKERFILE="monacoin/0.16.3/Dockerfile"
-echo "Building wakiyamap/docker-monacoin:0.16.3"
+# https://raw.githubusercontent.com/wakiyamap/docker-bitcoin/master/monacoin/0.17.1/Dockerfile
+DOCKERFILE="monacoin/0.17.1/Dockerfile"
+echo "Building wakiyamap/docker-monacoin:0.17.1"
 git clone https://github.com/wakiyamap/docker-bitcoin docker-monacoin
 cd docker-monacoin
 git checkout master
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "wakiyamap/docker-monacoin:0.16.3" .
+docker build -f "$DOCKERFILE" -t "wakiyamap/docker-monacoin:0.17.1" .
 cd - && cd ..
 
 
@@ -464,6 +464,18 @@ cd btctransmuter
 git checkout v0.0.37
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.37" .
+cd - && cd ..
+
+
+# Build electrumx
+# https://raw.githubusercontent.com/lukechilds/docker-electrumx/master/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building lukechilds/electrumx:latest"
+git clone https://github.com/lukechilds/docker-electrumx electrumx
+cd electrumx
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "lukechilds/electrumx:latest" .
 cd - && cd ..
 
 

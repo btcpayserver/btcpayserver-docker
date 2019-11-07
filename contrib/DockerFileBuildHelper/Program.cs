@@ -299,6 +299,11 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/JeffVandrewJr/patron";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     break;
+                case "electrumx":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/lukechilds/docker-electrumx";
+                    dockerInfo.GitRef = $"master";
+                    break;
                 case "isso":
                     dockerInfo.DockerFilePath = $"Dockerfile";
                     dockerInfo.GitLink = "https://github.com/JeffVandrewJr/isso";
