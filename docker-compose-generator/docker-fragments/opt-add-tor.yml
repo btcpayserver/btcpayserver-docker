@@ -35,11 +35,18 @@ services:
 
   bitcoind:
     environment:
-      HIDDENSERVICE_NAME: BTC-P2P
-      HIDDENSERVICE_VIRTUAL_PORT: 8333
-      HIDDENSERVICE_PORT: 39388
+      HIDDENSERVICE_NAME: BTC-P2P,BTC-RPC
+      BTC-P2P_HIDDENSERVICE_VIRTUAL_PORT: 8333
+      BTC-P2P_HIDDENSERVICE_PORT: 39388
+      BTC-RPC_HIDDENSERVICE_VIRTUAL_PORT: 8332
+      BTC-RPC_HIDDENSERVICE_PORT: 43782
       BITCOIN_EXTRA_ARGS: |
         onion=tor:9050
+        # rpcuser=btcrpc
+        # rpcpassword=btcpayserver4ever
+        # We need to use rpcauth because we also need cookieauth. rpcpassword disabled cookie file auth.
+        # Be careful if you copy the line below from the docker-compose.yml! A dollar sign is escaped.
+        rpcauth=btcrpc:a6a5d29a3f44f02e4cd8cabb5b10a234$$ab6152915515f6a9cca806d2ab5f0e2794c346ba74f812c61e48241d523778b8
     volumes:
     - "tor_datadir:/home/tor/.tor"
     links:
@@ -94,7 +101,7 @@ services:
 
   tor-gen:
     restart: unless-stopped
-    image: btcpayserver/docker-gen:0.7.6
+    image: btcpayserver/docker-gen:0.7.7
     container_name: tor-gen
     volumes:
       - "/var/run/docker.sock:/tmp/docker.sock:ro"
