@@ -132,6 +132,12 @@ services:
       - "tor_datadir:/home/tor/.tor"
       - "tor_servicesdir:/var/lib/tor/hidden_services"
 
+  electrumx:
+    environment:
+      HIDDENSERVICE_NAME: electrumx
+      HIDDENSERVICE_PORT: 50002
+      HIDDENSERVICE_VIRTUAL_PORT: 50002
+
 volumes:
     tor_datadir:
     tor_torrcdir:
