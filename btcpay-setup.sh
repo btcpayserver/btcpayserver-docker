@@ -450,7 +450,12 @@ if $HAS_DOCKER; then
 fi
 
 # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
-$HAS_DOCKER && . ./build.sh
+if $HAS_DOCKER; then
+    if ! ./build.sh; then
+        echo "Failed to generate the docker-compose"
+        return
+    fi
+fi
 
 if [[ "$BTCPAYGEN_OLD_PREGEN" == "true" ]]; then
     cp Generated/docker-compose.generated.yml $BTCPAY_DOCKER_COMPOSE
