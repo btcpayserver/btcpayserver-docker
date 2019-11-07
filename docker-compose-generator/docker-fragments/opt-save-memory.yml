@@ -38,4 +38,4 @@ services:
         dbcache=50
         maxmempool=50
 exclusive:
-  - pruning
+  - memory
