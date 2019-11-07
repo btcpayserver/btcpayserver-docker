@@ -38,8 +38,9 @@ if ! [ -f "/etc/docker/daemon.json" ] && [ -w "/etc/docker" ]; then
 }" > /etc/docker/daemon.json
     echo "Setting limited log files in /etc/docker/daemon.json"
 fi
-
+set -e
 . ./build.sh
+set +e
 if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then
     cp Generated/docker-compose.generated.yml $BTCPAY_DOCKER_COMPOSE
     cp Generated/torrc.tmpl "$(dirname "$BTCPAY_DOCKER_COMPOSE")/torrc.tmpl"
