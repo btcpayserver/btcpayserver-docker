@@ -18,3 +18,5 @@ services:
       - COIN=BitcoinSegwit
 volumes:
   electrumx_datadir:
+exclusive:
+  - pruning

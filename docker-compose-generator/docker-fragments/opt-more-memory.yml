@@ -31,4 +31,4 @@ services:
       BITCOIN_EXTRA_ARGS: |
         dbcache=1024
 exclusive:
-  - pruning
+  - memory
