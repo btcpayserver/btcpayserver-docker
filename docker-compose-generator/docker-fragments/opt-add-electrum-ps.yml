@@ -1,1 +1,20 @@
-WIP
+version: '2'
+services:
+  bitcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        rpcauth=electrumx:7d8ee47c089e6072635f82b34796e878$$13649d99453ccdf78e85007286422599c00e6953289f41bf8e92961076ba14db
+  electrum_ps:
+    image: docker.io/peleion/eps
+    restart: unless-stopped
+    container_name: electrum_ps
+    ports:
+      - 50002:50002
+    volumes:
+      - "electrum_ps_datadir:/data"
+    environment:
+      - DAEMON_URL=electrumx:1VmSUVGBuLNWvZl0LExRDW0tvl6196-47RfXIzS384g=@bitcoind:43782
+volumes:
+  electrum_ps_datadir:
+exclusive:
+  - pruning
