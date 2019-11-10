@@ -2,7 +2,7 @@ version: "3"
 
 services:
   lnd_bitcoin:
-    image: btcpayserver/lnd:v0.7.1-beta
+    image: btcpayserver/lnd:v0.7.1-beta-withseed
     container_name: btcpayserver_lnd_bitcoin
     restart: unless-stopped
     environment:
@@ -25,7 +25,6 @@ services:
         adminmacaroonpath=/data/admin.macaroon
         invoicemacaroonpath=/data/invoice.macaroon
         readonlymacaroonpath=/data/readonly.macaroon
-        noseedbackup=1
         notls=1
     ports:
       - "9735:9735"
