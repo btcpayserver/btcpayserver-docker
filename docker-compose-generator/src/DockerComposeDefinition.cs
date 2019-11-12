@@ -54,6 +54,7 @@ namespace DockerGenerator
 			var volumes = new List<KeyValuePair<YamlNode, YamlNode>>();
 			var networks = new List<KeyValuePair<YamlNode, YamlNode>>();
 			var exclusives = new List<(FragmentName FragmentName, string Exclusivity)>();
+			var incompatibles = new List<(FragmentName FragmentName, string Exclusivity)>();
 
 			foreach (var fragment in Fragments.Where(NotExcluded))
 			{
@@ -92,6 +93,13 @@ namespace DockerGenerator
 						exclusives.Add((fragment, node.ToString()));
 					}
 				}
+				if (doc.Children.ContainsKey("incompatible") && doc.Children["incompatible"] is YamlSequenceNode fragmentIncompatibleRoot)
+				{
+					foreach (var node in fragmentIncompatibleRoot)
+					{
+						incompatibles.Add((fragment, node.ToString()));
+					}
+				}
 				if (doc.Children.ContainsKey("required") && doc.Children["required"] is YamlSequenceNode fragmentRequireRoot)
 				{
 					foreach (var node in fragmentRequireRoot)
@@ -125,6 +133,14 @@ namespace DockerGenerator
 			.FirstOrDefault();
 			if (exclusiveConflict != null)
 				throw new YamlBuildException($"The fragments {String.Join(", ", exclusiveConflict.Select(e => e.FragmentName))} can't be used simultaneously (group '{exclusiveConflict.Key}')");
+
+			var groups = exclusives.ToDictionary(e => e.Exclusivity, e => e.FragmentName);
+			var incompatible = incompatibles
+								.Select(i => groups.TryGetValue(i.Exclusivity, out _) ? (i.FragmentName, i.Exclusivity) : (null, null))
+								.Where(i => i.Exclusivity != null)
+								.FirstOrDefault();
+			if (incompatible.Exclusivity != null)
+				throw new YamlBuildException($"The fragment {incompatible.FragmentName} is incompatible with '{incompatible.Exclusivity}'");
 
 			Console.WriteLine($"Selected fragments:");
 			foreach (var fragment in processedFragments)
