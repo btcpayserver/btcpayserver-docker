@@ -51,5 +51,5 @@ services:
       - eclair_bitcoin
 volumes:
   eclair_bitcoin_datadir:
-exclusive:
+incompatible:
   - pruning

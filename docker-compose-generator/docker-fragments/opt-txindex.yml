@@ -30,5 +30,5 @@ services:
     environment:
       BITCOIN_EXTRA_ARGS: |
         txindex=1
-exclusive:
+incompatible:
   - pruning
