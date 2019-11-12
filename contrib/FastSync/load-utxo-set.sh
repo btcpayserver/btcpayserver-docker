@@ -40,7 +40,9 @@ if ! [[ "$UTXO_DOWNLOAD_LINK" ]] && ! [[ "$TAR_FILE" ]]; then
     exit 1
 fi
 
+BITCOIN_DATA_DIR="$(docker volume inspect generated_bitcoin_datadir -f "{{.Mountpoint}}" 2>/dev/null)" || \
 BITCOIN_DATA_DIR="/var/lib/docker/volumes/generated_bitcoin_datadir/_data"
+
 [ ! -d "$BITCOIN_DATA_DIR" ] && mkdir -p "$BITCOIN_DATA_DIR"
 
 if [[ "$TAR_FILE" ]]; then
@@ -93,7 +95,9 @@ if ! tar -xf "$TAR_FILE" -C "$BITCOIN_DATA_DIR"; then
 fi
 $IS_DOWNLOADED && rm -f "$TAR_FILE"
 
+BTCPAY_DATA_DIR="$(docker volume inspect generated_btcpay_datadir -f "{{.Mountpoint}}" 2>/dev/null)" || \
 BTCPAY_DATA_DIR="/var/lib/docker/volumes/generated_btcpay_datadir/_data"
+
 [ ! -d "$BTCPAY_DATA_DIR" ] && mkdir -p "$BTCPAY_DATA_DIR"
 echo "$TAR_NAME" > "$BTCPAY_DATA_DIR/FastSynced"
 
