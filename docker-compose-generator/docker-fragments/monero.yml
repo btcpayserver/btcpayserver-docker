@@ -4,7 +4,7 @@ services:
   monerod:
     restart: unless-stopped
     container_name: btcpayserver_monerod
-    image: kukks/monero:v0.14.1.2
+    image: kukks/monero:v0.15.0.0
     entrypoint: monerod --rpc-bind-ip=0.0.0.0 --confirm-external-bind --rpc-bind-port=18081 --non-interactive --block-notify="/bin/sh ./scripts/notifier.sh -X GET http://btcpayserver:49392/monerolikedaemoncallback/block?cryptoCode=xmr&hash=%s" --hide-my-port --prune-blockchain
     expose:
       - "18081"
