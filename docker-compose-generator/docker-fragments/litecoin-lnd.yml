@@ -2,7 +2,7 @@ version: "3"
 
 services:
   lnd_litecoin:
-    image: btcpayserver/lnd:v0.7.1-beta
+    image: btcpayserver/lnd:v0.7.1-beta-withseed
     container_name: btcpayserver_lnd_litecoin
     restart: unless-stopped
     environment:
@@ -23,7 +23,6 @@ services:
         adminmacaroonpath=/data/admin.macaroon
         invoicemacaroonpath=/data/invoice.macaroon
         readonlymacaroonpath=/data/readonly.macaroon
-        noseedbackup=1
         notls=1
     ports:
       - "9736:9736"
@@ -40,6 +39,7 @@ services:
   btcpayserver:
     environment:
       BTCPAY_LTCLIGHTNING: "type=lnd-rest;server=http://lnd_litecoin:8080/;macaroonfilepath=/etc/lnd_litecoin/admin.macaroon;allowinsecure=true"
+      BTCPAY_LTCEXTERNALLNDSEEDBACKUP: "/etc/lnd_litecoin/data/chain/litecoin/${NBITCOIN_NETWORK:-regtest}/walletunlock.json"
     volumes:
       - "lnd_litecoin_datadir:/etc/lnd_litecoin"
     links:
