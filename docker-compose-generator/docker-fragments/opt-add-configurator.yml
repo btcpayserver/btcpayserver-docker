@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  configurator:
+    restart: unless-stopped
+    image: btcpayserver/btcpayserver-configurator:0.0.3
+    environment:
+      CONFIGURATOR_SSHCONNECTION: "root@host.docker.internal"
+      CONFIGURATOR_SSHKEYFILE: ${BTCPAY_SSHKEYFILE}
+      CONFIGURATOR_SSHAUTHORIZEDKEYS: ${BTCPAY_SSHAUTHORIZEDKEYS}
+    volumes:
+      - "configurator_passworddir:/usr/local/etc/configurator"
+      - "$<BTCPAY_HOST_SSHAUTHORIZEDKEYS>?:${BTCPAY_SSHAUTHORIZEDKEYS}"
+    expose:
+      - "80"
+  btcpayserver:
+    environment:
+      BTCPAY_EXTERNALCONFIGURATOR: "passwordfile=/usr/local/etc/configurator/password;server=/configurator"
+    volumes:
+      - "configurator_passworddir:/usr/local/etc/configurator"
+
+volumes:
+  configurator_passworddir:
