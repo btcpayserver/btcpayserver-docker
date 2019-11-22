@@ -9,6 +9,7 @@ services:
       CONFIGURATOR_SSHKEYFILE: ${BTCPAY_SSHKEYFILE}
       CONFIGURATOR_SSHAUTHORIZEDKEYS: ${BTCPAY_SSHAUTHORIZEDKEYS}
       CONFIGURATOR_ROOTPATH: "${BTCPAY_ROOTPATH:-/}configurator"
+      CONFIGURATOR_PASSWORDFILEPATH: "/usr/local/etc/configurator/password"
     volumes:
       - "configurator_passworddir:/usr/local/etc/configurator"
       - "$<BTCPAY_HOST_SSHAUTHORIZEDKEYS>?:${BTCPAY_SSHAUTHORIZEDKEYS}"
