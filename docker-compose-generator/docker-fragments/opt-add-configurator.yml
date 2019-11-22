@@ -13,7 +13,7 @@ services:
     volumes:
       - "configurator_passworddir:/usr/local/etc/configurator"
       - "$<BTCPAY_HOST_SSHAUTHORIZEDKEYS>?:${BTCPAY_SSHAUTHORIZEDKEYS}"
-     - "btcpay_datadir:/datadir"
+      - "btcpay_datadir:/datadir"
     expose:
       - "80"
   btcpayserver:
