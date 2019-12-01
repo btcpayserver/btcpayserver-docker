@@ -16,5 +16,5 @@ services:
       - DAEMON_URL=eps:cmhKyeLSco35KVhecK3blYcHFx73xrJ1fOQtjtmiKks=@bitcoind:43782
 volumes:
   electrum_ps_datadir:
-exclusive:
+incompatible:
   - pruning
