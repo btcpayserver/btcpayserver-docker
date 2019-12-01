@@ -7,7 +7,6 @@ services:
   electrum_ps:
     image: docker.io/peleion/eps
     restart: unless-stopped
-    container_name: electrum_ps
     ports:
       - 50002:50002
     volumes:
