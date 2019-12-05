@@ -61,12 +61,13 @@ namespace DockerGenerator
 				unprocessedFragments.Add(fragment);
 			}
 		reprocessFragments:
-			foreach (var fragment in unprocessedFragments)
+			foreach (var fragment in unprocessedFragments.ToList())
 			{
 				var fragmentPath = GetFragmentLocation(fragment);
 				if (!File.Exists(fragmentPath))
 				{
 					fragmentsNotFound.Add(fragment);
+					unprocessedFragments.Remove(fragment);
 				}
 			}
 			foreach (var o in unprocessedFragments.Select(f => (f, ParseDocument(f))).ToList())
