@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "docker-compose-generator", "src\docker-compose-generator.csproj", "{0900AF35-48E8-46E2-85B3-BA3847EE0844}"
 EndProject
@@ -10,6 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{8C1C711D-D
 		..\.circleci\config.yml = ..\.circleci\config.yml
 		linuxamd64.Dockerfile = linuxamd64.Dockerfile
 		linuxarm32v7.Dockerfile = linuxarm32v7.Dockerfile
+		linuxarm64v8.Dockerfile = linuxarm64v8.Dockerfile
 	EndProjectSection
 EndProject
 Global
