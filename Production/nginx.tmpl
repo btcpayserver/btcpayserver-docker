@@ -68,6 +68,12 @@
 		proxy_pass http://clightning_groestlcoin_charge:9112/;
 	}
 		{{ end }}
+		
+		{{ if (eq $serviceName "btctransmuter") }}
+	location /btctransmuter/ {
+		proxy_set_header Connection "";
+		proxy_pass http://btctransmuter;
+		{{ end }}
 	{{ end }}
 	{{ end }}
 

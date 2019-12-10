@@ -7,7 +7,8 @@ services:
     environment:
       TRANSMUTER_Database: User ID=postgres;Host=postgres;Port=5432;Database=btctransmuter${NBITCOIN_NETWORK:-regtest}
       TRANSMUTER_DatabaseType: postgres
-      TRANSMUTER_DataProtectionDir: data/keys      
+      TRANSMUTER_DataProtectionDir: data/keys
+      TRANSMUTER_ROOTHPATH: "/btctransmuter"
       TRANSMUTER_ExtensionsDir: data/extensions
       NBXplorer_Cryptos: ${BTCPAY_CRYPTOS}
       NBXplorer_Uri: http://nbxplorer:32838/
