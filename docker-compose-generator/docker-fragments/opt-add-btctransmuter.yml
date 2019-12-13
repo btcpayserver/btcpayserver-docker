@@ -3,11 +3,13 @@ version: "3"
 services:
   btctransmuter:
     restart: unless-stopped
-    image: btcpayserver/btctransmuter:0.0.39
+    image: btcpayserver/btctransmuter:0.0.43
+    container_name: btctransmuter
     environment:
       TRANSMUTER_Database: User ID=postgres;Host=postgres;Port=5432;Database=btctransmuter${NBITCOIN_NETWORK:-regtest}
       TRANSMUTER_DatabaseType: postgres
-      TRANSMUTER_DataProtectionDir: data/keys      
+      TRANSMUTER_DataProtectionDir: data/keys
+      TRANSMUTER_ROOTPATH: "/btctransmuter"
       TRANSMUTER_ExtensionsDir: data/extensions
       NBXplorer_Cryptos: ${BTCPAY_CRYPTOS}
       NBXplorer_Uri: http://nbxplorer:32838/
@@ -27,6 +29,6 @@ services:
      - "nbxplorer_datadir:/root/.nbxplorer"
   btcpayserver:
     environment:
-      BTCPAY_EXTERNALSERVICES: "BTC Transmuter:${BTCPAY_PROTOCOL:-https}://${BTCTRANSMUTER_HOST};"
+      BTCPAY_EXTERNALSERVICES: "BTC Transmuter:btctransmuter;"
 volumes:
     btctransmuter_datadir:
