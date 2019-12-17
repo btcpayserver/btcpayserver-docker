@@ -103,12 +103,7 @@ namespace DockerGenerator
                 new CryptoDefinition()
                 {
 	                Crypto = "lbtc",
-	                CryptoFragment = "liquid-bitcoin"
-                },
-                new CryptoDefinition()
-                {
-	                Crypto = "usdt",
-	                CryptoFragment = "liquid-tether"
+	                CryptoFragment = "liquid"
                 }
             };
         }

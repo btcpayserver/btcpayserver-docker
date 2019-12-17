@@ -28,6 +28,10 @@ services:
         NBXPLORER_LBTCNODEENDPOINT: elementsd:39388
       volumes:
         - "elements_datadir:/root/.elements"
+  btcpayserver:
+    environment:
+      BTCPAY_CHAINS: "lbtc"
+      BTCPAY_LBTCEXPLORERURL: http://nbxplorer:32838/
 volumes:
-  bitcoin_datadir:
-  bitcoin_wallet_datadir:
+  elements_datadir:
+  elements_wallet_datadir:
