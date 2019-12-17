@@ -12,6 +12,7 @@ services:
         ELEMENTS_EXTRA_ARGS: |
           rpcport=43782
           rpcbind=0.0.0.0:43782
+          rpcauth=liquid:c8bf1a8961d97f224cb21224aaa8235d$$402f4a8907683d057b8c58a42940b6e54d1638322a42986ae28ebb844e603ae6
           port=39388
           whitelist=0.0.0.0/0
           validatepegin=0
@@ -26,6 +27,8 @@ services:
         NBXPLORER_CHAINS: "lbtc"
         NBXPLORER_LBTCRPCURL: http://elementsd_liquid:43782/
         NBXPLORER_LBTCNODEENDPOINT: elementsd_liquid:39388
+        NBXPLORER_LBTCRPCUSER: "liquid"
+        NBXPLORER_LBTCRPCPASSWORD: "liquid"
       volumes:
         - "elements_datadir:/root/.elements"
   btcpayserver:
