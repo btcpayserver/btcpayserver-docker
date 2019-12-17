@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using YamlDotNet.Serialization;
 
 namespace DockerGenerator
@@ -35,10 +36,12 @@ namespace DockerGenerator
 
 		private void Run(DockerComposition composition, string name, string output)
 		{
-			var fragmentLocation = Environment.GetEnvironmentVariable("INSIDE_CONTAINER") == "1" ? "app" : "docker-compose-generator";
-			fragmentLocation = FindRoot(fragmentLocation);
-			fragmentLocation = Path.GetFullPath(Path.Combine(fragmentLocation, "docker-fragments"));
-
+			var root = Environment.GetEnvironmentVariable("INSIDE_CONTAINER") == "1" ? "app" : "docker-compose-generator";
+			 root = FindRoot(root);
+			var fragmentLocation = Path.GetFullPath(Path.Combine(root, "docker-fragments"));
+			var cryptoDefinitionsLocation = Path.GetFullPath(Path.Combine(root, "crypto-definitions.json"));
+			var cryptoDefinitions =
+				JsonSerializer.Deserialize<CryptoDefinition[]>(File.ReadAllText(cryptoDefinitionsLocation));
 			var fragments = new HashSet<string>();
 			switch (composition.SelectedProxy)
 			{
@@ -55,7 +58,8 @@ namespace DockerGenerator
 					break;
 			}
 			fragments.Add("btcpayserver");
-			foreach (var crypto in CryptoDefinition.GetDefinitions())
+			
+			foreach (var crypto in cryptoDefinitions)
 			{
 				if (!composition.SelectedCryptos.Contains(crypto.Crypto))
 					continue;
