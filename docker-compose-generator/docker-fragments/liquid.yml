@@ -1,9 +1,9 @@
 version: "3"
 
 services:
-  elementsd:
+  elementsd_liquid:
       restart: unless-stopped
-      container_name: btcpayserver_elementsd
+      container_name: btcpayserver_elementsd_liquid
       image: btcpayserver/elements:0.18.1.1-1
       environment:
         ELEMENTS_NETWORK: ${NBITCOIN_NETWORK:-regtest}
@@ -24,8 +24,8 @@ services:
   nbxplorer:
       environment:
         NBXPLORER_CHAINS: "lbtc"
-        NBXPLORER_LBTCRPCURL: http://elementsd:43782/
-        NBXPLORER_LBTCNODEENDPOINT: elementsd:39388
+        NBXPLORER_LBTCRPCURL: http://elementsd_liquid:43782/
+        NBXPLORER_LBTCNODEENDPOINT: elementsd_liquid:39388
       volumes:
         - "elements_datadir:/root/.elements"
   btcpayserver:
