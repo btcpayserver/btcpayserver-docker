@@ -30,6 +30,6 @@ cd "$NETWORK_DIRECTORY"
 tar -cvf "$TAR_NAME" "blocks/"
 echo "Adding $NETWORK_DIRECTORY/chainstate/*"
 tar -rvf "$TAR_NAME" "chainstate/"
-mv "$TAR_NAME" "/data/$TAR_NAME"
+[[ $NBITCOIN_NETWORK == "mainnet" ]] || mv "$TAR_NAME" "/data/$TAR_NAME"
 echo "TAR file created to /data/$TAR_NAME"
 exit
