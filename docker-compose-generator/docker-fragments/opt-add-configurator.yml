@@ -18,7 +18,7 @@ services:
       - "80"
   btcpayserver:
     environment:
-      BTCPAY_EXTERNALCONFIGURATOR: "passwordfile=/usr/local/etc/configurator/password;server=/configurator"
+      BTCPAY_EXTERNALCONFIGURATOR: "cookiefilepath=/usr/local/etc/configurator/password;server=/configurator"
     volumes:
       - "configurator_passworddir:/usr/local/etc/configurator"
 
