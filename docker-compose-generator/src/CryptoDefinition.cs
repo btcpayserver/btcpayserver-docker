@@ -26,7 +26,7 @@ namespace DockerGenerator
             get;
             private set;
         }
-        
+
         public string EclairFragment
         {
 	        get;
@@ -73,6 +73,7 @@ namespace DockerGenerator
                     Crypto = "grs",
                     CryptoFragment = "groestlcoin",
                     CLightningFragment = "groestlcoin-clightning",
+                    LNDFragment = "groestlcoin-lnd"
                 },
                 new CryptoDefinition()
                 {
