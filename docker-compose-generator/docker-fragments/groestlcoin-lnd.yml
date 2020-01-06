@@ -1,0 +1,71 @@
+version: "3"
+
+services:
+  lnd_groestlcoin:
+    image: groestlcoin/lnd:v0.8.2-grs
+    container_name: btcpayserver_lnd_groestlcoin
+    restart: unless-stopped
+    environment:
+      LND_CHAIN: "grs"
+      LND_EXTERNALIP: ${BTCPAY_ANNOUNCEABLE_HOST}
+      LND_PORT: 9736
+      LND_ALIAS: ${LIGHTNING_ALIAS}
+      LND_ENVIRONMENT: "${NBITCOIN_NETWORK:-regtest}"
+      LND_EXTRA_ARGS: |
+        restlisten=0.0.0.0:8080
+        rpclisten=127.0.0.1:10008
+        rpclisten=0.0.0.0:10009
+        groestlcoin.node=groestlcoind
+        groestlcoind.rpchost=groestlcoind:43782
+        groestlcoind.zmqpubrawblock=tcp://groestlcoind:21441
+        groestlcoind.zmqpubrawtx=tcp://groestlcoind:21441
+        adminmacaroonpath=/data/admin.macaroon
+        invoicemacaroonpath=/data/invoice.macaroon
+        readonlymacaroonpath=/data/readonly.macaroon
+        notls=1
+    ports:
+      - "9736:9736"
+    expose:
+      - "8080"
+      - "9736"
+    volumes:
+      - "lnd_groestlcoin_datadir:/data"
+      - "groestlcoin_datadir:/deps/.groestlcoin"
+      - "nbxplorer_datadir:/root/.nbxplorer"
+    links:
+      - groestlcoind
+
+  btcpayserver:
+    environment:
+      BTCPAY_GRSLIGHTNING: "type=lnd-rest;server=http://lnd_groestlcoin:8080/;macaroonfilepath=/etc/lnd_groestlcoin/admin.macaroon;allowinsecure=true"
+      BTCPAY_GRSEXTERNALLNDGRPC: "server=/;macaroonfilepath=/etc/lnd_groestlcoin/admin.macaroon;macaroondirectorypath=/etc/lnd_groestlcoin"
+      BTCPAY_GRSEXTERNALLNDREST: "server=/lnd-rest/grs/;macaroonfilepath=/etc/lnd_groestlcoin/admin.macaroon;macaroondirectorypath=/etc/lnd_groestlcoin"
+      BTCPAY_GRSEXTERNALLNDSEEDBACKUP: "/etc/lnd_groestlcoin/data/chain/groestlcoin/${NBITCOIN_NETWORK:-regtest}/walletunlock.json"
+    volumes:
+      - "lnd_groestlcoin_datadir:/etc/lnd_groestlcoin"
+    links:
+      - lnd_groestlcoin
+
+  groestlcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        zmqpubrawtx=tcp://0.0.0.0:21441
+        zmqpubrawblock=tcp://0.0.0.0:21441
+        zmqpubrawtxlock=tcp://0.0.0.0:21441
+        zmqpubhashblock=tcp://0.0.0.0:21441
+    expose:
+      - "21441"
+
+  nginx:
+    links:
+      - "lnd_groestlcoin"
+    volumes:
+      - "lnd_groestlcoin_datadir:/lnd"
+  nginx-gen:
+    links:
+      - "lnd_groestlcoin"
+    volumes:
+      - "lnd_groestlcoin_datadir:/lnd"
+
+volumes:
+  lnd_groestlcoin_datadir:
