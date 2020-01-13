@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DockerGenerator
+﻿namespace DockerGenerator
 {
 	public class CryptoDefinition
 	{
@@ -12,5 +8,4 @@ namespace DockerGenerator
 		public string LNDFragment { get; set; }
 		public string EclairFragment { get; set; }
 	}
-}
 }

@@ -75,5 +75,12 @@
     "CLightningFragment": null,
     "LNDFragment": null,
     "EclairFragment": null
+  },
+  {
+    "Crypto": "lbtc",
+    "CryptoFragment": "liquid-bitcoin",
+    "CLightningFragment": null,
+    "LNDFragment": null,
+    "EclairFragment": null
   }
 ]
