@@ -29,6 +29,9 @@ services:
       DOGECOIN_EXTRA_ARGS: prune=50000
   monacoind:
     environment:
+      BITCOIN_EXTRA_ARGS: prune=50000  
+  elementsd_liquid:
+    environment:
       BITCOIN_EXTRA_ARGS: prune=50000
 exclusive:
   - pruning

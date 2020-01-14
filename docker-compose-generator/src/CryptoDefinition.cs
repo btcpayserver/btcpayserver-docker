@@ -99,6 +99,11 @@ namespace DockerGenerator
                 {
 	                Crypto = "xmr",
 	                CryptoFragment = "monero"
+                },
+                new CryptoDefinition()
+                {
+	                Crypto = "lbtc",
+	                CryptoFragment = "liquid"
                 }
             };
         }

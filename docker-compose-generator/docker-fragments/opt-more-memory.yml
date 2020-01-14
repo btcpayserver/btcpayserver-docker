@@ -30,5 +30,9 @@ services:
     environment:
       BITCOIN_EXTRA_ARGS: |
         dbcache=1024
+  elementsd_liquid:
+    environment:
+      ELEMENTS_EXTRA_ARGS: |
+        dbcache=1024
 exclusive:
   - memory
