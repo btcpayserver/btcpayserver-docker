@@ -349,6 +349,7 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"x86_64";
                     break;
                 case "bitcoin":
+                {
                     var tagNoRevision = image.Tag.Split('-').First();
                     dockerInfo.DockerFilePath = $"Bitcoin/{tagNoRevision}/linuxamd64.Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"Bitcoin/{tagNoRevision}/linuxarm32v7.Dockerfile";
@@ -357,6 +358,17 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"Bitcoin/{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
+                }
+                case "elements":
+                {
+                    var tagNoRevision = image.Tag.Split('-').First();
+                    dockerInfo.DockerFilePath = $"Elements/{tagNoRevision}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Elements/{tagNoRevision}/linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Elements/{tagNoRevision}/linuxarm64v8.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"Elements/{image.Tag}";
+                    break;
+                }
                 case "tor":
                     dockerInfo.DockerFilePath = $"Tor/{image.Tag}/linuxamd64.Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"Tor/{image.Tag}/linuxarm32v7.Dockerfile";
