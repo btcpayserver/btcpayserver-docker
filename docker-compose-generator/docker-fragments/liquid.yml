@@ -16,6 +16,7 @@ services:
           port=39388
           whitelist=0.0.0.0/0
           validatepegin=0
+          prune=5000
       expose:
         - "43782"
         - "39388"
