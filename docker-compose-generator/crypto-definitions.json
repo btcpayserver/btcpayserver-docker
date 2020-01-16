@@ -78,7 +78,7 @@
   },
   {
     "Crypto": "lbtc",
-    "CryptoFragment": "liquid-bitcoin",
+    "CryptoFragment": "liquid",
     "CLightningFragment": null,
     "LNDFragment": null,
     "EclairFragment": null
