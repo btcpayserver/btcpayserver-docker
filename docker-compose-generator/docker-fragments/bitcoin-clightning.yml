@@ -64,6 +64,8 @@ services:
       - "clightning_bitcoin_datadir:/root/.lightning"
       - "bitcoin_datadir:/etc/bitcoin"
       - "clightning_bitcoin_rest_datadir:/usr/src/app"
+    expose:
+      - "3001"
 
   bitcoin_rtl:
     image: shahanafarooqui/rtl:0.6.1
@@ -79,7 +81,6 @@ services:
       LOGOUT_REDIRECT_LINK: /server/services
     volumes:
       - "bitcoin_datadir:/etc/bitcoin"
-      - "clightning_bitcoin_datadir:/etc/clightning"
       - "clightning_bitcoin_rtl_datadir:/data"
       - "clightning_bitcoin_rest_datadir:/etc/clightning_bitcoin_rest"
     expose:
