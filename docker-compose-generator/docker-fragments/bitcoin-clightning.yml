@@ -79,8 +79,11 @@ services:
       RTL_SSO: 1
       RTL_COOKIE_PATH: /data/.cookie
       LOGOUT_REDIRECT_LINK: /server/services
+      NODE_AUTH_TYPE: DEFAULT
+      CONFIG_PATH: /etc/clightning
     volumes:
       - "bitcoin_datadir:/etc/bitcoin"
+      - "clightning_bitcoin_datadir:/etc/clightning"
       - "clightning_bitcoin_rtl_datadir:/data"
       - "clightning_bitcoin_rest_datadir:/etc/clightning_bitcoin_rest"
     expose:
