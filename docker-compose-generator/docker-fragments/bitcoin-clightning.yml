@@ -63,6 +63,7 @@ services:
     volumes:
       - "clightning_bitcoin_datadir:/root/lightning"
       - "bitcoin_datadir:/etc/bitcoin"
+      - "clightning_bitcoin_rest_datadir:/usr/src/app"
 
   bitcoin_rtl:
     image: shahanafarooqui/rtl:0.6.1
@@ -70,7 +71,7 @@ services:
     environment:
       LN_IMPLEMENTATION: CLT
       LN_SERVER_URL: http://clightning_bitcoin_rest:3001/v1
-      MACAROON_PATH: /usr/src/app/certs
+      MACAROON_PATH: /clightning_bitcoin_rest/certs
       RTL_CONFIG_PATH: /data/RTL.conf
       BITCOIND_CONFIG_PATH: /etc/bitcoin/bitcoin.conf
       RTL_SSO: 1
@@ -80,6 +81,7 @@ services:
       - "bitcoin_datadir:/etc/bitcoin"
       - "clightning_bitcoin_datadir:/etc/clightning"
       - "clightning_bitcoin_rtl_datadir:/data"
+      - "clightning_bitcoin_rest_datadir:/etc/clightning_bitcoin_rest"
     expose:
       - "3000"       
        
@@ -100,3 +102,5 @@ volumes:
   clightning_bitcoin_datadir:
   clightning_bitcoin_spark:
   clightning_bitcoin_charge:
+  clightning_bitcoin_rtl_datadir:
+  clightning_bitcoin_rest_datadir:
