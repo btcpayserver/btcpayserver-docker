@@ -71,7 +71,7 @@ services:
     environment:
       LN_IMPLEMENTATION: CLT
       LN_SERVER_URL: http://clightning_bitcoin_rest:3001/v1
-      MACAROON_PATH: /clightning_bitcoin_rest/certs
+      MACAROON_PATH: /etc/clightning_bitcoin_rest/certs
       RTL_CONFIG_PATH: /data/RTL.conf
       BITCOIND_CONFIG_PATH: /etc/bitcoin/bitcoin.conf
       RTL_SSO: 1
