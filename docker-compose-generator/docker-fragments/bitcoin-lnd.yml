@@ -38,7 +38,7 @@ services:
     links:
       - bitcoind
 
-  lnd_bitcoin_rtl:
+  bitcoin_rtl:
     image: shahanafarooqui/rtl:0.6.1
     restart: unless-stopped
     environment:

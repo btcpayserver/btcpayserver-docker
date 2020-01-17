@@ -34,9 +34,9 @@
 		proxy_pass http://lnd_bitcoin:8080/;
 	}
 		{{ end }}
-		{{ if (eq $serviceName "lnd_bitcoin_rtl") }}
+		{{ if (eq $serviceName "bitcoin_rtl") }}
 	location /rtl/ {
-		proxy_pass http://lnd_bitcoin_rtl:3000/rtl/;
+		proxy_pass http://bitcoin_rtl:3000/rtl/;
 	}
 		{{ end }}
 		{{ if (eq $serviceName "btcqbo") }}
