@@ -53,7 +53,7 @@ services:
      - "9737"
 
   clightning_bitcoin_rest:
-    image: kukks/clightning-rest:latest
+    image: kukks/clightning-rest:0.2.0
     restart: unless-stopped
     environment:
       PROTOCOL: "http"
