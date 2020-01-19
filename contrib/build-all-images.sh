@@ -541,6 +541,22 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.47" .
 cd - && cd ..
 
 
+# Build btcpayserver-configurator
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver-configurator/v0.0.17/Dockerfiles/amd64.Dockerfile
+DOCKERFILE="Dockerfiles/amd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver-configurator/v0.0.17/Dockerfiles/arm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfiles/arm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver-configurator/v0.0.17/Dockerfiles/arm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfiles/arm64v8.Dockerfile"
+echo "Building btcpayserver/btcpayserver-configurator:0.0.17"
+git clone https://github.com/btcpayserver/btcpayserver-configurator btcpayserver-configurator
+cd btcpayserver-configurator
+git checkout v0.0.17
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver-configurator:0.0.17" .
+cd - && cd ..
+
+
 # Build electrumx
 # https://raw.githubusercontent.com/lukechilds/docker-electrumx/master/Dockerfile
 DOCKERFILE="Dockerfile"
