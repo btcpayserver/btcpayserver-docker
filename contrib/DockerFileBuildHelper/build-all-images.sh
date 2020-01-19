@@ -109,6 +109,38 @@ docker build -f "$DOCKERFILE" -t "shesek/spark-wallet:0.2.9-standalone" .
 cd - && cd ..
 
 
+# Build clightning-rest
+# https://raw.githubusercontent.com/kukks/c-lightning-REST/v0.2.0/amd64.Dockerfile
+DOCKERFILE="amd64.Dockerfile"
+# https://raw.githubusercontent.com/kukks/c-lightning-REST/v0.2.0/arm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
+# https://raw.githubusercontent.com/kukks/c-lightning-REST/v0.2.0/arm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
+echo "Building kukks/clightning-rest:0.2.0"
+git clone https://github.com/kukks/c-lightning-REST clightning-rest
+cd clightning-rest
+git checkout v0.2.0
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "kukks/clightning-rest:0.2.0" .
+cd - && cd ..
+
+
+# Build rtl
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.6.3/Dockerfile
+DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.6.3/Dockerfile.arm32v7
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.arm32v7"
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.6.3/Dockerfile.arm64v8
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.arm64v8"
+echo "Building shahanafarooqui/rtl:0.6.3"
+git clone https://github.com/ShahanaFarooqui/RTL rtl
+cd rtl
+git checkout v0.6.3
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.6.3" .
+cd - && cd ..
+
+
 # Build eclair
 # https://raw.githubusercontent.com/ACINQ/eclair/btcpay/Dockerfile
 DOCKERFILE="Dockerfile"
@@ -138,18 +170,18 @@ cd - && cd ..
 
 
 # Build rtl
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.6.1/Dockerfile
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.5.4/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.6.1/Dockerfile.arm32v7
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.5.4/Dockerfile.arm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.6.1/Dockerfile.arm64v8
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.5.4/Dockerfile.arm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.6.1"
+echo "Building shahanafarooqui/rtl:0.5.4"
 git clone https://github.com/ShahanaFarooqui/RTL rtl
 cd rtl
-git checkout v0.6.1
+git checkout v0.5.4
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.6.1" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.5.4" .
 cd - && cd ..
 
 
