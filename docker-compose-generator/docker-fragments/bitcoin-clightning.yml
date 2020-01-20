@@ -92,11 +92,13 @@ services:
       BTCPAY_BTCEXTERNALSPARK: "server=/spark/btc/;cookiefile=/etc/clightning_bitcoin_spark/.cookie"
       BTCPAY_BTCEXTERNALCHARGE: "server=/lightning-charge/btc/;cookiefilepath=/etc/clightning_bitcoin_charge/.cookie"
       BTCPAY_BTCEXTERNALRTL: "server=/rtl/api/authenticate/cookie;cookiefile=/etc/clightning_bitcoin_rtl/.cookie"
+      BTCPAY_BTCEXTERNALCLIGHTNINGREST: "server=/clightning-rest/btc;macaroonfilepath=/etc/clightning_bitcoin_rest/certs/access.macaroon;macaroondirectorypath=/etc/clightning_bitcoin_rest/certs"
     volumes:
       - "clightning_bitcoin_datadir:/etc/clightning_bitcoin"
       - "clightning_bitcoin_spark:/etc/clightning_bitcoin_spark"
       - "clightning_bitcoin_charge:/etc/clightning_bitcoin_charge"
       - "clightning_bitcoin_rtl_datadir:/etc/clightning_bitcoin_rtl"
+      - "clightning_bitcoin_rest_datadir:/etc/clightning_bitcoin_rest"
     links:
       - clightning_bitcoin
 volumes:
