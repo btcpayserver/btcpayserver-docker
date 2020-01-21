@@ -34,3 +34,4 @@ required:
   - "btcpayserver"
 recommended:
   - "opt-add-tor"
+  - "opt-add-configurator"
