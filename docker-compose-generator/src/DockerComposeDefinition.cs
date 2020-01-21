@@ -50,9 +50,6 @@ namespace DockerGenerator
 			var recommendedFragments = new HashSet<FragmentName>();
 			var processedFragments = new HashSet<FragmentName>();
 			var unprocessedFragments = new HashSet<FragmentName>();
-			var services = new List<KeyValuePair<YamlNode, YamlNode>>();
-			var volumes = new List<KeyValuePair<YamlNode, YamlNode>>();
-			var networks = new List<KeyValuePair<YamlNode, YamlNode>>();
 			var exclusives = new List<(FragmentName FragmentName, string Exclusivity)>();
 			var incompatibles = new List<(FragmentName FragmentName, string Exclusivity)>();
 
@@ -74,19 +71,6 @@ namespace DockerGenerator
 			{
 				var doc = o.Item2;
 				var fragment = o.f;
-				if (doc.Children.ContainsKey("services") && doc.Children["services"] is YamlMappingNode fragmentServicesRoot)
-				{
-					services.AddRange(fragmentServicesRoot.Children);
-				}
-
-				if (doc.Children.ContainsKey("volumes") && doc.Children["volumes"] is YamlMappingNode fragmentVolumesRoot)
-				{
-					volumes.AddRange(fragmentVolumesRoot.Children);
-				}
-				if (doc.Children.ContainsKey("networks") && doc.Children["networks"] is YamlMappingNode fragmentNetworksRoot)
-				{
-					networks.AddRange(fragmentNetworksRoot.Children);
-				}
 				if (doc.Children.ContainsKey("exclusive") && doc.Children["exclusive"] is YamlSequenceNode fragmentExclusiveRoot)
 				{
 					foreach (var node in fragmentExclusiveRoot)
@@ -152,6 +136,27 @@ namespace DockerGenerator
 			{
 				var fragmentPath = GetFragmentLocation(fragment);
 				ConsoleUtils.WriteLine($"\t{fragment} not found in {fragmentPath}, ignoring...", ConsoleColor.Yellow);
+			}
+
+			var services = new List<KeyValuePair<YamlNode, YamlNode>>();
+			var volumes = new List<KeyValuePair<YamlNode, YamlNode>>();
+			var networks = new List<KeyValuePair<YamlNode, YamlNode>>();
+			foreach (var o in processedFragments.Select(f => (f, ParseDocument(f))).ToList())
+			{
+				var doc = o.Item2;
+				var fragment = o.f;
+				if (doc.Children.ContainsKey("services") && doc.Children["services"] is YamlMappingNode fragmentServicesRoot)
+				{
+					services.AddRange(fragmentServicesRoot.Children);
+				}
+				if (doc.Children.ContainsKey("volumes") && doc.Children["volumes"] is YamlMappingNode fragmentVolumesRoot)
+				{
+					volumes.AddRange(fragmentVolumesRoot.Children);
+				}
+				if (doc.Children.ContainsKey("networks") && doc.Children["networks"] is YamlMappingNode fragmentNetworksRoot)
+				{
+					networks.AddRange(fragmentNetworksRoot.Children);
+				}
 			}
 
 			YamlMappingNode output = new YamlMappingNode();
