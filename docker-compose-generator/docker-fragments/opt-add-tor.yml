@@ -26,6 +26,14 @@ services:
       - "tor_servicesdir:/var/lib/tor/hidden_services"
       - "tor_torrcdir:/usr/local/etc/tor/"
       
+  configurator:
+    environment:
+      HIDDENSERVICE_NAME: Configurator
+      HIDDENSERVICE_REVERSEPROXY: nginx
+    volumes:
+      - "tor_servicesdir:/var/lib/tor/hidden_services"
+      - "tor_torrcdir:/usr/local/etc/tor/"
+      
   woocommerce:
     environment:
       HIDDENSERVICE_NAME: WooCommerce
