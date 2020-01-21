@@ -1,5 +1,5 @@
 #
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1.100 AS builder
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1.101 AS builder
 WORKDIR /source
 COPY src/docker-compose-generator.csproj docker-compose-generator.csproj
 # Cache some dependencies
@@ -8,7 +8,7 @@ COPY src/. .
 RUN dotnet publish --output /app/ --configuration Release
 
 #
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1.0-buster-slim
+FROM mcr.microsoft.com/dotnet/core/runtime:3.1.1-buster-slim
 LABEL org.btcpayserver.image=docker-compose-generator
 WORKDIR /datadir
 WORKDIR /app
