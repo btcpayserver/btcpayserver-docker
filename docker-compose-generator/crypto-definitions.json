@@ -1,0 +1,86 @@
+[
+  {
+    "Crypto": "ltc",
+    "CryptoFragment": "litecoin",
+    "CLightningFragment": "litecoin-clightning",
+    "LNDFragment": "litecoin-lnd",
+    "EclairFragment": null
+  },
+  {
+    "Crypto": "btc",
+    "CryptoFragment": "bitcoin",
+    "CLightningFragment": "bitcoin-clightning",
+    "LNDFragment": "bitcoin-lnd",
+    "EclairFragment": "bitcoin-eclair"
+  },
+  {
+    "Crypto": "btx",
+    "CryptoFragment": "bitcore",
+    "CLightningFragment": null,
+    "LNDFragment": null,
+    "EclairFragment": null
+  },
+  {
+    "Crypto": "btg",
+    "CryptoFragment": "bgold",
+    "CLightningFragment": null,
+    "LNDFragment": "bgold-lnd",
+    "EclairFragment": null
+  },
+  {
+    "Crypto": "ftc",
+    "CryptoFragment": "feathercoin",
+    "CLightningFragment": null,
+    "LNDFragment": null,
+    "EclairFragment": null
+  },
+  {
+    "Crypto": "grs",
+    "CryptoFragment": "groestlcoin",
+    "CLightningFragment": "groestlcoin-clightning",
+    "LNDFragment": null,
+    "EclairFragment": null
+  },
+  {
+    "Crypto": "via",
+    "CryptoFragment": "viacoin",
+    "CLightningFragment": null,
+    "LNDFragment": null,
+    "EclairFragment": null
+  },
+  {
+    "Crypto": "dash",
+    "CryptoFragment": "dash",
+    "CLightningFragment": null,
+    "LNDFragment": null,
+    "EclairFragment": null
+  },
+  {
+    "Crypto": "doge",
+    "CryptoFragment": "dogecoin",
+    "CLightningFragment": null,
+    "LNDFragment": null,
+    "EclairFragment": null
+  },
+  {
+    "Crypto": "mona",
+    "CryptoFragment": "monacoin",
+    "CLightningFragment": null,
+    "LNDFragment": null,
+    "EclairFragment": null
+  },
+  {
+    "Crypto": "xmr",
+    "CryptoFragment": "monero",
+    "CLightningFragment": null,
+    "LNDFragment": null,
+    "EclairFragment": null
+  },
+  {
+    "Crypto": "lbtc",
+    "CryptoFragment": "liquid",
+    "CLightningFragment": null,
+    "LNDFragment": null,
+    "EclairFragment": null
+  }
+]

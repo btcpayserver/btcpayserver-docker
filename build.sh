@@ -16,6 +16,7 @@ fi
 # This script will run docker-compose-generator in a container to generate the yml files
 docker run -v "$(pwd)/Generated:/app/Generated" \
            -v "$(pwd)/docker-compose-generator/docker-fragments:/app/docker-fragments" \
+           -v "$(pwd)/docker-compose-generator/crypto-definitions.json:/app/crypto-definitions.json" \
            -e "BTCPAYGEN_CRYPTO1=$BTCPAYGEN_CRYPTO1" \
            -e "BTCPAYGEN_CRYPTO2=$BTCPAYGEN_CRYPTO2" \
            -e "BTCPAYGEN_CRYPTO3=$BTCPAYGEN_CRYPTO3" \
