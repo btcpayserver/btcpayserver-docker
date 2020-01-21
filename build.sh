@@ -9,7 +9,7 @@ then
 else
     set +e
     docker pull $BTCPAYGEN_DOCKER_IMAGE
-    docker rmi $(docker images btcpayserver/docker-compose-generator --format "{{.Tag}};{{.ID}}" | grep "^<none>" | cut -f2 -d ';')
+    docker rmi $(docker images btcpayserver/docker-compose-generator --format "{{.Tag}};{{.ID}}" | grep "^<none>" | cut -f2 -d ';') > /dev/null 2>&1
     set -e
 fi
 
