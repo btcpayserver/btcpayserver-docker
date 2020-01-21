@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  configurator:
+    restart: unless-stopped
+    image: btcpayserver/btcpayserver-configurator:0.0.18
+    environment:
+      CONFIGURATOR_SSHCONNECTION: "root@host.docker.internal"
+      CONFIGURATOR_SSHKEYFILE: ${BTCPAY_SSHKEYFILE}
+      CONFIGURATOR_SSHAUTHORIZEDKEYS: ${BTCPAY_SSHAUTHORIZEDKEYS}
+      CONFIGURATOR_ROOTPATH: "${BTCPAY_ROOTPATH:-/}configurator"
+      CONFIGURATOR_COOKIEFILEPATH: "/usr/local/etc/configurator/cookie"
+    volumes:
+      - "configurator_passworddir:/usr/local/etc/configurator"
+      - "$<BTCPAY_HOST_SSHAUTHORIZEDKEYS>?:${BTCPAY_SSHAUTHORIZEDKEYS}"
+      - "btcpay_datadir:/datadir"
+    expose:
+      - "80"
+  btcpayserver:
+    environment:
+      BTCPAY_EXTERNALCONFIGURATOR: "cookiefilepath=/usr/local/etc/configurator/cookie;server=/configurator"
+    volumes:
+      - "configurator_passworddir:/usr/local/etc/configurator"
+
+volumes:
+  configurator_passworddir:
