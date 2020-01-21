@@ -106,7 +106,9 @@ namespace DockerGenerator
 				unprocessedFragments.Remove(fragment);
 			}
 
-			foreach (var fragment in requiredFragments.Concat(recommendedFragments).Where(f => !processedFragments.Contains(f)))
+			foreach (var fragment in requiredFragments
+										.Concat(recommendedFragments)
+										.Where(f => !processedFragments.Contains(f) && !fragmentsNotFound.Contains(f)))
 			{
 				unprocessedFragments.Add(fragment);
 			}
