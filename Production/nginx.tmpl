@@ -57,6 +57,12 @@
 	location /lightning-charge/btc/ {
 		proxy_pass http://clightning_bitcoin_charge:9112/;
 	}
+	{{ end }}		
+	{{ if (eq $serviceName "clightning_bitcoin_rest") }}
+	location /clightning-rest/btc/ {
+	    rewrite ^/clightning-rest/btc/(.*) /$1 break;
+		proxy_pass http://clightning_bitcoin_rest:3001/;
+	}
 		{{ end }}
 		{{ if (eq $serviceName "clightning_groestlcoin_spark") }}
 	location /spark/grs/ {
