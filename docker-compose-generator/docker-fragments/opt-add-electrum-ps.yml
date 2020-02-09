@@ -4,7 +4,7 @@ services:
   bitcoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
-        rpcauth=eps:7a32cf23721f62944b9df273fb21f869$$39882086c2df8e9f91dcdbc34ec9bb515f6ee66cd31eefdab7268fe4f8945c3f
+        rpcauth=eps:3d1cff5ee81ddeb3ba94483150310e74$4626aeb95b2a2b066eac8833c1ad936f65cf7492aa836ec8f173ff65ac428a0e
   electrum_ps:
     image: docker.io/peleion/eps-docker
     restart: unless-stopped
