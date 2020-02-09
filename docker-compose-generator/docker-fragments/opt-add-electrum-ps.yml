@@ -17,7 +17,7 @@ services:
       - PORT=43782
       - RPC_USER=eps
       - RPC_PASSWORD=cmhKyeLSco35KVhecK3blYcHFx73xrJ1fOQtjtmiKks
-      - XPUB=zpub6n2jxdFyXhUcXF67dDzQvmkk7J955AxQonuT4rhMFXqNsReGpeDjtd2ZoNJe3BLrhBK9QyUJ2RmDowSC6eGgN2Xdwb78vJSGKugkiMHF5Eh
+      - XPUB=zpub_BLAHBLAHBLAH_Add_Yours_Here
 volumes:
   electrum_ps_datadir:
 incompatible:
