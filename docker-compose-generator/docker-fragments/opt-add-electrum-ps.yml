@@ -10,9 +10,13 @@ services:
     ports:
       - 50002:50002
     volumes:
-      - "electrum_ps_datadir:/data"
+      - "electrum_ps_datadir:/srv"
     environment:
-      - DAEMON_URL=eps:cmhKyeLSco35KVhecK3blYcHFx73xrJ1fOQtjtmiKks=@bitcoind:43782
+      - HOST = 'bitcoind'
+      - PORT = '43782'
+      - RPC_USER = 'eps'
+      - RPC_PASSWORD = 'cmhKyeLSco35KVhecK3blYcHFx73xrJ1fOQtjtmiKks'
+      - XPUB = 'xpub_blah_blah'
 volumes:
   electrum_ps_datadir:
 incompatible:
