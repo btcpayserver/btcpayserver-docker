@@ -1,4 +1,5 @@
-version: '2'
+version: "3"
+
 services:
   bitcoind:
     environment:
@@ -8,15 +9,15 @@ services:
     image: docker.io/peleion/eps
     restart: unless-stopped
     ports:
-      - 50002:50002
+      - "50002:50002"
     volumes:
       - "electrum_ps_datadir:/srv"
     environment:
-      - HOST='bitcoind'
-      - PORT='43782'
-      - RPC_USER='eps'
-      - RPC_PASSWORD='cmhKyeLSco35KVhecK3blYcHFx73xrJ1fOQtjtmiKks'
-      - XPUB='xpub_blah_blah_EDIT_THIS_WITH_YOURS'
+      - HOST=bitcoind
+      - PORT=43782
+      - RPC_USER=eps
+      - RPC_PASSWORD=cmhKyeLSco35KVhecK3blYcHFx73xrJ1fOQtjtmiKks
+      - XPUB=zpub6n2jxdFyXhUcXF67dDzQvmkk7J955AxQonuT4rhMFXqNsReGpeDjtd2ZoNJe3BLrhBK9QyUJ2RmDowSC6eGgN2Xdwb78vJSGKugkiMHF5Eh
 volumes:
   electrum_ps_datadir:
 incompatible:
