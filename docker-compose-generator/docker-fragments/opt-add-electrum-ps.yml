@@ -12,12 +12,13 @@ services:
     volumes:
       - "electrum_ps_datadir:/srv"
     environment:
-      - HOST = 'bitcoind'
-      - PORT = '43782'
-      - RPC_USER = 'eps'
-      - RPC_PASSWORD = 'cmhKyeLSco35KVhecK3blYcHFx73xrJ1fOQtjtmiKks'
-      - XPUB = 'xpub_blah_blah'
+      - HOST='bitcoind'
+      - PORT='43782'
+      - RPC_USER='eps'
+      - RPC_PASSWORD='cmhKyeLSco35KVhecK3blYcHFx73xrJ1fOQtjtmiKks'
+      - XPUB='xpub_blah_blah_EDIT_THIS_WITH_YOURS'
 volumes:
   electrum_ps_datadir:
 incompatible:
   - pruning
+  
