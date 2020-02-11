@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker exec -ti btcpayserver_lnd_bitcoingold lncli "$@"
+docker exec btcpayserver_lnd_bitcoingold lncli "$@"

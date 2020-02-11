@@ -1,1 +1,1 @@
-docker exec -ti btcpayserver_bgoldd bgold-cli -datadir="/data" $args
+docker exec btcpayserver_bgoldd bgold-cli -datadir="/data" $args

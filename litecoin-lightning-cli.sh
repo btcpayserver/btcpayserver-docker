@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker exec -ti btcpayserver_clightning_litecoin lightning-cli "$@"
+docker exec btcpayserver_clightning_litecoin lightning-cli "$@"

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker exec -ti btcpayserver_dashd dash-cli -datadir="/data" "$@"
+docker exec btcpayserver_dashd dash-cli -datadir="/data" "$@"

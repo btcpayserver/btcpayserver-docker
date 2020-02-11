@@ -1,1 +1,1 @@
-docker exec -ti btcpayserver_bitcoinplusd bitcoinplus-cli -datadir="/data" $args
+docker exec btcpayserver_bitcoinplusd bitcoinplus-cli -datadir="/data" $args
