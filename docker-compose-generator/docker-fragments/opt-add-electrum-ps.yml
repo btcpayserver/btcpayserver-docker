@@ -20,6 +20,4 @@ services:
       - XPUB=${BTCPAY_EPS_XPUB}
 volumes:
   electrum_ps_datadir:
-incompatible:
-  - pruning
   
