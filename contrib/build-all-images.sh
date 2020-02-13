@@ -142,14 +142,14 @@ cd - && cd ..
 
 
 # Build eclair
-# https://raw.githubusercontent.com/ACINQ/eclair/btcpay/Dockerfile
+# https://raw.githubusercontent.com/ACINQ/eclair/v0.3.3/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building acinq/eclair:btcpay"
+echo "Building acinq/eclair:v0.3.3"
 git clone https://github.com/ACINQ/eclair eclair
 cd eclair
-git checkout btcpay
+git checkout v0.3.3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "acinq/eclair:btcpay" .
+docker build -f "$DOCKERFILE" -t "acinq/eclair:v0.3.3" .
 cd - && cd ..
 
 

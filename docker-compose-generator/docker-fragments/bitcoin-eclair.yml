@@ -12,7 +12,7 @@ services:
     container_name: btcpayserver_eclair_bitcoin
     restart: unless-stopped
     stop_signal: SIGINT
-    image: acinq/eclair:btcpay
+    image: acinq/eclair:v0.3.3
     environment:
       PUBLIC_HOST: ${BTCPAY_HOST}
       JAVA_OPTS: |
