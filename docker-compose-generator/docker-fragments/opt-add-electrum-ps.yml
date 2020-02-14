@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  bitcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        rpcauth=eps:3d1cff5ee81ddeb3ba94483150310e74$$4626aeb95b2a2b066eac8833c1ad936f65cf7492aa836ec8f173ff65ac428a0e
+  electrum_ps:
+    image: docker.io/peleion/eps-docker
+    restart: unless-stopped
+    ports:
+      - "50002:50002"
+    volumes:
+      - "electrum_ps_datadir:/srv"
+    environment:
+      - HOST=bitcoind
+      - PORT=43782
+      - RPC_USER=eps
+      - RPC_PASSWORD=cmhKyeLSco35KVhecK3blYcHFx73xrJ1fOQtjtmiKks
+      - XPUB=${EPS_XPUB}
+volumes:
+  electrum_ps_datadir:
+  
