@@ -226,18 +226,18 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.157/amd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.158/amd64.Dockerfile
 DOCKERFILE="amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.157/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.158/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.157/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.158/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building btcpayserver/btcpayserver:1.0.3.157"
+echo "Building btcpayserver/btcpayserver:1.0.3.158"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.0.3.157
+git checkout v1.0.3.158
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.157" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.158" .
 cd - && cd ..
 
 
@@ -528,16 +528,18 @@ cd - && cd ..
 
 
 # Build btctransmuter
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.47/BtcTransmuter/Dockerfile.linuxamd64
-DOCKERFILE="BtcTransmuter/Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.47/BtcTransmuter/Dockerfile.linuxarm32v7
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="BtcTransmuter/Dockerfile.linuxarm32v7"
-echo "Building btcpayserver/btctransmuter:0.0.47"
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.49/Dockerfiles/amd64.Dockerfile
+DOCKERFILE="Dockerfiles/amd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.49/Dockerfiles/arm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfiles/arm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.49/Dockerfiles/arm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfiles/arm64v8.Dockerfile"
+echo "Building btcpayserver/btctransmuter:0.0.49"
 git clone https://github.com/btcpayserver/btctransmuter btctransmuter
 cd btctransmuter
-git checkout v0.0.47
+git checkout v0.0.49
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.47" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.49" .
 cd - && cd ..
 
 
@@ -554,6 +556,18 @@ cd btcpayserver-configurator
 git checkout v0.0.18
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver-configurator:0.0.18" .
+cd - && cd ..
+
+
+# Build peleion/eps-docker
+# https://raw.githubusercontent.com/peleion/eps-docker/master/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building docker.io/peleion/eps-docker:latest"
+git clone https://github.com/peleion/eps-docker peleion/eps-docker
+cd peleion/eps-docker
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "docker.io/peleion/eps-docker:latest" .
 cd - && cd ..
 
 

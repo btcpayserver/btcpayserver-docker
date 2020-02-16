@@ -232,6 +232,11 @@ namespace DockerFileBuildHelper
         retry:
             switch (name)
             {
+                case "peleion/eps-docker":
+                    dockerInfo.DockerFilePath = "Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/peleion/eps-docker";
+                    dockerInfo.GitRef = "master";
+                    break;
                 case "btglnd":
                     dockerInfo.DockerFilePath = "Dockerfile";
                     dockerInfo.GitLink = "https://github.com/vutov/lnd";
@@ -409,8 +414,9 @@ namespace DockerFileBuildHelper
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "btctransmuter":
-                    dockerInfo.DockerFilePath = "BtcTransmuter/Dockerfile.linuxamd64";
-                    dockerInfo.DockerFilePathARM32v7 = "BtcTransmuter/Dockerfile.linuxarm32v7";
+                    dockerInfo.DockerFilePath = "Dockerfiles/amd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "Dockerfiles/arm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "Dockerfiles/arm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/btctransmuter";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     dockerInfo.SupportedByUs = true;
