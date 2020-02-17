@@ -451,6 +451,4 @@ If you need to run on a different port, it's best to terminate SSL using another
 
 ## Can I offload HTTPS termination? 
 
-Yes. To offload SSL termination, just forward the requests to the port specified by `REVERSEPROXY_HTTP_PORT` and make sure you are setting the header `X-Forwarded-Proto: https` so BTC Pay Server can know the original request was HTTPS. If you forget this extra header, BTCPay Server will work, but it will believe the connection is insecure and display a warning message.
-
-Because you are offloading HTTPS, you won't need the built-in Let's Encrypt anymore and can exclude `nginx-https` by adding it to `BTCPAYGEN_EXCLUDE_FRAGMENTS`.
+Yes. Please [see the documentation](https://docs.btcpayserver.org/faq-and-common-issues/faq-deployment#can-i-use-an-existing-nginx-server-as-a-reverse-proxy-with-ssl-termination).
