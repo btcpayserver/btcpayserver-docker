@@ -10,14 +10,13 @@ services:
     restart: unless-stopped
     ports:
       - "50002:50002"
-    volumes:
-      - "electrum_ps_datadir:/data"
     environment:
+      READY_FILE: /root/.nbxplorer/btc_fully_synched
       EPS_CONFIG: |
         [master-public-keys]
         wallet = ${EPS_XPUB}
         [bitcoin-rpc]
-        host = btcoind
+        host = bitcoind
         port = 43782
         rpc_user = eps
         rpc_password = cmhKyeLSco35KVhecK3blYcHFx73xrJ1fOQtjtmiKks
@@ -32,6 +31,9 @@ services:
         broadcast_method = own-node
         ip_whitelist = *
         disable_mempool_fee_histogram = false
+    volumes:
+      - "electrum_ps_datadir:/data"
+      - "nbxplorer_datadir:/root/.nbxplorer"
 volumes:
   electrum_ps_datadir:
   
