@@ -6,18 +6,34 @@ services:
       BITCOIN_EXTRA_ARGS: |
         rpcauth=eps:3d1cff5ee81ddeb3ba94483150310e74$$4626aeb95b2a2b066eac8833c1ad936f65cf7492aa836ec8f173ff65ac428a0e
   electrum_ps:
-    image: docker.io/peleion/eps-docker
+    image: btcpayserver/eps:0.2.0
     restart: unless-stopped
     ports:
       - "50002:50002"
-    volumes:
-      - "electrum_ps_datadir:/srv"
     environment:
-      - HOST=bitcoind
-      - PORT=43782
-      - RPC_USER=eps
-      - RPC_PASSWORD=cmhKyeLSco35KVhecK3blYcHFx73xrJ1fOQtjtmiKks
-      - XPUB=${EPS_XPUB}
+      READY_FILE: /root/.nbxplorer/btc_fully_synched
+      EPS_CONFIG: |
+        [master-public-keys]
+        wallet = ${EPS_XPUB}
+        [bitcoin-rpc]
+        host = bitcoind
+        port = 43782
+        rpc_user = eps
+        rpc_password = cmhKyeLSco35KVhecK3blYcHFx73xrJ1fOQtjtmiKks
+        poll_interval_listening = 600
+        poll_interval_connected = 5
+        initial_import_count = 1000
+        gap_limit = 25
+        wallet_filename =
+        [electrum-server]
+        host = 0.0.0.0
+        port = 50002
+        broadcast_method = own-node
+        ip_whitelist = *
+        disable_mempool_fee_histogram = false
+    volumes:
+      - "electrum_ps_datadir:/data"
+      - "nbxplorer_datadir:/root/.nbxplorer"
 volumes:
   electrum_ps_datadir:
   

@@ -559,15 +559,19 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver-configurator:0.0.18"
 cd - && cd ..
 
 
-# Build peleion/eps-docker
-# https://raw.githubusercontent.com/peleion/eps-docker/master/Dockerfile
-DOCKERFILE="Dockerfile"
-echo "Building docker.io/peleion/eps-docker:latest"
-git clone https://github.com/peleion/eps-docker peleion/eps-docker
-cd peleion/eps-docker
-git checkout master
+# Build eps
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/EPS/0.2.0/EPS/0.2.0/linuxamd64.Dockerfile
+DOCKERFILE="EPS/0.2.0/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/EPS/0.2.0/EPS/0.2.0/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="EPS/0.2.0/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/EPS/0.2.0/EPS/0.2.0/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="EPS/0.2.0/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/eps:0.2.0"
+git clone https://github.com/btcpayserver/dockerfile-deps eps
+cd eps
+git checkout EPS/0.2.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "docker.io/peleion/eps-docker:latest" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/eps:0.2.0" .
 cd - && cd ..
 
 

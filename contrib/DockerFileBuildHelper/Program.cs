@@ -232,10 +232,13 @@ namespace DockerFileBuildHelper
         retry:
             switch (name)
             {
-                case "peleion/eps-docker":
-                    dockerInfo.DockerFilePath = "Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/peleion/eps-docker";
-                    dockerInfo.GitRef = "master";
+                case "eps":
+                    dockerInfo.DockerFilePath = $"EPS/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"EPS/{NoRevision(image.Tag)}/linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"EPS/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"EPS/{image.Tag}";
+                    dockerInfo.SupportedByUs = true;
                     break;
                 case "btglnd":
                     dockerInfo.DockerFilePath = "Dockerfile";
