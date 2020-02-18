@@ -147,6 +147,12 @@ services:
       - "tor_datadir:/home/tor/.tor"
       - "tor_servicesdir:/var/lib/tor/hidden_services"
 
+  electrum_ps:
+    environment:
+      HIDDENSERVICE_NAME: btc-electrum-ps
+      HIDDENSERVICE_PORT: 50002
+      HIDDENSERVICE_VIRTUAL_PORT: 50002
+
   electrumx:
     environment:
       HIDDENSERVICE_NAME: electrumx
