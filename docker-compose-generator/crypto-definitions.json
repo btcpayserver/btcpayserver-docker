@@ -38,8 +38,8 @@
     "Crypto": "grs",
     "CryptoFragment": "groestlcoin",
     "CLightningFragment": "groestlcoin-clightning",
-    "LNDFragment": null,
-    "EclairFragment": null
+    "LNDFragment": "groestlcoin-lnd",
+    "EclairFragment": "groestlcoin-eclair"
   },
   {
     "Crypto": "via",

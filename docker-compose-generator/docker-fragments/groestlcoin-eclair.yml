@@ -1,0 +1,55 @@
+version: "3"
+
+services:
+  groestlcoind:
+    environment:
+      GROESTLCOIN_EXTRA_ARGS: |
+        zmqpubrawblock=tcp://0.0.0.0:21441
+        zmqpubrawtx=tcp://0.0.0.0:21441
+        rpcauth=eclair:d3a244200d5c946f6bef48e6583ec979$$215049513aef33245dfec8ff3ab5e749458fde51ede931dec04c767c0732d468
+        txindex=1
+  eclair_groestlcoin:
+    container_name: btcpayserver_eclair_groestlcoin
+    restart: unless-stopped
+    stop_signal: SIGINT
+    image: groestlcoin/eclair:v0.3.3
+    environment:
+      PUBLIC_HOST: ${BTCPAY_HOST}
+      JAVA_OPTS: |
+        -Xmx256m
+        -Declair.printToConsole
+        -Declair.headless
+        -Declair.chain=${NBITCOIN_NETWORK:-regtest}
+        -Declair.server.binding-ip=0.0.0.0
+        -Declair.server.public-ips.0=${BTCPAY_HOST}
+        -Declair.server.port=9735
+        -Declair.api.enabled=true
+        -Declair.api.binding-ip=0.0.0.0
+        -Declair.api.port=8080
+        -Declair.node-alias=${LIGHTNING_ALIAS}
+        -Declair.api.password=DwubwWsoo3
+        -Declair.bitcoind.host=groestlcoind
+        -Declair.bitcoind.rpcport=43782
+        -Declair.bitcoind.rpcuser=eclair
+        -Declair.bitcoind.rpcpassword=sFLjcg99Puh4k3CAZCQkLvC-fcoFUFRyKwKcXQKa7dw=
+        -Declair.bitcoind.zmqblock=tcp://groestlcoind:21441
+        -Declair.bitcoind.zmqtx=tcp://groestlcoind:21441
+    expose:
+      - "9735" # server port
+      - "8080" # api port
+    volumes:
+      - "groestlcoin_datadir:/etc/groestlcoin"
+      - "eclair_groestlcoin_datadir:/data"
+    links:
+      - groestlcoind
+  btcpayserver:
+    environment:
+      BTCPAY_GRSLIGHTNING: "type=eclair;server=http://eclair_groestlcoin:8080;password=DwubwWsoo3"
+    volumes:
+      - "eclair_groestlcoin_datadir:/etc/eclair_groestlcoin"
+    links:
+      - eclair_groestlcoin
+volumes:
+  eclair_groestlcoin_datadir:
+incompatible:
+  - pruning
