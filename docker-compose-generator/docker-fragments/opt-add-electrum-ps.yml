@@ -13,8 +13,6 @@ services:
     environment:
       READY_FILE: /root/.nbxplorer/btc_fully_synched
       EPS_CONFIG: |
-        [master-public-keys]
-        wallet = ${EPS_XPUB}
         [bitcoin-rpc]
         host = bitcoind
         port = 43782
@@ -31,6 +29,8 @@ services:
         broadcast_method = own-node
         ip_whitelist = *
         disable_mempool_fee_histogram = false
+        [master-public-keys]
+        wallet = ${EPS_XPUB}
     volumes:
       - "electrum_ps_datadir:/data"
       - "nbxplorer_datadir:/root/.nbxplorer"
