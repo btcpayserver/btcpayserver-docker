@@ -78,14 +78,15 @@ exit
 * Make sure BTCPay starts at reboot via upstart or systemd
 * Setup environment variables to use BTCPay utilities
 * Add BTCPay utilities in /usr/bin
-* Start BTCPay
+* Start BTCPay Server
 
-You can read [the article](https://medium.com/@BtcpayServer/hosting-btcpay-server-for-cheap-2b27761fdb9d) for step by step instructions.
+Video below guides you step by step on how to set up BTCPay Server on a VPS with Docker.
+
+[![](https://raw.githubusercontent.com/btcpayserver/btcpayserver-doc/master/img/thumbnails/BTCPayDockerDeploymentVPS.png)](https://www.youtube.com/watch?v=x6hqTFgHqhA)
 
 Check out this video if you're interested in learning more about setting up [BTCPay with Docker Compose](https://www.youtube.com/playlist?list=PLH4m2oS2ratfaprAFx9E3ZDjwxNKvCk4e).
 
 [![Docker automated build](https://img.shields.io/docker/automated/btcpayserver/btcpayserver.svg)](https://hub.docker.com/r/btcpayserver/btcpayserver/)
-
 
 # Environment variables
 
@@ -119,8 +120,6 @@ Additionally, there are specific environment variables for some addons:
 * `LIBREPATRON_HOST`: If libre patron is activated with [opt-add-librepatron](docker-compose-generator/docker-fragments/opt-add-librepatron.yml), the hostname of your libre patron website (eg. `librepatron.example.com`)
 * `WOOCOMMERCE_HOST`: If woocommerce is activated with [opt-add-woocommerce](docker-compose-generator/docker-fragments/opt-add-woocommerce.yml), the hostname of your woocommerce website (eg. `store.example.com`)
 * `EPS_XPUB`: If Electrum Personal Server (EPS) is activated with [opt-add-electrum-ps](docker-compose-generator/docker-fragments/opt-add-electrum-ps.yml), you must set the Extended Public Key (XPUB, YPUB or ZPUB) of the wallet you want to use, before first run of the EPS server.  If you accidently start EPS without this, it will not work properly as the model of EPS is to monitor only specified wallets.
-
-
 
 # Tooling
 
