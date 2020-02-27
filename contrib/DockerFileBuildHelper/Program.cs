@@ -232,6 +232,13 @@ namespace DockerFileBuildHelper
         retry:
             switch (name)
             {
+                case "pihole":
+                    dockerInfo.GitLink = "https://github.com/pi-hole/docker-pi-hole";
+                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile_armhf";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile_arm64";
+                    dockerInfo.GitRef = $"{image.Tag}";
+                    dockerInfo.SupportedByUs = true;
+                    break;
                 case "eps":
                     dockerInfo.DockerFilePath = $"EPS/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"EPS/{NoRevision(image.Tag)}/linuxarm32v7.Dockerfile";

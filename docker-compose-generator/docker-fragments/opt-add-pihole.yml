@@ -1,0 +1,23 @@
+version: '3'
+services:
+    pihole:
+        restart: unless-stopped
+        container_name: pihole
+        image: pihole/pihole:v4.4
+        environment:
+            ServerIP: "${PIHOLE_SERVERIP:-127.0.0.1}"
+            VIRTUAL_HOST: pi.hole
+            VIRTUAL_HOST_NAME: "pihole"
+        expose:
+            - "53"
+            - "67"
+            - "80"
+            - "443"
+        ports:
+            - "53:53/udp"
+        volumes:
+            - "./pihole/02-lan.conf:/etc/dnsmasq.d/02-lan.conf:ro"
+            - "./pihole/resolv.conf:/etc/resolv.conf:ro"
+            - "pihole_datadir:/etc/pihole"
+volumes:
+    pihole_datadir:

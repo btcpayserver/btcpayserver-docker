@@ -282,38 +282,38 @@ cd - && cd ..
 
 
 # Build lightning
-# https://raw.githubusercontent.com/Groestlcoin/lightning/v0.8.0/Dockerfile
+# https://raw.githubusercontent.com/Groestlcoin/lightning/v0.8.1/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building groestlcoin/lightning:v0.8.0"
+echo "Building groestlcoin/lightning:v0.8.1"
 git clone https://github.com/Groestlcoin/lightning lightning
 cd lightning
-git checkout v0.8.0
+git checkout v0.8.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "groestlcoin/lightning:v0.8.0" .
+docker build -f "$DOCKERFILE" -t "groestlcoin/lightning:v0.8.1" .
 cd - && cd ..
 
 
 # Build groestlcoin-lightning-charge
-# https://raw.githubusercontent.com/Groestlcoin/groestlcoin-lightning-charge/v0.4.11/Dockerfile
+# https://raw.githubusercontent.com/Groestlcoin/groestlcoin-lightning-charge/v0.4.16/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building groestlcoin/groestlcoin-lightning-charge:version-0.4.11"
+echo "Building groestlcoin/groestlcoin-lightning-charge:version-0.4.16"
 git clone https://github.com/Groestlcoin/groestlcoin-lightning-charge groestlcoin-lightning-charge
 cd groestlcoin-lightning-charge
-git checkout v0.4.11
+git checkout v0.4.16
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "groestlcoin/groestlcoin-lightning-charge:version-0.4.11" .
+docker build -f "$DOCKERFILE" -t "groestlcoin/groestlcoin-lightning-charge:version-0.4.16" .
 cd - && cd ..
 
 
 # Build groestlcoin-spark
-# https://raw.githubusercontent.com/Groestlcoin/groestlcoin-spark/v0.2.9/Dockerfile
+# https://raw.githubusercontent.com/Groestlcoin/groestlcoin-spark/v0.2.12/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building groestlcoin/groestlcoin-spark:version-0.2.9"
+echo "Building groestlcoin/groestlcoin-spark:version-0.2.12"
 git clone https://github.com/Groestlcoin/groestlcoin-spark groestlcoin-spark
 cd groestlcoin-spark
-git checkout v0.2.9
+git checkout v0.2.12
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "groestlcoin/groestlcoin-spark:version-0.2.9" .
+docker build -f "$DOCKERFILE" -t "groestlcoin/groestlcoin-spark:version-0.2.12" .
 cd - && cd ..
 
 
@@ -609,6 +609,23 @@ git checkout patron.22
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "jvandrew/isso:atron.22" .
 cd - && cd ..
+
+
+# Build pihole
+DOCKERFILE=""
+# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/v4.4/Dockerfile_armhf
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile_armhf"
+# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/v4.4/Dockerfile_arm64
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile_arm64"
+if [[ "$DOCKERFILE" ]]; then
+	echo "Building pihole/pihole:v4.4"
+	git clone https://github.com/pi-hole/docker-pi-hole pihole
+	cd pihole
+	git checkout v4.4
+	cd "$(dirname $DOCKERFILE)"
+	docker build -f "$DOCKERFILE" -t "pihole/pihole:v4.4" .
+	cd - && cd ..
+fi
 
 
 # Build docker-gen
