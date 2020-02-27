@@ -44,6 +44,7 @@ services:
     environment:
       LND_SERVER_URL: http://lnd_bitcoin:8080/v1
       MACAROON_PATH: /etc/lnd
+      RTL_CONFIG_PATH: /data/
       LND_CONFIG_PATH: /etc/lnd/lnd.conf
       BITCOIND_CONFIG_PATH: /etc/bitcoin/bitcoin.conf
       RTL_SSO: 1
