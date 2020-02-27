@@ -72,6 +72,7 @@ services:
     restart: unless-stopped
     environment:
       LN_IMPLEMENTATION: CLT
+      CONFIG_PATH: /root/.lightning/config
       LN_SERVER_URL: http://clightning_bitcoin_rest:3001/v1
       MACAROON_PATH: /etc/clightning_bitcoin_rest/certs
       RTL_CONFIG_PATH: /data/
