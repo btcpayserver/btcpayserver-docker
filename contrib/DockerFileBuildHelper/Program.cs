@@ -234,6 +234,7 @@ namespace DockerFileBuildHelper
             {
                 case "pihole":
                     dockerInfo.GitLink = "https://github.com/pi-hole/docker-pi-hole";
+                    dockerInfo.DockerFilePath = $"Dockerfile_amd64";
                     dockerInfo.DockerFilePathARM32v7 = $"Dockerfile_armhf";
                     dockerInfo.DockerFilePathARM64v8 = $"Dockerfile_arm64";
                     dockerInfo.GitRef = $"{image.Tag}";

@@ -612,20 +612,19 @@ cd - && cd ..
 
 
 # Build pihole
-DOCKERFILE=""
+# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/v4.4/Dockerfile_amd64
+DOCKERFILE="Dockerfile_amd64"
 # https://raw.githubusercontent.com/pi-hole/docker-pi-hole/v4.4/Dockerfile_armhf
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile_armhf"
 # https://raw.githubusercontent.com/pi-hole/docker-pi-hole/v4.4/Dockerfile_arm64
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile_arm64"
-if [[ "$DOCKERFILE" ]]; then
-	echo "Building pihole/pihole:v4.4"
-	git clone https://github.com/pi-hole/docker-pi-hole pihole
-	cd pihole
-	git checkout v4.4
-	cd "$(dirname $DOCKERFILE)"
-	docker build -f "$DOCKERFILE" -t "pihole/pihole:v4.4" .
-	cd - && cd ..
-fi
+echo "Building pihole/pihole:v4.4"
+git clone https://github.com/pi-hole/docker-pi-hole pihole
+cd pihole
+git checkout v4.4
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "pihole/pihole:v4.4" .
+cd - && cd ..
 
 
 # Build docker-gen
