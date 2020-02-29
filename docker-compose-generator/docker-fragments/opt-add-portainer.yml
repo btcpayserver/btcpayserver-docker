@@ -8,8 +8,6 @@ services:
     command: -H unix:///var/run/docker.sock
     expose:
       - "8000"
-    links:
-      - redis
   btcpayserver:
     environment:
       BTCPAY_EXTERNALSERVICES: "Portainer Docker UI:portainer;"
