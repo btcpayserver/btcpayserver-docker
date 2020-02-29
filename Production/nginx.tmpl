@@ -74,6 +74,11 @@
 		proxy_pass http://clightning_groestlcoin_charge:9112/;
 	}
 		{{ end }}
+		{{ if (eq $serviceName "portainer") }}
+        	location /portainer/ {
+        		proxy_pass http://portainer:9000/;
+        	}
+        {{ end }}
 		
 		{{ if (eq $serviceName "btctransmuter") }}
 	location /btctransmuter/ {

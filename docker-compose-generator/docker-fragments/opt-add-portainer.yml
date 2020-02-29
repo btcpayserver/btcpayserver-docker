@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  portainer:
+    image: portainer/portainer:1.23.1
+    restart: unless-stopped
+    container_name: portainer
+    command: -H unix:///var/run/docker.sock
+    environment:
+
+    expose:
+      - "8001"
+    links:
+      - redis
+  btcpayserver:
+    environment:
+      BTCPAY_EXTERNALSERVICES: "Portainer Docker UI:portainer;"
+volumes:
+  portainer_datadir:
