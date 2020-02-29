@@ -6,10 +6,8 @@ services:
     restart: unless-stopped
     container_name: portainer
     command: -H unix:///var/run/docker.sock
-    environment:
-
     expose:
-      - "8001"
+      - "8000"
     links:
       - redis
   btcpayserver:
