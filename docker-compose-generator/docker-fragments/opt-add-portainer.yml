@@ -8,6 +8,9 @@ services:
     command: -H unix:///var/run/docker.sock
     expose:
       - "8000"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "portainer_datadir:/data"
   btcpayserver:
     environment:
       BTCPAY_EXTERNALSERVICES: "Portainer Docker UI:portainer;"
