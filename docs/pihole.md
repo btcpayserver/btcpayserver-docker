@@ -25,7 +25,7 @@ From now everytime a device will connect to your local network, they will automa
 ## Using the dashboard
 
 Pi-Hole comes with a very nice admin dashboard to monitor its activity.
-It is disabled by default. To enable it, you need to configure `PIHOLE_IPSERVER` to the IP of your server:
+It is disabled by default. To enable it, you need to configure `PIHOLE_SERVERIP` to the IP of your server:
 
 ```bash
 PIHOLE_SERVERIP="192.168.1.2"
