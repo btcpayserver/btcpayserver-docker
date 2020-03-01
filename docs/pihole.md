@@ -28,7 +28,7 @@ Pi-Hole comes with a very nice admin dashboard to monitor its activity.
 It is disabled by default. To enable it, you need to configure `PIHOLE_IPSERVER` to the IP of your server:
 
 ```bash
-PIHOLE_IPSERVER="192.168.1.2"
+PIHOLE_SERVERIP="192.168.1.2"
 . btcpay-setup.sh -i
 ```
 
