@@ -226,18 +226,18 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.161/amd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.162/amd64.Dockerfile
 DOCKERFILE="amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.161/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.162/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.161/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.3.162/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building btcpayserver/btcpayserver:1.0.3.161"
+echo "Building btcpayserver/btcpayserver:1.0.3.162"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.0.3.161
+git checkout v1.0.3.162
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.161" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.3.162" .
 cd - && cd ..
 
 
@@ -528,18 +528,18 @@ cd - && cd ..
 
 
 # Build btctransmuter
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.51/Dockerfiles/amd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.52/Dockerfiles/amd64.Dockerfile
 DOCKERFILE="Dockerfiles/amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.51/Dockerfiles/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.52/Dockerfiles/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfiles/arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.51/Dockerfiles/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.52/Dockerfiles/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfiles/arm64v8.Dockerfile"
-echo "Building btcpayserver/btctransmuter:0.0.51"
+echo "Building btcpayserver/btctransmuter:0.0.52"
 git clone https://github.com/btcpayserver/btctransmuter btctransmuter
 cd btctransmuter
-git checkout v0.0.51
+git checkout v0.0.52
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.51" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.52" .
 cd - && cd ..
 
 
