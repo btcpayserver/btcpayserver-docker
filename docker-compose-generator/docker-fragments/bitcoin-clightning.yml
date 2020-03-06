@@ -68,14 +68,13 @@ services:
       - "3001"
 
   bitcoin_rtl:
-    image: shahanafarooqui/rtl:0.6.7
+    image: shahanafarooqui/rtl:0.6.3
     restart: unless-stopped
     environment:
       LN_IMPLEMENTATION: CLT
-      CONFIG_PATH: /root/.lightning/config
       LN_SERVER_URL: http://clightning_bitcoin_rest:3001/v1
       MACAROON_PATH: /etc/clightning_bitcoin_rest/certs
-      RTL_CONFIG_PATH: /data/
+      RTL_CONFIG_PATH: /data/RTL.conf
       BITCOIND_CONFIG_PATH: /etc/bitcoin/bitcoin.conf
       RTL_SSO: 1
       RTL_COOKIE_PATH: /data/.cookie
