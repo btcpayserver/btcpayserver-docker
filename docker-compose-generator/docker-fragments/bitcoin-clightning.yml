@@ -26,6 +26,7 @@ services:
   clightning_bitcoin_charge:
     image: shesek/lightning-charge:0.4.16-standalone
     restart: unless-stopped
+    stop_signal: SIGKILL
     environment:
       NETWORK: ${NBITCOIN_NETWORK:-regtest}
       COOKIE_FILE: /data/.cookie
