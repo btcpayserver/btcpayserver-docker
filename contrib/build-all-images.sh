@@ -317,6 +317,18 @@ docker build -f "$DOCKERFILE" -t "groestlcoin/groestlcoin-spark:version-0.2.12" 
 cd - && cd ..
 
 
+# Build eclair
+# https://raw.githubusercontent.com/Groestlcoin/eclair/v0.3.3/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building groestlcoin/eclair:v0.3.3"
+git clone https://github.com/Groestlcoin/eclair eclair
+cd eclair
+git checkout v0.3.3
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "groestlcoin/eclair:v0.3.3" .
+cd - && cd ..
+
+
 # Build lnd
 # https://raw.githubusercontent.com/Groestlcoin/lnd/v0.8.2-grs/Dockerfile
 DOCKERFILE="Dockerfile"
@@ -765,5 +777,3 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
-
-
