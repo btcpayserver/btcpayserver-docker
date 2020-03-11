@@ -54,7 +54,7 @@ services:
      - "9737"
 
   clightning_bitcoin_rest:
-    image: saubyk/c-lightning-rest:0.2.2
+    image: saubyk/c-lightning-rest:0.2.1
     restart: unless-stopped
     environment:
       PROTOCOL: "http"
