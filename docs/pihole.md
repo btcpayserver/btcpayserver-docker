@@ -52,15 +52,6 @@ Then running again
 docker logs pihole | grep random
 ```
 
-## Make pi-hole the eafult host for the Reverse Proxy Server
-
-As per here: https://github.com/pi-hole/docker-pi-hole#tips-and-tricks adding this will make the experience even more user firendly, blocking more ads.  This will mean, when you visit port 80 with just your IP (eg. 192.168.1.2 etc) for pi-hole, pihole will show as the deafult page.
-
-```bash
-REVERSEPROXY_DEFAULT_HOST="pi.hole"
-. btcpay-setup.sh -i
-```
-
 ## Adding custom entry to pi-hole dns
 
 You can easily add your local domains to pi-hole.
