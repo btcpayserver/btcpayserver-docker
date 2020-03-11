@@ -20,15 +20,16 @@ BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-pihole"
 3. If your server has a firewall, make sure it allow incoming traffic to port `53 (UDP)`.
 4. Configure your home router DHCP server to use `192.168.1.2`
 
+
 From now everytime a device will connect to your local network, they will automatically use pi-hole as a DNS server. Advertisements will go to a black hole for all devices.
 
 ## Using the dashboard
 
 Pi-Hole comes with a very nice admin dashboard to monitor its activity.
-It is disabled by default. To enable it, you need to configure `PIHOLE_IPSERVER` to the IP of your server:
+It is disabled by default. To enable it, you need to configure `PIHOLE_SERVERIP` to the IP of your server:
 
 ```bash
-PIHOLE_IPSERVER="192.168.1.2"
+PIHOLE_SERVERIP="192.168.1.2"
 . btcpay-setup.sh -i
 ```
 
@@ -49,6 +50,15 @@ docker restart pihole
 Then running again
 ```bash
 docker logs pihole | grep random
+```
+
+## Make pi-hole the eafult host for the Reverse Proxy Server
+
+As per here: https://github.com/pi-hole/docker-pi-hole#tips-and-tricks adding this will make the experience even more user firendly, blocking more ads.  This will mean, when you visit port 80 with just your IP (eg. 192.168.1.2 etc) for pi-hole, pihole will show as the deafult page.
+
+```bash
+REVERSEPROXY_DEFAULT_HOST="pi.hole"
+. btcpay-setup.sh -i
 ```
 
 ## Adding custom entry to pi-hole dns
