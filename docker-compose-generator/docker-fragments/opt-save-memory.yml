@@ -7,6 +7,10 @@ services:
       BITCOIN_EXTRA_ARGS: |
         dbcache=50
         maxmempool=50
+  electrumx:
+    environment:
+      - CACHE_MB=50
+      - MAX_SESSIONS=100
   bgoldd:
     environment:
       BITCOIN_EXTRA_ARGS: |
