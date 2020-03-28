@@ -44,7 +44,9 @@ First, make sure you have a domain name pointing to your host (CNAME), with port
 
 Let's assume your domain is `btcpay.EXAMPLE.com`.
 
-The setup below assumes you want to support Bitcoin, c-lightning, HTTPS automatically configured by Nginx. It also enables node pruning, which you can [modify](#generated-docker-compose) or ignore if you have enough disk space for a full node.
+The setup below assumes you want to support Bitcoin, c-lightning, HTTPS automatically configured by Nginx. It also enables node pruning, which you can [modify](#generated-docker-compose) or ignore if you have enough disk space for a full node. Finally, your domain is `btcpay.EXAMPLE.com` should reflect your actual domain name.
+
+[Enviroment variables](#environment-variables) can be tailored to your needs. Some variables require additional storage space.
 
 ```bash
 # Login as root
