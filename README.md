@@ -1,6 +1,6 @@
 [![CircleCI](https://circleci.com/gh/btcpayserver/btcpayserver-docker.svg?style=svg)](https://circleci.com/gh/btcpayserver/btcpayserver-docker)
 
-#### Start accepting Bitcoin today with BTCPayServer! This guide will walk you through the installation.
+#### Start accepting Bitcoin today with BTCPay Server! This guide will walk you through the installation.
 
 # Introduction
 
@@ -36,15 +36,17 @@ Here is a presentation of the global architecture at Advancing Bitcoin conferenc
 
 # Full installation (for technical users)
 
-You can also install BTCPayServer on your own machine or VPS instance.
+You can also install BTCPay Server on your own machine or VPS instance.
 
 The officially supported setup is driven by Docker (and Docker-Compose).
 
-First, make sure you have a domain name pointing to your host (CNAME), with ports `443` and `80` externally accessible (and perhaps additional ports like `9735` and `9736` for Bitcoin and Litecoin lightning). Otherwise, you will have to set it manually by running `changedomain.sh`.
+First, make sure you have a domain name pointing to your host `A record`, with ports `443` and `80` externally accessible. For Lightning Network, port `9735` is required (`9736` if you use Litecoin Lightning). Otherwise, you will have to set a domain manually by running `changedomain.sh`.
 
-Let's assume it is `btcpay.EXAMPLE.com`.
+Let's assume your domain is `btcpay.EXAMPLE.com`.
 
-If you want to support Litecoin, Bitcoin, and C-Lightning, and want HTTPS automatically configured by Nginx:
+The setup below assumes you want to support Bitcoin, c-lightning, HTTPS automatically configured by Nginx. It also enables node pruning, which you can [modify](#generated-docker-compose) or ignore if you have enough disk space for a full node. Finally, your domain is `btcpay.EXAMPLE.com` should reflect your actual domain name.
+
+[Enviroment variables](#environment-variables) can be tailored to your needs. Some variables require additional storage space.
 
 ```bash
 # Login as root
@@ -62,7 +64,7 @@ cd btcpayserver-docker
 export BTCPAY_HOST="btcpay.EXAMPLE.com"
 export NBITCOIN_NETWORK="mainnet"
 export BTCPAYGEN_CRYPTO1="btc"
-export BTCPAYGEN_CRYPTO2="ltc"
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage-s"
 export BTCPAYGEN_REVERSEPROXY="nginx"
 export BTCPAYGEN_LIGHTNING="clightning"
 export BTCPAY_ENABLE_SSH=true
