@@ -64,7 +64,6 @@ services:
       BTCPAY_BTCEXTERNALLNDGRPC: "server=/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon;macaroondirectorypath=/etc/lnd_bitcoin"
       BTCPAY_BTCEXTERNALLNDREST: "server=/lnd-rest/btc/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon;macaroondirectorypath=/etc/lnd_bitcoin"
       BTCPAY_BTCEXTERNALLNDSEEDBACKUP: "/etc/lnd_bitcoin/data/chain/bitcoin/${NBITCOIN_NETWORK:-regtest}/walletunlock.json"
-      BTCPAY_EXTERNALSERVICES: "Thunderhub:thub;"
     volumes:
       - "lnd_bitcoin_datadir:/etc/lnd_bitcoin"
       - "lnd_bitcoin_rtl_datadir:/etc/lnd_bitcoin_rtl"
