@@ -639,6 +639,18 @@ docker build -f "$DOCKERFILE" -t "pihole/pihole:v4.4" .
 cd - && cd ..
 
 
+# Build thunderhub
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.3.5/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building apotdevin/thunderhub:v0.3.5"
+git clone https://github.com/apotdevin/thunderhub thunderhub
+cd thunderhub
+git checkout v0.3.5
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:v0.3.5" .
+cd - && cd ..
+
+
 # Build docker-gen
 # https://raw.githubusercontent.com/btcpayserver/docker-gen/v0.7.7/linuxamd64.Dockerfile
 DOCKERFILE="linuxamd64.Dockerfile"
