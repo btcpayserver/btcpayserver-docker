@@ -1,0 +1,12 @@
+version: "3"
+services:
+    bitcoin_thub:
+        image: apotdevin/thunderhub:v0.3.5
+        restart: unless-stopped
+        environment:
+            BASE_PATH: "/thub"
+            HODL_KEY: "XQ86AOqw7Of8qMDql901mcZkuHL2nRel5FA9H2Ie4rTLeBKn0VlO5GuXvdVRogWrDOuH5V0E51Qxy9Bo"
+        expose:
+            - "3000"
+        required:
+            - "bitcoin-lnd"
