@@ -544,6 +544,12 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"v{image.Tag.Split('-')[0]}";
                     dockerInfo.SupportedByUs = true;
                     break;
+                case "thunderhub":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/apotdevin/thunderhub";
+                    dockerInfo.GitRef = $"{image.Tag.Split('-')[0]}";
+                    dockerInfo.SupportedByUs = false;
+                    break;
                 default:
                     if (firstTry)
                     {
