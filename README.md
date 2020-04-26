@@ -174,7 +174,7 @@ You can also create your own [custom fragments](#how-can-i-customize-the-generat
 If you want to add an option to `BTCPAYGEN_ADDITIONAL_FRAGMENTS` and re-configure your install:
 ```bash
 export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-lnd-autopilot"
-. btcpay-setup.sh -i
+. ./btcpay-setup.sh -i
 ```
 
 For example, if you want `btc` and `ltc` support with `nginx` and `clightning` inside `Generated/docker-compose.custom.yml`:
