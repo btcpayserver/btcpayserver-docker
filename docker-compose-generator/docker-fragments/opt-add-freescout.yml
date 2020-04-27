@@ -14,7 +14,7 @@ services:
       - DB_PASS=freescout
   
   freescout:
-    image: tiredofit/freescout
+    image: tiredofit/freescouts
     container_name: freescout
     environment:
       - DB_HOST=freescout-db
@@ -29,12 +29,12 @@ services:
     expose:
       - "80"
     volumes:
-      - "freescout_rootdir:/www"
-      - "freescout_datadir:/data"
+      - "freescout_rootdir:/www/html"
+      - "freescout_logsdir:/www/logs"
   btcpayserver:
     environment:
       BTCPAY_EXTERNALSERVICES: "Freescout:freescout;"
 volumes:
   freescout_rootdir:
-  freescout_datadir:
+  freescout_logsdir:
   freescout_db:
