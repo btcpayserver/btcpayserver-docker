@@ -167,6 +167,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-configurator](docker-compose-generator/docker-fragments/opt-add-configurator.yml), to integrate the [BTCPay Server Configurator](https://install.btcpayserver.org) to manage your BTCPay deployment through a UI, and to allow new deployments elsewhere easily.
 * [opt-add-pihole](docker-compose-generator/docker-fragments/opt-add-pihole.yml) ([See the documentation](docs/pihole.md))
 * [opt-add-thunderhub](docker-compose-generator/docker-fragments/opt-add-thunderhub.yml) for a LND Lightning Node Manager in your Browser. Maintained by [apotdevin](https://github.com/apotdevin).
+* [opt-add-freescout](docker-compose-generator/docker-fragments/opt-add-freescout.yml) for a free open source help desk called [Freescout](https://freescout.net/) to help manage support emails. Available at `/freescout` of your primary BTCPay domain. 
 
 
 You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).

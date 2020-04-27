@@ -26,6 +26,8 @@ services:
       - ADMIN_PASS=admin@admin.com
       - ENABLE_SSL_PROXY=TRUE
       - DISPLAY_ERRORS=TRUE
+    links:
+      - freescout-db
     expose:
       - "80"
     volumes:
