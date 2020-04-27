@@ -14,7 +14,7 @@ services:
       - DB_PASS=freescout
   
   freescout:
-    image: tiredofit/freescouts
+    image: tiredofit/freescout
     container_name: freescout
     environment:
       - DB_HOST=freescout-db
