@@ -24,7 +24,7 @@ services:
       - SITE_URL=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/freescout
       - ADMIN_EMAIL=admin@admin.com
       - ADMIN_PASS=admin@admin.com
-      - ENABLE_SSL_PROXY=FALSE
+      - ENABLE_SSL_PROXY=TRUE
       - DISPLAY_ERRORS=TRUE
     expose:
       - "80"
