@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+  freescout-db:
+    restart: unless-stopped
+    image: tiredofit/mariadb
+    container_name: freescout-db
+    volumes:
+      - freescout_db:/var/lib/mysql
+    environment:
+      - ROOT_PASS=password
+      - DB_NAME=freescout
+      - DB_USER=freescout
+      - DB_PASS=freescout
+  
+  freescout:
+    image: tiredofit/freescout
+    container_name: freescout
+    environment:
+      - DB_HOST=freescout-db
+      - DB_NAME=freescout
+      - DB_USER=freescout
+      - DB_PASS=freescout
+      - SITE_URL=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/freescout
+      - ADMIN_EMAIL=admin@admin.com
+      - ADMIN_PASS=admin@admin.com
+      - ENABLE_SSL_PROXY=FALSE
+      - DISPLAY_ERRORS=TRUE
+    expose:
+      - "80"
+    volumes:
+      - "freescout_rootdir:/www"
+      - "freescout_datadir:/data"
+  btcpayserver:
+    environment:
+      BTCPAY_EXTERNALSERVICES: "Freescout:freescout;"
+volumes:
+  freescout_rootdir:
+  freescout_datadir:
+  freescout_db:
