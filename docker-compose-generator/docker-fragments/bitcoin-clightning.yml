@@ -55,6 +55,7 @@ services:
   clightning_bitcoin_rest:
     image: saubyk/c-lightning-rest:0.2.2
     restart: unless-stopped
+    stop_signal: SIGKILL
     environment:
       PROTOCOL: "http"
       NODE: clightning_bitcoin:9835
