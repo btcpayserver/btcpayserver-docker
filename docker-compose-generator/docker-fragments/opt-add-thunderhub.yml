@@ -4,7 +4,7 @@ services:
         environment:
           BTCPAY_EXTERNALSERVICES: "Thunderhub:thub;"
     bitcoin_thub:
-        image: apotdevin/thunderhub:v0.3.9
+        image: apotdevin/thunderhub:v0.5.1
         restart: unless-stopped
         environment:
             BASE_PATH: "/thub"
