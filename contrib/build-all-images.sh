@@ -640,14 +640,14 @@ cd - && cd ..
 
 
 # Build thunderhub
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.3.9/Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.5.1/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building apotdevin/thunderhub:v0.3.9"
+echo "Building apotdevin/thunderhub:v0.5.1"
 git clone https://github.com/apotdevin/thunderhub thunderhub
 cd thunderhub
-git checkout v0.3.9
+git checkout v0.5.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:v0.3.9" .
+docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:v0.5.1" .
 cd - && cd ..
 
 
