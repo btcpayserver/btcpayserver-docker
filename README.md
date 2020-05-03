@@ -136,6 +136,7 @@ A wide variety of useful scripts are available once BTCPay is installed:
 * `btcpay-setup.sh`: Change the settings of your server
 * `. ./btcpay-setup.sh`: Information about additional parameters
 * `. ./btcpay-setup.sh -i`: Set up your BTCPayServer
+* `btcpay-restart.sh`: Restart your BTCPayServer
 
 # Under the hood
 
