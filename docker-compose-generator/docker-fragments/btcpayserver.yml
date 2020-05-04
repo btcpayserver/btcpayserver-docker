@@ -4,7 +4,7 @@ services:
 
   btcpayserver:
     restart: unless-stopped
-    image: ${BTCPAY_IMAGE:-btcpayserver/btcpayserver:1.0.4.2}
+    image: ${BTCPAY_IMAGE:-btcpayserver/btcpayserver:1.0.4.3}
     expose:
       - "49392"
     environment:
