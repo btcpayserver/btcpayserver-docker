@@ -16,7 +16,6 @@ services:
         ports:
             - "53:53/udp"
         volumes:
-            - "./pihole/02-lan.conf:/etc/dnsmasq.d/02-lan.conf:ro"
             - "./pihole/resolv.conf:/etc/resolv.conf:ro"
             - "pihole_datadir:/etc/pihole"
 volumes:
