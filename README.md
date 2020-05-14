@@ -129,7 +129,7 @@ A wide variety of useful scripts are available once BTCPay is installed:
 
 * `bitcoin-cli.sh`: Access your Bitcoin node instance (for RPC)
 * `bitcoin-lightning-cli.sh`: Access your C-Lightning node instance (for RPC)
-* `changedomain.sh`: Change the domain of your BTCPayServer
+* `changedomain.sh`: Change the domain of your BTCPayServer (remember to disable 2FA/U2F first, as you risk being unable to log in to your account)
 * `btcpay-update.sh`: Update BTCPayServer to the latest version
 * `btcpay-up.sh`: Run `docker-compose up`
 * `btcpay-down.sh`: Run `docker-compose down`
