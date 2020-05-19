@@ -2,9 +2,9 @@ version: "3"
 services:
     btcpayserver:
         environment:
-            BTCPAY_EXTERNALSERVICES: "Thunderhub:thub;"
+            BTCPAY_EXTERNALSERVICES: "ThunderHub:thub;"
     bitcoin_thub:
-        image: apotdevin/thunderhub:v0.5.5
+        image: apotdevin/thunderhub:v0.6.0
         restart: unless-stopped
         environment:
             BASE_PATH: "/thub"
