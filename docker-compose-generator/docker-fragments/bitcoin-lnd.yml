@@ -26,6 +26,7 @@ services:
         invoicemacaroonpath=/data/invoice.macaroon
         readonlymacaroonpath=/data/readonly.macaroon
         notls=1
+        tlsextradomain=lnd_bitcoin
     ports:
       - "9735:9735"
     expose:
