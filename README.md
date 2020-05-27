@@ -32,7 +32,7 @@ Take a look at how BTCPay works in a video below.
 
 Here is a presentation of the global architecture at Advancing Bitcoin conference.
 
-[![BTCPay - Architecture overview](https://i.vimeocdn.com/video/758684368_520x252.jpg)](https://vimeo.com/316630434 "BTCPay - Architecture overview")
+[![BTCPay - Architecture overview](https://i3.ytimg.com/vi/Up0dvorzSNM/maxresdefault.jpg)](https://www.youtube.com/watch?v=Up0dvorzSNM "BTCPay - Architecture overview")
 
 # Full installation (for technical users)
 
