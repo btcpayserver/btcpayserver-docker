@@ -10,7 +10,7 @@ You will find below information about how you can install BTCPay Server easily i
 
 # Architecture
 
-![Architecture](https://github.com/btcpayserver/btcpayserver-doc/raw/master/img/Architecture.png)
+![Architecture](https://github.com/btcpayserver/btcpayserver-doc/raw/master/docs/img/Architecture.png)
 
 As you can see, BTCPay depends on several pieces of infrastructure, mainly:
 
@@ -46,7 +46,7 @@ Let's assume your domain is `btcpay.EXAMPLE.com`.
 
 The setup below assumes you want to support Bitcoin, c-lightning, HTTPS automatically configured by Nginx. It also enables node pruning, which you can [modify](#generated-docker-compose) or ignore if you have enough disk space for a full node. Finally, your domain is `btcpay.EXAMPLE.com` should reflect your actual domain name.
 
-[Enviroment variables](#environment-variables) can be tailored to your needs. Some variables require additional storage space.
+[Environment variables](#environment-variables) can be tailored to your needs. Some variables require additional storage space.
 
 ```bash
 # Login as root
@@ -161,9 +161,9 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-tor](docker-compose-generator/docker-fragments/opt-add-tor.yml), for exposing BTCPayServer, Woocommerce, your lightning nodes as hidden services and accept onion peers for your full node. Warning: This options is for working around NAT and firewall problems as well as to help protect your customer's privacy. This will not protect your privacy against a targeted attack against you.
 * [opt-add-btctransmuter](docker-compose-generator/docker-fragments/opt-add-btctransmuter.yml), for a self-hosted IFTTT style service for crypto services such as fiat settlement. (More information on this [github repository](https://github.com/btcpayserver/btcTransmuter/)
 * [opt-txindex](docker-compose-generator/docker-fragments/opt-txindex.yml), to enable txindex=1 in bitcoin.conf if you require txindexing for Bisq, DOJO, Esplora, etc.
-* [opt-unsafe-expose](docker-compose-generator/docker-fragments/opt-unsafe-expose.yml), to unsafely expose bitcoind P2P port 8333 if you require P2P for Bisq, DOJO, Esplora, etc. WARNING: ONLY USE ON TRUSTED LAN OR WITH FIREWALL RULES WHITELISTING SPECIFIC HOSTS
+* [opt-unsafe-expose](docker-compose-generator/docker-fragments/opt-expose-unsafe.yml), to unsafely expose bitcoind P2P port 8333 if you require P2P for Bisq, DOJO, Esplora, etc. WARNING: ONLY USE ON TRUSTED LAN OR WITH FIREWALL RULES WHITELISTING SPECIFIC HOSTS
 * [opt-add-tor-relay](docker-compose-generator/docker-fragments/opt-add-tor-relay.yml), for a non-exit tor relay. Make sure to have ports 9001 and 9030 accessible externally. [Please read the legal implications of running a tor relay](https://www.eff.org/torchallenge/faq.html) and [what resources are used to operate the relay](https://trac.torproject.org/projects/tor/wiki/TorRelayGuide#RelayRequirements).
-* [opt-add-electrumx](docker-compose-generator/docker-fragments/opt-add-electrumx.yml), to integrate a full ElectrumX server (from official source) with BTCPay, using the BTCPay server's full bitcoin node for complete privacy when using your own Electrum wallet.  You can also open port 50002 up to the internet on your router etc, to be part of the ElectrumX network, helping other Electrum wallet users to get connected. The bitcoin option `-txindex` is mandatory for ElectrumX, and this fragement will enable it on your BTCPay server automatically - NO need to use the fragment opt-txindex.yml.
+* [opt-add-electrumx](docker-compose-generator/docker-fragments/opt-add-electrumx.yml), to integrate a full ElectrumX server (from official source) with BTCPay, using the BTCPay server's full bitcoin node for complete privacy when using your own Electrum wallet.  You can also open port 50002 up to the internet on your router etc, to be part of the ElectrumX network, helping other Electrum wallet users to get connected. The bitcoin option `-txindex` is mandatory for ElectrumX, and this fragment will enable it on your BTCPay server automatically - NO need to use the fragment opt-txindex.yml.
 * [opt-add-electrum-ps](docker-compose-generator/docker-fragments/opt-add-electrum-ps.yml), to integrate Electrum Personal Server (EPS) with BTCPay (EPS is a  single-user alternative to the ElectrumX Server option above).  EPS will also use the BTCPay server's full bitcoin node for complete privacy when using your own Electrum wallet, for your own personal use (i.e. other users cannot use your server to verify transactions).  Also, the bitcoin option `-txindex` is NOT mandatory for EPS, and it will run on a pruned node (unlike ElectrumX).  You will need to add your XPUB/YPUB/ZPUB as environment variable `EPS_XPUB` before enabling EPS for the first time (see above section on environment variables, and see [full documentation](https://github.com/btcpayserver/btcpayserver-doc/blob/master/ElectrumPersonalServer.md) for details).
 * [opt-add-configurator](docker-compose-generator/docker-fragments/opt-add-configurator.yml), to integrate the [BTCPay Server Configurator](https://install.btcpayserver.org) to manage your BTCPay deployment through a UI, and to allow new deployments elsewhere easily.
 * [opt-add-pihole](docker-compose-generator/docker-fragments/opt-add-pihole.yml) ([See the documentation](docs/pihole.md))
