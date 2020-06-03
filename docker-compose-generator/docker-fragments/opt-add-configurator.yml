@@ -3,7 +3,7 @@ version: "3"
 services:
   configurator:
     restart: unless-stopped
-    image: btcpayserver/btcpayserver-configurator:0.0.19
+    image: btcpayserver/btcpayserver-configurator:0.0.21
     environment:
       CONFIGURATOR_SSHCONNECTION: "root@host.docker.internal"
       CONFIGURATOR_SSHKEYFILE: ${BTCPAY_SSHKEYFILE}
