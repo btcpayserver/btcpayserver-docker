@@ -174,13 +174,13 @@ if [ ! -z "$BTCPAY_ADDITIONAL_HOSTS" ] && [[ "$BTCPAY_ADDITIONAL_HOSTS" == *[';'
     return;
 fi
 
-if [ ! -z "$BTCPAY_ADDITIONAL_HOSTS" ] && [[ "$BTCPAY_ADDITIONAL_HOSTS" == .onion* ]]; then 
-    echo "$BTCPAY_ADDITIONAL_HOSTS should not contains onion hosts, additional hosts is only for getting https certificates, those are not available to tor addresses"
+if [ ! -z "$BTCPAY_ADDITIONAL_HOSTS" ] && [[ "$BTCPAY_ADDITIONAL_HOSTS" == .onion* ]]; then
+    echo "$BTCPAY_ADDITIONAL_HOSTS should not contain onion hosts, additional hosts is only for getting https certificates, those are not available to tor addresses"
     return;
 fi
 ######### Migration: old pregen environment to new environment ############
 if [[ ! -z $BTCPAY_DOCKER_COMPOSE ]] && [[ ! -z $DOWNLOAD_ROOT ]] && [[ -z $BTCPAYGEN_OLD_PREGEN ]]; then
-    echo "Your deployment is too old, you need to migrate by following instructions on this link https://github.com/btcpayserver/btcpayserver-docker/tree/master#i-deployed-before-btcpay-setupsh-existed-before-may-17-can-i-migrate-to-this-new-system"
+    echo "Your deployment is too old, you need to migrate by following instructions on this link https://docs.btcpayserver.org/Docker/#i-deployed-before-btcpay-setup-sh-existed-before-may-17-2018-can-i-migrate-to-this-new-system"
     return
 fi
 #########################################################
