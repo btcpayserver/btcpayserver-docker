@@ -31,21 +31,11 @@ services:
 
   btcpayserver:
     environment:
-      BTCPAY_BTCLIGHTNING: "type=lnd-rest;server=http://lnd_bitcoingold:8080/;macaroonfilepath=/etc/lnd_bitcoingold/admin.macaroon;allowinsecure=true"
+      BTCPAY_BTGLIGHTNING: "type=lnd-rest;server=http://lnd_bitcoingold:8080/;macaroonfilepath=/etc/lnd_bitcoingold/admin.macaroon;allowinsecure=true"
     volumes:
       - "lnd_bitcoingold_datadir:/etc/lnd_bitcoingold"
     links:
       - lnd_bitcoingold
-
-  bgoldd:
-    environment:
-      BITCOIN_EXTRA_ARGS: |
-        zmqpubrawtx=tcp://0.0.0.0:28332
-        zmqpubrawblock=tcp://0.0.0.0:28332
-        zmqpubrawtxlock=tcp://0.0.0.0:28332
-        zmqpubhashblock=tcp://0.0.0.0:28332
-    expose:
-      - "28332"
   
   nginx:
     links:
@@ -60,3 +50,6 @@ services:
 
 volumes:
   lnd_bitcoingold_datadir:
+
+required:
+  - "opt-add-zmq"

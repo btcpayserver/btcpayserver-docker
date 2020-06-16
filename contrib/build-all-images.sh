@@ -639,6 +639,22 @@ docker build -f "$DOCKERFILE" -t "pihole/pihole:v5.0" .
 cd - && cd ..
 
 
+# Build teos
+# https://raw.githubusercontent.com/talaia-labs/python-teos/cb1ba5629dbaa2e7f3080ccc91c99d58c488fcf6/docker/Dockerfile
+DOCKERFILE="docker/Dockerfile"
+# https://raw.githubusercontent.com/talaia-labs/python-teos/cb1ba5629dbaa2e7f3080ccc91c99d58c488fcf6/docker/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/Dockerfile"
+# https://raw.githubusercontent.com/talaia-labs/python-teos/cb1ba5629dbaa2e7f3080ccc91c99d58c488fcf6/docker/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/Dockerfile"
+echo "Building kukks/teos:cb1ba56"
+git clone https://github.com/talaia-labs/python-teos teos
+cd teos
+git checkout cb1ba5629dbaa2e7f3080ccc91c99d58c488fcf6
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "kukks/teos:cb1ba56" .
+cd - && cd ..
+
+
 # Build thunderhub
 # https://raw.githubusercontent.com/apotdevin/thunderhub/v0.8.5/Dockerfile
 DOCKERFILE="Dockerfile"
