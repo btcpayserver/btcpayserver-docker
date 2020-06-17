@@ -6,6 +6,7 @@ services:
       BITCOIN_EXTRA_ARGS: |
         zmqpubrawblock=tcp://0.0.0.0:28332
         zmqpubrawtx=tcp://0.0.0.0:28333
+        zmqpubhashblock=tcp://0.0.0.0:28334
     expose:
       - "28332"
       - "28333"
