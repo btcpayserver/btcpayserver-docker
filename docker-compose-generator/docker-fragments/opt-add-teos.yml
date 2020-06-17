@@ -17,7 +17,7 @@ services:
     volumes:
       - "bitcoin_teos_datadir:/root/.teos"
     ports:
-      - "9814"
+      - "9814:9814"
   bitcoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
