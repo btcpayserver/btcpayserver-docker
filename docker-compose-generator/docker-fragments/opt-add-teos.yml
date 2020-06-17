@@ -13,7 +13,7 @@ services:
       BTC_RPC_USER: "teos"
       BTC_RPC_PASSWORD: "teos"
       BTC_FEED_CONNECT: "bitcoind"
-      BTC_FEED_PORT: 28332
+      BTC_FEED_PORT: 28334
     volumes:
       - "bitcoin_teos_datadir:/root/.teos"
     ports:
