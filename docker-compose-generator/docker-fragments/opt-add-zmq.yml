@@ -10,7 +10,7 @@ services:
     expose:
       - "28332"
       - "28333"
-      - "283334"
+      - "28334"
   litecoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
