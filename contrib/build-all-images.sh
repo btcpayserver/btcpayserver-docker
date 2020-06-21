@@ -330,14 +330,14 @@ cd - && cd ..
 
 
 # Build lnd
-# https://raw.githubusercontent.com/Groestlcoin/lnd/v0.8.2-grs/Dockerfile
+# https://raw.githubusercontent.com/Groestlcoin/lnd/v0.10.0-grs/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building groestlcoin/lnd:v0.8.2-grs"
+echo "Building groestlcoin/lnd:v0.10.0-grs"
 git clone https://github.com/Groestlcoin/lnd lnd
 cd lnd
-git checkout v0.8.2-grs
+git checkout v0.10.0-grs
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "groestlcoin/lnd:v0.8.2-grs" .
+docker build -f "$DOCKERFILE" -t "groestlcoin/lnd:v0.10.0-grs" .
 cd - && cd ..
 
 
@@ -793,5 +793,3 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
-
-
