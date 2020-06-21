@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  bwt:
+    image: shesek/bwt
+    environment:
+      network: mainnet
+      bitcoind-url: http://btcpayserver_bitcoind
+      xpub: <xpub1>,<xpub2>,<xpub3>
+      electrum-rpc-addr: 50001
+      http-server-addr: 3060
+      #bitcoind-auth: 
+    networks:
+      - default
+    ports:
+      - "50001:50001/tcp"
+      - "3060:3060/udp"
+    restart: unless-stopped
+#    volumes:
+#      - ~/.bitcoin:/bitcoin
+
+networks:
+  default:
