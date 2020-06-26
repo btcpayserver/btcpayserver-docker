@@ -3,7 +3,7 @@ version: "3"
 services:
   bitcoin_teos:
     restart: unless-stopped
-    image: kukks/teos:cb1ba56
+    image: talaia/python-teos:latest
     environment:
       API_BIND: "0.0.0.0"
       API_PORT: 9814
