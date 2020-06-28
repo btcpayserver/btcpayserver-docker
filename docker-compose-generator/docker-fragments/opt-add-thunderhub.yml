@@ -24,6 +24,8 @@ services:
         expose:
             - "3000"
         command: ["npm", "run", "start:cookie", "--", "/data/.cookie"]
+        links:
+            - lnd_bitcoin
 volumes:
     lnd_bitcoin_thub_datadir:
 required:

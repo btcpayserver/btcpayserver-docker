@@ -57,6 +57,8 @@ services:
       - "lnd_bitcoin_rtl_datadir:/data"
     expose:
       - "3000"
+    links:
+      - lnd_bitcoin
 
   btcpayserver:
     environment:
