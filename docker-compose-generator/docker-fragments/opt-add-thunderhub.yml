@@ -8,6 +8,7 @@ services:
     bitcoin_thub:
         image: apotdevin/thunderhub:v0.8.5
         restart: unless-stopped
+        stop_signal: SIGKILL
         environment:
             BASE_PATH: "/thub"
             HODL_KEY: "XQ86AOqw7Of8qMDql901mcZkuHL2nRel5FA9H2Ie4rTLeBKn0VlO5GuXvdVRogWrDOuH5V0E51Qxy9Bo"
