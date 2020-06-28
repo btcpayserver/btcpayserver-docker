@@ -6,7 +6,7 @@ services:
         volumes:
             - "lnd_bitcoin_thub_datadir:/etc/lnd_bitcoin_thub_datadir"
     bitcoin_thub:
-        image: apotdevin/thunderhub:v0.7.9
+        image: apotdevin/thunderhub:v0.8.5
         restart: unless-stopped
         environment:
             BASE_PATH: "/thub"
