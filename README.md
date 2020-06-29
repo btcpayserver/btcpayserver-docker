@@ -446,7 +446,7 @@ Modify the new `opt-save-storage.custom.yml` file to your taste:
 Then set it up:
 
 ```bash
-export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage.custom"
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-save-storage.custom"
 . ./btcpay-setup.sh -i
 ```
 
