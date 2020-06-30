@@ -639,19 +639,19 @@ docker build -f "$DOCKERFILE" -t "pihole/pihole:v5.0" .
 cd - && cd ..
 
 
-# Build teos
-# https://raw.githubusercontent.com/talaia-labs/python-teos/cb1ba5629dbaa2e7f3080ccc91c99d58c488fcf6/docker/Dockerfile
+# Build python-teos
+# https://raw.githubusercontent.com/talaia-labs/python-teos/master/docker/Dockerfile
 DOCKERFILE="docker/Dockerfile"
-# https://raw.githubusercontent.com/talaia-labs/python-teos/cb1ba5629dbaa2e7f3080ccc91c99d58c488fcf6/docker/Dockerfile
+# https://raw.githubusercontent.com/talaia-labs/python-teos/master/docker/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/Dockerfile"
-# https://raw.githubusercontent.com/talaia-labs/python-teos/cb1ba5629dbaa2e7f3080ccc91c99d58c488fcf6/docker/Dockerfile
+# https://raw.githubusercontent.com/talaia-labs/python-teos/master/docker/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/Dockerfile"
-echo "Building kukks/teos:cb1ba56"
-git clone https://github.com/talaia-labs/python-teos teos
-cd teos
-git checkout cb1ba5629dbaa2e7f3080ccc91c99d58c488fcf6
+echo "Building talaia/python-teos:latest"
+git clone https://github.com/talaia-labs/python-teos python-teos
+cd python-teos
+git checkout master
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "kukks/teos:cb1ba56" .
+docker build -f "$DOCKERFILE" -t "talaia/python-teos:latest" .
 cd - && cd ..
 
 
