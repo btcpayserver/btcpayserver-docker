@@ -46,16 +46,6 @@ services:
     links:
       - lnd_groestlcoin
 
-  groestlcoind:
-    environment:
-      BITCOIN_EXTRA_ARGS: |
-        zmqpubrawtx=tcp://0.0.0.0:21441
-        zmqpubrawblock=tcp://0.0.0.0:21441
-        zmqpubrawtxlock=tcp://0.0.0.0:21441
-        zmqpubhashblock=tcp://0.0.0.0:21441
-    expose:
-      - "21441"
-
   nginx:
     links:
       - "lnd_groestlcoin"
@@ -69,3 +59,6 @@ services:
 
 volumes:
   lnd_groestlcoin_datadir:
+
+required:
+  - "opt-add-zmq"

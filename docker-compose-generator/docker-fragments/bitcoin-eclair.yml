@@ -4,10 +4,7 @@ services:
   bitcoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
-        zmqpubrawblock=tcp://0.0.0.0:28332
-        zmqpubrawtx=tcp://0.0.0.0:28333
         rpcauth=eclair:d3a244200d5c946f6bef48e6583ec979$$215049513aef33245dfec8ff3ab5e749458fde51ede931dec04c767c0732d468
-        txindex=1
   eclair_bitcoin:
     container_name: btcpayserver_eclair_bitcoin
     restart: unless-stopped
@@ -51,5 +48,9 @@ services:
       - eclair_bitcoin
 volumes:
   eclair_bitcoin_datadir:
+
 incompatible:
   - pruning
+required:
+  - "opt-add-zmq"
+  - "opt-txindex"

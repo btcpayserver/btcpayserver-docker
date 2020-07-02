@@ -639,6 +639,22 @@ docker build -f "$DOCKERFILE" -t "pihole/pihole:v5.0" .
 cd - && cd ..
 
 
+# Build python-teos
+# https://raw.githubusercontent.com/talaia-labs/python-teos/master/docker/Dockerfile
+DOCKERFILE="docker/Dockerfile"
+# https://raw.githubusercontent.com/talaia-labs/python-teos/master/docker/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/Dockerfile"
+# https://raw.githubusercontent.com/talaia-labs/python-teos/master/docker/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/Dockerfile"
+echo "Building talaia/python-teos:latest"
+git clone https://github.com/talaia-labs/python-teos python-teos
+cd python-teos
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "talaia/python-teos:latest" .
+cd - && cd ..
+
+
 # Build thunderhub
 # https://raw.githubusercontent.com/apotdevin/thunderhub/v0.8.5/Dockerfile
 DOCKERFILE="Dockerfile"

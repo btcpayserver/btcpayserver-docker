@@ -4,10 +4,7 @@ services:
   groestlcoind:
     environment:
       GROESTLCOIN_EXTRA_ARGS: |
-        zmqpubrawblock=tcp://0.0.0.0:21441
-        zmqpubrawtx=tcp://0.0.0.0:21441
         rpcauth=eclair:d3a244200d5c946f6bef48e6583ec979$$215049513aef33245dfec8ff3ab5e749458fde51ede931dec04c767c0732d468
-        txindex=1
   eclair_groestlcoin:
     container_name: btcpayserver_eclair_groestlcoin
     restart: unless-stopped
@@ -51,5 +48,7 @@ services:
       - eclair_groestlcoin
 volumes:
   eclair_groestlcoin_datadir:
-incompatible:
-  - pruning
+
+required:
+  - "opt-add-zmq"
+  - "opt-txindex"

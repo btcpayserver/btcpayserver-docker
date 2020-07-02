@@ -45,14 +45,8 @@ services:
     links:
       - lnd_litecoin
 
-  litecoind:
-    environment:
-      BITCOIN_EXTRA_ARGS: |
-        zmqpubrawblock=tcp://0.0.0.0:28332
-        zmqpubrawtx=tcp://0.0.0.0:28333
-    expose:
-      - "28332"
-      - "28333"
-
 volumes:
   lnd_litecoin_datadir:
+
+required:
+  - "opt-add-zmq"

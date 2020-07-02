@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  bitcoin_teos:
+    restart: unless-stopped
+    image: talaia/python-teos:latest
+    environment:
+      API_BIND: "0.0.0.0"
+      API_PORT: 9814
+      BTC_NETWORK: ${NBITCOIN_NETWORK:-regtest}
+      BTC_RPC_CONNECT: "bitcoind"
+      BTC_RPC_PORT: 43782
+      BTC_RPC_USER: "teos"
+      BTC_RPC_PASSWORD: "teos"
+      BTC_FEED_CONNECT: "bitcoind"
+      BTC_FEED_PORT: 28334
+    volumes:
+      - "bitcoin_teos_datadir:/root/.teos"
+    ports:
+      - "9814:9814"
+  bitcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        # rpcuser=teos
+        # rpcpassword=teos
+        # We need to use rpcauth because we also need cookieauth. rpcpassword disabled cookie file auth.
+        # Be careful if you copy the line below from the docker-compose.yml! A dollar sign is escaped.
+        rpcauth=teos:504ff14fe34faa90e5bbe124e94be6a4$$bdac33da901ff27b4a27ca160cd706b2ba41d9e363556815cab5b7ef1e4dcf23
+volumes:
+  bitcoin_teos_datadir:
+
+required:
+  - "opt-add-zmq"
+  - "bitcoin"
+  - "opt-txindex" 
