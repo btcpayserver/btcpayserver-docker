@@ -4,7 +4,7 @@ services:
   groestlcoind:
       restart: unless-stopped
       container_name: btcpayserver_groestlcoind
-      image: nicolasdorier/docker-groestlcoin:2.19.1
+      image: groestlcoin/docker-groestlcoin:2.19.1
       environment:
         GROESTLCOIN_EXTRA_ARGS: |
           rpcport=43782
