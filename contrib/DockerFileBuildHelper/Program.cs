@@ -443,7 +443,7 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = "feature/dogecoin";
                     break;
                 case "docker-bitcore":
-                    dockerInfo.DockerFilePath = "btx-debian/Dockerfile";
+                    dockerInfo.DockerFilePath = "docker-bitcored/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/dalijolijo/btcpayserver-docker-bitcore";
                     dockerInfo.GitRef = "master";
                     break;

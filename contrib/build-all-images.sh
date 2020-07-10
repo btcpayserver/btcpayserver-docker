@@ -214,8 +214,8 @@ cd - && cd ..
 
 
 # Build docker-bitcore
-# https://raw.githubusercontent.com/dalijolijo/btcpayserver-docker-bitcore/master/btx-debian/Dockerfile
-DOCKERFILE="btx-debian/Dockerfile"
+# https://raw.githubusercontent.com/dalijolijo/btcpayserver-docker-bitcore/master/docker-bitcored/Dockerfile
+DOCKERFILE="docker-bitcored/Dockerfile"
 echo "Building dalijolijo/docker-bitcore:0.15.2"
 git clone https://github.com/dalijolijo/btcpayserver-docker-bitcore docker-bitcore
 cd docker-bitcore
