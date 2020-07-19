@@ -41,5 +41,9 @@ services:
       BITCOIN_EXTRA_ARGS: |
         dbcache=50
         maxmempool=50
+  btc_rpc_explorer:
+    environment:
+        BTCEXP_NO_INMEMORY_RPC_CACHE: "true"
+        BTCEXP_SLOW_DEVICE_MODE: "true"
 exclusive:
   - memory

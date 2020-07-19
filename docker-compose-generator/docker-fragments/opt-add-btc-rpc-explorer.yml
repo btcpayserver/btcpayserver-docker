@@ -1,0 +1,33 @@
+version: "3"
+services:
+    bitcoind:
+      environment:
+        BITCOIN_EXTRA_ARGS: |
+          rpcauth=btc-rpc-explorer:3e467290e3db6fd238723b714e635833$$9560cdc6fe3034e128105739d028858888ae59bb6de6fe57aa9ddce92f4e1c31
+    btcpayserver:
+        environment:
+            BTCPAY_BTCEXTERNAL: "server=/btc-rpc-explorer"
+        volumes:
+            - "lnd_bitcoin_thub_datadir:/etc/lnd_bitcoin_thub_datadir"
+    btc_rpc_explorer:
+        image: kukks/btc-rpc-explorer:latest
+        restart: unless-stopped
+        stop_signal: SIGKILL
+        environment:
+            BTCEXP_COIN: "BTC"
+            BTCEXP_HOST: "0.0.0.0"
+            BTCEXP_PORT: 3002
+            BTCEXP_BITCOIND_HOST: "bitcoind"
+            BTCEXP_BITCOIND_PORT: 39388
+            BTCEXP_BITCOIND_USER: "btc-rpc-explorer"
+            BTCEXP_BITCOIND_PASS: "btc-rpc-explorer"
+        expose:
+            - "3002"
+        links:
+            - bitcoin
+volumes:
+  bitcoin_datadir:
+required:
+    - "bitcoin"
+incompatible:
+    - "pruning

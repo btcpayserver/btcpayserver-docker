@@ -4,7 +4,6 @@ services:
   bitcoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
-        txindex=1
         rpcauth=electrumx:7d8ee47c089e6072635f82b34796e878$$13649d99453ccdf78e85007286422599c00e6953289f41bf8e92961076ba14db
   electrumx:
     image: lukechilds/electrumx
@@ -16,7 +15,12 @@ services:
     environment:
       - DAEMON_URL=electrumx:1VmSUVGBuLNWvZl0LExRDW0tvl6196-47RfXIzS384g=@bitcoind:43782
       - COIN=BitcoinSegwit
+  btc_rpc_explorer:
+    environment:
+        BTCEXP_ADDRESS_API: "electrumx"
+        BTCEXP_SLOW_DEVICE_MODE: "true"
+        BTCEXP_ELECTRUMX_SERVERS: "tcp://electrumx:50002"
 volumes:
   electrumx_datadir:
-incompatible:
-  - pruning
+required:
+  - "opt-txindex"
