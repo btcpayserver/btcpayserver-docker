@@ -7,8 +7,6 @@ services:
     btcpayserver:
         environment:
             BTCPAY_BTCEXTERNAL: "server=/btc-rpc-explorer"
-        volumes:
-            - "lnd_bitcoin_thub_datadir:/etc/lnd_bitcoin_thub_datadir"
     btc_rpc_explorer:
         image: kukks/btc-rpc-explorer:latest
         restart: unless-stopped
