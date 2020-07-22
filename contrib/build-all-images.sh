@@ -142,14 +142,30 @@ cd - && cd ..
 
 
 # Build eclair
-# https://raw.githubusercontent.com/ACINQ/eclair/v0.3.3/Dockerfile
+# https://raw.githubusercontent.com/ACINQ/eclair/release-0.4.1/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building acinq/eclair:v0.3.3"
+echo "Building acinq/eclair:release-0.4.1"
 git clone https://github.com/ACINQ/eclair eclair
 cd eclair
-git checkout v0.3.3
+git checkout release-0.4.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "acinq/eclair:v0.3.3" .
+docker build -f "$DOCKERFILE" -t "acinq/eclair:release-0.4.1" .
+cd - && cd ..
+
+
+# Build rtl
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.8.2/Dockerfile
+DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.8.2/Dockerfile.arm32v7
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.arm32v7"
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.8.2/Dockerfile.arm64v8
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.arm64v8"
+echo "Building shahanafarooqui/rtl:0.8.2"
+git clone https://github.com/ShahanaFarooqui/RTL rtl
+cd rtl
+git checkout v0.8.2
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.8.2" .
 cd - && cd ..
 
 

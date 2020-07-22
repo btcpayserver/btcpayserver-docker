@@ -9,7 +9,7 @@ services:
     container_name: btcpayserver_eclair_bitcoin
     restart: unless-stopped
     stop_signal: SIGINT
-    image: acinq/eclair:v0.3.3
+    image: acinq/eclair:release-0.4.1
     environment:
       PUBLIC_HOST: ${BTCPAY_HOST}
       JAVA_OPTS: |
@@ -39,11 +39,34 @@ services:
       - "eclair_bitcoin_datadir:/data"
     links:
       - bitcoind
+        
+  bitcoin_rtl:
+    image: shahanafarooqui/rtl:0.8.2
+    restart: unless-stopped
+    environment:
+      LN_IMPLEMENTATION: ECL
+      LN_SERVER_URL: http://eclair_bitcoin:8080
+      LN_API_PASSWORD: DwubwWsoo3
+      BITCOIND_CONFIG_PATH: /etc/bitcoin/bitcoin.conf
+      RTL_SSO: 1
+      RTL_COOKIE_PATH: /data/.cookie
+      LOGOUT_REDIRECT_LINK: /server/services
+    volumes:
+      - "bitcoin_datadir:/etc/bitcoin"
+      - "eclair_bitcoin_datadir:/etc/eclair"
+      - "eclair_bitcoin_rtl_datadir:/data"
+    expose:
+      - "3000"
+    links:
+      - eclair_bitcoin
+
   btcpayserver:
     environment:
       BTCPAY_BTCLIGHTNING: "type=eclair;server=http://eclair_bitcoin:8080;password=DwubwWsoo3"
+      BTCPAY_BTCEXTERNALRTL: "server=/rtl/api/authenticate/cookie;cookiefile=/etc/eclair_bitcoin_rtl/.cookie"
     volumes:
       - "eclair_bitcoin_datadir:/etc/eclair_bitcoin"
+      - "eclair_bitcoin_rtl_datadir:/etc/eclair_bitcoin_rtl"
     links:
       - eclair_bitcoin
 volumes:
