@@ -142,12 +142,12 @@ cd - && cd ..
 
 
 # Build eclair
-# https://raw.githubusercontent.com/ACINQ/eclair/release-0.4.1/Dockerfile
+# https://raw.githubusercontent.com/ACINQ/eclair/v0.4.1/Dockerfile
 DOCKERFILE="Dockerfile"
 echo "Building acinq/eclair:release-0.4.1"
 git clone https://github.com/ACINQ/eclair eclair
 cd eclair
-git checkout release-0.4.1
+git checkout v0.4.1
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "acinq/eclair:release-0.4.1" .
 cd - && cd ..
@@ -360,12 +360,12 @@ cd - && cd ..
 # Build docker-groestlcoin
 # https://raw.githubusercontent.com/NicolasDorier/docker-bitcoin/master/groestlcoin/2.19.1/Dockerfile
 DOCKERFILE="groestlcoin/2.19.1/Dockerfile"
-echo "Building nicolasdorier/docker-groestlcoin:2.19.1"
+echo "Building groestlcoin/docker-groestlcoin:2.19.1"
 git clone https://github.com/NicolasDorier/docker-bitcoin docker-groestlcoin
 cd docker-groestlcoin
 git checkout master
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/docker-groestlcoin:2.19.1" .
+docker build -f "$DOCKERFILE" -t "groestlcoin/docker-groestlcoin:2.19.1" .
 cd - && cd ..
 
 
@@ -468,18 +468,18 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.1.36/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.1.37/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.1.36/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.1.37/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.1.36/Dockerfile.linuxarm64v8
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.1.37/Dockerfile.linuxarm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.linuxarm64v8"
-echo "Building nicolasdorier/nbxplorer:2.1.36"
+echo "Building nicolasdorier/nbxplorer:2.1.37"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.1.36
+git checkout v2.1.37
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.1.36" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.1.37" .
 cd - && cd ..
 
 
@@ -825,3 +825,5 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
+
+
