@@ -23,6 +23,10 @@ services:
     depends_on:
       - postgres
 
+  postgres:
+    environment:
+      - POSTGRES_DB=fireflyiii
+
 volumes:
    firefly_iii_export:
    firefly_iii_upload:
