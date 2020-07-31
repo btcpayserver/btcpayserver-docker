@@ -45,30 +45,16 @@
 	}
 		{{ end }}
 		{{ if (eq $serviceName "fireflyiii") }}
-	location /firefly {
-		rewrite ^/firefly(.*)$ $1 break;
+	location /fireflyiii/ {		
+		proxy_set_header Connection "";
+		proxy_set_header        Host               $host;
+        proxy_set_header        X-Real-IP          $remote_addr;
+        proxy_set_header        X-Forwarded-For    $proxy_add_x_forwarded_for;
+        proxy_set_header        X-Forwarded-Host   $host:443;
+        proxy_set_header        X-Forwarded-Server $host;
+        proxy_set_header        X-Forwarded-Port   443;
+        proxy_set_header        X-Forwarded-Proto  https;
 		proxy_pass http://fireflyiii:8080;
-		
-	    # Request uncompressed files from upstream server to allow manipulation
-        # of response body
-        proxy_set_header Accept-Encoding "";
-
-        # Rewrite redirects, such as / to /login and /logout
-        # No trailing slash - including it works for login, but (at least) not logout.
-        # Also means we can't use `proxy_redirect default;`
-        proxy_redirect $scheme://$host /finance;
-
-        # Setting proper X-Forwarded headers, in combination TRUSTED_PROXIES
-        # env variable, lets Laraval create URLs based on proxied address rather
-        # than server name.
-        proxy_set_header X-Forwarded-For $remote_addr;
-        proxy_set_header X-Forwarded-Host $host;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_set_header X-Forwarded-Port $server_port;
-
-        # Add the folder name to links/asset URLs in the response body
-        sub_filter $scheme://$host http://$host/firefly;
-        sub_filter_once off;
 	}
 		{{ end }}
 		{{ if (eq $serviceName "btcqbo") }}
