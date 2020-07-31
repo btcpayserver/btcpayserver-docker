@@ -44,6 +44,12 @@
 		proxy_pass http://bitcoin_thub:3000/thub;
 	}
 		{{ end }}
+		{{ if (eq $serviceName "fireflyiii") }}
+	location /fireflyiii/ {
+		rewrite ^/fireflyiii(.*)$ $1 break;
+		proxy_pass http://fireflyiii:3000/;
+	}
+		{{ end }}
 		{{ if (eq $serviceName "btcqbo") }}
 	location /btcqbo/ {
 		proxy_pass http://btcqbo:8001;

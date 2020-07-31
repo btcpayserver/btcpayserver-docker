@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  fireflyiii:
+    image: jc5x/firefly-iii:latest
+    environment:
+      - APP_URL=${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/fireflyiii
+      - TRUSTED_PROXIES=**
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=fireflyiii
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=
+    ports:
+      - 3000:8080
+    expose:
+      - 3000
+    volumes:
+      - firefly_iii_export:/var/www/firefly-iii/storage/export
+      - firefly_iii_upload:/var/www/firefly-iii/storage/upload
+    depends_on:
+      - postgres
+
+volumes:
+   firefly_iii_export:
+   firefly_iii_upload:
