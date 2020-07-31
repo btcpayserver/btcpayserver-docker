@@ -13,10 +13,8 @@ services:
       - DB_DATABASE=fireflyiii
       - DB_USERNAME=postgres
       - DB_PASSWORD=
-    ports:
-      - 3000:8080
     expose:
-      - 3000
+      - 8080
     volumes:
       - firefly_iii_export:/var/www/firefly-iii/storage/export
       - firefly_iii_upload:/var/www/firefly-iii/storage/upload
@@ -24,8 +22,7 @@ services:
       - postgres
 
   postgres:
-    environment:
-      - POSTGRES_DB=fireflyiii
+    command: psql -U postgres -tc "SELECT 1 FROM pg_database WHERE datname = 'fireflyiii'" | grep -q 1 || psql -U postgres -c "CREATE DATABASE fireflyiii"
 
 volumes:
    firefly_iii_export:
