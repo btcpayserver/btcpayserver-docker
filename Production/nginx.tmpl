@@ -46,7 +46,7 @@
 		{{ end }}
 		{{ if (eq $serviceName "fireflyiii") }}
 	location /fireflyiii/ {
-		rewrite ^/fireflyiii(.*)$ $1 break;
+		rewrite ^/fireflyiii/(.*)$ $1 break;
 		proxy_pass http://fireflyiii:8080/;
 	}
 		{{ end }}
