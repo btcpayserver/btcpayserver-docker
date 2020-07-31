@@ -21,9 +21,6 @@ services:
     depends_on:
       - postgres
 
-  postgres:
-    command: psql -U postgres -c "CREATE DATABASE fireflyiii"
-
 volumes:
    firefly_iii_export:
    firefly_iii_upload:
