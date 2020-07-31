@@ -46,6 +46,7 @@
 		{{ end }}
 		{{ if (eq $serviceName "fireflyiii") }}
 	location /firefly {
+		rewrite ^/firefly(.*)$ $1 break;
 		proxy_pass http://fireflyiii:8080;
 		
 	    # Request uncompressed files from upstream server to allow manipulation
