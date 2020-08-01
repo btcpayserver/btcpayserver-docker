@@ -16,8 +16,8 @@ services:
       - DB_PASSWORD=
       - VIRTUAL_HOST_NAME=fireflyiii
       - VIRTUAL_HOST=${FIREFLY_HOST}
+      - VIRTUAL_PORT=8080
     expose:
-      - 80
       - 8080
     volumes:
       - firefly_iii_export:/var/www/firefly-iii/storage/export
