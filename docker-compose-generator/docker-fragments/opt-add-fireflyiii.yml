@@ -14,8 +14,8 @@ services:
       - DB_DATABASE=fireflyiii
       - DB_USERNAME=postgres
       - DB_PASSWORD=
-      - VIRTUAL_HOST_NAME: "firefly"
-      - VIRTUAL_HOST: ${FIREFLY_HOST}
+      - VIRTUAL_HOST_NAME=firefly
+      - VIRTUAL_HOST=${FIREFLY_HOST}
     expose:
       - 8080
     volumes:
