@@ -59,12 +59,16 @@ namespace DockerGenerator
 			}
 			fragments.Add("btcpayserver");
 			
+			bool hasAltcoins = false;
 			foreach (var crypto in cryptoDefinitions)
 			{
 				if (!composition.SelectedCryptos.Contains(crypto.Crypto))
 					continue;
 
 				fragments.Add(crypto.CryptoFragment);
+				if (crypto.CryptoFragment != "bitcoin")
+					hasAltcoins = true;
+
 				if (composition.SelectedLN == "clightning" && crypto.CLightningFragment != null)
 				{
 					fragments.Add(crypto.CLightningFragment);
@@ -78,6 +82,11 @@ namespace DockerGenerator
 					fragments.Add(crypto.EclairFragment);
 				}
 			}
+
+			if (hasAltcoins)
+				Environment.SetEnvironmentVariable("BTCPAY_BUILD_CONFIGURATION", "-altcoins");
+			else
+				Environment.SetEnvironmentVariable("BTCPAY_BUILD_CONFIGURATION", "");
 
 			foreach (var fragment in composition.AdditionalFragments)
 			{

@@ -6,12 +6,12 @@
       "environmentVariables": {
         "BTCPAY_HOST_SSHKEYFILE": "test.rsa",
         "BTCPAYGEN_LIGHTNING": "clightning",
+        "BTCPAYGEN_ADDITIONAL_FRAGMENTS": "opt-save-storage",
         "BTCPAYGEN_CRYPTO4": "ftc",
         "BTCPAYGEN_CRYPTO3": "btg",
         "BTCPAYGEN_CRYPTO2": "ltc",
         "BTCPAYGEN_CRYPTO1": "btc",
-        "BTCPAYGEN_REVERSEPROXY": "nginx",
-        "BTCPAYGEN_ADDITIONAL_FRAGMENTS": "opt-save-storage;opt-txindex"
+        "BTCPAYGEN_REVERSEPROXY": "nginx"
       }
     }
   }
