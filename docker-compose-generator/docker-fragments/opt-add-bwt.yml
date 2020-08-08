@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   bwt:
-    image: shesek/bwt
+    image: shesek/bwt:electrum
     environment:
       network: mainnet
       bitcoind-url: http://btcpayserver_bitcoind
