@@ -6,7 +6,7 @@ services:
       BITCOIN_EXTRA_ARGS: |
         rpcauth=eps:3d1cff5ee81ddeb3ba94483150310e74$$4626aeb95b2a2b066eac8833c1ad936f65cf7492aa836ec8f173ff65ac428a0e
   electrum_ps:
-    image: btcpayserver/eps:0.2.0
+    image: btcpayserver/eps:0.2.1.1
     restart: unless-stopped
     ports:
       - "50002:50002"
