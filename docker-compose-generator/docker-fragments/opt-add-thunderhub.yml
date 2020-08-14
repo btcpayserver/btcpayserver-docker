@@ -6,17 +6,16 @@ services:
         volumes:
             - "lnd_bitcoin_thub_datadir:/etc/lnd_bitcoin_thub_datadir"
     bitcoin_thub:
-        image: apotdevin/thunderhub:v0.8.13
+        image: apotdevin/thunderhub:v0.9.3
         restart: unless-stopped
         stop_signal: SIGKILL
         environment:
             BASE_PATH: "/thub"
-            HODL_KEY: "XQ86AOqw7Of8qMDql901mcZkuHL2nRel5FA9H2Ie4rTLeBKn0VlO5GuXvdVRogWrDOuH5V0E51Qxy9Bo"
+            NO_VERSION_CHECK: true
             COOKIE_PATH: "/data/.cookie"
             SSO_SERVER_URL: "lnd_bitcoin:10009"
             SSO_MACAROON_PATH: "/etc/lnd"
             SSO_CERT_PATH: "/etc/lnd/tls.cert"
-            NO_CLIENT_ACCOUNTS: "true"
             LOG_LEVEL: debug
         volumes:
             - "lnd_bitcoin_datadir:/etc/lnd"
