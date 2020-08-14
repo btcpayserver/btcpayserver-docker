@@ -169,6 +169,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-pihole](docker-compose-generator/docker-fragments/opt-add-pihole.yml) ([See the documentation](docs/pihole.md))
 * [opt-add-thunderhub](docker-compose-generator/docker-fragments/opt-add-thunderhub.yml) for a LND Lightning Node Manager in your Browser. Maintained by [apotdevin](https://github.com/apotdevin).
 * [opt-add-teos](docker-compose-generator/docker-fragments/opt-add-teos.yml) for [The Eye Of Satoshi](https://github.com/talaia-labs/python-teos), a BOLT13 Lightning Watchtower. Use port 9814 on your server or Tor to connect.
+* [opt-add-chatwoot](docker-compose-generator/docker-fragments/opt-add-chatwoot.yml) for open source chat support system.  ([See the documentation](docs/chatwoot.md))
 
 You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).
 
