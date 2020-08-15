@@ -120,6 +120,7 @@ Check out this video if you're interested in learning more about setting up [BTC
 Additionally, there are specific environment variables for some addons:
 
 * `LIBREPATRON_HOST`: If libre patron is activated with [opt-add-librepatron](docker-compose-generator/docker-fragments/opt-add-librepatron.yml), the hostname of your libre patron website (eg. `librepatron.example.com`)
+* `ZAMMAD_HOST`: If zammad is activated with [opt-add-zammad](docker-compose-generator/docker-fragments/opt-add-zammad.yml), the hostname of your zammad website (eg. `zammad.example.com`)
 * `WOOCOMMERCE_HOST`: If woocommerce is activated with [opt-add-woocommerce](docker-compose-generator/docker-fragments/opt-add-woocommerce.yml), the hostname of your woocommerce website (eg. `store.example.com`)
 * `EPS_XPUB`: If Electrum Personal Server (EPS) is activated with [opt-add-electrum-ps](docker-compose-generator/docker-fragments/opt-add-electrum-ps.yml), you must set the Extended Public Key (XPUB, YPUB or ZPUB) of the wallet you want to use, before first run of the EPS server.  If you accidently start EPS without this, it will not work properly as the model of EPS is to monitor only specified wallets.
 
@@ -169,6 +170,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-pihole](docker-compose-generator/docker-fragments/opt-add-pihole.yml) ([See the documentation](docs/pihole.md))
 * [opt-add-thunderhub](docker-compose-generator/docker-fragments/opt-add-thunderhub.yml) for a LND Lightning Node Manager in your Browser. Maintained by [apotdevin](https://github.com/apotdevin).
 * [opt-add-teos](docker-compose-generator/docker-fragments/opt-add-teos.yml) for [The Eye Of Satoshi](https://github.com/talaia-labs/python-teos), a BOLT13 Lightning Watchtower. Use port 9814 on your server or Tor to connect.
+* [opt-add-zammad](docker-compose-generator/docker-fragments/opt-add-zammad.yml) for [Zammad](https://zammad.com/features), a web based open source helpdesk/customer support system with many features to manage customer communication via several channels like telephone, facebook, twitter, chat and e-mails
 
 You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).
 
