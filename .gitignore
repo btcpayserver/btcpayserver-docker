@@ -303,3 +303,6 @@ Generated/error
 
 
 /Generated/save-images.sh
+
+# DS_Store ignore
+.DS_Store
