@@ -28,7 +28,7 @@ Note: The setup process can be time consuming, but is heavily automated to make 
 
 Take a look at how BTCPay works in a video below.
 
-[![](https://raw.githubusercontent.com/btcpayserver/btcpayserver-doc/master/img/thumbnails/HowBTCPayServerWorks.png)](https://www.youtube.com/watch?v=nr0UNbz3AoQ)
+[![](https://img.youtube.com/vi/nr0UNbz3AoQ/hqdefault.jpg)](https://www.youtube.com/watch?v=nr0UNbz3AoQ)
 
 Here is a presentation of the global architecture at Advancing Bitcoin conference.
 
