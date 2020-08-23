@@ -84,7 +84,7 @@ exit
 
 Video below guides you step by step on how to set up BTCPay Server on a VPS with Docker.
 
-[![](https://raw.githubusercontent.com/btcpayserver/btcpayserver-doc/master/img/thumbnails/BTCPayDockerDeploymentVPS.png)](https://www.youtube.com/watch?v=x6hqTFgHqhA)
+[![](https://img.youtube.com/vi/x6hqTFgHqhA/hqdefault.jpg)](https://www.youtube.com/watch?v=x6hqTFgHqhA)
 
 Check out this video if you're interested in learning more about setting up [BTCPay with Docker Compose](https://www.youtube.com/playlist?list=PLH4m2oS2ratfaprAFx9E3ZDjwxNKvCk4e).
 
