@@ -2,7 +2,7 @@ version: "3"
 
 services:
   clightning_groestlcoin:
-    image: groestlcoin/lightning:v0.8.2
+    image: groestlcoin/lightning:v0.9.0
     stop_signal: SIGKILL
     container_name: btcpayserver_clightning_groestlcoin
     restart: unless-stopped
@@ -29,7 +29,7 @@ services:
       - nbxplorer
       - groestlcoind
   clightning_groestlcoin_charge:
-    image: groestlcoin/groestlcoin-lightning-charge:version-0.4.19
+    image: groestlcoin/groestlcoin-lightning-charge:version-0.4.22
     restart: unless-stopped
     environment:
       NETWORK: ${NBITCOIN_NETWORK:-regtest}
@@ -54,7 +54,7 @@ services:
     links:
       - clightning_groestlcoin
   clightning_groestlcoin_spark:
-    image: groestlcoin/groestlcoin-spark:version-0.2.14
+    image: groestlcoin/groestlcoin-spark:version-0.2.16
     stop_signal: SIGKILL
     restart: unless-stopped
     environment:
