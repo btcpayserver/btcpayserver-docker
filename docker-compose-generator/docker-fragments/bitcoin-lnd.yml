@@ -2,7 +2,7 @@ version: "3"
 
 services:
   lnd_bitcoin:
-    image: btcpayserver/lnd:v0.10.2-beta
+    image: btcpayserver/lnd:v0.11.0-beta
     container_name: btcpayserver_lnd_bitcoin
     restart: unless-stopped
     environment:
@@ -27,6 +27,7 @@ services:
         readonlymacaroonpath=/data/readonly.macaroon
         notls=1
         tlsextradomain=lnd_bitcoin
+        protocol.wumbo-channels=1
     ports:
       - "9735:9735"
     expose:
