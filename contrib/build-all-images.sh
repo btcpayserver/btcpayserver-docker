@@ -446,12 +446,12 @@ cd - && cd ..
 # Build monero
 # https://raw.githubusercontent.com/Kukks/monero-docker/x86_64/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/monero:0.15.0.1-amd64"
+echo "Building btcpayserver/monero:0.17.0.0-amd64"
 git clone https://github.com/Kukks/monero-docker monero
 cd monero
 git checkout x86_64
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.15.0.1-amd64" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.17.0.0-amd64" .
 cd - && cd ..
 
 
