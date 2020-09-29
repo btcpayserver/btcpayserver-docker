@@ -202,18 +202,18 @@ cd - && cd ..
 
 
 # Build bitcoin
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.19.0.1/Bitcoin/0.19.0.1/linuxamd64.Dockerfile
-DOCKERFILE="Bitcoin/0.19.0.1/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.19.0.1/Bitcoin/0.19.0.1/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Bitcoin/0.19.0.1/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.19.0.1/Bitcoin/0.19.0.1/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Bitcoin/0.19.0.1/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/bitcoin:0.19.0.1"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.20.1/Bitcoin/0.20.1/linuxamd64.Dockerfile
+DOCKERFILE="Bitcoin/0.20.1/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.20.1/Bitcoin/0.20.1/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Bitcoin/0.20.1/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.20.1/Bitcoin/0.20.1/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Bitcoin/0.20.1/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/bitcoin:0.20.1"
 git clone https://github.com/btcpayserver/dockerfile-deps bitcoin
 cd bitcoin
-git checkout Bitcoin/0.19.0.1
+git checkout Bitcoin/0.20.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoin:0.19.0.1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoin:0.20.1" .
 cd - && cd ..
 
 
