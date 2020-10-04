@@ -50,7 +50,7 @@ services:
     links:
       - clightning_bitcoin
     expose:
-     - "9737"
+      - "9737"
 
   clightning_bitcoin_rest:
     image: saubyk/c-lightning-rest:0.3.0
@@ -87,8 +87,8 @@ services:
       - "clightning_bitcoin_rtl_datadir:/data"
       - "clightning_bitcoin_rest_datadir:/etc/clightning_bitcoin_rest"
     expose:
-      - "3000"       
-       
+      - "3000"
+
   btcpayserver:
     environment:
       BTCPAY_BTCLIGHTNING: "type=clightning;server=unix://etc/clightning_bitcoin/lightning-rpc"

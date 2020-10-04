@@ -1,4 +1,4 @@
 services:
   bitcoind:
-      ports:
-        - "8332:43782"
+    ports:
+      - "8332:43782"

@@ -2,7 +2,7 @@ version: "3"
 
 services:
   btcpayserver:
-      ports:
+    ports:
       - "80:49392"
 
 exclusive:

@@ -11,7 +11,7 @@ services:
         stop_signal: SIGKILL
         environment:
             BASE_PATH: "/thub"
-            NO_VERSION_CHECK : "true"
+            NO_VERSION_CHECK: "true"
             COOKIE_PATH: "/data/.cookie"
             SSO_SERVER_URL: "lnd_bitcoin:10009"
             SSO_MACAROON_PATH: "/etc/lnd"

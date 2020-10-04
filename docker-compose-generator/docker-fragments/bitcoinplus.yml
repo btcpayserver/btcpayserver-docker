@@ -2,34 +2,34 @@ version: "3"
 
 services:
   bitcoinplusd:
-      restart: unless-stopped
-      container_name: btcpayserver_bitcoinplusd
-      image: chekaz/docker-bitcoinplus:2.7.0
-      environment:
-        BITCOIN_EXTRA_ARGS: |
-          rpcport=43782
-          ${NBITCOIN_NETWORK:-regtest}=1
-          port=39388
-          whitelist=0.0.0.0/0
-      expose:
-        - "43782"
-        - "39388"
-      volumes:
-        - "bitcoinplus_datadir:/data"
+    restart: unless-stopped
+    container_name: btcpayserver_bitcoinplusd
+    image: chekaz/docker-bitcoinplus:2.7.0
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        rpcport=43782
+        ${NBITCOIN_NETWORK:-regtest}=1
+        port=39388
+        whitelist=0.0.0.0/0
+    expose:
+      - "43782"
+      - "39388"
+    volumes:
+      - "bitcoinplus_datadir:/data"
   nbxplorer:
-      environment:
-        NBXPLORER_CHAINS: "xbc"
-        NBXPLORER_XBCRPCURL: http://bitcoinplusd:43782/
-        NBXPLORER_XBCNODEENDPOINT: bitcoinplusd:39388
-        NBXPLORER_XBCRPCUSER: "NBXPLORER_XBCRPCUSER"
-        NBXPLORER_XBCRPCPASSWORD: "NBXPLORER_XBCRPCPASS"
-      links:
-        - bitcoinplusd
-      volumes:
-        - "bitcoinplus_datadir:/root/.bitcoinplus"
+    environment:
+      NBXPLORER_CHAINS: "xbc"
+      NBXPLORER_XBCRPCURL: http://bitcoinplusd:43782/
+      NBXPLORER_XBCNODEENDPOINT: bitcoinplusd:39388
+      NBXPLORER_XBCRPCUSER: "NBXPLORER_XBCRPCUSER"
+      NBXPLORER_XBCRPCPASSWORD: "NBXPLORER_XBCRPCPASS"
+    links:
+      - bitcoinplusd
+    volumes:
+      - "bitcoinplus_datadir:/root/.bitcoinplus"
   btcpayserver:
-      environment:
-        BTCPAY_CHAINS: "xbc"
-        BTCPAY_TZCEXPLORERURL: http://nbxplorer:32838/
+    environment:
+      BTCPAY_CHAINS: "xbc"
+      BTCPAY_TZCEXPLORERURL: http://nbxplorer:32838/
 volumes:
   bitcoinplus_datadir:

@@ -26,10 +26,10 @@ services:
       - postgres
       - nbxplorer
     volumes:
-     - "btctransmuter_datadir:/app/data"
-     - "nbxplorer_datadir:/root/.nbxplorer"
+      - "btctransmuter_datadir:/app/data"
+      - "nbxplorer_datadir:/root/.nbxplorer"
   btcpayserver:
     environment:
       BTCPAY_EXTERNALSERVICES: "BTC Transmuter:btctransmuter;"
 volumes:
-    btctransmuter_datadir:
+  btctransmuter_datadir:

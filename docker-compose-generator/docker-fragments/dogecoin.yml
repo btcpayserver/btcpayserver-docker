@@ -2,40 +2,40 @@ version: "3"
 
 services:
   dogecoind:
-      restart: unless-stopped
-      container_name: btcpayserver_dogecoind
-      image: rockstardev/dogecoin:1.10.0
-      environment:
-        DOGECOIN_EXTRA_ARGS: |
-          rpcuser=ceiwHEbqWI83
-          rpcpassword=DwubwWsoo3
-          ${NBITCOIN_NETWORK:-regtest}=1
-          server=1
-          rpcport=22555
-          port=22556
-          whitelist=0.0.0.0/0
-          # Reducing memory usage of dogecoind. Don't try running this container without at least 2 GB of memory
-          # https://www.reddit.com/r/dogecoin/comments/5wynqe/reducing_memory_usage_of_dogecoind/
-          dbcache=50
-      ports: 
-        - "22555:22555"
-      expose:
-        - "22555" # RPC
-        - "22556" # P2P
-      volumes:
-        - "dogecoin_datadir:/data"
+    restart: unless-stopped
+    container_name: btcpayserver_dogecoind
+    image: rockstardev/dogecoin:1.10.0
+    environment:
+      DOGECOIN_EXTRA_ARGS: |
+        rpcuser=ceiwHEbqWI83
+        rpcpassword=DwubwWsoo3
+        ${NBITCOIN_NETWORK:-regtest}=1
+        server=1
+        rpcport=22555
+        port=22556
+        whitelist=0.0.0.0/0
+        # Reducing memory usage of dogecoind. Don't try running this container without at least 2 GB of memory
+        # https://www.reddit.com/r/dogecoin/comments/5wynqe/reducing_memory_usage_of_dogecoind/
+        dbcache=50
+    ports:
+      - "22555:22555"
+    expose:
+      - "22555"  # RPC
+      - "22556"  # P2P
+    volumes:
+      - "dogecoin_datadir:/data"
   nbxplorer:
-      environment:
-        NBXPLORER_CHAINS: "doge"
-        NBXPLORER_DOGERPCURL: http://dogecoind:22555/
-        NBXPLORER_DOGENODEENDPOINT: dogecoind:22556
-        NBXPLORER_DOGERPCUSER: ceiwHEbqWI83
-        NBXPLORER_DOGERPCPASSWORD: DwubwWsoo3
-      volumes:
-        - "dogecoin_datadir:/root/.dogecoin"
+    environment:
+      NBXPLORER_CHAINS: "doge"
+      NBXPLORER_DOGERPCURL: http://dogecoind:22555/
+      NBXPLORER_DOGENODEENDPOINT: dogecoind:22556
+      NBXPLORER_DOGERPCUSER: ceiwHEbqWI83
+      NBXPLORER_DOGERPCPASSWORD: DwubwWsoo3
+    volumes:
+      - "dogecoin_datadir:/root/.dogecoin"
   btcpayserver:
-      environment:
-        BTCPAY_CHAINS: "doge"
-        BTCPAY_DOGEEXPLORERURL: http://nbxplorer:32838/
+    environment:
+      BTCPAY_CHAINS: "doge"
+      BTCPAY_DOGEEXPLORERURL: http://nbxplorer:32838/
 volumes:
   dogecoin_datadir:
