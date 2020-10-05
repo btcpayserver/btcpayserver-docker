@@ -18,6 +18,7 @@ services:
       BTCPAY_SSHKEYFILE: ${BTCPAY_SSHKEYFILE}
       BTCPAY_SSHAUTHORIZEDKEYS: ${BTCPAY_SSHAUTHORIZEDKEYS}
       BTCPAY_DEBUGLOG: btcpay.log
+      BTCPAY_UPDATEURL: https://api.github.com/repos/btcpayserver/btcpayserver/releases/latest
     links:
       - postgres
     volumes:
