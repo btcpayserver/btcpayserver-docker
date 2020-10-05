@@ -2,30 +2,30 @@ version: "3"
 
 services:
   viacoind:
-      restart: unless-stopped
-      container_name: btcpayserver_viacoind
-      image: romanornr/docker-viacoin:0.15.2
-      environment:
-        BITCOIN_EXTRA_ARGS: |
-          rpcport=43782
-          ${NBITCOIN_NETWORK:-regtest}=1
-          port=39388
-          whitelist=0.0.0.0/0
-      expose:
-        - "43782"
-        - "39388"
-      volumes:
-        - "viacoin_datadir:/data"
+    restart: unless-stopped
+    container_name: btcpayserver_viacoind
+    image: romanornr/docker-viacoin:0.15.2
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        rpcport=43782
+        ${NBITCOIN_NETWORK:-regtest}=1
+        port=39388
+        whitelist=0.0.0.0/0
+    expose:
+      - "43782"
+      - "39388"
+    volumes:
+      - "viacoin_datadir:/data"
   nbxplorer:
-      environment:
-        NBXPLORER_CHAINS: "via"
-        NBXPLORER_VIARPCURL: http://viacoind:43782/
-        NBXPLORER_VIANODEENDPOINT: viacoind:39388
-      volumes:
-        - "viacoin_datadir:/root/.viacoin"
+    environment:
+      NBXPLORER_CHAINS: "via"
+      NBXPLORER_VIARPCURL: http://viacoind:43782/
+      NBXPLORER_VIANODEENDPOINT: viacoind:39388
+    volumes:
+      - "viacoin_datadir:/root/.viacoin"
   btcpayserver:
-      environment:
-        BTCPAY_CHAINS: "via"
-        BTCPAY_VIAEXPLORERURL: http://nbxplorer:32838/
+    environment:
+      BTCPAY_CHAINS: "via"
+      BTCPAY_VIAEXPLORERURL: http://nbxplorer:32838/
 volumes:
   viacoin_datadir:

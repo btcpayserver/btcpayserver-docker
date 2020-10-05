@@ -17,16 +17,16 @@ services:
     volumes:
       - "litecoin_datadir:/data"
   nbxplorer:
-      environment:
-        NBXPLORER_CHAINS: "ltc"
-        NBXPLORER_LTCRPCURL: http://litecoind:43782/
-        NBXPLORER_LTCNODEENDPOINT: litecoind:39388
-      volumes:
-        - "litecoin_datadir:/root/.litecoin"
+    environment:
+      NBXPLORER_CHAINS: "ltc"
+      NBXPLORER_LTCRPCURL: http://litecoind:43782/
+      NBXPLORER_LTCNODEENDPOINT: litecoind:39388
+    volumes:
+      - "litecoin_datadir:/root/.litecoin"
   btcpayserver:
-      environment:
-        BTCPAY_LTCEXPLORERURL: http://nbxplorer:32838/
-        BTCPAY_CHAINS: "ltc"
+    environment:
+      BTCPAY_LTCEXPLORERURL: http://nbxplorer:32838/
+      BTCPAY_CHAINS: "ltc"
 
 volumes:
-    litecoin_datadir:
+  litecoin_datadir:

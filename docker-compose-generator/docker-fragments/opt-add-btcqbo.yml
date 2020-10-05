@@ -11,7 +11,7 @@ services:
       CALLBACK_URL: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/btcqbo/qbologged
     expose:
       - "8001"
-    links: 
+    links:
       - redis
   redis:
     image: redis:5.0.2-alpine
@@ -23,4 +23,4 @@ services:
     environment:
       BTCPAY_EXTERNALSERVICES: "Quickbooks Online Connector:btcqbo;"
 volumes:
-    redis_datadir:
+  redis_datadir:

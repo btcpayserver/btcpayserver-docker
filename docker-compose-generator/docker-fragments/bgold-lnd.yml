@@ -36,7 +36,7 @@ services:
       - "lnd_bitcoingold_datadir:/etc/lnd_bitcoingold"
     links:
       - lnd_bitcoingold
-  
+
   nginx:
     links:
       - "lnd_bitcoingold"

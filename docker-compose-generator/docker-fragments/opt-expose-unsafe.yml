@@ -3,5 +3,5 @@ version: "3"
 
 services:
   bitcoind:
-      ports:
-        - "8333:39388"
+    ports:
+      - "8333:39388"

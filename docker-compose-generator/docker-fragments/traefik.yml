@@ -14,7 +14,7 @@ services:
       - "./acme.json:/acme.json:ro"
       - "./servers.toml:/servers.toml"
       - "./traefik_logs:/traefik_logs"
-      
+
     links:
       - btcpayserver
 

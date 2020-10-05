@@ -2,30 +2,30 @@ version: "3"
 
 services:
   feathercoind:
-      restart: unless-stopped
-      container_name: btcpayserver_feathercoind
-      image: chekaz/docker-feathercoin:0.16.3
-      environment:
-        BITCOIN_EXTRA_ARGS: |
-          rpcport=43782
-          ${NBITCOIN_NETWORK:-regtest}=1
-          port=39388
-          whitelist=0.0.0.0/0
-      expose:
-        - "43782"
-        - "39388"
-      volumes:
-        - "feathercoin_datadir:/data"
+    restart: unless-stopped
+    container_name: btcpayserver_feathercoind
+    image: chekaz/docker-feathercoin:0.16.3
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        rpcport=43782
+        ${NBITCOIN_NETWORK:-regtest}=1
+        port=39388
+        whitelist=0.0.0.0/0
+    expose:
+      - "43782"
+      - "39388"
+    volumes:
+      - "feathercoin_datadir:/data"
   nbxplorer:
-      environment:
-        NBXPLORER_CHAINS: "ftc"
-        NBXPLORER_FTCRPCURL: http://feathercoind:43782/
-        NBXPLORER_FTCNODEENDPOINT: feathercoind:39388
-      volumes:
-        - "feathercoin_datadir:/root/.feathercoin"
+    environment:
+      NBXPLORER_CHAINS: "ftc"
+      NBXPLORER_FTCRPCURL: http://feathercoind:43782/
+      NBXPLORER_FTCNODEENDPOINT: feathercoind:39388
+    volumes:
+      - "feathercoin_datadir:/root/.feathercoin"
   btcpayserver:
-      environment:
-        BTCPAY_CHAINS: "ftc"
-        BTCPAY_FTCEXPLORERURL: http://nbxplorer:32838/
+    environment:
+      BTCPAY_CHAINS: "ftc"
+      BTCPAY_FTCEXPLORERURL: http://nbxplorer:32838/
 volumes:
   feathercoin_datadir:

@@ -36,4 +36,3 @@ services:
       - "nbxplorer_datadir:/root/.nbxplorer"
 volumes:
   electrum_ps_datadir:
-  

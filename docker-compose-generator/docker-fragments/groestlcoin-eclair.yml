@@ -32,8 +32,8 @@ services:
         -Declair.bitcoind.zmqblock=tcp://groestlcoind:21441
         -Declair.bitcoind.zmqtx=tcp://groestlcoind:21441
     expose:
-      - "9735" # server port
-      - "8080" # api port
+      - "9735"  # server port
+      - "8080"  # api port
     volumes:
       - "groestlcoin_datadir:/etc/groestlcoin"
       - "eclair_groestlcoin_datadir:/data"

@@ -61,12 +61,12 @@ services:
       NETWORK: ${NBITCOIN_NETWORK:-regtest}
       SPARK_OPT: --no-tls  --port 9739 -C /data/.cookie
     volumes:
-    - "clightning_groestlcoin_datadir:/etc/lightning"
-    - "clightning_groestlcoin_spark:/data"
+      - "clightning_groestlcoin_datadir:/etc/lightning"
+      - "clightning_groestlcoin_spark:/data"
     links:
-    - clightning_groestlcoin
+      - clightning_groestlcoin
     expose:
-    - "9739"
+      - "9739"
 volumes:
   clightning_groestlcoin_datadir:
   clightning_groestlcoin_charge:
