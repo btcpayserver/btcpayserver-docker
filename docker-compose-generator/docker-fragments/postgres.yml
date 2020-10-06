@@ -3,9 +3,9 @@ version: "3"
 services:
   postgres:
     restart: unless-stopped
-    image:  postgres:9.6.5
+    image: postgres:9.6.5
     volumes:
       - "postgres_datadir:/var/lib/postgresql/data"
 
 volumes:
-    postgres_datadir:
+  postgres_datadir:

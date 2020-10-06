@@ -17,16 +17,16 @@ services:
     volumes:
       - "monacoin_datadir:/data"
   nbxplorer:
-      environment:
-        NBXPLORER_CHAINS: "mona"
-        NBXPLORER_MONARPCURL: http://monacoind:43782/
-        NBXPLORER_MONANODEENDPOINT: monacoind:39388
-      volumes:
-        - "monacoin_datadir:/root/.monacoin"
+    environment:
+      NBXPLORER_CHAINS: "mona"
+      NBXPLORER_MONARPCURL: http://monacoind:43782/
+      NBXPLORER_MONANODEENDPOINT: monacoind:39388
+    volumes:
+      - "monacoin_datadir:/root/.monacoin"
   btcpayserver:
-      environment:
-        BTCPAY_MONAEXPLORERURL: http://nbxplorer:32838/
-        BTCPAY_CHAINS: "mona"
+    environment:
+      BTCPAY_MONAEXPLORERURL: http://nbxplorer:32838/
+      BTCPAY_CHAINS: "mona"
 
 volumes:
-    monacoin_datadir:
+  monacoin_datadir:

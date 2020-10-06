@@ -32,8 +32,8 @@ services:
       - "mariadb_datadir:/var/lib/mysql"
 
   btcpayserver:
-      environment:
-          BTCPAY_EXTERNALSERVICES: "WooCommerce:${BTCPAY_PROTOCOL:-https}://${WOOCOMMERCE_HOST};"
+    environment:
+      BTCPAY_EXTERNALSERVICES: "WooCommerce:${BTCPAY_PROTOCOL:-https}://${WOOCOMMERCE_HOST};"
 volumes:
   woocommerce_html:
   mariadb_datadir:

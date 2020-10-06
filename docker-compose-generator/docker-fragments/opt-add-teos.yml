@@ -32,4 +32,4 @@ volumes:
 required:
   - "opt-add-zmq"
   - "bitcoin"
-  - "opt-txindex" 
+  - "opt-txindex"

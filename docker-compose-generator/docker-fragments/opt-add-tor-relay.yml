@@ -14,7 +14,7 @@ services:
     environment:
       TOR_RELAY_NICKNAME: ${TOR_RELAY_NICKNAME}
       TOR_RELAY_EMAIL: ${TOR_RELAY_EMAIL}
-        
+
   tor-relay:
     restart: unless-stopped
     image: btcpayserver/tor:0.4.2.7
@@ -25,9 +25,9 @@ services:
     volumes:
       - "tor_relay_datadir:/home/tor/.tor"
       - "tor_relay_torrcdir:/usr/local/etc/tor"
-    ports: 
+    ports:
       - "9001:9001"
-      - "9030:9030" 
+      - "9030:9030"
 volumes:
   tor_relay_datadir:
   tor_relay_torrcdir:

@@ -22,9 +22,9 @@ services:
     links:
       - postgres
     volumes:
-     - "btcpay_datadir:/datadir"
-     - "nbxplorer_datadir:/root/.nbxplorer"
-     - "$<BTCPAY_HOST_SSHAUTHORIZEDKEYS>?:${BTCPAY_SSHAUTHORIZEDKEYS}"
+      - "btcpay_datadir:/datadir"
+      - "nbxplorer_datadir:/root/.nbxplorer"
+      - "$<BTCPAY_HOST_SSHAUTHORIZEDKEYS>?:${BTCPAY_SSHAUTHORIZEDKEYS}"
 
 volumes:
   btcpay_datadir:

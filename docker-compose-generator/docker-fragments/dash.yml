@@ -2,30 +2,30 @@ version: "3"
 
 services:
   dashd:
-      restart: unless-stopped
-      container_name: btcpayserver_dashd
-      image: btcpayserver/dash:0.14.0.1
-      environment:
-        BITCOIN_EXTRA_ARGS: |
-          ${NBITCOIN_NETWORK:-regtest}=1
-          port=9999
-          rpcport=9998
-          whitelist=0.0.0.0/0
-      expose:
-        - "9998"
-        - "9999"
-      volumes:
-        - "dash_datadir:/data"
+    restart: unless-stopped
+    container_name: btcpayserver_dashd
+    image: btcpayserver/dash:0.14.0.1
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        ${NBITCOIN_NETWORK:-regtest}=1
+        port=9999
+        rpcport=9998
+        whitelist=0.0.0.0/0
+    expose:
+      - "9998"
+      - "9999"
+    volumes:
+      - "dash_datadir:/data"
   nbxplorer:
-      environment:
-        NBXPLORER_CHAINS: "dash"
-        NBXPLORER_DASHRPCURL: http://dashd:9998/
-        NBXPLORER_DASHNODEENDPOINT: dashd:9999
-      volumes:
-        - "dash_datadir:/root/.dashcore"
+    environment:
+      NBXPLORER_CHAINS: "dash"
+      NBXPLORER_DASHRPCURL: http://dashd:9998/
+      NBXPLORER_DASHNODEENDPOINT: dashd:9999
+    volumes:
+      - "dash_datadir:/root/.dashcore"
   btcpayserver:
-      environment:
-        BTCPAY_CHAINS: "dash"
-        BTCPAY_DASHEXPLORERURL: http://nbxplorer:32838/
+    environment:
+      BTCPAY_CHAINS: "dash"
+      BTCPAY_DASHEXPLORERURL: http://nbxplorer:32838/
 volumes:
   dash_datadir:
