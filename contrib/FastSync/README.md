@@ -113,7 +113,7 @@ If you are a bitcoin developer or public figure, feel free to add your signature
 keybase pgp sign -i YOU.utxo-sets -c -t -o sigs/YOU.utxo-sets.asc
 rm YOU.utxo-sets
 git add sigs/YOU.utxo-sets.asc
-git commit -m "Add YOU utxo-set signature" -all
+git commit -m "Add YOU utxo-set signature" --all
 ```
 And make a pull request to `btcpayserver-docker` repository.
 
