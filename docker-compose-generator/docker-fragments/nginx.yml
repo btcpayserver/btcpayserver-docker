@@ -28,10 +28,10 @@ services:
       - btcpayserver
       - nginx
 volumes:
-    nginx_conf:
-    nginx_vhost:
-    nginx_html:
-    nginx_certs:
+  nginx_conf:
+  nginx_vhost:
+  nginx_html:
+  nginx_certs:
 
 exclusive:
   - proxy

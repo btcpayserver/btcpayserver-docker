@@ -32,14 +32,14 @@ services:
         -Declair.bitcoind.zmqblock=tcp://bitcoind:28332
         -Declair.bitcoind.zmqtx=tcp://bitcoind:28333
     expose:
-      - "9735" # server port
-      - "8080" # api port
+      - "9735"  # server port
+      - "8080"  # api port
     volumes:
       - "bitcoin_datadir:/etc/bitcoin"
       - "eclair_bitcoin_datadir:/data"
     links:
       - bitcoind
-        
+
   bitcoin_rtl:
     image: shahanafarooqui/rtl:0.8.2
     restart: unless-stopped
@@ -71,6 +71,7 @@ services:
       - eclair_bitcoin
 volumes:
   eclair_bitcoin_datadir:
+  eclair_bitcoin_rtl_datadir:
 
 incompatible:
   - pruning

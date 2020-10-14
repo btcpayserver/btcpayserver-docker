@@ -9,7 +9,7 @@ services:
       VIRTUAL_PORT: 49392
       VIRTUAL_HOST: ${BTCPAY_HOST},${BTCPAY_ADDITIONAL_HOSTS}
       VIRTUAL_HOST_NAME: "btcpay"
-      SSL_POLICY: Mozilla-Modern 
+      SSL_POLICY: Mozilla-Modern
 
       # Let's encrypt settings
       LETSENCRYPT_HOST: ${BTCPAY_HOST},${BTCPAY_ADDITIONAL_HOSTS}
