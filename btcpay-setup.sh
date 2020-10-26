@@ -358,6 +358,7 @@ export BTCPAY_ENV_FILE=\"$BTCPAY_ENV_FILE\"
 export BTCPAY_HOST_SSHKEYFILE=\"$BTCPAY_HOST_SSHKEYFILE\"
 export BTCPAY_ENABLE_SSH=$BTCPAY_ENABLE_SSH
 export PIHOLE_SERVERIP=\"$PIHOLE_SERVERIP\"
+export LIGHTNING_ALIAS=\"$LIGHTNING_ALIAS\"
 if cat \"\$BTCPAY_ENV_FILE\" &> /dev/null; then
   while IFS= read -r line; do
     ! [[ \"\$line\" == \"#\"* ]] && [[ \"\$line\" == *\"=\"* ]] && export \"\$line\"
