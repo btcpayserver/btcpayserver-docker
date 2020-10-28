@@ -539,4 +539,6 @@ server {
 {{ end }}
 {{ end }}
 {{ end }}
-{{$.Env.ADDITIONAL_NGINX_CONFIG }}
+{{ if $.Env.ADDITIONAL_NGINX_CONFIG }}
+{{ $.Env.ADDITIONAL_NGINX_CONFIG}}
+{{ end }}
