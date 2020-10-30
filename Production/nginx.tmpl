@@ -34,6 +34,18 @@
 		proxy_pass http://lnd_bitcoin:8080/;
 	}
 		{{ end }}
+		{{ if (eq $serviceName "bitcoin_mempool") }}
+	location /mempool {
+		rewrite ^/mempool(.*)$ $1 break;
+		proxy_pass http://bitcoin_mempool/;
+	}
+	location /ws {
+		proxy_pass http://bitcoin_mempool/ws;
+		proxy_http_version 1.1;
+		proxy_set_header Upgrade $http_upgrade;
+		proxy_set_header Connection "Upgrade";
+	}
+		{{ end }}
 		{{ if (eq $serviceName "bitcoin_rtl") }}
 	location /rtl/ {
 		proxy_pass http://bitcoin_rtl:3000/rtl/;

@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  bitcoin_mempool:
+    image: mempool/mempool:v1.0
+    environment:
+      MEMPOOL_BASE_HREF: /mempool
+      BITCOIN_NODE_HOST: bitcoind
+      BITCOIN_NODE_PORT: 43782
+      BITCOIN_NODE_USER: mempool
+      BITCOIN_NODE_PASS: mempool
+    expose:
+      - "80"
+    links:
+      - bitcoind
+    volumes:
+      - "mempool:/var/lib/mysql"
+      - "mempool:/mempool.space"
+
+  bitcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        rpcauth=mempool:429313b63ea02e5836ee4d534c41d34b$$5a18aa10ec8ffcf9cdc87d6147b85fbf04ec4959be42bf04b86f771c3335469c
+
+volumes:
+  mempool:
