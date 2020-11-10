@@ -169,6 +169,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-pihole](docker-compose-generator/docker-fragments/opt-add-pihole.yml) ([See the documentation](docs/pihole.md))
 * [opt-add-thunderhub](docker-compose-generator/docker-fragments/opt-add-thunderhub.yml) for a LND Lightning Node Manager in your Browser. Maintained by [apotdevin](https://github.com/apotdevin).
 * [opt-add-teos](docker-compose-generator/docker-fragments/opt-add-teos.yml) for [The Eye Of Satoshi](https://github.com/talaia-labs/python-teos), a BOLT13 Lightning Watchtower. Use port 9814 on your server or Tor to connect.
+* [opt-monero-expose](docker-compose-generator/docker-fragments/opt-monero-expose.yml) to expose monero node's RPC port at 127.0.0.1:18081 to connect your own wallet. Use f.e. ssh port forwarding to forward to your own computer.
 
 You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).
 
