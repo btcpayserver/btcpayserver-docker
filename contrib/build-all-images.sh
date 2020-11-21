@@ -639,6 +639,22 @@ docker build -f "$DOCKERFILE" -t "jvandrew/isso:atron.22" .
 cd - && cd ..
 
 
+# Build ndlc-cli
+# https://raw.githubusercontent.com/dgarage/ndlc/releases/1.0.1/amd64.Dockerfile
+DOCKERFILE="amd64.Dockerfile"
+# https://raw.githubusercontent.com/dgarage/ndlc/releases/1.0.1/arm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
+# https://raw.githubusercontent.com/dgarage/ndlc/releases/1.0.1/arm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
+echo "Building nicolasdorier/ndlc-cli:1.0.1"
+git clone https://github.com/dgarage/ndlc ndlc-cli
+cd ndlc-cli
+git checkout releases/1.0.1
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "nicolasdorier/ndlc-cli:1.0.1" .
+cd - && cd ..
+
+
 # Build pihole
 # https://raw.githubusercontent.com/pi-hole/docker-pi-hole/v5.0/Dockerfile_amd64
 DOCKERFILE="Dockerfile_amd64"
