@@ -640,18 +640,18 @@ cd - && cd ..
 
 
 # Build ndlc-cli
-# https://raw.githubusercontent.com/dgarage/ndlc/releases/1.0.1/amd64.Dockerfile
+# https://raw.githubusercontent.com/dgarage/ndlc/releases/1.0.1-2/amd64.Dockerfile
 DOCKERFILE="amd64.Dockerfile"
-# https://raw.githubusercontent.com/dgarage/ndlc/releases/1.0.1/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/dgarage/ndlc/releases/1.0.1-2/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/dgarage/ndlc/releases/1.0.1/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/dgarage/ndlc/releases/1.0.1-2/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building nicolasdorier/ndlc-cli:1.0.1"
+echo "Building nicolasdorier/ndlc-cli:1.0.1-2"
 git clone https://github.com/dgarage/ndlc ndlc-cli
 cd ndlc-cli
-git checkout releases/1.0.1
+git checkout releases/1.0.1-2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/ndlc-cli:1.0.1" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/ndlc-cli:1.0.1-2" .
 cd - && cd ..
 
 

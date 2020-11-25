@@ -2,7 +2,7 @@ version: '3'
 services:
   ndlc:
     container_name: ndlci_cli
-    image: nicolasdorier/ndlc-cli:1.0.1
+    image: nicolasdorier/ndlc-cli:1.0.1-2
     restart: 'no'
     volumes:
       - "ndlc_cli_datadir:/root/.ndlc"
