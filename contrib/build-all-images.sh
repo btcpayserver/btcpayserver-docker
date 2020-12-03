@@ -242,18 +242,18 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.6.0/amd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.6.1/amd64.Dockerfile
 DOCKERFILE="amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.6.0/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.6.1/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.6.0/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.6.1/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building btcpayserver/btcpayserver:1.0.6.0$<BTCPAY_BUILD_CONFIGURATION>?"
+echo "Building btcpayserver/btcpayserver:1.0.6.1$<BTCPAY_BUILD_CONFIGURATION>?"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.0.6.0
+git checkout v1.0.6.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.6.0$<BTCPAY_BUILD_CONFIGURATION>?" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.6.1$<BTCPAY_BUILD_CONFIGURATION>?" .
 cd - && cd ..
 
 
@@ -446,24 +446,24 @@ cd - && cd ..
 # Build monero
 # https://raw.githubusercontent.com/Kukks/monero-docker/x86_64/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/monero:0.17.1.3"
+echo "Building btcpayserver/monero:0.17.1.5"
 git clone https://github.com/Kukks/monero-docker monero
 cd monero
 git checkout x86_64
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.17.1.3" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.17.1.5" .
 cd - && cd ..
 
 
 # Build monero
 # https://raw.githubusercontent.com/Kukks/monero-docker/x86_64/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/monero:0.17.1.3"
+echo "Building btcpayserver/monero:0.17.1.5"
 git clone https://github.com/Kukks/monero-docker monero
 cd monero
 git checkout x86_64
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.17.1.3" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.17.1.5" .
 cd - && cd ..
 
 
@@ -768,14 +768,14 @@ cd - && cd ..
 
 
 # Build docker-woocommerce
-# https://raw.githubusercontent.com/btcpayserver/docker-woocommerce/v3.0.6-3/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/docker-woocommerce/v3.0.6-wordpress-5.5.3-php-7.4.12/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/docker-woocommerce:3.0.6-3"
+echo "Building btcpayserver/docker-woocommerce:3.0.6-wordpress-5.5.3-php-7.4.12"
 git clone https://github.com/btcpayserver/docker-woocommerce docker-woocommerce
 cd docker-woocommerce
-git checkout v3.0.6-3
+git checkout v3.0.6-wordpress-5.5.3-php-7.4.12
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/docker-woocommerce:3.0.6-3" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/docker-woocommerce:3.0.6-wordpress-5.5.3-php-7.4.12" .
 cd - && cd ..
 
 
