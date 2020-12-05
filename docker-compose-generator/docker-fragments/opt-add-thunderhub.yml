@@ -2,11 +2,11 @@ version: "3"
 services:
     btcpayserver:
         environment:
-            BTCPAY_BTCEXTERNALTHUNDERHUB: "server=/thub/;cookiefile=/etc/lnd_bitcoin_thub_datadir/.cookie"
+            BTCPAY_BTCEXTERNALTHUNDERHUB: "server=/thub/sso/;cookiefile=/etc/lnd_bitcoin_thub_datadir/.cookie"
         volumes:
             - "lnd_bitcoin_thub_datadir:/etc/lnd_bitcoin_thub_datadir"
     bitcoin_thub:
-        image: apotdevin/thunderhub:v0.10.1
+        image: apotdevin/thunderhub:v0.11.0
         restart: unless-stopped
         stop_signal: SIGKILL
         environment:
