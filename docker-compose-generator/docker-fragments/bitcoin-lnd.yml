@@ -41,7 +41,7 @@ services:
       - bitcoind
 
   bitcoin_rtl:
-    image: shahanafarooqui/rtl:0.8.4
+    image: shahanafarooqui/rtl:0.9.2
     restart: unless-stopped
     environment:
       LND_SERVER_URL: http://lnd_bitcoin:8080/v1

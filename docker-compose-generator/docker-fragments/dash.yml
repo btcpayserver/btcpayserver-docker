@@ -4,7 +4,7 @@ services:
   dashd:
     restart: unless-stopped
     container_name: btcpayserver_dashd
-    image: btcpayserver/dash:0.14.0.1
+    image: btcpayserver/dash:0.16.1.1
     environment:
       BITCOIN_EXTRA_ARGS: |
         ${NBITCOIN_NETWORK:-regtest}=1
