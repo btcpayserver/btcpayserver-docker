@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  monerod:
+    ports:
+    - "127.0.0.1:18081:18081"
+required:
+    - "monero"
