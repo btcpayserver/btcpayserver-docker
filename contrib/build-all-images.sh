@@ -274,14 +274,14 @@ cd - && cd ..
 
 
 # Build dogecoin
-# https://raw.githubusercontent.com/rockstardev/docker-bitcoin/feature/dogecoin/dogecoin/1.10.0/Dockerfile
-DOCKERFILE="dogecoin/1.10.0/Dockerfile"
-echo "Building rockstardev/dogecoin:1.10.0"
-git clone https://github.com/rockstardev/docker-bitcoin dogecoin
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dogecoin/1.14.2/Dogecoin/1.14.2/linuxamd64.Dockerfile
+DOCKERFILE="Dogecoin/1.14.2/linuxamd64.Dockerfile"
+echo "Building btcpayserver/dogecoin:1.14.2"
+git clone https://github.com/btcpayserver/dockerfile-deps dogecoin
 cd dogecoin
-git checkout feature/dogecoin
+git checkout Dogecoin/1.14.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "rockstardev/dogecoin:1.10.0" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/dogecoin:1.14.2" .
 cd - && cd ..
 
 
@@ -446,24 +446,24 @@ cd - && cd ..
 # Build monero
 # https://raw.githubusercontent.com/Kukks/monero-docker/x86_64/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/monero:0.17.1.5"
+echo "Building btcpayserver/monero:0.17.1.6"
 git clone https://github.com/Kukks/monero-docker monero
 cd monero
 git checkout x86_64
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.17.1.5" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.17.1.6" .
 cd - && cd ..
 
 
 # Build monero
 # https://raw.githubusercontent.com/Kukks/monero-docker/x86_64/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/monero:0.17.1.5"
+echo "Building btcpayserver/monero:0.17.1.6"
 git clone https://github.com/Kukks/monero-docker monero
 cd monero
 git checkout x86_64
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.17.1.5" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.17.1.6" .
 cd - && cd ..
 
 

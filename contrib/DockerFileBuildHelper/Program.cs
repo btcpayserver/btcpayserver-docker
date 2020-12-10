@@ -447,9 +447,9 @@ namespace DockerFileBuildHelper
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "dogecoin":
-                    dockerInfo.DockerFilePath = $"dogecoin/{image.Tag}/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/rockstardev/docker-bitcoin";
-                    dockerInfo.GitRef = "feature/dogecoin";
+                    dockerInfo.DockerFilePath = $"Dogecoin/{image.Tag}/linuxamd64.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"Dogecoin/{image.Tag}";
                     break;
                 case "docker-bitcore":
                     dockerInfo.DockerFilePath = "docker-bitcored/Dockerfile";
