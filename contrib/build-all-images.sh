@@ -153,22 +153,6 @@ docker build -f "$DOCKERFILE" -t "acinq/eclair:release-0.4.1" .
 cd - && cd ..
 
 
-# Build rtl
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.8.2/Dockerfile
-DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.8.2/Dockerfile.arm32v7
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.8.2/Dockerfile.arm64v8
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.8.2"
-git clone https://github.com/ShahanaFarooqui/RTL rtl
-cd rtl
-git checkout v0.8.2
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.8.2" .
-cd - && cd ..
-
-
 # Build lnd
 # https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.11.0-beta/linuxamd64.Dockerfile
 DOCKERFILE="linuxamd64.Dockerfile"
@@ -182,22 +166,6 @@ cd lnd
 git checkout basedon-v0.11.0-beta
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.11.0-beta" .
-cd - && cd ..
-
-
-# Build rtl
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.9.2/Dockerfile
-DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.9.2/Dockerfile.arm32v7
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.9.2/Dockerfile.arm64v8
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.9.2"
-git clone https://github.com/ShahanaFarooqui/RTL rtl
-cd rtl
-git checkout v0.9.2
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.9.2" .
 cd - && cd ..
 
 
