@@ -446,24 +446,24 @@ cd - && cd ..
 # Build monero
 # https://raw.githubusercontent.com/Kukks/monero-docker/x86_64/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/monero:0.17.1.6"
+echo "Building btcpayserver/monero:0.17.1.7"
 git clone https://github.com/Kukks/monero-docker monero
 cd monero
 git checkout x86_64
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.17.1.6" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.17.1.7" .
 cd - && cd ..
 
 
 # Build monero
 # https://raw.githubusercontent.com/Kukks/monero-docker/x86_64/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/monero:0.17.1.6"
+echo "Building btcpayserver/monero:0.17.1.7"
 git clone https://github.com/Kukks/monero-docker monero
 cd monero
 git checkout x86_64
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.17.1.6" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.17.1.7" .
 cd - && cd ..
 
 
@@ -688,18 +688,18 @@ cd - && cd ..
 
 
 # Build thunderhub
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.11.0/Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.0/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.11.0/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.0/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.11.0/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.0/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building apotdevin/thunderhub:v0.11.0"
+echo "Building apotdevin/thunderhub:base-v0.12.0"
 git clone https://github.com/apotdevin/thunderhub thunderhub
 cd thunderhub
-git checkout v0.11.0
+git checkout v0.12.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:v0.11.0" .
+docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:base-v0.12.0" .
 cd - && cd ..
 
 
