@@ -313,7 +313,7 @@ docker build -f "$DOCKERFILE" -t "groestlcoin/eclair:v0.3.3" .
 cd - && cd ..
 
 
-# Build lnd
+# Build groestlcoin lnd
 # https://raw.githubusercontent.com/Groestlcoin/lnd/v0.10.0-grs/Dockerfile
 DOCKERFILE="Dockerfile"
 echo "Building groestlcoin/lnd:v0.10.0-grs"
@@ -408,18 +408,6 @@ cd docker-monacoin
 git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "wakiyamap/docker-monacoin:0.17.1" .
-cd - && cd ..
-
-
-# Build monero
-# https://raw.githubusercontent.com/Kukks/monero-docker/x86_64/Dockerfile
-DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/monero:0.17.1.7"
-git clone https://github.com/Kukks/monero-docker monero
-cd monero
-git checkout x86_64
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.17.1.7" .
 cd - && cd ..
 
 
@@ -684,22 +672,6 @@ cd docker-gen
 git checkout v0.7.7
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/docker-gen:0.7.7" .
-cd - && cd ..
-
-
-# Build tor
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.2.7/Tor/0.4.2.7/linuxamd64.Dockerfile
-DOCKERFILE="Tor/0.4.2.7/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.2.7/Tor/0.4.2.7/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Tor/0.4.2.7/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.2.7/Tor/0.4.2.7/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Tor/0.4.2.7/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/tor:0.4.2.7"
-git clone https://github.com/btcpayserver/dockerfile-deps tor
-cd tor
-git checkout Tor/0.4.2.7
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/tor:0.4.2.7" .
 cd - && cd ..
 
 
