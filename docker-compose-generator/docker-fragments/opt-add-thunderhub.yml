@@ -6,11 +6,10 @@ services:
         volumes:
             - "lnd_bitcoin_thub_datadir:/etc/lnd_bitcoin_thub_datadir"
     bitcoin_thub:
-        image: apotdevin/thunderhub:v0.11.0
+        image: apotdevin/thunderhub:base-v0.12.0
         restart: unless-stopped
         stop_signal: SIGKILL
         environment:
-            BASE_PATH: "/thub"
             NO_VERSION_CHECK: "true"
             COOKIE_PATH: "/data/.cookie"
             SSO_SERVER_URL: "lnd_bitcoin:10009"
@@ -18,6 +17,7 @@ services:
             SSO_CERT_PATH: "/etc/lnd/tls.cert"
             NO_CLIENT_ACCOUNTS: "true"
             LOG_LEVEL: debug
+            LOGOUT_URL: "/server/services/thunderhub/BTC"
         volumes:
             - "lnd_bitcoin_datadir:/etc/lnd"
             - "lnd_bitcoin_thub_datadir:/data"

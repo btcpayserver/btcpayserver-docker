@@ -40,9 +40,8 @@
 	}
 		{{ end }}
 		{{ if (eq $serviceName "bitcoin_thub") }}
-	location /thub/ {
-		rewrite ^/thub(.*)$ $1 break;
-		proxy_pass http://bitcoin_thub:3000/;
+	location /thub {
+		proxy_pass http://bitcoin_thub:3000/thub;
 	}
 		{{ end }}
 		{{ if (eq $serviceName "btcqbo") }}
