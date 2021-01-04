@@ -166,6 +166,14 @@ services:
     volumes:
       - "tor_servicesdir:/var/lib/tor/hidden_services"
       - "tor_torrcdir:/usr/local/etc/tor/"
+
+  zammad-nginx:
+    environment:
+      HIDDENSERVICE_NAME: zammad
+      HIDDENSERVICE_PORT: 80
+    volumes:
+      - "tor_servicesdir:/var/lib/tor/hidden_services"
+      - "tor_torrcdir:/usr/local/etc/tor/"
 volumes:
   tor_datadir:
   tor_torrcdir:
