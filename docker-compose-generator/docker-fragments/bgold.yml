@@ -2,30 +2,30 @@ version: "3"
 
 services:
   bgoldd:
-      restart: unless-stopped
-      container_name: btcpayserver_bgoldd
-      image: kamigawabul/docker-bitcoingold:0.15.2
-      environment:
-        BITCOIN_EXTRA_ARGS: |
-          rpcport=43782
-          ${NBITCOIN_NETWORK:-regtest}=1
-          port=39388
-          whitelist=0.0.0.0/0
-      expose:
-        - "43782"
-        - "39388"
-      volumes:
-        - "bgold_datadir:/data"
+    restart: unless-stopped
+    container_name: btcpayserver_bgoldd
+    image: kamigawabul/docker-bitcoingold:0.15.2
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        rpcport=43782
+        ${NBITCOIN_NETWORK:-regtest}=1
+        port=39388
+        whitelist=0.0.0.0/0
+    expose:
+      - "43782"
+      - "39388"
+    volumes:
+      - "bgold_datadir:/data"
   nbxplorer:
-      environment:
-        NBXPLORER_CHAINS: "btg"
-        NBXPLORER_BTGRPCURL: http://bgoldd:43782/
-        NBXPLORER_BTGNODEENDPOINT: bgoldd:39388
-      volumes:
-        - "bgold_datadir:/root/.bitcoingold"
+    environment:
+      NBXPLORER_CHAINS: "btg"
+      NBXPLORER_BTGRPCURL: http://bgoldd:43782/
+      NBXPLORER_BTGNODEENDPOINT: bgoldd:39388
+    volumes:
+      - "bgold_datadir:/root/.bitcoingold"
   btcpayserver:
-      environment:
-        BTCPAY_CHAINS: "btg"
-        BTCPAY_BTGEXPLORERURL: http://nbxplorer:32838/
+    environment:
+      BTCPAY_CHAINS: "btg"
+      BTCPAY_BTGEXPLORERURL: http://nbxplorer:32838/
 volumes:
   bgold_datadir:

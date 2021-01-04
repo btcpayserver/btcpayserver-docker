@@ -1,5 +1,5 @@
-# This will expose BTCPayServer, Woocommerce, your lightning nodes as hidden services and accept onion peers for your full node. 
-# Warning: This options is for working around NAT and firewall problems as well as to help protect your customer's privacy. 
+# This will expose BTCPayServer, Woocommerce, your lightning nodes as hidden services and accept onion peers for your full node.
+# Warning: This options is for working around NAT and firewall problems as well as to help protect your customer's privacy.
 # This will not protect your privacy against a targeted attack against your own privacy.
 # All outbound traffic is not channeled through the TOR SOCKS proxy
 version: "3"
@@ -15,7 +15,7 @@ services:
     volumes:
       - "tor_servicesdir:/var/lib/tor/hidden_services"
       - "tor_torrcdir:/usr/local/etc/tor/"
-      
+
   btctransmuter:
     environment:
       HIDDENSERVICE_NAME: BTCTransmuter
@@ -25,7 +25,7 @@ services:
     volumes:
       - "tor_servicesdir:/var/lib/tor/hidden_services"
       - "tor_torrcdir:/usr/local/etc/tor/"
-      
+
   configurator:
     environment:
       HIDDENSERVICE_NAME: Configurator
@@ -33,7 +33,7 @@ services:
     volumes:
       - "tor_servicesdir:/var/lib/tor/hidden_services"
       - "tor_torrcdir:/usr/local/etc/tor/"
-      
+
   woocommerce:
     environment:
       HIDDENSERVICE_NAME: WooCommerce
@@ -56,9 +56,9 @@ services:
         # Be careful if you copy the line below from the docker-compose.yml! A dollar sign is escaped.
         rpcauth=btcrpc:a6a5d29a3f44f02e4cd8cabb5b10a234$$ab6152915515f6a9cca806d2ab5f0e2794c346ba74f812c61e48241d523778b8
     volumes:
-    - "tor_datadir:/home/tor/.tor"
+      - "tor_datadir:/home/tor/.tor"
     links:
-    - tor
+      - tor
 
   nginx:
     volumes:
@@ -77,8 +77,8 @@ services:
       TOR_EXTRA_ARGS: |
         CookieAuthentication 1
     expose:
-      - "9050" # SOCKS
-      - "9051" # Tor Control
+      - "9050"  # SOCKS
+      - "9051"  # Tor Control
     volumes:
       - "tor_datadir:/home/tor/.tor"
       - "tor_torrcdir:/usr/local/etc/tor"
@@ -175,6 +175,6 @@ services:
       - "tor_servicesdir:/var/lib/tor/hidden_services"
       - "tor_torrcdir:/usr/local/etc/tor/"
 volumes:
-    tor_datadir:
-    tor_torrcdir:
-    tor_servicesdir:
+  tor_datadir:
+  tor_torrcdir:
+  tor_servicesdir:
