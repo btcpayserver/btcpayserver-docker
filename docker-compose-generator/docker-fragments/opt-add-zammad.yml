@@ -1,0 +1,116 @@
+version: "3"
+
+services:
+  zammad-backup:
+    command: ["zammad-backup"]
+    depends_on:
+      - zammad-railsserver
+    entrypoint: /usr/local/bin/backup.sh
+    environment:
+      - BACKUP_SLEEP=86400
+      - HOLD_DAYS=10
+      - POSTGRESQL_HOST=postgres
+      - POSTGRESQL_USER=postgres
+      - POSTGRESQL_PASSWORD=
+    image: zammad/zammad-docker-compose:zammad-postgresql-3.4.0-4
+    links:
+      - postgres
+    restart: unless-stopped
+    volumes:
+      - zammad-backup:/var/tmp/zammad
+      - zammad-data:/opt/zammad
+  zammad-elasticsearch:
+    environment:
+      - discovery.type=single-node
+    image: zammad/zammad-docker-compose:zammad-elasticsearch-3.4.0-4
+    restart: unless-stopped
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+
+  zammad-init:
+    command: ["zammad-init"]
+    depends_on:
+      - postgres
+    environment:
+      - POSTGRESQL_HOST=postgres
+      - POSTGRESQL_USER=postgres
+      - POSTGRESQL_PASS=
+    image: zammad/zammad-docker-compose:zammad-3.4.0-4
+    links:
+      - zammad-elasticsearch
+      - postgres
+    restart: on-failure
+    volumes:
+      - zammad-data:/opt/zammad
+
+  zammad-memcached:
+    command: memcached -m 256M
+    image: memcached:1.5.22-alpine
+    restart: unless-stopped
+
+  zammad-nginx:
+    command: ["zammad-nginx"]
+    expose:
+      - "80"
+    depends_on:
+      - zammad-railsserver
+    image: zammad/zammad-docker-compose:zammad-3.4.0-4
+    links:
+      - zammad-railsserver
+      - zammad-websocket
+    restart: unless-stopped
+    environment:
+      VIRTUAL_HOST: ${ZAMMAD_HOST}
+      VIRTUAL_HOST_NAME: "zammad"
+      LETSENCRYPT_HOST: ${ZAMMAD_HOST}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}
+    volumes:
+      - zammad-data:/opt/zammad
+
+  zammad-railsserver:
+    command: ["zammad-railsserver"]
+    depends_on:
+      - zammad-memcached
+      - postgres
+    image: zammad/zammad-docker-compose:zammad-3.4.0-4
+    links:
+      - zammad-elasticsearch
+      - zammad-memcached
+      - postgres
+    restart: unless-stopped
+    volumes:
+      - zammad-data:/opt/zammad
+
+  zammad-scheduler:
+    command: ["zammad-scheduler"]
+    depends_on:
+      - zammad-memcached
+      - zammad-railsserver
+    image: zammad/zammad-docker-compose:zammad-3.4.0-4
+    links:
+      - zammad-elasticsearch
+      - zammad-memcached
+      - postgres
+    restart: unless-stopped
+    volumes:
+      - zammad-data:/opt/zammad
+
+  zammad-websocket:
+    command: ["zammad-websocket"]
+    depends_on:
+      - zammad-memcached
+      - zammad-railsserver
+    image: zammad/zammad-docker-compose:zammad-3.4.0-4
+    links:
+      - postgres
+      - zammad-memcached
+    restart: unless-stopped
+    volumes:
+      - zammad-data:/opt/zammad
+  btcpayserver:
+    environment:
+      BTCPAY_EXTERNALSERVICES: "Zammad: ${BTCPAY_PROTOCOL:-https}://${ZAMMAD_HOST};"
+volumes:
+  elasticsearch-data:
+  zammad-backup:
+  zammad-data:

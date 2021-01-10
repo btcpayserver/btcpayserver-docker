@@ -463,7 +463,7 @@ namespace DockerFileBuildHelper
                     break;
                 case "docker-groestlcoin":
                     dockerInfo.DockerFilePath = $"groestlcoin/{image.Tag}/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/NicolasDorier/docker-bitcoin";
+                    dockerInfo.GitLink = "https://github.com/Groestlcoin/docker-groestlcoin";
                     dockerInfo.GitRef = "master";
                     break;
                 case "docker-viacoin":
@@ -560,7 +560,7 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/apotdevin/thunderhub";
                     dockerInfo.GitRef = $"{image.Tag.Split('-')[1]}";
                     dockerInfo.SupportedByUs = false;
-                    break;                
+                    break;
                 case "python-teos":
                     dockerInfo.DockerFilePath = $"docker/Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"docker/Dockerfile";

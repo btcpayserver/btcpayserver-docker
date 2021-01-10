@@ -71,7 +71,7 @@ services:
       - "3001"
 
   bitcoin_rtl:
-    image: shahanafarooqui/rtl:0.9.3
+    image: shahanafarooqui/rtl:0.10.0
     restart: unless-stopped
     environment:
       LN_IMPLEMENTATION: CLT
