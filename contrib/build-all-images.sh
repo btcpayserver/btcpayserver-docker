@@ -768,14 +768,14 @@ cd - && cd ..
 
 
 # Build docker-woocommerce
-# https://raw.githubusercontent.com/btcpayserver/docker-woocommerce/v3.0.6-wordpress-5.5.3-php-7.4.12/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/docker-woocommerce/v3.0.12/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/docker-woocommerce:3.0.6-wordpress-5.5.3-php-7.4.12"
+echo "Building btcpayserver/docker-woocommerce:3.0.12"
 git clone https://github.com/btcpayserver/docker-woocommerce docker-woocommerce
 cd docker-woocommerce
-git checkout v3.0.6-wordpress-5.5.3-php-7.4.12
+git checkout v3.0.12
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/docker-woocommerce:3.0.6-wordpress-5.5.3-php-7.4.12" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/docker-woocommerce:3.0.12" .
 cd - && cd ..
 
 
