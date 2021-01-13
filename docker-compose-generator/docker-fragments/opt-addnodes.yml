@@ -4,7 +4,7 @@ version: "3"
 services:
   dogecoind:
     environment:
-      BITCOIN_EXTRA_ARGS: |
+      DOGECOIN_EXTRA_ARGS: |
         addnode=coins.prohashing.com:6003
   feathercoind:
     environment:
