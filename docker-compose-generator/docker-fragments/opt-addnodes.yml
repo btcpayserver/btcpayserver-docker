@@ -1,0 +1,26 @@
+version: "3"
+# Uses addnodes from Prohashing explorers for faster syncing! 
+
+services:
+  dogecoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        addnode=coins.prohashing.com:6003
+  feathercoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        addnode=coins.prohashing.com:6002
+  litecoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        addnode=coins.prohashing.com:6001
+  viacoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        addnode=coins.prohashing.com:6095
+  monacoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        addnode=coins.prohashing.com:6138
+exclusive:
+  - addnode
