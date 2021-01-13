@@ -14,9 +14,6 @@ services:
         rpcport=22555
         port=22556
         whitelist=0.0.0.0/0
-        # Reducing memory usage of dogecoind. Don't try running this container without at least 2 GB of memory
-        # https://www.reddit.com/r/dogecoin/comments/5wynqe/reducing_memory_usage_of_dogecoind/
-        dbcache=50
     ports:
       - "22555:22555"
     expose:
