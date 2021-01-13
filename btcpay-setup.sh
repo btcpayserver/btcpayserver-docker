@@ -333,7 +333,14 @@ if [[ "$NBITCOIN_NETWORK" != "mainnet" ]] && [[ "$NBITCOIN_NETWORK" != "testnet"
     echo "NBITCOIN_NETWORK should be equal to mainnet, testnet or regtest"
 fi
 
-
+if [[ $BTCPAY_CRYPTOS == *"doge"* ]]; then
+        echo "Found DOGE, generating unique RPC username and password for security"
+        random_user=$(date +%s | sha256sum | base64 | head -c 32 ; echo) ; sleep 1 ; random_pass=$(date +%s | sha256sum | base64 | head -c 32 ; echo)
+        perl -pi -e 's/rpcuser=.*/'"rpcuser=$random_user"'/g' docker-compose-generator/docker-fragments/dogecoin.yml
+        perl -pi -e 's/rpcpassword=.*/'"rpcpassword=$random_pass"'/g' docker-compose-generator/docker-fragments/dogecoin.yml
+        perl -pi -e 's/NBXPLORER_DOGERPCUSER: .*/'"NBXPLORER_DOGERPCUSER: $random_user"'/g' docker-compose-generator/docker-fragments/dogecoin.yml
+        perl -pi -e 's/NBXPLORER_DOGERPCPASSWORD: .*/'"NBXPLORER_DOGERPCPASSWORD: $random_pass"'/g' docker-compose-generator/docker-fragments/dogecoin.yml
+fi
 
 # Init the variables when a user log interactively
 touch "$BASH_PROFILE_SCRIPT"
