@@ -12,7 +12,7 @@ services:
         dbcache=1024
   dogecoind:
     environment:
-      BITCOIN_EXTRA_ARGS: |
+      DOGECOIN_EXTRA_ARGS: |
         dbcache=1024
   feathercoind:
     environment:
