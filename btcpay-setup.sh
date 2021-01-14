@@ -3,7 +3,7 @@
 set +x
 
 if [[ "$0" = "$BASH_SOURCE" ]]; then
-    echo "This script must be sourced \". btcpay-setup.sh\"" 
+    echo "This script must be sourced \". btcpay-setup.sh\""
     exit 1
 fi
 
@@ -103,6 +103,7 @@ Add-on specific variables:
     LIBREPATRON_HOST: If libre patron is activated with opt-add-librepatron, the hostname of your libre patron website (eg. librepatron.example.com)
     ZAMMAD_HOST: If zammad is activated with opt-add-zammad, the hostname of your zammad website (eg. zammad.example.com)
     WOOCOMMERCE_HOST: If woocommerce is activated with opt-add-woocommerce, the hostname of your woocommerce website (eg. store.example.com)
+    PRESTASHOP_HOST: If PrestaShop is activated with opt-add-prestashop, the hostname of your PrestaShop website (eg. store.example.com)
     BTCPAYGEN_EXCLUDE_FRAGMENTS:  Semicolon-separated list of fragments you want to forcefully exclude (eg. litecoin-clightning)
     BTCTRANSMUTER_HOST: If btc transmuter is activated with opt-add-btctransmuter, the hostname of your btc transmuter website (eg. store.example.com)
     TOR_RELAY_NICKNAME: If tor relay is activated with opt-add-tor-relay, the relay nickname
@@ -170,7 +171,7 @@ if [[ -z "$BTCPAYGEN_CRYPTO1" ]]; then
     fi
 fi
 
-if [ ! -z "$BTCPAY_ADDITIONAL_HOSTS" ] && [[ "$BTCPAY_ADDITIONAL_HOSTS" == *[';']* ]]; then 
+if [ ! -z "$BTCPAY_ADDITIONAL_HOSTS" ] && [[ "$BTCPAY_ADDITIONAL_HOSTS" == *[';']* ]]; then
     echo "$BTCPAY_ADDITIONAL_HOSTS should be separated by a , not ;"
     return;
 fi
@@ -285,6 +286,7 @@ REVERSEPROXY_DEFAULT_HOST:$REVERSEPROXY_DEFAULT_HOST
 LIBREPATRON_HOST:$LIBREPATRON_HOST
 ZAMMAD_HOST:$ZAMMAD_HOST
 WOOCOMMERCE_HOST:$WOOCOMMERCE_HOST
+PRESTASHOP_HOST:$PRESTASHOP_HOST
 BTCTRANSMUTER_HOST:$BTCTRANSMUTER_HOST
 BTCPAY_ENABLE_SSH:$BTCPAY_ENABLE_SSH
 BTCPAY_HOST_SSHKEYFILE:$BTCPAY_HOST_SSHKEYFILE
@@ -391,7 +393,7 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
     if ! [[ -x "$(command -v docker)" ]]; then
         if [[ "$(uname -m)" == "x86_64" ]] || [[ "$(uname -m)" == "armv7l" ]] || [[ "$(uname -m)" == "aarch64" ]]; then
             if [[ "$OSTYPE" == "darwin"* ]]; then
-                # Mac OS	
+                # Mac OS
                 if ! [[ -x "$(command -v brew)" ]]; then
                     # Brew is not installed, install it now
                     echo "Homebrew, the package manager for Mac OS, is not installed. Installing it now..."

@@ -34,6 +34,6 @@ If ($BTCPAYGEN_REVERSEPROXY -eq "nginx") {
 
 If ($BTCPAYGEN_REVERSEPROXY -eq "traefik") {
     Copy-Item ".\Traefik\traefik.toml" -Destination ".\Generated"
-    
+
     New-Item  ".\Generated\acme.json" -type file
 }

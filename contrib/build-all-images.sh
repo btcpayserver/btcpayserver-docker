@@ -201,6 +201,18 @@ docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.10.0" .
 cd - && cd ..
 
 
+# Build prestashop
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/master/PrestaShop/1.7/linuxamd64.Dockerfile
+DOCKERFILE="PrestaShop/1.7/linuxamd64.Dockerfile"
+echo "Building btcpayserver/prestashop:1.7"
+git clone https://github.com/btcpayserver/dockerfile-deps prestashop
+cd prestashop
+git checkout PrestaShop/1.7
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/prestashop:1.7" .
+cd - && cd ..
+
+
 # Build bitcoin
 # https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.20.1/Bitcoin/0.20.1/linuxamd64.Dockerfile
 DOCKERFILE="Bitcoin/0.20.1/linuxamd64.Dockerfile"

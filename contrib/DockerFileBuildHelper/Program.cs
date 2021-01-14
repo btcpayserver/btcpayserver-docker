@@ -390,6 +390,15 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"Elements/{image.Tag}";
                     break;
                 }
+                case "prestashop":
+                {
+                    var tagNoRevision = image.Tag.Split('-').First();
+                    dockerInfo.DockerFilePath = $"PrestaShop/{tagNoRevision}/linuxamd64.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"PrestaShop/{image.Tag}";
+                    dockerInfo.SupportedByUs = true;
+                    break;
+                }
                 case "tor":
                     dockerInfo.DockerFilePath = $"Tor/{image.Tag}/linuxamd64.Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"Tor/{image.Tag}/linuxarm32v7.Dockerfile";

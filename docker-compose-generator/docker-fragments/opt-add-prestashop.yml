@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  prestashop:
+    image: btcpayserver/prestashop:1.7
+    environment:
+      PS_DOMAIN: ${PRESTASHOP_HOST}
+      PS_INSTALL_AUTO: 0
+      PS_HANDLE_DYNAMIC_DOMAIN: 1
+      DB_SERVER: mariadb
+      DB_USER: prestashop
+      DB_NAME: prestashop
+      DB_PASSWD: prestashop
+      LETSENCRYPT_HOST: ${PRESTASHOP_HOST}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}
+      VIRTUAL_HOST: ${PRESTASHOP_HOST}
+      VIRTUAL_HOST_NAME: "prestashop"
+    expose:
+      - '80'
+    links:
+      - mariadb
+    volumes:
+      - 'prestashop_html:/var/www/html'
+
+  mariadb:
+    image: mariadb:10.3
+    environment:
+      MYSQL_ROOT_PASSWORD: prestashopdb
+      MYSQL_DATABASE: prestashop
+      MYSQL_USER: prestashop
+      MYSQL_PASSWORD: prestashop
+    expose:
+      - "3306"
+    volumes:
+      - "mariadb_datadir:/var/lib/mysql"
+
+  btcpayserver:
+    environment:
+      BTCPAY_EXTERNALSERVICES: "PrestaShop:${BTCPAY_PROTOCOL:-https}://${PRESTASHOP_HOST};"
+volumes:
+  prestashop_html:
+  mariadb_datadir:
