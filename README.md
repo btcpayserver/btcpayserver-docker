@@ -469,3 +469,33 @@ If you need to run on a different port, it's best to terminate SSL using another
 ## Can I offload HTTPS termination?
 
 Yes. Please [see the documentation](https://docs.btcpayserver.org/FAQ/FAQ-Deployment/#can-i-use-an-existing-nginx-server-as-a-reverse-proxy-with-ssl-termination).
+
+## How can I back up my BTCPay Server?
+
+We provide a backup script that dumps the database and saves the important files:
+
+```bash
+cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
+./backup.sh
+```
+
+This will save the backup locally as `/var/lib/docker/volumes/backup_datadir/_data/backup.tar.gz`.
+These are the options to customize the backup name and location:
+
+- You can customize the filename by providing it as an argument to the script (see below).
+- `BACKUP_TIMESTAMP=true` saves the backup with datetime as part of the file name, so that backups do not get overwritten.
+- `BACKUP_PROVIDER=SCP` saves the backup remotely, requires additional `SCP_TARGET` environment variable (see below).
+- `BACKUP_PROVIDER=Dropbox` saves the backup to Dropbox, requires additional `DROPBOX_TOKEN` environment variable (see below).
+
+```bash
+cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
+
+# Backup with custom file name and timestamp:
+BACKUP_TIMESTAMP=true ./backup.sh btcpay-server.tar.gz
+
+# Backup via SCP:
+BACKUP_PROVIDER=SCP SCP_TARGET=myhost:backups/btcpay ./backup.sh
+
+# Backup to Dropbox:
+BACKUP_PROVIDER=Dropbox DROPBOX_TOKEN=myDropboxToken ./backup.sh
+```
