@@ -126,18 +126,18 @@ cd - && cd ..
 
 
 # Build rtl
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.9.3/Dockerfile
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.10.0/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.9.3/Dockerfile.arm32v7
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.10.0/Dockerfile.arm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.9.3/Dockerfile.arm64v8
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.10.0/Dockerfile.arm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.9.3"
+echo "Building shahanafarooqui/rtl:0.10.0"
 git clone https://github.com/ShahanaFarooqui/RTL rtl
 cd rtl
-git checkout v0.9.3
+git checkout v0.10.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.9.3" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.10.0" .
 cd - && cd ..
 
 
@@ -154,18 +154,18 @@ cd - && cd ..
 
 
 # Build rtl
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.8.2/Dockerfile
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.10.0/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.8.2/Dockerfile.arm32v7
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.10.0/Dockerfile.arm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.8.2/Dockerfile.arm64v8
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.10.0/Dockerfile.arm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.8.2"
+echo "Building shahanafarooqui/rtl:0.10.0"
 git clone https://github.com/ShahanaFarooqui/RTL rtl
 cd rtl
-git checkout v0.8.2
+git checkout v0.10.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.8.2" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.10.0" .
 cd - && cd ..
 
 
@@ -186,18 +186,18 @@ cd - && cd ..
 
 
 # Build rtl
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.9.3/Dockerfile
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.10.0/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.9.3/Dockerfile.arm32v7
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.10.0/Dockerfile.arm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.9.3/Dockerfile.arm64v8
+# https://raw.githubusercontent.com/ShahanaFarooqui/RTL/v0.10.0/Dockerfile.arm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.9.3"
+echo "Building shahanafarooqui/rtl:0.10.0"
 git clone https://github.com/ShahanaFarooqui/RTL rtl
 cd rtl
-git checkout v0.9.3
+git checkout v0.10.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.9.3" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.10.0" .
 cd - && cd ..
 
 
@@ -242,18 +242,18 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.6.4/amd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.6.5/amd64.Dockerfile
 DOCKERFILE="amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.6.4/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.6.5/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.6.4/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.0.6.5/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building btcpayserver/btcpayserver:1.0.6.4$<BTCPAY_BUILD_CONFIGURATION>?"
+echo "Building btcpayserver/btcpayserver:1.0.6.5$<BTCPAY_BUILD_CONFIGURATION>?"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.0.6.4
+git checkout v1.0.6.5
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.6.4$<BTCPAY_BUILD_CONFIGURATION>?" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.0.6.5$<BTCPAY_BUILD_CONFIGURATION>?" .
 cd - && cd ..
 
 
@@ -361,7 +361,7 @@ cd - && cd ..
 # https://raw.githubusercontent.com/Groestlcoin/docker-groestlcoin/master/groestlcoin/2.21.0/Dockerfile
 DOCKERFILE="groestlcoin/2.21.0/Dockerfile"
 echo "Building groestlcoin/docker-groestlcoin:2.21.0"
-git https://github.com/Groestlcoin/docker-groestlcoin docker-groestlcoin
+git clone https://github.com/Groestlcoin/docker-groestlcoin docker-groestlcoin
 cd docker-groestlcoin
 git checkout master
 cd "$(dirname $DOCKERFILE)"
@@ -468,18 +468,18 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.1.46/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.1.47/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.1.46/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.1.47/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.1.46/Dockerfile.linuxarm64v8
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.1.47/Dockerfile.linuxarm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.linuxarm64v8"
-echo "Building nicolasdorier/nbxplorer:2.1.46"
+echo "Building nicolasdorier/nbxplorer:2.1.47"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.1.46
+git checkout v2.1.47
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.1.46" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.1.47" .
 cd - && cd ..
 
 
@@ -791,6 +791,102 @@ docker build -f "$DOCKERFILE" -t "mariadb:10.3" .
 cd - && cd ..
 
 
+# Build zammad-docker-compose
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad-postgresql/Dockerfile
+DOCKERFILE="containers/zammad-postgresql/Dockerfile"
+echo "Building zammad/zammad-docker-compose:zammad-postgresql-3.4.0-4"
+git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
+cd zammad-docker-compose
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-postgresql-3.4.0-4" .
+cd - && cd ..
+
+
+# Build zammad-docker-compose
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad-elasticsearch/Dockerfile
+DOCKERFILE="containers/zammad-elasticsearch/Dockerfile"
+echo "Building zammad/zammad-docker-compose:zammad-elasticsearch-3.4.0-4"
+git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
+cd zammad-docker-compose
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-elasticsearch-3.4.0-4" .
+cd - && cd ..
+
+
+# Build zammad-docker-compose
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad/Dockerfile
+DOCKERFILE="containers/zammad/Dockerfile"
+echo "Building zammad/zammad-docker-compose:zammad-3.4.0-4"
+git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
+cd zammad-docker-compose
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-3.4.0-4" .
+cd - && cd ..
+
+
+# Build memcached
+# https://raw.githubusercontent.com/docker-library/memcached/master/alpine/Dockerfile
+DOCKERFILE="alpine/Dockerfile"
+echo "Building memcached:1.5.22-alpine"
+git clone https://github.com/docker-library/memcached memcached
+cd memcached
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "memcached:1.5.22-alpine" .
+cd - && cd ..
+
+
+# Build zammad-docker-compose
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad/Dockerfile
+DOCKERFILE="containers/zammad/Dockerfile"
+echo "Building zammad/zammad-docker-compose:zammad-3.4.0-4"
+git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
+cd zammad-docker-compose
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-3.4.0-4" .
+cd - && cd ..
+
+
+# Build zammad-docker-compose
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad/Dockerfile
+DOCKERFILE="containers/zammad/Dockerfile"
+echo "Building zammad/zammad-docker-compose:zammad-3.4.0-4"
+git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
+cd zammad-docker-compose
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-3.4.0-4" .
+cd - && cd ..
+
+
+# Build zammad-docker-compose
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad/Dockerfile
+DOCKERFILE="containers/zammad/Dockerfile"
+echo "Building zammad/zammad-docker-compose:zammad-3.4.0-4"
+git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
+cd zammad-docker-compose
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-3.4.0-4" .
+cd - && cd ..
+
+
+# Build zammad-docker-compose
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad/Dockerfile
+DOCKERFILE="containers/zammad/Dockerfile"
+echo "Building zammad/zammad-docker-compose:zammad-3.4.0-4"
+git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
+cd zammad-docker-compose
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-3.4.0-4" .
+cd - && cd ..
+
+
 # Build postgres
 # https://raw.githubusercontent.com/docker-library/postgres/b7cb3c6eacea93be2259381033be3cc435649369/9.6/Dockerfile
 DOCKERFILE="9.6/Dockerfile"
@@ -841,3 +937,5 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
+
+

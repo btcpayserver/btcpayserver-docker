@@ -569,6 +569,30 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"master";
                     dockerInfo.SupportedByUs = false;
                     break;
+                case "zammad/zammad-docker-compose" when image.Tag.StartsWith("zammad-postgresql-"):
+                    dockerInfo.DockerFilePath = $"containers/zammad-postgresql/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/zammad/zammad-docker-compose";
+                    dockerInfo.GitRef = $"master";
+                    dockerInfo.SupportedByUs = false;
+                    break;
+                case "zammad/zammad-docker-compose" when image.Tag.StartsWith("zammad-elasticsearch-"):
+                    dockerInfo.DockerFilePath = $"containers/zammad-elasticsearch/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/zammad/zammad-docker-compose";
+                    dockerInfo.GitRef = $"master";
+                    dockerInfo.SupportedByUs = false;
+                    break;
+                case "zammad/zammad-docker-compose" when image.Tag.StartsWith("zammad-"):
+                    dockerInfo.DockerFilePath = $"containers/zammad/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/zammad/zammad-docker-compose";
+                    dockerInfo.GitRef = $"master";
+                    dockerInfo.SupportedByUs = false;
+                    break;
+                case "memcached" when image.Tag.EndsWith("alpine"):
+                    dockerInfo.DockerFilePath = $"alpine/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/docker-library/memcached";
+                    dockerInfo.GitRef = $"master";
+                    dockerInfo.SupportedByUs = false;
+                    break;
                 default:
                     if (firstTry)
                     {
