@@ -39,7 +39,7 @@ esac
 # preparation
 volumes_dir=/var/lib/docker/volumes
 backup_dir="$volumes_dir/backup_datadir"
-timestamp=$(date "+%Y%m%d-%H%M%S")
+dumpname="postgres.sql"
 
 if [ -z ${1+x} ]; then
     filename="backup.tar.gz"
@@ -47,22 +47,20 @@ else
     filename=$1
 fi
 if [ "$BACKUP_TIMESTAMP" == true ]; then
+  timestamp=$(date "+%Y%m%d-%H%M%S")
   filename="$timestamp-$filename"
+  dumpname="$timestamp-$dumpname"
 fi
 
 backup_path="$backup_dir/_data/${filename}"
-dbdump_path="$backup_dir/_data/postgres-dump.sql"
-
-if [ ! -d "$backup_dir" ]; then
-    docker volume create backup_datadir
-fi
+dbdump_path="$backup_dir/_data/${dumpname}"
 
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 . helpers.sh
 
 # dump database
 echo "Dumping database …"
-docker exec $(docker ps -a -q -f "name=postgres_1") pg_dumpall -c -U postgres > $dbdump_path
+btcpay_dump_db $dumpname
 
 # stop docker containers, save files and restart
 echo "Stopping BTCPay Server …"
