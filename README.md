@@ -125,6 +125,7 @@ Additionally, there are specific environment variables for some addons:
 * `EPS_XPUB`: If Electrum Personal Server (EPS) is activated with [opt-add-electrum-ps](docker-compose-generator/docker-fragments/opt-add-electrum-ps.yml), you must set the Extended Public Key (XPUB, YPUB or ZPUB) of the wallet you want to use, before first run of the EPS server.  If you accidently start EPS without this, it will not work properly as the model of EPS is to monitor only specified wallets.
 * `PRESTASHOP_HOST`: If PrestaShop is activated with [opt-add-prestashop](docker-compose-generator/docker-fragments/opt-add-prestashop.yml), the hostname of your PrestaShop website (eg. `store.example.com`)
   - The default database configuration is: `server: mariadb`, `user: prestashop`, `password: prestashop`, `database: prestashop`.
+  - After you finish the installer, you'll need to run the following: `docker exec generated_prestashop_1 /bin/bash -c "rm -r /var/www/html/install"`
 
 # Tooling
 
