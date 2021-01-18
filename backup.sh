@@ -39,13 +39,9 @@ esac
 # preparation
 volumes_dir=/var/lib/docker/volumes
 backup_dir="$volumes_dir/backup_datadir"
+filename="backup.tar.gz"
 dumpname="postgres.sql"
 
-if [ -z ${1+x} ]; then
-    filename="backup.tar.gz"
-else
-    filename=$1
-fi
 if [ "$BACKUP_TIMESTAMP" == true ]; then
   timestamp=$(date "+%Y%m%d-%H%M%S")
   filename="$timestamp-$filename"
@@ -62,15 +58,19 @@ cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 echo "Dumping database …"
 btcpay_dump_db $dumpname
 
-# stop docker containers, save files and restart
-echo "Stopping BTCPay Server …"
-btcpay_down
+if [[ "$1" == "--only-db" ]]; then
+    tar -cvzf $backup_path $dbdump_path
+else
+    # stop docker containers, save files and restart
+    echo "Stopping BTCPay Server …"
+    btcpay_down
 
-echo "Backing up files …"
-tar --exclude="$backup_dir/*" --exclude="$volumes_dir/generated_bitcoin_datadir/*" --exclude="$volumes_dir/generated_litecoin_datadir/*" --exclude="$volumes_dir/**/logs/*" -cvzf $backup_path $dbdump_path $volumes_dir
+    echo "Backing up files …"
+    tar --exclude="$backup_dir/*" --exclude="$volumes_dir/generated_bitcoin_datadir/*" --exclude="$volumes_dir/generated_litecoin_datadir/*" --exclude="$volumes_dir/**/logs/*" -cvzf $backup_path $dbdump_path $volumes_dir
 
-echo "Restarting BTCPay Server …"
-btcpay_up
+    echo "Restarting BTCPay Server …"
+    btcpay_up
+fi
 
 # post processing
 case $BACKUP_PROVIDER in

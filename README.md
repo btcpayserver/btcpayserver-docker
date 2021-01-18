@@ -482,7 +482,6 @@ cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 This will save the backup locally as `/var/lib/docker/volumes/backup_datadir/_data/backup.tar.gz`.
 These are the options to customize the backup name and location:
 
-- You can customize the filename by providing it as an argument to the script (see below).
 - `BACKUP_TIMESTAMP=true` saves the backup with datetime as part of the file name, so that backups do not get overwritten.
 - `BACKUP_PROVIDER=SCP` saves the backup remotely, requires additional `SCP_TARGET` environment variable (see below).
 - `BACKUP_PROVIDER=Dropbox` saves the backup to Dropbox, requires additional `DROPBOX_TOKEN` environment variable (see below).
@@ -491,11 +490,19 @@ These are the options to customize the backup name and location:
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 
 # Backup with custom file name and timestamp:
-BACKUP_TIMESTAMP=true ./backup.sh btcpay-server.tar.gz
+BACKUP_TIMESTAMP=true ./backup.sh
 
 # Backup via SCP:
 BACKUP_PROVIDER=SCP SCP_TARGET=myhost:backups/btcpay ./backup.sh
 
 # Backup to Dropbox:
 BACKUP_PROVIDER=Dropbox DROPBOX_TOKEN=myDropboxToken ./backup.sh
+```
+
+You can also choose to only dump the database.
+This option does not need to stop and restart the docker-containers:
+
+```bash
+cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
+./backup.sh --only-db
 ```
