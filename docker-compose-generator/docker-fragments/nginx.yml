@@ -13,7 +13,7 @@ services:
       - "nginx_html:/usr/share/nginx/html"
   nginx-gen:
     restart: unless-stopped
-    image: btcpayserver/docker-gen:0.7.7
+    image: btcpayserver/docker-gen:0.7.8
     container_name: nginx-gen
     environment:
       DEFAULT_HOST: ${REVERSEPROXY_DEFAULT_HOST:-none}
