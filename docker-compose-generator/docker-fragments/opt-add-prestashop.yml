@@ -5,6 +5,7 @@ services:
     image: btcpayserver/prestashop:1.7
     environment:
       PS_DOMAIN: ${PRESTASHOP_HOST}
+      PS_ENABLE_SSL: 1
       PS_INSTALL_AUTO: 0
       PS_HANDLE_DYNAMIC_DOMAIN: 1
       DB_SERVER: mariadb
