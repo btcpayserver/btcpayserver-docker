@@ -7,7 +7,6 @@ services:
       PS_DOMAIN: ${PRESTASHOP_HOST}
       PS_ENABLE_SSL: 1
       PS_INSTALL_AUTO: 0
-      PS_HANDLE_DYNAMIC_DOMAIN: 1
       DB_SERVER: mariadb
       DB_USER: prestashop
       DB_NAME: prestashop
