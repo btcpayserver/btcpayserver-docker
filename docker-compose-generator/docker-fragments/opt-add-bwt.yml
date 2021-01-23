@@ -2,15 +2,14 @@ version: "3"
 
 services:
   bwt:
-    image: shesek/bwt:${BWT_VERSION:-0.2.1}-${BWT_VARIANT:-electrum}
+    image: shesek/bwt:0.2.1-electrum
     restart: unless-stopped
-    expose: [ "50001", "3060" ]
+    expose: [ "50001" ]
     environment:
       NETWORK: $NBITCOIN_NETWORK
       BITCOIND_URL: http://bitcoind:43782/
       BITCOIND_DIR: /etc/bitcoin
       ELECTRUM_ADDR: 0.0.0.0:50001
-      HTTP_ADDR: 0.0.0.0:3060
     volumes:
       - "bitcoin_datadir:/etc/bitcoin"
       - "nbxplorer_datadir:/root/.nbxplorer"

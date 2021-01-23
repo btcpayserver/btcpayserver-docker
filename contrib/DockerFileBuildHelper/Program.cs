@@ -593,6 +593,11 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"master";
                     dockerInfo.SupportedByUs = false;
                     break;
+                case "bwt":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/bwt-dev/bwt";
+                    dockerInfo.GitRef = $"v{image.Tag.Split('-')[0]}";
+                    break;
                 default:
                     if (firstTry)
                     {
