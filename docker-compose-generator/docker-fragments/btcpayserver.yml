@@ -26,9 +26,11 @@ services:
       - "btcpay_datadir:/datadir"
       - "nbxplorer_datadir:/root/.nbxplorer"
       - "$<BTCPAY_HOST_SSHAUTHORIZEDKEYS>?:${BTCPAY_SSHAUTHORIZEDKEYS}"
+      - "btcpay_pluginsdir:/root/.btcpayserver/Plugins"
 
 volumes:
   btcpay_datadir:
+  btcpay_pluginsdir:
 
 required:
   - "postgres"
