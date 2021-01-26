@@ -4,13 +4,13 @@ services:
   bitcoind:
     restart: unless-stopped
     container_name: btcpayserver_bitcoind
-    image: btcpayserver/bitcoin:0.20.1
+    image: btcpayserver/bitcoin:0.21.0
     environment:
       BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       BITCOIN_WALLETDIR: "/walletdata"
       BITCOIN_EXTRA_ARGS: |
-        rpcport=43782
         rpcbind=0.0.0.0:43782
+        rpcallowip=0.0.0.0/0
         port=39388
         whitelist=0.0.0.0/0
         maxmempool=500
