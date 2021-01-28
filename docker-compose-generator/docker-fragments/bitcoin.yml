@@ -8,6 +8,9 @@ services:
     environment:
       BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       BITCOIN_WALLETDIR: "/walletdata"
+      # rpcport and rpcbind seems duplicates, but they are not
+      # rpcport is using by some tooling to automatically get
+      # the rpcport from the configuration file. Do not remove!
       BITCOIN_EXTRA_ARGS: |
         rpcport=43782
         rpcbind=0.0.0.0:43782
