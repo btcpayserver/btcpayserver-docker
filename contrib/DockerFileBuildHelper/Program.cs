@@ -563,8 +563,8 @@ namespace DockerFileBuildHelper
                     break;
                 case "python-teos":
                     dockerInfo.DockerFilePath = $"docker/Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"docker/Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"docker/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"docker/arm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"docker/arm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/talaia-labs/python-teos";
                     dockerInfo.GitRef = $"master";
                     dockerInfo.SupportedByUs = false;
