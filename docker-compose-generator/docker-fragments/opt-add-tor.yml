@@ -159,6 +159,12 @@ services:
       HIDDENSERVICE_PORT: 50002
       HIDDENSERVICE_VIRTUAL_PORT: 50002
 
+  bwt:
+    environment:
+      HIDDENSERVICE_NAME: bwt-electrum
+      HIDDENSERVICE_PORT: 50001
+      HIDDENSERVICE_VIRTUAL_PORT: 50001
+
   bitcoin_teos:
     environment:
       HIDDENSERVICE_NAME: teos
