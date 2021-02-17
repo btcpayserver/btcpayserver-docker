@@ -571,6 +571,22 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.55" .
 cd - && cd ..
 
 
+# Build bwt
+# https://raw.githubusercontent.com/bwt-dev/bwt/v0.2.2/docker/Dockerfile
+DOCKERFILE="docker/Dockerfile"
+# https://raw.githubusercontent.com/bwt-dev/bwt/v0.2.2/docker/arm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/arm32v7.Dockerfile"
+# https://raw.githubusercontent.com/bwt-dev/bwt/v0.2.2/docker/arm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/arm64v8.Dockerfile"
+echo "Building shesek/bwt:0.2.2-electrum"
+git clone https://github.com/bwt-dev/bwt bwt
+cd bwt
+git checkout v0.2.2
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "shesek/bwt:0.2.2-electrum" .
+cd - && cd ..
+
+
 # Build btcpayserver-configurator
 # https://raw.githubusercontent.com/btcpayserver/btcpayserver-configurator/v0.0.21/Dockerfiles/amd64.Dockerfile
 DOCKERFILE="Dockerfiles/amd64.Dockerfile"
@@ -674,10 +690,10 @@ cd - && cd ..
 # Build python-teos
 # https://raw.githubusercontent.com/talaia-labs/python-teos/master/docker/Dockerfile
 DOCKERFILE="docker/Dockerfile"
-# https://raw.githubusercontent.com/talaia-labs/python-teos/master/docker/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/Dockerfile"
-# https://raw.githubusercontent.com/talaia-labs/python-teos/master/docker/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/Dockerfile"
+# https://raw.githubusercontent.com/talaia-labs/python-teos/master/docker/arm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/arm32v7.Dockerfile"
+# https://raw.githubusercontent.com/talaia-labs/python-teos/master/docker/arm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/arm64v8.Dockerfile"
 echo "Building talaia/python-teos:latest"
 git clone https://github.com/talaia-labs/python-teos python-teos
 cd python-teos
@@ -720,34 +736,34 @@ cd - && cd ..
 
 
 # Build tor
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.2.7/Tor/0.4.2.7/linuxamd64.Dockerfile
-DOCKERFILE="Tor/0.4.2.7/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.2.7/Tor/0.4.2.7/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Tor/0.4.2.7/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.2.7/Tor/0.4.2.7/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Tor/0.4.2.7/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/tor:0.4.2.7"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.4.7/Tor/0.4.4.7/linuxamd64.Dockerfile
+DOCKERFILE="Tor/0.4.4.7/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.4.7/Tor/0.4.4.7/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Tor/0.4.4.7/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.4.7/Tor/0.4.4.7/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Tor/0.4.4.7/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/tor:0.4.4.7"
 git clone https://github.com/btcpayserver/dockerfile-deps tor
 cd tor
-git checkout Tor/0.4.2.7
+git checkout Tor/0.4.4.7
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/tor:0.4.2.7" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/tor:0.4.4.7" .
 cd - && cd ..
 
 
 # Build tor
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.2.7/Tor/0.4.2.7/linuxamd64.Dockerfile
-DOCKERFILE="Tor/0.4.2.7/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.2.7/Tor/0.4.2.7/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Tor/0.4.2.7/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.2.7/Tor/0.4.2.7/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Tor/0.4.2.7/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/tor:0.4.2.7"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.4.7/Tor/0.4.4.7/linuxamd64.Dockerfile
+DOCKERFILE="Tor/0.4.4.7/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.4.7/Tor/0.4.4.7/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Tor/0.4.4.7/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.4.7/Tor/0.4.4.7/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Tor/0.4.4.7/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/tor:0.4.4.7"
 git clone https://github.com/btcpayserver/dockerfile-deps tor
 cd tor
-git checkout Tor/0.4.2.7
+git checkout Tor/0.4.4.7
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/tor:0.4.2.7" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/tor:0.4.4.7" .
 cd - && cd ..
 
 
