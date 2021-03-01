@@ -672,18 +672,18 @@ cd - && cd ..
 
 
 # Build pihole
-# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/v5.0/Dockerfile_amd64
-DOCKERFILE="Dockerfile_amd64"
-# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/v5.0/Dockerfile_armhf
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile_armhf"
-# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/v5.0/Dockerfile_arm64
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile_arm64"
-echo "Building pihole/pihole:v5.0"
+# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/v5.7/Dockerfile
+DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/v5.7/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/v5.7/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+echo "Building pihole/pihole:v5.7"
 git clone https://github.com/pi-hole/docker-pi-hole pihole
 cd pihole
-git checkout v5.0
+git checkout v5.7
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "pihole/pihole:v5.0" .
+docker build -f "$DOCKERFILE" -t "pihole/pihole:v5.7" .
 cd - && cd ..
 
 
