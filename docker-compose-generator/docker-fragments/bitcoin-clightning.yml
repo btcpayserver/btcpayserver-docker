@@ -24,7 +24,7 @@ services:
     links:
       - bitcoind
   clightning_bitcoin_charge:
-    image: shesek/lightning-charge:0.4.19-standalone
+    image: shesek/lightning-charge:0.4.22-standalone
     restart: unless-stopped
     environment:
       NETWORK: ${NBITCOIN_NETWORK:-regtest}
@@ -39,7 +39,7 @@ services:
       - clightning_bitcoin
 
   clightning_bitcoin_spark:
-    image: shesek/spark-wallet:0.2.9-standalone
+    image: shesek/spark-wallet:0.2.17-standalone
     restart: unless-stopped
     environment:
       NETWORK: ${NBITCOIN_NETWORK:-regtest}
