@@ -16,35 +16,84 @@ if [ "$(id -u)" != "0" ]; then
     exit 1
 fi
 
-(return 2>/dev/null) && sourced=1 || sourced=0
-
-if [ $sourced != 1 ]; then
-    echo "You forgot the leading '.' followed by a space!"
-    echo "Try this format: . ./backup.sh"
-    exit 1
-fi
-
-if [ -z ${BACKUP_PROVIDER+x} ]; then
-    echo "Set BACKUP_PROVIDER environmental variable and try again."
-    exit 1
-elif [ ${BACKUP_PROVIDER="Dropbox"} ]; then
-    if [ -z ${DROPBOX_TOKEN+x} ]; then
-        echo "Set DROPBOX_TOKEN environmental variable and try again."
+case "$BACKUP_PROVIDER" in
+  "Dropbox")
+    if [ -z "$DROPBOX_TOKEN" ]; then
+        echo "Set DROPBOX_TOKEN environment variable and try again."
         exit 1
     fi
-    if [ -z ${1+x} ]; then
-	filename="backup.tar.gz"
-    else
-	filename=$1
-    fi	
-    if [ ! -d /var/lib/docker/volumes/backup_datadir ]; then
-        docker volume create backup_datadir
-    fi	
-    btcpay-down.sh
-    tar --exclude='/var/lib/docker/volumes/backup_datadir/*' --exclude='/var/lib/docker/volumes/generated_bitcoin_datadir/*' --exclude='/var/lib/docker/volumes/generated_litecoin_datadir/*' -cvzf /var/lib/docker/volumes/backup_datadir/_data/${filename} /var/lib/docker/volumes
-    btcpay-up.sh
-    echo "Uploading to Dropbox..."
-    docker run --name backup --env DROPBOX_TOKEN=$DROPBOX_TOKEN -v backup_datadir:/data jvandrew/btcpay-dropbox:1.0.5 $filename
-    echo "Deleting local backup..."
-    rm /var/lib/docker/volumes/backup_datadir/_data/${filename}
+    ;;
+
+  "SCP")
+    if [ -z "$SCP_TARGET" ]; then
+        echo "Set SCP_TARGET environment variable and try again."
+        exit 1
+    fi
+    ;;
+
+  *)
+    echo "No BACKUP_PROVIDER set. Backing up to local directory."
+    ;;
+esac
+
+# preparation
+volumes_dir=/var/lib/docker/volumes
+backup_dir="$volumes_dir/backup_datadir"
+filename="backup.tar.gz"
+dumpname="postgres.sql"
+
+if [ "$BACKUP_TIMESTAMP" == true ]; then
+  timestamp=$(date "+%Y%m%d-%H%M%S")
+  filename="$timestamp-$filename"
+  dumpname="$timestamp-$dumpname"
 fi
+
+backup_path="$backup_dir/_data/${filename}"
+dbdump_path="$backup_dir/_data/${dumpname}"
+
+cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
+. helpers.sh
+
+# dump database
+echo "Dumping database …"
+btcpay_dump_db $dumpname
+
+if [[ "$1" == "--only-db" ]]; then
+    tar -cvzf $backup_path $dbdump_path
+else
+    # stop docker containers, save files and restart
+    echo "Stopping BTCPay Server …"
+    btcpay_down
+
+    echo "Backing up files …"
+    tar --exclude="$backup_dir/*" --exclude="$volumes_dir/generated_bitcoin_datadir/*" --exclude="$volumes_dir/generated_litecoin_datadir/*" --exclude="$volumes_dir/**/logs/*" -cvzf $backup_path $dbdump_path $volumes_dir
+
+    echo "Restarting BTCPay Server …"
+    btcpay_up
+fi
+
+# post processing
+case $BACKUP_PROVIDER in
+  "Dropbox")
+    echo "Uploading to Dropbox …"
+    docker run --name backup --env DROPBOX_TOKEN=$DROPBOX_TOKEN -v backup_datadir:/data jvandrew/btcpay-dropbox:1.0.5 $filename
+    echo "Deleting local backup …"
+    rm $backup_path
+    ;;
+
+  "SCP")
+    echo "Uploading via SCP …"
+    scp $backup_path $SCP_TARGET
+    echo "Deleting local backup …"
+    rm $backup_path
+    ;;
+
+  *)
+    echo "Backed up to $backup_path"
+    ;;
+esac
+
+# cleanup
+rm $dbdump_path
+
+echo "Backup done."

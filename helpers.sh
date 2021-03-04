@@ -105,6 +105,8 @@ WOOCOMMERCE_HOST=$WOOCOMMERCE_HOST
 TOR_RELAY_NICKNAME=$TOR_RELAY_NICKNAME
 TOR_RELAY_EMAIL=$TOR_RELAY_EMAIL
 EPS_XPUB=$EPS_XPUB" > $BTCPAY_ENV_FILE
+
+env | grep ^BWT_ >> $BTCPAY_ENV_FILE || true
 }
 
 btcpay_up() {
@@ -144,5 +146,17 @@ btcpay_restart() {
     if ! [ $? -eq 0 ]; then
         docker-compose -f $BTCPAY_DOCKER_COMPOSE restart
     fi
+    popd > /dev/null
+}
+
+btcpay_dump_db() {
+    pushd . > /dev/null
+    cd "$(dirname "$BTCPAY_ENV_FILE")"
+    backup_dir="/var/lib/docker/volumes/backup_datadir/_data"
+    if [ ! -d "$backup_dir" ]; then
+        docker volume create backup_datadir
+    fi
+    local filename=${1:-"postgres-$(date "+%Y%m%d-%H%M%S").sql"}
+    docker exec $(docker ps -a -q -f "name=postgres_1") pg_dumpall -c -U postgres > "$backup_dir/$filename"
     popd > /dev/null
 }

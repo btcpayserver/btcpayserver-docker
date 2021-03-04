@@ -234,9 +234,9 @@ namespace DockerFileBuildHelper
             {
                 case "pihole":
                     dockerInfo.GitLink = "https://github.com/pi-hole/docker-pi-hole";
-                    dockerInfo.DockerFilePath = $"Dockerfile_amd64";
-                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile_armhf";
-                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile_arm64";
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
                     dockerInfo.GitRef = $"{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
@@ -563,11 +563,42 @@ namespace DockerFileBuildHelper
                     break;
                 case "python-teos":
                     dockerInfo.DockerFilePath = $"docker/Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"docker/Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"docker/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"docker/arm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"docker/arm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/talaia-labs/python-teos";
                     dockerInfo.GitRef = $"master";
                     dockerInfo.SupportedByUs = false;
+                    break;
+                case "zammad/zammad-docker-compose" when image.Tag.StartsWith("zammad-postgresql-"):
+                    dockerInfo.DockerFilePath = $"containers/zammad-postgresql/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/zammad/zammad-docker-compose";
+                    dockerInfo.GitRef = $"master";
+                    dockerInfo.SupportedByUs = false;
+                    break;
+                case "zammad/zammad-docker-compose" when image.Tag.StartsWith("zammad-elasticsearch-"):
+                    dockerInfo.DockerFilePath = $"containers/zammad-elasticsearch/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/zammad/zammad-docker-compose";
+                    dockerInfo.GitRef = $"master";
+                    dockerInfo.SupportedByUs = false;
+                    break;
+                case "zammad/zammad-docker-compose" when image.Tag.StartsWith("zammad-"):
+                    dockerInfo.DockerFilePath = $"containers/zammad/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/zammad/zammad-docker-compose";
+                    dockerInfo.GitRef = $"master";
+                    dockerInfo.SupportedByUs = false;
+                    break;
+                case "memcached" when image.Tag.EndsWith("alpine"):
+                    dockerInfo.DockerFilePath = $"alpine/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/docker-library/memcached";
+                    dockerInfo.GitRef = $"master";
+                    dockerInfo.SupportedByUs = false;
+                    break;
+                case "bwt":
+                    dockerInfo.DockerFilePath = $"docker/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"docker/arm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"docker/arm64v8.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/bwt-dev/bwt";
+                    dockerInfo.GitRef = $"v{image.Tag.Split('-')[0]}";
                     break;
                 default:
                     if (firstTry)

@@ -12,5 +12,12 @@ Install [.NET Core SDK](https://dotnet.microsoft.com/download) and run:
 ./run.sh
 ```
 
-This will build a `build-all.sh` file.
-Note that the 
+Or using Docker:
+
+```
+docker run -it --rm -v `pwd`:/project -w /project/contrib/DockerFileBuildHelper mcr.microsoft.com/dotnet/sdk:2.1 ./run.sh
+```
+
+This will build a `build-all.sh` file which you can run locally.
+
+To update the README table and the `build-all-images.sh` script that's checked into git, replace `run.sh` with `update-repo.sh`.
