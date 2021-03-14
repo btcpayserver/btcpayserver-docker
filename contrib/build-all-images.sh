@@ -21,19 +21,19 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/docker-compose-generator:latest" 
 cd - && cd ..
 
 
-# Build docker-compose-builder
-# https://raw.githubusercontent.com/btcpayserver/docker-compose-builder/v1.24.1/linuxamd64.Dockerfile
-DOCKERFILE="linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/docker-compose-builder/v1.24.1/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/docker-compose-builder/v1.24.1/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/docker-compose-builder:1.24.1"
-git clone https://github.com/btcpayserver/docker-compose-builder docker-compose-builder
-cd docker-compose-builder
-git checkout v1.24.1
+# Build docker-compose
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/docker-compose/1.28.5/docker-compose/1.28.5/linuxamd64.Dockerfile
+DOCKERFILE="docker-compose/1.28.5/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/docker-compose/1.28.5/docker-compose/1.28.5/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker-compose/1.28.5/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/docker-compose/1.28.5/docker-compose/1.28.5/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker-compose/1.28.5/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/docker-compose:1.28.5"
+git clone https://github.com/btcpayserver/dockerfile-deps docker-compose
+cd docker-compose
+git checkout docker-compose/1.28.5
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/docker-compose-builder:1.24.1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/docker-compose:1.28.5" .
 cd - && cd ..
 
 
