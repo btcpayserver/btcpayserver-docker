@@ -12,7 +12,8 @@ services:
       LND_ALIAS: ${LIGHTNING_ALIAS}
       LND_ENVIRONMENT: "${NBITCOIN_NETWORK:-regtest}"
       LND_READY_FILE: /root/.nbxplorer/btc_fully_synched
-      LND_WITH_LOOP: "true"
+      LND_REST_LISTEN_HOST: http://lnd_bitcoin:8080
+      LND_HOST_FOR_LOOP: lnd_bitcoin:10009
       LND_EXTRA_ARGS: |
         restlisten=0.0.0.0:8080
         rpclisten=127.0.0.1:10008
