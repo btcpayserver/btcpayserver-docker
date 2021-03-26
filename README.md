@@ -511,3 +511,30 @@ This option does not need to stop and restart the docker-containers:
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 ./backup.sh --only-db
 ```
+
+## How can I connect to the database?
+
+On the server you can open a database session by connecting via `psql` as the postgres user:
+
+```bash
+docker exec -ti $(docker ps -a -q -f "name=postgres_1") psql -U postgres
+```
+
+Then, inside `psql` you can select a database and interact with the tables:
+
+```bash
+# list databases
+\l
+
+# connect to database
+\c btcpayservermainnet
+
+# list tables
+\dt+
+
+# list users
+SELECT "Id", "Email" FROM "AspNetUsers";
+
+# end session
+\q
+```
