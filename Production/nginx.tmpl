@@ -272,7 +272,6 @@ upstream {{ $upstream_name }} {
 server {
 	server_name {{ trim $onionHost }};
 	listen 80 ;
-	proxy_set_header X-Forwarded-Host  $host;
 	access_log /var/log/nginx/access.log vhost;
 	{{ if (exists "/etc/nginx/vhost.d/default") }}
 	include /etc/nginx/vhost.d/default;
