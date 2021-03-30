@@ -292,7 +292,7 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePathARM32v7 = "arm32v7.Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = "arm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/ElementsProject/lightning-charge";
-                    dockerInfo.GitRef = $"v{image.Tag.Replace("-standalone", "")}";
+                    dockerInfo.GitRef =  NoRevision($"v{image.Tag.Replace("-standalone", "")}");
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "docker-bitcoinplus":

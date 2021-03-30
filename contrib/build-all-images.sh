@@ -78,18 +78,18 @@ cd - && cd ..
 
 
 # Build lightning-charge
-# https://raw.githubusercontent.com/ElementsProject/lightning-charge/v0.4.19/Dockerfile
+# https://raw.githubusercontent.com/ElementsProject/lightning-charge/v0.4.23/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/ElementsProject/lightning-charge/v0.4.19/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/ElementsProject/lightning-charge/v0.4.23/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/ElementsProject/lightning-charge/v0.4.19/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/ElementsProject/lightning-charge/v0.4.23/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building shesek/lightning-charge:0.4.19-standalone"
+echo "Building shesek/lightning-charge:0.4.23-1-standalone"
 git clone https://github.com/ElementsProject/lightning-charge lightning-charge
 cd lightning-charge
-git checkout v0.4.19
+git checkout v0.4.23
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shesek/lightning-charge:0.4.19-standalone" .
+docker build -f "$DOCKERFILE" -t "shesek/lightning-charge:0.4.23-1-standalone" .
 cd - && cd ..
 
 
@@ -556,18 +556,18 @@ cd - && cd ..
 
 
 # Build btctransmuter
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.55/Dockerfiles/amd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.56/Dockerfiles/amd64.Dockerfile
 DOCKERFILE="Dockerfiles/amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.55/Dockerfiles/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.56/Dockerfiles/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfiles/arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.55/Dockerfiles/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.56/Dockerfiles/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfiles/arm64v8.Dockerfile"
-echo "Building btcpayserver/btctransmuter:0.0.55"
+echo "Building btcpayserver/btctransmuter:0.0.56"
 git clone https://github.com/btcpayserver/btctransmuter btctransmuter
 cd btctransmuter
-git checkout v0.0.55
+git checkout v0.0.56
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.55" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.56" .
 cd - && cd ..
 
 
