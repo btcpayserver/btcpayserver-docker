@@ -136,6 +136,7 @@ A wide variety of useful scripts are available once BTCPay is installed:
 * `btcpay-up.sh`: Run `docker-compose up`
 * `btcpay-down.sh`: Run `docker-compose down`
 * `btcpay-setup.sh`: Change the settings of your server
+* `btcpay-clean.sh`: Purge any unused docker images
 * `. ./btcpay-setup.sh`: Information about additional parameters
 * `. ./btcpay-setup.sh -i`: Set up your BTCPayServer
 * `btcpay-restart.sh`: Restart your BTCPayServer
