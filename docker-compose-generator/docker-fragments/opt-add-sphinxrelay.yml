@@ -6,9 +6,6 @@ services:
     volumes:
       - "sphinxrelay_datadir:/etc/sphinxrelay_datadir"
   lnd_bitcoin:
-    environment:
-      LND_EXTRA_ARGS: |
-        accept-keysend=1
     expose:
       - "10009"
   sphinxrelay:
@@ -36,3 +33,4 @@ volumes:
   sphinxrelay_datadir:
 required:
   - "bitcoin-lnd"
+  - "opt-lnd-keysend"
