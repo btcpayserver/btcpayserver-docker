@@ -1,0 +1,38 @@
+version: "3"
+services:
+  btcpayserver:
+    environment:
+      BTCPAY_EXTERNALSERVICES: "Sphinx Relay:${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/sphinxrelay/;"
+    volumes:
+      - "sphinxrelay_datadir:/etc/sphinxrelay_datadir"
+  lnd_bitcoin:
+    environment:
+      LND_EXTRA_ARGS: |
+        accept-keysend=1
+    expose:
+      - "10009"
+  sphinxrelay:
+    image: sphinxlightning/sphinx-relay:v2.0.8
+    user: "0:0"
+    restart: unless-stopped
+    expose:
+      - "3300"
+    volumes:
+      - "sphinxrelay_datadir:/relay/.lnd"
+      - "lnd_bitcoin_datadir:/relay/lnd"
+    environment:
+      NODE_ENV: production
+      NODE_IP: lnd_bitcoin
+      LND_IP: lnd_bitcoin
+      LND_PORT: 10009
+      PORT: 3300
+      MACAROON_LOCATION: /relay/lnd/admin.macaroon
+      TLS_LOCATION: /relay/lnd/tls.cert
+      LND_LOG_LOCATION: /relay/lnd/logs/bitcoin/mainnet/lnd.log
+      PUBLIC_URL: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/sphinxrelay/
+    links:
+      - lnd_bitcoin
+volumes:
+  sphinxrelay_datadir:
+required:
+  - "bitcoin-lnd"

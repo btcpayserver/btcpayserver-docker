@@ -173,6 +173,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-configurator](docker-compose-generator/docker-fragments/opt-add-configurator.yml), to integrate the [BTCPay Server Configurator](https://install.btcpayserver.org) to manage your BTCPay deployment through a UI, and to allow new deployments elsewhere easily.
 * [opt-add-pihole](docker-compose-generator/docker-fragments/opt-add-pihole.yml) ([See the documentation](docs/pihole.md))
 * [opt-add-ndlc](docker-compose-generator/docker-fragments/opt-add-ndlc.yml) ([See the documentation](docs/ndlc.md))
+* [opt-add-sphinxrelay](docker-compose-generator/docker-fragments/opt-add-sphinxrelay.yml) for [Sphinx Relay](https://github.com/stakwork/sphinx-relay). Maintained by [dennisreimann](https://github.com/dennisreimann).
 * [opt-add-thunderhub](docker-compose-generator/docker-fragments/opt-add-thunderhub.yml) for a LND Lightning Node Manager in your Browser. Maintained by [apotdevin](https://github.com/apotdevin).
 * [opt-add-teos](docker-compose-generator/docker-fragments/opt-add-teos.yml) for [The Eye Of Satoshi](https://github.com/talaia-labs/python-teos), a BOLT13 Lightning Watchtower. Use port 9814 on your server or Tor to connect.
 * [opt-add-zammad](docker-compose-generator/docker-fragments/opt-add-zammad.yml) for [Zammad](https://zammad.com/features), a web based open source helpdesk/customer support system with many features to manage customer communication via several channels like telephone, facebook, twitter, chat and e-mails
