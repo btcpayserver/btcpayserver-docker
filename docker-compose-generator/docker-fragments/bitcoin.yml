@@ -4,13 +4,17 @@ services:
   bitcoind:
     restart: unless-stopped
     container_name: btcpayserver_bitcoind
-    image: btcpayserver/bitcoin:0.20.1
+    image: btcpayserver/bitcoin:0.21.0
     environment:
       BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       BITCOIN_WALLETDIR: "/walletdata"
+      # rpcport and rpcbind seems duplicates, but they are not
+      # rpcport is using by some tooling to automatically get
+      # the rpcport from the configuration file. Do not remove!
       BITCOIN_EXTRA_ARGS: |
         rpcport=43782
         rpcbind=0.0.0.0:43782
+        rpcallowip=0.0.0.0/0
         port=39388
         whitelist=0.0.0.0/0
         maxmempool=500

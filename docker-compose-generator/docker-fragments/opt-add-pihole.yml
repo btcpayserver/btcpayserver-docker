@@ -3,7 +3,7 @@ services:
     pihole:
         restart: unless-stopped
         container_name: pihole
-        image: pihole/pihole:v5.0
+        image: pihole/pihole:v5.7
         environment:
             ServerIP: "${PIHOLE_SERVERIP:-127.0.0.1}"
             VIRTUAL_HOST: pi.hole
