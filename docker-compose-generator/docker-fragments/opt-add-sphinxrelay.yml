@@ -16,7 +16,7 @@ services:
       - "3300"
     volumes:
       - "sphinxrelay_datadir:/relay/.lnd"
-      - "lnd_bitcoin_datadir:/relay/lnd"
+      - "lnd_bitcoin_datadir:/relay/lnd:ro"
     environment:
       NODE_ENV: production
       NODE_IP: lnd_bitcoin
