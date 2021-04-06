@@ -169,7 +169,7 @@ namespace DockerGenerator
 			PostProcess(output);
 
 			var dockerImages = ((YamlMappingNode)output["services"]).Children.Select(kv => kv.Value["image"].ToString()).ToList();
-			dockerImages.Add("btcpayserver/docker-compose:1.28.5");
+			dockerImages.Add("btcpayserver/docker-compose:1.28.6");
 			dockerImages.Add("btcpayserver/docker-compose-generator:latest");
 			StringBuilder pullImageSh = new StringBuilder();
 			pullImageSh.Append($"#!/bin/bash\n\n");
