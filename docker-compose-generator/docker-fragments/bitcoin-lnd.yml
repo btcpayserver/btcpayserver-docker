@@ -29,6 +29,7 @@ services:
         readonlymacaroonpath=/data/readonly.macaroon
         no-rest-tls=1
         protocol.wumbo-channels=1
+        tlsextradomain=lnd_bitcoin
     ports:
       - "9735:9735"
     expose:
