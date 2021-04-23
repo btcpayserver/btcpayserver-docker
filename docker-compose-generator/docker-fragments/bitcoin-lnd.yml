@@ -27,9 +27,9 @@ services:
         adminmacaroonpath=/data/admin.macaroon
         invoicemacaroonpath=/data/invoice.macaroon
         readonlymacaroonpath=/data/readonly.macaroon
+        tlsextradomain=lnd_bitcoin
         no-rest-tls=1
         protocol.wumbo-channels=1
-        tlsextradomain=lnd_bitcoin
     ports:
       - "9735:9735"
     expose:
