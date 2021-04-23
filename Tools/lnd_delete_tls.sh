@@ -10,6 +10,7 @@ fi
 docker exec btcpayserver_lnd_bitcoin rm -rf /root/.lnd/tls.cert
 docker exec btcpayserver_lnd_bitcoin rm -rf /root/.lnd/tls.key
 
-. btcpay-setup.sh -i
+docker stop btcpayserver_lnd_bitcoin
+docker start btcpayserver_lnd_bitcoin
 
 echo "LND TLS certificate recreated"
