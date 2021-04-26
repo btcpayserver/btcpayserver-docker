@@ -9,7 +9,7 @@ services:
     expose:
       - "10009"
   sphinxrelay:
-    image: sphinxlightning/sphinx-relay:v2.0.12
+    image: sphinxlightning/sphinx-relay:v2.0.13
     user: "0:0"
     restart: unless-stopped
     expose:
