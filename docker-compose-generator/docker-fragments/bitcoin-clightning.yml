@@ -24,12 +24,14 @@ services:
     links:
       - bitcoind
   clightning_bitcoin_charge:
-    image: shesek/lightning-charge:0.4.19-standalone
+    image: shesek/lightning-charge:0.4.23-1-standalone
     restart: unless-stopped
     environment:
       NETWORK: ${NBITCOIN_NETWORK:-regtest}
       COOKIE_FILE: /data/.cookie
       URL: ${BTCPAY_ROOTPATH:-/}lightning-charge/btc/
+      LN_NET_PATH: /etc/lightning
+      LN_NET: /etc/lightning
     volumes:
       - "clightning_bitcoin_datadir:/etc/lightning"
       - "clightning_bitcoin_charge:/data"

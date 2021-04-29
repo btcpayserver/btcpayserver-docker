@@ -40,7 +40,7 @@ namespace DockerFileBuildHelper
             foreach (var image in new[]
             {
                 Image.Parse("btcpayserver/docker-compose-generator"),
-                Image.Parse("btcpayserver/docker-compose-builder:1.24.1"),
+                Image.Parse("btcpayserver/docker-compose:1.28.6"),
             }.Concat(GetImages(fragmentDirectory)))
             {
                 Console.WriteLine($"Image: {image.ToString()}");
@@ -253,12 +253,12 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/vutov/lnd";
                     dockerInfo.GitRef = "master";
                     break;
-                case "docker-compose-builder":
-                    dockerInfo.DockerFilePath = "linuxamd64.Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = "linuxarm32v7.Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = "linuxarm64v8.Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/btcpayserver/docker-compose-builder";
-                    dockerInfo.GitRef = $"v{image.Tag}";
+                case "docker-compose":
+                    dockerInfo.DockerFilePath = $"docker-compose/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"docker-compose/{NoRevision(image.Tag)}/linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"docker-compose/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"docker-compose/{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "docker-compose-generator":
@@ -292,7 +292,7 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePathARM32v7 = "arm32v7.Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = "arm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/ElementsProject/lightning-charge";
-                    dockerInfo.GitRef = $"v{image.Tag.Replace("-standalone", "")}";
+                    dockerInfo.GitRef =  NoRevision($"v{image.Tag.Replace("-standalone", "")}");
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "docker-bitcoinplus":

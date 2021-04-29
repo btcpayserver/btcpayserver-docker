@@ -272,6 +272,15 @@ upstream {{ $upstream_name }} {
 server {
 	server_name {{ trim $onionHost }};
 	listen 80 ;
+	proxy_set_header X-Forwarded-Host  $http_host;
+	proxy_set_header Host $http_host;
+	proxy_set_header Upgrade $http_upgrade;
+	proxy_set_header Connection $proxy_connection;
+	proxy_set_header X-Real-IP $remote_addr;
+	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	proxy_set_header X-Forwarded-Proto $proxy_x_forwarded_proto;
+	proxy_set_header X-Forwarded-Ssl $proxy_x_forwarded_ssl;
+	proxy_set_header X-Forwarded-Port $proxy_x_forwarded_port;
 	access_log /var/log/nginx/access.log vhost;
 	{{ if (exists "/etc/nginx/vhost.d/default") }}
 	include /etc/nginx/vhost.d/default;
@@ -341,6 +350,15 @@ server {
 {{ end }}
 
 server {
+	proxy_set_header X-Forwarded-Host  $http_host;
+	proxy_set_header Host $http_host;
+	proxy_set_header Upgrade $http_upgrade;
+	proxy_set_header Connection $proxy_connection;
+	proxy_set_header X-Real-IP $remote_addr;
+	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	proxy_set_header X-Forwarded-Proto $proxy_x_forwarded_proto;
+	proxy_set_header X-Forwarded-Ssl $proxy_x_forwarded_ssl;
+	proxy_set_header X-Forwarded-Port $proxy_x_forwarded_port;
 	client_max_body_size 100M;
 	server_name {{ $host }};
 	listen 443 ssl http2 {{ $default_server }};
