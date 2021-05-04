@@ -4,7 +4,7 @@ services:
   bitcored:
     restart: unless-stopped
     container_name: btcpayserver_bitcored
-    image: dalijolijo/docker-bitcore:0.90.9.1
+    image: dalijolijo/docker-bitcore:0.90.9.10
     environment:
       BITCOIN_EXTRA_ARGS: |
         rpcport=43782
