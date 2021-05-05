@@ -173,6 +173,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-configurator](docker-compose-generator/docker-fragments/opt-add-configurator.yml), to integrate the [BTCPay Server Configurator](https://install.btcpayserver.org) to manage your BTCPay deployment through a UI, and to allow new deployments elsewhere easily.
 * [opt-add-pihole](docker-compose-generator/docker-fragments/opt-add-pihole.yml) ([See the documentation](docs/pihole.md))
 * [opt-add-ndlc](docker-compose-generator/docker-fragments/opt-add-ndlc.yml) ([See the documentation](docs/ndlc.md))
+* [opt-add-sphinxrelay](docker-compose-generator/docker-fragments/opt-add-sphinxrelay.yml) for [Sphinx Relay](https://github.com/stakwork/sphinx-relay). Maintained by [dennisreimann](https://github.com/dennisreimann).
 * [opt-add-thunderhub](docker-compose-generator/docker-fragments/opt-add-thunderhub.yml) for a LND Lightning Node Manager in your Browser. Maintained by [apotdevin](https://github.com/apotdevin).
 * [opt-add-teos](docker-compose-generator/docker-fragments/opt-add-teos.yml) for [The Eye Of Satoshi](https://github.com/talaia-labs/python-teos), a BOLT13 Lightning Watchtower. Use port 9814 on your server or Tor to connect.
 * [opt-add-zammad](docker-compose-generator/docker-fragments/opt-add-zammad.yml) for [Zammad](https://zammad.com/features), a web based open source helpdesk/customer support system with many features to manage customer communication via several channels like telephone, facebook, twitter, chat and e-mails
@@ -377,6 +378,7 @@ We are trying to update our dependencies to run on `arm32v7` and `x64` boards. H
 | traefik | latest | [✔️](https://raw.githubusercontent.com/containous/traefik-library-image/master/scratch/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/containous/traefik-library-image) - [DockerHub](https://hub.docker.com/_/traefik) |
 | chekaz/docker-trezarcoin | 0.13.0 | [✔️](https://raw.githubusercontent.com/ChekaZ/docker/master/trezarcoin/1.2.0/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/ChekaZ/docker) - [DockerHub](https://hub.docker.com/r/chekaz/docker-trezarcoin) |
 | romanornr/docker-viacoin | 0.15.2 | [✔️](https://raw.githubusercontent.com/viacoin/docker-viacoin/master/viacoin/0.15.2/docker-viacoin) | ️❌ | ️❌ | [Github](https://github.com/viacoin/docker-viacoin) - [DockerHub](https://hub.docker.com/r/romanornr/docker-viacoin) |
+| stakwork/sphinx-relay | 2.0.13 | [✔️](https://github.com/stakwork/sphinx-relay/blob/v2.0.13/Dockerfile) | ❌ | ❌ | [Github](https://github.com/stakwork/sphinx-relay) - [DockerHub](https://hub.docker.com/r/sphinxlightning/sphinx-relay/) |
 
 # FAQ
 
