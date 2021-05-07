@@ -7,7 +7,6 @@ services:
     command: "redis-server --requirepass S7bk49NBp29khUci4Zw28vsBviCnYfZ2QLTEsQNizq9ni5ur"
     restart: "on-failure"
     stop_grace_period: "1m"
-    init: true
     volumes:
       - "bluewallet_lndhub_redisdir:/data"
 
@@ -19,7 +18,6 @@ services:
     depends_on: [ "bluewallet_lndhub_redis" ]
     restart: "on-failure"
     stop_grace_period: "1m"
-    init: true
     volumes:
       - "lnd_bitcoin_datadir:/lnd:ro"
     environment:
