@@ -98,6 +98,12 @@
 	location /bluewallet_lndhub_app/ {
 		proxy_pass http://bluewallet_lndhub_app:3000/;
 	}
+	location /qr/ {
+		proxy_pass http://bluewallet_lndhub_app:3000/qr/;
+	}
+	location /static/ {
+		proxy_pass http://bluewallet_lndhub_app:3000/static/;
+	}
 		{{ end }}
 
 		
