@@ -4,7 +4,7 @@ services:
   bitcoind:
     restart: unless-stopped
     container_name: btcpayserver_bitcoind
-    image: btcpayserver/bitcoin:0.21.0
+    image: btcpayserver/bitcoin:0.21.1
     environment:
       BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       BITCOIN_WALLETDIR: "/walletdata"

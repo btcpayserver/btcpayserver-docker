@@ -1,32 +1,32 @@
 version: "3"
 services:
-    btcpayserver:
-        environment:
-            BTCPAY_BTCEXTERNALTHUNDERHUB: "server=/thub/sso;cookiefile=/etc/lnd_bitcoin_thub_datadir/.cookie"
-        volumes:
-            - "lnd_bitcoin_thub_datadir:/etc/lnd_bitcoin_thub_datadir"
-    bitcoin_thub:
-        image: apotdevin/thunderhub:base-v0.12.5
-        restart: unless-stopped
-        stop_signal: SIGKILL
-        environment:
-            NO_VERSION_CHECK: "true"
-            COOKIE_PATH: "/data/.cookie"
-            SSO_SERVER_URL: "lnd_bitcoin:10009"
-            SSO_MACAROON_PATH: "/etc/lnd"
-            SSO_CERT_PATH: "/etc/lnd/tls.cert"
-            NO_CLIENT_ACCOUNTS: "true"
-            LOG_LEVEL: debug
-            LOGOUT_URL: "/server/services/thunderhub/BTC"
-        volumes:
-            - "lnd_bitcoin_datadir:/etc/lnd"
-            - "lnd_bitcoin_thub_datadir:/data"
-        expose:
-            - "3000"
-        command: ["npm", "run", "start:cookie", "--", "/data/.cookie"]
-        links:
-            - lnd_bitcoin
+  btcpayserver:
+    environment:
+      BTCPAY_BTCEXTERNALTHUNDERHUB: "server=/thub/sso;cookiefile=/etc/lnd_bitcoin_thub_datadir/.cookie"
+    volumes:
+      - "lnd_bitcoin_thub_datadir:/etc/lnd_bitcoin_thub_datadir"
+  bitcoin_thub:
+    image: apotdevin/thunderhub:base-v0.12.16
+    restart: unless-stopped
+    stop_signal: SIGKILL
+    environment:
+      NO_VERSION_CHECK: "true"
+      COOKIE_PATH: "/data/.cookie"
+      SSO_SERVER_URL: "lnd_bitcoin:10009"
+      SSO_MACAROON_PATH: "/etc/lnd"
+      SSO_CERT_PATH: "/etc/lnd/tls.cert"
+      NO_CLIENT_ACCOUNTS: "true"
+      LOG_LEVEL: debug
+      LOGOUT_URL: "/server/services/thunderhub/BTC"
+    volumes:
+      - "lnd_bitcoin_datadir:/etc/lnd"
+      - "lnd_bitcoin_thub_datadir:/data"
+    expose:
+      - "3000"
+    command: ["npm", "run", "start:cookie", "--", "/data/.cookie"]
+    links:
+      - lnd_bitcoin
 volumes:
-    lnd_bitcoin_thub_datadir:
+  lnd_bitcoin_thub_datadir:
 required:
-    - "bitcoin-lnd"
+  - "bitcoin-lnd"
