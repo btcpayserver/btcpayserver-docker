@@ -97,12 +97,9 @@
 		{{ if (eq $serviceName "bluewallet_lndhub_app") }}
 	location /bluewallet_lndhub_app/ {
 		proxy_pass http://bluewallet_lndhub_app:3000/;
-	}
-	location /qr/ {
-		proxy_pass http://bluewallet_lndhub_app:3000/qr/;
-	}
-	location /static/ {
-		proxy_pass http://bluewallet_lndhub_app:3000/static/;
+        sub_filter 'href="../'  'href="/bluewallet_lndhub_app/';
+        sub_filter 'src="/'  'src="/bluewallet_lndhub_app/';
+        sub_filter_once off;
 	}
 		{{ end }}
 
