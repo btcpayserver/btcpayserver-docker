@@ -380,7 +380,6 @@ We are trying to update our dependencies to run on `arm32v7` and `x64` boards. H
 | chekaz/docker-trezarcoin | 0.13.0 | [✔️](https://raw.githubusercontent.com/ChekaZ/docker/master/trezarcoin/1.2.0/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/ChekaZ/docker) - [DockerHub](https://hub.docker.com/r/chekaz/docker-trezarcoin) |
 | romanornr/docker-viacoin | 0.15.2 | [✔️](https://raw.githubusercontent.com/viacoin/docker-viacoin/master/viacoin/0.15.2/docker-viacoin) | ️❌ | ️❌ | [Github](https://github.com/viacoin/docker-viacoin) - [DockerHub](https://hub.docker.com/r/romanornr/docker-viacoin) |
 | stakwork/sphinx-relay | 2.0.13 | [✔️](https://github.com/stakwork/sphinx-relay/blob/v2.0.13/Dockerfile) | ❌ | ❌ | [Github](https://github.com/stakwork/sphinx-relay) - [DockerHub](https://hub.docker.com/r/sphinxlightning/sphinx-relay/) |
-| bluewalletorganization/lndhub | 1.3.3 | [✔️](https://github.com/BlueWallet/LndHub#run-in-docker) | ❌ | ❌ | [Github](https://github.com/BlueWallet/LndHub) - [DockerHub](https://hub.docker.com/r/bluewalletorganization/lndhub/) |
 
 # FAQ
 

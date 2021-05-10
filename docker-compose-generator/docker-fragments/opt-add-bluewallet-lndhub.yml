@@ -14,7 +14,7 @@ services:
   bluewallet_lndhub_app:
     container_name: bluewallet_lndhub_app
     image: "bluewalletorganization/lndhub:v1.3.3@sha256:b99408dfb53f503def405668f5fc4d8185de39a87843d4ea8774544a5df1fe36"
-    user: "0:0"  #need help here as the official docker image from bluewalletorganization uses a user called lndhub, which by default cant read macaroon from BTCPay Server LND.  How to get around this without giving root access?
+    user: "0:0"
     depends_on: [ "bluewallet_lndhub_redis" ]
     restart: "on-failure"
     stop_grace_period: "1m"
