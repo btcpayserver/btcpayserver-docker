@@ -32,9 +32,9 @@ services:
     environment:
       BTCPAY_EXTERNALSERVICES: "Blue Wallet LNDHub:${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/bluewallet_lndhub_app;"
 
-required:
-  - "bitcoin-lnd"
-
 # use docker native volumes
 volumes:
   bluewallet_lndhub_redisdir:
+
+required:
+  - "bitcoin-lnd"
