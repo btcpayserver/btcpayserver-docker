@@ -531,6 +531,32 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/docker-gen:0.7.8" .
 cd - && cd ..
 
 
+# Build redis
+# https://raw.githubusercontent.com/docker-library/redis/f1a8498333ae3ab340b5b39fbac1d7e1dc0d628c/5.0/Dockerfile
+DOCKERFILE="5.0/Dockerfile"
+echo "Building redis:6.2.2-buster@sha256:e10f55f92478715698a2cef97c2bbdc48df2a05081edd884938903aa60df6396"
+git clone https://github.com/docker-library/redis redis
+cd redis
+git checkout f1a8498333ae3ab340b5b39fbac1d7e1dc0d628c
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "redis:6.2.2-buster@sha256:e10f55f92478715698a2cef97c2bbdc48df2a05081edd884938903aa60df6396" .
+cd - && cd ..
+
+
+# Build lndhub
+# https://raw.githubusercontent.com/BlueWallet/LndHub/v1.3.3/Dockerfile
+DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/BlueWallet/LndHub/v1.3.3/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+echo "Building bluewalletorganization/lndhub:v1.3.3@sha256:b99408dfb53f503def405668f5fc4d8185de39a87843d4ea8774544a5df1fe36"
+git clone https://github.com/BlueWallet/LndHub lndhub
+cd lndhub
+git checkout v1.3.3
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "bluewalletorganization/lndhub:v1.3.3@sha256:b99408dfb53f503def405668f5fc4d8185de39a87843d4ea8774544a5df1fe36" .
+cd - && cd ..
+
+
 # Build btcqbo
 # https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.3.36/Dockerfile
 DOCKERFILE="Dockerfile"
@@ -687,6 +713,20 @@ docker build -f "$DOCKERFILE" -t "pihole/pihole:v5.7" .
 cd - && cd ..
 
 
+# Build sphinx-relay
+# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.0.13/Dockerfile
+DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.0.13/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+echo "Building sphinxlightning/sphinx-relay:v2.0.13"
+git clone https://github.com/stakwork/sphinx-relay sphinx-relay
+cd sphinx-relay
+git checkout v2.0.13
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "sphinxlightning/sphinx-relay:v2.0.13" .
+cd - && cd ..
+
+
 # Build python-teos
 # https://raw.githubusercontent.com/talaia-labs/python-teos/master/docker/Dockerfile
 DOCKERFILE="docker/Dockerfile"
@@ -704,18 +744,18 @@ cd - && cd ..
 
 
 # Build thunderhub
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.15/Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.16/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.15/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.16/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.15/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.16/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building apotdevin/thunderhub:base-v0.12.15"
+echo "Building apotdevin/thunderhub:base-v0.12.16"
 git clone https://github.com/apotdevin/thunderhub thunderhub
 cd thunderhub
-git checkout v0.12.15
+git checkout v0.12.16
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:base-v0.12.15" .
+docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:base-v0.12.16" .
 cd - && cd ..
 
 

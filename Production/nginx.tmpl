@@ -94,6 +94,16 @@
 	}
 		{{ end }}
 
+		{{ if (eq $serviceName "bluewallet_lndhub_app") }}
+	location /bluewallet_lndhub_app/ {
+		proxy_pass http://bluewallet_lndhub_app:3000/;
+        sub_filter 'href="../'  'href="/bluewallet_lndhub_app/';
+        sub_filter 'src="/'  'src="/bluewallet_lndhub_app/';
+        sub_filter_once off;
+	}
+		{{ end }}
+
+		
   {{ if (eq $serviceName "sphinxrelay") }}
   location /sphinxrelay/ {
     proxy_set_header        Host               $host;

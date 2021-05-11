@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+  bluewallet_lndhub_redis:
+    container_name: bluewallet_lndhub_redis
+    image: "redis:6.2.2-buster@sha256:e10f55f92478715698a2cef97c2bbdc48df2a05081edd884938903aa60df6396"
+    command: "redis-server --requirepass S7bk49NBp29khUci4Zw28vsBviCnYfZ2QLTEsQNizq9ni5ur"
+    restart: "on-failure"
+    stop_grace_period: "1m"
+    volumes:
+      - "bluewallet_lndhub_redisdir:/data"
+
+
+  bluewallet_lndhub_app:
+    container_name: bluewallet_lndhub_app
+    image: "bluewalletorganization/lndhub:v1.3.3@sha256:b99408dfb53f503def405668f5fc4d8185de39a87843d4ea8774544a5df1fe36"
+    user: "0:0"
+    depends_on: [ "bluewallet_lndhub_redis" ]
+    restart: "on-failure"
+    stop_grace_period: "1m"
+    volumes:
+      - "lnd_bitcoin_datadir:/lnd:ro"
+    environment:
+      PORT: "3000"
+      #TOR_URL: "${APP_HIDDEN_SERVICE}"
+      LND_CERT_FILE: "/lnd/tls.cert"
+      LND_ADMIN_MACAROON_FILE: "/lnd/admin.macaroon"
+      CONFIG: '{ "rateLimit": 10000, "postRateLimit": 10000, "redis": { "port": 6379, "host": "bluewallet_lndhub_redis", "family": 4, "password": "S7bk49NBp29khUci4Zw28vsBviCnYfZ2QLTEsQNizq9ni5ur", "db": 0 }, "lnd": { "url": "lnd_bitcoin:10009", "password": ""}}'
+
+
+  btcpayserver:
+    environment:
+      BTCPAY_EXTERNALSERVICES: "Blue Wallet LNDHub:${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/bluewallet_lndhub_app;"
+
+# use docker native volumes
+volumes:
+  bluewallet_lndhub_redisdir:
+
+required:
+  - "bitcoin-lnd"
