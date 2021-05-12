@@ -18,6 +18,7 @@ services:
         restlisten=lnd_bitcoin:8080
         rpclisten=127.0.0.1:10008
         rpclisten=lnd_bitcoin:10009
+        rpclisten=127.0.0.1:10009
         bitcoin.node=bitcoind
         bitcoind.rpchost=bitcoind:43782
         bitcoind.rpcuser=lnd
