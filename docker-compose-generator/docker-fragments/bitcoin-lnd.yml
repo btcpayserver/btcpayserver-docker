@@ -2,7 +2,7 @@ version: "3"
 
 services:
   lnd_bitcoin:
-    image: btcpayserver/lnd:v0.12.1-beta-15s
+    image: btcpayserver/lnd:v0.12.1-beta-withloop
     container_name: btcpayserver_lnd_bitcoin
     restart: unless-stopped
     environment:
@@ -13,7 +13,7 @@ services:
       LND_ENVIRONMENT: "${NBITCOIN_NETWORK:-regtest}"
       LND_READY_FILE: /root/.nbxplorer/btc_fully_synched
       LND_REST_LISTEN_HOST: http://lnd_bitcoin:8080
-      LND_HOST_FOR_LOOP: lnd_bitcoin:10009
+      LND_HOST_FOR_LOOP: 127.0.0.1:10009
       LND_EXTRA_ARGS: |
         restlisten=lnd_bitcoin:8080
         rpclisten=127.0.0.1:10008
