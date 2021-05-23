@@ -334,14 +334,14 @@ cd - && cd ..
 
 
 # Build eclair
-# https://raw.githubusercontent.com/Groestlcoin/eclair/v0.3.3/Dockerfile
+# https://raw.githubusercontent.com/Groestlcoin/eclair/v0.6.0/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building groestlcoin/eclair:v0.3.3"
+echo "Building groestlcoin/eclair:v0.6.0"
 git clone https://github.com/Groestlcoin/eclair eclair
 cd eclair
-git checkout v0.3.3
+git checkout v0.6.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "groestlcoin/eclair:v0.3.3" .
+docker build -f "$DOCKERFILE" -t "groestlcoin/eclair:v0.6.0" .
 cd - && cd ..
 
 
