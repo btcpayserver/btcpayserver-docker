@@ -300,12 +300,12 @@ cd - && cd ..
 # Build lightning
 # https://raw.githubusercontent.com/Groestlcoin/lightning/v0.9.2/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building groestlcoin/lightning:v0.9.2"
+echo "Building groestlcoin/lightning:v0.10.0"
 git clone https://github.com/Groestlcoin/lightning lightning
 cd lightning
-git checkout v0.9.2
+git checkout v0.10.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "groestlcoin/lightning:v0.9.2" .
+docker build -f "$DOCKERFILE" -t "groestlcoin/lightning:v0.10.0" .
 cd - && cd ..
 
 
@@ -358,14 +358,14 @@ cd - && cd ..
 
 
 # Build docker-groestlcoin
-# https://raw.githubusercontent.com/Groestlcoin/docker-groestlcoin/master/groestlcoin/2.21.0/Dockerfile
-DOCKERFILE="groestlcoin/2.21.0/Dockerfile"
-echo "Building groestlcoin/docker-groestlcoin:2.21.0"
+# https://raw.githubusercontent.com/Groestlcoin/docker-groestlcoin/master/groestlcoin/2.21.1/Dockerfile
+DOCKERFILE="groestlcoin/2.21.1/Dockerfile"
+echo "Building groestlcoin/docker-groestlcoin:2.21.1"
 git clone https://github.com/Groestlcoin/docker-groestlcoin docker-groestlcoin
 cd docker-groestlcoin
 git checkout master
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "groestlcoin/docker-groestlcoin:2.21.0" .
+docker build -f "$DOCKERFILE" -t "groestlcoin/docker-groestlcoin:2.21.1" .
 cd - && cd ..
 
 
@@ -993,5 +993,3 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
-
-
