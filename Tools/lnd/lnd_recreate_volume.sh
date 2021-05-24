@@ -17,7 +17,7 @@ if [ $yn != "yes" ]; then
 	exit 0
 fi
 
-../../btcpay-down.sh
+btcpay-down.sh
 
 docker volume rm --force generated_lnd_bitcoin_datadir
 
@@ -25,6 +25,6 @@ docker volume rm --force generated_lnd_bitcoin_datadir
 # https://github.com/btcpayserver/btcpayserver-docker/issues/272
 docker volume rm --force production_lnd_bitcoin_datadir
 
-../../btcpay-up.sh
+btcpay-up.sh
 
 echo "LND container recreated"
