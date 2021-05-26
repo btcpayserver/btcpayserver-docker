@@ -16,6 +16,11 @@ services:
       BITCOIN_EXTRA_ARGS: |
         dbcache=50
         maxmempool=50
+  dogecoind:
+    environment:
+      DOGECOIN_EXTRA_ARGS: |
+        dbcache=50
+        maxmempool=50
   feathercoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
