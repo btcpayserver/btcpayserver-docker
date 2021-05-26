@@ -16,7 +16,6 @@ services:
         port=39388
         whitelist=0.0.0.0/0
         validatepegin=0
-        prune=5000
         fallbackfee=0.000001
     expose:
       - "43782"
@@ -40,3 +39,6 @@ services:
 volumes:
   elements_datadir:
   elements_wallet_datadir:
+
+recommended:
+  - "liquid-default-prune"

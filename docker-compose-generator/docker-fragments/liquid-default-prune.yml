@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  elementsd_liquid:
+    environment:
+      ELEMENTS_EXTRA_ARGS: |
+        prune=5000
