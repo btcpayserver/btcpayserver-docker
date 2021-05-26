@@ -38,6 +38,10 @@ namespace DockerFileBuildHelper
             img.User = match.Groups[1].Length == 0 ? string.Empty : match.Groups[1].Value.Substring(0, match.Groups[1].Value.Length - 1);
             img.Name = match.Groups[2].Value;
             img.Tag = match.Groups[3].Value;
+            if (img.Tag.Contains('@'))
+            {
+                img.Tag = img.Tag.Split('@')[0];
+            }
             if (img.Tag == string.Empty)
                 img.Tag = "latest";
             return img;
