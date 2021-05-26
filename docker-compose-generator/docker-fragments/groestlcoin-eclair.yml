@@ -9,7 +9,7 @@ services:
     container_name: btcpayserver_eclair_groestlcoin
     restart: unless-stopped
     stop_signal: SIGINT
-    image: groestlcoin/eclair:v0.3.3
+    image: groestlcoin/eclair:v0.6.0
     environment:
       PUBLIC_HOST: ${BTCPAY_HOST}
       JAVA_OPTS: |
