@@ -743,6 +743,22 @@ docker build -f "$DOCKERFILE" -t "sphinxlightning/sphinx-relay:v2.1.3" .
 cd - && cd ..
 
 
+# Build tallycoin_connect
+# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.0.0/Dockerfile
+DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.0.0/arm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
+# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.0.0/arm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
+echo "Building dennisreimann/tallycoin_connect:v1.0.0"
+git clone https://github.com/dennisreimann/tallycoin_connect tallycoin_connect
+cd tallycoin_connect
+git checkout v1.0.0
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "dennisreimann/tallycoin_connect:v1.0.0" .
+cd - && cd ..
+
+
 # Build python-teos
 # https://raw.githubusercontent.com/talaia-labs/python-teos/master/docker/Dockerfile
 DOCKERFILE="docker/Dockerfile"
