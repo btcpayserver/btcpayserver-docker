@@ -124,7 +124,7 @@ Additionally, there are specific environment variables for some addons:
 * `WOOCOMMERCE_HOST`: If woocommerce is activated with [opt-add-woocommerce](docker-compose-generator/docker-fragments/opt-add-woocommerce.yml), the hostname of your woocommerce website (eg. `store.example.com`)
 * `EPS_XPUB`: If Electrum Personal Server (EPS) is activated with [opt-add-electrum-ps](docker-compose-generator/docker-fragments/opt-add-electrum-ps.yml), you must set the Extended Public Key (XPUB, YPUB or ZPUB) of the wallet you want to use, before first run of the EPS server.  If you accidently start EPS without this, it will not work properly as the model of EPS is to monitor only specified wallets.
 * If Bitcoin Wallet Tracker is activated with [opt-add-bwt](docker-compose-generator/docker-fragments/opt-add-bwt.yml),  you can use `BWT_XPUB`/`BWT_XPUB_*` (to set your XPUB/YPUB/ZPUB), `BWT_DESCRIPTOR`/`BWT_DESCRIPTOR_*` (for script descriptors), `BWT_RESCAN_SINCE` (set to the wallet creation date in YYYY-MM-DD to speed up the rescan), `BWT_BITCOIND_WALLET` and `BWT_GAP_LIMIT`.
-
+* `LND_WTCLIENT_SWEEP_FEE`: If LND watchtower is activated with [opt-lnd-wtclient](docker-compose-generator/docker-fragments/opt-lnd-wtclient.yml), you can use `LND_WTCLIENT_SWEEP_FEE` to change the sweep fee used in constructing the justice transaction (default is 10 sat/byte)
 # Tooling
 
 A wide variety of useful scripts are available once BTCPay is installed:
@@ -157,7 +157,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-save-storage-xxs](docker-compose-generator/docker-fragments/opt-save-storage-xxs.yml) will keep around 2 weeks of blocks (prune BTC for 5 GB) (lightning not supported)
 * [opt-lnd-autopilot](docker-compose-generator/docker-fragments/opt-lnd-autopilot.yml) will activate auto pilot on LND. (5 channels, 60% of allocation)
 * [opt-lnd-keysend](docker-compose-generator/docker-fragments/opt-lnd-keysend.yml) will activate keysend on LND.
-* [opt-lnd-wtclient](docker-compose-generator/docker-fragments/opt-lnd-wtclient.yml) will activate the watchtower client on LND.
+* [opt-lnd-wtclient](docker-compose-generator/docker-fragments/opt-lnd-wtclient.yml) will activate the watchtower client on LND. `LND_WTCLIENT_SWEEP_FEE` can be used to override the default 10 sat/byte justice transaction fee
 * [opt-save-memory](docker-compose-generator/docker-fragments/opt-save-memory.yml) will decrease the default dbcache at the expense of longer synchronization time. (Useful if your machine is less than 2GB)
 * [opt-more-memory](docker-compose-generator/docker-fragments/opt-more-memory.yml) will increase the default dbcache to make synchronization faster (Useful if your machine is has around 4GB)
 * [opt-add-btcqbo](docker-compose-generator/docker-fragments/opt-add-btcqbo.yml) will allow you to create an invoice on Quickbooks which include a way for your customer to pay on BTCPay Server (More information on this [github repository](https://github.com/JeffVandrewJr/btcqbo/), this add-on is maintained by [JeffVandrewJr](https://github.com/JeffVandrewJr), see more on [this video](https://www.youtube.com/watch?v=srgwL9ozg6c))
