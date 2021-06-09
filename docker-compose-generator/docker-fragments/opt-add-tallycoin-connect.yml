@@ -6,7 +6,7 @@ services:
     volumes:
       - "tallycoin_connect_datadir:/etc/tallycoin_connect_datadir"
   tallycoin_connect:
-    image: "dennisreimann/tallycoin_connect:v1.0.0@sha256:266cb62da9c7f81f97b1068bf40ba7e967009e1ff70f706f5363dcb6297197e6"
+    image: "dennisreimann/tallycoin_connect:v1.1.2@sha256:853caccbb1bc1ce2878396113ba8c1909ca66e48d5e61d2376b7a68c4f95365c"
     restart: unless-stopped
     expose:
       - "8123"
