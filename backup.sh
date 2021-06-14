@@ -19,14 +19,26 @@ fi
 case "$BACKUP_PROVIDER" in
   "Dropbox")
     if [ -z "$DROPBOX_TOKEN" ]; then
-        echo "Set DROPBOX_TOKEN environment variable and try again."
+        echo -e "\033[0;31mSet DROPBOX_TOKEN environment variable and try again.\033[0m"
         exit 1
+    fi
+    ;;
+
+  "S3")
+    echo -e "\033[1;33mUsing S3 backup provider. Make sure you have ran 'aws configure' on your root user and configured an AMI with access to your bucket.\033[0m"
+    if [ -z "$S3_BUCKET" ]; then
+        echo -e "\033[0;31mSet S3_BUCKET environment variable and try again.\033[0m"
+        exit 1
+    fi
+    
+    if [ -z "$S3_PATH" ]; then
+        echo -e "\033[1;33mUsing bucket root for backup, set S3_PATH if you want to backup into a specific folder (Make sure it ends with a trailing slash).\033[0m"
     fi
     ;;
 
   "SCP")
     if [ -z "$SCP_TARGET" ]; then
-        echo "Set SCP_TARGET environment variable and try again."
+        echo -e "\033[0;31mSet SCP_TARGET environment variable and try again.\033[0m"
         exit 1
     fi
     ;;
@@ -81,7 +93,14 @@ case $BACKUP_PROVIDER in
     rm $backup_path
     ;;
 
-  "SCP")
+  "S3")
+    echo "Uploading to S3 …"
+    docker run --rm -v ~/.aws:/root/.aws -v $backup_path:/aws/$filename amazon/aws-cli s3 cp $filename s3://$S3_BUCKET/$S3_PATH
+    echo "Deleting local backup …"
+    rm $backup_path
+    ;;
+
+"SCP")
     echo "Uploading via SCP …"
     scp $backup_path $SCP_TARGET
     echo "Deleting local backup …"
