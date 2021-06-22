@@ -38,12 +38,12 @@ else
 fi
 
 # Verify we are in right folder. If we are not, let's go in the parent folder of the current docker-compose.
-if ! git -C . rev-parse &> /dev/null || [ ! -d "Generated" ]; then
+if ! git -c . rev-parse &> /dev/null || [ ! -d "Generated" ]; then
     if [[ ! -z $BTCPAY_DOCKER_COMPOSE ]]; then
         cd $(dirname $BTCPAY_DOCKER_COMPOSE)
         cd ..
     fi
-    if ! git -C . rev-parse || [[ ! -d "Generated" ]]; then
+    if ! git -c . rev-parse || [[ ! -d "Generated" ]]; then
         echo "You must run this script inside the git repository of btcpayserver-docker"
         return
     fi
