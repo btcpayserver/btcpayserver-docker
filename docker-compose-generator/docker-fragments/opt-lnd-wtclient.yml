@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  lnd_bitcoin:
+    environment:
+      LND_EXTRA_ARGS: |
+        wtclient.active=1
+        wtclient.sweep-fee-rate=${LND_WTCLIENT_SWEEP_FEE:-10}
