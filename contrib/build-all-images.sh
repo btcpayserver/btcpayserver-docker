@@ -744,14 +744,14 @@ cd - && cd ..
 
 
 # Build tallycoin_connect
-# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.1.2/Dockerfile
+# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.2.0/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building dennisreimann/tallycoin_connect:v1.1.2"
+echo "Building dennisreimann/tallycoin_connect:v1.2.0"
 git clone https://github.com/dennisreimann/tallycoin_connect tallycoin_connect
 cd tallycoin_connect
-git checkout v1.1.2
+git checkout v1.2.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "dennisreimann/tallycoin_connect:v1.1.2" .
+docker build -f "$DOCKERFILE" -t "dennisreimann/tallycoin_connect:v1.2.0" .
 cd - && cd ..
 
 
