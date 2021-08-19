@@ -1,6 +1,4 @@
 ﻿using System;
-using YamlDotNet;
-using YamlDotNet.Helpers;
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -429,6 +427,14 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/btcpayserver/btcpayserver";
                     // v1.0.5.4$<BTCPAY_BUILD_CONFIGURATION>
                     dockerInfo.GitRef = $"v{image.Tag.Substring(0, image.Tag.IndexOf('$'))}";
+                    dockerInfo.SupportedByUs = true;
+                    break;
+                case "rtl" when image.Tag != "0.10.0":
+                    dockerInfo.DockerFilePath = "docker/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "docker/Dockerfile.arm32v7";
+                    dockerInfo.DockerFilePathARM64v8 = "docker/Dockerfile.arm64v8";
+                    dockerInfo.GitLink = "https://github.com/Ride-The-Lightning/RTL";
+                    dockerInfo.GitRef = $"v{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "rtl":
