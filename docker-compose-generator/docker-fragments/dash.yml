@@ -4,12 +4,17 @@ services:
   dashd:
     restart: unless-stopped
     container_name: btcpayserver_dashd
-    image: btcpayserver/dash:0.16.1.1
+    image: btcpayserver/dash:0.17.0.3
     environment:
+      # rpcport and rpcbind seems duplicates, but they are not
+      # rpcport is using by some tooling to automatically get
+      # the rpcport from the configuration file. Do not remove!
       BITCOIN_EXTRA_ARGS: |
         ${NBITCOIN_NETWORK:-regtest}=1
         port=9999
         rpcport=9998
+        rpcbind=0.0.0.0:9998
+        rpcallowip=0.0.0.0/0
         whitelist=0.0.0.0/0
     expose:
       - "9998"
