@@ -6,7 +6,7 @@ services:
     volumes:
       - "tallycoin_connect_datadir:/etc/tallycoin_connect_datadir"
   tallycoin_connect:
-    image: "dennisreimann/tallycoin_connect:v1.2.0@sha256:8f55332744d81507d275f61048da0952badfa9824e9759c52a3dfc048640a47b"
+    image: "dennisreimann/tallycoin_connect:v1.4.0"
     restart: unless-stopped
     expose:
       - "8123"
@@ -17,6 +17,7 @@ services:
       PUBLIC_URL: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/tallycoin-connect/
       TALLYCOIN_APIKEY: "${TALLYCOIN_APIKEY}"
       TALLYCOIN_PASSWD: "${TALLYCOIN_PASSWD}"
+      LND_SOCKET: "lnd_bitcoin:10009"
       LND_MACAROON_PATH: /tallycoin_connect/lnd/admin.macaroon
       LND_TLSCERT_PATH: /tallycoin_connect/lnd/tls.cert
       PORT: 8123

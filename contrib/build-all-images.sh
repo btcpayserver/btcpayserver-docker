@@ -744,14 +744,14 @@ cd - && cd ..
 
 
 # Build tallycoin_connect
-# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.2.0/Dockerfile
+# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.4.0/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building dennisreimann/tallycoin_connect:v1.2.0"
+echo "Building dennisreimann/tallycoin_connect:v1.4.0"
 git clone https://github.com/dennisreimann/tallycoin_connect tallycoin_connect
 cd tallycoin_connect
-git checkout v1.2.0
+git checkout v1.4.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "dennisreimann/tallycoin_connect:v1.2.0" .
+docker build -f "$DOCKERFILE" -t "dennisreimann/tallycoin_connect:v1.4.0" .
 cd - && cd ..
 
 
@@ -1021,5 +1021,3 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
-
-
