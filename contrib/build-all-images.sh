@@ -730,16 +730,16 @@ cd - && cd ..
 
 
 # Build sphinx-relay
-# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.1.3/Dockerfile
+# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.0/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.1.3/Dockerfile
+# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.0/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building sphinxlightning/sphinx-relay:v2.1.3"
+echo "Building sphinxlightning/sphinx-relay:v2.2.0"
 git clone https://github.com/stakwork/sphinx-relay sphinx-relay
 cd sphinx-relay
-git checkout v2.1.3
+git checkout v2.2.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "sphinxlightning/sphinx-relay:v2.1.3" .
+docker build -f "$DOCKERFILE" -t "sphinxlightning/sphinx-relay:v2.2.0" .
 cd - && cd ..
 
 
@@ -1021,3 +1021,5 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
+
+
