@@ -1,4 +1,4 @@
-{{ $CurrentContainer := where $ "ID" .Docker.CurrentContainerID | first }} 
+{{ $CurrentContainer := where $ "ID" .Docker.CurrentContainerID | first }}
 {{ define "upstream" }}
 	{{ if .Address }}
 		{{/* If we got the containers from swarm and this container's port is published to host, use host IP:PORT */}}
@@ -18,7 +18,7 @@
 	server 127.0.0.1 down;
 		{{ end }}
 	{{ end }}
-	
+
 {{ end }}
 
 {{ define "redirects" }}
@@ -69,7 +69,7 @@
 	location /lightning-charge/btc/ {
 		proxy_pass http://clightning_bitcoin_charge:9112/;
 	}
-	{{ end }}		
+	{{ end }}
 	{{ if (eq $serviceName "clightning_bitcoin_rest") }}
 	location /clightning-rest/btc/ {
 	    rewrite ^/clightning-rest/btc/(.*) /$1 break;
@@ -86,7 +86,7 @@
 		proxy_pass http://clightning_groestlcoin_charge:9112/;
 	}
 		{{ end }}
-		
+
 		{{ if (eq $serviceName "btctransmuter") }}
 	location /btctransmuter/ {
 		proxy_set_header Connection "";
@@ -110,7 +110,31 @@
 	}
 		{{ end }}
 
-		
+  {{ if (eq $serviceName "lnd_lit") }}
+  location /lit {
+    proxy_set_header Host               $host;
+    proxy_set_header X-Real-IP          $remote_addr;
+    proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto  $scheme;
+    proxy_set_header Accept-Encoding "";
+    proxy_set_header Origin http://$lnd_backend;
+    proxy_set_header Connection $lnd_connection;
+    proxy_pass http://lnd_lit:8080/;
+  }
+
+	location ~* ^/lnrpc.Lightning/ {
+    proxy_pass http://lnd_lit:8080;
+  }
+
+  location ~* ^/looprpc.SwapClient/ {
+    proxy_pass http://lnd_lit:8080;
+  }
+
+  location ~* ^/poolrpc.Trader/ {
+    proxy_pass http://lnd_lit:8080;
+  }
+  {{ end }}
+
   {{ if (eq $serviceName "sphinxrelay") }}
   location /sphinxrelay/ {
     proxy_set_header        Host               $host;
@@ -183,6 +207,31 @@ map $http_upgrade $proxy_connection {
   default upgrade;
   '' close;
 }
+
+{{ if (eq $serviceName "lnd_lit") }}
+# Redirect all incoming grpc-web requests to the LiT proxy. Everything else
+# goes directly to the internal lnd container. We use a temporary variable
+# here so we can rewrite it to the actual host again in the next map
+# directive.
+map $content_type $tmp_backend {
+  "application/grpc-web+proto" "lnd_lit:8080"; # LiT proxy.
+  default "lnd_bitcoin:10009"; # main LND
+}
+
+# Streaming grpc-web requests can be identified by the
+# "Sec-WebSocket-Protocol: grpc-websockets" header field. So those requests
+# also need to go to the LiT proxy.
+map $http_sec_websocket_protocol $lnd_backend {
+  "grpc-websockets" "lnd_lit:8080"; # LiT proxy.
+  default $tmp_backend; # Fall back to the value from the above map result.
+}
+
+# Make sure WebSockets are properly upgraded.
+map $http_sec_websocket_protocol $lnd_connection {
+  "grpc-websockets" "upgrade";
+  default $http_connection;
+}
+{{ end }}
 
 # Apply fix for very long server names
 server_names_hash_bucket_size 128;

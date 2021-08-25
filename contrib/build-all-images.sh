@@ -827,6 +827,18 @@ docker build -f "$DOCKERFILE" -t "dennisreimann/tallycoin_connect:v1.7.0" .
 cd - && cd ..
 
 
+# Build lightning-terminal
+# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.5.0-alpha/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building lightninglabs/lightning-terminal/v0.5.0-alpha"
+git clone https://github.com/lightninglabs/lightning-terminal.git lightning-terminal
+cd lightning-terminal
+git checkout v0.5.0-alpha
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.5.0-alpha" .
+cd - && cd ..
+
+
 # Build python-teos
 # https://raw.githubusercontent.com/talaia-labs/python-teos/master/docker/Dockerfile
 DOCKERFILE="docker/Dockerfile"
