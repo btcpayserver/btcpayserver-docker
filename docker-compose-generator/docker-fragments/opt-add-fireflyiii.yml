@@ -17,6 +17,8 @@ services:
       - VIRTUAL_HOST_NAME=fireflyiii
       - VIRTUAL_HOST=${FIREFLY_HOST}
       - VIRTUAL_PORT=8080
+      - LETSENCRYPT_HOST=${LIBREPATRON_HOST}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL:-<no value>}
     expose:
       - 8080
     volumes:

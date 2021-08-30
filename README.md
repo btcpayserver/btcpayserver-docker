@@ -125,6 +125,7 @@ Additionally, there are specific environment variables for some addons:
 * `EPS_XPUB`: If Electrum Personal Server (EPS) is activated with [opt-add-electrum-ps](docker-compose-generator/docker-fragments/opt-add-electrum-ps.yml), you must set the Extended Public Key (XPUB, YPUB or ZPUB) of the wallet you want to use, before first run of the EPS server.  If you accidently start EPS without this, it will not work properly as the model of EPS is to monitor only specified wallets.
 * If Bitcoin Wallet Tracker is activated with [opt-add-bwt](docker-compose-generator/docker-fragments/opt-add-bwt.yml),  you can use `BWT_XPUB`/`BWT_XPUB_*` (to set your XPUB/YPUB/ZPUB), `BWT_DESCRIPTOR`/`BWT_DESCRIPTOR_*` (for script descriptors), `BWT_RESCAN_SINCE` (set to the wallet creation date in YYYY-MM-DD to speed up the rescan), `BWT_BITCOIND_WALLET` and `BWT_GAP_LIMIT`.
 * `LND_WTCLIENT_SWEEP_FEE`: If LND watchtower is activated with [opt-lnd-wtclient](docker-compose-generator/docker-fragments/opt-lnd-wtclient.yml), you can use `LND_WTCLIENT_SWEEP_FEE` to change the sweep fee used in constructing the justice transaction (default is 10 sat/byte)
+* `FIREFLY_HOST`: If fireflyiii is activated with [opt-add-fireflyiii](docker-compose-generator/docker-fragments/opt-add-fireflyiii.yml), the hostname of your fireflyiii website (eg. `firefly.example.com`)
 # Tooling
 
 A wide variety of useful scripts are available once BTCPay is installed:
@@ -181,6 +182,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-teos](docker-compose-generator/docker-fragments/opt-add-teos.yml) for [The Eye Of Satoshi](https://github.com/talaia-labs/python-teos), a BOLT13 Lightning Watchtower. Use port 9814 on your server or Tor to connect.
 * [opt-add-zammad](docker-compose-generator/docker-fragments/opt-add-zammad.yml) for [Zammad](https://zammad.com/features), a web based open source helpdesk/customer support system with many features to manage customer communication via several channels like telephone, facebook, twitter, chat and e-mails
 * [opt-monero-expose](docker-compose-generator/docker-fragments/opt-monero-expose.yml) to expose monero node's RPC port at 127.0.0.1:18081 to connect your own wallet. Use f.e. ssh port forwarding to forward to your own computer.
+* [opt-add-fireflyiii](docker-compose-generator/docker-fragments/opt-add-fireflyiii.yml) for [FIREFLY III](https://www.firefly-iii.org/), A free and open source personal finance manager.
 
 You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).
 
