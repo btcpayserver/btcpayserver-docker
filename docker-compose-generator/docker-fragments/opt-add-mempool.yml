@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+  bitcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        rpcauth=mempool:d77ee0acf132038f6aaa9d4500d745ec$72cc78dcf18191c91d10c15ff8f7c3dbbd170c4d3107cca35d71c6bf96af2ed9
+  mempool_web:
+    image: mempool/frontend:latest
+    restart: on-failure
+    stop_grace_period: 1m
+    command: "./wait-for mempool_db:3306 --timeout=720 -- nginx -g 'daemon off;'"
+    expose:
+      - "8080"
+    environment:
+      FRONTEND_HTTP_PORT: "8080"
+      BACKEND_MAINNET_HTTP_HOST: "mempool_api"
+
+  mempool_api:
+    image: mempool/backend:latest
+    restart: on-failure
+    stop_grace_period: 1m
+    command: "./wait-for-it.sh db:3306 --timeout=720 --strict -- ./start.sh"
+    volumes:
+      - mempool_api_datadir:/backend/cache
+    environment:
+      RPC_HOST: "bitcoind"
+      RPC_PORT: "43782"
+      RPC_USER: "mempool"
+      RPC_PASS: "mempool"
+      ELECTRUM_HOST: "electrumx"
+      ELECTRUM_PORT: "50002"
+      ELECTRUM_TLS: "false"
+      MYSQL_HOST: "mempool_db"
+      MYSQL_PORT: "3306"
+      MYSQL_DATABASE: "mempool"
+      MYSQL_USER: "mempool"
+      MYSQL_PASS: "mempool"
+      BACKEND_MAINNET_HTTP_PORT: "8999"
+      CACHE_DIR: "/backend/cache"
+      MEMPOOL_CLEAR_PROTECTION_MINUTES: "20"
+
+  mempool_db:
+    image: mariadb:10.5.8
+    restart: on-failure    
+    expose:
+      - "3306"
+    volumes:
+      - "mempool_db_datadir:/var/lib/mysql"
+      - ./mysql/db-scripts:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_DATABASE: "mempool"
+      MYSQL_USER: "mempool"
+      MYSQL_PASSWORD: "mempool"
+      MYSQL_ROOT_PASSWORD: "admin"
+
+  btcpayserver:
+    environment:
+      BTCPAY_EXTERNALSERVICES: "Mempool Explorer:/mempool-explorer"
+volumes:
+  - mempool_db_datadir:
+  - mempool_api_datadir:
+
+required:
+  - opt-add-electrumx
+  - opt-txindex
+incompatible:
+  - pruning
