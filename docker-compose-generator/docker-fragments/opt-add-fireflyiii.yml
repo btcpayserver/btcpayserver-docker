@@ -2,7 +2,7 @@ version: '3'
 
 services:
   fireflyiii:
-    image: jc5x/firefly-iii:latest
+    image: fireflyiii/core:latest
     environment:
       - APP_ENV=local
       - APP_KEY=MustBe32DropDbAndChangeItIfUWant
@@ -17,7 +17,7 @@ services:
       - VIRTUAL_HOST_NAME=fireflyiii
       - VIRTUAL_HOST=${FIREFLY_HOST}
       - VIRTUAL_PORT=8080
-      - LETSENCRYPT_HOST=${LIBREPATRON_HOST}
+      - LETSENCRYPT_HOST=${FIREFLY_HOST}
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL:-<no value>}
     expose:
       - 8080
@@ -26,7 +26,7 @@ services:
       - firefly_iii_upload:/var/www/firefly-iii/storage/upload
     depends_on:
       - postgres
-
+ 
 volumes:
    firefly_iii_export:
    firefly_iii_upload:

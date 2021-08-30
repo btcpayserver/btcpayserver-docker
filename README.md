@@ -182,7 +182,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-teos](docker-compose-generator/docker-fragments/opt-add-teos.yml) for [The Eye Of Satoshi](https://github.com/talaia-labs/python-teos), a BOLT13 Lightning Watchtower. Use port 9814 on your server or Tor to connect.
 * [opt-add-zammad](docker-compose-generator/docker-fragments/opt-add-zammad.yml) for [Zammad](https://zammad.com/features), a web based open source helpdesk/customer support system with many features to manage customer communication via several channels like telephone, facebook, twitter, chat and e-mails
 * [opt-monero-expose](docker-compose-generator/docker-fragments/opt-monero-expose.yml) to expose monero node's RPC port at 127.0.0.1:18081 to connect your own wallet. Use f.e. ssh port forwarding to forward to your own computer.
-* [opt-add-fireflyiii](docker-compose-generator/docker-fragments/opt-add-fireflyiii.yml) for [FIREFLY III](https://www.firefly-iii.org/), A free and open source personal finance manager.
+* [opt-add-fireflyiii](docker-compose-generator/docker-fragments/opt-add-fireflyiii.yml) ([See the documentation](docs/fireflyiii.md))
 
 You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).
 
