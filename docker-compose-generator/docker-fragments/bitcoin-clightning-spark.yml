@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  clightning_bitcoin_spark:
+    image: shesek/spark-wallet:0.2.9-standalone
+    restart: unless-stopped
+    environment:
+      NETWORK: ${NBITCOIN_NETWORK:-regtest}
+      SPARK_OPT: --no-tls -C /data/.cookie
+    volumes:
+      - "clightning_bitcoin_datadir:/etc/lightning"
+      - "clightning_bitcoin_spark:/data"
+    links:
+      - clightning_bitcoin
+    expose:
+      - "9737"
+  btcpayserver:
+    environment:
+      BTCPAY_BTCEXTERNALSPARK: "server=/spark/btc/;cookiefile=/etc/clightning_bitcoin_spark/.cookie"
+      volumes:
+      - "clightning_bitcoin_spark:/etc/clightning_bitcoin_spark"
+volumes:
+  clightning_bitcoin_spark:
+
+required:
+  - "clightning_bitcoin"

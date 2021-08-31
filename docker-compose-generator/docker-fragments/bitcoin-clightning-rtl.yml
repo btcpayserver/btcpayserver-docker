@@ -1,0 +1,34 @@
+version: "3"
+
+services:
+  bitcoin_rtl:
+    image: shahanafarooqui/rtl:0.11.1
+    restart: unless-stopped
+    environment:
+      LN_IMPLEMENTATION: CLT
+      CONFIG_PATH: /root/.lightning/config
+      LN_SERVER_URL: http://clightning_bitcoin_rest:3001/v1
+      MACAROON_PATH: /etc/clightning_bitcoin_rest/certs
+      RTL_CONFIG_PATH: /data/
+      BITCOIND_CONFIG_PATH: /etc/bitcoin/bitcoin.conf
+      RTL_SSO: 1
+      RTL_COOKIE_PATH: /data/.cookie
+      LOGOUT_REDIRECT_LINK: /server/services
+    volumes:
+      - "clightning_bitcoin_datadir:/root/.lightning"
+      - "bitcoin_datadir:/etc/bitcoin"
+      - "clightning_bitcoin_rtl_datadir:/data"
+      - "clightning_bitcoin_rest_datadir:/etc/clightning_bitcoin_rest"
+    expose:
+      - "3000"
+
+  btcpayserver:
+    environment:
+      BTCPAY_BTCEXTERNALRTL: "server=/rtl/api/authenticate/cookie;cookiefile=/etc/clightning_bitcoin_rtl/.cookie"
+     volumes:
+      - "clightning_bitcoin_rtl_datadir:/etc/clightning_bitcoin_rtl"
+volumes:
+  clightning_bitcoin_rtl_datadir:
+
+required:
+  - "bitcoin-clightning-rest"

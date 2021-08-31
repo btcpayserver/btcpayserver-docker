@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  clightning_bitcoin_rest:
+    image: saubyk/c-lightning-rest:0.4.4
+    restart: unless-stopped
+    stop_signal: SIGKILL
+    environment:
+      PROTOCOL: "http"
+      NODE: clightning_bitcoin:9835
+      LIGHTNINGD_READY_FILE: /root/.nbxplorer/btc_fully_synched
+    links:
+      - clightning_bitcoin
+    volumes:
+      - "clightning_bitcoin_datadir:/root/.lightning"
+      - "bitcoin_datadir:/etc/bitcoin"
+      - "clightning_bitcoin_rest_datadir:/usr/src/app"
+      - "nbxplorer_datadir:/root/.nbxplorer"
+    expose:
+      - "3001"
+  btcpayserver:
+    environment:
+      BTCPAY_BTCEXTERNALCLIGHTNINGREST: "server=/clightning-rest/btc;macaroonfilepath=/etc/clightning_bitcoin_rest/certs/access.macaroon;macaroondirectorypath=/etc/clightning_bitcoin_rest/certs"
+    volumes:
+      - "clightning_bitcoin_rest_datadir:/etc/clightning_bitcoin_rest"
+    links:
+      - clightning_bitcoin
+volumes:
+  clightning_bitcoin_rest_datadir:
+required:
+  - "clightning_bitcoin"
+recommended:
+  - "bitcoin-clightning-rtl"
