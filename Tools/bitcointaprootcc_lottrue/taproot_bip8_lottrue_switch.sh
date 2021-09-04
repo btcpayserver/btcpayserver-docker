@@ -1,6 +1,6 @@
 #!/bin/bash
 if [[ "$0" = "$BASH_SOURCE" ]]; then
-    echo "This script must be sourced \". taproot_bip8_lottrue_switch.sh\"" 
+    echo "This script must be sourced \". taproot_bip8_lottrue_switch.sh\""
     exit 1
 fi
 
@@ -15,8 +15,9 @@ if [[ "$BTCPAYGEN_ADDITIONAL_FRAGMENTS" =~ "bitcointaprootcc-bip8-lottrue" ]]; t
  export BTCPAYGEN_EXCLUDE_FRAGMENTS="${BTCPAYGEN_EXCLUDE_FRAGMENTS//bitcoin;/}"
 
   . btcpay-setup.sh -i
-  cd Tools  echo "Configured to use Bitcoin Core release."
-  exit 0  
+  cd Tools
+  echo "Configured to use Bitcoin Core release."
+  exit 0
 fi
 
 
@@ -32,4 +33,4 @@ export BTCPAYGEN_EXCLUDE_FRAGMENTS="$BTCPAYGEN_EXCLUDE_FRAGMENTS;bitcoin;"
 
 . btcpay-setup.sh -i
 cd Tools
-echo "Configured to use https://bitcointaproot.cc release." 
+echo "Configured to use https://bitcointaproot.cc release."
