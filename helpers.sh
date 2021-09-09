@@ -147,6 +147,7 @@ btcpay_restart() {
     if ! [ $? -eq 0 ]; then
         docker-compose -f $BTCPAY_DOCKER_COMPOSE restart
     fi
+    docker restart nginx-gen
     popd > /dev/null
 }
 
