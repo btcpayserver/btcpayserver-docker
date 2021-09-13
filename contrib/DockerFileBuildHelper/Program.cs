@@ -246,6 +246,12 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"EPS/{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
+                case "joinmarket":
+                    dockerInfo.DockerFilePath = $"JoinMarket/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"JoinMarket/{image.Tag}";
+                    dockerInfo.SupportedByUs = true;
+                    break;
                 case "btglnd":
                     dockerInfo.DockerFilePath = "Dockerfile";
                     dockerInfo.GitLink = "https://github.com/vutov/lnd";

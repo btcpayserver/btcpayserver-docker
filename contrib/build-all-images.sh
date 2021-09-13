@@ -689,6 +689,18 @@ docker build -f "$DOCKERFILE" -t "fireflyiii/core:latest" .
 cd - && cd ..
 
 
+# Build joinmarket
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.1/JoinMarket/0.9.1/linuxamd64.Dockerfile
+DOCKERFILE="JoinMarket/0.9.1/linuxamd64.Dockerfile"
+echo "Building btcpayserver/joinmarket:0.9.1"
+git clone https://github.com/btcpayserver/dockerfile-deps joinmarket
+cd joinmarket
+git checkout JoinMarket/0.9.1
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/joinmarket:0.9.1" .
+cd - && cd ..
+
+
 # Build librepatron
 # https://raw.githubusercontent.com/JeffVandrewJr/patron/v0.7.39/Dockerfile
 DOCKERFILE="Dockerfile"
@@ -994,12 +1006,12 @@ DOCKERFILE="9.6/Dockerfile"
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="9.6/Dockerfile"
 # https://raw.githubusercontent.com/docker-library/postgres/b7cb3c6eacea93be2259381033be3cc435649369/9.6/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="9.6/Dockerfile"
-echo "Building postgres:13.3"
+echo "Building postgres:9.6.20"
 git clone https://github.com/docker-library/postgres postgres
 cd postgres
 git checkout b7cb3c6eacea93be2259381033be3cc435649369
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "postgres:13.3" .
+docker build -f "$DOCKERFILE" -t "postgres:9.6.20" .
 cd - && cd ..
 
 
