@@ -14,9 +14,11 @@ services:
       LIGHTNINGD_READY_FILE: /root/.nbxplorer/btc_fully_synched
       LIGHTNINGD_OPT: |
         bitcoin-datadir=/etc/bitcoin
-        bitcoin-rpcconnect=bitcoind
+        bitcoin-rpcconnect=bitcoind        
+        plugin-dir=/etc/clightningplugins
     volumes:
       - "clightning_bitcoin_datadir:/root/.lightning"
+      - "clightning_bitcoin_plugindir:/etc/clightningplugins"
       - "bitcoin_datadir:/etc/bitcoin"
       - "nbxplorer_datadir:/root/.nbxplorer"
     ports:
@@ -110,6 +112,7 @@ services:
       - clightning_bitcoin
 volumes:
   clightning_bitcoin_datadir:
+  clightning_bitcoin_plugindir:
   clightning_bitcoin_spark:
   clightning_bitcoin_charge:
   clightning_bitcoin_rtl_datadir:
