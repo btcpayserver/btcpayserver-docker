@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  fireflyiii:
+    image: fireflyiii/core:latest
+    environment:
+      - APP_ENV=local
+      - APP_KEY=MustBe32DropDbAndChangeItIfUWant
+      - APP_URL=http://${FIREFLY_HOST}
+      - TRUSTED_PROXIES=**
+      - DB_CONNECTION=pgsql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=fireflyiii
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=
+      - VIRTUAL_HOST_NAME=fireflyiii
+      - VIRTUAL_HOST=${FIREFLY_HOST}
+      - VIRTUAL_PORT=8080
+      - LETSENCRYPT_HOST=${FIREFLY_HOST}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL:-<no value>}
+    expose:
+      - 8080
+    volumes:
+      - firefly_iii_export:/var/www/firefly-iii/storage/export
+      - firefly_iii_upload:/var/www/firefly-iii/storage/upload
+    depends_on:
+      - postgres
+ 
+volumes:
+   firefly_iii_export:
+   firefly_iii_upload:
