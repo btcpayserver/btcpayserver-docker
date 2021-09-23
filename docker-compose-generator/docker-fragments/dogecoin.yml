@@ -4,7 +4,7 @@ services:
   dogecoind:
     restart: unless-stopped
     container_name: btcpayserver_dogecoind
-    image: btcpayserver/dogecoin:1.14.3
+    image: btcpayserver/dogecoin:1.14.4
     environment:
       DOGECOIN_EXTRA_ARGS: |
         rpcuser=ceiwHEbqWI83
