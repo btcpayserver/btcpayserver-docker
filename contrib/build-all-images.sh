@@ -202,18 +202,18 @@ cd - && cd ..
 
 
 # Build bitcoin
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.21.1/Bitcoin/0.21.1/linuxamd64.Dockerfile
-DOCKERFILE="Bitcoin/0.21.1/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.21.1/Bitcoin/0.21.1/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Bitcoin/0.21.1/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.21.1/Bitcoin/0.21.1/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Bitcoin/0.21.1/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/bitcoin:0.21.1"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/22.0/Bitcoin/22.0/linuxamd64.Dockerfile
+DOCKERFILE="Bitcoin/22.0/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/22.0/Bitcoin/22.0/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Bitcoin/22.0/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/22.0/Bitcoin/22.0/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Bitcoin/22.0/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/bitcoin:22.0"
 git clone https://github.com/btcpayserver/dockerfile-deps bitcoin
 cd bitcoin
-git checkout Bitcoin/0.21.1
+git checkout Bitcoin/22.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoin:0.21.1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoin:22.0" .
 cd - && cd ..
 
 
@@ -994,12 +994,12 @@ DOCKERFILE="9.6/Dockerfile"
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="9.6/Dockerfile"
 # https://raw.githubusercontent.com/docker-library/postgres/b7cb3c6eacea93be2259381033be3cc435649369/9.6/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="9.6/Dockerfile"
-echo "Building postgres:9.6.20"
+echo "Building postgres:13.3"
 git clone https://github.com/docker-library/postgres postgres
 cd postgres
 git checkout b7cb3c6eacea93be2259381033be3cc435649369
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "postgres:9.6.20" .
+docker build -f "$DOCKERFILE" -t "postgres:13.3" .
 cd - && cd ..
 
 
