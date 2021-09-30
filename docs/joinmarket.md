@@ -32,7 +32,7 @@ jm.sh wallet-tool
 
 ## How to fine tune?
 
-In the [README](../README.md), follow the instruction in `How can I customize the generated docker-compose file?`.
+Follow the [How can I customize the generated docker-compose file?](https://github.com/btcpayserver/btcpayserver-docker/blob/master/README.md#how-can-i-customize-the-generated-docker-compose-file) instructions.
 Then pass as environment variable the attribute you want to modify, prefixed by `jm_`.
 
 Our system is using the default configuration of joinmarket, then replace the values your specify like this.
