@@ -15,4 +15,5 @@ FIREFLY_HOST="firefly.yourserver.org"
 . btcpay-setup.sh -i
 . ./Tools/fireflyiii/init.sh
 ```
+
 4. Access Firefly III at `firefly.yourserver.org` and create your admin account.

@@ -53,6 +53,7 @@ services:
 By running `jm.sh` without parameter, you will get a bunch of command that you can run such as:
 
 For example:
+
 ```
 Usage:
 ------
@@ -84,6 +85,7 @@ Example:
 ```
 
 Note `jm.sh` commands are wrapper around joinmarket scripts. Those wrapper makes your life easier by:
+
 1. Avoiding, when it can, that you enter wallet file name/ wallet password
 2. Stop and Start the yield generator for the duration of the operation
 
@@ -107,7 +109,6 @@ Failed to load wallet, error message: RetryableStorageError('File is currently i
 This is because the yield generator is running.
 
 You can stop and start the yield generator with the helper scripts in the container `stop.sh` and `start.sh`.
-
 
 ## Troubleshooting
 
