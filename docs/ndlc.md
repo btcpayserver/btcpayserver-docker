@@ -25,7 +25,7 @@ The `Contract Execution Transaction` (or `CET`) is the transaction distributing 
 
 The following documentation is also explained in this video.
 
-[<img src="https://img.youtube.com/vi/DakwshnNkho/mqdefault.jpg">](https://youtu.be/DakwshnNkho)
+[![How to make a DLC with NDLC-CLI](https://img.youtube.com/vi/DakwshnNkho/mqdefault.jpg)](https://www.youtube.com/watch?v=DakwshnNkho)
 
 ## How to use
 
