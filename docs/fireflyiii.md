@@ -1,6 +1,6 @@
 # Firefly III support
 
-[Firefly III](https://pi-hole.net/)  is a self-hosted financial manager.
+[Firefly III](https://www.firefly-iii.org/)  is a self-hosted financial manager.
 It can help you keep track of expenses, income, budgets and everything in between. It supports credit cards, shared household accounts and savings accounts. It’s pretty fancy. You should use it to save and organise money.
 
 ## How to use
@@ -15,4 +15,5 @@ FIREFLY_HOST="firefly.yourserver.org"
 . btcpay-setup.sh -i
 . ./Tools/fireflyiii/init.sh
 ```
+
 4. Access Firefly III at `firefly.yourserver.org` and create your admin account.

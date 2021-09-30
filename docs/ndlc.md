@@ -16,6 +16,7 @@ The `oracle` roles is to define the `event` and `attest` a single outcome of the
 Let's call Alice and Bob the two parties of the contract, and Olivia the oracle.
 
 A DLC will show two transactions on the chain:
+
 * The Funding Transaction
 * The Contract Execution Transaction (CET)
 
@@ -25,7 +26,7 @@ The `Contract Execution Transaction` (or `CET`) is the transaction distributing 
 
 The following documentation is also explained in this video.
 
-[<img src="https://img.youtube.com/vi/DakwshnNkho/mqdefault.jpg">](https://youtu.be/DakwshnNkho)
+[![How to make a DLC with NDLC-CLI](https://img.youtube.com/vi/DakwshnNkho/mqdefault.jpg)](https://www.youtube.com/watch?v=DakwshnNkho)
 
 ## How to use
 
@@ -42,4 +43,4 @@ You can then use `ndlc-cli.sh` to run use ndlc-cli, for example:
 ndlc.sh oracle generate MyOwnOracle
 ```
 
-Read our documentation on our [github repository](https://github.com/dgarage/NDLC/blob/master/docs/Concepts.md).
+Read our documentation on our [GitHub repository](https://github.com/dgarage/NDLC/blob/master/docs/Concepts.md).
