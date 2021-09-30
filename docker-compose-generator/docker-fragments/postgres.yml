@@ -3,11 +3,14 @@ version: "3"
 services:
   postgres:
     restart: unless-stopped
-    image: postgres:9.6.20
+    image: postgres:13.4
+    entrypoint: ./migrate-docker-entrypoint.sh
+    command: postgres
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
     volumes:
       - "postgres_datadir:/var/lib/postgresql/data"
+      - "./postgres/migrate-docker-entrypoint.sh:/migrate-docker-entrypoint.sh:ro"
 
 volumes:
   postgres_datadir:
