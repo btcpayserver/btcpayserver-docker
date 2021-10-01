@@ -60,8 +60,8 @@ Example:
     * jm.sh wallet-tool-generate
     * jm.sh set-wallet wallet.jmdat mypassword
     * jm.sh wallet-tool
-    * jm.sh receive-payjoin
-    * jm.sh sendpayment <address> <amount>
+    * jm.sh receive-payjoin <amount>
+    * jm.sh sendpayment <amount> <address>
     * jm.sh wallet-tool history
     * jm.sh bash
 ```
