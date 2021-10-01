@@ -7,16 +7,12 @@ Usage:
 
 Tooling to setup your joinmarket yield generator
 
-    exec: Run the specified joinmarket script
     wallet-tool: Run wallet-tools.py on the wallet
     wallet-tool-generate: Generate a new wallet
     set-wallet: Set the wallet that the yield generator need to use
-    logs: See logs of the yield generator (add -f to follow the logs)
     bash: Open an interactive bash session in the joinmarket container
     receive-payjoin: Receive a payjoin payment (this will stop the yield generator until the payment is received)
     sendpayment: Send a payjoin through coinjoin (password needed, this will stop the yield generator until the payment is received)
-    start: Start the yield generator (started by default)
-    stop: Stop the yield generator
 
 Example:
     * jm.sh wallet-tool-generate
@@ -25,10 +21,7 @@ Example:
     * jm.sh receive-payjoin
     * jm.sh sendpayment <address> <amount>
     * jm.sh wallet-tool history
-    * jm.sh logs -f
     * jm.sh bash
-    * jm.sh start
-    * jm.sh stop
 
 See https://github.com/btcpayserver/btcpayserver-docker/tree/master/docs/joinmarket.md for more information.
 END
@@ -36,16 +29,6 @@ END
 
 while (( "$#" )); do
   case "$1" in
-    exec)
-      CMD="$1"
-      shift 1
-      break;
-      ;;
-    logs)
-      CMD="$1"
-      shift 1
-      break;
-      ;;
     bash)
       CMD="$1"
       shift 1
