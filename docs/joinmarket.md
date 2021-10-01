@@ -53,8 +53,8 @@ Tooling to setup your joinmarket yield generator
     wallet-tool-generate: Generate a new wallet
     set-wallet: Set the wallet that the yield generator need to use
     bash: Open an interactive bash session in the joinmarket container
-    receive-payjoin: Receive a payjoin payment (this will stop the yield generator until the payment is received)
-    sendpayment: Send a payjoin through coinjoin (password needed, this will stop the yield generator until the payment is received)
+    receive-payjoin: Receive a payjoin payment
+    sendpayment: Send a payjoin through coinjoin (password needed)
 
 Example:
     * jm.sh wallet-tool-generate
