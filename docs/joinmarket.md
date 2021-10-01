@@ -1,7 +1,5 @@
 # Joinmarket support
 
-EXPERIMENTAL JOINMARKET SUPPORT IS SUBJECT TO CHANGE
-
 JoinMarket is software to create a special kind of bitcoin transaction called a CoinJoin transaction. Its aim is to improve the confidentiality and privacy of bitcoin transactions.
 
 You will be able to use your bitcoin to help other protect their privacy, while earning a yield for this service.
@@ -19,7 +17,7 @@ BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-joinmark
 . btcpay-setup.sh -i
 ```
 
-Then you need to setup your joinmarket wallet:
+Then you need to setup your default joinmarket wallet:
 
 ```bash
 jm.sh wallet-tool-generate
@@ -32,29 +30,18 @@ Once done, you will need to send some money to the joinmarket wallet:
 jm.sh wallet-tool
 ```
 
-## How to fine tune?
+## How to change joinmarket configuration?
 
-Follow the [How can I customize the generated docker-compose file?](https://github.com/btcpayserver/btcpayserver-docker/blob/master/README.md#how-can-i-customize-the-generated-docker-compose-file) instructions.
-Then pass as environment variable the attribute you want to modify, prefixed by `jm_`.
+Connect to your container, and edit your configuration:
 
-Our system is using the default configuration of joinmarket, then replace the values your specify like this.
-
-Example:
-
-```yml
-services:
-  joinmarket:
-    environment:
-      jm_gaplimit: 3000
-      jm_txfee: 300
-      jm_cjfee_a: 500
+```bash
+jm.sh bash
+vim $CONFIG
 ```
 
 ## Managing your wallet
 
 By running `jm.sh` without parameter, you will get a bunch of command that you can run such as:
-
-For example:
 
 ```
 Usage:
@@ -62,16 +49,12 @@ Usage:
 
 Tooling to setup your joinmarket yield generator
 
-    exec: Run the specified joinmarket script
     wallet-tool: Run wallet-tools.py on the wallet
     wallet-tool-generate: Generate a new wallet
     set-wallet: Set the wallet that the yield generator need to use
-    logs: See logs of the yield generator (add -f to follow the logs)
     bash: Open an interactive bash session in the joinmarket container
     receive-payjoin: Receive a payjoin payment (this will stop the yield generator until the payment is received)
     sendpayment: Send a payjoin through coinjoin (password needed, this will stop the yield generator until the payment is received)
-    start: Start the yield generator (started by default)
-    stop: Stop the yield generator
 
 Example:
     * jm.sh wallet-tool-generate
@@ -80,18 +63,10 @@ Example:
     * jm.sh receive-payjoin
     * jm.sh sendpayment <address> <amount>
     * jm.sh wallet-tool history
-    * jm.sh logs -f
     * jm.sh bash
-    * jm.sh start
-    * jm.sh stop
 ```
 
-Note `jm.sh` commands are wrapper around joinmarket scripts. Those wrapper makes your life easier by:
-
-1. Avoiding, when it can, that you enter wallet file name/ wallet password
-2. Stop and Start the yield generator for the duration of the operation
-
-In some cases you might want to get access to the raw scripts of joinmarket, in which case, you need to get the command prompt into the container.
+Note `jm.sh` commands are wrapper around joinmarket scripts. Those are just convenience command, you can always directly connect to the container via `jm.sh bash` and achieve the same result with the joinmarket python scripts.
 
 ## Getting command prompt into the container
 
@@ -102,19 +77,76 @@ jm.sh bash
 sendpayment.py wallet.jmdat ...
 ```
 
-However, you might get the following error:
+## Managing the services such as yield generators
+
+First connect to the container's bash
+
+```bash
+jm.sh bash
+```
+You can list available services to run:
+
+```bash
+supervisorctl status
+```
+
+Which might show you
+
+```bash
+root> supervisorctl status
+ob-watcher                       STOPPED   Not started
+yg-privacyenhanced               STOPPED   Not started
+yield-generator-basic            STOPPED   Not started
+```
+
+You can start a yield generator with:
+
+```bash
+supervisorctl start yg-privacyenhanced
+```
+
+*** Note that services will NOT be restarted automatically if the container restart. ***
+
+## OB-Watcher
+
+The `ob-watcher` service allows you to [see an order book](https://github.com/JoinMarket-Org/joinmarket-clientserver/blob/master/docs/orderbook.md).
+
+You can activate it:
+
+```bash
+supervisorctl start ob-watcher
+```
+
+Then you can browse it by browsing `https://<your-server>.com/obwatch/`
+
+## Troubleshooting
+
+### Error: Failed to load wallet, you need to remove the lock file
+
+You might sometimes get the following error when running a python script for joinmarket:
 
 ```
 Failed to load wallet, error message: RetryableStorageError('File is currently in use (locked by pid 12822). If this is a leftover from a crashed instance you need to remove the lock file `/root/.joinmarket/wallets/.wallet.jmdat.lock` manually.')
 ```
 
-This is because the yield generator is running.
+This is because a service using the wallet is running, so you need to shut it down before running the command.
 
-You can stop and start the yield generator with the helper scripts in the container `stop.sh` and `start.sh`.
+Check which service is running:
+```bash
+supervisorctl status
+```
 
-## Troubleshooting
+And stop it
 
-Run `jm.sh logs` to get the logs of the yield generator.
+```bash
+supervisorctl stop yg-privacyenhanced
+```
 
-A common issue is that a lock file is present, preventing it to restart.
-In which case, connect directly into the container with `jm.sh bash` and delete the problematic file.
+### Read the logs of services
+
+You can use the `supervisorctl tail` command:
+```bash
+supervisorctl tail yg-privacyenhanced
+```
+
+You can also check the logs in the `$DATADIR/logs` folder.

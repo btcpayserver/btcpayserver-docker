@@ -39,6 +39,13 @@
 		proxy_pass http://bitcoin_rtl:3000/rtl/;
 	}
 		{{ end }}
+
+		{{ if (eq $serviceName "joinmarket") }}
+		location /obwatch/ {
+		proxy_pass http://joinmarket:62601/;
+		}
+		{{ end }}
+
 		{{ if (eq $serviceName "bitcoin_thub") }}
 	location /thub {
 		proxy_pass http://bitcoin_thub:3000/thub;

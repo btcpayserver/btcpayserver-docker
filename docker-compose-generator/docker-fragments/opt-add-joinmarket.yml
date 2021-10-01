@@ -24,6 +24,8 @@ services:
       - "joinmarket_datadir:/root/.joinmarket"
       - "nbxplorer_datadir:/root/.nbxplorer"
       - "tor_datadir:/home/tor/.tor"
+    expose:
+      - 62601
     links:
       - bitcoind
 

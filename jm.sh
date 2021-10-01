@@ -71,16 +71,6 @@ while (( "$#" )); do
       shift 1
       break;
       ;;
-    start)
-      CMD="$1"
-      shift 1
-      break;
-      ;;
-    stop)
-      CMD="$1"
-      shift 1
-      break;
-      ;;
     wallet-tool-generate)
       CMD="$1"
       shift 1
@@ -106,26 +96,18 @@ if ! [[ "$CMD" ]]; then
     display_help
 else
     if [[ "$CMD" == "wallet-tool" ]]; then
-        docker exec joinmarket wallet-tool.sh "$@"
+        docker exec joinmarket exec-wrapper.sh unlockwallet wallet-tool.py "$@"
     elif [[ "$CMD" == "wallet-tool-generate" ]]; then
         docker exec -ti joinmarket exec-wrapper.sh wallet-tool.py generate "$@"
     elif [[ "$CMD" == "sendpayment" ]]; then
-        docker exec -ti joinmarket exec-wrapper.sh sendpayment.sh "$@"
+        docker exec -ti joinmarket exec-wrapper.sh unlockwallet nopass sendpayment.py "$@"
     elif [[ "$CMD" == "receive-payjoin" ]]; then
-        docker exec -ti joinmarket exec-wrapper.sh receive-payjoin.sh "$@"
+        docker exec -ti joinmarket exec-wrapper.sh unlockwallet receive-payjoin.py "$@"
     elif [[ "$CMD" == "set-wallet" ]]; then
         docker exec joinmarket set-wallet.sh "$@"
         docker restart joinmarket
-    elif [[ "$CMD" == "exec" ]]; then
-        docker exec joinmarket exec-wrapper.sh "$@"
-    elif [[ "$CMD" == "logs" ]]; then
-        docker logs "$@" joinmarket
     elif [[ "$CMD" == "bash" ]]; then    
         docker exec -ti joinmarket exec-wrapper.sh bash "$@"
-    elif [[ "$CMD" == "stop" ]]; then
-        docker exec joinmarket exec-wrapper.sh stop.sh
-    elif [[ "$CMD" == "start" ]]; then
-        docker exec joinmarket exec-wrapper.sh start.sh
     else
         display_help
     fi
