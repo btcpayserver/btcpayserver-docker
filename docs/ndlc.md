@@ -1,8 +1,11 @@
 # NDLC support
 
-DISCLAIMER: THIS PROJECT IS EXPERIMENTAL BASED ON A PROTOCOL WHICH IS STILL EVOLVING EVERYDAY. USE WITH CAUTION.
+:::danger Disclaimer
+This project is experimental and based on a protocol which is still evolving everyday.
+Use with caution.
 
-I WILL TAKE NO ATTEMPT AT MAINTAINING BACKWARD COMPATIBILITY AT THIS STAGE.
+I will take no attempt at maintaining backwards compatibility at this stage.
+:::
 
 ## Introduction
 
