@@ -1,5 +1,7 @@
 # Joinmarket support
 
+EXPERIMENTAL JOINMARKET SUPPORT IS SUBJECT TO CHANGE
+
 JoinMarket is software to create a special kind of bitcoin transaction called a CoinJoin transaction. Its aim is to improve the confidentiality and privacy of bitcoin transactions.
 
 You will be able to use your bitcoin to help other protect their privacy, while earning a yield for this service.
