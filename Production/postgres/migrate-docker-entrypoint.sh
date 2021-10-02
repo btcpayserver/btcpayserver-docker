@@ -11,10 +11,23 @@ fi
 if [[ "$CURRENT_PGVERSION" != "$EXPECTED_PGVERSION" ]] && \
    [[ "$CURRENT_PGVERSION" != "" ]]; then
    sed -i "s/$/ $CURRENT_PGVERSION/" /etc/apt/sources.list.d/pgdg.list
-   apt-get update && apt-get install -y --no-install-recommends \
-		postgresql-$CURRENT_PGVERSION \
-		postgresql-contrib-$CURRENT_PGVERSION \
-	&& rm -rf /var/lib/apt/lists/*
+   apt-get update
+   if ! apt-get install -y --no-install-recommends \
+        postgresql-$CURRENT_PGVERSION \
+        postgresql-contrib-$CURRENT_PGVERSION; then
+        # On arm32, postgres doesn't ship those packages, so we download
+        # the binaries from an archive we built from the postgres 9.6.20 image's binaries
+        FALLBACK="https://aois.blob.core.windows.net/public/$CURRENT_PGVERSION-$(uname -m).tar.gz"
+        echo "Failure to install postgresql-$CURRENT_PGVERSION and postgresql-contrib-$CURRENT_PGVERSION trying fallback $FALLBACK"
+        apt-get install -y wget
+        pushd . > /dev/null
+        cd /usr/lib/postgresql
+        wget $FALLBACK
+        tar -xvf *.tar.gz
+        rm -f *.tar.gz
+        popd > /dev/null
+        echo "Successfully installed PG utilities via the fallback"
+   fi
 
     export PGBINOLD="/usr/lib/postgresql/$CURRENT_PGVERSION/bin"
     export PGDATABASE="/var/lib/postgresql/data"
