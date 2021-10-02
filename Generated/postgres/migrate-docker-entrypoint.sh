@@ -18,11 +18,16 @@ if [[ "$CURRENT_PGVERSION" != "$EXPECTED_PGVERSION" ]] && \
         # On arm32, postgres doesn't ship those packages, so we download
         # the binaries from an archive we built from the postgres 9.6.20 image's binaries
         FALLBACK="https://aois.blob.core.windows.net/public/$CURRENT_PGVERSION-$(uname -m).tar.gz"
+        FALLBACK_SHARE="https://aois.blob.core.windows.net/public/share-$CURRENT_PGVERSION-$(uname -m).tar.gz"
         echo "Failure to install postgresql-$CURRENT_PGVERSION and postgresql-contrib-$CURRENT_PGVERSION trying fallback $FALLBACK"
         apt-get install -y wget
         pushd . > /dev/null
         cd /usr/lib/postgresql
         wget $FALLBACK
+        tar -xvf *.tar.gz
+        rm -f *.tar.gz
+        cd /usr/share/postgresql
+        wget $FALLBACK_SHARE
         tar -xvf *.tar.gz
         rm -f *.tar.gz
         popd > /dev/null
