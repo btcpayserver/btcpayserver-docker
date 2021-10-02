@@ -18,6 +18,7 @@ services:
         port=39388
         whitelist=0.0.0.0/0
         maxmempool=500
+        settings=false
     expose:
       - "43782"
       - "39388"
