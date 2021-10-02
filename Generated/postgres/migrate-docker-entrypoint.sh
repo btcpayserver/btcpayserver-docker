@@ -11,7 +11,10 @@ fi
 if [[ "$CURRENT_PGVERSION" != "$EXPECTED_PGVERSION" ]] && \
    [[ "$CURRENT_PGVERSION" != "" ]]; then
    sed -i "s/$/ $CURRENT_PGVERSION/" /etc/apt/sources.list.d/pgdg.list
-   apt-get update
+   if ! apt-get update; then
+    echo "apt-get update failed. Are you using raspberry pi 4? If yes, please follow https://blog.samcater.com/fix-workaround-rpi4-docker-libseccomp2-docker-20/"
+    exit 1
+   fi
    if ! apt-get install -y --no-install-recommends \
         postgresql-$CURRENT_PGVERSION \
         postgresql-contrib-$CURRENT_PGVERSION; then
