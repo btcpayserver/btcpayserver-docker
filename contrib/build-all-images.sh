@@ -880,14 +880,14 @@ cd - && cd ..
 
 
 # Build docker-woocommerce
-# https://raw.githubusercontent.com/btcpayserver/docker-woocommerce/v3.0.12/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/docker-woocommerce/v3.0.14/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/docker-woocommerce:3.0.12"
+echo "Building btcpayserver/docker-woocommerce:3.0.14"
 git clone https://github.com/btcpayserver/docker-woocommerce docker-woocommerce
 cd docker-woocommerce
-git checkout v3.0.12
+git checkout v3.0.14
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/docker-woocommerce:3.0.12" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/docker-woocommerce:3.0.14" .
 cd - && cd ..
 
 
@@ -1006,12 +1006,12 @@ DOCKERFILE="9.6/Dockerfile"
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="9.6/Dockerfile"
 # https://raw.githubusercontent.com/docker-library/postgres/b7cb3c6eacea93be2259381033be3cc435649369/9.6/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="9.6/Dockerfile"
-echo "Building postgres:9.6.20"
+echo "Building postgres:13.4"
 git clone https://github.com/docker-library/postgres postgres
 cd postgres
 git checkout b7cb3c6eacea93be2259381033be3cc435649369
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "postgres:9.6.20" .
+docker build -f "$DOCKERFILE" -t "postgres:13.4" .
 cd - && cd ..
 
 
