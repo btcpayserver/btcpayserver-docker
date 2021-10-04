@@ -180,6 +180,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-tallycoin-connect](docker-compose-generator/docker-fragments/opt-add-tallycoin-connect.yml) for [Tallycoin Connect](https://github.com/djbooth007/tallycoin_connect). Maintained by [dennisreimann](https://github.com/dennisreimann).
 * [opt-add-thunderhub](docker-compose-generator/docker-fragments/opt-add-thunderhub.yml) for a LND Lightning Node Manager in your Browser. Maintained by [apotdevin](https://github.com/apotdevin).
 * [opt-add-teos](docker-compose-generator/docker-fragments/opt-add-teos.yml) for [The Eye Of Satoshi](https://github.com/talaia-labs/python-teos), a BOLT13 Lightning Watchtower. Use port 9814 on your server or Tor to connect.
+* [opt-add-chatwoot](docker-compose-generator/docker-fragments/opt-add-chatwoot.yml) for open source chat support system.  ([See the documentation](docs/chatwoot.md))
 * [opt-add-zammad](docker-compose-generator/docker-fragments/opt-add-zammad.yml) for [Zammad](https://zammad.com/features), a web based open source helpdesk/customer support system with many features to manage customer communication via several channels like telephone, facebook, twitter, chat and e-mails
 * [opt-monero-expose](docker-compose-generator/docker-fragments/opt-monero-expose.yml) to expose monero node's RPC port at 127.0.0.1:18081 to connect your own wallet. Use f.e. ssh port forwarding to forward to your own computer.
 * [opt-add-fireflyiii](docker-compose-generator/docker-fragments/opt-add-fireflyiii.yml) ([See the documentation](docs/fireflyiii.md))
