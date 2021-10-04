@@ -692,6 +692,10 @@ cd - && cd ..
 # Build joinmarket
 # https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.1/JoinMarket/0.9.1/linuxamd64.Dockerfile
 DOCKERFILE="JoinMarket/0.9.1/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.1/JoinMarket/0.9.1/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="JoinMarket/0.9.1/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.1/JoinMarket/0.9.1/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="JoinMarket/0.9.1/linuxarm64v8.Dockerfile"
 echo "Building btcpayserver/joinmarket:0.9.1"
 git clone https://github.com/btcpayserver/dockerfile-deps joinmarket
 cd joinmarket
