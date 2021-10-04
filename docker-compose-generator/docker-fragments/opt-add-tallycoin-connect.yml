@@ -1,0 +1,30 @@
+version: "3"
+services:
+  btcpayserver:
+    environment:
+      BTCPAY_EXTERNALSERVICES: "Tallycoin Connect:${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/tallycoin-connect/;"
+    volumes:
+      - "tallycoin_connect_datadir:/etc/tallycoin_connect_datadir"
+  tallycoin_connect:
+    image: "dennisreimann/tallycoin_connect:v1.4.0"
+    restart: unless-stopped
+    expose:
+      - "8123"
+    volumes:
+      - "tallycoin_connect_datadir:/tallycoin_connect"
+      - "lnd_bitcoin_datadir:/tallycoin_connect/lnd:ro"
+    environment:
+      PUBLIC_URL: ${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/tallycoin-connect/
+      TALLYCOIN_APIKEY: "${TALLYCOIN_APIKEY}"
+      TALLYCOIN_PASSWD: "${TALLYCOIN_PASSWD}"
+      LND_SOCKET: "lnd_bitcoin:10009"
+      LND_MACAROON_PATH: /tallycoin_connect/lnd/admin.macaroon
+      LND_TLSCERT_PATH: /tallycoin_connect/lnd/tls.cert
+      PORT: 8123
+    links:
+      - lnd_bitcoin
+volumes:
+  tallycoin_connect_datadir:
+required:
+  - "bitcoin-lnd"
+  - "opt-lnd-grpc"

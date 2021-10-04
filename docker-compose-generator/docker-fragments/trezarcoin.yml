@@ -2,34 +2,34 @@ version: "3"
 
 services:
   trezarcoind:
-      restart: unless-stopped
-      container_name: btcpayserver_trezarcoind
-      image: chekaz/docker-trezarcoin:0.13.0
-      environment:
-        BITCOIN_EXTRA_ARGS: |
-          rpcport=43782
-          ${NBITCOIN_NETWORK:-regtest}=1
-          port=39388
-          whitelist=0.0.0.0/0
-      expose:
-        - "43782"
-        - "39388"
-      volumes:
-        - "trezarcoin_datadir:/data"
+    restart: unless-stopped
+    container_name: btcpayserver_trezarcoind
+    image: chekaz/docker-trezarcoin:0.13.0
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        rpcport=43782
+        ${NBITCOIN_NETWORK:-regtest}=1
+        port=39388
+        whitelist=0.0.0.0/0
+    expose:
+      - "43782"
+      - "39388"
+    volumes:
+      - "trezarcoin_datadir:/data"
   nbxplorer:
-      environment:
-        NBXPLORER_CHAINS: "tzc"
-        NBXPLORER_TZCRPCURL: http://trezarcoind:43782/
-        NBXPLORER_TZCNODEENDPOINT: trezarcoind:39388
-        NBXPLORER_TZCRPCUSER: "NBXPLORER_TZCRPCUSER"
-        NBXPLORER_TZCRPCPASSWORD: "NBXPLORER_TZCRPCPASS"
-      links:
-        - trezarcoind
-      volumes:
-        - "trezarcoin_datadir:/root/.trezarcoin"
+    environment:
+      NBXPLORER_CHAINS: "tzc"
+      NBXPLORER_TZCRPCURL: http://trezarcoind:43782/
+      NBXPLORER_TZCNODEENDPOINT: trezarcoind:39388
+      NBXPLORER_TZCRPCUSER: "NBXPLORER_TZCRPCUSER"
+      NBXPLORER_TZCRPCPASSWORD: "NBXPLORER_TZCRPCPASS"
+    links:
+      - trezarcoind
+    volumes:
+      - "trezarcoin_datadir:/root/.trezarcoin"
   btcpayserver:
-      environment:
-        BTCPAY_CHAINS: "tzc"
-        BTCPAY_TZCEXPLORERURL: http://nbxplorer:32838/
+    environment:
+      BTCPAY_CHAINS: "tzc"
+      BTCPAY_TZCEXPLORERURL: http://nbxplorer:32838/
 volumes:
   trezarcoin_datadir:

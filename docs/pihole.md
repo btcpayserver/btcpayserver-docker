@@ -42,12 +42,14 @@ docker logs pihole | grep random
 ```
 
 If the password does not work, you can try to reset the password:
+
 ```bash
 pihole.sh -a -p
 docker restart pihole
 ```
 
 Then running again
+
 ```bash
 docker logs pihole | grep random
 ```

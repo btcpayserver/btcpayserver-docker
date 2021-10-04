@@ -1,6 +1,4 @@
 ﻿using System;
-using YamlDotNet;
-using YamlDotNet.Helpers;
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -40,7 +38,7 @@ namespace DockerFileBuildHelper
             foreach (var image in new[]
             {
                 Image.Parse("btcpayserver/docker-compose-generator"),
-                Image.Parse("btcpayserver/docker-compose-builder:1.24.1"),
+                Image.Parse("btcpayserver/docker-compose:1.28.6"),
             }.Concat(GetImages(fragmentDirectory)))
             {
                 Console.WriteLine($"Image: {image.ToString()}");
@@ -234,9 +232,9 @@ namespace DockerFileBuildHelper
             {
                 case "pihole":
                     dockerInfo.GitLink = "https://github.com/pi-hole/docker-pi-hole";
-                    dockerInfo.DockerFilePath = $"Dockerfile_amd64";
-                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile_armhf";
-                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile_arm64";
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
                     dockerInfo.GitRef = $"{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
@@ -248,17 +246,25 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"EPS/{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
+                case "joinmarket":
+                    dockerInfo.DockerFilePath = $"JoinMarket/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"JoinMarket/{NoRevision(image.Tag)}/linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"JoinMarket/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"JoinMarket/{image.Tag}";
+                    dockerInfo.SupportedByUs = true;
+                    break;
                 case "btglnd":
                     dockerInfo.DockerFilePath = "Dockerfile";
                     dockerInfo.GitLink = "https://github.com/vutov/lnd";
                     dockerInfo.GitRef = "master";
                     break;
-                case "docker-compose-builder":
-                    dockerInfo.DockerFilePath = "linuxamd64.Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = "linuxarm32v7.Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = "linuxarm64v8.Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/btcpayserver/docker-compose-builder";
-                    dockerInfo.GitRef = $"v{image.Tag}";
+                case "docker-compose":
+                    dockerInfo.DockerFilePath = $"docker-compose/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"docker-compose/{NoRevision(image.Tag)}/linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"docker-compose/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"docker-compose/{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "docker-compose-generator":
@@ -268,6 +274,12 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/btcpayserver/btcpayserver-docker";
                     dockerInfo.GitRef = $"dcg-latest";
                     dockerInfo.SupportedByUs = true;
+                    break;
+                case "tallycoin_connect":
+                    dockerInfo.DockerFilePath = "Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/dennisreimann/tallycoin_connect";
+                    dockerInfo.GitRef = $"{image.Tag}";
+                    dockerInfo.SupportedByUs = false;
                     break;
                 case "docker-bitcoingold":
                     dockerInfo.DockerFilePath = $"bitcoingold/{image.Tag}/Dockerfile";
@@ -292,7 +304,7 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePathARM32v7 = "arm32v7.Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = "arm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/ElementsProject/lightning-charge";
-                    dockerInfo.GitRef = $"v{image.Tag.Replace("-standalone", "")}";
+                    dockerInfo.GitRef =  NoRevision($"v{image.Tag.Replace("-standalone", "")}");
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "docker-bitcoinplus":
@@ -380,6 +392,17 @@ namespace DockerFileBuildHelper
                     dockerInfo.SupportedByUs = true;
                     break;
                 }
+                case "bitcointaprootcc/0.21.0-bip8-lottrue":
+                {
+                    var tagNoRevision = image.Tag.Split('-').First();
+                    dockerInfo.DockerFilePath = $"bitcointaprootcc/0.21.0-bip8-lottrue/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"bitcointaprootcc/0.21.0-bip8-lottrue/linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"bitcointaprootcc/0.21.0-bip8-lottrue/linuxarm64v8.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"bitcointaprootcc/0.21.0-bip8-lottrue";
+                    dockerInfo.SupportedByUs = true;
+                    break;
+                }
                 case "elements":
                 {
                     var tagNoRevision = image.Tag.Split('-').First();
@@ -414,6 +437,14 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"v{image.Tag.Substring(0, image.Tag.IndexOf('$'))}";
                     dockerInfo.SupportedByUs = true;
                     break;
+                case "rtl" when image.Tag != "0.10.0":
+                    dockerInfo.DockerFilePath = "docker/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "docker/Dockerfile.arm32v7";
+                    dockerInfo.DockerFilePathARM64v8 = "docker/Dockerfile.arm64v8";
+                    dockerInfo.GitLink = "https://github.com/Ride-The-Lightning/RTL";
+                    dockerInfo.GitRef = $"v{image.Tag}";
+                    dockerInfo.SupportedByUs = true;
+                    break;
                 case "rtl":
                     dockerInfo.DockerFilePath = "Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = "Dockerfile.arm32v7";
@@ -430,6 +461,14 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"v{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
+                case "ndlc-cli":
+                    dockerInfo.DockerFilePath = "amd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "arm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "arm64v8.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/dgarage/ndlc";
+                    dockerInfo.GitRef = $"releases/{image.Tag}";
+                    dockerInfo.SupportedByUs = true;
+                    break;
                 case "btctransmuter":
                     dockerInfo.DockerFilePath = "Dockerfiles/amd64.Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = "Dockerfiles/arm32v7.Dockerfile";
@@ -439,9 +478,9 @@ namespace DockerFileBuildHelper
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "dogecoin":
-                    dockerInfo.DockerFilePath = $"dogecoin/{image.Tag}/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/rockstardev/docker-bitcoin";
-                    dockerInfo.GitRef = "feature/dogecoin";
+                    dockerInfo.DockerFilePath = $"Dogecoin/{image.Tag}/linuxamd64.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"Dogecoin/{image.Tag}";
                     break;
                 case "docker-bitcore":
                     dockerInfo.DockerFilePath = "docker-bitcored/Dockerfile";
@@ -455,7 +494,7 @@ namespace DockerFileBuildHelper
                     break;
                 case "docker-groestlcoin":
                     dockerInfo.DockerFilePath = $"groestlcoin/{image.Tag}/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/NicolasDorier/docker-bitcoin";
+                    dockerInfo.GitLink = "https://github.com/Groestlcoin/docker-groestlcoin";
                     dockerInfo.GitRef = "master";
                     break;
                 case "docker-viacoin":
@@ -550,16 +589,69 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePathARM32v7 = "arm32v7.Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = "arm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/apotdevin/thunderhub";
-                    dockerInfo.GitRef = $"{image.Tag.Split('-')[0]}";
+                    dockerInfo.GitRef = $"{image.Tag.Split('-')[1]}";
                     dockerInfo.SupportedByUs = false;
-                    break;                
+                    break;
                 case "python-teos":
                     dockerInfo.DockerFilePath = $"docker/Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"docker/Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"docker/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"docker/arm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"docker/arm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/talaia-labs/python-teos";
                     dockerInfo.GitRef = $"master";
                     dockerInfo.SupportedByUs = false;
+                    break;
+                case "zammad/zammad-docker-compose" when image.Tag.StartsWith("zammad-postgresql-"):
+                    dockerInfo.DockerFilePath = $"containers/zammad-postgresql/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/zammad/zammad-docker-compose";
+                    dockerInfo.GitRef = $"master";
+                    dockerInfo.SupportedByUs = false;
+                    break;
+                case "zammad/zammad-docker-compose" when image.Tag.StartsWith("zammad-elasticsearch-"):
+                    dockerInfo.DockerFilePath = $"containers/zammad-elasticsearch/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/zammad/zammad-docker-compose";
+                    dockerInfo.GitRef = $"master";
+                    dockerInfo.SupportedByUs = false;
+                    break;
+                case "zammad/zammad-docker-compose" when image.Tag.StartsWith("zammad-"):
+                    dockerInfo.DockerFilePath = $"containers/zammad/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/zammad/zammad-docker-compose";
+                    dockerInfo.GitRef = $"master";
+                    dockerInfo.SupportedByUs = false;
+                    break;
+                case "memcached" when image.Tag.EndsWith("alpine"):
+                    dockerInfo.DockerFilePath = $"alpine/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/docker-library/memcached";
+                    dockerInfo.GitRef = $"master";
+                    dockerInfo.SupportedByUs = false;
+                    break;
+                case "bwt":
+                    dockerInfo.DockerFilePath = $"docker/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"docker/arm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"docker/arm64v8.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/bwt-dev/bwt";
+                    dockerInfo.GitRef = $"v{image.Tag.Split('-')[0]}";
+                    break;
+                case "sphinx-relay":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/stakwork/sphinx-relay";
+                    dockerInfo.GitRef = $"{image.Tag}";
+                    break;
+                case "lndhub":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/BlueWallet/LndHub";
+                    dockerInfo.GitRef = $"{image.Tag.Split("@")[0]}";
+                    break;
+                case "fireflyiii/core":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
+                    dockerInfo.GitLink = "https://dev.azure.com/Firefly-III/_git/MainImage";
+                    dockerInfo.RawLink = "https://dev.azure.com/Firefly-III/66fb773b-063e-42d7-b6a5-e7729a22e8b3/_apis/git/repositories/e9c3dcf8-4533-4ef1-83cc-75527cab3377/items?path=%2FDockerfile&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=main&resolveLfs=true&%24format=octetStream&api-version=5.0&download=true";
+                    
+                    dockerInfo.GitRef = null;
                     break;
                 default:
                     if (firstTry)

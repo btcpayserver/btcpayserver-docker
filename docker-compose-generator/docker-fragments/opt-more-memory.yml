@@ -1,5 +1,5 @@
 version: "3"
-# If your machine has moar than 1GB of memory dedicated for bitcoind, use this
+# If your machine has more than 1GB of memory dedicated for bitcoind, use this
 
 services:
   bitcoind:
@@ -9,6 +9,10 @@ services:
   bgoldd:
     environment:
       BITCOIN_EXTRA_ARGS: |
+        dbcache=1024
+  dogecoind:
+    environment:
+      DOGECOIN_EXTRA_ARGS: |
         dbcache=1024
   feathercoind:
     environment:

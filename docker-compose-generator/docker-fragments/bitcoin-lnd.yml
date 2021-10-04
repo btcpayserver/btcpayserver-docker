@@ -2,7 +2,7 @@ version: "3"
 
 services:
   lnd_bitcoin:
-    image: btcpayserver/lnd:v0.10.2-beta
+    image: btcpayserver/lnd:v0.13.1-beta-withloop-fix
     container_name: btcpayserver_lnd_bitcoin
     restart: unless-stopped
     environment:
@@ -12,39 +12,47 @@ services:
       LND_ALIAS: ${LIGHTNING_ALIAS}
       LND_ENVIRONMENT: "${NBITCOIN_NETWORK:-regtest}"
       LND_READY_FILE: /root/.nbxplorer/btc_fully_synched
+      LND_REST_LISTEN_HOST: http://lnd_bitcoin:8080
+      LND_HOST_FOR_LOOP: 127.0.0.1:10009
       LND_EXTRA_ARGS: |
-        restlisten=0.0.0.0:8080
+        restlisten=lnd_bitcoin:8080
         rpclisten=127.0.0.1:10008
-        rpclisten=0.0.0.0:10009
+        rpclisten=lnd_bitcoin:10009
+        rpclisten=127.0.0.1:10009
         bitcoin.node=bitcoind
+        bitcoind.rpchost=bitcoind:43782
         bitcoind.rpcuser=lnd
         bitcoind.rpcpass=afixedpasswordbecauselndsuckswithcookiefile
-        bitcoind.rpchost=bitcoind:43782
         bitcoind.zmqpubrawblock=tcp://bitcoind:28332
         bitcoind.zmqpubrawtx=tcp://bitcoind:28333
         adminmacaroonpath=/data/admin.macaroon
         invoicemacaroonpath=/data/invoice.macaroon
         readonlymacaroonpath=/data/readonly.macaroon
-        notls=1
         tlsextradomain=lnd_bitcoin
+        no-rest-tls=1
+        protocol.wumbo-channels=1
     ports:
       - "9735:9735"
     expose:
       - "8080"
+      - "8081"
       - "9735"
     volumes:
       - "lnd_bitcoin_datadir:/data"
+      - "lndloop_bitcoin_datadir:/root/.loop/${NBITCOIN_NETWORK:-regtest}"
       - "bitcoin_datadir:/deps/.bitcoin"
       - "nbxplorer_datadir:/root/.nbxplorer"
     links:
       - bitcoind
 
   bitcoin_rtl:
-    image: shahanafarooqui/rtl:0.8.4
+    image: shahanafarooqui/rtl:0.11.2
     restart: unless-stopped
     environment:
       LND_SERVER_URL: http://lnd_bitcoin:8080/v1
       MACAROON_PATH: /etc/lnd
+      SWAP_SERVER_URL: https://lnd_bitcoin:8081/v1
+      SWAP_MACAROON_PATH: /etc/lndloop
       RTL_CONFIG_PATH: /data/
       LND_CONFIG_PATH: /etc/lnd/lnd.conf
       BITCOIND_CONFIG_PATH: /etc/bitcoin/bitcoin.conf
@@ -54,6 +62,7 @@ services:
     volumes:
       - "bitcoin_datadir:/etc/bitcoin"
       - "lnd_bitcoin_datadir:/etc/lnd"
+      - "lndloop_bitcoin_datadir:/etc/lndloop"
       - "lnd_bitcoin_rtl_datadir:/data"
     expose:
       - "3000"
@@ -81,7 +90,7 @@ services:
         # We need to use rpcauth because we also need cookieauth. rpcpassword disabled cookie file auth.
         # Be careful if you copy the line below from the docker-compose.yml! A dollar sign is escaped.
         rpcauth=lnd:d031f7567c5b02ba95524170e51c77f4$$827ce5412f653d6613c2f480e521eb437c866b999bdeb2ee4f9c41d3b00dff1c
-  
+
   nginx:
     links:
       - "lnd_bitcoin"
@@ -95,6 +104,7 @@ services:
 
 volumes:
   lnd_bitcoin_datadir:
+  lndloop_bitcoin_datadir:
   lnd_bitcoin_rtl_datadir:
 
 required:

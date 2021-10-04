@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  bwt:
+    image: shesek/bwt:0.2.2-electrum
+    restart: unless-stopped
+    expose: [ "50001" ]
+    environment:
+      NETWORK: $NBITCOIN_NETWORK
+      BITCOIND_URL: http://bitcoind:43782/
+      BITCOIND_DIR: /etc/bitcoin
+      ELECTRUM_ADDR: 0.0.0.0:50001
+    volumes:
+      - "bitcoin_datadir:/etc/bitcoin"
+      - "nbxplorer_datadir:/root/.nbxplorer"
+    entrypoint: [ "/bin/bash", "-c" ]
+    command:
+      - |
+        while [ ! -f /root/.nbxplorer/btc_fully_synched ]; do sleep 0.5; done
+        [ "$$NETWORK" == "mainnet" ] && export NETWORK=bitcoin
+        # accept envirnoment variables with the BWT_ prefix (and strip it)
+        exec env -S "$$(echo $$(env | grep ^BWT_ | sed "s/^BWT_//g"))" \
+        bwt ${BWT_ARGS:-}
+
+required: [ bitcoind ]

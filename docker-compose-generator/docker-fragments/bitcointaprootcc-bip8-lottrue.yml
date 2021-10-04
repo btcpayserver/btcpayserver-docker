@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  bitcoind:
+    restart: unless-stopped
+    container_name: btcpayserver_bitcoind
+    image: btcpayserver/bitcointaprootcc/0.21.0-bip8-lottrue
+    environment:
+      BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
+      BITCOIN_WALLETDIR: "/walletdata"
+      # rpcport and rpcbind seems duplicates, but they are not
+      # rpcport is using by some tooling to automatically get
+      # the rpcport from the configuration file. Do not remove!
+      BITCOIN_EXTRA_ARGS: |
+        rpcport=43782
+        rpcbind=0.0.0.0:43782
+        rpcallowip=0.0.0.0/0
+        port=39388
+        whitelist=0.0.0.0/0
+        maxmempool=500
+    expose:
+      - "43782"
+      - "39388"
+    volumes:
+      - "bitcoin_datadir:/data"
+      - "bitcoin_wallet_datadir:/walletdata"
+  nbxplorer:
+    environment:
+      NBXPLORER_CHAINS: "btc"
+      NBXPLORER_BTCRPCURL: http://bitcoind:43782/
+      NBXPLORER_BTCNODEENDPOINT: bitcoind:39388
+    volumes:
+      - "bitcoin_datadir:/root/.bitcoin"
+  btcpayserver:
+    environment:
+      BTCPAY_CHAINS: "btc"
+      BTCPAY_BTCEXPLORERURL: http://nbxplorer:32838/
+volumes:
+  bitcoin_datadir:
+  bitcoin_wallet_datadir:
+
+exclusive:
+  - bitcoin-node 

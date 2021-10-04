@@ -39,10 +39,16 @@
 		proxy_pass http://bitcoin_rtl:3000/rtl/;
 	}
 		{{ end }}
+
+		{{ if (eq $serviceName "joinmarket") }}
+		location /obwatch/ {
+		proxy_pass http://joinmarket:62601/;
+		}
+		{{ end }}
+
 		{{ if (eq $serviceName "bitcoin_thub") }}
-	location /thub/ {
-		rewrite ^/thub(.*)$ $1 break;
-		proxy_pass http://bitcoin_thub:3000/;
+	location /thub {
+		proxy_pass http://bitcoin_thub:3000/thub;
 	}
 		{{ end }}
 		{{ if (eq $serviceName "btcqbo") }}
@@ -94,7 +100,37 @@
 		proxy_pass http://btctransmuter;
 	}
 		{{ end }}
+
+		{{ if (eq $serviceName "bluewallet_lndhub_app") }}
+	location /bluewallet_lndhub_app/ {
+		proxy_pass http://bluewallet_lndhub_app:3000/;
+        sub_filter 'href="../'  'href="/bluewallet_lndhub_app/';
+        sub_filter 'src="/'  'src="/bluewallet_lndhub_app/';
+        sub_filter_once off;
+	}
+		{{ end }}
+
 		
+  {{ if (eq $serviceName "sphinxrelay") }}
+  location /sphinxrelay/ {
+    proxy_set_header        Host               $host;
+    proxy_set_header        X-Real-IP          $remote_addr;
+    proxy_set_header        X-Forwarded-For    $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto  $scheme;
+    proxy_pass http://sphinxrelay:3300/;
+  }
+  {{ end }}
+
+  {{ if (eq $serviceName "tallycoin_connect") }}
+  location /tallycoin-connect/ {
+    proxy_set_header        Host               $host;
+    proxy_set_header        X-Real-IP          $remote_addr;
+    proxy_set_header        X-Forwarded-For    $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto  $scheme;
+    proxy_pass http://tallycoin_connect:8123/;
+  }
+  {{ end }}
+
 		{{ if (eq $serviceName "configurator") }}
 	location /configurator/ {
 		proxy_set_header Connection "";
@@ -165,7 +201,9 @@ map $scheme $proxy_x_forwarded_ssl {
   https on;
 }
 
-gzip_types text/plain text/css application/javascript application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+gzip on;
+gzip_min_length 1000;
+gzip_types image/svg+xml text/plain text/css application/javascript application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
 
 log_format vhost '$host $remote_addr - $remote_user [$time_local] '
                  '"$request" $status $body_bytes_sent '
@@ -273,6 +311,15 @@ upstream {{ $upstream_name }} {
 server {
 	server_name {{ trim $onionHost }};
 	listen 80 ;
+	proxy_set_header X-Forwarded-Host  $http_host;
+	proxy_set_header Host $http_host;
+	proxy_set_header Upgrade $http_upgrade;
+	proxy_set_header Connection $proxy_connection;
+	proxy_set_header X-Real-IP $remote_addr;
+	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	proxy_set_header X-Forwarded-Proto $proxy_x_forwarded_proto;
+	proxy_set_header X-Forwarded-Ssl $proxy_x_forwarded_ssl;
+	proxy_set_header X-Forwarded-Port $proxy_x_forwarded_port;
 	access_log /var/log/nginx/access.log vhost;
 	{{ if (exists "/etc/nginx/vhost.d/default") }}
 	include /etc/nginx/vhost.d/default;
@@ -342,6 +389,15 @@ server {
 {{ end }}
 
 server {
+	proxy_set_header X-Forwarded-Host  $http_host;
+	proxy_set_header Host $http_host;
+	proxy_set_header Upgrade $http_upgrade;
+	proxy_set_header Connection $proxy_connection;
+	proxy_set_header X-Real-IP $remote_addr;
+	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	proxy_set_header X-Forwarded-Proto $proxy_x_forwarded_proto;
+	proxy_set_header X-Forwarded-Ssl $proxy_x_forwarded_ssl;
+	proxy_set_header X-Forwarded-Port $proxy_x_forwarded_port;
 	client_max_body_size 100M;
 	server_name {{ $host }};
 	listen 443 ssl http2 {{ $default_server }};
@@ -538,4 +594,7 @@ server {
 {{ end }}
 {{ end }}
 {{ end }}
+{{ end }}
+{{ if $.Env.ADDITIONAL_NGINX_CONFIG }}
+{{ $.Env.ADDITIONAL_NGINX_CONFIG}}
 {{ end }}
