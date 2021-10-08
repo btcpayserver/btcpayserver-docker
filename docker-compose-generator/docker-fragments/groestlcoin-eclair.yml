@@ -19,7 +19,7 @@ services:
         -Declair.chain=${NBITCOIN_NETWORK:-regtest}
         -Declair.server.binding-ip=0.0.0.0
         -Declair.server.public-ips.0=${BTCPAY_HOST}
-        -Declair.server.port=9735
+        -Declair.server.port=9736
         -Declair.api.enabled=true
         -Declair.api.binding-ip=0.0.0.0
         -Declair.api.port=8080
@@ -32,13 +32,14 @@ services:
         -Declair.bitcoind.zmqblock=tcp://groestlcoind:21441
         -Declair.bitcoind.zmqtx=tcp://groestlcoind:21441
     expose:
-      - "9735"  # server port
+      - "9736"  # server port
       - "8080"  # api port
     volumes:
       - "groestlcoin_datadir:/etc/groestlcoin"
       - "eclair_groestlcoin_datadir:/data"
     links:
       - groestlcoind
+
   btcpayserver:
     environment:
       BTCPAY_GRSLIGHTNING: "type=eclair;server=http://eclair_groestlcoin:8080;password=DwubwWsoo3"
@@ -49,6 +50,8 @@ services:
 volumes:
   eclair_groestlcoin_datadir:
 
+incompatible:
+  - pruning
 required:
   - "opt-add-zmq"
   - "opt-txindex"

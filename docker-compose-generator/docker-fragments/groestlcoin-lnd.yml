@@ -11,22 +11,30 @@ services:
       LND_PORT: 9736
       LND_ALIAS: ${LIGHTNING_ALIAS}
       LND_ENVIRONMENT: "${NBITCOIN_NETWORK:-regtest}"
+      LND_REST_LISTEN_HOST: http://lnd_groestlcoin:8080
+      LND_HOST_FOR_LOOP: 127.0.0.1:10009
       LND_EXTRA_ARGS: |
-        restlisten=0.0.0.0:8080
+        restlisten=lnd_groestlcoin:8080
         rpclisten=127.0.0.1:10008
-        rpclisten=0.0.0.0:10009
+        rpclisten=lnd_groestlcoin:10009
+        rpclisten=127.0.0.1:10009
         groestlcoin.node=groestlcoind
         groestlcoind.rpchost=groestlcoind:43782
+        groestlcoind.rpcuser=lnd
+        groestlcoind.rpcpass=afixedpasswordbecauselndsuckswithcookiefile
         groestlcoind.zmqpubrawblock=tcp://groestlcoind:21441
         groestlcoind.zmqpubrawtx=tcp://groestlcoind:21441
         adminmacaroonpath=/data/admin.macaroon
         invoicemacaroonpath=/data/invoice.macaroon
         readonlymacaroonpath=/data/readonly.macaroon
-        notls=1
+        tlsextradomain=lnd_groestlcoin
+        no-rest-tls=1
+        protocol.wumbo-channels=1
     ports:
       - "9736:9736"
     expose:
       - "8080"
+      - "8081"
       - "9736"
     volumes:
       - "lnd_groestlcoin_datadir:/data"
@@ -45,6 +53,15 @@ services:
       - "lnd_groestlcoin_datadir:/etc/lnd_groestlcoin"
     links:
       - lnd_groestlcoin
+
+  groestlcoind:
+    environment:
+      GROESTLCOIN_EXTRA_ARGS: |
+        # rpcuser=lnd
+        # rpcpassword=afixedpasswordbecauselndsuckswithcookiefile
+        # We need to use rpcauth because we also need cookieauth. rpcpassword disabled cookie file auth.
+        # Be careful if you copy the line below from the docker-compose.yml! A dollar sign is escaped.
+        rpcauth=lnd:d031f7567c5b02ba95524170e51c77f4$$827ce5412f653d6613c2f480e521eb437c866b999bdeb2ee4f9c41d3b00dff1c
 
   nginx:
     links:
