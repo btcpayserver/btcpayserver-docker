@@ -4,7 +4,7 @@ services:
   bitcoind:
     restart: unless-stopped
     container_name: btcpayserver_bitcoind
-    image: btcpayserver/bitcoin:22.0
+    image: btcpayserver/bitcoin:22.0-1
     environment:
       BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       BITCOIN_WALLETDIR: "/walletdata"
@@ -18,7 +18,6 @@ services:
         port=39388
         whitelist=0.0.0.0/0
         maxmempool=500
-        settings=false
     expose:
       - "43782"
       - "39388"
