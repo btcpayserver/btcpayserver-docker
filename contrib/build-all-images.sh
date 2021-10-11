@@ -484,18 +484,18 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.2.10/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.2.12/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.2.10/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.2.12/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.2.10/Dockerfile.linuxarm64v8
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.2.12/Dockerfile.linuxarm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.linuxarm64v8"
-echo "Building nicolasdorier/nbxplorer:2.2.10"
+echo "Building nicolasdorier/nbxplorer:2.2.12"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.2.10
+git checkout v2.2.12
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.2.10" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.2.12" .
 cd - && cd ..
 
 
@@ -626,6 +626,42 @@ cd bwt
 git checkout v0.2.2
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "shesek/bwt:0.2.2-electrum" .
+cd - && cd ..
+
+
+# Build chatwoot
+# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
+DOCKERFILE="docker/Dockerfile"
+echo "Building chatwoot/chatwoot:v1.7.0"
+git clone https://github.com/chatwoot/chatwoot chatwoot
+cd chatwoot
+git checkout v1.7.0
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "chatwoot/chatwoot:v1.7.0" .
+cd - && cd ..
+
+
+# Build chatwoot
+# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
+DOCKERFILE="docker/Dockerfile"
+echo "Building chatwoot/chatwoot:v1.7.0"
+git clone https://github.com/chatwoot/chatwoot chatwoot
+cd chatwoot
+git checkout v1.7.0
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "chatwoot/chatwoot:v1.7.0" .
+cd - && cd ..
+
+
+# Build redis
+# https://raw.githubusercontent.com/docker-library/redis/f1a8498333ae3ab340b5b39fbac1d7e1dc0d628c/5.0/Dockerfile
+DOCKERFILE="5.0/Dockerfile"
+echo "Building redis:5.0.2-alpine"
+git clone https://github.com/docker-library/redis redis
+cd redis
+git checkout f1a8498333ae3ab340b5b39fbac1d7e1dc0d628c
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "redis:5.0.2-alpine" .
 cd - && cd ..
 
 

@@ -299,6 +299,12 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/Groestlcoin/lightning";
                     dockerInfo.GitRef = $"{image.Tag}";
                     break;
+                case "chatwoot":
+                    dockerInfo.DockerFilePath = $"docker/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/chatwoot/chatwoot";
+                    dockerInfo.GitRef = $"{image.Tag}";
+                    dockerInfo.SupportedByUs = false;
+                    break;
                 case "lightning-charge":
                     dockerInfo.DockerFilePath = $"Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = "arm32v7.Dockerfile";
