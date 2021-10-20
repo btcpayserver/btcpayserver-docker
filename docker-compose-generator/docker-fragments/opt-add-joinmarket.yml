@@ -3,8 +3,8 @@ version: "3"
 services:
   joinmarket:
     container_name: joinmarket
-    image: btcpayserver/joinmarket:0.9.1
-    restart: 'no'
+    image: btcpayserver/joinmarket:0.9.3-devbtcpay
+    restart: unless-stopped
     environment:
       READY_FILE: /root/.nbxplorer/btc_fully_synched
       ENSURE_WALLET: 1
@@ -25,7 +25,8 @@ services:
       - "nbxplorer_datadir:/root/.nbxplorer"
       - "tor_datadir:/home/tor/.tor"
     expose:
-      - 62601
+      - 62601 # obwatch
+      - 8080 # payjoin server
     links:
       - bitcoind
 
