@@ -719,25 +719,25 @@ DOCKERFILE="Dockerfile"
 echo "Building fireflyiii/core:latest"
 git clone https://dev.azure.com/Firefly-III/_git/MainImage core
 cd core
-git checkout
+git checkout 
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "fireflyiii/core:latest" .
 cd - && cd ..
 
 
 # Build joinmarket
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.1/JoinMarket/0.9.1/linuxamd64.Dockerfile
-DOCKERFILE="JoinMarket/0.9.1/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.1/JoinMarket/0.9.1/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="JoinMarket/0.9.1/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.1/JoinMarket/0.9.1/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="JoinMarket/0.9.1/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/joinmarket:0.9.1"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.3-devbtcpay/JoinMarket/0.9.3/linuxamd64.Dockerfile
+DOCKERFILE="JoinMarket/0.9.3/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.3-devbtcpay/JoinMarket/0.9.3/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="JoinMarket/0.9.3/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.3-devbtcpay/JoinMarket/0.9.3/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="JoinMarket/0.9.3/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/joinmarket:0.9.3-devbtcpay"
 git clone https://github.com/btcpayserver/dockerfile-deps joinmarket
 cd joinmarket
-git checkout JoinMarket/0.9.1
+git checkout JoinMarket/0.9.3-devbtcpay
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/joinmarket:0.9.1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/joinmarket:0.9.3-devbtcpay" .
 cd - && cd ..
 
 
@@ -812,14 +812,14 @@ cd - && cd ..
 
 
 # Build tallycoin_connect
-# https://raw.githubusercontent.com/djbooth007/tallycoin_connect/v1.7.0/Dockerfile
+# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.0/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building djbooth007/tallycoin_connect:v1.7.0"
-git clone https://github.com/djbooth007/tallycoin_connect tallycoin_connect
+echo "Building dennisreimann/tallycoin_connect:v1.7.0"
+git clone https://github.com/dennisreimann/tallycoin_connect tallycoin_connect
 cd tallycoin_connect
 git checkout v1.7.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "djbooth007/tallycoin_connect:v1.7.0" .
+docker build -f "$DOCKERFILE" -t "dennisreimann/tallycoin_connect:v1.7.0" .
 cd - && cd ..
 
 
@@ -1089,3 +1089,5 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
+
+
