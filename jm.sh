@@ -13,6 +13,7 @@ Tooling to setup your joinmarket yield generator
     bash: Open an interactive bash session in the joinmarket container
     receive-payjoin: Receive a payjoin payment
     sendpayment: Send a payjoin through coinjoin (password needed)
+    reset-config: Reset the configuration to its default value
 
 Example:
     * jm.sh wallet-tool-generate
@@ -21,6 +22,7 @@ Example:
     * jm.sh receive-payjoin <amount>
     * jm.sh sendpayment <amount> <address>
     * jm.sh wallet-tool history
+    * jm.sh reset-config
     * jm.sh bash
 
 See https://github.com/btcpayserver/btcpayserver-docker/tree/master/docs/joinmarket.md for more information.
@@ -30,6 +32,11 @@ END
 while (( "$#" )); do
   case "$1" in
     bash)
+      CMD="$1"
+      shift 1
+      break;
+      ;;
+    reset-config)
       CMD="$1"
       shift 1
       break;
@@ -89,7 +96,10 @@ else
     elif [[ "$CMD" == "set-wallet" ]]; then
         docker exec joinmarket set-wallet.sh "$@"
         docker restart joinmarket
-    elif [[ "$CMD" == "bash" ]]; then    
+    elif [[ "$CMD" == "reset-config" ]]; then
+        docker exec -ti joinmarket bash -c 'rm -f "$CONFIG"'
+        docker restart joinmarket
+    elif [[ "$CMD" == "bash" ]]; then
         docker exec -ti joinmarket exec-wrapper.sh bash "$@"
     else
         display_help

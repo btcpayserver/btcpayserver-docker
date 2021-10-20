@@ -107,6 +107,14 @@ supervisorctl start yg-privacyenhanced
 
 *** Note that services will NOT be restarted automatically if the container restart. ***
 
+If you want to automatically restart the service when the container restart,
+
+```bash
+vim $AUTO_START
+```
+
+Then remove the comment `#` in front of the service name you want to automatically restart.
+
 ## OB-Watcher
 
 The `ob-watcher` service allows you to [see an order book](https://github.com/JoinMarket-Org/joinmarket-clientserver/blob/master/docs/orderbook.md).
