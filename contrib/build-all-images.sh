@@ -719,7 +719,7 @@ DOCKERFILE="Dockerfile"
 echo "Building fireflyiii/core:latest"
 git clone https://dev.azure.com/Firefly-III/_git/MainImage core
 cd core
-git checkout 
+git checkout
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "fireflyiii/core:latest" .
 cd - && cd ..
@@ -812,14 +812,14 @@ cd - && cd ..
 
 
 # Build tallycoin_connect
-# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.4.0/Dockerfile
+# https://raw.githubusercontent.com/djbooth007/tallycoin_connect/v1.7.0/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building dennisreimann/tallycoin_connect:v1.4.0"
-git clone https://github.com/dennisreimann/tallycoin_connect tallycoin_connect
+echo "Building djbooth007/tallycoin_connect:v1.7.0"
+git clone https://github.com/djbooth007/tallycoin_connect tallycoin_connect
 cd tallycoin_connect
-git checkout v1.4.0
+git checkout v1.7.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "dennisreimann/tallycoin_connect:v1.4.0" .
+docker build -f "$DOCKERFILE" -t "djbooth007/tallycoin_connect:v1.7.0" .
 cd - && cd ..
 
 
@@ -1089,5 +1089,3 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
-
-
