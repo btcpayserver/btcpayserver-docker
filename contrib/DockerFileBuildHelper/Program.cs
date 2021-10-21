@@ -554,11 +554,11 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"f1a8498333ae3ab340b5b39fbac1d7e1dc0d628c";
                     break;
                 case "postgres":
-                    dockerInfo.DockerFilePath = $"9.6/Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"9.6/Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"9.6/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/docker-library/postgres";
-                    dockerInfo.GitRef = $"b7cb3c6eacea93be2259381033be3cc435649369";
+                    dockerInfo.DockerFilePath = $"Postgres/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Postgres/{NoRevision(image.Tag)}/linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Postgres/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"Postgres/{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "traefik":
