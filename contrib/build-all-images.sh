@@ -726,18 +726,18 @@ cd - && cd ..
 
 
 # Build joinmarket
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.3-devbtcpay/JoinMarket/0.9.3/linuxamd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.3/JoinMarket/0.9.3/linuxamd64.Dockerfile
 DOCKERFILE="JoinMarket/0.9.3/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.3-devbtcpay/JoinMarket/0.9.3/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.3/JoinMarket/0.9.3/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="JoinMarket/0.9.3/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.3-devbtcpay/JoinMarket/0.9.3/linuxarm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.3/JoinMarket/0.9.3/linuxarm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="JoinMarket/0.9.3/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/joinmarket:0.9.3-devbtcpay"
+echo "Building btcpayserver/joinmarket:0.9.3"
 git clone https://github.com/btcpayserver/dockerfile-deps joinmarket
 cd joinmarket
-git checkout JoinMarket/0.9.3-devbtcpay
+git checkout JoinMarket/0.9.3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/joinmarket:0.9.3-devbtcpay" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/joinmarket:0.9.3" .
 cd - && cd ..
 
 
