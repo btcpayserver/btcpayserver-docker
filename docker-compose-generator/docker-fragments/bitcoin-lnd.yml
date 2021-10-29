@@ -109,3 +109,5 @@ volumes:
 
 required:
   - "opt-add-zmq"
+exclusive:
+  - lightning

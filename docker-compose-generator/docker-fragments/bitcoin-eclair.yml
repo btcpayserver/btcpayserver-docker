@@ -78,3 +78,5 @@ incompatible:
 required:
   - "opt-add-zmq"
   - "opt-txindex"
+exclusive:
+  - lightning

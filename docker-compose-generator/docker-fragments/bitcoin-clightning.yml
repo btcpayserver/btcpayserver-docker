@@ -113,3 +113,5 @@ volumes:
   clightning_bitcoin_charge:
   clightning_bitcoin_rtl_datadir:
   clightning_bitcoin_rest_datadir:
+exclusive:
+  - lightning
