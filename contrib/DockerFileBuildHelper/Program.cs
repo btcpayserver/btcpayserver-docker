@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -277,6 +277,8 @@ namespace DockerFileBuildHelper
                     break;
                 case "tallycoin_connect":
                     dockerInfo.DockerFilePath = "Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile.arm32v7";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile.arm64v8";
                     dockerInfo.GitLink = "https://github.com/dennisreimann/tallycoin_connect";
                     dockerInfo.GitRef = $"{image.Tag}";
                     dockerInfo.SupportedByUs = false;
