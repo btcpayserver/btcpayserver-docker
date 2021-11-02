@@ -828,14 +828,14 @@ cd - && cd ..
 
 
 # Build lightning-terminal
-# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.5.0-alpha/Dockerfile
+# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.5.3-alpha/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building lightninglabs/lightning-terminal/v0.5.0-alpha"
+echo "Building lightninglabs/lightning-terminal/v0.5.3-alpha-path-prefix"
 git clone https://github.com/lightninglabs/lightning-terminal.git lightning-terminal
 cd lightning-terminal
-git checkout v0.5.0-alpha
+git checkout v0.5.3-alpha-path-prefix
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.5.0-alpha" .
+docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.5.3-alpha-path-prefix" .
 cd - && cd ..
 
 
