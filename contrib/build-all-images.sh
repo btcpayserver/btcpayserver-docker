@@ -460,10 +460,10 @@ cd - && cd ..
 
 
 # Build monero
-# https://raw.githubusercontent.com/Kukks/monero-docker/x86_64/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/master/Monero/0.17.2.3/linuxamd64.Dockerfile
 DOCKERFILE="Dockerfile"
 echo "Building btcpayserver/monero:0.17.2.3"
-git clone https://github.com/Kukks/monero-docker monero
+git clone https://github.com/btcpayserver/dockerfile-deps monero
 cd monero
 git checkout x86_64
 cd "$(dirname $DOCKERFILE)"
@@ -472,10 +472,10 @@ cd - && cd ..
 
 
 # Build monero
-# https://raw.githubusercontent.com/Kukks/monero-docker/x86_64/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/master/Monero/0.17.2.3/linuxamd64.Dockerfile
 DOCKERFILE="Dockerfile"
 echo "Building btcpayserver/monero:0.17.2.3"
-git clone https://github.com/Kukks/monero-docker monero
+git clone https://github.com/btcpayserver/dockerfile-deps monero
 cd monero
 git checkout x86_64
 cd "$(dirname $DOCKERFILE)"
