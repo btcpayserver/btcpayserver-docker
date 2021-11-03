@@ -550,7 +550,7 @@ cd "$(dirname $BTCPAY_ENV_FILE)"
 
 if $HAS_DOCKER && [[ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ]] && [[ "$OLD_BTCPAY_DOCKER_COMPOSE" != "$BTCPAY_DOCKER_COMPOSE" ]]; then
     echo "Closing old docker-compose at $OLD_BTCPAY_DOCKER_COMPOSE..."
-    docker-compose -f "$OLD_BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
+    docker-compose -p btcpayserver -f "$OLD_BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
 fi
 
 if $START; then
