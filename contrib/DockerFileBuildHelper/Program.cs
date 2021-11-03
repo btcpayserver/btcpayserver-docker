@@ -285,7 +285,6 @@ namespace DockerFileBuildHelper
                     break;
                 case "lnd_lit":
                     dockerInfo.DockerFilePath = "Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
                     dockerInfo.GitLink = "https://github.com/lightninglabs/lightning-terminal";
                     dockerInfo.GitRef = $"{image.Tag}";
