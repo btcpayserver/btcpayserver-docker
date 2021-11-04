@@ -258,18 +258,18 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.1/amd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.2/amd64.Dockerfile
 DOCKERFILE="amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.1/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.2/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.1/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.2/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building btcpayserver/btcpayserver:1.3.1$<BTCPAY_BUILD_CONFIGURATION>?"
+echo "Building btcpayserver/btcpayserver:1.3.2$<BTCPAY_BUILD_CONFIGURATION>?"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.3.1
+git checkout v1.3.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.3.1$<BTCPAY_BUILD_CONFIGURATION>?" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.3.2$<BTCPAY_BUILD_CONFIGURATION>?" .
 cd - && cd ..
 
 
@@ -719,7 +719,7 @@ DOCKERFILE="Dockerfile"
 echo "Building fireflyiii/core:latest"
 git clone https://dev.azure.com/Firefly-III/_git/MainImage core
 cd core
-git checkout
+git checkout 
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "fireflyiii/core:latest" .
 cd - && cd ..
@@ -814,6 +814,10 @@ cd - && cd ..
 # Build tallycoin_connect
 # https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.0/Dockerfile
 DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.0/Dockerfile.arm32v7
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.arm32v7"
+# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.0/Dockerfile.arm64v8
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.arm64v8"
 echo "Building dennisreimann/tallycoin_connect:v1.7.0"
 git clone https://github.com/dennisreimann/tallycoin_connect tallycoin_connect
 cd tallycoin_connect
@@ -840,18 +844,18 @@ cd - && cd ..
 
 
 # Build thunderhub
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.17/Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.31/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.17/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.31/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.17/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.31/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building apotdevin/thunderhub:base-v0.12.17"
+echo "Building apotdevin/thunderhub:base-v0.12.31"
 git clone https://github.com/apotdevin/thunderhub thunderhub
 cd thunderhub
-git checkout v0.12.17
+git checkout v0.12.31
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:base-v0.12.17" .
+docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:base-v0.12.31" .
 cd - && cd ..
 
 
@@ -1089,3 +1093,5 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
+
+
