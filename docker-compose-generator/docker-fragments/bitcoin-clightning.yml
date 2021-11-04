@@ -61,6 +61,7 @@ services:
       PROTOCOL: "http"
       NODE: clightning_bitcoin:9835
       LIGHTNINGD_READY_FILE: /root/.nbxplorer/btc_fully_synched
+      RPCCOMMANDS: "*"
     links:
       - clightning_bitcoin
     volumes:
