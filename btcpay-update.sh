@@ -68,6 +68,7 @@ if [[ "$ACME_CA_URI" == "https://acme-staging.api.letsencrypt.org/directory" ]];
 fi
 
 . helpers.sh
+docker_update
 install_tooling
 btcpay_update_docker_env
 btcpay_up
