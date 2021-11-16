@@ -3,7 +3,7 @@ version: "3"
 services:
   postgres:
     restart: unless-stopped
-    image: postgres:9.6.20
+    image: btcpayserver/postgres:13.4-4
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
     volumes:

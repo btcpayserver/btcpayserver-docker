@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  joinmarket:
+    container_name: joinmarket
+    image: btcpayserver/joinmarket:0.9.3
+    restart: unless-stopped
+    environment:
+      READY_FILE: /root/.nbxplorer/btc_fully_synched
+      ENSURE_WALLET: 1
+      jm_gaplimit: 2000
+      jm_tor_control_host: tor
+      jm_tor_control_port: 9051
+      jm_onion_socks5_host: tor
+      jm_onion_socks5_port: 9050
+      jm_socks5_host: tor
+      jm_socks5_port: 9050
+      jm_network: ${NBITCOIN_NETWORK:-regtest}
+      jm_rpc_host: bitcoind
+      jm_rpc_port: 43782
+      jm_rpc_user: joinmarket
+      jm_rpc_password: afixedpasswordforjoinmarket
+    volumes:
+      - "joinmarket_datadir:/root/.joinmarket"
+      - "nbxplorer_datadir:/root/.nbxplorer"
+      - "tor_datadir:/home/tor/.tor"
+    expose:
+      - 62601 # obwatch
+      - 8080 # payjoin server
+    links:
+      - bitcoind
+
+  bitcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        # rpcuser=joinmarket
+        # rpcpassword=afixedpasswordforjoinmarket
+        # We need to use rpcauth because we also need cookieauth. rpcpassword disabled cookie file auth.
+        # Be careful if you copy the line below from the docker-compose.yml! A dollar sign is escaped.
+        rpcauth=joinmarket:4b4dbcb712557eb8c8bfd56a2b6a7707$$6497d80877f10dc375829724f369f546b070fc706121a361438a4a1e51025bea
+
+volumes:
+  joinmarket_datadir:
+
+required:
+  - "opt-add-tor"

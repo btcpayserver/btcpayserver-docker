@@ -11,7 +11,7 @@ set -e
 # This will download the utxo set and untar it in bitcoin's folder
 # Usage: ./load-utxo-set.sh
 # This will use the tar to load the utxo in bitcoin's folder
-# Usage: ./load-utxo-set.sh utxo-snapshot-bitcoin-mainnet-565305.tar
+# Usage: ./load-utxo-set.sh utxo-snapshot-bitcoin-mainnet-699714.tar
 
 if ! [ "$0" = "$BASH_SOURCE" ]; then
     echo "This script must not be sourced" 
@@ -31,7 +31,7 @@ fi
 TAR_FILE="$1"
 
 if ! [[ "$UTXO_DOWNLOAD_LINK" ]]; then
-    [[ $NBITCOIN_NETWORK == "mainnet" ]] && UTXO_DOWNLOAD_LINK="http://utxosets.blob.core.windows.net/public/utxo-snapshot-bitcoin-mainnet-680891.tar"
+    [[ $NBITCOIN_NETWORK == "mainnet" ]] && UTXO_DOWNLOAD_LINK="http://utxosets.blob.core.windows.net/public/utxo-snapshot-bitcoin-mainnet-699714.tar"
     [[ $NBITCOIN_NETWORK == "testnet" ]] && UTXO_DOWNLOAD_LINK="http://utxosets.blob.core.windows.net/public/utxo-snapshot-bitcoin-testnet-1445586.tar"
 fi
 

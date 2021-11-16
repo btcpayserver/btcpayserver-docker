@@ -107,6 +107,8 @@ Add-on specific variables:
     BTCTRANSMUTER_HOST: If btc transmuter is activated with opt-add-btctransmuter, the hostname of your btc transmuter website (eg. store.example.com)
     TOR_RELAY_NICKNAME: If tor relay is activated with opt-add-tor-relay, the relay nickname
     TOR_RELAY_EMAIL: If tor relay is activated with opt-add-tor-relay, the email for Tor to contact you regarding your relay
+    CHATWOOT_HOST: If chatwoot is activated with opt-add-chatwoot, the hostname of your chatwoot website (eg. store.example.com)
+    FIREFLY_HOST: If fireflyiii is activated with opt-add-fireflyiii, the hostname of your libre patron website (eg. firefly.example.com)
 END
 }
 START=""
@@ -286,6 +288,7 @@ LIBREPATRON_HOST:$LIBREPATRON_HOST
 ZAMMAD_HOST:$ZAMMAD_HOST
 WOOCOMMERCE_HOST:$WOOCOMMERCE_HOST
 BTCTRANSMUTER_HOST:$BTCTRANSMUTER_HOST
+CHATWOOT_HOST:$CHATWOOT_HOST
 BTCPAY_ENABLE_SSH:$BTCPAY_ENABLE_SSH
 BTCPAY_HOST_SSHKEYFILE:$BTCPAY_HOST_SSHKEYFILE
 LETSENCRYPT_EMAIL:$LETSENCRYPT_EMAIL
@@ -309,6 +312,7 @@ ACME_CA_URI:$ACME_CA_URI
 TOR_RELAY_NICKNAME: $TOR_RELAY_NICKNAME
 TOR_RELAY_EMAIL: $TOR_RELAY_EMAIL
 PIHOLE_SERVERIP: $PIHOLE_SERVERIP
+FIREFLY_HOST: $FIREFLY_HOST
 ----------------------
 Additional exported variables:
 BTCPAY_DOCKER_COMPOSE=$BTCPAY_DOCKER_COMPOSE
@@ -418,6 +422,8 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
             return
         fi
     fi
+
+    docker_update
 
     if ! [[ -x "$(command -v docker-compose)" ]]; then
         if ! [[ "$OSTYPE" == "darwin"* ]] && $HAS_DOCKER; then

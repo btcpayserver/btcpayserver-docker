@@ -41,7 +41,7 @@ services:
       - bitcoind
 
   bitcoin_rtl:
-    image: shahanafarooqui/rtl:0.10.0
+    image: shahanafarooqui/rtl:0.11.2
     restart: unless-stopped
     environment:
       LN_IMPLEMENTATION: ECL
@@ -78,3 +78,5 @@ incompatible:
 required:
   - "opt-add-zmq"
   - "opt-txindex"
+exclusive:
+  - lightning
