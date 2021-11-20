@@ -170,18 +170,18 @@ cd - && cd ..
 
 
 # Build lnd
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.13.3-beta/linuxamd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.14.0-beta/linuxamd64.Dockerfile
 DOCKERFILE="linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.13.3-beta/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.14.0-beta/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.13.3-beta/linuxarm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.14.0-beta/linuxarm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/lnd:v0.13.3-beta"
+echo "Building btcpayserver/lnd:v0.14.0-beta"
 git clone https://github.com/btcpayserver/lnd lnd
 cd lnd
-git checkout basedon-v0.13.3-beta
+git checkout basedon-v0.14.0-beta
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.13.3-beta" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.14.0-beta" .
 cd - && cd ..
 
 
@@ -258,18 +258,18 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.5/amd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.6/amd64.Dockerfile
 DOCKERFILE="amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.5/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.6/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.5/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.6/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building btcpayserver/btcpayserver:1.3.5$<BTCPAY_BUILD_CONFIGURATION>?"
+echo "Building btcpayserver/btcpayserver:1.3.6$<BTCPAY_BUILD_CONFIGURATION>?"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.3.5
+git checkout v1.3.6
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.3.5$<BTCPAY_BUILD_CONFIGURATION>?" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.3.6$<BTCPAY_BUILD_CONFIGURATION>?" .
 cd - && cd ..
 
 

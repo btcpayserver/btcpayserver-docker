@@ -126,6 +126,7 @@ services:
       LND_HIDDENSERVICE_HOSTNAME_FILE: /var/lib/tor/hidden_services/lnd/hostname
       LND_EXTRA_ARGS: |
         tor.active=1
+        tor.skip-proxy-for-clearnet-targets=1
         tor.socks=tor:9050
     links:
       - tor
