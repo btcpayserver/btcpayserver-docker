@@ -176,6 +176,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-pihole](docker-compose-generator/docker-fragments/opt-add-pihole.yml) ([See the documentation](docs/pihole.md))
 * [opt-add-bluewallet-lndhub](docker-compose-generator/docker-fragments/opt-add-bluewallet-lndhub.yml) for [Bluewallet LNDHub](https://github.com/BlueWallet/LndHub) - Use non-custodial LND Lightning directly from your Bluewallet, and freely let others open accounts on your node. Fragment maintained by [maltokyo](https://github.com/maltokyo).
 * [opt-add-ndlc](docker-compose-generator/docker-fragments/opt-add-ndlc.yml) ([See the documentation](docs/ndlc.md))
+* [opt-add-lightning-terminal](docker-compose-generator/docker-fragments/opt-add-lightning-terminal.yml) for [Lightning Terminal/LiT](https://github.com/lightninglabs/lightning-terminal). Maintained by [dennisreimann](https://github.com/dennisreimann).
 * [opt-add-sphinxrelay](docker-compose-generator/docker-fragments/opt-add-sphinxrelay.yml) for [Sphinx Relay](https://github.com/stakwork/sphinx-relay). Maintained by [dennisreimann](https://github.com/dennisreimann).
 * [opt-add-tallycoin-connect](docker-compose-generator/docker-fragments/opt-add-tallycoin-connect.yml) for [Tallycoin Connect](https://github.com/dennisreimann/tallycoin_connect). Maintained by [dennisreimann](https://github.com/dennisreimann).
 * [opt-add-thunderhub](docker-compose-generator/docker-fragments/opt-add-thunderhub.yml) for a LND Lightning Node Manager in your Browser. Maintained by [apotdevin](https://github.com/apotdevin).
