@@ -21,6 +21,9 @@ services:
   litecoind:
     environment:
       BITCOIN_EXTRA_ARGS: prune=100000
+  monerod:
+    environment:
+      MONEROD_EXTRA_ARGS: prune-blockchain=1
   viacoind:
     environment:
       BITCOIN_EXTRA_ARGS: prune=100000
