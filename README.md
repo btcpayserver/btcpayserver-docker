@@ -100,6 +100,7 @@ Check out this video if you're interested in learning more about setting up [BTC
 * `REVERSEPROXY_HTTPS_PORT`: The public port the reverse proxy binds to for HTTPS traffic (default: 443)
 * `REVERSEPROXY_DEFAULT_HOST`: Optional, if using a reverse proxy nginx, specify which website should be presented if the server is accessed by its IP.
 * `NBITCOIN_NETWORK`: The type of network to use (eg. `mainnet`, `testnet`, or `regtest`. Default: `mainnet`)
+* `BTCPAY_CHEATMODE`: When `NBITCOIN_NETWORK=regtest` is used, you can enable Cheat Mode which allows you to fake Bitcoin payments directly on the payment page. Use this for easier testing.
 * `LIGHTNING_ALIAS`: An alias for your lightning network node, if used
 * `BTCPAYGEN_CRYPTO1`: First supported crypto currency (eg. `btc`, `ltc`. Default: `btc`)
 * `BTCPAYGEN_CRYPTO2`: Second supported crypto currency (eg. `btc`, `ltc`. Default: `(empty)`)
