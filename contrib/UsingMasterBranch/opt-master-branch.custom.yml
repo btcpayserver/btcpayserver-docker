@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  nbxplorer:
+    environment:
+      NBXPLORER_EXPOSERPC: 1
+  bitcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        fallbackfee=0.0002
