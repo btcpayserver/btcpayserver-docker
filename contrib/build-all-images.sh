@@ -719,7 +719,7 @@ DOCKERFILE="Dockerfile"
 echo "Building fireflyiii/core:latest"
 git clone https://dev.azure.com/Firefly-III/_git/MainImage core
 cd core
-git checkout 
+git checkout
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "fireflyiii/core:latest" .
 cd - && cd ..
@@ -824,6 +824,18 @@ cd tallycoin_connect
 git checkout v1.7.0
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "dennisreimann/tallycoin_connect:v1.7.0" .
+cd - && cd ..
+
+
+# Build lightning-terminal
+# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.6.0-alpha/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building lightninglabs/lightning-terminal/v0.6.0-alpha-path-prefix"
+git clone https://github.com/lightninglabs/lightning-terminal.git lightning-terminal
+cd lightning-terminal
+git checkout v0.6.0-alpha
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.6.0-alpha-path-prefix" .
 cd - && cd ..
 
 
@@ -1093,5 +1105,3 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
-
-

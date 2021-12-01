@@ -1,4 +1,4 @@
-{{ $CurrentContainer := where $ "ID" .Docker.CurrentContainerID | first }} 
+{{ $CurrentContainer := where $ "ID" .Docker.CurrentContainerID | first }}
 {{ define "upstream" }}
 	{{ if .Address }}
 		{{/* If we got the containers from swarm and this container's port is published to host, use host IP:PORT */}}
@@ -18,7 +18,7 @@
 	server 127.0.0.1 down;
 		{{ end }}
 	{{ end }}
-	
+
 {{ end }}
 
 {{ define "redirects" }}
@@ -69,7 +69,7 @@
 	location /lightning-charge/btc/ {
 		proxy_pass http://clightning_bitcoin_charge:9112/;
 	}
-	{{ end }}		
+	{{ end }}
 	{{ if (eq $serviceName "clightning_bitcoin_rest") }}
 	location /clightning-rest/btc/ {
 	    rewrite ^/clightning-rest/btc/(.*) /$1 break;
@@ -86,7 +86,7 @@
 		proxy_pass http://clightning_groestlcoin_charge:9112/;
 	}
 		{{ end }}
-		
+
 		{{ if (eq $serviceName "btctransmuter") }}
 	location /btctransmuter/ {
 		proxy_set_header Connection "";
@@ -110,7 +110,28 @@
 	}
 		{{ end }}
 
-		
+  {{ if (eq $serviceName "lnd_lit") }}
+  location /lit {
+    proxy_set_header Host               $host;
+    proxy_set_header X-Real-IP          $remote_addr;
+    proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto  $scheme;
+    proxy_pass http://lnd_lit:8080/;
+  }
+
+	location ~* ^/lnrpc.Lightning/ {
+    proxy_pass http://lnd_lit:8080;
+  }
+
+  location ~* ^/looprpc.SwapClient/ {
+    proxy_pass http://lnd_lit:8080;
+  }
+
+  location ~* ^/poolrpc.Trader/ {
+    proxy_pass http://lnd_lit:8080;
+  }
+  {{ end }}
+
   {{ if (eq $serviceName "sphinxrelay") }}
   location /sphinxrelay/ {
     proxy_set_header        Host               $host;

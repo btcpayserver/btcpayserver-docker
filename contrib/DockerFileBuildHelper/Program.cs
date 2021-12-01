@@ -283,6 +283,13 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"{image.Tag}";
                     dockerInfo.SupportedByUs = false;
                     break;
+                case "lnd_lit":
+                    dockerInfo.DockerFilePath = "Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/lightninglabs/lightning-terminal";
+                    dockerInfo.GitRef = $"{image.Tag}";
+                    dockerInfo.SupportedByUs = false;
+                    break;
                 case "docker-bitcoingold":
                     dockerInfo.DockerFilePath = $"bitcoingold/{image.Tag}/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/Vutov/docker-bitcoin";
@@ -658,7 +665,7 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
                     dockerInfo.GitLink = "https://dev.azure.com/Firefly-III/_git/MainImage";
                     dockerInfo.RawLink = "https://dev.azure.com/Firefly-III/66fb773b-063e-42d7-b6a5-e7729a22e8b3/_apis/git/repositories/e9c3dcf8-4533-4ef1-83cc-75527cab3377/items?path=%2FDockerfile&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=main&resolveLfs=true&%24format=octetStream&api-version=5.0&download=true";
-                    
+
                     dockerInfo.GitRef = null;
                     break;
                 default:
