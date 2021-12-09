@@ -9,6 +9,8 @@ services:
       BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       BITCOIN_EXTRA_ARGS: |
         rpcport=43782
+        rpcbind=0.0.0.0:43782
+        rpcallowip=0.0.0.0/0
         port=39388
         whitelist=0.0.0.0/0
     expose:
