@@ -3,6 +3,7 @@
 set -e
 
 apt-get remove docker-ce
+rm -rf /usr/bin/docker
 rm -rf /usr/local/bin/docker-compose
 
 cd ../..
