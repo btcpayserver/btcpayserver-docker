@@ -1,0 +1,25 @@
+﻿version: '3'
+
+services:
+  helipad:
+    image: podcastindexorg/podcasting20-boosts:v0.1.4
+    restart: unless-stopped
+    stop_grace_period: 1m
+    expose:
+      - 2112
+    volumes:
+      - helipad_datadir:/data
+      - lnd_bitcoin_datadir:/lnd:ro
+    environment:
+      LND_URL: "lnd_bitcoin:10009"
+
+
+  btcpayserver:
+    environment:
+      BTCPAY_EXTERNALSERVICES: "Podcast Index Helipad:${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/helipad;"
+
+volumes:
+  helipad_datadir:
+        
+required:
+- "bitcoin-lnd"

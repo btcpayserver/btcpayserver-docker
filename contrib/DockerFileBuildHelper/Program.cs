@@ -672,6 +672,20 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePath = $"Dockerfile";
                     dockerInfo.GitRef = image.Tag.Replace("-path-prefix", "");
                     break;
+                case "chatwoot/chatwoot":
+                    dockerInfo.DockerFilePath = $"docker/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"docker/Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"docker/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/chatwoot/chatwoot";
+                    dockerInfo.GitRef = $"{image.Tag}";
+                    break;
+                case "podcastindexorg/podcasting20-boosts":
+                    dockerInfo.DockerFilePath = $"umbrel/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"umbrel/Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"umbrel/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/Podcastindex-org/helipad";
+                    dockerInfo.GitRef = $"{image.Tag}";
+                    break;
                 default:
                     if (firstTry)
                     {
