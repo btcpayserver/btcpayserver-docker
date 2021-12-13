@@ -1,10 +1,10 @@
 ﻿version: '3'
 
 services:
-  helipad:
+  helipad:    
+    container_name: helipad
     image: podcastindexorg/podcasting20-boosts:v0.1.4
     restart: unless-stopped
-    stop_grace_period: 1m
     expose:
       - 2112
     volumes:
