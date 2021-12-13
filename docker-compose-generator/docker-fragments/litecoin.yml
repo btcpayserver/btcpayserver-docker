@@ -4,11 +4,13 @@ services:
   litecoind:
     restart: unless-stopped
     container_name: btcpayserver_litecoind
-    image: btcpayserver/litecoin:0.17.1-1
+    image: btcpayserver/litecoin:0.18.1
     environment:
       BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       BITCOIN_EXTRA_ARGS: |
         rpcport=43782
+        rpcbind=0.0.0.0:43782
+        rpcallowip=0.0.0.0/0
         port=39388
         whitelist=0.0.0.0/0
     expose:
