@@ -258,18 +258,18 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.6/amd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.7/amd64.Dockerfile
 DOCKERFILE="amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.6/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.7/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.6/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.3.7/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building btcpayserver/btcpayserver:1.3.6$<BTCPAY_BUILD_CONFIGURATION>?"
+echo "Building btcpayserver/btcpayserver:1.3.7$<BTCPAY_BUILD_CONFIGURATION>?"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.3.6
+git checkout v1.3.7
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.3.6$<BTCPAY_BUILD_CONFIGURATION>?" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.3.7$<BTCPAY_BUILD_CONFIGURATION>?" .
 cd - && cd ..
 
 
@@ -448,14 +448,14 @@ cd - && cd ..
 
 
 # Build docker-monacoin
-# https://raw.githubusercontent.com/wakiyamap/docker-bitcoin/master/monacoin/0.17.1/Dockerfile
-DOCKERFILE="monacoin/0.17.1/Dockerfile"
-echo "Building wakiyamap/docker-monacoin:0.17.1"
+# https://raw.githubusercontent.com/wakiyamap/docker-bitcoin/master/monacoin/0.20.2/Dockerfile
+DOCKERFILE="monacoin/0.20.2/Dockerfile"
+echo "Building wakiyamap/docker-monacoin:0.20.2"
 git clone https://github.com/wakiyamap/docker-bitcoin docker-monacoin
 cd docker-monacoin
 git checkout master
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "wakiyamap/docker-monacoin:0.17.1" .
+docker build -f "$DOCKERFILE" -t "wakiyamap/docker-monacoin:0.20.2" .
 cd - && cd ..
 
 
@@ -766,14 +766,14 @@ cd - && cd ..
 
 
 # Build lightning-terminal
-# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.6.0-alpha/Dockerfile
+# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.6.1-alpha/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building lightninglabs/lightning-terminal:v0.6.0-alpha-path-prefix"
+echo "Building lightninglabs/lightning-terminal:v0.6.1-alpha-path-prefix"
 git clone https://github.com/lightninglabs/lightning-terminal lightning-terminal
 cd lightning-terminal
-git checkout v0.6.0-alpha
+git checkout v0.6.1-alpha
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.6.0-alpha-path-prefix" .
+docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.6.1-alpha-path-prefix" .
 cd - && cd ..
 
 
@@ -836,18 +836,6 @@ cd tallycoin_connect
 git checkout v1.7.0
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "dennisreimann/tallycoin_connect:v1.7.0" .
-cd - && cd ..
-
-
-# Build lightning-terminal
-# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.6.1-alpha/Dockerfile
-DOCKERFILE="Dockerfile"
-echo "Building lightninglabs/lightning-terminal/v0.6.1-alpha-path-prefix"
-git clone https://github.com/lightninglabs/lightning-terminal.git lightning-terminal
-cd lightning-terminal
-git checkout v0.6.1-alpha
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.6.1-alpha-path-prefix" .
 cd - && cd ..
 
 
