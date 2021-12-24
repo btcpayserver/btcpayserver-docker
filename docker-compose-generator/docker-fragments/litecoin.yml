@@ -4,7 +4,7 @@ services:
   litecoind:
     restart: unless-stopped
     container_name: btcpayserver_litecoind
-    image: btcpayserver/litecoin:0.18.1
+    image: btcpayserver/litecoin:0.18.1-1
     environment:
       BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       BITCOIN_EXTRA_ARGS: |
