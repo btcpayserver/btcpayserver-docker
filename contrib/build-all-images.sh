@@ -290,14 +290,14 @@ cd - && cd ..
 
 
 # Build dogecoin
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dogecoin/1.14.4/Dogecoin/1.14.4/linuxamd64.Dockerfile
-DOCKERFILE="Dogecoin/1.14.4/linuxamd64.Dockerfile"
-echo "Building btcpayserver/dogecoin:1.14.4"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dogecoin/1.14.5/Dogecoin/1.14.5/linuxamd64.Dockerfile
+DOCKERFILE="Dogecoin/1.14.5/linuxamd64.Dockerfile"
+echo "Building btcpayserver/dogecoin:1.14.5"
 git clone https://github.com/btcpayserver/dockerfile-deps dogecoin
 cd dogecoin
-git checkout Dogecoin/1.14.4
+git checkout Dogecoin/1.14.5
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/dogecoin:1.14.4" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/dogecoin:1.14.5" .
 cd - && cd ..
 
 
@@ -386,18 +386,18 @@ cd - && cd ..
 
 
 # Build elements
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.18.1.12/Elements/0.18.1.12/linuxamd64.Dockerfile
-DOCKERFILE="Elements/0.18.1.12/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.18.1.12/Elements/0.18.1.12/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Elements/0.18.1.12/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.18.1.12/Elements/0.18.1.12/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Elements/0.18.1.12/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/elements:0.18.1.12"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.1/Elements/0.21.0.1/linuxamd64.Dockerfile
+DOCKERFILE="Elements/0.21.0.1/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.1/Elements/0.21.0.1/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Elements/0.21.0.1/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.1/Elements/0.21.0.1/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Elements/0.21.0.1/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/elements:0.21.0.1"
 git clone https://github.com/btcpayserver/dockerfile-deps elements
 cd elements
-git checkout Elements/0.18.1.12
+git checkout Elements/0.21.0.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/elements:0.18.1.12" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/elements:0.21.0.1" .
 cd - && cd ..
 
 
