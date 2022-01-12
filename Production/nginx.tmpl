@@ -110,7 +110,7 @@
 	}
 		{{ end }}
 		{{ if (eq $serviceName "helipad") }}
-	location /helipad {
+	location /helipad/ {
 		proxy_set_header Connection "";
 		proxy_set_header        Host               $host;
 		proxy_set_header        X-Real-IP          $remote_addr;
@@ -122,7 +122,7 @@
 		
 		sub_filter_once off;
 		sub_filter_types *;
-		location script?name=home {
+		location /helipad/script?name=home {
 		
 		sub_filter 'src="/'  'src="/helipad/';
 		sub_filter 'href="/'  'href="/helipad/';
