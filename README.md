@@ -186,6 +186,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-monero-expose](docker-compose-generator/docker-fragments/opt-monero-expose.yml) to expose monero node's RPC port at 127.0.0.1:18081 to connect your own wallet. Use f.e. ssh port forwarding to forward to your own computer.
 * [opt-add-fireflyiii](docker-compose-generator/docker-fragments/opt-add-fireflyiii.yml) ([See the documentation](docs/fireflyiii.md))
 * [opt-add-joinmarket](docker-compose-generator/docker-fragments/opt-add-joinmarket.yml) ([See the documentation](docs/joinmarket.md))
+* [opt-add-helipad](docker-compose-generator/docker-fragments/opt-add-helipad.yml) for [Podcastindex.org Helipad](https://github.com/Podcastindex-org/helipad). Requires LND.
 
 You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).
 
