@@ -127,9 +127,9 @@
 		
 		sub_filter 'src="/'  'src="/helipad/';
 		sub_filter 'href="/'  'href="/helipad/';
-		sub_filter '/image'  'href="/helipad/image';		
-		sub_filter '/pew'  'href="/helipad/pew';		
-		sub_filter '/boosts'  'href="/helipad/boosts';
+		sub_filter '/image'  '/helipad/image';		
+		sub_filter '/pew'  '/helipad/pew';		
+		sub_filter '/boosts'  '/helipad/boosts';
 		proxy_pass http://helipad:2112/;
 
 	}
