@@ -130,9 +130,13 @@
 		proxy_pass http://helipad:2112/;
 		
 		location /helipad/script?name=home {
-
+                sub_filter_once off;
+		sub_filter_types *;
+		sub_filter 'src="/'  'src="/helipad/';
+		sub_filter 'href="/'  'href="/helipad/';
 		sub_filter "'/" "'/helipad/";
 		sub_filter '"/' '"/helipad/';
+		proxy_pass http://helipad:2112/;
 		}
 
 	}
