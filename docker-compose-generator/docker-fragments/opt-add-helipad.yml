@@ -1,19 +1,22 @@
 ﻿version: '3'
 
 services:
-  helipad:    
+  helipad:
     container_name: helipad
     image: podcastindexorg/podcasting20-helipad:v0.1.6
     restart: unless-stopped
+    user: "root"
     expose:
-      - 2112
+    - 2112
     volumes:
-      - helipad_datadir:/data
-      - lnd_bitcoin_datadir:/lnd:ro
+    - helipad_datadir:/data
+    - lnd_bitcoin_datadir:/lnd:ro
     environment:
       LND_URL: "lnd_bitcoin:10009"
       LND_ADMINMACAROON: "/lnd/admin.macaroon"
       LND_TLSCERT: "/lnd/tls.cert"
+    links:
+      - lnd_bitcoin
 
 
   btcpayserver:
