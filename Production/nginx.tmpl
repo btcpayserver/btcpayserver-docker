@@ -119,10 +119,13 @@
         proxy_set_header        X-Forwarded-Server $host;
         proxy_set_header        X-Forwarded-Port   443;
         proxy_set_header        X-Forwarded-Proto  https;
-		proxy_pass http://helipad:2112/;
+		
+		sub_filter_once off;
+		sub_filter_types *;
 		sub_filter 'src="/'  'src="/helipad/';
 		sub_filter 'href="/'  'href="/helipad/';
-        	sub_filter_once off;
+		proxy_pass http://helipad:2112/;
+
 	}
 		{{ end }}
 
