@@ -407,17 +407,6 @@ namespace DockerFileBuildHelper
                     dockerInfo.SupportedByUs = true;
                     break;
                 }
-                case "bitcointaprootcc/0.21.0-bip8-lottrue":
-                {
-                    var tagNoRevision = image.Tag.Split('-').First();
-                    dockerInfo.DockerFilePath = $"bitcointaprootcc/0.21.0-bip8-lottrue/linuxamd64.Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"bitcointaprootcc/0.21.0-bip8-lottrue/linuxarm32v7.Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"bitcointaprootcc/0.21.0-bip8-lottrue/linuxarm64v8.Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
-                    dockerInfo.GitRef = $"bitcointaprootcc/0.21.0-bip8-lottrue";
-                    dockerInfo.SupportedByUs = true;
-                    break;
-                }
                 case "elements":
                 {
                     var tagNoRevision = image.Tag.Split('-').First();

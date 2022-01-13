@@ -229,22 +229,6 @@ docker build -f "$DOCKERFILE" -t "chekaz/docker-bitcoinplus:2.7.0" .
 cd - && cd ..
 
 
-# Build bitcointaprootcc/0.21.0-bip8-lottrue
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/bitcointaprootcc/0.21.0-bip8-lottrue/bitcointaprootcc/0.21.0-bip8-lottrue/linuxamd64.Dockerfile
-DOCKERFILE="bitcointaprootcc/0.21.0-bip8-lottrue/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/bitcointaprootcc/0.21.0-bip8-lottrue/bitcointaprootcc/0.21.0-bip8-lottrue/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="bitcointaprootcc/0.21.0-bip8-lottrue/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/bitcointaprootcc/0.21.0-bip8-lottrue/bitcointaprootcc/0.21.0-bip8-lottrue/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="bitcointaprootcc/0.21.0-bip8-lottrue/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/bitcointaprootcc/0.21.0-bip8-lottrue:latest"
-git clone https://github.com/btcpayserver/dockerfile-deps bitcointaprootcc/0.21.0-bip8-lottrue
-cd bitcointaprootcc/0.21.0-bip8-lottrue
-git checkout bitcointaprootcc/0.21.0-bip8-lottrue
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/bitcointaprootcc/0.21.0-bip8-lottrue:latest" .
-cd - && cd ..
-
-
 # Build docker-bitcore
 # https://raw.githubusercontent.com/dalijolijo/btcpayserver-docker-bitcore/master/docker-bitcored/Dockerfile
 DOCKERFILE="docker-bitcored/Dockerfile"
