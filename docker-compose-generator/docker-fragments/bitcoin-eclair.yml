@@ -9,11 +9,10 @@ services:
     container_name: btcpayserver_eclair_bitcoin
     restart: unless-stopped
     stop_signal: SIGINT
-    image: acinq/eclair:release-0.4.1
+    image: acinq/eclair:release-0.6.1
     environment:
       PUBLIC_HOST: ${BTCPAY_HOST}
       JAVA_OPTS: |
-        -Xmx256m
         -Declair.printToConsole
         -Declair.headless
         -Declair.chain=${NBITCOIN_NETWORK:-regtest}

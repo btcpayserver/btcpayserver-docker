@@ -680,7 +680,7 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/chatwoot/chatwoot";
                     dockerInfo.GitRef = $"{image.Tag}";
                     break;
-                case "podcastindexorg/podcasting20-boosts":
+                case "podcastindexorg/podcasting20-helipad":
                     dockerInfo.DockerFilePath = $"umbrel/Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"umbrel/Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = $"umbrel/Dockerfile";

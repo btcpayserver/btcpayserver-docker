@@ -142,14 +142,14 @@ cd - && cd ..
 
 
 # Build eclair
-# https://raw.githubusercontent.com/ACINQ/eclair/v0.4.1/Dockerfile
+# https://raw.githubusercontent.com/ACINQ/eclair/v0.6.1/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building acinq/eclair:release-0.4.1"
+echo "Building acinq/eclair:release-0.6.1"
 git clone https://github.com/ACINQ/eclair eclair
 cd eclair
-git checkout v0.4.1
+git checkout v0.6.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "acinq/eclair:release-0.4.1" .
+docker build -f "$DOCKERFILE" -t "acinq/eclair:release-0.6.1" .
 cd - && cd ..
 
 
@@ -634,6 +634,10 @@ cd - && cd ..
 # Build chatwoot
 # https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
 DOCKERFILE="docker/Dockerfile"
+# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/Dockerfile"
+# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/Dockerfile"
 echo "Building chatwoot/chatwoot:v1.7.0"
 git clone https://github.com/chatwoot/chatwoot chatwoot
 cd chatwoot
@@ -646,6 +650,10 @@ cd - && cd ..
 # Build chatwoot
 # https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
 DOCKERFILE="docker/Dockerfile"
+# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/Dockerfile"
+# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/Dockerfile"
 echo "Building chatwoot/chatwoot:v1.7.0"
 git clone https://github.com/chatwoot/chatwoot chatwoot
 cd chatwoot
@@ -724,6 +732,22 @@ cd core
 git checkout 
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "fireflyiii/core:latest" .
+cd - && cd ..
+
+
+# Build podcasting20-helipad
+# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.6/umbrel/Dockerfile
+DOCKERFILE="umbrel/Dockerfile"
+# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.6/umbrel/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="umbrel/Dockerfile"
+# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.6/umbrel/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="umbrel/Dockerfile"
+echo "Building podcastindexorg/podcasting20-helipad:v0.1.6"
+git clone https://github.com/Podcastindex-org/helipad podcasting20-helipad
+cd podcasting20-helipad
+git checkout v0.1.6
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "podcastindexorg/podcasting20-helipad:v0.1.6" .
 cd - && cd ..
 
 
