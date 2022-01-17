@@ -803,6 +803,22 @@ docker build -f "$DOCKERFILE" -t "nicolasdorier/ndlc-cli:1.0.1" .
 cd - && cd ..
 
 
+# Build nnostr-relay
+# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.5/Relay/Dockerfile
+DOCKERFILE="Relay/Dockerfile"
+# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.5/Relay/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Relay/Dockerfile"
+# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.5/Relay/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Relay/Dockerfile"
+echo "Building kukks/nnostr-relay:v0.0.5"
+git clone https://github.com/kukks/nnostr nnostr-relay
+cd nnostr-relay
+git checkout Relay/v0.0.5
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "kukks/nnostr-relay:v0.0.5" .
+cd - && cd ..
+
+
 # Build pihole
 # https://raw.githubusercontent.com/pi-hole/docker-pi-hole/v5.7/Dockerfile
 DOCKERFILE="Dockerfile"
