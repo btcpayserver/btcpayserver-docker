@@ -676,6 +676,13 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/Podcastindex-org/helipad";
                     dockerInfo.GitRef = $"{image.Tag}";
                     break;
+                case "kukks/nnostr-relay":
+                    dockerInfo.DockerFilePath = $"Relay/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Relay/Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Relay/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/kukks/nnostr";
+                    dockerInfo.GitRef = $"Relay/{image.Tag}";
+                    break;
                 default:
                     if (firstTry)
                     {
