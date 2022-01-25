@@ -297,8 +297,6 @@ Production/.env
 .vscode/
 *docker-compose.generated.yml
 
-Generated/acme.json
-Generated/traefik_logs/
 Generated/chatwoot_config.env
 Generated/error
 

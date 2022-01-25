@@ -41,9 +41,3 @@ fi
 
 [[ -f "Generated/pull-images.sh" ]] && chmod +x Generated/pull-images.sh
 [[ -f "Generated/save-images.sh" ]] && chmod +x Generated/save-images.sh
-
-if [ "$BTCPAYGEN_REVERSEPROXY" == "traefik" ]; then
-    cp Traefik/traefik.toml Generated/traefik.toml
-    :> Generated/acme.json
-    chmod 600 Generated/acme.json
-fi
