@@ -24,7 +24,7 @@ providers:
 #  dashboard: true
 
 log:
-  level: DEBUG
+  level: ERROR # or DEBUG, PANIC, FATAL, WARN, and INFO
 
 certificatesResolvers:
   default:
