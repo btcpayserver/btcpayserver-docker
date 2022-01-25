@@ -23,7 +23,7 @@ services:
       TRANSMUTER_BTCPayAuthServer: "http://btcpayserver:49392"
     labels:
       traefik.enable: true
-      traefik.http.routers.bitcoin_rtl.rule: Host(`${BTCPAY_HOST}`) && PathPrefix(`/btctransmuter/`)
+      traefik.http.routers.bitcoin_rtl.rule: Host(`${BTCPAY_HOST}`) && (Path(`/btctransmuter`) || PathPrefix(`/btctransmuter/`))
     expose:
       - "80"
     links:

@@ -86,7 +86,7 @@ services:
       LOGOUT_REDIRECT_LINK: /server/services
     labels:
       traefik.enable: true
-      traefik.http.routers.bitcoin_rtl.rule: Host(`${BTCPAY_HOST}`) && PathPrefix(`/rtl/`)
+      traefik.http.routers.bitcoin_rtl.rule: Host(`${BTCPAY_HOST}`) && (Path(`/rtl`) || PathPrefix(`/rtl/`))
     volumes:
       - "clightning_bitcoin_datadir:/root/.lightning"
       - "bitcoin_datadir:/etc/bitcoin"
