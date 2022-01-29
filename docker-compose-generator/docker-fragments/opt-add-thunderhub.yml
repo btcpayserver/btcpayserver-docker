@@ -6,7 +6,7 @@ services:
     volumes:
       - "lnd_bitcoin_thub_datadir:/etc/lnd_bitcoin_thub_datadir"
   bitcoin_thub:
-    image: apotdevin/thunderhub:base-v0.12.31@sha256:c9b60170a7cc2d4922d31e4b9d9d3c5948121e3fc6d9b88a264312d138670021
+    image: apotdevin/thunderhub:base-v0.13.1@sha256:7b7a85f516be5c06ec0a4f76bc4d4dc2faf8f984f994ccc280b038520f42fa13
     restart: unless-stopped
     stop_signal: SIGKILL
     environment:
@@ -23,7 +23,6 @@ services:
       - "lnd_bitcoin_thub_datadir:/data"
     expose:
       - "3000"
-    command: ["npm", "run", "start:cookie", "--", "/data/.cookie"]
     links:
       - lnd_bitcoin
 volumes:
