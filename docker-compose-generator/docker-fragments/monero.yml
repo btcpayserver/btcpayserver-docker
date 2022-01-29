@@ -5,16 +5,7 @@ services:
     restart: unless-stopped
     container_name: btcpayserver_monerod
     image: btcpayserver/monero:0.17.2.3
-    entrypoint: monerod 
-    environment:
-      MONERO_EXTRA_ARGS: |
-        rpc-bind-ip=0.0.0.0
-        confirm-external-bind=1
-        rpc-bind-port=18081
-        non-interactive=1
-        block-notify="/bin/sh ./scripts/notifier.sh -X GET http://btcpayserver:49392/monerolikedaemoncallback/block?cryptoCode=xmr&hash=%s"
-        hide-my-port=1
-        enable-dns-blocklist=1
+    entrypoint: monerod --rpc-bind-ip=0.0.0.0 --confirm-external-bind --rpc-bind-port=18081 --non-interactive --block-notify="/bin/sh ./scripts/notifier.sh -X GET http://btcpayserver:49392/monerolikedaemoncallback/block?cryptoCode=xmr&hash=%s" --hide-my-port --prune-blockchain --enable-dns-blocklist
     expose:
       - "18081"
     volumes:
