@@ -736,18 +736,18 @@ cd - && cd ..
 
 
 # Build joinmarket
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.3/JoinMarket/0.9.3/linuxamd64.Dockerfile
-DOCKERFILE="JoinMarket/0.9.3/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.3/JoinMarket/0.9.3/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="JoinMarket/0.9.3/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.3/JoinMarket/0.9.3/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="JoinMarket/0.9.3/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/joinmarket:0.9.3"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.4/JoinMarket/0.9.4/linuxamd64.Dockerfile
+DOCKERFILE="JoinMarket/0.9.4/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.4/JoinMarket/0.9.4/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="JoinMarket/0.9.4/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.4/JoinMarket/0.9.4/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="JoinMarket/0.9.4/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/joinmarket:0.9.4"
 git clone https://github.com/btcpayserver/dockerfile-deps joinmarket
 cd joinmarket
-git checkout JoinMarket/0.9.3
+git checkout JoinMarket/0.9.4
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/joinmarket:0.9.3" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/joinmarket:0.9.4" .
 cd - && cd ..
 
 
@@ -804,18 +804,18 @@ cd - && cd ..
 
 
 # Build nnostr-relay
-# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.5/Relay/Dockerfile
+# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.7/Relay/Dockerfile
 DOCKERFILE="Relay/Dockerfile"
-# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.5/Relay/Dockerfile
+# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.7/Relay/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Relay/Dockerfile"
-# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.5/Relay/Dockerfile
+# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.7/Relay/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Relay/Dockerfile"
-echo "Building kukks/nnostr-relay:v0.0.5"
+echo "Building kukks/nnostr-relay:v0.0.7"
 git clone https://github.com/kukks/nnostr nnostr-relay
 cd nnostr-relay
-git checkout Relay/v0.0.5
+git checkout Relay/v0.0.7
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "kukks/nnostr-relay:v0.0.5" .
+docker build -f "$DOCKERFILE" -t "kukks/nnostr-relay:v0.0.7" .
 cd - && cd ..
 
 
@@ -882,18 +882,18 @@ cd - && cd ..
 
 
 # Build thunderhub
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.31/Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.1/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.31/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.1/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.31/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.1/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building apotdevin/thunderhub:base-v0.12.31"
+echo "Building apotdevin/thunderhub:base-v0.13.1"
 git clone https://github.com/apotdevin/thunderhub thunderhub
 cd thunderhub
-git checkout v0.12.31
+git checkout v0.13.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:base-v0.12.31" .
+docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:base-v0.13.1" .
 cd - && cd ..
 
 
