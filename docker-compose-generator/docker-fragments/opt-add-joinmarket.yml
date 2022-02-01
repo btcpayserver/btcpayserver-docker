@@ -3,7 +3,7 @@ version: "3"
 services:
   joinmarket:
     container_name: joinmarket
-    image: btcpayserver/joinmarket:0.9.3
+    image: btcpayserver/joinmarket:0.9.4
     restart: unless-stopped
     environment:
       READY_FILE: /root/.nbxplorer/btc_fully_synched
