@@ -109,6 +109,11 @@
         sub_filter_once off;
 	}
 		{{ end }}
+		{{ if (eq $serviceName "joinmarket-webui") }}
+	location /joinmarket/ {
+		proxy_pass http://joinmarket-webui:80/;
+	}
+		{{ end }}
 		{{ if (eq $serviceName "helipad") }}
 	location /helipad/ {
 		proxy_set_header Connection "";

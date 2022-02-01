@@ -29,6 +29,17 @@ services:
       - 8080 # payjoin server
     links:
       - bitcoind
+  joinmarket-webui:
+    image: ghcr.io/theborakompanioni/jmui-ui-only:v0.0.1-alpha-dev
+    restart: unless-stopped
+    stop_grace_period: 1m
+    environment:
+      JMWEBUI_JM_WALLETD_HOST: joinmarket
+      JMWEBUI_JM_WALLETD_PORT: 43782
+  
+  btcpayserver:
+    environment:
+      BTCPAY_EXTERNALSERVICES: "Joinmarket UI:/joinmarket"
 
   bitcoind:
     environment:
