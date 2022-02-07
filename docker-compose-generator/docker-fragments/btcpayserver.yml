@@ -4,7 +4,7 @@ services:
 
   btcpayserver:
     restart: unless-stopped
-    image: ${BTCPAY_IMAGE:-btcpayserver/btcpayserver:1.4.3$<BTCPAY_BUILD_CONFIGURATION>?}
+    image: ${BTCPAY_IMAGE:-zeus-pay/btcpayserver:2.0.0.1$<BTCPAY_BUILD_CONFIGURATION>?}
     expose:
       - "49392"
     environment:
@@ -18,7 +18,7 @@ services:
       BTCPAY_SSHKEYFILE: ${BTCPAY_SSHKEYFILE}
       BTCPAY_SSHAUTHORIZEDKEYS: ${BTCPAY_SSHAUTHORIZEDKEYS}
       BTCPAY_DEBUGLOG: btcpay.log
-      BTCPAY_UPDATEURL: https://api.github.com/repos/btcpayserver/btcpayserver/releases/latest
+      BTCPAY_UPDATEURL: https://api.github.com/repos/zeus-pay/btcpayserver/releases/latest
       BTCPAY_DOCKERDEPLOYMENT: "true"
     links:
       - postgres
