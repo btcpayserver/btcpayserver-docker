@@ -9,7 +9,7 @@ services:
     expose:
       - "8080"
     volumes:
-      - "lnd_lit_datadir:/data/lit"
+      - "lnd_lit_datadir:/root"
       - "lnd_bitcoin_datadir:/data/lnd:ro"
     links:
       - bitcoind
