@@ -119,16 +119,16 @@
         proxy_set_header        X-Forwarded-Server $host;
         proxy_set_header        X-Forwarded-Port   443;
         proxy_set_header        X-Forwarded-Proto  https;
-		
+
 		sub_filter_once off;
 		sub_filter_types *;
-		
-		
-		
+
+
+
 		sub_filter 'src="/'  'src="/helipad/';
 		sub_filter 'href="/'  'href="/helipad/';
-		sub_filter '/image'  '/helipad/image';		
-		sub_filter '/pew'  '/helipad/pew';		
+		sub_filter '/image'  '/helipad/image';
+		sub_filter '/pew'  '/helipad/pew';
 		sub_filter '/boosts'  '/helipad/boosts';
 		proxy_pass http://helipad:2112/;
 
@@ -144,15 +144,7 @@
     proxy_pass http://lnd_lit:8080/;
   }
 
-	location ~* ^/lnrpc.Lightning/ {
-    proxy_pass http://lnd_lit:8080;
-  }
-
-  location ~* ^/looprpc.SwapClient/ {
-    proxy_pass http://lnd_lit:8080;
-  }
-
-  location ~* ^/poolrpc.Trader/ {
+  location ~* ^/(ln|loop|pool|lit)rpc\. {
     proxy_pass http://lnd_lit:8080;
   }
   {{ end }}
