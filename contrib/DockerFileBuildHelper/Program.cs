@@ -496,10 +496,12 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/ChekaZ/docker";
                     dockerInfo.GitRef = "master";
                     break;
-                case "docker-groestlcoin":
-                    dockerInfo.DockerFilePath = $"groestlcoin/{image.Tag}/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/Groestlcoin/docker-groestlcoin";
-                    dockerInfo.GitRef = "master";
+                case "btcpayserver/groestlcoin":
+                    dockerInfo.DockerFilePath = $"Groestlcoin/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Groestlcoin/{NoRevision(image.Tag)}/linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Groestlcoin/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"Groestlcoin/{NoRevision(image.Tag)}";
                     break;
                 case "docker-viacoin":
                     dockerInfo.DockerFilePath = $"viacoin/{image.Tag}/docker-viacoin";

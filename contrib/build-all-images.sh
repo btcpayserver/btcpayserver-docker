@@ -142,14 +142,14 @@ cd - && cd ..
 
 
 # Build eclair
-# https://raw.githubusercontent.com/ACINQ/eclair/v0.6.1/Dockerfile
+# https://raw.githubusercontent.com/ACINQ/eclair/v0.7.0/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building acinq/eclair:release-0.6.1"
+echo "Building acinq/eclair:release-0.7.0"
 git clone https://github.com/ACINQ/eclair eclair
 cd eclair
-git checkout v0.6.1
+git checkout v0.7.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "acinq/eclair:release-0.6.1" .
+docker build -f "$DOCKERFILE" -t "acinq/eclair:release-0.7.0" .
 cd - && cd ..
 
 
@@ -717,7 +717,7 @@ DOCKERFILE="Dockerfile"
 echo "Building fireflyiii/core:latest"
 git clone https://dev.azure.com/Firefly-III/_git/MainImage core
 cd core
-git checkout
+git checkout 
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "fireflyiii/core:latest" .
 cd - && cd ..
@@ -886,18 +886,18 @@ cd - && cd ..
 
 
 # Build thunderhub
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.1/Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.6/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.1/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.6/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.1/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.6/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building apotdevin/thunderhub:base-v0.13.1"
+echo "Building apotdevin/thunderhub:base-v0.13.6"
 git clone https://github.com/apotdevin/thunderhub thunderhub
 cd thunderhub
-git checkout v0.13.1
+git checkout v0.13.6
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:base-v0.13.1" .
+docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:base-v0.13.6" .
 cd - && cd ..
 
 
@@ -1135,3 +1135,5 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
+
+
