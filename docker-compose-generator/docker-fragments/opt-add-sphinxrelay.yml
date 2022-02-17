@@ -6,7 +6,7 @@ services:
     volumes:
       - "sphinxrelay_datadir:/etc/sphinxrelay_datadir"
   sphinxrelay:
-    image: "sphinxlightning/sphinx-relay:v2.2.0"
+    image: "sphinxlightning/sphinx-relay:v2.2.5"
     user: "0:0"
     restart: unless-stopped
     expose:
