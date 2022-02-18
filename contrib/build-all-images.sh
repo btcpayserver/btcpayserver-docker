@@ -840,16 +840,16 @@ cd - && cd ..
 
 
 # Build sphinx-relay
-# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.0/Dockerfile
+# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.5/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.0/Dockerfile
+# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.5/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building sphinxlightning/sphinx-relay:v2.2.0"
+echo "Building sphinxlightning/sphinx-relay:v2.2.5"
 git clone https://github.com/stakwork/sphinx-relay sphinx-relay
 cd sphinx-relay
-git checkout v2.2.0
+git checkout v2.2.5
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "sphinxlightning/sphinx-relay:v2.2.0" .
+docker build -f "$DOCKERFILE" -t "sphinxlightning/sphinx-relay:v2.2.5" .
 cd - && cd ..
 
 
