@@ -854,18 +854,18 @@ cd - && cd ..
 
 
 # Build tallycoin_connect
-# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.0/Dockerfile
+# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.2/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.0/Dockerfile.arm32v7
+# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.2/Dockerfile.arm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.0/Dockerfile.arm64v8
+# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.2/Dockerfile.arm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.arm64v8"
-echo "Building dennisreimann/tallycoin_connect:v1.7.0"
+echo "Building dennisreimann/tallycoin_connect:v1.7.2"
 git clone https://github.com/dennisreimann/tallycoin_connect tallycoin_connect
 cd tallycoin_connect
-git checkout v1.7.0
+git checkout v1.7.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "dennisreimann/tallycoin_connect:v1.7.0" .
+docker build -f "$DOCKERFILE" -t "dennisreimann/tallycoin_connect:v1.7.2" .
 cd - && cd ..
 
 
