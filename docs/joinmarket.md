@@ -13,6 +13,8 @@ For hardcore bitcoiners only.
 ## How to use
 
 ```bash
+export JOINMARKET_WEBUI_USER="joinmarket"
+export JOINMARKET_WEBUI_PASSWD="sUpErSeCrEt"
 BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-joinmarket"
 . btcpay-setup.sh -i
 ```
@@ -79,11 +81,12 @@ sendpayment.py wallet.jmdat ...
 
 ## Managing the services such as yield generators
 
-First connect to the container's bash
+First connect to the container:
 
 ```bash
 jm.sh bash
 ```
+
 You can list available services to run:
 
 ```bash
@@ -94,7 +97,8 @@ Which might show you
 
 ```bash
 root> supervisorctl status
-ob-watcher                       STOPPED   Not started
+jmwalletd                        RUNNING   pid 55, uptime 0:00:21
+ob-watcher                       RUNNING   pid 43, uptime 0:00:21
 yg-privacyenhanced               STOPPED   Not started
 yield-generator-basic            STOPPED   Not started
 ```
@@ -105,7 +109,7 @@ You can start a yield generator with:
 supervisorctl start yg-privacyenhanced
 ```
 
-*** Note that services will NOT be restarted automatically if the container restart. ***
+***Note that services will NOT be restarted automatically if the container restart.***
 
 If you want to automatically restart the service when the container restart,
 
@@ -117,15 +121,7 @@ Then remove the comment `#` in front of the service name you want to automatical
 
 ## OB-Watcher
 
-The `ob-watcher` service allows you to [see an order book](https://github.com/JoinMarket-Org/joinmarket-clientserver/blob/master/docs/orderbook.md).
-
-You can activate it:
-
-```bash
-supervisorctl start ob-watcher
-```
-
-Then you can browse it by browsing `https://<your-server>.com/obwatch/`
+You can browse the [order book](https://github.com/JoinMarket-Org/joinmarket-clientserver/blob/master/docs/orderbook.md) by visiting `https://<your-server>/joinmarket/orderbook/`
 
 ## Troubleshooting
 
@@ -140,6 +136,7 @@ Failed to load wallet, error message: RetryableStorageError('File is currently i
 This is because a service using the wallet is running, so you need to shut it down before running the command.
 
 Check which service is running:
+
 ```bash
 supervisorctl status
 ```
@@ -153,6 +150,7 @@ supervisorctl stop yg-privacyenhanced
 ### Read the logs of services
 
 You can use the `supervisorctl tail` command:
+
 ```bash
 supervisorctl tail yg-privacyenhanced
 ```

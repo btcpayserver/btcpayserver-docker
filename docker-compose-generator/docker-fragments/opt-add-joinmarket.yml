@@ -7,6 +7,8 @@ services:
     restart: unless-stopped
     environment:
       READY_FILE: /root/.nbxplorer/btc_fully_synched
+      APP_USER: ${JOINMARKET_WEBUI_USER}
+      APP_PASSWORD: ${JOINMARKET_WEBUI_PASSWD}
       ENSURE_WALLET: 1
       jm_gaplimit: 2000
       jm_tor_control_host: tor
@@ -26,9 +28,24 @@ services:
       - "tor_datadir:/home/tor/.tor"
     expose:
       - 62601 # obwatch
+      - 28183 # jmwallet daemon
       - 8080 # payjoin server
     links:
       - bitcoind
+
+  joinmarket_webui:
+    container_name: joinmarket_webui
+    image: ghcr.io/joinmarket-webui/joinmarket-webui-ui-only:v0.0.3-clientserver-v0.9.5
+    restart: unless-stopped
+    expose:
+      - 80 #webui nginx
+    volumes:
+      - "joinmarket_datadir:/root/.joinmarket"
+    environment:
+      JMWEBUI_JM_WALLETD_HOST: joinmarket
+      JMWEBUI_JM_WALLETD_PORT: 28183
+    links:
+      - joinmarket
 
   bitcoind:
     environment:

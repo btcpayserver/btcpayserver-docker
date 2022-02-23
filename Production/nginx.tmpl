@@ -50,8 +50,13 @@
 		{{ end }}
 
 		{{ if (eq $serviceName "joinmarket") }}
-		location /obwatch/ {
-		proxy_pass http://joinmarket:62601/;
+		location /joinmarket/orderbook/ {
+      proxy_pass http://joinmarket:62601/;
+		}
+
+    location /joinmarket/ {
+      # TODO: Add authentication
+      proxy_pass http://joinmarket_webui/;
 		}
 		{{ end }}
 
