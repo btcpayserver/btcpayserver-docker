@@ -4,12 +4,12 @@ services:
     environment:
       BTCPAY_EXTERNALSERVICES: "Lightning Terminal:${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/lit/;"
   lnd_lit:
-    image: "lightninglabs/lightning-terminal:v0.6.1-alpha-path-prefix"
+    image: "lightninglabs/lightning-terminal:v0.6.3-alpha-path-prefix"
     restart: unless-stopped
     expose:
       - "8080"
     volumes:
-      - "lnd_lit_datadir:/data/lit"
+      - "lnd_lit_datadir:/root"
       - "lnd_bitcoin_datadir:/data/lnd:ro"
     links:
       - bitcoind

@@ -142,14 +142,14 @@ cd - && cd ..
 
 
 # Build eclair
-# https://raw.githubusercontent.com/ACINQ/eclair/v0.6.1/Dockerfile
+# https://raw.githubusercontent.com/ACINQ/eclair/v0.7.0/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building acinq/eclair:release-0.6.1"
+echo "Building acinq/eclair:release-0.7.0"
 git clone https://github.com/ACINQ/eclair eclair
 cd eclair
-git checkout v0.6.1
+git checkout v0.7.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "acinq/eclair:release-0.6.1" .
+docker build -f "$DOCKERFILE" -t "acinq/eclair:release-0.7.0" .
 cd - && cd ..
 
 
@@ -242,18 +242,18 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.4.3/amd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.4.6/amd64.Dockerfile
 DOCKERFILE="amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.4.3/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.4.6/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.4.3/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.4.6/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building btcpayserver/btcpayserver:1.4.3$<BTCPAY_BUILD_CONFIGURATION>?"
+echo "Building btcpayserver/btcpayserver:1.4.6$<BTCPAY_BUILD_CONFIGURATION>?"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.4.3
+git checkout v1.4.6
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.4.3$<BTCPAY_BUILD_CONFIGURATION>?" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.4.6$<BTCPAY_BUILD_CONFIGURATION>?" .
 cd - && cd ..
 
 
@@ -357,15 +357,19 @@ docker build -f "$DOCKERFILE" -t "groestlcoin/lnd:v0.10.0-grs" .
 cd - && cd ..
 
 
-# Build docker-groestlcoin
-# https://raw.githubusercontent.com/Groestlcoin/docker-groestlcoin/master/groestlcoin/2.21.1/Dockerfile
-DOCKERFILE="groestlcoin/2.21.1/Dockerfile"
-echo "Building groestlcoin/docker-groestlcoin:2.21.1"
-git clone https://github.com/Groestlcoin/docker-groestlcoin docker-groestlcoin
-cd docker-groestlcoin
-git checkout master
+# Build groestlcoin
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/22.0/Groestlcoin/22.0/linuxamd64.Dockerfile
+DOCKERFILE="Groestlcoin/22.0/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/22.0/Groestlcoin/22.0/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Groestlcoin/22.0/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/22.0/Groestlcoin/22.0/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Groestlcoin/22.0/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/groestlcoin:22.0"
+git clone https://github.com/btcpayserver/dockerfile-deps groestlcoin
+cd groestlcoin
+git checkout Groestlcoin/22.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "groestlcoin/docker-groestlcoin:2.21.1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/groestlcoin:22.0" .
 cd - && cd ..
 
 
@@ -720,18 +724,18 @@ cd - && cd ..
 
 
 # Build podcasting20-helipad
-# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.6/umbrel/Dockerfile
+# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.8/umbrel/Dockerfile
 DOCKERFILE="umbrel/Dockerfile"
-# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.6/umbrel/Dockerfile
+# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.8/umbrel/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="umbrel/Dockerfile"
-# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.6/umbrel/Dockerfile
+# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.8/umbrel/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="umbrel/Dockerfile"
-echo "Building podcastindexorg/podcasting20-helipad:v0.1.6"
+echo "Building podcastindexorg/podcasting20-helipad:v0.1.8"
 git clone https://github.com/Podcastindex-org/helipad podcasting20-helipad
 cd podcasting20-helipad
-git checkout v0.1.6
+git checkout v0.1.8
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "podcastindexorg/podcasting20-helipad:v0.1.6" .
+docker build -f "$DOCKERFILE" -t "podcastindexorg/podcasting20-helipad:v0.1.8" .
 cd - && cd ..
 
 
@@ -776,14 +780,14 @@ cd - && cd ..
 
 
 # Build lightning-terminal
-# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.6.1-alpha/Dockerfile
+# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.6.3-alpha/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building lightninglabs/lightning-terminal:v0.6.1-alpha-path-prefix"
+echo "Building lightninglabs/lightning-terminal:v0.6.3-alpha-path-prefix"
 git clone https://github.com/lightninglabs/lightning-terminal lightning-terminal
 cd lightning-terminal
-git checkout v0.6.1-alpha
+git checkout v0.6.3-alpha
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.6.1-alpha-path-prefix" .
+docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.6.3-alpha-path-prefix" .
 cd - && cd ..
 
 
@@ -836,32 +840,32 @@ cd - && cd ..
 
 
 # Build sphinx-relay
-# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.0/Dockerfile
+# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.5/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.0/Dockerfile
+# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.5/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building sphinxlightning/sphinx-relay:v2.2.0"
+echo "Building sphinxlightning/sphinx-relay:v2.2.5"
 git clone https://github.com/stakwork/sphinx-relay sphinx-relay
 cd sphinx-relay
-git checkout v2.2.0
+git checkout v2.2.5
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "sphinxlightning/sphinx-relay:v2.2.0" .
+docker build -f "$DOCKERFILE" -t "sphinxlightning/sphinx-relay:v2.2.5" .
 cd - && cd ..
 
 
 # Build tallycoin_connect
-# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.0/Dockerfile
+# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.2/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.0/Dockerfile.arm32v7
+# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.2/Dockerfile.arm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.0/Dockerfile.arm64v8
+# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.2/Dockerfile.arm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.arm64v8"
-echo "Building dennisreimann/tallycoin_connect:v1.7.0"
+echo "Building dennisreimann/tallycoin_connect:v1.7.2"
 git clone https://github.com/dennisreimann/tallycoin_connect tallycoin_connect
 cd tallycoin_connect
-git checkout v1.7.0
+git checkout v1.7.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "dennisreimann/tallycoin_connect:v1.7.0" .
+docker build -f "$DOCKERFILE" -t "dennisreimann/tallycoin_connect:v1.7.2" .
 cd - && cd ..
 
 
@@ -882,18 +886,18 @@ cd - && cd ..
 
 
 # Build thunderhub
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.1/Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.6/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.1/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.6/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.1/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.6/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building apotdevin/thunderhub:base-v0.13.1"
+echo "Building apotdevin/thunderhub:base-v0.13.6"
 git clone https://github.com/apotdevin/thunderhub thunderhub
 cd thunderhub
-git checkout v0.13.1
+git checkout v0.13.6
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:base-v0.13.1" .
+docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:base-v0.13.6" .
 cd - && cd ..
 
 

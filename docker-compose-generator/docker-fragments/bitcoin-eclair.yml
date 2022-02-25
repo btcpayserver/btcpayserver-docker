@@ -9,7 +9,7 @@ services:
     container_name: btcpayserver_eclair_bitcoin
     restart: unless-stopped
     stop_signal: SIGINT
-    image: acinq/eclair:release-0.6.1
+    image: acinq/eclair:release-0.7.0
     environment:
       PUBLIC_HOST: ${BTCPAY_HOST}
       JAVA_OPTS: |
@@ -28,7 +28,7 @@ services:
         -Declair.bitcoind.rpcport=43782
         -Declair.bitcoind.rpcuser=eclair
         -Declair.bitcoind.rpcpassword=sFLjcg99Puh4k3CAZCQkLvC-fcoFUFRyKwKcXQKa7dw=
-        -Declair.bitcoind.zmqblock=tcp://bitcoind:28332
+        -Declair.bitcoind.zmqblock=tcp://bitcoind:28334
         -Declair.bitcoind.zmqtx=tcp://bitcoind:28333
     expose:
       - "9735" # server port

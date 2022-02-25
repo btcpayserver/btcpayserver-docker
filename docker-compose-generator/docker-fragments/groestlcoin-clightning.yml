@@ -3,30 +3,25 @@ version: "3"
 services:
   clightning_groestlcoin:
     image: groestlcoin/lightning:v0.10.0
-    stop_signal: SIGKILL
     container_name: btcpayserver_clightning_groestlcoin
     restart: unless-stopped
     environment:
       LIGHTNINGD_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       LIGHTNINGD_CHAIN: grs
+      LIGHTNINGD_ALIAS: ${LIGHTNING_ALIAS}
+      LIGHTNINGD_ANNOUNCEADDR: ${BTCPAY_ANNOUNCEABLE_HOST}
+      LIGHTNINGD_PORT: 9736
       LIGHTNINGD_EXPLORERURL: "http://nbxplorer:32838/"
       LIGHTNINGD_OPT: |
         bitcoin-datadir=/etc/groestlcoin
         bitcoin-rpcconnect=groestlcoind
-        bitcoin-rpcport=43782
-        log-level=debug
-        announce-addr=${BTCPAY_HOST}:9738
-        bind-addr=0.0.0.0:9735
-        network=${NBITCOIN_NETWORK:-regtest}
-        alias=${LIGHTNING_ALIAS}
     volumes:
       - "clightning_groestlcoin_datadir:/root/.lightning"
       - "groestlcoin_datadir:/etc/groestlcoin"
       - "nbxplorer_datadir:/root/.nbxplorer"
     ports:
-      - "9738:9735"
+      - "9736:9736"
     links:
-      - nbxplorer
       - groestlcoind
   clightning_groestlcoin_charge:
     image: groestlcoin/groestlcoin-lightning-charge:version-0.4.22
@@ -35,6 +30,8 @@ services:
       NETWORK: ${NBITCOIN_NETWORK:-regtest}
       COOKIE_FILE: /data/.cookie
       URL: ${BTCPAY_ROOTPATH:-/}lightning-charge/grs/
+      LN_NET_PATH: /etc/lightning
+      LN_NET: /etc/lightning
     volumes:
       - "clightning_groestlcoin_datadir:/etc/lightning"
       - "clightning_groestlcoin_charge:/data"
@@ -42,6 +39,21 @@ services:
       - "9112"
     links:
       - clightning_groestlcoin
+
+  clightning_groestlcoin_spark:
+    image: groestlcoin/groestlcoin-spark:version-0.2.16
+    restart: unless-stopped
+    environment:
+      NETWORK: ${NBITCOIN_NETWORK:-regtest}
+      SPARK_OPT: --no-tls -C /data/.cookie
+    volumes:
+      - "clightning_groestlcoin_datadir:/etc/lightning"
+      - "clightning_groestlcoin_spark:/data"
+    links:
+      - clightning_groestlcoin
+    expose:
+      - "9736"
+
   btcpayserver:
     environment:
       BTCPAY_GRSLIGHTNING: "type=clightning;server=unix://etc/clightning_groestlcoin/lightning-rpc"
@@ -53,20 +65,6 @@ services:
       - "clightning_groestlcoin_charge:/etc/clightning_groestlcoin_charge"
     links:
       - clightning_groestlcoin
-  clightning_groestlcoin_spark:
-    image: groestlcoin/groestlcoin-spark:version-0.2.16
-    stop_signal: SIGKILL
-    restart: unless-stopped
-    environment:
-      NETWORK: ${NBITCOIN_NETWORK:-regtest}
-      SPARK_OPT: --no-tls  --port 9739 -C /data/.cookie
-    volumes:
-      - "clightning_groestlcoin_datadir:/etc/lightning"
-      - "clightning_groestlcoin_spark:/data"
-    links:
-      - clightning_groestlcoin
-    expose:
-      - "9739"
 volumes:
   clightning_groestlcoin_datadir:
   clightning_groestlcoin_charge:
