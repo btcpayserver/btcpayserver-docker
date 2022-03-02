@@ -38,14 +38,28 @@ else
 fi
 
 # Verify we are in right folder. If we are not, let's go in the parent folder of the current docker-compose.
-if ! git -C . rev-parse &> /dev/null || [ ! -d "Generated" ]; then
-    if [[ ! -z $BTCPAY_DOCKER_COMPOSE ]]; then
-        cd $(dirname $BTCPAY_DOCKER_COMPOSE)
-        cd ..
+# For CentOS using git -c
+if [ -f /etc/redhat-release ]; then
+    if ! git -c . rev-parse &> /dev/null || [ ! -d "Generated" ]; then
+        if [[ ! -z $BTCPAY_DOCKER_COMPOSE ]]; then
+            cd $(dirname $BTCPAY_DOCKER_COMPOSE)
+            cd ..
+        fi
+        if ! git -c . rev-parse || [[ ! -d "Generated" ]]; then
+            echo "You must run this script inside the git repository of btcpayserver-docker"
+            return
+        fi
     fi
-    if ! git -C . rev-parse || [[ ! -d "Generated" ]]; then
-        echo "You must run this script inside the git repository of btcpayserver-docker"
-        return
+else
+    if ! git -C . rev-parse &> /dev/null || [ ! -d "Generated" ]; then
+        if [[ ! -z $BTCPAY_DOCKER_COMPOSE ]]; then
+            cd $(dirname $BTCPAY_DOCKER_COMPOSE)
+            cd ..
+        fi
+        if ! git -C . rev-parse || [[ ! -d "Generated" ]]; then
+            echo "You must run this script inside the git repository of btcpayserver-docker"
+            return
+        fi
     fi
 fi
 
@@ -415,7 +429,7 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
                 curl -fsSL https://get.docker.com -o get-docker.sh
                 chmod +x get-docker.sh
                 sh get-docker.sh
-                rm get-docker.sh
+                rm -rf get-docker.sh
             fi
         else
             echo "Unsupported architecture $(uname -m)"
@@ -429,6 +443,9 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
         if ! [[ "$OSTYPE" == "darwin"* ]] && $HAS_DOCKER; then
             echo "Trying to install docker-compose by using the btcpayserver/docker-compose ($(uname -m))"
             ! [[ -d "dist" ]] && mkdir dist
+            # Start Docker before run command
+            service docker start
+            chkconfig docker on
             docker run --rm -v "$(pwd)/dist:/dist" btcpayserver/docker-compose:1.28.6
             mv dist/docker-compose /usr/local/bin/docker-compose
             chmod +x /usr/local/bin/docker-compose
