@@ -4,6 +4,7 @@ services:
   postgres:
     restart: unless-stopped
     image: btcpayserver/postgres:13.6
+    command: [ "-c", "random_page_cost=1.0" ]
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
     volumes:

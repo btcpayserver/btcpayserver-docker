@@ -4,7 +4,7 @@ services:
 
   nbxplorer:
     restart: unless-stopped
-    image: nicolasdorier/nbxplorer:2.2.20
+    image: nicolasdorier/nbxplorer:2.3.5
     expose:
       - "32838"
     environment:
@@ -12,6 +12,11 @@ services:
       NBXPLORER_BIND: 0.0.0.0:32838
       NBXPLORER_TRIMEVENTS: 10000
       NBXPLORER_SIGNALFILESDIR: /datadir
+      NBXPLORER_POSTGRES: User ID=postgres;Host=postgres;Port=5432;Application Name=nbxplorer;MaxPoolSize=20;Database=nbxplorer${NBITCOIN_NETWORK:-regtest}
+      NBXPLORER_AUTOMIGRATE: 1
+      NBXPLORER_NOMIGRATEEVTS: 1
+    links:
+      - postgres
     volumes:
       - "nbxplorer_datadir:/datadir"
 

@@ -3,12 +3,12 @@ version: "3"
 services:
   btcpayserver:
     restart: unless-stopped
-    image: ${BTCPAY_IMAGE:-btcpayserver/btcpayserver:1.4.7$<BTCPAY_BUILD_CONFIGURATION>?}
+    image: ${BTCPAY_IMAGE:-btcpayserver/btcpayserver:1.4.9$<BTCPAY_BUILD_CONFIGURATION>?}
     expose:
       - "49392"
     environment:
       # BTCPay settings
-      BTCPAY_POSTGRES: User ID=postgres;Host=postgres;Port=5432;Database=btcpayserver${NBITCOIN_NETWORK:-regtest}
+      BTCPAY_POSTGRES: User ID=postgres;Host=postgres;Port=5432;Application Name=btcpayserver;Database=btcpayserver${NBITCOIN_NETWORK:-regtest}
       BTCPAY_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       BTCPAY_BIND: 0.0.0.0:49392
       BTCPAY_ROOTPATH: ${BTCPAY_ROOTPATH:-/}
