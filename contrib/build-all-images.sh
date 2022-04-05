@@ -374,18 +374,18 @@ cd - && cd ..
 
 
 # Build elements
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2/Elements/0.21.0.2/linuxamd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2-1/Elements/0.21.0.2/linuxamd64.Dockerfile
 DOCKERFILE="Elements/0.21.0.2/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2/Elements/0.21.0.2/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2-1/Elements/0.21.0.2/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Elements/0.21.0.2/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2/Elements/0.21.0.2/linuxarm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2-1/Elements/0.21.0.2/linuxarm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Elements/0.21.0.2/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/elements:0.21.0.2"
+echo "Building btcpayserver/elements:0.21.0.2-1"
 git clone https://github.com/btcpayserver/dockerfile-deps elements
 cd elements
-git checkout Elements/0.21.0.2
+git checkout Elements/0.21.0.2-1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/elements:0.21.0.2" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/elements:0.21.0.2-1" .
 cd - && cd ..
 
 
