@@ -27,7 +27,7 @@ cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 
 if [[ "$1" != "--skip-git-pull" ]]; then
     git pull --force
-    exec "btcpay-update.sh" --skip-git-pull
+    exec "./btcpay-update.sh" --skip-git-pull
     return
 fi
 
