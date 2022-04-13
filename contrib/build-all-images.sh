@@ -126,18 +126,18 @@ cd - && cd ..
 
 
 # Build rtl
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.2/docker/Dockerfile
-DOCKERFILE="docker/Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.2/docker/Dockerfile.arm32v7
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.2/docker/Dockerfile.arm64v8
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.11.2"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.12.2/dockerfiles/Dockerfile
+DOCKERFILE="dockerfiles/Dockerfile"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.12.2/dockerfiles/Dockerfile.arm32v7
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm32v7"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.12.2/dockerfiles/Dockerfile.arm64v8
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm64v8"
+echo "Building shahanafarooqui/rtl:0.12.2"
 git clone https://github.com/Ride-The-Lightning/RTL rtl
 cd rtl
-git checkout v0.11.2
+git checkout v0.12.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.11.2" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.12.2" .
 cd - && cd ..
 
 
@@ -154,18 +154,18 @@ cd - && cd ..
 
 
 # Build rtl
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.2/docker/Dockerfile
-DOCKERFILE="docker/Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.2/docker/Dockerfile.arm32v7
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.2/docker/Dockerfile.arm64v8
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.11.2"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.12.2/dockerfiles/Dockerfile
+DOCKERFILE="dockerfiles/Dockerfile"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.12.2/dockerfiles/Dockerfile.arm32v7
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm32v7"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.12.2/dockerfiles/Dockerfile.arm64v8
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm64v8"
+echo "Building shahanafarooqui/rtl:0.12.2"
 git clone https://github.com/Ride-The-Lightning/RTL rtl
 cd rtl
-git checkout v0.11.2
+git checkout v0.12.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.11.2" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.12.2" .
 cd - && cd ..
 
 
@@ -186,18 +186,18 @@ cd - && cd ..
 
 
 # Build rtl
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.2/docker/Dockerfile
-DOCKERFILE="docker/Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.2/docker/Dockerfile.arm32v7
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.2/docker/Dockerfile.arm64v8
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.11.2"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.12.2/dockerfiles/Dockerfile
+DOCKERFILE="dockerfiles/Dockerfile"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.12.2/dockerfiles/Dockerfile.arm32v7
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm32v7"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.12.2/dockerfiles/Dockerfile.arm64v8
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm64v8"
+echo "Building shahanafarooqui/rtl:0.12.2"
 git clone https://github.com/Ride-The-Lightning/RTL rtl
 cd rtl
-git checkout v0.11.2
+git checkout v0.12.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.11.2" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.12.2" .
 cd - && cd ..
 
 
@@ -374,18 +374,18 @@ cd - && cd ..
 
 
 # Build elements
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2/Elements/0.21.0.2/linuxamd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2-1/Elements/0.21.0.2/linuxamd64.Dockerfile
 DOCKERFILE="Elements/0.21.0.2/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2/Elements/0.21.0.2/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2-1/Elements/0.21.0.2/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Elements/0.21.0.2/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2/Elements/0.21.0.2/linuxarm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2-1/Elements/0.21.0.2/linuxarm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Elements/0.21.0.2/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/elements:0.21.0.2"
+echo "Building btcpayserver/elements:0.21.0.2-1"
 git clone https://github.com/btcpayserver/dockerfile-deps elements
 cd elements
-git checkout Elements/0.21.0.2
+git checkout Elements/0.21.0.2-1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/elements:0.21.0.2" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/elements:0.21.0.2-1" .
 cd - && cd ..
 
 
@@ -474,18 +474,18 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.5/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.16/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.5/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.16/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.5/Dockerfile.linuxarm64v8
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.16/Dockerfile.linuxarm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.linuxarm64v8"
-echo "Building nicolasdorier/nbxplorer:2.3.5"
+echo "Building nicolasdorier/nbxplorer:2.3.16"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.3.5
+git checkout v2.3.16
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.3.5" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.3.16" .
 cd - && cd ..
 
 

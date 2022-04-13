@@ -441,19 +441,11 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"v{image.Tag.Substring(0, image.Tag.IndexOf('$'))}";
                     dockerInfo.SupportedByUs = true;
                     break;
-                case "rtl" when image.Tag != "0.10.0":
-                    dockerInfo.DockerFilePath = "docker/Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = "docker/Dockerfile.arm32v7";
-                    dockerInfo.DockerFilePathARM64v8 = "docker/Dockerfile.arm64v8";
-                    dockerInfo.GitLink = "https://github.com/Ride-The-Lightning/RTL";
-                    dockerInfo.GitRef = $"v{image.Tag}";
-                    dockerInfo.SupportedByUs = true;
-                    break;
                 case "rtl":
-                    dockerInfo.DockerFilePath = "Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = "Dockerfile.arm32v7";
-                    dockerInfo.DockerFilePathARM64v8 = "Dockerfile.arm64v8";
-                    dockerInfo.GitLink = "https://github.com/ShahanaFarooqui/RTL";
+                    dockerInfo.DockerFilePath = "dockerfiles/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "dockerfiles/Dockerfile.arm32v7";
+                    dockerInfo.DockerFilePathARM64v8 = "dockerfiles/Dockerfile.arm64v8";
+                    dockerInfo.GitLink = "https://github.com/Ride-The-Lightning/RTL";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
