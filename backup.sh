@@ -30,7 +30,7 @@ case "$BACKUP_PROVIDER" in
         echo -e "\033[0;31mSet S3_BUCKET environment variable and try again.\033[0m"
         exit 1
     fi
-    
+
     if [ -z "$S3_PATH" ]; then
         echo -e "\033[1;33mUsing bucket root for backup, set S3_PATH if you want to backup into a specific folder (Make sure it ends with a trailing slash).\033[0m"
     fi
@@ -78,7 +78,7 @@ else
     btcpay_down
 
     echo "Backing up files …"
-    tar --exclude="$backup_dir/*" --exclude="$volumes_dir/generated_bitcoin_datadir/*" --exclude="$volumes_dir/generated_litecoin_datadir/*" --exclude="$volumes_dir/**/logs/*" -cvzf $backup_path $dbdump_path $volumes_dir
+    tar --exclude="$backup_path" --exclude="$volumes_dir/generated_bitcoin_datadir/*" --exclude="$volumes_dir/generated_litecoin_datadir/*" --exclude="$volumes_dir/generated_postgres_datadir/*" --exclude="$volumes_dir/**/logs/*" -cvzf $backup_path $dbdump_path $volumes_dir
 
     echo "Restarting BTCPay Server …"
     btcpay_up
