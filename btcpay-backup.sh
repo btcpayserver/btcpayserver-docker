@@ -30,11 +30,23 @@ fi
 cd $btcpay_dir
 . helpers.sh
 
-echo "Stopping BTCPay Server …"
-btcpay_down
+dbcontainer=$(docker ps -a -q -f "name=postgres_1")
+if [ -z "$dbcontainer" ]; then
+  echo "Database container is not up and running. Starting BTCPay Server …"
+  btcpay_up
+
+  dbcontainer=$(docker ps -a -q -f "name=postgres_1")
+  if [ -z "$dbcontainer" ]; then
+    echo "Database container could not be started or found."
+    exit 1
+  fi
+fi
 
 echo "Dumping database …"
 btcpay_dump_db $dbdump_path
+
+echo "Stopping BTCPay Server …"
+btcpay_down
 
 echo "Backing up files …"
 cd $docker_dir
