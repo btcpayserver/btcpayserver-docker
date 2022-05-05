@@ -52,7 +52,7 @@ esac
 volumes_dir=/var/lib/docker/volumes
 backup_dir="$volumes_dir/backup_datadir"
 filename="backup.tar.gz"
-dumpname="postgres.sql"
+dumpname="postgres.sql.gz"
 
 if [ "$BACKUP_TIMESTAMP" == true ]; then
   timestamp=$(date "+%Y%m%d-%H%M%S")

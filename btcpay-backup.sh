@@ -16,7 +16,7 @@ fi
 
 # preparation
 docker_dir=$(docker volume inspect generated_btcpay_datadir --format="{{.Mountpoint}}" | sed -e "s%/volumes/.*%%g")
-dbdump_name=postgres.sql
+dbdump_name=postgres.sql.gz
 btcpay_dir="$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 backup_dir="$docker_dir/volumes/backup_datadir/_data"
 dbdump_path="$docker_dir/$dbdump_name"
