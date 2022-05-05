@@ -30,7 +30,7 @@ case "$BACKUP_PROVIDER" in
         echo -e "\033[0;31mSet S3_BUCKET environment variable and try again.\033[0m"
         exit 1
     fi
-    
+
     if [ -z "$S3_PATH" ]; then
         echo -e "\033[1;33mUsing bucket root for backup, set S3_PATH if you want to backup into a specific folder (Make sure it ends with a trailing slash).\033[0m"
     fi
@@ -66,9 +66,14 @@ dbdump_path="$backup_dir/_data/${dumpname}"
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 . helpers.sh
 
+# ensure backup dir exists
+if [ ! -d "$backup_dir" ]; then
+    docker volume create backup_datadir
+fi
+
 # dump database
 echo "Dumping database …"
-btcpay_dump_db $dumpname
+btcpay_dump_db $dbdump_path
 
 if [[ "$1" == "--only-db" ]]; then
     tar -cvzf $backup_path $dbdump_path
