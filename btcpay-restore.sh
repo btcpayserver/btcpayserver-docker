@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+set -o pipefail -o errexit
+
 if [ "$(id -u)" != "0" ]; then
   echo "This script must be run as root."
   echo "Use the command 'sudo su -' (include the trailing hypen) and try again"

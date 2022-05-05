@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+set -o pipefail -o errexit
+
 # Please be aware of these important issues:
 #
 # - Old channel state is toxic and you can loose all your funds, if you or someone
@@ -43,7 +45,7 @@ if [ -z "$dbcontainer" ]; then
 fi
 
 echo "Dumping database …"
-btcpay_dump_db $dbdump_path
+docker exec $dbcontainer pg_dumpall -c -U postgres | gzip > $dbdump_path
 
 echo "Stopping BTCPay Server …"
 btcpay_down
