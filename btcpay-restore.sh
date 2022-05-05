@@ -9,12 +9,12 @@ fi
 backup_file=$1
 if [ -z "$backup_file" ]; then
   echo "Usage: btcpay-restore.sh /path/to/backup.tar.gz"
-  exit
+  exit 1
 fi
 
 if [ ! -f "$backup_file" ]; then
   echo "$backup_file does not exist."
-  exit
+  exit 1
 fi
 
 volumes_dir=/var/lib/docker/volumes
