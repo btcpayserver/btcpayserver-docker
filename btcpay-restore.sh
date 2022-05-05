@@ -17,7 +17,7 @@ if [ ! -f "$backup_file" ]; then
   exit 1
 fi
 
-volumes_dir=/var/lib/docker/volumes
+volumes_dir=$(docker volume inspect generated_btcpay_datadir --format="{{.Mountpoint}}" | sed -e "s%/volumes/.*%%g")
 restore_dir="$volumes_dir/backup_datadir/_data/restore"
 
 mkdir -p $restore_dir
