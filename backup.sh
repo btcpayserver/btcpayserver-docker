@@ -78,7 +78,7 @@ else
     btcpay_down
 
     echo "Backing up files …"
-    tar --exclude="$backup_dir/*" --exclude="$volumes_dir/generated_bitcoin_datadir/*" --exclude="$volumes_dir/generated_litecoin_datadir/*" --exclude="$volumes_dir/**/logs/*" -cvzf $backup_path $dbdump_path $volumes_dir
+    tar --exclude="$backup_dir/*" --exclude="$volumes_dir/generated_*" --exclude="$volumes_dir/**/logs/*" -cvzf $backup_path $dbdump_path $volumes_dir
 
     echo "Restarting BTCPay Server …"
     btcpay_up
