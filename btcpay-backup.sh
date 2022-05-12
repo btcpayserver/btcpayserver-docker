@@ -11,8 +11,8 @@ set -o pipefail -o errexit
 #   revocation key!
 
 if [ "$(id -u)" != "0" ]; then
-  echo "This script must be run as root."
-  echo "Use the command 'sudo su -' (include the trailing hypen) and try again"
+  printf "\n🚨 This script must be run as root.\n"
+  printf "➡️  Use the command 'sudo su -' (include the trailing hypen) and try again.\n\n"
   exit 1
 fi
 
@@ -34,37 +34,70 @@ cd $btcpay_dir
 
 dbcontainer=$(docker ps -a -q -f "name=postgres_1")
 if [ -z "$dbcontainer" ]; then
-  echo "Database container is not up and running. Starting BTCPay Server …"
+  printf "\n"
+  echo "ℹ️  Database container is not up and running. Starting BTCPay Server …"
   btcpay_up
 
+  printf "\n"
   dbcontainer=$(docker ps -a -q -f "name=postgres_1")
   if [ -z "$dbcontainer" ]; then
-    echo "Database container could not be started or found."
+    echo "🚨 Database container could not be started or found."
     exit 1
   fi
 fi
 
-echo "Dumping database …"
-docker exec $dbcontainer pg_dumpall -c -U postgres | gzip > $dbdump_path
+printf "\n"
+echo "ℹ️  Dumping database …"
+{
+  docker exec $dbcontainer pg_dumpall -c -U postgres | gzip > $dbdump_path
+  echo "✅ Database dump done."
+} || {
+  echo "🚨 Dumping failed. Please check the error message above."
+  exit 1
+}
 
-echo "Stopping BTCPay Server …"
+printf "\nℹ️  Stopping BTCPay Server …\n\n"
 btcpay_down
 
-echo "Backing up files …"
+printf "\n"
 cd $docker_dir
-tar \
-  --exclude="volumes/backup_datadir" \
-  --exclude="volumes/generated_postgres_datadir" \
-  --exclude="volumes/generated_bitcoin_datadir" \
-  --exclude="volumes/generated_litecoin_datadir" \
-  --exclude="**/logs/*" \
-  -cvzf $backup_path $dbdump_name volumes/generated_*
-cd -
+echo "ℹ️  Archiving files in $(pwd)…"
 
-echo "Restarting BTCPay Server …"
+{
+  tar \
+    --exclude="volumes/backup_datadir" \
+    --exclude="volumes/generated_bitcoin_datadir" \
+    --exclude="volumes/generated_litecoin_datadir" \
+    --exclude="volumes/generated_postgres_datadir" \
+    --exclude="volumes/generated_clightning_bitcoin_datadir/_data/lightning-rpc" \
+    --exclude="**/logs/*" \
+    -cvzf $backup_path $dbdump_name volumes/generated_*
+  echo "✅ Archive done."
+
+  if [ ! -z "$BTCPAY_BACKUP_PASSPHRASE" ]; then
+    printf "\n"
+    echo "🔐 BTCPAY_BACKUP_PASSPHRASE is set, the backup will be encrypted."
+    {
+      gpg -o "$backup_path.gpg" --batch --yes -c --passphrase "$BTCPAY_BACKUP_PASSPHRASE" $backup_path
+      rm $backup_path
+      backup_path="$backup_path.gpg"
+      echo "✅ Encryption done."
+    } || {
+      echo "🚨  Encrypting failed. Please check the error message above."
+      # do not exit, we need to restart BTCPay Server
+    }
+  fi
+} || {
+  echo "🚨  Archiving failed. Please check the error message above."
+  # do not exit, we need to restart BTCPay Server
+}
+
+printf "\nℹ️  Restarting BTCPay Server …\n\n"
+
+cd -
 btcpay_up
 
-echo "Cleaning up …"
+printf "\nℹ️  Cleaning up …\n\n"
 rm $dbdump_path
 
-echo "Backup done."
+printf "✅ Backup done => $backup_path\n\n"
