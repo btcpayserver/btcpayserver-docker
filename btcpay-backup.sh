@@ -26,7 +26,7 @@ backup_path="$backup_dir/backup.tar.gz"
 
 # ensure backup dir exists
 if [ ! -d "$backup_dir" ]; then
-  docker volume create backup_datadir
+  mkdir -p $backup_dir
 fi
 
 cd $btcpay_dir
@@ -36,7 +36,8 @@ dbcontainer=$(docker ps -a -q -f "name=postgres_1")
 if [ -z "$dbcontainer" ]; then
   printf "\n"
   echo "ℹ️  Database container is not up and running. Starting BTCPay Server …"
-  btcpay_up
+  docker volume create generated_postgres_datadir
+  docker-compose -f $BTCPAY_DOCKER_COMPOSE up -d postgres
 
   printf "\n"
   dbcontainer=$(docker ps -a -q -f "name=postgres_1")
@@ -84,17 +85,22 @@ echo "ℹ️  Archiving files in $(pwd)…"
       echo "✅ Encryption done."
     } || {
       echo "🚨  Encrypting failed. Please check the error message above."
-      # do not exit, we need to restart BTCPay Server
+      printf "\nℹ️  Restarting BTCPay Server …\n\n"
+      cd $btcpay_dir
+      btcpay_up
+      exit 1
     }
   fi
 } || {
   echo "🚨  Archiving failed. Please check the error message above."
-  # do not exit, we need to restart BTCPay Server
+  printf "\nℹ️  Restarting BTCPay Server …\n\n"
+  cd $btcpay_dir
+  btcpay_up
+  exit 1
 }
 
 printf "\nℹ️  Restarting BTCPay Server …\n\n"
-
-cd -
+cd $btcpay_dir
 btcpay_up
 
 printf "\nℹ️  Cleaning up …\n\n"

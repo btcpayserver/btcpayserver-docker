@@ -40,7 +40,6 @@ if [[ "$backup_path" == *.gpg ]]; then
   echo "🔐 Decrypting backup file …"
   {
     gpg -o "${backup_path%.*}" --batch --yes --passphrase "$BTCPAY_BACKUP_PASSPHRASE" -d $backup_path
-    rm $backup_path
     backup_path="${backup_path%.*}"
     printf "✅ Decryption done.\n\n"
   } || {
@@ -67,33 +66,45 @@ fi
 cd $btcpay_dir
 . helpers.sh
 
-dbcontainer=$(docker ps -a -q -f "name=postgres_1")
-if [ -z "$dbcontainer" ]; then
-  printf "\n"
-  echo "ℹ️  Database container is not up and running. Starting BTCPay Server …"
-  btcpay_up
+printf "\nℹ️  Stopping BTCPay Server …\n\n"
+btcpay_down
 
-  printf "\n"
-  dbcontainer=$(docker ps -a -q -f "name=postgres_1")
+{
+  printf "\nℹ️  Starting database container …"
+  docker-compose -f $BTCPAY_DOCKER_COMPOSE up -d postgres
+  dbcontainer=$(docker ps -a -q -f "name=postgres")
   if [ -z "$dbcontainer" ]; then
     echo "🚨 Database container could not be started or found."
+    echo printf "\nℹ️  Restarting BTCPay Server …\n\n"
+    btcpay_up
     exit 1
   fi
-fi
+} || {
+  echo "🚨  Starting database container failed. Please check the error message above."
+  echo printf "\nℹ️  Restarting BTCPay Server …\n\n"
+  btcpay_up
+  exit 1
+}
 
-printf "\nℹ️  Restoring database …"
 cd $restore_dir
-gunzip -c $dbdump_name | docker exec -i $dbcontainer psql -U postgres postgres -a
 
-# printf "\nℹ️  Stopping BTCPay Server …\n\n"
-# btcpay_down
+{
+  printf "\nℹ️  Restoring database …"
+  gunzip -c $dbdump_name | docker exec -i $dbcontainer psql -U postgres postgres -a
+} || {
+  echo "🚨  Restoring database failed. Please check the error message above."
+  echo printf "\nℹ️  Restarting BTCPay Server …\n\n"
+  btcpay_up
+  exit 1
+}
 
-# # TODO All the restore tasks :)
+# TODO Restore volumes
 
-# echo printf "\nℹ️  Restarting BTCPay Server …\n\n"
-# btcpay_up
+printf "\nℹ️  Restarting BTCPay Server …\n\n"
+btcpay_up
 
 printf "\nℹ️  Cleaning up …\n\n"
-rm -rf $restore_dir $backup_path
+# rm -rf $restore_dir
+# rm -rf $backup_path $backup_path.gpg
 
 printf "✅ Restore done\n\n"
