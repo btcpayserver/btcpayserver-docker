@@ -49,6 +49,7 @@ if [[ "$backup_path" == *.gpg ]]; then
 fi
 
 cd $restore_dir
+
 echo "ℹ️  Extracting files in $(pwd) …"
 tar -xvf $backup_path -C $restore_dir
 
@@ -69,19 +70,45 @@ cd $btcpay_dir
 printf "\nℹ️  Stopping BTCPay Server …\n\n"
 btcpay_down
 
+cd $restore_dir
+
 {
-  printf "\nℹ️  Starting database container …"
+  printf "\nℹ️  Restoring volumes …\n"
+  # ensure volumes dir exists
+  if [ ! -d "$docker_dir/volumes" ]; then
+    mkdir -p $docker_dir/volumes
+  fi
+  # copy volume directories over
+  cp -r volumes/* $docker_dir/volumes/
+  # ensure datadirs excluded in backup exist
+  mkdir -p $docker_dir/volumes/generated_bitcoin_datadir/_data
+  mkdir -p $docker_dir/volumes/generated_litecoin_datadir/_data
+  mkdir -p $docker_dir/volumes/generated_postgres_datadir/_data
+  echo "✅ Volume restore done."
+} || {
+  echo "🚨  Restoring volumes failed. Please check the error message above."
+  printf "\nℹ️  Restarting BTCPay Server …\n\n"
+  cd $btcpay_dir
+  btcpay_up
+  exit 1
+}
+
+{
+  printf "\nℹ️  Starting database container …\n"
   docker-compose -f $BTCPAY_DOCKER_COMPOSE up -d postgres
+  sleep 10
   dbcontainer=$(docker ps -a -q -f "name=postgres")
   if [ -z "$dbcontainer" ]; then
     echo "🚨 Database container could not be started or found."
-    echo printf "\nℹ️  Restarting BTCPay Server …\n\n"
+    printf "\nℹ️  Restarting BTCPay Server …\n\n"
+    cd $btcpay_dir
     btcpay_up
     exit 1
   fi
 } || {
   echo "🚨  Starting database container failed. Please check the error message above."
-  echo printf "\nℹ️  Restarting BTCPay Server …\n\n"
+  printf "\nℹ️  Restarting BTCPay Server …\n\n"
+  cd $btcpay_dir
   btcpay_up
   exit 1
 }
@@ -91,16 +118,17 @@ cd $restore_dir
 {
   printf "\nℹ️  Restoring database …"
   gunzip -c $dbdump_name | docker exec -i $dbcontainer psql -U postgres postgres -a
+  echo "✅ Database restore done."
 } || {
   echo "🚨  Restoring database failed. Please check the error message above."
-  echo printf "\nℹ️  Restarting BTCPay Server …\n\n"
+  printf "\nℹ️  Restarting BTCPay Server …\n\n"
+  cd $btcpay_dir
   btcpay_up
   exit 1
 }
 
-# TODO Restore volumes
-
 printf "\nℹ️  Restarting BTCPay Server …\n\n"
+cd $btcpay_dir
 btcpay_up
 
 printf "\nℹ️  Cleaning up …\n\n"
