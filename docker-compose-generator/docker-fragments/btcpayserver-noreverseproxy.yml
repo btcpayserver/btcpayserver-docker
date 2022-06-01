@@ -3,7 +3,7 @@ version: "3"
 services:
   btcpayserver:
     ports:
-      - "80:49392"
+      - "${NOREVERSEPROXY_HTTP_PORT:-80}:49392"
 
 exclusive:
   - proxy
