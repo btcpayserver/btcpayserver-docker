@@ -499,6 +499,14 @@ Yes. Please [see the documentation](https://docs.btcpayserver.org/FAQ/FAQ-Deploy
 
 ## How can I back up my BTCPay Server?
 
+See the [Backup & Restore](https://docs.btcpayserver.org/Deployment/BackupRestore/) guide in our documentation.
+
+<details>
+<summary>For backwards compatibility: Click here for the description of the old backup.sh process</summary>
+
+:::warning
+Please consider switching to the [new Backup & Restore process](https://docs.btcpayserver.org/Deployment/BackupRestore/), because the `backup.sh` will not be maintained anymore.
+:::
 We provide a backup script that dumps the database and saves the important files:
 
 ```bash
@@ -509,9 +517,9 @@ cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 This will save the backup locally as `/var/lib/docker/volumes/backup_datadir/_data/backup.tar.gz`.
 These are the options to customize the backup name and location:
 
-- `BACKUP_TIMESTAMP=true` saves the backup with datetime as part of the file name, so that backups do not get overwritten.
-- `BACKUP_PROVIDER=SCP` saves the backup remotely, requires additional `SCP_TARGET` environment variable (see below).
-- `BACKUP_PROVIDER=Dropbox` saves the backup to Dropbox, requires additional `DROPBOX_TOKEN` environment variable (see below).
+* `BACKUP_TIMESTAMP=true` saves the backup with datetime as part of the file name, so that backups do not get overwritten.
+* `BACKUP_PROVIDER=SCP` saves the backup remotely, requires additional `SCP_TARGET` environment variable (see below).
+* `BACKUP_PROVIDER=Dropbox` saves the backup to Dropbox, requires additional `DROPBOX_TOKEN` environment variable (see below).
 
 ```bash
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
@@ -533,6 +541,7 @@ This option does not need to stop and restart the docker-containers:
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 ./backup.sh --only-db
 ```
+</details>
 
 ## How can I connect to the database?
 
