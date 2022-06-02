@@ -35,7 +35,7 @@ cd $btcpay_dir
 dbcontainer=$(docker ps -a -q -f "name=postgres_1")
 if [ -z "$dbcontainer" ]; then
   printf "\n"
-  echo "ℹ️  Database container is not up and running. Starting BTCPay Server …"
+  echo "ℹ️ Database container is not up and running. Starting BTCPay Server …"
   docker volume create generated_postgres_datadir
   docker-compose -f $BTCPAY_DOCKER_COMPOSE up -d postgres
 
@@ -48,7 +48,7 @@ if [ -z "$dbcontainer" ]; then
 fi
 
 printf "\n"
-echo "ℹ️  Dumping database …"
+echo "ℹ️ Dumping database …"
 {
   docker exec $dbcontainer pg_dumpall -c -U postgres | gzip > $dbdump_path
   echo "✅ Database dump done."
@@ -57,12 +57,12 @@ echo "ℹ️  Dumping database …"
   exit 1
 }
 
-printf "\nℹ️  Stopping BTCPay Server …\n\n"
+printf "\nℹ️ Stopping BTCPay Server …\n\n"
 btcpay_down
 
 printf "\n"
 cd $docker_dir
-echo "ℹ️  Archiving files in $(pwd)…"
+echo "ℹ️ Archiving files in $(pwd)…"
 
 {
   tar \
@@ -96,18 +96,18 @@ echo "ℹ️  Archiving files in $(pwd)…"
     }
   fi
 } || {
-  echo "🚨  Archiving failed. Please check the error message above."
-  printf "\nℹ️  Restarting BTCPay Server …\n\n"
+  echo "🚨 Archiving failed. Please check the error message above."
+  printf "\nℹ️ Restarting BTCPay Server …\n\n"
   cd $btcpay_dir
   btcpay_up
   exit 1
 }
 
-printf "\nℹ️  Restarting BTCPay Server …\n\n"
+printf "\nℹ️ Restarting BTCPay Server …\n\n"
 cd $btcpay_dir
 btcpay_up
 
-printf "\nℹ️  Cleaning up …\n\n"
+printf "\nℹ️ Cleaning up …\n\n"
 rm $dbdump_path
 
 printf "✅ Backup done => $backup_path\n\n"
