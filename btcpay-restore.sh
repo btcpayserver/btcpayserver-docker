@@ -132,7 +132,6 @@ cd $btcpay_dir
 btcpay_up
 
 printf "\nℹ️  Cleaning up …\n\n"
-# rm -rf $restore_dir
-# rm -rf $backup_path $backup_path.gpg
+rm -rf $restore_dir
 
 printf "✅ Restore done\n\n"
