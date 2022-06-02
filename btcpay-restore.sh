@@ -81,8 +81,6 @@ cd $restore_dir
   # copy volume directories over
   cp -r volumes/* $docker_dir/volumes/
   # ensure datadirs excluded in backup exist
-  mkdir -p $docker_dir/volumes/generated_bitcoin_datadir/_data
-  mkdir -p $docker_dir/volumes/generated_litecoin_datadir/_data
   mkdir -p $docker_dir/volumes/generated_postgres_datadir/_data
   echo "✅ Volume restore done."
 } || {
