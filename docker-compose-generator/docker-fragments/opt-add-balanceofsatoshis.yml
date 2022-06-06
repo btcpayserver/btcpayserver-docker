@@ -1,0 +1,16 @@
+version: "3"
+services:
+  bos:
+    container_name: bos
+    image: "alexbosworth/balanceofsatoshis:latest"
+    restart: unless-stopped
+    volumes:
+      - "lnd_bitcoin_datadir:/home/node/.lnd:ro"
+    links:
+      - bitcoind
+      - lnd_bitcoin
+volumes:
+  lnd_lit_datadir:
+required:
+  - "bitcoin-lnd"
+  - "opt-lnd-grpc"

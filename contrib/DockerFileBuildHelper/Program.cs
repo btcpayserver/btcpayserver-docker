@@ -677,6 +677,13 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/kukks/nnostr";
                     dockerInfo.GitRef = $"Relay/{image.Tag}";
                     break;
+                case "alexbosworth/balanceofsatoshis":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/alexbosworth/balanceofsatoshis";
+                    dockerInfo.GitRef = $"master";
+                    break;
                 default:
                     if (firstTry)
                     {

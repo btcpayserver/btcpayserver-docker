@@ -21,6 +21,7 @@ install_tooling() {
                 "joinmarket" "jm.sh" "Command line for your joinmarket instance" \
                 "ndlci_cli" "ndlc-cli.sh" "Command line for NDLC-CLI" \
                 "pihole" "pihole.sh" "Command line for running pihole commands" \
+                "bos" "bos.sh" "Command line for running balance of satoshi commands" \
                 "*" "btcpay-clean.sh" "Command line for deleting old unused docker images" \
                 "*" "btcpay-down.sh" "Command line for stopping all services related to BTCPay Server" \
                 "*" "btcpay-restart.sh" "Command line for restarting all services related to BTCPay Server" \

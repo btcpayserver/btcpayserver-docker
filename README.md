@@ -189,6 +189,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-joinmarket](docker-compose-generator/docker-fragments/opt-add-joinmarket.yml) ([See the documentation](docs/joinmarket.md))
 * [opt-add-helipad](docker-compose-generator/docker-fragments/opt-add-helipad.yml) for [Podcastindex.org Helipad](https://github.com/Podcastindex-org/helipad). Requires LND.
 * [opt-add-nostr-relay](docker-compose-generator/docker-fragments/opt-add-nostr-relay.yml) for [Nostr Relay](https://github.com/kukks/Nnostr).
+* [opt-add-balanceofsatoshis](docker-compose-generator/docker-fragments/opt-add-balanceofsatoshis.yml) for [Balance of Satoshis](https://github.com/alexbosworth/balanceofsatoshis). Requires LND.
 
 You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).
 
