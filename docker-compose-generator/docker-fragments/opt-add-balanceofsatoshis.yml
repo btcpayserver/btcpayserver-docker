@@ -9,8 +9,6 @@ services:
     links:
       - bitcoind
       - lnd_bitcoin
-volumes:
-  lnd_lit_datadir:
 required:
   - "bitcoin-lnd"
   - "opt-lnd-grpc"
