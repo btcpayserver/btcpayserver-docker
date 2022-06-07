@@ -499,13 +499,13 @@ Yes. Please [see the documentation](https://docs.btcpayserver.org/FAQ/FAQ-Deploy
 
 ## How can I back up my BTCPay Server?
 
-See the [Backup & Restore](https://docs.btcpayserver.org/Deployment/BackupRestore/) guide in our documentation.
+See the [Backup & Restore](https://docs.btcpayserver.org/Docker/backup-restore/) guide in our documentation.
 
 <details>
 <summary>For backwards compatibility: Click here for the description of the old backup.sh process</summary>
 
 :::warning
-Please consider switching to the [new Backup & Restore process](https://docs.btcpayserver.org/Deployment/BackupRestore/), because the `backup.sh` will not be maintained anymore.
+Please consider switching to the [new Backup & Restore process](https://docs.btcpayserver.org/Docker/backup-restore/), because the `backup.sh` will not be maintained anymore.
 :::
 We provide a backup script that dumps the database and saves the important files:
 
