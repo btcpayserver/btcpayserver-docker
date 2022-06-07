@@ -1,6 +1,6 @@
 # Backup & Restore
 
-This guide gets you up to speed with the [Docker deployment](../Docker/)'s Backup & Restore process.
+This guide gets you up to speed with the [Docker deployment](https://docs.btcpayserver.org/Docker/)'s Backup & Restore process.
 You will learn about what to keep in mind when doing a backup and how to restore a backup.
 
 [[toc]]
