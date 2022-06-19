@@ -724,18 +724,18 @@ cd - && cd ..
 
 
 # Build podcasting20-helipad
-# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.8/umbrel/Dockerfile
+# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.10/umbrel/Dockerfile
 DOCKERFILE="umbrel/Dockerfile"
-# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.8/umbrel/Dockerfile
+# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.10/umbrel/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="umbrel/Dockerfile"
-# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.8/umbrel/Dockerfile
+# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.10/umbrel/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="umbrel/Dockerfile"
-echo "Building podcastindexorg/podcasting20-helipad:v0.1.8"
+echo "Building podcastindexorg/podcasting20-helipad:v0.1.10"
 git clone https://github.com/Podcastindex-org/helipad podcasting20-helipad
 cd podcasting20-helipad
-git checkout v0.1.8
+git checkout v0.1.10
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "podcastindexorg/podcasting20-helipad:v0.1.8" .
+docker build -f "$DOCKERFILE" -t "podcastindexorg/podcasting20-helipad:v0.1.10" .
 cd - && cd ..
 
 
@@ -1086,30 +1086,30 @@ cd - && cd ..
 
 
 # Build postgres
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.6/Postgres/13.6/linuxamd64.Dockerfile
-DOCKERFILE="Postgres/13.6/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.6/Postgres/13.6/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Postgres/13.6/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.6/Postgres/13.6/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Postgres/13.6/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/postgres:13.6"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.7/Postgres/13.7/linuxamd64.Dockerfile
+DOCKERFILE="Postgres/13.7/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.7/Postgres/13.7/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Postgres/13.7/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.7/Postgres/13.7/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Postgres/13.7/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/postgres:13.7"
 git clone https://github.com/btcpayserver/dockerfile-deps postgres
 cd postgres
-git checkout Postgres/13.6
+git checkout Postgres/13.7
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/postgres:13.6" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/postgres:13.7" .
 cd - && cd ..
 
 
 # Build traefik
 # https://raw.githubusercontent.com/containous/traefik-library-image/master/scratch/Dockerfile
 DOCKERFILE="scratch/Dockerfile"
-echo "Building traefik:latest"
+echo "Building traefik:v2.6"
 git clone https://github.com/containous/traefik-library-image traefik
 cd traefik
 git checkout master
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "traefik:latest" .
+docker build -f "$DOCKERFILE" -t "traefik:v2.6" .
 cd - && cd ..
 
 
