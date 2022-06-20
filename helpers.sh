@@ -89,6 +89,7 @@ BTCPAY_ANNOUNCEABLE_HOST=$BTCPAY_ANNOUNCEABLE_HOST
 REVERSEPROXY_HTTP_PORT=$REVERSEPROXY_HTTP_PORT
 REVERSEPROXY_HTTPS_PORT=$REVERSEPROXY_HTTPS_PORT
 REVERSEPROXY_DEFAULT_HOST=$REVERSEPROXY_DEFAULT_HOST
+NOREVERSEPROXY_HTTP_PORT=$NOREVERSEPROXY_HTTP_PORT
 BTCPAY_IMAGE=$BTCPAY_IMAGE
 ACME_CA_URI=$ACME_CA_URI
 NBITCOIN_NETWORK=$NBITCOIN_NETWORK
@@ -174,11 +175,7 @@ btcpay_restart() {
 btcpay_dump_db() {
     pushd . > /dev/null
     cd "$(dirname "$BTCPAY_ENV_FILE")"
-    backup_dir="/var/lib/docker/volumes/backup_datadir/_data"
-    if [ ! -d "$backup_dir" ]; then
-        docker volume create backup_datadir
-    fi
-    local filename=${1:-"postgres-$(date "+%Y%m%d-%H%M%S").sql"}
-    docker exec $(docker ps -a -q -f "name=postgres_1") pg_dumpall -c -U postgres > "$backup_dir/$filename"
+    local file_path=${1:-"postgres-$(date "+%Y%m%d-%H%M%S").sql.gz"}
+    docker exec $(docker ps -a -q -f "name=postgres_1") pg_dumpall -c -U postgres | gzip > "$file_path"
     popd > /dev/null
 }

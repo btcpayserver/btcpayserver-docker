@@ -31,8 +31,8 @@ services:
         -Declair.bitcoind.zmqblock=tcp://bitcoind:28334
         -Declair.bitcoind.zmqtx=tcp://bitcoind:28333
     expose:
-      - "9735"  # server port
-      - "8080"  # api port
+      - "9735" # server port
+      - "8080" # api port
     volumes:
       - "bitcoin_datadir:/etc/bitcoin"
       - "eclair_bitcoin_datadir:/data"
@@ -56,6 +56,9 @@ services:
       - "eclair_bitcoin_rtl_datadir:/data"
     expose:
       - "3000"
+    labels:
+      traefik.enable: true
+      traefik.http.routers.bitcoin_rtl.rule: Host(`${BTCPAY_HOST}`) && (Path(`/rtl`) || PathPrefix(`/rtl/`))
     links:
       - eclair_bitcoin
 

@@ -15,6 +15,7 @@ services:
       LIGHTNINGD_OPT: |
         bitcoin-datadir=/etc/bitcoin
         bitcoin-rpcconnect=bitcoind
+        experimental-offers
     volumes:
       - "clightning_bitcoin_datadir:/root/.lightning"
       - "bitcoin_datadir:/etc/bitcoin"
@@ -55,7 +56,7 @@ services:
       - "9737"
 
   clightning_bitcoin_rest:
-    image: saubyk/c-lightning-rest:0.7.0
+    image: saubyk/c-lightning-rest:0.7.2
     restart: unless-stopped
     environment:
       PROTOCOL: "http"
@@ -66,7 +67,7 @@ services:
     volumes:
       - "clightning_bitcoin_datadir:/root/.lightning"
       - "bitcoin_datadir:/etc/bitcoin"
-      - "clightning_bitcoin_rest_datadir:/usr/src/app"
+      - "clightning_bitcoin_rest_certsdir:/usr/src/app/certs"
       - "nbxplorer_datadir:/root/.nbxplorer"
     expose:
       - "3001"
@@ -78,7 +79,7 @@ services:
       LN_IMPLEMENTATION: CLT
       CONFIG_PATH: /root/.lightning/config
       LN_SERVER_URL: http://clightning_bitcoin_rest:3001/v1
-      MACAROON_PATH: /etc/clightning_bitcoin_rest/certs
+      MACAROON_PATH: /etc/clightning_bitcoin_rest_certs
       RTL_CONFIG_PATH: /data/
       BITCOIND_CONFIG_PATH: /etc/bitcoin/bitcoin.conf
       RTL_SSO: 1
@@ -88,7 +89,7 @@ services:
       - "clightning_bitcoin_datadir:/root/.lightning"
       - "bitcoin_datadir:/etc/bitcoin"
       - "clightning_bitcoin_rtl_datadir:/data"
-      - "clightning_bitcoin_rest_datadir:/etc/clightning_bitcoin_rest"
+      - "clightning_bitcoin_rest_certsdir:/etc/clightning_bitcoin_rest_certs"
     expose:
       - "3000"
 
@@ -98,13 +99,13 @@ services:
       BTCPAY_BTCEXTERNALSPARK: "server=/spark/btc/;cookiefile=/etc/clightning_bitcoin_spark/.cookie"
       BTCPAY_BTCEXTERNALCHARGE: "server=/lightning-charge/btc/;cookiefilepath=/etc/clightning_bitcoin_charge/.cookie"
       BTCPAY_BTCEXTERNALRTL: "server=/rtl/api/authenticate/cookie;cookiefile=/etc/clightning_bitcoin_rtl/.cookie"
-      BTCPAY_BTCEXTERNALCLIGHTNINGREST: "server=/clightning-rest/btc;macaroonfilepath=/etc/clightning_bitcoin_rest/certs/access.macaroon;macaroondirectorypath=/etc/clightning_bitcoin_rest/certs"
+      BTCPAY_BTCEXTERNALCLIGHTNINGREST: "server=/clightning-rest/btc;macaroonfilepath=/etc/clightning_bitcoin_rest_certs/access.macaroon;macaroondirectorypath=/etc/clightning_bitcoin_rest_certs"
     volumes:
       - "clightning_bitcoin_datadir:/etc/clightning_bitcoin"
       - "clightning_bitcoin_spark:/etc/clightning_bitcoin_spark"
       - "clightning_bitcoin_charge:/etc/clightning_bitcoin_charge"
       - "clightning_bitcoin_rtl_datadir:/etc/clightning_bitcoin_rtl"
-      - "clightning_bitcoin_rest_datadir:/etc/clightning_bitcoin_rest"
+      - "clightning_bitcoin_rest_certsdir:/etc/clightning_bitcoin_rest_certs"
     links:
       - clightning_bitcoin
 volumes:
@@ -112,6 +113,6 @@ volumes:
   clightning_bitcoin_spark:
   clightning_bitcoin_charge:
   clightning_bitcoin_rtl_datadir:
-  clightning_bitcoin_rest_datadir:
+  clightning_bitcoin_rest_certsdir:
 exclusive:
   - lightning

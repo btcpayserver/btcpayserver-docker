@@ -130,6 +130,7 @@
 		sub_filter '/image'  '/helipad/image';
 		sub_filter '/pew'  '/helipad/pew';
 		sub_filter '/boosts'  '/helipad/boosts';
+		sub_filter '/api/v1/helipad'  '/helipad/api/v1/helipad';
 		proxy_pass http://helipad:2112/;
 
 	}

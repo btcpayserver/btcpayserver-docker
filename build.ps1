@@ -31,9 +31,3 @@ docker run -v "$(Get-Location)\Generated:/app/Generated" `
 If ($BTCPAYGEN_REVERSEPROXY -eq "nginx") {
     Copy-Item ".\Production\nginx.tmpl" -Destination ".\Generated"
 }
-
-If ($BTCPAYGEN_REVERSEPROXY -eq "traefik") {
-    Copy-Item ".\Traefik\traefik.toml" -Destination ".\Generated"
-    
-    New-Item  ".\Generated\acme.json" -type file
-}
