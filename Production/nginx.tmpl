@@ -159,6 +159,12 @@
   }
   {{ end }}
 
+  {{ if (eq $serviceName "torq") }}
+  location /torq/ {
+    proxy_pass http://torq:8080/;
+  }
+  {{ end }}
+
   {{ if (eq $serviceName "sphinxrelay") }}
   location /sphinxrelay/ {
     proxy_set_header        Host               $host;
