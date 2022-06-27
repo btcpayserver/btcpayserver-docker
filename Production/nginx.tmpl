@@ -27,6 +27,8 @@
 		{{ $serviceName := (index $container.Labels "com.docker.compose.service") }}
 		{{ if (eq $serviceName "lnd_bitcoin") }}
 	location ~* ^/(lnrpc|routerrpc)\. {
+		grpc_read_timeout 6000s;
+		grpc_send_timeout 6000s;
 		grpc_pass grpcs://lnd_bitcoin:10009;
 	}
 	location /lnd-rest/btc/ {
