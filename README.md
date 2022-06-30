@@ -127,6 +127,8 @@ Additionally, there are specific environment variables for some addons:
 * If Bitcoin Wallet Tracker is activated with [opt-add-bwt](docker-compose-generator/docker-fragments/opt-add-bwt.yml),  you can use `BWT_XPUB`/`BWT_XPUB_*` (to set your XPUB/YPUB/ZPUB), `BWT_DESCRIPTOR`/`BWT_DESCRIPTOR_*` (for script descriptors), `BWT_RESCAN_SINCE` (set to the wallet creation date in YYYY-MM-DD to speed up the rescan), `BWT_BITCOIND_WALLET` and `BWT_GAP_LIMIT`.
 * `LND_WTCLIENT_SWEEP_FEE`: If LND watchtower is activated with [opt-lnd-wtclient](docker-compose-generator/docker-fragments/opt-lnd-wtclient.yml), you can use `LND_WTCLIENT_SWEEP_FEE` to change the sweep fee used in constructing the justice transaction (default is 10 sat/byte)
 * `FIREFLY_HOST`: If fireflyiii is activated with [opt-add-fireflyiii](docker-compose-generator/docker-fragments/opt-add-fireflyiii.yml), the hostname of your fireflyiii website (eg. `firefly.example.com`)
+* `CLOUDFLARE_TUNNEL_TOKEN`: Used to expose your instance to clearnet with a Cloudflare Argo Tunnel (if cloudflare tunnel is activated with [opt-add-cloudflare](docker-compose-generator/docker-fragments/opt-add-cloudflare.yml), for setup instructions [see documentation](docs/cloudflare-tunnel.md))
+
 # Tooling
 
 A wide variety of useful scripts are available once BTCPay is installed:
@@ -189,6 +191,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-joinmarket](docker-compose-generator/docker-fragments/opt-add-joinmarket.yml) ([See the documentation](docs/joinmarket.md))
 * [opt-add-helipad](docker-compose-generator/docker-fragments/opt-add-helipad.yml) for [Podcastindex.org Helipad](https://github.com/Podcastindex-org/helipad). Requires LND.
 * [opt-add-nostr-relay](docker-compose-generator/docker-fragments/opt-add-nostr-relay.yml) for [Nostr Relay](https://github.com/kukks/Nnostr).
+* [opt-add-cloudflare](docker-compose-generator/docker-fragments/opt-add-cloudflare.yml) to expose your local server on clearnet painlessly ([see documentation](docs/cloudflare-tunnel.md)).
 
 You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).
 
