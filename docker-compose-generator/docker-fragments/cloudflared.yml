@@ -3,7 +3,7 @@ version: "3"
 services:
   cloudflared:
     container_name: 'cloudflared-tunnel'
-    image: 'cloudflare/cloudflared:2022.6.3'
+    image: btcpayserver/cloudflared:2022.6.3
     network_mode: host
     command: 'tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}'
     restart: 'on-failure'
