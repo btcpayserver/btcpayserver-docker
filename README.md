@@ -98,7 +98,7 @@ Check out this video if you're interested in learning more about setting up [BTC
 * `BTCPAY_ADDITIONAL_HOSTS`: Optional, specify additional domains to your BTCPayServer with https support if enabled. (eg. example2.com,example3.com)
 * `REVERSEPROXY_HTTP_PORT`: The public port the reverse proxy binds to for HTTP traffic (default: 80)
 * `REVERSEPROXY_HTTPS_PORT`: The public port the reverse proxy binds to for HTTPS traffic (default: 443)
-* `REVERSEPROXY_DEFAULT_HOST`: Optional, if using a reverse proxy nginx, specify which website should be presented if the server is accessed by its IP.
+* `REVERSEPROXY_DEFAULT_HOST`: Optional, if using a reverse proxy nginx, specify which website should be presented if the server is accessed by its IP or by an unrecognized domain name.
 * `NOREVERSEPROXY_HTTP_PORT`: Optional, if not using a reverse proxy, specify which port should be opened for HTTP traffic. (default: 80)
 * `NBITCOIN_NETWORK`: The type of network to use (eg. `mainnet`, `testnet`, or `regtest`. Default: `mainnet`)
 * `LIGHTNING_ALIAS`: An alias for your lightning network node, if used

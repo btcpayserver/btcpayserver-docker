@@ -40,7 +40,7 @@ BTCPAYGEN_EXCLUDE_FRAGMENTS="$BTCPAYGEN_EXCLUDE_FRAGMENTS;nginx-https"
 . btcpay-setup.sh -i
 ```
 
-Now you should be able to access your server from internet!
+Now you should be able to access your server from internet! (If you get an nginx error 503, check below)
 
 ## Recommended additional step
 
@@ -51,4 +51,14 @@ In [cloudflare dashboard](https://dash.cloudflare.com), navigate to your website
 
 ### Error 503
 
-If you get error 503, make sure `BTCPAY_HOST` is set to your domain name and run `. btcpay-setup.sh -i` again.
+An error 503 means that the tunnel is working and cloudflare correctly set up, the HTTP request is reaching your server, but the server's reverse proxy doesn't know which downstream container should receive the request.
+
+This command will instruct to forward any requests from your domain to your BTCPay Server container. It also instructs to forward any HTTP requests with an unrecognized domain name to your BTCPay Server container.
+
+```bash
+BTCPAY_HOST="<YOUR_DOMAIN_HERE>"
+REVERSEPROXY_DEFAULT_HOST="<YOUR_DOMAIN_HERE>"
+. btcpay-setup.sh -i
+```
+
+`REVERSEPROXY_DEFAULT_HOST` will make sure that you can still access your server from the local network with an ip or a local domain name.
