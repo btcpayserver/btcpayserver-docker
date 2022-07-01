@@ -21,7 +21,7 @@ services:
       BTCPAY_UPDATEURL: https://api.github.com/repos/btcpayserver/btcpayserver/releases/latest
       BTCPAY_DOCKERDEPLOYMENT: "true"
     labels:
-      traefik.enable: true
+      traefik.enable: "true"
       traefik.http.routers.btcpayserver.rule: Host(`${BTCPAY_HOST}`)
       # Traefic can not accept list from BTCPAY_ADDITIONAL_HOSTS, see Traefik/README.md
     links:

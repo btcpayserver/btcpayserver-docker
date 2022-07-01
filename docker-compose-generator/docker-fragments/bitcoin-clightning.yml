@@ -86,7 +86,7 @@ services:
       RTL_COOKIE_PATH: /data/.cookie
       LOGOUT_REDIRECT_LINK: /server/services
     labels:
-      traefik.enable: true
+      traefik.enable: "true"
       traefik.http.routers.bitcoin_rtl.rule: Host(`${BTCPAY_HOST}`) && (Path(`/rtl`) || PathPrefix(`/rtl/`))
     volumes:
       - "clightning_bitcoin_datadir:/root/.lightning"
