@@ -109,6 +109,7 @@ Add-on specific variables:
     TOR_RELAY_EMAIL: If tor relay is activated with opt-add-tor-relay, the email for Tor to contact you regarding your relay
     CHATWOOT_HOST: If chatwoot is activated with opt-add-chatwoot, the hostname of your chatwoot website (eg. store.example.com)
     FIREFLY_HOST: If fireflyiii is activated with opt-add-fireflyiii, the hostname of your libre patron website (eg. firefly.example.com)
+    CLOUDFLARE_TUNNEL_TOKEN: Used to expose your instance to clearnet with a Cloudflare Argo Tunnel
 END
 }
 START=""
@@ -204,6 +205,7 @@ fi
 : "${REVERSEPROXY_HTTPS_PORT:=443}"
 : "${BTCPAY_ENABLE_SSH:=false}"
 : "${PIHOLE_SERVERIP:=}"
+: "${CLOUDFLARE_TUNNEL_TOKEN:=}"
 
 OLD_BTCPAY_DOCKER_COMPOSE="$BTCPAY_DOCKER_COMPOSE"
 ORIGINAL_DIRECTORY="$(pwd)"
