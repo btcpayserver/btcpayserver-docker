@@ -2,7 +2,7 @@
 
 Your server is on a local network, and you want to expose it on the internet (clearnet)?
 
-While there are many solutions at your disposal, this one is by far the less costly and easiest.
+While there are many solutions at your disposal, this one is by far the least costly and easiest.
 
 Traditionally, the solution to this problem is either:
 * Configure your firewall and your internet router (NAT) correctly to accept incoming traffic
