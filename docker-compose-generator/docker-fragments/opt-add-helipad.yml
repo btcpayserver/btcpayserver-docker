@@ -3,7 +3,7 @@
 services:
   helipad:
     container_name: helipad
-    image: podcastindexorg/podcasting20-helipad:v0.1.8
+    image: podcastindexorg/podcasting20-helipad:v0.1.10
     restart: unless-stopped
     user: "root"
     expose:

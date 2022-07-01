@@ -113,7 +113,8 @@ FIREFLY_HOST=$FIREFLY_HOST
 LIT_PASSWD=$LIT_PASSWD
 TALLYCOIN_APIKEY=$TALLYCOIN_APIKEY
 TALLYCOIN_PASSWD=$TALLYCOIN_PASSWD
-TALLYCOIN_PASSWD_CLEARTEXT=$TALLYCOIN_PASSWD_CLEARTEXT" > $BTCPAY_ENV_FILE
+TALLYCOIN_PASSWD_CLEARTEXT=$TALLYCOIN_PASSWD_CLEARTEXT
+CLOUDFLARE_TUNNEL_TOKEN=$CLOUDFLARE_TUNNEL_TOKEN" > $BTCPAY_ENV_FILE
 
 env | grep ^BWT_ >> $BTCPAY_ENV_FILE || true
 }
@@ -175,11 +176,7 @@ btcpay_restart() {
 btcpay_dump_db() {
     pushd . > /dev/null
     cd "$(dirname "$BTCPAY_ENV_FILE")"
-    backup_dir="/var/lib/docker/volumes/backup_datadir/_data"
-    if [ ! -d "$backup_dir" ]; then
-        docker volume create backup_datadir
-    fi
-    local filename=${1:-"postgres-$(date "+%Y%m%d-%H%M%S").sql"}
-    docker exec $(docker ps -a -q -f "name=postgres_1") pg_dumpall -c -U postgres > "$backup_dir/$filename"
+    local file_path=${1:-"postgres-$(date "+%Y%m%d-%H%M%S").sql.gz"}
+    docker exec $(docker ps -a -q -f "name=postgres_1") pg_dumpall -c -U postgres | gzip > "$file_path"
     popd > /dev/null
 }

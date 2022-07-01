@@ -98,7 +98,7 @@ Check out this video if you're interested in learning more about setting up [BTC
 * `BTCPAY_ADDITIONAL_HOSTS`: Optional, specify additional domains to your BTCPayServer with https support if enabled. (eg. example2.com,example3.com)
 * `REVERSEPROXY_HTTP_PORT`: The public port the reverse proxy binds to for HTTP traffic (default: 80)
 * `REVERSEPROXY_HTTPS_PORT`: The public port the reverse proxy binds to for HTTPS traffic (default: 443)
-* `REVERSEPROXY_DEFAULT_HOST`: Optional, if using a reverse proxy nginx, specify which website should be presented if the server is accessed by its IP.
+* `REVERSEPROXY_DEFAULT_HOST`: Optional, if using a reverse proxy nginx, specify which website should be presented if the server is accessed by its IP or by an unrecognized domain name.
 * `NOREVERSEPROXY_HTTP_PORT`: Optional, if not using a reverse proxy, specify which port should be opened for HTTP traffic. (default: 80)
 * `NBITCOIN_NETWORK`: The type of network to use (eg. `mainnet`, `testnet`, or `regtest`. Default: `mainnet`)
 * `LIGHTNING_ALIAS`: An alias for your lightning network node, if used
@@ -127,6 +127,8 @@ Additionally, there are specific environment variables for some addons:
 * If Bitcoin Wallet Tracker is activated with [opt-add-bwt](docker-compose-generator/docker-fragments/opt-add-bwt.yml),  you can use `BWT_XPUB`/`BWT_XPUB_*` (to set your XPUB/YPUB/ZPUB), `BWT_DESCRIPTOR`/`BWT_DESCRIPTOR_*` (for script descriptors), `BWT_RESCAN_SINCE` (set to the wallet creation date in YYYY-MM-DD to speed up the rescan), `BWT_BITCOIND_WALLET` and `BWT_GAP_LIMIT`.
 * `LND_WTCLIENT_SWEEP_FEE`: If LND watchtower is activated with [opt-lnd-wtclient](docker-compose-generator/docker-fragments/opt-lnd-wtclient.yml), you can use `LND_WTCLIENT_SWEEP_FEE` to change the sweep fee used in constructing the justice transaction (default is 10 sat/byte)
 * `FIREFLY_HOST`: If fireflyiii is activated with [opt-add-fireflyiii](docker-compose-generator/docker-fragments/opt-add-fireflyiii.yml), the hostname of your fireflyiii website (eg. `firefly.example.com`)
+* `CLOUDFLARE_TUNNEL_TOKEN`: Used to expose your instance to clearnet with a Cloudflare Argo Tunnel (if cloudflare tunnel is activated with [opt-add-cloudflare](docker-compose-generator/docker-fragments/opt-add-cloudflare.yml), for setup instructions [see documentation](docs/cloudflare-tunnel.md))
+
 # Tooling
 
 A wide variety of useful scripts are available once BTCPay is installed:
@@ -189,6 +191,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-joinmarket](docker-compose-generator/docker-fragments/opt-add-joinmarket.yml) ([See the documentation](docs/joinmarket.md))
 * [opt-add-helipad](docker-compose-generator/docker-fragments/opt-add-helipad.yml) for [Podcastindex.org Helipad](https://github.com/Podcastindex-org/helipad). Requires LND.
 * [opt-add-nostr-relay](docker-compose-generator/docker-fragments/opt-add-nostr-relay.yml) for [Nostr Relay](https://github.com/kukks/Nnostr).
+* [opt-add-cloudflare](docker-compose-generator/docker-fragments/opt-add-cloudflare.yml) to expose your local server on clearnet painlessly ([see documentation](docs/cloudflare-tunnel.md)).
 
 You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).
 
@@ -350,13 +353,14 @@ We are trying to update our dependencies to run on `arm32v7` and `x64` boards. H
 | nginx | 1.16.0 | [✔️](https://raw.githubusercontent.com/nginxinc/docker-nginx/1.16.0/stable/stretch/Dockerfile) | [✔️](https://raw.githubusercontent.com/nginxinc/docker-nginx/1.16.0/stable/stretch/Dockerfile) | [✔️](https://raw.githubusercontent.com/nginxinc/docker-nginx/1.16.0/stable/stretch/Dockerfile) | [Github](https://github.com/nginxinc/docker-nginx) - [DockerHub](https://hub.docker.com/_/nginx) |
 | btcpayserver/docker-gen | 0.7.8 | [✔️](https://raw.githubusercontent.com/btcpayserver/docker-gen/v0.7.8/linuxamd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/docker-gen/v0.7.8/linuxarm32v7.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/docker-gen/v0.7.8/linuxarm64v8.Dockerfile) | [Github](https://github.com/btcpayserver/docker-gen) - [DockerHub](https://hub.docker.com/r/btcpayserver/docker-gen) |
 | btcpayserver/btctransmuter | 0.0.59 | [✔️](https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.59/Dockerfiles/amd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.59/Dockerfiles/arm32v7.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.59/Dockerfiles/arm64v8.Dockerfile) | [Github](https://github.com/btcpayserver/btctransmuter) - [DockerHub](https://hub.docker.com/r/btcpayserver/btctransmuter) |
+| btcpayserver/cloudflared | 2022.6.3 | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2022.6.3/Cloudflared/2022.6.3/linuxamd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2022.6.3/Cloudflared/2022.6.3/linuxarm32v7.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2022.6.3/Cloudflared/2022.6.3/linuxarm64v8.Dockerfile) | [Github](https://github.com/btcpayserver/dockerfile-deps) - [DockerHub](https://hub.docker.com/r/btcpayserver/cloudflared) |
 | btcpayserver/btcpayserver-configurator | 0.0.21 | [✔️](https://raw.githubusercontent.com/btcpayserver/btcpayserver-configurator/v0.0.21/Dockerfiles/amd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/btcpayserver-configurator/v0.0.21/Dockerfiles/arm32v7.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/btcpayserver-configurator/v0.0.21/Dockerfiles/arm64v8.Dockerfile) | [Github](https://github.com/btcpayserver/btcpayserver-configurator) - [DockerHub](https://hub.docker.com/r/btcpayserver/btcpayserver-configurator) |
 | btcpayserver/eps | 0.2.2 | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/EPS/0.2.2/EPS/0.2.2/linuxamd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/EPS/0.2.2/EPS/0.2.2/linuxarm32v7.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/EPS/0.2.2/EPS/0.2.2/linuxarm64v8.Dockerfile) | [Github](https://github.com/btcpayserver/dockerfile-deps) - [DockerHub](https://hub.docker.com/r/btcpayserver/eps) |
 | btcpayserver/joinmarket | 0.9.5 | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.5/JoinMarket/0.9.5/linuxamd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.5/JoinMarket/0.9.5/linuxarm32v7.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.5/JoinMarket/0.9.5/linuxarm64v8.Dockerfile) | [Github](https://github.com/btcpayserver/dockerfile-deps) - [DockerHub](https://hub.docker.com/r/btcpayserver/joinmarket) |
 | nicolasdorier/ndlc-cli | 1.0.1 | [✔️](https://raw.githubusercontent.com/dgarage/ndlc/releases/1.0.1/amd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/dgarage/ndlc/releases/1.0.1/arm32v7.Dockerfile) | [✔️](https://raw.githubusercontent.com/dgarage/ndlc/releases/1.0.1/arm64v8.Dockerfile) | [Github](https://github.com/dgarage/ndlc) - [DockerHub](https://hub.docker.com/r/nicolasdorier/ndlc-cli) |
 | pihole/pihole | v5.7 | [✔️](https://raw.githubusercontent.com/pi-hole/docker-pi-hole/v5.7/Dockerfile) | [✔️](https://raw.githubusercontent.com/pi-hole/docker-pi-hole/v5.7/Dockerfile) | [✔️](https://raw.githubusercontent.com/pi-hole/docker-pi-hole/v5.7/Dockerfile) | [Github](https://github.com/pi-hole/docker-pi-hole) - [DockerHub](https://hub.docker.com/r/pihole/pihole) |
 | btcpayserver/tor | 0.4.5.9 | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.5.9/Tor/0.4.5.9/linuxamd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.5.9/Tor/0.4.5.9/linuxarm32v7.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.5.9/Tor/0.4.5.9/linuxarm64v8.Dockerfile) | [Github](https://github.com/btcpayserver/dockerfile-deps) - [DockerHub](https://hub.docker.com/r/btcpayserver/tor) |
-| btcpayserver/postgres | 13.6 | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.6/Postgres/13.6/linuxamd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.6/Postgres/13.6/linuxarm32v7.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.6/Postgres/13.6/linuxarm64v8.Dockerfile) | [Github](https://github.com/btcpayserver/dockerfile-deps) - [DockerHub](https://hub.docker.com/r/btcpayserver/postgres) |
+| btcpayserver/postgres | 13.7 | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.7/Postgres/13.7/linuxamd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.7/Postgres/13.7/linuxarm32v7.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.7/Postgres/13.7/linuxarm64v8.Dockerfile) | [Github](https://github.com/btcpayserver/dockerfile-deps) - [DockerHub](https://hub.docker.com/r/btcpayserver/postgres) |
 | kamigawabul/btglnd | latest | [✔️](https://raw.githubusercontent.com/vutov/lnd/master/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/vutov/lnd) - [DockerHub](https://hub.docker.com/r/kamigawabul/btglnd) |
 | kamigawabul/docker-bitcoingold | 0.15.2 | [✔️](https://raw.githubusercontent.com/Vutov/docker-bitcoin/master/bitcoingold/0.15.2/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/Vutov/docker-bitcoin) - [DockerHub](https://hub.docker.com/r/kamigawabul/docker-bitcoingold) |
 | acinq/eclair | release-0.7.0 | [✔️](https://raw.githubusercontent.com/ACINQ/eclair/v0.7.0/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/ACINQ/eclair) - [DockerHub](https://hub.docker.com/r/acinq/eclair) |
@@ -370,7 +374,7 @@ We are trying to update our dependencies to run on `arm32v7` and `x64` boards. H
 | groestlcoin/groestlcoin-spark | version-0.2.16 | [✔️](https://raw.githubusercontent.com/Groestlcoin/groestlcoin-spark/v0.2.16/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/Groestlcoin/groestlcoin-spark) - [DockerHub](https://hub.docker.com/r/groestlcoin/groestlcoin-spark) |
 | groestlcoin/eclair | v0.6.0 | [✔️](https://raw.githubusercontent.com/Groestlcoin/eclair/v0.6.0/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/Groestlcoin/eclair) - [DockerHub](https://hub.docker.com/r/groestlcoin/eclair) |
 | groestlcoin/lnd | v0.10.0-grs | [✔️](https://raw.githubusercontent.com/Groestlcoin/lnd/v0.10.0-grs/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/Groestlcoin/lnd) - [DockerHub](https://hub.docker.com/r/groestlcoin/lnd) |
-| btcpayserver/groestlcoin | 22.0 | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/22.0/Groestlcoin/22.0/linuxamd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/22.0/Groestlcoin/22.0/linuxarm32v7.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/22.0/Groestlcoin/22.0/linuxarm64v8.Dockerfile) | [Github](https://github.com/btcpayserver/dockerfile-deps) - [DockerHub](https://hub.docker.com/r/btcpayserver/groestlcoin) |
+| btcpayserver/groestlcoin | 23.0 | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/23.0/Groestlcoin/23.0/linuxamd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/23.0/Groestlcoin/23.0/linuxarm32v7.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/23.0/Groestlcoin/23.0/linuxarm64v8.Dockerfile) | [Github](https://github.com/btcpayserver/dockerfile-deps) - [DockerHub](https://hub.docker.com/r/btcpayserver/groestlcoin) |
 | btcpayserver/elements | 0.21.0.2-1 | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2-1/Elements/0.21.0.2/linuxamd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2-1/Elements/0.21.0.2/linuxarm32v7.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2-1/Elements/0.21.0.2/linuxarm64v8.Dockerfile) | [Github](https://github.com/btcpayserver/dockerfile-deps) - [DockerHub](https://hub.docker.com/r/btcpayserver/elements) |
 | btcpayserver/litecoin | 0.18.1-1 | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.18.1-1/Litecoin/0.18.1/linuxamd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.18.1-1/Litecoin/0.18.1/linuxarm32v7.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.18.1-1/Litecoin/0.18.1/linuxarm64v8.Dockerfile) | [Github](https://github.com/btcpayserver/dockerfile-deps) - [DockerHub](https://hub.docker.com/r/btcpayserver/litecoin) |
 | wakiyamap/docker-monacoin | 0.20.2 | [✔️](https://raw.githubusercontent.com/wakiyamap/docker-bitcoin/master/monacoin/0.20.2/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/wakiyamap/docker-bitcoin) - [DockerHub](https://hub.docker.com/r/wakiyamap/docker-monacoin) |
@@ -382,7 +386,7 @@ We are trying to update our dependencies to run on `arm32v7` and `x64` boards. H
 | chatwoot/chatwoot | v1.7.0 | [✔️](https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile) | [✔️](https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile) | [✔️](https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile) | [Github](https://github.com/chatwoot/chatwoot) - [DockerHub](https://hub.docker.com/r/chatwoot/chatwoot) |
 | lukechilds/electrumx | latest | [✔️](https://raw.githubusercontent.com/lukechilds/docker-electrumx/master/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/lukechilds/docker-electrumx) - [DockerHub](https://hub.docker.com/r/lukechilds/electrumx) |
 | fireflyiii/core | latest | [✔️](https://dev.azure.com/Firefly-III/66fb773b-063e-42d7-b6a5-e7729a22e8b3/_apis/git/repositories/e9c3dcf8-4533-4ef1-83cc-75527cab3377/items?path=%2FDockerfile&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=main&resolveLfs=true&%24format=octetStream&api-version=5.0&download=true) | [✔️](https://dev.azure.com/Firefly-III/66fb773b-063e-42d7-b6a5-e7729a22e8b3/_apis/git/repositories/e9c3dcf8-4533-4ef1-83cc-75527cab3377/items?path=%2FDockerfile&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=main&resolveLfs=true&%24format=octetStream&api-version=5.0&download=true) | [✔️](https://dev.azure.com/Firefly-III/66fb773b-063e-42d7-b6a5-e7729a22e8b3/_apis/git/repositories/e9c3dcf8-4533-4ef1-83cc-75527cab3377/items?path=%2FDockerfile&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=main&resolveLfs=true&%24format=octetStream&api-version=5.0&download=true) | [Github](https://dev.azure.com/Firefly-III/_git/MainImage) - [DockerHub](https://hub.docker.com/r/fireflyiii/core) |
-| podcastindexorg/podcasting20-helipad | v0.1.8 | [✔️](https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.8/umbrel/Dockerfile) | [✔️](https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.8/umbrel/Dockerfile) | [✔️](https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.8/umbrel/Dockerfile) | [Github](https://github.com/Podcastindex-org/helipad) - [DockerHub](https://hub.docker.com/r/podcastindexorg/podcasting20-helipad) |
+| podcastindexorg/podcasting20-helipad | v0.1.10 | [✔️](https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.10/umbrel/Dockerfile) | [✔️](https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.10/umbrel/Dockerfile) | [✔️](https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.10/umbrel/Dockerfile) | [Github](https://github.com/Podcastindex-org/helipad) - [DockerHub](https://hub.docker.com/r/podcastindexorg/podcasting20-helipad) |
 | jvandrew/librepatron | 0.7.39 | [✔️](https://raw.githubusercontent.com/JeffVandrewJr/patron/v0.7.39/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/JeffVandrewJr/patron) - [DockerHub](https://hub.docker.com/r/jvandrew/librepatron) |
 | jvandrew/isso | atron.22 | [✔️](https://raw.githubusercontent.com/JeffVandrewJr/isso/patron.22/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/JeffVandrewJr/isso) - [DockerHub](https://hub.docker.com/r/jvandrew/isso) |
 | lightninglabs/lightning-terminal | v0.6.3-alpha-path-prefix | [✔️](https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.6.3-alpha/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/lightninglabs/lightning-terminal) - [DockerHub](https://hub.docker.com/r/lightninglabs/lightning-terminal) |
@@ -395,7 +399,7 @@ We are trying to update our dependencies to run on `arm32v7` and `x64` boards. H
 | mariadb | 10.3 | [✔️](https://raw.githubusercontent.com/docker-library/mariadb/master/10.3/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/docker-library/mariadb) - [DockerHub](https://hub.docker.com/_/mariadb) |
 | zammad/zammad-docker-compose | zammad-postgresql-3.4.0-4 | [✔️](https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad-postgresql/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/zammad/zammad-docker-compose) - [DockerHub](https://hub.docker.com/r/zammad/zammad-docker-compose) |
 | memcached | 1.5.22-alpine | [✔️](https://raw.githubusercontent.com/docker-library/memcached/master/alpine/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/docker-library/memcached) - [DockerHub](https://hub.docker.com/_/memcached) |
-| traefik | latest | [✔️](https://raw.githubusercontent.com/containous/traefik-library-image/master/scratch/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/containous/traefik-library-image) - [DockerHub](https://hub.docker.com/_/traefik) |
+| traefik | v2.6 | [✔️](https://raw.githubusercontent.com/containous/traefik-library-image/master/scratch/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/containous/traefik-library-image) - [DockerHub](https://hub.docker.com/_/traefik) |
 | chekaz/docker-trezarcoin | 0.13.0 | [✔️](https://raw.githubusercontent.com/ChekaZ/docker/master/trezarcoin/1.2.0/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/ChekaZ/docker) - [DockerHub](https://hub.docker.com/r/chekaz/docker-trezarcoin) |
 | romanornr/docker-viacoin | 0.15.2 | [✔️](https://raw.githubusercontent.com/viacoin/docker-viacoin/master/viacoin/0.15.2/docker-viacoin) | ️❌ | ️❌ | [Github](https://github.com/viacoin/docker-viacoin) - [DockerHub](https://hub.docker.com/r/romanornr/docker-viacoin) |
 
@@ -499,6 +503,14 @@ Yes. Please [see the documentation](https://docs.btcpayserver.org/FAQ/FAQ-Deploy
 
 ## How can I back up my BTCPay Server?
 
+See the [Backup & Restore](https://docs.btcpayserver.org/Docker/backup-restore/) guide in our documentation.
+
+<details>
+<summary>For backwards compatibility: Click here for the description of the old backup.sh process</summary>
+
+:::warning
+Please consider switching to the [new Backup & Restore process](https://docs.btcpayserver.org/Docker/backup-restore/), because the `backup.sh` will not be maintained anymore.
+:::
 We provide a backup script that dumps the database and saves the important files:
 
 ```bash
@@ -509,9 +521,9 @@ cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 This will save the backup locally as `/var/lib/docker/volumes/backup_datadir/_data/backup.tar.gz`.
 These are the options to customize the backup name and location:
 
-- `BACKUP_TIMESTAMP=true` saves the backup with datetime as part of the file name, so that backups do not get overwritten.
-- `BACKUP_PROVIDER=SCP` saves the backup remotely, requires additional `SCP_TARGET` environment variable (see below).
-- `BACKUP_PROVIDER=Dropbox` saves the backup to Dropbox, requires additional `DROPBOX_TOKEN` environment variable (see below).
+* `BACKUP_TIMESTAMP=true` saves the backup with datetime as part of the file name, so that backups do not get overwritten.
+* `BACKUP_PROVIDER=SCP` saves the backup remotely, requires additional `SCP_TARGET` environment variable (see below).
+* `BACKUP_PROVIDER=Dropbox` saves the backup to Dropbox, requires additional `DROPBOX_TOKEN` environment variable (see below).
 
 ```bash
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
@@ -533,6 +545,7 @@ This option does not need to stop and restart the docker-containers:
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 ./backup.sh --only-db
 ```
+</details>
 
 ## How can I connect to the database?
 

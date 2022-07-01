@@ -21,18 +21,27 @@
 
 {{ end }}
 
+
 {{ define "redirects" }}
 	{{ if eq $.HostName "btcpay" }}
 	{{ range $container := $.Containers }}
 		{{ $serviceName := (index $container.Labels "com.docker.compose.service") }}
 		{{ if (eq $serviceName "lnd_bitcoin") }}
-	location /lnrpc {
+	location ~* ^/(lnrpc|routerrpc)\. {
+		grpc_read_timeout 6000s;
+		grpc_send_timeout 6000s;
 		grpc_pass grpcs://lnd_bitcoin:10009;
 	}
 	location /lnd-rest/btc/ {
 		rewrite ^/lnd-rest/btc/(.*) /$1 break;
 		proxy_pass http://lnd_bitcoin:8080/;
 	}
+		{{ end }}
+		{{ if $container.Env.REAL_IP_HEADER }}
+		{{ range $containerNetwork := $container.Networks }}
+		set_real_ip_from {{ $containerNetwork.IP }};
+		{{ end }}
+        real_ip_header {{ $container.Env.REAL_IP_HEADER }};
 		{{ end }}
 		{{ if (eq $serviceName "bitcoin_rtl") }}
 	location /rtl/ {
@@ -130,6 +139,7 @@
 		sub_filter '/image'  '/helipad/image';
 		sub_filter '/pew'  '/helipad/pew';
 		sub_filter '/boosts'  '/helipad/boosts';
+		sub_filter '/api/v1/helipad'  '/helipad/api/v1/helipad';
 		proxy_pass http://helipad:2112/;
 
 	}
