@@ -16,7 +16,8 @@ The challenges with the second solution are that Tor has very high latency, so y
 
 The third solution is technically challenging and isn't free, as you need to pay for a VPS.
 
-Cloudflare tunnel offer an alternative to those solutions without the downsides.
+Cloudflare tunnel offer an alternative to those solutions with a single downside: Cloudflare is able to see or modify all of your traffic, as it acts as a middleman between the client's browser and your local server.
+
 With cloudflare tunnel, you will enjoy low latency access to your server, on clearnet and WITHOUT the need to configure your firewall, internet router, dynamic dns and on any internet service provider. For free.
 
 You still need to configure the tunnel correctly, and this documentation will guide you through it.
