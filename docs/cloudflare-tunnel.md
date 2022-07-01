@@ -42,6 +42,11 @@ BTCPAYGEN_EXCLUDE_FRAGMENTS="$BTCPAYGEN_EXCLUDE_FRAGMENTS;nginx-https"
 
 Now you should be able to access your server from internet!
 
+## Recommended additional step
+
+In [cloudflare dashboard](https://dash.cloudflare.com), navigate to your websites, go to `Edge Certificates` and check `Always Use HTTPS`. This will make sure that any request to your website use HTTPS.
+![](./img/Cloudflare-Always-Https.png)
+
 ## Known error
 
 ### Error 503
