@@ -33,7 +33,7 @@ First we are going to create the tunnel on Cloudflare.
 5. In `Choose your environment`, click on docker and copy your token, you will need it later (the string after `--token`, as shown in the following screenshot)
 ![](./img/Cloudflare-Tunnel-Token.png)
 6. Click on the `Next` button
-7. Enter your subdomain, select your domain in the list. Then in `Service` select `HTTP` and enter `localhost`.
+7. Enter your subdomain, select your domain in the list. Then in `Service` select `HTTP` and enter `nginx`.
 8. In your the SSH session of your server, add cloudflare tunnel by running the following script. (replace `<YOUR_TOKEN_HERE>` by what you copied in step `5.`, and also replace `<YOUR_DOMAIN_HERE>` with the domain you entered in steps `7.`)
 ```bash
 BTCPAY_HOST="<YOUR_DOMAIN_HERE>"
