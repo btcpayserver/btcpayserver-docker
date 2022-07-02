@@ -9,7 +9,7 @@ Traditionally, the solution to this problem is either:
 * Use Tor
 * Setup an SSH reverse tunnel to a public VPS
 
-The challenge with the first solution si that there is no unified way to do it. Every local network has its own way of doing.
+The challenge with the first solution is that there is no unified way to do it. Every local network has its own way of doing.
 On top of it, it may not even work: internet server providers may block incoming traffic, or they might use dynamic IPs. You need to set up a [dyndns service](https://docs.btcpayserver.org/Deployment/DynamicDNS/) to update the DNS record when the IP changes automatically.
 
 The challenges with the second solution are that Tor has very high latency, so your server will feel sluggish and unreliable, and you would need a Tor-enabled browser to access it. (such as Brave or Tor Browser)
