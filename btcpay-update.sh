@@ -70,6 +70,11 @@ fi
 . helpers.sh
 docker_update
 install_tooling
+
+if $BTCPAY_ENABLE_SSH && [[ "$BTCPAY_SSHKEYFILE" == "/datadir/host_id_rsa" ]]; then
+    BTCPAY_SSHKEYFILE="/datadir/host_id_ed25519"
+    echo "Info: BTCPAY -> Host SSH connection changed ssh keys from rsa to ed25519"
+fi
 btcpay_update_docker_env
 btcpay_up
 
