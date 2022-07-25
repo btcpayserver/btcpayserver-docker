@@ -274,14 +274,14 @@ cd - && cd ..
 
 
 # Build dogecoin
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dogecoin/1.14.5/Dogecoin/1.14.5/linuxamd64.Dockerfile
-DOCKERFILE="Dogecoin/1.14.5/linuxamd64.Dockerfile"
-echo "Building btcpayserver/dogecoin:1.14.5"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dogecoin/1.14.6/Dogecoin/1.14.6/linuxamd64.Dockerfile
+DOCKERFILE="Dogecoin/1.14.6/linuxamd64.Dockerfile"
+echo "Building btcpayserver/dogecoin:1.14.6"
 git clone https://github.com/btcpayserver/dockerfile-deps dogecoin
 cd dogecoin
-git checkout Dogecoin/1.14.5
+git checkout Dogecoin/1.14.6
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/dogecoin:1.14.5" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/dogecoin:1.14.6" .
 cd - && cd ..
 
 
