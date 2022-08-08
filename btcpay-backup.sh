@@ -17,6 +17,16 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 # preparation
+if [[ "$OSTYPE" == "darwin"* ]]; then
+	# Mac OS
+	BASH_PROFILE_SCRIPT="$HOME/btcpay-env.sh"
+else
+	# Linux
+	BASH_PROFILE_SCRIPT="/etc/profile.d/btcpay-env.sh"
+fi
+
+. "$BASH_PROFILE_SCRIPT"
+
 docker_dir=$(docker volume inspect generated_btcpay_datadir --format="{{.Mountpoint}}" | sed -e "s%/volumes/.*%%g")
 dbdump_name=postgres.sql.gz
 btcpay_dir="$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
