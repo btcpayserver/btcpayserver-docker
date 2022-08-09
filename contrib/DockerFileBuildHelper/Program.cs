@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -650,8 +650,10 @@ namespace DockerFileBuildHelper
                 case "lndhub":
                     dockerInfo.DockerFilePath = $"Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
                     dockerInfo.GitLink = "https://github.com/BlueWallet/LndHub";
                     dockerInfo.GitRef = $"{image.Tag.Split("@")[0]}";
+                    dockerInfo.SupportedByUs = false;
                     break;
                 case "fireflyiii/core":
                     dockerInfo.DockerFilePath = $"Dockerfile";

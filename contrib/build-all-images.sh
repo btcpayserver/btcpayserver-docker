@@ -540,16 +540,14 @@ cd - && cd ..
 
 
 # Build lndhub
-# https://raw.githubusercontent.com/BlueWallet/LndHub/v1.3.3/Dockerfile
+# https://raw.githubusercontent.com/BlueWallet/LndHub/v1.4.1/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/BlueWallet/LndHub/v1.3.3/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-echo "Building bluewalletorganization/lndhub:v1.3.3"
+echo "Building bluewalletorganization/lndhub:v1.4.1"
 git clone https://github.com/BlueWallet/LndHub lndhub
 cd lndhub
-git checkout v1.3.3
+git checkout v1.4.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "bluewalletorganization/lndhub:v1.3.3" .
+docker build -f "$DOCKERFILE" -t "bluewalletorganization/lndhub:v1.4.1" .
 cd - && cd ..
 
 
