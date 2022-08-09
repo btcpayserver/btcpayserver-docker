@@ -400,9 +400,11 @@ namespace DockerFileBuildHelper
                     dockerInfo.SupportedByUs = false;
                     break;
                 case "monero":
-                    dockerInfo.DockerFilePath = "Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/Kukks/monero-docker";
-                    dockerInfo.GitRef = $"x86_64";
+                    dockerInfo.DockerFilePath = $"Monero/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Monero/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"Monero/{image.Tag}";
+                    dockerInfo.SupportedByUs = true;
                     break;
                 case "bitcoin":
                 {
