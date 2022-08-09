@@ -666,6 +666,7 @@ namespace DockerFileBuildHelper
                 case "lightninglabs/lightning-terminal":
                     dockerInfo.GitLink = "https://github.com/lightninglabs/lightning-terminal";
                     dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
                     dockerInfo.GitRef = image.Tag.Replace("-path-prefix", "");
                     break;
                 case "chatwoot/chatwoot":
