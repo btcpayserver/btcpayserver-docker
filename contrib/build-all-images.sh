@@ -540,16 +540,14 @@ cd - && cd ..
 
 
 # Build lndhub
-# https://raw.githubusercontent.com/BlueWallet/LndHub/v1.3.3/Dockerfile
+# https://raw.githubusercontent.com/BlueWallet/LndHub/v1.4.1/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/BlueWallet/LndHub/v1.3.3/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-echo "Building bluewalletorganization/lndhub:v1.3.3"
+echo "Building bluewalletorganization/lndhub:v1.4.1"
 git clone https://github.com/BlueWallet/LndHub lndhub
 cd lndhub
-git checkout v1.3.3
+git checkout v1.4.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "bluewalletorganization/lndhub:v1.3.3" .
+docker build -f "$DOCKERFILE" -t "bluewalletorganization/lndhub:v1.4.1" .
 cd - && cd ..
 
 
@@ -786,14 +784,14 @@ cd - && cd ..
 
 
 # Build lightning-terminal
-# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.6.3-alpha/Dockerfile
+# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.6.7-alpha/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building lightninglabs/lightning-terminal:v0.6.3-alpha-path-prefix"
+echo "Building lightninglabs/lightning-terminal:v0.6.7-alpha-path-prefix"
 git clone https://github.com/lightninglabs/lightning-terminal lightning-terminal
 cd lightning-terminal
-git checkout v0.6.3-alpha
+git checkout v0.6.7-alpha
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.6.3-alpha-path-prefix" .
+docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.6.7-alpha-path-prefix" .
 cd - && cd ..
 
 
@@ -846,16 +844,14 @@ cd - && cd ..
 
 
 # Build sphinx-relay
-# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.5/Dockerfile
+# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.9/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.5/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building sphinxlightning/sphinx-relay:v2.2.5"
+echo "Building sphinxlightning/sphinx-relay:v2.2.9"
 git clone https://github.com/stakwork/sphinx-relay sphinx-relay
 cd sphinx-relay
-git checkout v2.2.5
+git checkout v2.2.9
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "sphinxlightning/sphinx-relay:v2.2.5" .
+docker build -f "$DOCKERFILE" -t "sphinxlightning/sphinx-relay:v2.2.9" .
 cd - && cd ..
 
 

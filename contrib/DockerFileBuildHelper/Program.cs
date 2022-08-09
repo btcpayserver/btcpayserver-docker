@@ -642,16 +642,19 @@ namespace DockerFileBuildHelper
                     break;
                 case "sphinx-relay":
                     dockerInfo.DockerFilePath = $"Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
                     dockerInfo.GitLink = "https://github.com/stakwork/sphinx-relay";
                     dockerInfo.GitRef = $"{image.Tag}";
+                    dockerInfo.SupportedByUs = false;
                     break;
                 case "lndhub":
                     dockerInfo.DockerFilePath = $"Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
                     dockerInfo.GitLink = "https://github.com/BlueWallet/LndHub";
                     dockerInfo.GitRef = $"{image.Tag.Split("@")[0]}";
+                    dockerInfo.SupportedByUs = false;
                     break;
                 case "fireflyiii/core":
                     dockerInfo.DockerFilePath = $"Dockerfile";
@@ -664,6 +667,7 @@ namespace DockerFileBuildHelper
                 case "lightninglabs/lightning-terminal":
                     dockerInfo.GitLink = "https://github.com/lightninglabs/lightning-terminal";
                     dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
                     dockerInfo.GitRef = image.Tag.Replace("-path-prefix", "");
                     break;
                 case "chatwoot/chatwoot":
