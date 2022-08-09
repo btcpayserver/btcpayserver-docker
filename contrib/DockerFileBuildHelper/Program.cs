@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -642,10 +642,11 @@ namespace DockerFileBuildHelper
                     break;
                 case "sphinx-relay":
                     dockerInfo.DockerFilePath = $"Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
                     dockerInfo.GitLink = "https://github.com/stakwork/sphinx-relay";
                     dockerInfo.GitRef = $"{image.Tag}";
+                    dockerInfo.SupportedByUs = false;
                     break;
                 case "lndhub":
                     dockerInfo.DockerFilePath = $"Dockerfile";
