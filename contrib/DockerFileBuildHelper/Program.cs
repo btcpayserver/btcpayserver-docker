@@ -401,9 +401,8 @@ namespace DockerFileBuildHelper
                     break;
                 case "monero":
                     dockerInfo.DockerFilePath = $"Monero/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"Monero/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
-                    dockerInfo.GitRef = $"Monero/{image.Tag}";
+                    dockerInfo.GitRef = $"Monero/{NoRevision(image.Tag)}";
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "bitcoin":
