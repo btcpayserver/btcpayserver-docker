@@ -373,6 +373,7 @@ upstream {{ $upstream_name }} {
 	{{ $onionHost := read (printf "/var/lib/tor/hidden_services/%s/hostname" $hiddenHostName) }}
 	{{ if ne $onionHost "" }}
 server {
+	client_max_body_size 100M;
 	server_name {{ trim $onionHost }};
 	listen 80 ;
 	proxy_set_header X-Forwarded-Host  $http_host;
@@ -562,6 +563,7 @@ server {
 {{ if or (not $is_https) (eq $https_method "noredirect") }}
 
 server {
+	client_max_body_size 100M;
 	server_name {{ $host }};
 	listen 80 {{ $default_server }};
 	{{ if $enable_ipv6 }}
@@ -606,6 +608,7 @@ server {
 
 {{ if (and (not $is_https) (exists "/etc/nginx/certs/default.crt") (exists "/etc/nginx/certs/default.key")) }}
 server {
+	client_max_body_size 100M;
 	server_name {{ $host }};
 	listen 443 ssl http2 {{ $default_server }};
 	{{ if $enable_ipv6 }}
