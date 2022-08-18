@@ -17,6 +17,16 @@ if [ "$(id -u)" != "0" ]; then
 fi
 
 # preparation
+if [[ "$OSTYPE" == "darwin"* ]]; then
+	# Mac OS
+	BASH_PROFILE_SCRIPT="$HOME/btcpay-env.sh"
+else
+	# Linux
+	BASH_PROFILE_SCRIPT="/etc/profile.d/btcpay-env.sh"
+fi
+
+. "$BASH_PROFILE_SCRIPT"
+
 docker_dir=$(docker volume inspect generated_btcpay_datadir --format="{{.Mountpoint}}" | sed -e "s%/volumes/.*%%g")
 dbdump_name=postgres.sql.gz
 btcpay_dir="$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
@@ -67,12 +77,12 @@ echo "ℹ️ Archiving files in $(pwd)…"
 {
   tar \
     --exclude="volumes/backup_datadir" \
-    --exclude="volumes/generated_bitcoin_datadir/blocks" \
-    --exclude="volumes/generated_bitcoin_datadir/chainstate" \
-    --exclude="volumes/generated_bitcoin_datadir/debug.log" \
-    --exclude="volumes/generated_litecoin_datadir/blocks" \
-    --exclude="volumes/generated_litecoin_datadir/chainstate" \
-    --exclude="volumes/generated_litecoin_datadir/debug.log" \
+    --exclude="volumes/generated_bitcoin_datadir/_data/blocks" \
+    --exclude="volumes/generated_bitcoin_datadir/_data/chainstate" \
+    --exclude="volumes/generated_bitcoin_datadir/_data/debug.log" \
+    --exclude="volumes/generated_litecoin_datadir/_data/blocks" \
+    --exclude="volumes/generated_litecoin_datadir/_data/chainstate" \
+    --exclude="volumes/generated_litecoin_datadir/_data/debug.log" \
     --exclude="volumes/generated_postgres_datadir" \
     --exclude="volumes/generated_clightning_bitcoin_datadir/_data/lightning-rpc" \
     --exclude="**/logs/*" \
