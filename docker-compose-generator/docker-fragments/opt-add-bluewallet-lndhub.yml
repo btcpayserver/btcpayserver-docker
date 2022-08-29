@@ -24,6 +24,9 @@ services:
       LND_CERT_FILE: "/lnd/tls.cert"
       LND_ADMIN_MACAROON_FILE: "/lnd/admin.macaroon"
       CONFIG: '{ "rateLimit": 10000, "postRateLimit": 10000, "redis": { "port": 6379, "host": "bluewallet_lndhub_redis", "family": 4, "password": "S7bk49NBp29khUci4Zw28vsBviCnYfZ2QLTEsQNizq9ni5ur", "db": 0 }, "lnd": { "url": "lnd_bitcoin:10009", "password": ""}}'
+    # overrides to fix file permissions, see original: https://github.com/BlueWallet/LndHub/blob/master/Dockerfile
+    entrypoint: "bash"
+    command: -c "cp /lnd/tls.cert /lnd/admin.macaroon /lndhub/ && cd /lndhub && chown lndhub:lndhub admin.macaroon tls.cert && npm start"
 
   btcpayserver:
     environment:
