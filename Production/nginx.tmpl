@@ -209,33 +209,39 @@
 	}
   {{ end }}
   {{ if (eq $serviceName "mempool_web") }}
+  # https://github.com/mempool/mempool/tree/master/production/nginx
 	location /mempool/ {
 		proxy_pass http://mempool_web:8080;
 
+		sub_filter_types *;
+		sub_filter_once off;
+		sub_filter 'base href="/'  'base href="/mempool/';
+		sub_filter '="/resources'  '="/mempool/resources';
+
 		# static API docs
-		location = /api {
+		location = /mempool/api {
 			try_files $uri $uri/ /en-US/index.html =404;
 		}
-		location = /api/ {
+		location = /mempool/api/ {
 			try_files $uri $uri/ /en-US/index.html =404;
 		}
 
 		# mainnet API
-		location /api/v1/ws {
+		location /mempool/api/v1/ws {
 			proxy_pass http://mempool_api:8999/;
 			proxy_http_version 1.1;
 			proxy_set_header Upgrade $http_upgrade;
 			proxy_set_header Connection "Upgrade";
 		}
-		location /api/v1 {
+		location /mempool/api/v1 {
 			proxy_pass http://mempool_api:8999/api/v1;
 		}
-		location /api/ {
+		location /mempool/api/ {
 			proxy_pass http://mempool_api:8999/api/v1/;
 		}
 
 		# mainnet API
-		location /ws {
+		location /mempool/ws {
 			proxy_pass http://mempool_api:8999/;
 			proxy_http_version 1.1;
 			proxy_set_header Upgrade $http_upgrade;
