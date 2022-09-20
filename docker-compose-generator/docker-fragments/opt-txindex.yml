@@ -30,5 +30,8 @@ services:
     environment:
       BITCOIN_EXTRA_ARGS: |
         txindex=1
+  nbxplorer:
+    environment:
+      NBXPLORER_BTCHASTXINDEX: 1
 incompatible:
   - pruning
