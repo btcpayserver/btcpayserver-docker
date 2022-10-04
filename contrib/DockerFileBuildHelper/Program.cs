@@ -401,8 +401,10 @@ namespace DockerFileBuildHelper
                     break;
                 case "monero":
                     dockerInfo.DockerFilePath = $"Monero/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Monero/{NoRevision(image.Tag)}/linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Monero/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
-                    dockerInfo.GitRef = $"Monero/{NoRevision(image.Tag)}";
+                    dockerInfo.GitRef = $"Monero/{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "bitcoin":
@@ -436,7 +438,6 @@ namespace DockerFileBuildHelper
                     break;
                 case "dash":
                     dockerInfo.DockerFilePath = $"Dash/{image.Tag}/linuxamd64.Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"Dash/{image.Tag}/linuxarm32v7.Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = $"Dash/{image.Tag}/linuxarm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
                     dockerInfo.GitRef = $"Dash/{image.Tag}";

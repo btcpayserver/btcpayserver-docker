@@ -79,11 +79,15 @@ echo "ℹ️ Archiving files in $(pwd)…"
     --exclude="volumes/backup_datadir" \
     --exclude="volumes/generated_bitcoin_datadir/_data/blocks" \
     --exclude="volumes/generated_bitcoin_datadir/_data/chainstate" \
+    --exclude="volumes/generated_bitcoin_datadir/_data/indexes" \
     --exclude="volumes/generated_bitcoin_datadir/_data/debug.log" \
     --exclude="volumes/generated_litecoin_datadir/_data/blocks" \
     --exclude="volumes/generated_litecoin_datadir/_data/chainstate" \
+    --exclude="volumes/generated_litecoin_datadir/_data/indexes" \
     --exclude="volumes/generated_litecoin_datadir/_data/debug.log" \
     --exclude="volumes/generated_postgres_datadir" \
+    --exclude="volumes/generated_electrumx_datadir" \
+    --exclude="volumes/generated_lnd_bitcoin_datadir/_data/data/graph" \
     --exclude="volumes/generated_clightning_bitcoin_datadir/_data/lightning-rpc" \
     --exclude="**/logs/*" \
     -cvzf $backup_path $dbdump_name volumes/generated_*
