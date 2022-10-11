@@ -81,6 +81,16 @@ if [[ "$BTCPAY_ENABLE_SSH" == "true" ]] && ! [[ "$BTCPAY_HOST_SSHAUTHORIZEDKEYS"
     BTCPAY_HOST_SSHKEYFILE=""
 fi
 
+sshd_config="/etc/ssh/sshd_config"
+if [[ "$BTCPAY_ENABLE_SSH" == "true" ]] && \
+   [[ -f "$sshd_config" ]] && \
+   grep -q "PermitRootLogin[[:space:]]no" "$sshd_config"; then
+   echo "Updating "$sshd_config" (Change from 'PermitRootLogin no' to 'PermitRootLogin prohibit-password')"
+   echo "BTCPay Server needs connection from inside the container to the host in order to run btcpay-update.sh"
+   sed -i 's/PermitRootLogin[[:space:]]no/PermitRootLogin prohibit-password/' "$sshd_config"
+   service sshd reload
+fi
+
 echo "
 BTCPAY_PROTOCOL=$BTCPAY_PROTOCOL
 BTCPAY_HOST=$BTCPAY_HOST
