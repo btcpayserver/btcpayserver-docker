@@ -298,6 +298,14 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"{image.Tag}";
                     dockerInfo.SupportedByUs = false;
                     break;
+                case "mempool":
+                    dockerInfo.DockerFilePath = "docker/frontend/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "docker/frontend/Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "docker/frontend/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/mempool/mempool";
+                    dockerInfo.GitRef = $"{image.Tag}";
+                    dockerInfo.SupportedByUs = false;
+                    break;
                 case "docker-bitcoingold":
                     dockerInfo.DockerFilePath = $"bitcoingold/{image.Tag}/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/Vutov/docker-bitcoin";

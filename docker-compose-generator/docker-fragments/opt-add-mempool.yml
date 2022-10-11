@@ -8,9 +8,8 @@ services:
         # We need to use rpcauth because we also need cookieauth. rpcpassword disabled cookie file auth.
         # Be careful if you copy the line below from the docker-compose.yml! A dollar sign is escaped.
         rpcauth=mempool:d77ee0acf132038f6aaa9d4500d745ec$$72cc78dcf18191c91d10c15ff8f7c3dbbd170c4d3107cca35d71c6bf96af2ed9
-
   mempool_web:
-    image: mempool/frontend:latest
+    image: mempool/frontend:v2.5.0-dev1
     restart: on-failure
     stop_grace_period: 1m
     command: "./wait-for mempool_db:3306 --timeout=720 -- nginx -g 'daemon off;'"
@@ -21,16 +20,19 @@ services:
       BACKEND_MAINNET_HTTP_HOST: "mempool_api"
 
   mempool_api:
-    image: mempool/backend:latest
+    image: mempool/backend:v2.5.0-dev1
     restart: on-failure
     stop_grace_period: 1m
     command: "./wait-for-it.sh mempool_db:3306 --timeout=720 --strict -- ./start.sh"
     volumes:
       - mempool_api_datadir:/backend/cache
+    expose:
+      - "8999"
     environment:
       MEMPOOL_BACKEND: "electrum"
+      MEMPOOL_CACHE_DIR: "/backend/cache"
       ELECTRUM_HOST: "electrumx"
-      ELECTRUM_PORT: "50002"
+      ELECTRUM_PORT: "50001"
       ELECTRUM_TLS_ENABLED: "false"
       CORE_RPC_HOST: "bitcoind"
       CORE_RPC_PORT: "43782"

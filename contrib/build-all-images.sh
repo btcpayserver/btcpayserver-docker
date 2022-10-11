@@ -741,7 +741,7 @@ DOCKERFILE="Dockerfile"
 echo "Building fireflyiii/core:latest"
 git clone https://dev.azure.com/Firefly-III/_git/MainImage core
 cd core
-git checkout 
+git checkout
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "fireflyiii/core:latest" .
 cd - && cd ..
@@ -814,6 +814,18 @@ cd lightning-terminal
 git checkout v0.6.7-alpha
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.6.7-alpha-path-prefix" .
+cd - && cd ..
+
+
+# Build mempool
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/frontend/Dockerfile
+DOCKERFILE="docker/frontend/Dockerfile"
+echo "Building mempool/mempool:v2.5.0-dev1"
+git clone https://github.com/mempool/mempool mempool
+cd mempool
+git checkout v2.5.0-dev1
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "mempool/mempool:v2.5.0-dev1" .
 cd - && cd ..
 
 
@@ -1163,5 +1175,3 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
-
-

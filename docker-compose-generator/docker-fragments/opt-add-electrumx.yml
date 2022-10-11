@@ -8,6 +8,8 @@ services:
   electrumx:
     image: lukechilds/electrumx
     restart: unless-stopped
+    expose:
+      - "50001"
     ports:
       - "50002:50002"
     volumes:
