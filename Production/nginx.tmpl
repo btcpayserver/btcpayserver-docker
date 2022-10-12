@@ -225,7 +225,6 @@
 		sub_filter '/resources'             '/mempool/resources';
 
 		proxy_set_header Accept-Encoding "";
-		proxy_pass http://mempool_web:8080/;
 
 		# mainnet API
 		location /mempool/api/v1/ws {
