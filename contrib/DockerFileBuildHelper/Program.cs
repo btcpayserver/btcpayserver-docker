@@ -246,6 +246,13 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"EPS/{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
+                case "woocommerce":
+                    dockerInfo.DockerFilePath = $"WooCommerce/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"WooCommerce/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"WooCommerce/{image.Tag}";
+                    dockerInfo.SupportedByUs = true;
+                    break;
                 case "cloudflared":
                     dockerInfo.DockerFilePath = $"Cloudflared/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"Cloudflared/{NoRevision(image.Tag)}/linuxarm32v7.Dockerfile";
@@ -369,11 +376,6 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePath = $"Dockerfile";
                     dockerInfo.GitLink = "https://github.com/JeffVandrewJr/isso";
                     dockerInfo.GitRef = $"patron.{image.Tag.Substring("atron.".Length)}";
-                    break;
-                case "docker-woocommerce":
-                    dockerInfo.DockerFilePath = $"Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/btcpayserver/docker-woocommerce";
-                    dockerInfo.GitRef = $"v{image.Tag}";
                     break;
                 case "mariadb":
                     dockerInfo.DockerFilePath = $"{image.Tag}/Dockerfile";
