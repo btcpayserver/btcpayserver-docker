@@ -96,14 +96,11 @@ echo "ℹ️ Archiving files in $(pwd)…"
 {
   tar \
     --exclude="volumes/backup_datadir" \
-    --exclude="volumes/generated_bitcoin_datadir/_data/blocks" \
-    --exclude="volumes/generated_bitcoin_datadir/_data/chainstate" \
-    --exclude="volumes/generated_bitcoin_datadir/_data/indexes" \
-    --exclude="volumes/generated_bitcoin_datadir/_data/debug.log" \
-    --exclude="volumes/generated_litecoin_datadir/_data/blocks" \
-    --exclude="volumes/generated_litecoin_datadir/_data/chainstate" \
-    --exclude="volumes/generated_litecoin_datadir/_data/indexes" \
-    --exclude="volumes/generated_litecoin_datadir/_data/debug.log" \
+    --exclude="volumes/generated_bitcoin_datadir/_data" \
+    --exclude="volumes/generated_litecoin_datadir/_data" \
+    --exclude="volumes/generated_elements_datadir/_data" \
+    --exclude="volumes/generated_xmr_data/_data" \
+    --exclude="volumes/generated_dash_datadir/_data" \
     --exclude="volumes/generated_mariadb_datadir" \
     --exclude="volumes/generated_postgres_datadir" \
     --exclude="volumes/generated_electrumx_datadir" \
