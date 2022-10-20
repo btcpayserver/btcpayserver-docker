@@ -741,7 +741,7 @@ DOCKERFILE="Dockerfile"
 echo "Building fireflyiii/core:latest"
 git clone https://dev.azure.com/Firefly-III/_git/MainImage core
 cd core
-git checkout 
+git checkout
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "fireflyiii/core:latest" .
 cd - && cd ..
@@ -882,18 +882,18 @@ cd - && cd ..
 
 
 # Build tallycoin_connect
-# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.3/Dockerfile
+# https://raw.githubusercontent.com/djbooth007/tallycoin_connect/v1.7.5/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.3/Dockerfile.arm32v7
+# https://raw.githubusercontent.com/djbooth007/tallycoin_connect/v1.7.5/Dockerfile.arm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.3/Dockerfile.arm64v8
+# https://raw.githubusercontent.com/djbooth007/tallycoin_connect/v1.7.5/Dockerfile.arm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.arm64v8"
-echo "Building dennisreimann/tallycoin_connect:v1.7.3"
-git clone https://github.com/dennisreimann/tallycoin_connect tallycoin_connect
+echo "Building djbooth007/tallycoin_connect:v1.7.5"
+git clone https://github.com/djbooth007/tallycoin_connect tallycoin_connect
 cd tallycoin_connect
-git checkout v1.7.3
+git checkout v1.7.5
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "dennisreimann/tallycoin_connect:v1.7.3" .
+docker build -f "$DOCKERFILE" -t "djbooth007/tallycoin_connect:v1.7.5" .
 cd - && cd ..
 
 
@@ -1165,5 +1165,3 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
-
-

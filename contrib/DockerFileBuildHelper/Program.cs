@@ -294,7 +294,7 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePath = "Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"Dockerfile.arm32v7";
                     dockerInfo.DockerFilePathARM64v8 = $"Dockerfile.arm64v8";
-                    dockerInfo.GitLink = "https://github.com/dennisreimann/tallycoin_connect";
+                    dockerInfo.GitLink = "https://github.com/djbooth007/tallycoin_connect";
                     dockerInfo.GitRef = $"{image.Tag}";
                     dockerInfo.SupportedByUs = false;
                     break;
