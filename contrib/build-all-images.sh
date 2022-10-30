@@ -894,18 +894,18 @@ cd - && cd ..
 
 
 # Build tallycoin_connect
-# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.3/Dockerfile
+# https://raw.githubusercontent.com/djbooth007/tallycoin_connect/v1.7.5/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.3/Dockerfile.arm32v7
+# https://raw.githubusercontent.com/djbooth007/tallycoin_connect/v1.7.5/Dockerfile.arm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.7.3/Dockerfile.arm64v8
+# https://raw.githubusercontent.com/djbooth007/tallycoin_connect/v1.7.5/Dockerfile.arm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.arm64v8"
-echo "Building dennisreimann/tallycoin_connect:v1.7.3"
-git clone https://github.com/dennisreimann/tallycoin_connect tallycoin_connect
+echo "Building djbooth007/tallycoin_connect:v1.7.5"
+git clone https://github.com/djbooth007/tallycoin_connect tallycoin_connect
 cd tallycoin_connect
-git checkout v1.7.3
+git checkout v1.7.5
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "dennisreimann/tallycoin_connect:v1.7.3" .
+docker build -f "$DOCKERFILE" -t "djbooth007/tallycoin_connect:v1.7.5" .
 cd - && cd ..
 
 
