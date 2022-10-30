@@ -191,8 +191,8 @@
         proxy_set_header        X-Forwarded-Proto  https;
 		proxy_pass http://configurator;
 	}
-		{{ end }}
-		{{ if (eq $serviceName "nnostr-relay") }}
+  {{ end }}
+  {{ if (eq $serviceName "nnostr-relay") }}
 	location /nostr/ {
 		proxy_set_header Connection "";
 		proxy_set_header        Host               $host;
@@ -207,7 +207,41 @@
     	proxy_set_header Connection "Upgrade";
 		proxy_pass http://nnostr-relay;
 	}
-		{{ end }}
+  {{ end }}
+  {{ if (eq $serviceName "mempool_web") }}
+  # https://github.com/mempool/mempool/tree/master/production/nginx
+	location /mempool/ {
+		proxy_pass http://mempool_web:8080/;
+
+		# Bypass gzip, so that we can apply sub_filter, which does not work with proxy compressed response.
+		# Details: https://www.nginx.com/resources/wiki/modules/substitutions/#directives
+		proxy_set_header Accept-Encoding "";
+
+		sub_filter_types *;
+		sub_filter_once off;
+
+		sub_filter 'base href="/'           'base href="/mempool/';
+		sub_filter '/api/'               '/mempool/api/';
+		sub_filter '/resources'             '/mempool/resources';
+
+		# mainnet API
+		location /mempool/api/v1/ws {
+			proxy_pass http://mempool_api:8999;
+			proxy_http_version 1.1;
+			proxy_set_header Upgrade $http_upgrade;
+			proxy_set_header Connection "Upgrade";
+		}
+		location /mempool/api/v1/ {
+			proxy_pass http://mempool_api:8999/api/v1/;
+		}
+		location /mempool/api/ {
+			proxy_pass http://mempool_api:8999/api/v1/;
+		}
+	}
+	location ~ "^/[a-z]{2}/mempool" {
+		rewrite ^/(.*)/mempool $scheme://$server_name/mempool/$1/ redirect;
+	}
+	{{ end }}
 	{{ end }}
 	{{ end }}
 
