@@ -4,7 +4,7 @@ services:
   dashd:
     restart: unless-stopped
     container_name: btcpayserver_dashd
-    image: btcpayserver/dash:18.0.1
+    image: btcpayserver/dash:18.1.0
     environment:
       # rpcport and rpcbind seems duplicates, but they are not
       # rpcport is using by some tooling to automatically get
