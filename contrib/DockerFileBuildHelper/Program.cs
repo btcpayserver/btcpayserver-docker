@@ -246,6 +246,13 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"EPS/{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
+                case "woocommerce":
+                    dockerInfo.DockerFilePath = $"WooCommerce/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"WooCommerce/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"WooCommerce/{image.Tag}";
+                    dockerInfo.SupportedByUs = true;
+                    break;
                 case "cloudflared":
                     dockerInfo.DockerFilePath = $"Cloudflared/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"Cloudflared/{NoRevision(image.Tag)}/linuxarm32v7.Dockerfile";
@@ -287,7 +294,7 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePath = "Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"Dockerfile.arm32v7";
                     dockerInfo.DockerFilePathARM64v8 = $"Dockerfile.arm64v8";
-                    dockerInfo.GitLink = "https://github.com/dennisreimann/tallycoin_connect";
+                    dockerInfo.GitLink = "https://github.com/djbooth007/tallycoin_connect";
                     dockerInfo.GitRef = $"{image.Tag}";
                     dockerInfo.SupportedByUs = false;
                     break;
@@ -295,6 +302,14 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePath = "Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
                     dockerInfo.GitLink = "https://github.com/lightninglabs/lightning-terminal";
+                    dockerInfo.GitRef = $"{image.Tag}";
+                    dockerInfo.SupportedByUs = false;
+                    break;
+                case "mempool":
+                    dockerInfo.DockerFilePath = "docker/frontend/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "docker/frontend/Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "docker/frontend/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/mempool/mempool";
                     dockerInfo.GitRef = $"{image.Tag}";
                     dockerInfo.SupportedByUs = false;
                     break;
@@ -369,11 +384,6 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePath = $"Dockerfile";
                     dockerInfo.GitLink = "https://github.com/JeffVandrewJr/isso";
                     dockerInfo.GitRef = $"patron.{image.Tag.Substring("atron.".Length)}";
-                    break;
-                case "docker-woocommerce":
-                    dockerInfo.DockerFilePath = $"Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/btcpayserver/docker-woocommerce";
-                    dockerInfo.GitRef = $"v{image.Tag}";
                     break;
                 case "mariadb":
                     dockerInfo.DockerFilePath = $"{image.Tag}/Dockerfile";

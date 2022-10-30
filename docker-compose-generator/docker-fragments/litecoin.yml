@@ -4,9 +4,10 @@ services:
   litecoind:
     restart: unless-stopped
     container_name: btcpayserver_litecoind
-    image: btcpayserver/litecoin:0.21.2.1-1
+    image: btcpayserver/litecoin:0.21.2.1-2
     environment:
       BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
+      BITCOIN_WALLETDIR: "/walletdata"
       BITCOIN_EXTRA_ARGS: |
         rpcport=43782
         rpcbind=0.0.0.0:43782
@@ -18,6 +19,7 @@ services:
       - "39388"
     volumes:
       - "litecoin_datadir:/data"
+      - "litecoin_wallet_datadir:/walletdata"
   nbxplorer:
     environment:
       NBXPLORER_CHAINS: "ltc"
@@ -32,3 +34,4 @@ services:
 
 volumes:
   litecoin_datadir:
+  litecoin_wallet_datadir:

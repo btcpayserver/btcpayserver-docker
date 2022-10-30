@@ -28,7 +28,7 @@ fi
 # preparation
 docker_dir=$(docker volume inspect generated_btcpay_datadir --format="{{.Mountpoint}}" | sed -e "s%/volumes/.*%%g")
 restore_dir="$docker_dir/volumes/backup_datadir/_data/restore"
-dbdump_name=postgres.sql.gz
+postgres_dump_name=postgres.sql.gz
 btcpay_dir="$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 
 # ensure clean restore dir
@@ -54,14 +54,18 @@ echo "ℹ️ Extracting files in $(pwd) …"
 tar -xvf $backup_path -C $restore_dir
 
 # basic control checks
-if [ ! -f "$dbdump_name" ]; then
-  printf "\n🚨 $dbdump_name does not exist.\n\n"
+if [ ! -f "$postgres_dump_name" ]; then
+  printf "\n🚨 $postgres_dump_name does not exist.\n\n"
   exit 1
 fi
 
 if [ ! -d "volumes" ]; then
   printf "\n🚨 volumes directory does not exist.\n\n"
   exit 1
+fi
+
+if [ -f "mariadb.sql.gz" ]; then
+  mariadb_dump_name=mariadb.sql.gz
 fi
 
 cd $btcpay_dir
@@ -82,6 +86,9 @@ cd $restore_dir
   cp -r volumes/* $docker_dir/volumes/
   # ensure datadirs excluded in backup exist
   mkdir -p $docker_dir/volumes/generated_postgres_datadir/_data
+  if [ ! -z "$mariadb_dump_name" ]; then
+    mkdir -p $docker_dir/volumes/generated_mariadb_datadir/_data
+  fi
   echo "✅ Volume restore done."
 } || {
   echo "🚨  Restoring volumes failed. Please check the error message above."
@@ -91,39 +98,79 @@ cd $restore_dir
   exit 1
 }
 
+# Start Postgres database
 {
-  printf "\nℹ️ Starting database container …\n"
+  printf "\nℹ️ Starting Postgres database container …\n"
   docker-compose -f $BTCPAY_DOCKER_COMPOSE up -d postgres
   sleep 10
-  dbcontainer=$(docker ps -a -q -f "name=postgres")
-  if [ -z "$dbcontainer" ]; then
-    echo "🚨 Database container could not be started or found."
+  postgres_container=$(docker ps -a -q -f "name=postgres_1")
+  if [ -z "$postgres_container" ]; then
+    echo "🚨 Postgres database container could not be started or found."
     printf "\nℹ️ Restarting BTCPay Server …\n\n"
     cd $btcpay_dir
     btcpay_up
     exit 1
   fi
 } || {
-  echo "🚨 Starting database container failed. Please check the error message above."
+  echo "🚨 Starting Postgres database container failed. Please check the error message above."
   printf "\nℹ️ Restarting BTCPay Server …\n\n"
   cd $btcpay_dir
   btcpay_up
   exit 1
 }
 
+# Optional: Start MariaDB database
+if [ ! -z "$mariadb_dump_name" ]; then
+  {
+    printf "\nℹ️ Starting MariaDB database container …\n"
+    docker-compose -f $BTCPAY_DOCKER_COMPOSE up -d mariadb
+    sleep 10
+    mariadb_container=$(docker ps -a -q -f "name=mariadb_1")
+    if [ -z "$mariadb_container" ]; then
+      echo "🚨 MariaDB database container could not be started or found."
+      printf "\nℹ️ Restarting BTCPay Server …\n\n"
+      cd $btcpay_dir
+      btcpay_up
+      exit 1
+    fi
+  } || {
+    echo "🚨 Starting MariaDB database container failed. Please check the error message above."
+    printf "\nℹ️ Restarting BTCPay Server …\n\n"
+    cd $btcpay_dir
+    btcpay_up
+    exit 1
+  }
+fi
+
 cd $restore_dir
 
+# Postgres database
 {
-  printf "\nℹ️ Restoring database …"
-  gunzip -c $dbdump_name | docker exec -i $dbcontainer psql -U postgres postgres -a
-  echo "✅ Database restore done."
+  printf "\nℹ️ Restoring Postgres database …"
+  gunzip -c $postgres_dump_name | docker exec -i $postgres_container psql -U postgres postgres
+  echo "✅ Postgres database restore done."
 } || {
-  echo "🚨 Restoring database failed. Please check the error message above."
+  echo "🚨 Restoring Postgres database failed. Please check the error message above."
   printf "\nℹ️  Restarting BTCPay Server …\n\n"
   cd $btcpay_dir
   btcpay_up
   exit 1
 }
+
+# Optional: MariaDB database
+if [ ! -z "$mariadb_dump_name" ]; then
+  {
+    printf "\nℹ️ Restoring MariaDB database …"
+    gunzip -c $mariadb_dump_name | docker exec -i $mariadb_container mysql -u root -pwordpressdb
+    printf "\n✅ MariaDB database restore done."
+  } || {
+    echo "🚨 Restoring MariaDB database failed. Please check the error message above."
+    printf "\nℹ️  Restarting BTCPay Server …\n\n"
+    cd $btcpay_dir
+    btcpay_up
+    exit 1
+  }
+fi
 
 printf "\nℹ️ Restarting BTCPay Server …\n\n"
 cd $btcpay_dir
