@@ -170,18 +170,18 @@ cd - && cd ..
 
 
 # Build lnd
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.15.3-beta/linuxamd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.15.4-beta/linuxamd64.Dockerfile
 DOCKERFILE="linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.15.3-beta/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.15.4-beta/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.15.3-beta/linuxarm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.15.4-beta/linuxarm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/lnd:v0.15.3-beta"
+echo "Building btcpayserver/lnd:v0.15.4-beta"
 git clone https://github.com/btcpayserver/lnd lnd
 cd lnd
-git checkout basedon-v0.15.3-beta
+git checkout basedon-v0.15.4-beta
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.15.3-beta" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.15.4-beta" .
 cd - && cd ..
 
 
@@ -258,16 +258,16 @@ cd - && cd ..
 
 
 # Build dash
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/18.0.1/Dash/18.0.1/linuxamd64.Dockerfile
-DOCKERFILE="Dash/18.0.1/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/18.0.1/Dash/18.0.1/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dash/18.0.1/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/dash:18.0.1"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/18.1.0/Dash/18.1.0/linuxamd64.Dockerfile
+DOCKERFILE="Dash/18.1.0/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/18.1.0/Dash/18.1.0/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dash/18.1.0/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/dash:18.1.0"
 git clone https://github.com/btcpayserver/dockerfile-deps dash
 cd dash
-git checkout Dash/18.0.1
+git checkout Dash/18.1.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/dash:18.0.1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/dash:18.1.0" .
 cd - && cd ..
 
 
@@ -384,38 +384,6 @@ cd elements
 git checkout Elements/0.21.0.2-1
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/elements:0.21.0.2-1" .
-cd - && cd ..
-
-
-# Build lightning
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.9.0-1/Dockerfile
-DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.9.0-1/contrib/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="contrib/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.9.0-1/contrib/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="contrib/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/lightning:v0.9.0-1"
-git clone https://github.com/btcpayserver/lightning lightning
-cd lightning
-git checkout basedon-v0.9.0-1
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v0.9.0-1" .
-cd - && cd ..
-
-
-# Build lnd
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.11.0-beta/linuxamd64.Dockerfile
-DOCKERFILE="linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.11.0-beta/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.11.0-beta/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/lnd:v0.11.0-beta"
-git clone https://github.com/btcpayserver/lnd lnd
-cd lnd
-git checkout basedon-v0.11.0-beta
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.11.0-beta" .
 cd - && cd ..
 
 
@@ -741,7 +709,7 @@ DOCKERFILE="Dockerfile"
 echo "Building fireflyiii/core:latest"
 git clone https://dev.azure.com/Firefly-III/_git/MainImage core
 cd core
-git checkout
+git checkout 
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "fireflyiii/core:latest" .
 cd - && cd ..
@@ -817,15 +785,47 @@ docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.6.7-alpha-
 cd - && cd ..
 
 
-# Build mempool
+# Build frontend
 # https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/frontend/Dockerfile
 DOCKERFILE="docker/frontend/Dockerfile"
-echo "Building mempool/mempool:v2.5.0-dev1"
-git clone https://github.com/mempool/mempool mempool
-cd mempool
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/frontend/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/frontend/Dockerfile"
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/frontend/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/frontend/Dockerfile"
+echo "Building mempool/frontend:v2.5.0-dev1"
+git clone https://github.com/mempool/mempool frontend
+cd frontend
 git checkout v2.5.0-dev1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "mempool/mempool:v2.5.0-dev1" .
+docker build -f "$DOCKERFILE" -t "mempool/frontend:v2.5.0-dev1" .
+cd - && cd ..
+
+
+# Build backend
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/backend/Dockerfile
+DOCKERFILE="docker/backend/Dockerfile"
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/backend/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/backend/Dockerfile"
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/backend/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/backend/Dockerfile"
+echo "Building mempool/backend:v2.5.0-dev1"
+git clone https://github.com/mempool/mempool backend
+cd backend
+git checkout v2.5.0-dev1
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "mempool/backend:v2.5.0-dev1" .
+cd - && cd ..
+
+
+# Build mariadb
+# https://raw.githubusercontent.com/docker-library/mariadb/master/10.5/Dockerfile
+DOCKERFILE="10.5/Dockerfile"
+echo "Building mariadb:10.5.8"
+git clone https://github.com/docker-library/mariadb mariadb
+cd mariadb
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "mariadb:10.5.8" .
 cd - && cd ..
 
 
@@ -1177,3 +1177,5 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
+
+

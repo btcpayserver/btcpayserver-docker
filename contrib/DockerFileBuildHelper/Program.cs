@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
 using System.Net.Http;
@@ -386,7 +387,9 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"patron.{image.Tag.Substring("atron.".Length)}";
                     break;
                 case "mariadb":
-                    dockerInfo.DockerFilePath = $"{image.Tag}/Dockerfile";
+                    // 10.5.8 -> 10.5
+                    var tag = Regex.Match(image.Tag, "\\d*\\.\\d*");
+                    dockerInfo.DockerFilePath = $"{tag.Value}/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/docker-library/mariadb";
                     dockerInfo.GitRef = $"master";
                     break;
@@ -700,6 +703,20 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePathARM64v8 = $"Relay/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/kukks/nnostr";
                     dockerInfo.GitRef = $"Relay/{image.Tag}";
+                    break;
+                case "mempool/frontend":
+                    dockerInfo.DockerFilePath = $"docker/frontend/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"docker/frontend/Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"docker/frontend/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/mempool/mempool";
+                    dockerInfo.GitRef = image.Tag;
+                    break;
+                case "mempool/backend":
+                    dockerInfo.DockerFilePath = $"docker/backend/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"docker/backend/Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"docker/backend/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/mempool/mempool";
+                    dockerInfo.GitRef = image.Tag;
                     break;
                 default:
                     if (firstTry)
