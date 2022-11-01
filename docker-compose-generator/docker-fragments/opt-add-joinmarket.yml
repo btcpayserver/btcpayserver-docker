@@ -3,7 +3,7 @@ version: "3"
 services:
   joinmarket:
     container_name: joinmarket
-    image: btcpayserver/joinmarket:0.9.5
+    image: btcpayserver/joinmarket:0.9.8
     restart: unless-stopped
     environment:
       READY_FILE: /root/.nbxplorer/btc_fully_synched
@@ -29,21 +29,24 @@ services:
     expose:
       - 62601 # obwatch
       - 28183 # jmwallet daemon
+      - 28283 # jmwallet websocket
       - 8080 # payjoin server
     links:
       - bitcoind
 
   joinmarket_webui:
     container_name: joinmarket_webui
-    image: ghcr.io/joinmarket-webui/joinmarket-webui-ui-only:v0.0.3-clientserver-v0.9.5
+    image: ghcr.io/joinmarket-webui/joinmarket-webui-ui-only:v0.0.10-clientserver-v0.9.6
     restart: unless-stopped
     expose:
-      - 80 #webui nginx
+      - 80 # webui nginx
     volumes:
       - "joinmarket_datadir:/root/.joinmarket"
     environment:
-      JMWEBUI_JM_WALLETD_HOST: joinmarket
-      JMWEBUI_JM_WALLETD_PORT: 28183
+      JAM_JMWALLETD_HOST: joinmarket
+      JAM_JMWALLETD_API_PORT: 28183
+      JAM_JMWALLETD_WEBSOCKET_PORT: 28283
+      JAM_JMOBWATCH_PORT: 62601
     links:
       - joinmarket
 
