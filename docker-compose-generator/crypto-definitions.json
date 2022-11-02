@@ -2,8 +2,8 @@
   {
     "Crypto": "ltc",
     "CryptoFragment": "litecoin",
-    "CLightningFragment": "litecoin-clightning",
-    "LNDFragment": "litecoin-lnd",
+    "CLightningFragment": null,
+    "LNDFragment": null,
     "EclairFragment": null
   },
   {

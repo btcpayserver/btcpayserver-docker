@@ -69,7 +69,7 @@ services:
 
   tor:
     restart: unless-stopped
-    image: btcpayserver/tor:0.4.7.8
+    image: btcpayserver/tor:0.4.7.10
     container_name: tor
     environment:
       TOR_PASSWORD: btcpayserver

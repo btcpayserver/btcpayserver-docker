@@ -17,7 +17,7 @@ services:
 
   tor-relay:
     restart: unless-stopped
-    image: btcpayserver/tor:0.4.7.8
+    image: btcpayserver/tor:0.4.7.10
     container_name: tor-relay
     environment:
       TOR_PASSWORD: btcpayserver
@@ -27,7 +27,6 @@ services:
       - "tor_relay_torrcdir:/usr/local/etc/tor"
     ports:
       - "9001:9001"
-      - "9030:9030"
 volumes:
   tor_relay_datadir:
   tor_relay_torrcdir:

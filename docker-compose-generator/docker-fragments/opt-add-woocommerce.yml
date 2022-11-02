@@ -2,7 +2,7 @@ version: '3'
 
 services:
   woocommerce:
-    image: btcpayserver/docker-woocommerce:3.0.16
+    image: btcpayserver/woocommerce:3.1.0
     environment:
       WOOCOMMERCE_HOST: ${WOOCOMMERCE_HOST}
       WORDPRESS_DB_HOST: mariadb

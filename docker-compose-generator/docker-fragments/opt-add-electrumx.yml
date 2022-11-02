@@ -4,11 +4,12 @@ services:
   bitcoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
-        txindex=1
         rpcauth=electrumx:7d8ee47c089e6072635f82b34796e878$$13649d99453ccdf78e85007286422599c00e6953289f41bf8e92961076ba14db
   electrumx:
     image: lukechilds/electrumx
     restart: unless-stopped
+    expose:
+      - "50001"
     ports:
       - "50002:50002"
     volumes:
@@ -20,3 +21,5 @@ volumes:
   electrumx_datadir:
 incompatible:
   - pruning
+required:
+  - "opt-txindex"
