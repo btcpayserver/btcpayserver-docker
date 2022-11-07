@@ -66,7 +66,7 @@ cd "$TAR_DIR"
 IS_DOWNLOADED=false
 if [ ! -f "$TAR_FILE" ]; then
   echo "Downloading $UTXO_DOWNLOAD_LINK to $TAR_FILE"
-  wget "$UTXO_DOWNLOAD_LINK" -q --show-progress
+  wget "$UTXO_DOWNLOAD_LINK" -c -O $TAR_FILE.partial -q --show-progress && mv $TAR_FILE.partial $TAR_FILE
   IS_DOWNLOADED=true
 else
   echo "$TAR_FILE already exists"
