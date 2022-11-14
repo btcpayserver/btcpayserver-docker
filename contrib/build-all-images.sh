@@ -448,18 +448,18 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.44/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.45/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.44/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.45/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.44/Dockerfile.linuxarm64v8
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.45/Dockerfile.linuxarm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.linuxarm64v8"
-echo "Building nicolasdorier/nbxplorer:2.3.44"
+echo "Building nicolasdorier/nbxplorer:2.3.45"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.3.44
+git checkout v2.3.45
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.3.44" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.3.45" .
 cd - && cd ..
 
 
@@ -709,7 +709,7 @@ DOCKERFILE="Dockerfile"
 echo "Building fireflyiii/core:latest"
 git clone https://dev.azure.com/Firefly-III/_git/MainImage core
 cd core
-git checkout
+git checkout 
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "fireflyiii/core:latest" .
 cd - && cd ..
@@ -1032,36 +1032,36 @@ cd - && cd ..
 
 
 # Build zammad-docker-compose
-# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad-postgresql/Dockerfile
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/ff20084ce2829486076e9781fe27407ca6cc09bb/containers/zammad-postgresql/Dockerfile
 DOCKERFILE="containers/zammad-postgresql/Dockerfile"
 echo "Building zammad/zammad-docker-compose:zammad-postgresql-3.4.0-4"
 git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
 cd zammad-docker-compose
-git checkout master
+git checkout ff20084ce2829486076e9781fe27407ca6cc09bb
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-postgresql-3.4.0-4" .
 cd - && cd ..
 
 
 # Build zammad-docker-compose
-# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad-elasticsearch/Dockerfile
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/ff20084ce2829486076e9781fe27407ca6cc09bb/containers/zammad-elasticsearch/Dockerfile
 DOCKERFILE="containers/zammad-elasticsearch/Dockerfile"
 echo "Building zammad/zammad-docker-compose:zammad-elasticsearch-3.4.0-4"
 git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
 cd zammad-docker-compose
-git checkout master
+git checkout ff20084ce2829486076e9781fe27407ca6cc09bb
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-elasticsearch-3.4.0-4" .
 cd - && cd ..
 
 
 # Build zammad-docker-compose
-# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad/Dockerfile
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/ff20084ce2829486076e9781fe27407ca6cc09bb/containers/zammad/Dockerfile
 DOCKERFILE="containers/zammad/Dockerfile"
 echo "Building zammad/zammad-docker-compose:zammad-3.4.0-4"
 git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
 cd zammad-docker-compose
-git checkout master
+git checkout ff20084ce2829486076e9781fe27407ca6cc09bb
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-3.4.0-4" .
 cd - && cd ..
@@ -1080,48 +1080,48 @@ cd - && cd ..
 
 
 # Build zammad-docker-compose
-# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad/Dockerfile
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/ff20084ce2829486076e9781fe27407ca6cc09bb/containers/zammad/Dockerfile
 DOCKERFILE="containers/zammad/Dockerfile"
 echo "Building zammad/zammad-docker-compose:zammad-3.4.0-4"
 git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
 cd zammad-docker-compose
-git checkout master
+git checkout ff20084ce2829486076e9781fe27407ca6cc09bb
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-3.4.0-4" .
 cd - && cd ..
 
 
 # Build zammad-docker-compose
-# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad/Dockerfile
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/ff20084ce2829486076e9781fe27407ca6cc09bb/containers/zammad/Dockerfile
 DOCKERFILE="containers/zammad/Dockerfile"
 echo "Building zammad/zammad-docker-compose:zammad-3.4.0-4"
 git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
 cd zammad-docker-compose
-git checkout master
+git checkout ff20084ce2829486076e9781fe27407ca6cc09bb
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-3.4.0-4" .
 cd - && cd ..
 
 
 # Build zammad-docker-compose
-# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad/Dockerfile
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/ff20084ce2829486076e9781fe27407ca6cc09bb/containers/zammad/Dockerfile
 DOCKERFILE="containers/zammad/Dockerfile"
 echo "Building zammad/zammad-docker-compose:zammad-3.4.0-4"
 git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
 cd zammad-docker-compose
-git checkout master
+git checkout ff20084ce2829486076e9781fe27407ca6cc09bb
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-3.4.0-4" .
 cd - && cd ..
 
 
 # Build zammad-docker-compose
-# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad/Dockerfile
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/ff20084ce2829486076e9781fe27407ca6cc09bb/containers/zammad/Dockerfile
 DOCKERFILE="containers/zammad/Dockerfile"
 echo "Building zammad/zammad-docker-compose:zammad-3.4.0-4"
 git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
 cd zammad-docker-compose
-git checkout master
+git checkout ff20084ce2829486076e9781fe27407ca6cc09bb
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-3.4.0-4" .
 cd - && cd ..
@@ -1177,3 +1177,5 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
+
+
