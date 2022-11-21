@@ -1004,6 +1004,35 @@ cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/docker-gen:0.7.8" .
 cd - && cd ..
 
+# Build torq
+# https://raw.githubusercontent.com/lncapital/torq/v0.11.1/Dockerfile
+DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/lncapital/torq/v0.11.1/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/lncapital/torq/v0.11.1/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+echo "Building lncapital/torq:v0.11.1"
+git clone https://github.com/lncapital/torq torq
+cd torq
+git checkout v0.11.1
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "lncapital/torq:v0.11.1" .
+cd - && cd ..
+
+# Build timescaledb
+# https://raw.githubusercontent.com/timescale/timescaledb-docker/main/Dockerfile
+DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/timescale/timescaledb-docker/main/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/timescale/timescaledb-docker/main/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+echo "Building timescale/timescaledb:latest-pg14"
+git clone https://github.com/timescale/timescaledb-docker timescaledb
+cd timescaledb
+git checkout main
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "timescale/timescaledb:latest-pg14" .
+cd - && cd ..
 
 # Build woocommerce
 # https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/WooCommerce/3.1.0/WooCommerce/3.1.0/linuxamd64.Dockerfile

@@ -2,7 +2,7 @@ version: "3.7"
 services:
   torq:
     user: "root:root"
-    image: "lncapital/torq:0.10.4-btcpay4"
+    image: "lncapital/torq:0.11.1"
     restart: unless-stopped
     depends_on:
       - "torq_db"
