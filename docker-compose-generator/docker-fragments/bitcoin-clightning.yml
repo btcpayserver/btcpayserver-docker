@@ -56,7 +56,7 @@ services:
       - "9737"
 
   clightning_bitcoin_rest:
-    image: saubyk/c-lightning-rest:0.7.2
+    image: saubyk/c-lightning-rest:0.9.0
     restart: unless-stopped
     environment:
       PROTOCOL: "http"
@@ -73,10 +73,10 @@ services:
       - "3001"
 
   bitcoin_rtl:
-    image: shahanafarooqui/rtl:0.12.3
+    image: shahanafarooqui/rtl:0.13.2
     restart: unless-stopped
     environment:
-      LN_IMPLEMENTATION: CLT
+      LN_IMPLEMENTATION: CLN
       CONFIG_PATH: /root/.lightning/config
       LN_SERVER_URL: http://clightning_bitcoin_rest:3001/v1
       MACAROON_PATH: /etc/clightning_bitcoin_rest_certs
