@@ -127,7 +127,7 @@ docker logs --tail -100 btcpayserver_bitcoind
 
 If you don't trust anybody, which should be the case as much as possible, then here are the steps to verify that the UTXO set you just loaded is not malicious.
 
-1. You need another node that you own, entirely `under your control`, that `you synchronized from the genesis block. Let's call this node `Trusty`.
+1. You need another node that you own, entirely `under your control`, that `you synchronized from the genesis block`. Let's call this node `Trusty`.
 2. In the previous [step](./README.md#if-you-trust-the-owner-of-this-repository) you've set up the `Fast Sync` node. Let's call this `Synchy`.
 3. Wait for `Synchy` to be fully synced.
 4. Now on, `Synchy` and `Trusty` run the following command at the same time:
