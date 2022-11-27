@@ -568,11 +568,28 @@ Then, inside `psql` you can select a database and interact with the tables:
 \c btcpayservermainnet
 
 # list tables
-\dt+
+\dt
 
 # list users
 SELECT "Id", "Email" FROM "AspNetUsers";
 
 # end session
 \q
+```
+
+The main BTCPay Server database tables are part of the `public` schema.
+Plugins have their own schema, named after the plugin.
+
+By default, only the tables of the `public` schema are shown.
+If you want to also see and select the plugin tables, you need to extend the search path:
+
+```bash
+# list plugin schemas
+SELECT * FROM pg_catalog.pg_namespace WHERE nspname LIKE 'BTCPayServer.%';
+
+# extend search path
+SET search_path TO "BTCPayServer.Plugins.MyPlugin", public;
+
+# table list now also shows the MyPlugin tables
+\dt
 ```
