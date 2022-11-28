@@ -718,6 +718,20 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/mempool/mempool";
                     dockerInfo.GitRef = image.Tag;
                     break;
+                case "lncapital/torq":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/lncapital/torq";
+                    dockerInfo.GitRef = "v" + image.Tag;
+                    break;
+                case "timescale/timescaledb":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/timescale/timescaledb-docker";
+                    dockerInfo.GitRef = "main";
+                    break;
                 default:
                     if (firstTry)
                     {
