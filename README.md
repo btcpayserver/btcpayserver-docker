@@ -193,6 +193,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-helipad](docker-compose-generator/docker-fragments/opt-add-helipad.yml) for [Podcastindex.org Helipad](https://github.com/Podcastindex-org/helipad). Requires LND.
 * [opt-add-nostr-relay](docker-compose-generator/docker-fragments/opt-add-nostr-relay.yml) for [Nostr Relay](https://github.com/kukks/Nnostr).
 * [opt-add-cloudflared](docker-compose-generator/docker-fragments/opt-add-cloudflared.yml) to expose your local server on clearnet painlessly ([see documentation](docs/cloudflare-tunnel.md)).
+* [opt-add-torq](docker-compose-generator/docker-fragments/opt-add-torq.yml) to install [Torq](https://github.com/lncapital/torq) node management application. Requires LND.
 
 You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).
 
