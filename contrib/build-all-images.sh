@@ -202,18 +202,18 @@ cd - && cd ..
 
 
 # Build bitcoin
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/23.0-1/Bitcoin/23.0/linuxamd64.Dockerfile
-DOCKERFILE="Bitcoin/23.0/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/23.0-1/Bitcoin/23.0/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Bitcoin/23.0/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/23.0-1/Bitcoin/23.0/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Bitcoin/23.0/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/bitcoin:23.0-1"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/24.0/Bitcoin/24.0/linuxamd64.Dockerfile
+DOCKERFILE="Bitcoin/24.0/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/24.0/Bitcoin/24.0/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Bitcoin/24.0/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/24.0/Bitcoin/24.0/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Bitcoin/24.0/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/bitcoin:24.0"
 git clone https://github.com/btcpayserver/dockerfile-deps bitcoin
 cd bitcoin
-git checkout Bitcoin/23.0-1
+git checkout Bitcoin/24.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoin:23.0-1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoin:24.0" .
 cd - && cd ..
 
 
@@ -1004,6 +1004,7 @@ cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/docker-gen:0.7.8" .
 cd - && cd ..
 
+
 # Build torq
 # https://raw.githubusercontent.com/lncapital/torq/v0.12.1/Dockerfile
 DOCKERFILE="Dockerfile"
@@ -1011,13 +1012,14 @@ DOCKERFILE="Dockerfile"
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
 # https://raw.githubusercontent.com/lncapital/torq/v0.12.1/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building lncapital/torq:v0.12.1"
+echo "Building lncapital/torq:0.12.1"
 git clone https://github.com/lncapital/torq torq
 cd torq
 git checkout v0.12.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "lncapital/torq:v0.12.1" .
+docker build -f "$DOCKERFILE" -t "lncapital/torq:0.12.1" .
 cd - && cd ..
+
 
 # Build timescaledb
 # https://raw.githubusercontent.com/timescale/timescaledb-docker/main/Dockerfile
@@ -1033,6 +1035,7 @@ git checkout main
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "timescale/timescaledb:latest-pg14" .
 cd - && cd ..
+
 
 # Build woocommerce
 # https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/WooCommerce/3.1.0/WooCommerce/3.1.0/linuxamd64.Dockerfile
