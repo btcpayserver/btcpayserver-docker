@@ -321,8 +321,8 @@ namespace DockerFileBuildHelper
                     break;
                 case "lightning":
                     dockerInfo.DockerFilePath = $"Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = "contrib/linuxarm32v7.Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = "contrib/linuxarm64v8.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "contrib/docker/linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "contrib/docker/linuxarm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/lightning";
                     dockerInfo.GitRef = $"basedon-{image.Tag}";
                     dockerInfo.SupportedByUs = true;
