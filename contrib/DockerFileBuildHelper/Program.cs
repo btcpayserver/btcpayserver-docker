@@ -321,8 +321,8 @@ namespace DockerFileBuildHelper
                     break;
                 case "lightning":
                     dockerInfo.DockerFilePath = $"Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = "contrib/linuxarm32v7.Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = "contrib/linuxarm64v8.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "contrib/docker/linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "contrib/docker/linuxarm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/lightning";
                     dockerInfo.GitRef = $"basedon-{image.Tag}";
                     dockerInfo.SupportedByUs = true;
@@ -717,6 +717,20 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePathARM64v8 = $"docker/backend/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/mempool/mempool";
                     dockerInfo.GitRef = image.Tag;
+                    break;
+                case "lncapital/torq":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/lncapital/torq";
+                    dockerInfo.GitRef = "v" + image.Tag;
+                    break;
+                case "timescale/timescaledb":
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/timescale/timescaledb-docker";
+                    dockerInfo.GitRef = "main";
                     break;
                 default:
                     if (firstTry)

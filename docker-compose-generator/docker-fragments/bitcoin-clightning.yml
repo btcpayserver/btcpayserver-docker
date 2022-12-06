@@ -2,7 +2,7 @@ version: "3"
 
 services:
   clightning_bitcoin:
-    image: btcpayserver/lightning:v0.10.2
+    image: btcpayserver/lightning:v22.11
     container_name: btcpayserver_clightning_bitcoin
     restart: unless-stopped
     environment:
@@ -16,6 +16,7 @@ services:
         bitcoin-datadir=/etc/bitcoin
         bitcoin-rpcconnect=bitcoind
         experimental-offers
+        database-upgrade=true
     volumes:
       - "clightning_bitcoin_datadir:/root/.lightning"
       - "bitcoin_datadir:/etc/bitcoin"
@@ -42,7 +43,7 @@ services:
       - clightning_bitcoin
 
   clightning_bitcoin_spark:
-    image: shesek/spark-wallet:0.2.9-standalone
+    image: shesek/spark-wallet:0.3.1-standalone
     restart: unless-stopped
     environment:
       NETWORK: ${NBITCOIN_NETWORK:-regtest}
