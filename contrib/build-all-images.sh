@@ -62,18 +62,18 @@ cd - && cd ..
 
 
 # Build lightning
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.10.2/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v22.11/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.10.2/contrib/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="contrib/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.10.2/contrib/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="contrib/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/lightning:v0.10.2"
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v22.11/contrib/docker/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="contrib/docker/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v22.11/contrib/docker/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="contrib/docker/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/lightning:v22.11"
 git clone https://github.com/btcpayserver/lightning lightning
 cd lightning
-git checkout basedon-v0.10.2
+git checkout basedon-v22.11
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v0.10.2" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v22.11" .
 cd - && cd ..
 
 
