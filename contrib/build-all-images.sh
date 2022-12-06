@@ -94,18 +94,18 @@ cd - && cd ..
 
 
 # Build spark-wallet
-# https://raw.githubusercontent.com/shesek/spark-wallet/v0.2.9/Dockerfile
+# https://raw.githubusercontent.com/shesek/spark-wallet/v0.3.1/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/shesek/spark-wallet/v0.2.9/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/shesek/spark-wallet/v0.3.1/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/shesek/spark-wallet/v0.2.9/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/shesek/spark-wallet/v0.3.1/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building shesek/spark-wallet:0.2.9-standalone"
+echo "Building shesek/spark-wallet:0.3.1-standalone"
 git clone https://github.com/shesek/spark-wallet spark-wallet
 cd spark-wallet
-git checkout v0.2.9
+git checkout v0.3.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shesek/spark-wallet:0.2.9-standalone" .
+docker build -f "$DOCKERFILE" -t "shesek/spark-wallet:0.3.1-standalone" .
 cd - && cd ..
 
 
