@@ -42,3 +42,5 @@ volumes:
 
 exclusive:
   - bitcoin-node
+recommended:
+  - "opt-mempoolfullrbf"
