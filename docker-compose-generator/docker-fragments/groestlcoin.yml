@@ -4,7 +4,7 @@ services:
   groestlcoind:
     restart: unless-stopped
     container_name: btcpayserver_groestlcoind
-    image: btcpayserver/groestlcoin:23.0
+    image: btcpayserver/groestlcoin:24.0.1
     environment:
       GROESTLCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       GROESTLCOIN_WALLETDIR: "/walletdata"
