@@ -175,3 +175,60 @@ Always make sure your backup strategy is tested and fits your needs.
 No one solution fits all, and we tried to cover the basic cases.
 For the latest updates, always feel free to ask on the BTCPay Server community channels.
 :::
+
+## How to migrate to a new server?
+
+The necessary steps always depend on your setup and infrastructure but as a rough guideline the following steps and considerations will get you through the process.
+
+:::warning
+If you have Lightning Network (LN) channels open on your internal node, you need to make sure to **not** restore any old channel state, otherwise your are at the risk of loosing funds. Therefore it is important to shut down BTCPay on the old server immediately after the backup has finished as outlined below.
+:::
+
+**Definitions:**   
+NEW = steps to be done on the NEW server  
+OLD = steps to be done on the OLD server
+
+
+### Preparation   
+
+#### Temporarily reduce the TTL of your domain:   
+Depending on the TTL (time-to-live) of your DNS entries (A-Record) for you BTCPay Server domains/subdomains it makes sense to reduce the TTL a day or a few hours before you want to start the migration. In case anything goes wrong you can quickly switch between new and old server IP addresses. You should set the TTL for the domain/subdomain to some shorter timewindow eg. 600 seconds (10 minutes) or if possible 300 seconds (5 mins). You can do this in at your domain registrar control center.
+
+#### Environment variables:
+write down the environment variables you need for the setup on the new server as written in the [Docker installation guide](/Docker/#full-installation-for-technical-users).
+
+```bash
+echo $BTCPAY_HOST
+echo $NBITCOIN_NETWORK
+echo $BTCPAYGEN_CRYPTO1
+echo $BTCPAYGEN_ADDITIONAL_FRAGMENTS
+echo $BTCPAYGEN_REVERSEPROXY
+echo $BTCPAYGEN_LIGHTNING
+echo $BTCPAY_ENABLE_SSH
+```
+
+:::tip
+If you have custom modifications or additional altcoins then do not forget export those environment variables too.
+:::
+
+
+#### Prepare the NEW server:  
+
+Install the operating system on the new server/VPS without installing BTCPay, yet. 
+
+
+### Migration steps
+
+#### On the OLD server:   
+- [make the backup](#how-does-the-backup-work)
+- stop all containers by running `./btcpay-stop.sh` (this ensures no outdated LN channel state gets restored on the new server)
+- copy the backup archive to new server
+
+#### At the domain registrar:   
+Change the DNS A-Record of your domains/subdomains to the NEW server IP address and wait 5-10 mins (depending on the TTL)
+
+#### On the NEW server:   
+- install BTCPay according to [our Docker installation guide](/Docker/#full-installation-for-technical-users) but with the same environment variable values you wrote down in the preparation steps above
+- wait until the installation finished (takes a few minutes) and check if you can access the btcpay interface, you will see that the node is still synching which is fine
+- run the [restore process](#how-to-restore) (you can do this even if node not fully synced yet, it will continue after the restore is finished)
+- if everything works on the new server you can shutdown and wipe the old server
