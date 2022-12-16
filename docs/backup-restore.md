@@ -204,7 +204,7 @@ echo $BTCPAY_ENABLE_SSH
 ```
 
 :::tip
-If you have custom modifications or additional altcoins then do not forget write down those environment variables too.
+If you have custom modifications or additional altcoins then do not forget to write down those environment variables too.
 :::
 
 
