@@ -184,10 +184,6 @@ The necessary steps always depend on your setup and infrastructure but as a roug
 If you have Lightning Network (LN) channels open on your internal node, you need to make sure to **not** restore any old channel state, otherwise your are at the risk of loosing funds. Therefore it is important to shut down BTCPay on the old server immediately after the backup has finished as outlined below.
 :::
 
-**Definitions:**   
-NEW = steps to be done on the NEW server  
-OLD = steps to be done on the OLD server
-
 
 ### Preparation   
 
