@@ -4,9 +4,10 @@ services:
   bitcoind:
     restart: unless-stopped
     container_name: btcpayserver_bitcoind
-    image: btcpayserver/bitcoin:24.0
+    image: btcpayserver/bitcoin:24.0.1
     environment:
       BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
+      CREATE_WALLET: "false"
       BITCOIN_WALLETDIR: "/walletdata"
       # rpcport and rpcbind seems duplicates, but they are not
       # rpcport is using by some tooling to automatically get

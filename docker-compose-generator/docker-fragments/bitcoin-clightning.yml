@@ -2,7 +2,7 @@ version: "3"
 
 services:
   clightning_bitcoin:
-    image: btcpayserver/lightning:v22.11
+    image: btcpayserver/lightning:v22.11.1
     container_name: btcpayserver_clightning_bitcoin
     restart: unless-stopped
     environment:
@@ -74,7 +74,7 @@ services:
       - "3001"
 
   bitcoin_rtl:
-    image: shahanafarooqui/rtl:0.13.2
+    image: shahanafarooqui/rtl:0.13.3
     restart: unless-stopped
     environment:
       LN_IMPLEMENTATION: CLN
