@@ -182,7 +182,7 @@ If you are a bitcoin developer or public figure, feel free to add your signature
 
 ```bash
 # Assuming you are inside the FastSync directory
-keybase PGP sign -i YOU.utxo-sets -c -t -o sigs/YOU.utxo-sets.asc
+keybase pgp sign -i YOU.utxo-sets -c -t -o sigs/YOU.utxo-sets.asc
 rm YOU.utxo-sets
 git add sigs/YOU.utxo-sets.asc
 git commit -m "Add YOU utxo-set signature" --all
