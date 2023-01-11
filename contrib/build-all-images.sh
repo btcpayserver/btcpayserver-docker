@@ -1006,18 +1006,18 @@ cd - && cd ..
 
 
 # Build torq
-# https://raw.githubusercontent.com/lncapital/torq/v0.15.4/Dockerfile
+# https://raw.githubusercontent.com/lncapital/torq/v0.16.3/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/lncapital/torq/v0.15.4/Dockerfile
+# https://raw.githubusercontent.com/lncapital/torq/v0.16.3/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/lncapital/torq/v0.15.4/Dockerfile
+# https://raw.githubusercontent.com/lncapital/torq/v0.16.3/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building lncapital/torq:0.15.4"
+echo "Building lncapital/torq:0.16.3"
 git clone https://github.com/lncapital/torq torq
 cd torq
-git checkout v0.15.4
+git checkout v0.16.3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "lncapital/torq:0.15.4" .
+docker build -f "$DOCKERFILE" -t "lncapital/torq:0.16.3" .
 cd - && cd ..
 
 
