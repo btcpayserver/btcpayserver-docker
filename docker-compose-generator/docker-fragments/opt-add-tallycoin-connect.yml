@@ -6,7 +6,7 @@ services:
     volumes:
       - "tallycoin_connect_datadir:/etc/tallycoin_connect_datadir"
   tallycoin_connect:
-    image: "djbooth007/tallycoin_connect:v1.7.5"
+    image: "djbooth007/tallycoin_connect:v1.8.0"
     restart: unless-stopped
     expose:
       - "8123"
