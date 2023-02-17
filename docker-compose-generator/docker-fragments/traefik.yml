@@ -3,23 +3,35 @@ version: "3"
 services:
   traefik:
     restart: unless-stopped
-    image: traefik
+    image: traefik:v2.6
     container_name: traefik
     ports:
       - "${REVERSEPROXY_HTTP_PORT:-80}:80"
       - "${REVERSEPROXY_HTTPS_PORT:-443}:443"
+      - "8080:8080" # Dashboard, enable for debug only
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./traefik.toml:/traefik.toml"
-      - "./acme.json:/acme.json:ro"
-      - "./servers.toml:/servers.toml"
-      - "./traefik_logs:/traefik_logs"
-
-    links:
-      - btcpayserver
-
+      - "../Traefik/traefik.yml:/traefik.yml"
+      - "traefik_data:/data"
+  bitcoin_rtl:
+      labels:
+        traefik.enable: true
+        traefik.http.routers.bitcoin_rtl.rule: Host(`${BTCPAY_HOST}`) && (Path(`/rtl`) || PathPrefix(`/rtl/`))
+  btcpayserver:
+    labels:
+      traefik.enable: true
+      traefik.http.routers.btcpayserver.rule: Host(`${BTCPAY_HOST}`)
+      # Traefic can not accept list from BTCPAY_ADDITIONAL_HOSTS, see Traefik/README.md
+  btctransmuter:
+    labels:
+      traefik.enable: true
+      traefik.http.routers.btctransmuter.rule: Host(`${BTCPAY_HOST}`) && (Path(`/btctransmuter`) || PathPrefix(`/btctransmuter/`))
+  bitcoin_thub:
+    labels:
+      traefik.enable: true
+      traefik.http.routers.bitcoin_thub.rule: Host(`${BTCPAY_HOST}`) && (Path(`/thub`) || PathPrefix(`/thub/`))
 volumes:
-  traefik_logs:
+  traefik_data:
 
 exclusive:
   - proxy

@@ -3,7 +3,7 @@ version: "3"
 services:
   btctransmuter:
     restart: unless-stopped
-    image: btcpayserver/btctransmuter:0.0.57
+    image: btcpayserver/btctransmuter:0.0.59
     container_name: btctransmuter
     environment:
       TRANSMUTER_Database: User ID=postgres;Host=postgres;Port=5432;Database=btctransmuter${NBITCOIN_NETWORK:-regtest}

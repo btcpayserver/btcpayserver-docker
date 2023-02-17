@@ -18,6 +18,7 @@ install_tooling() {
                 "btcpayserver_trezarcoind" "trezarcoin-cli.sh" "Command line for your Trezar instance" \
                 "btcpayserver_viacoind" "viacoin-cli.sh" "Command line for your Viacoin instance" \
                 "btcpayserver_elementsd" "elements-cli.sh" "Command line for your Elements/Liquid instance" \
+                "joinmarket" "jm.sh" "Command line for your joinmarket instance" \
                 "ndlci_cli" "ndlc-cli.sh" "Command line for NDLC-CLI" \
                 "pihole" "pihole.sh" "Command line for running pihole commands" \
                 "*" "btcpay-clean.sh" "Command line for deleting old unused docker images" \
@@ -53,9 +54,9 @@ install_tooling() {
 btcpay_expand_variables() {
     BTCPAY_CRYPTOS=""
     for i in "$BTCPAYGEN_CRYPTO1" "$BTCPAYGEN_CRYPTO2" "$BTCPAYGEN_CRYPTO3" "$BTCPAYGEN_CRYPTO4" "$BTCPAYGEN_CRYPTO5" "$BTCPAYGEN_CRYPTO5" "$BTCPAYGEN_CRYPTO6" "$BTCPAYGEN_CRYPTO7" "$BTCPAYGEN_CRYPTO8"
-    do  
-        if [ ! -z "$i" ]; then 
-            if [ ! -z "$BTCPAY_CRYPTOS" ]; then 
+    do
+        if [ ! -z "$i" ]; then
+            if [ ! -z "$BTCPAY_CRYPTOS" ]; then
                 BTCPAY_CRYPTOS="$BTCPAY_CRYPTOS;"
             fi
             BTCPAY_CRYPTOS="$BTCPAY_CRYPTOS$i"
@@ -80,6 +81,16 @@ if [[ "$BTCPAY_ENABLE_SSH" == "true" ]] && ! [[ "$BTCPAY_HOST_SSHAUTHORIZEDKEYS"
     BTCPAY_HOST_SSHKEYFILE=""
 fi
 
+sshd_config="/etc/ssh/sshd_config"
+if [[ "$BTCPAY_ENABLE_SSH" == "true" ]] && \
+   [[ -f "$sshd_config" ]] && \
+   grep -q "PermitRootLogin[[:space:]]no" "$sshd_config"; then
+   echo "Updating "$sshd_config" (Change from 'PermitRootLogin no' to 'PermitRootLogin prohibit-password')"
+   echo "BTCPay Server needs connection from inside the container to the host in order to run btcpay-update.sh"
+   sed -i 's/PermitRootLogin[[:space:]]no/PermitRootLogin prohibit-password/' "$sshd_config"
+   service sshd reload
+fi
+
 echo "
 BTCPAY_PROTOCOL=$BTCPAY_PROTOCOL
 BTCPAY_HOST=$BTCPAY_HOST
@@ -88,6 +99,7 @@ BTCPAY_ANNOUNCEABLE_HOST=$BTCPAY_ANNOUNCEABLE_HOST
 REVERSEPROXY_HTTP_PORT=$REVERSEPROXY_HTTP_PORT
 REVERSEPROXY_HTTPS_PORT=$REVERSEPROXY_HTTPS_PORT
 REVERSEPROXY_DEFAULT_HOST=$REVERSEPROXY_DEFAULT_HOST
+NOREVERSEPROXY_HTTP_PORT=$NOREVERSEPROXY_HTTP_PORT
 BTCPAY_IMAGE=$BTCPAY_IMAGE
 ACME_CA_URI=$ACME_CA_URI
 NBITCOIN_NETWORK=$NBITCOIN_NETWORK
@@ -100,14 +112,34 @@ BTCPAY_HOST_SSHAUTHORIZEDKEYS=$BTCPAY_HOST_SSHAUTHORIZEDKEYS
 LIBREPATRON_HOST=$LIBREPATRON_HOST
 ZAMMAD_HOST=$ZAMMAD_HOST
 BTCTRANSMUTER_HOST=$BTCTRANSMUTER_HOST
+CHATWOOT_HOST=$CHATWOOT_HOST
 BTCPAY_CRYPTOS=$BTCPAY_CRYPTOS
 WOOCOMMERCE_HOST=$WOOCOMMERCE_HOST
 TOR_RELAY_NICKNAME=$TOR_RELAY_NICKNAME
 TOR_RELAY_EMAIL=$TOR_RELAY_EMAIL
 EPS_XPUB=$EPS_XPUB
-LND_WTCLIENT_SWEEP_FEE=$LND_WTCLIENT_SWEEP_FEE" > $BTCPAY_ENV_FILE
+LND_WTCLIENT_SWEEP_FEE=$LND_WTCLIENT_SWEEP_FEE
+FIREFLY_HOST=$FIREFLY_HOST
+LIT_PASSWD=$LIT_PASSWD
+TALLYCOIN_APIKEY=$TALLYCOIN_APIKEY
+TALLYCOIN_PASSWD=$TALLYCOIN_PASSWD
+TALLYCOIN_PASSWD_CLEARTEXT=$TALLYCOIN_PASSWD_CLEARTEXT
+CLOUDFLARE_TUNNEL_TOKEN=$CLOUDFLARE_TUNNEL_TOKEN" > $BTCPAY_ENV_FILE
 
 env | grep ^BWT_ >> $BTCPAY_ENV_FILE || true
+}
+
+docker_update() {
+    if [[ "$(uname -m)" == "armv7l" ]] && cat "/etc/os-release" 2>/dev/null | grep -q "VERSION_CODENAME=buster" 2>/dev/null; then
+        if [[ "$(apt list libseccomp2 2>/dev/null)" == *" 2.3"* ]]; then
+            echo "Outdated version of libseccomp2, updating... (see: https://blog.samcater.com/fix-workaround-rpi4-docker-libseccomp2-docker-20/)"
+            # https://blog.samcater.com/fix-workaround-rpi4-docker-libseccomp2-docker-20/
+            apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC 648ACFD622F3D138
+            echo 'deb http://httpredir.debian.org/debian buster-backports main contrib non-free' | sudo tee -a /etc/apt/sources.list.d/debian-backports.list
+            apt update
+            apt install libseccomp2 -t buster-backports
+        fi
+    fi
 }
 
 btcpay_up() {
@@ -147,17 +179,14 @@ btcpay_restart() {
     if ! [ $? -eq 0 ]; then
         docker-compose -f $BTCPAY_DOCKER_COMPOSE restart
     fi
+    btcpay_up
     popd > /dev/null
 }
 
 btcpay_dump_db() {
     pushd . > /dev/null
     cd "$(dirname "$BTCPAY_ENV_FILE")"
-    backup_dir="/var/lib/docker/volumes/backup_datadir/_data"
-    if [ ! -d "$backup_dir" ]; then
-        docker volume create backup_datadir
-    fi
-    local filename=${1:-"postgres-$(date "+%Y%m%d-%H%M%S").sql"}
-    docker exec $(docker ps -a -q -f "name=postgres_1") pg_dumpall -c -U postgres > "$backup_dir/$filename"
+    local file_path=${1:-"postgres-$(date "+%Y%m%d-%H%M%S").sql.gz"}
+    docker exec $(docker ps -a -q -f "name=postgres_1") pg_dumpall -c -U postgres | gzip > "$file_path"
     popd > /dev/null
 }

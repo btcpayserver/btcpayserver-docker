@@ -1,4 +1,4 @@
-{{ $CurrentContainer := where $ "ID" .Docker.CurrentContainerID | first }} 
+{{ $CurrentContainer := where $ "ID" .Docker.CurrentContainerID | first }}
 {{ define "upstream" }}
 	{{ if .Address }}
 		{{/* If we got the containers from swarm and this container's port is published to host, use host IP:PORT */}}
@@ -18,15 +18,18 @@
 	server 127.0.0.1 down;
 		{{ end }}
 	{{ end }}
-	
+
 {{ end }}
+
 
 {{ define "redirects" }}
 	{{ if eq $.HostName "btcpay" }}
 	{{ range $container := $.Containers }}
 		{{ $serviceName := (index $container.Labels "com.docker.compose.service") }}
 		{{ if (eq $serviceName "lnd_bitcoin") }}
-	location /lnrpc {
+	location ~* ^/(lnrpc|routerrpc|verrpc|walletrpc)\. {
+		grpc_read_timeout 6000s;
+		grpc_send_timeout 6000s;
 		grpc_pass grpcs://lnd_bitcoin:10009;
 	}
 	location /lnd-rest/btc/ {
@@ -34,11 +37,24 @@
 		proxy_pass http://lnd_bitcoin:8080/;
 	}
 		{{ end }}
+		{{ if $container.Env.REAL_IP_HEADER }}
+		{{ range $containerNetwork := $container.Networks }}
+		set_real_ip_from {{ $containerNetwork.IP }};
+		{{ end }}
+        real_ip_header {{ $container.Env.REAL_IP_HEADER }};
+		{{ end }}
 		{{ if (eq $serviceName "bitcoin_rtl") }}
 	location /rtl/ {
 		proxy_pass http://bitcoin_rtl:3000/rtl/;
 	}
 		{{ end }}
+
+		{{ if (eq $serviceName "joinmarket") }}
+		location /obwatch/ {
+		proxy_pass http://joinmarket:62601/;
+		}
+		{{ end }}
+
 		{{ if (eq $serviceName "bitcoin_thub") }}
 	location /thub {
 		proxy_pass http://bitcoin_thub:3000/thub;
@@ -62,7 +78,7 @@
 	location /lightning-charge/btc/ {
 		proxy_pass http://clightning_bitcoin_charge:9112/;
 	}
-	{{ end }}		
+	{{ end }}
 	{{ if (eq $serviceName "clightning_bitcoin_rest") }}
 	location /clightning-rest/btc/ {
 	    rewrite ^/clightning-rest/btc/(.*) /$1 break;
@@ -79,7 +95,7 @@
 		proxy_pass http://clightning_groestlcoin_charge:9112/;
 	}
 		{{ end }}
-		
+
 		{{ if (eq $serviceName "btctransmuter") }}
 	location /btctransmuter/ {
 		proxy_set_header Connection "";
@@ -102,8 +118,53 @@
         sub_filter_once off;
 	}
 		{{ end }}
+		{{ if (eq $serviceName "helipad") }}
+	location /helipad/ {
+		proxy_set_header Connection "";
+		proxy_set_header        Host               $host;
+		proxy_set_header        X-Real-IP          $remote_addr;
+        proxy_set_header        X-Forwarded-For    $proxy_add_x_forwarded_for;
+        proxy_set_header        X-Forwarded-Host   $host:443;
+        proxy_set_header        X-Forwarded-Server $host;
+        proxy_set_header        X-Forwarded-Port   443;
+        proxy_set_header        X-Forwarded-Proto  https;
 
-		
+		sub_filter_once off;
+		sub_filter_types *;
+
+
+
+		sub_filter 'src="/'  'src="/helipad/';
+		sub_filter 'href="/'  'href="/helipad/';
+		sub_filter '/image'  '/helipad/image';
+		sub_filter '/pew'  '/helipad/pew';
+		sub_filter '/boosts'  '/helipad/boosts';
+		sub_filter '/api/v1/helipad'  '/helipad/api/v1/helipad';
+		proxy_pass http://helipad:2112/;
+
+	}
+		{{ end }}
+
+  {{ if (eq $serviceName "lnd_lit") }}
+  location /lit {
+    proxy_set_header Host               $host;
+    proxy_set_header X-Real-IP          $remote_addr;
+    proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto  $scheme;
+    proxy_pass http://lnd_lit:8080/;
+  }
+
+  location ~* ^/(ln|loop|pool|lit)rpc\. {
+    proxy_pass http://lnd_lit:8080;
+  }
+  {{ end }}
+
+  {{ if (eq $serviceName "torq") }}
+  location /torq/ {
+    proxy_pass http://torq:8080/;
+  }
+  {{ end }}
+
   {{ if (eq $serviceName "sphinxrelay") }}
   location /sphinxrelay/ {
     proxy_set_header        Host               $host;
@@ -136,7 +197,57 @@
         proxy_set_header        X-Forwarded-Proto  https;
 		proxy_pass http://configurator;
 	}
-		{{ end }}
+  {{ end }}
+  {{ if (eq $serviceName "nnostr-relay") }}
+	location /nostr/ {
+		proxy_set_header Connection "";
+		proxy_set_header        Host               $host;
+        proxy_set_header        X-Real-IP          $remote_addr;
+        proxy_set_header        X-Forwarded-For    $proxy_add_x_forwarded_for;
+        proxy_set_header        X-Forwarded-Host   $host:443;
+        proxy_set_header        X-Forwarded-Server $host;
+        proxy_set_header        X-Forwarded-Port   443;
+        proxy_set_header        X-Forwarded-Proto  https;
+		proxy_http_version 1.1;
+    	proxy_set_header Upgrade $http_upgrade;
+    	proxy_set_header Connection "Upgrade";
+		proxy_pass http://nnostr-relay;
+	}
+  {{ end }}
+  {{ if (eq $serviceName "mempool_web") }}
+  # https://github.com/mempool/mempool/tree/master/production/nginx
+	location /mempool/ {
+		proxy_pass http://mempool_web:8080/;
+
+		# Bypass gzip, so that we can apply sub_filter, which does not work with proxy compressed response.
+		# Details: https://www.nginx.com/resources/wiki/modules/substitutions/#directives
+		proxy_set_header Accept-Encoding "";
+
+		sub_filter_types *;
+		sub_filter_once off;
+
+		sub_filter 'base href="/'           'base href="/mempool/';
+		sub_filter '/api/'               '/mempool/api/';
+		sub_filter '/resources'             '/mempool/resources';
+
+		# mainnet API
+		location /mempool/api/v1/ws {
+			proxy_pass http://mempool_api:8999;
+			proxy_http_version 1.1;
+			proxy_set_header Upgrade $http_upgrade;
+			proxy_set_header Connection "Upgrade";
+		}
+		location /mempool/api/v1/ {
+			proxy_pass http://mempool_api:8999/api/v1/;
+		}
+		location /mempool/api/ {
+			proxy_pass http://mempool_api:8999/api/v1/;
+		}
+	}
+	location ~ "^/[a-z]{2}/mempool" {
+		rewrite ^/(.*)/mempool $scheme://$server_name/mempool/$1/ redirect;
+	}
+	{{ end }}
 	{{ end }}
 	{{ end }}
 
@@ -194,7 +305,9 @@ map $scheme $proxy_x_forwarded_ssl {
   https on;
 }
 
-gzip_types text/plain text/css application/javascript application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+gzip on;
+gzip_min_length 1000;
+gzip_types image/svg+xml text/plain text/css application/javascript application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript;
 
 log_format vhost '$host $remote_addr - $remote_user [$time_local] '
                  '"$request" $status $body_bytes_sent '
@@ -226,8 +339,6 @@ proxy_buffers              4 256k;
 proxy_busy_buffers_size    256k;
 client_header_buffer_size 500k;
 large_client_header_buffers 4 500k;
-http2_max_field_size       500k;
-http2_max_header_size      500k;
 
 # Mitigate httpoxy attack (see README for details)
 proxy_set_header Proxy "";
@@ -300,6 +411,7 @@ upstream {{ $upstream_name }} {
 	{{ $onionHost := read (printf "/var/lib/tor/hidden_services/%s/hostname" $hiddenHostName) }}
 	{{ if ne $onionHost "" }}
 server {
+	client_max_body_size 100M;
 	server_name {{ trim $onionHost }};
 	listen 80 ;
 	proxy_set_header X-Forwarded-Host  $http_host;
@@ -489,6 +601,7 @@ server {
 {{ if or (not $is_https) (eq $https_method "noredirect") }}
 
 server {
+	client_max_body_size 100M;
 	server_name {{ $host }};
 	listen 80 {{ $default_server }};
 	{{ if $enable_ipv6 }}
@@ -533,6 +646,7 @@ server {
 
 {{ if (and (not $is_https) (exists "/etc/nginx/certs/default.crt") (exists "/etc/nginx/certs/default.key")) }}
 server {
+	client_max_body_size 100M;
 	server_name {{ $host }};
 	listen 443 ssl http2 {{ $default_server }};
 	{{ if $enable_ipv6 }}

@@ -10,10 +10,9 @@ services:
     volumes:
       - "bluewallet_lndhub_redisdir:/data"
 
-
   bluewallet_lndhub_app:
     container_name: bluewallet_lndhub_app
-    image: "bluewalletorganization/lndhub:v1.3.3@sha256:b99408dfb53f503def405668f5fc4d8185de39a87843d4ea8774544a5df1fe36"
+    image: "bluewalletorganization/lndhub:v1.4.1"
     user: "0:0"
     depends_on: [ "bluewallet_lndhub_redis" ]
     restart: "on-failure"
@@ -22,11 +21,12 @@ services:
       - "lnd_bitcoin_datadir:/lnd:ro"
     environment:
       PORT: "3000"
-      #TOR_URL: "${APP_HIDDEN_SERVICE}"
       LND_CERT_FILE: "/lnd/tls.cert"
       LND_ADMIN_MACAROON_FILE: "/lnd/admin.macaroon"
       CONFIG: '{ "rateLimit": 10000, "postRateLimit": 10000, "redis": { "port": 6379, "host": "bluewallet_lndhub_redis", "family": 4, "password": "S7bk49NBp29khUci4Zw28vsBviCnYfZ2QLTEsQNizq9ni5ur", "db": 0 }, "lnd": { "url": "lnd_bitcoin:10009", "password": ""}}'
-
+    # overrides to fix file permissions, see original: https://github.com/BlueWallet/LndHub/blob/master/Dockerfile
+    entrypoint: "bash"
+    command: -c "cp /lnd/tls.cert /lnd/admin.macaroon /lndhub/ && cd /lndhub && chown lndhub:lndhub admin.macaroon tls.cert && npm start"
 
   btcpayserver:
     environment:

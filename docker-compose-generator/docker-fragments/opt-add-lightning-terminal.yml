@@ -1,0 +1,33 @@
+version: "3"
+services:
+  btcpayserver:
+    environment:
+      BTCPAY_EXTERNALSERVICES: "Lightning Terminal:${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/lit/;"
+  lnd_lit:
+    image: "lightninglabs/lightning-terminal:v0.6.7-alpha-path-prefix"
+    restart: unless-stopped
+    expose:
+      - "8080"
+    volumes:
+      - "lnd_lit_datadir:/root/.lnd"
+      - "lnd_bitcoin_datadir:/data/lnd:ro"
+    links:
+      - bitcoind
+      - lnd_bitcoin
+    command:
+      - "--insecure-httplisten=0.0.0.0:8080"
+      - "--network=${NBITCOIN_NETWORK}"
+      - "--uipassword=${LIT_PASSWD}"
+      - "--lnd-mode=remote"
+      - "--remote.lnd.rpcserver=lnd_bitcoin:10009"
+      - "--remote.lnd.macaroonpath=/data/lnd/admin.macaroon"
+      - "--remote.lnd.tlscertpath=/data/lnd/tls.cert"
+      - "--faraday.connect_bitcoin"
+      - "--faraday.bitcoin.host=bitcoind:43782"
+      - "--faraday.bitcoin.user=lnd"
+      - "--faraday.bitcoin.password=afixedpasswordbecauselndsuckswithcookiefile"
+volumes:
+  lnd_lit_datadir:
+required:
+  - "bitcoin-lnd"
+  - "opt-lnd-grpc"

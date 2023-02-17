@@ -1,0 +1,46 @@
+version: "3.7"
+services:
+  torq:
+    user: "root:root"
+    image: "lncapital/torq:0.17.3"
+    restart: unless-stopped
+    depends_on:
+      - "torq_db"
+    command:
+      - --db.host
+      - torq_db
+      - --db.password
+      - torq_db_password
+      - --lnd.url
+      - lnd_bitcoin:10009
+      - --lnd.macaroon-path
+      - /lnd/admin.macaroon
+      - --lnd.tls-path
+      - /lnd/tls.cert
+      - --torq.cookie-path
+      - /data/.cookie
+      - start
+    volumes:
+      - "lnd_bitcoin_datadir:/lnd:ro"
+      - "lnd_bitcoin_torq_datadir:/data"
+    links:
+      - lnd_bitcoin
+  torq_db:
+    image: "timescale/timescaledb:latest-pg14"
+    environment:
+      POSTGRES_PASSWORD: torq_db_password
+    volumes:
+      - torq_datadir:/var/lib/postgresql/data
+
+  btcpayserver:
+    environment:
+      BTCPAY_BTCEXTERNALTORQ: "server=/torq/cookie-login;cookiefile=/etc/lnd_bitcoin_torq/.cookie"
+    volumes:
+      - "lnd_bitcoin_torq_datadir:/etc/lnd_bitcoin_torq"
+
+volumes:
+  torq_datadir:
+  lnd_bitcoin_torq_datadir:
+required:
+  - "bitcoin-lnd"
+  - "opt-lnd-grpc"

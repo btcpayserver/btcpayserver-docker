@@ -62,18 +62,18 @@ cd - && cd ..
 
 
 # Build lightning
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.10.1/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v22.11.1/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.10.1/contrib/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="contrib/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.10.1/contrib/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="contrib/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/lightning:v0.10.1"
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v22.11.1/contrib/docker/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="contrib/docker/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v22.11.1/contrib/docker/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="contrib/docker/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/lightning:v22.11.1"
 git clone https://github.com/btcpayserver/lightning lightning
 cd lightning
-git checkout basedon-v0.10.1
+git checkout basedon-v22.11.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v0.10.1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v22.11.1" .
 cd - && cd ..
 
 
@@ -94,126 +94,126 @@ cd - && cd ..
 
 
 # Build spark-wallet
-# https://raw.githubusercontent.com/shesek/spark-wallet/v0.2.9/Dockerfile
+# https://raw.githubusercontent.com/shesek/spark-wallet/v0.3.1/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/shesek/spark-wallet/v0.2.9/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/shesek/spark-wallet/v0.3.1/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/shesek/spark-wallet/v0.2.9/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/shesek/spark-wallet/v0.3.1/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building shesek/spark-wallet:0.2.9-standalone"
+echo "Building shesek/spark-wallet:0.3.1-standalone"
 git clone https://github.com/shesek/spark-wallet spark-wallet
 cd spark-wallet
-git checkout v0.2.9
+git checkout v0.3.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shesek/spark-wallet:0.2.9-standalone" .
+docker build -f "$DOCKERFILE" -t "shesek/spark-wallet:0.3.1-standalone" .
 cd - && cd ..
 
 
 # Build c-lightning-rest
-# https://raw.githubusercontent.com/Ride-The-Lightning/c-lightning-REST/v0.4.4/amd64.Dockerfile
+# https://raw.githubusercontent.com/Ride-The-Lightning/c-lightning-REST/v0.9.0/amd64.Dockerfile
 DOCKERFILE="amd64.Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/c-lightning-REST/v0.4.4/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/Ride-The-Lightning/c-lightning-REST/v0.9.0/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/c-lightning-REST/v0.4.4/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/Ride-The-Lightning/c-lightning-REST/v0.9.0/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building saubyk/c-lightning-rest:0.4.4"
+echo "Building saubyk/c-lightning-rest:0.9.0"
 git clone https://github.com/Ride-The-Lightning/c-lightning-REST c-lightning-rest
 cd c-lightning-rest
-git checkout v0.4.4
+git checkout v0.9.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "saubyk/c-lightning-rest:0.4.4" .
+docker build -f "$DOCKERFILE" -t "saubyk/c-lightning-rest:0.9.0" .
 cd - && cd ..
 
 
 # Build rtl
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.1/docker/Dockerfile
-DOCKERFILE="docker/Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.1/docker/Dockerfile.arm32v7
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.1/docker/Dockerfile.arm64v8
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.11.1"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.13.3/dockerfiles/Dockerfile
+DOCKERFILE="dockerfiles/Dockerfile"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.13.3/dockerfiles/Dockerfile.arm32v7
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm32v7"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.13.3/dockerfiles/Dockerfile.arm64v8
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm64v8"
+echo "Building shahanafarooqui/rtl:0.13.3"
 git clone https://github.com/Ride-The-Lightning/RTL rtl
 cd rtl
-git checkout v0.11.1
+git checkout v0.13.3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.11.1" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.13.3" .
 cd - && cd ..
 
 
 # Build eclair
-# https://raw.githubusercontent.com/ACINQ/eclair/v0.4.1/Dockerfile
+# https://raw.githubusercontent.com/ACINQ/eclair/v0.7.0/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building acinq/eclair:release-0.4.1"
+echo "Building acinq/eclair:release-0.7.0"
 git clone https://github.com/ACINQ/eclair eclair
 cd eclair
-git checkout v0.4.1
+git checkout v0.7.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "acinq/eclair:release-0.4.1" .
+docker build -f "$DOCKERFILE" -t "acinq/eclair:release-0.7.0" .
 cd - && cd ..
 
 
 # Build rtl
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.1/docker/Dockerfile
-DOCKERFILE="docker/Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.1/docker/Dockerfile.arm32v7
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.1/docker/Dockerfile.arm64v8
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.11.1"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.13.3/dockerfiles/Dockerfile
+DOCKERFILE="dockerfiles/Dockerfile"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.13.3/dockerfiles/Dockerfile.arm32v7
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm32v7"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.13.3/dockerfiles/Dockerfile.arm64v8
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm64v8"
+echo "Building shahanafarooqui/rtl:0.13.3"
 git clone https://github.com/Ride-The-Lightning/RTL rtl
 cd rtl
-git checkout v0.11.1
+git checkout v0.13.3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.11.1" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.13.3" .
 cd - && cd ..
 
 
 # Build lnd
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.13.1-beta-withloop-fix/linuxamd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.15.4-beta-1/linuxamd64.Dockerfile
 DOCKERFILE="linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.13.1-beta-withloop-fix/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.15.4-beta-1/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.13.1-beta-withloop-fix/linuxarm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.15.4-beta-1/linuxarm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/lnd:v0.13.1-beta-withloop-fix"
+echo "Building btcpayserver/lnd:v0.15.4-beta-1"
 git clone https://github.com/btcpayserver/lnd lnd
 cd lnd
-git checkout basedon-v0.13.1-beta-withloop-fix
+git checkout basedon-v0.15.4-beta-1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.13.1-beta-withloop-fix" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.15.4-beta-1" .
 cd - && cd ..
 
 
 # Build rtl
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.1/docker/Dockerfile
-DOCKERFILE="docker/Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.1/docker/Dockerfile.arm32v7
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.11.1/docker/Dockerfile.arm64v8
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.11.1"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.13.3/dockerfiles/Dockerfile
+DOCKERFILE="dockerfiles/Dockerfile"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.13.3/dockerfiles/Dockerfile.arm32v7
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm32v7"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.13.3/dockerfiles/Dockerfile.arm64v8
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm64v8"
+echo "Building shahanafarooqui/rtl:0.13.3"
 git clone https://github.com/Ride-The-Lightning/RTL rtl
 cd rtl
-git checkout v0.11.1
+git checkout v0.13.3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.11.1" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.13.3" .
 cd - && cd ..
 
 
 # Build bitcoin
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.21.1/Bitcoin/0.21.1/linuxamd64.Dockerfile
-DOCKERFILE="Bitcoin/0.21.1/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.21.1/Bitcoin/0.21.1/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Bitcoin/0.21.1/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/0.21.1/Bitcoin/0.21.1/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Bitcoin/0.21.1/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/bitcoin:0.21.1"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/24.0.1-1/Bitcoin/24.0.1/linuxamd64.Dockerfile
+DOCKERFILE="Bitcoin/24.0.1/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/24.0.1-1/Bitcoin/24.0.1/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Bitcoin/24.0.1/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/24.0.1-1/Bitcoin/24.0.1/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Bitcoin/24.0.1/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/bitcoin:24.0.1-1"
 git clone https://github.com/btcpayserver/dockerfile-deps bitcoin
 cd bitcoin
-git checkout Bitcoin/0.21.1
+git checkout Bitcoin/24.0.1-1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoin:0.21.1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoin:24.0.1-1" .
 cd - && cd ..
 
 
@@ -226,22 +226,6 @@ cd docker-bitcoinplus
 git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "chekaz/docker-bitcoinplus:2.7.0" .
-cd - && cd ..
-
-
-# Build bitcointaprootcc/0.21.0-bip8-lottrue
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/bitcointaprootcc/0.21.0-bip8-lottrue/bitcointaprootcc/0.21.0-bip8-lottrue/linuxamd64.Dockerfile
-DOCKERFILE="bitcointaprootcc/0.21.0-bip8-lottrue/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/bitcointaprootcc/0.21.0-bip8-lottrue/bitcointaprootcc/0.21.0-bip8-lottrue/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="bitcointaprootcc/0.21.0-bip8-lottrue/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/bitcointaprootcc/0.21.0-bip8-lottrue/bitcointaprootcc/0.21.0-bip8-lottrue/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="bitcointaprootcc/0.21.0-bip8-lottrue/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/bitcointaprootcc/0.21.0-bip8-lottrue:latest"
-git clone https://github.com/btcpayserver/dockerfile-deps bitcointaprootcc/0.21.0-bip8-lottrue
-cd bitcointaprootcc/0.21.0-bip8-lottrue
-git checkout bitcointaprootcc/0.21.0-bip8-lottrue
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/bitcointaprootcc/0.21.0-bip8-lottrue:latest" .
 cd - && cd ..
 
 
@@ -258,46 +242,44 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.2.2/amd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.7.12/amd64.Dockerfile
 DOCKERFILE="amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.2.2/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.7.12/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.2.2/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.7.12/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building btcpayserver/btcpayserver:1.2.2$<BTCPAY_BUILD_CONFIGURATION>?"
+echo "Building btcpayserver/btcpayserver:1.7.12$<BTCPAY_BUILD_CONFIGURATION>?"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.2.2
+git checkout v1.7.12
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.2.2$<BTCPAY_BUILD_CONFIGURATION>?" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.7.12$<BTCPAY_BUILD_CONFIGURATION>?" .
 cd - && cd ..
 
 
 # Build dash
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.17.0.3/Dash/0.17.0.3/linuxamd64.Dockerfile
-DOCKERFILE="Dash/0.17.0.3/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.17.0.3/Dash/0.17.0.3/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dash/0.17.0.3/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/0.17.0.3/Dash/0.17.0.3/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dash/0.17.0.3/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/dash:0.17.0.3"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/18.1.0/Dash/18.1.0/linuxamd64.Dockerfile
+DOCKERFILE="Dash/18.1.0/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/18.1.0/Dash/18.1.0/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dash/18.1.0/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/dash:18.1.0"
 git clone https://github.com/btcpayserver/dockerfile-deps dash
 cd dash
-git checkout Dash/0.17.0.3
+git checkout Dash/18.1.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/dash:0.17.0.3" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/dash:18.1.0" .
 cd - && cd ..
 
 
 # Build dogecoin
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dogecoin/1.14.3/Dogecoin/1.14.3/linuxamd64.Dockerfile
-DOCKERFILE="Dogecoin/1.14.3/linuxamd64.Dockerfile"
-echo "Building btcpayserver/dogecoin:1.14.3"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dogecoin/1.14.6/Dogecoin/1.14.6/linuxamd64.Dockerfile
+DOCKERFILE="Dogecoin/1.14.6/linuxamd64.Dockerfile"
+echo "Building btcpayserver/dogecoin:1.14.6"
 git clone https://github.com/btcpayserver/dockerfile-deps dogecoin
 cd dogecoin
-git checkout Dogecoin/1.14.3
+git checkout Dogecoin/1.14.6
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/dogecoin:1.14.3" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/dogecoin:1.14.6" .
 cd - && cd ..
 
 
@@ -314,14 +296,14 @@ cd - && cd ..
 
 
 # Build lightning
-# https://raw.githubusercontent.com/Groestlcoin/lightning/v0.10.0/Dockerfile
+# https://raw.githubusercontent.com/Groestlcoin/lightning/v22.11.1/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building groestlcoin/lightning:v0.10.0"
+echo "Building groestlcoin/lightning:v22.11.1"
 git clone https://github.com/Groestlcoin/lightning lightning
 cd lightning
-git checkout v0.10.0
+git checkout v22.11.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "groestlcoin/lightning:v0.10.0" .
+docker build -f "$DOCKERFILE" -t "groestlcoin/lightning:v22.11.1" .
 cd - && cd ..
 
 
@@ -373,129 +355,111 @@ docker build -f "$DOCKERFILE" -t "groestlcoin/lnd:v0.10.0-grs" .
 cd - && cd ..
 
 
-# Build docker-groestlcoin
-# https://raw.githubusercontent.com/Groestlcoin/docker-groestlcoin/master/groestlcoin/2.21.1/Dockerfile
-DOCKERFILE="groestlcoin/2.21.1/Dockerfile"
-echo "Building groestlcoin/docker-groestlcoin:2.21.1"
-git clone https://github.com/Groestlcoin/docker-groestlcoin docker-groestlcoin
-cd docker-groestlcoin
-git checkout master
+# Build groestlcoin
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/24.0.1/Groestlcoin/24.0.1/linuxamd64.Dockerfile
+DOCKERFILE="Groestlcoin/24.0.1/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/24.0.1/Groestlcoin/24.0.1/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Groestlcoin/24.0.1/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/24.0.1/Groestlcoin/24.0.1/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Groestlcoin/24.0.1/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/groestlcoin:24.0.1"
+git clone https://github.com/btcpayserver/dockerfile-deps groestlcoin
+cd groestlcoin
+git checkout Groestlcoin/24.0.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "groestlcoin/docker-groestlcoin:2.21.1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/groestlcoin:24.0.1" .
 cd - && cd ..
 
 
 # Build elements
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.18.1.12/Elements/0.18.1.12/linuxamd64.Dockerfile
-DOCKERFILE="Elements/0.18.1.12/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.18.1.12/Elements/0.18.1.12/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Elements/0.18.1.12/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.18.1.12/Elements/0.18.1.12/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Elements/0.18.1.12/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/elements:0.18.1.12"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2-4/Elements/0.21.0.2/linuxamd64.Dockerfile
+DOCKERFILE="Elements/0.21.0.2/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2-4/Elements/0.21.0.2/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Elements/0.21.0.2/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2-4/Elements/0.21.0.2/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Elements/0.21.0.2/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/elements:0.21.0.2-4"
 git clone https://github.com/btcpayserver/dockerfile-deps elements
 cd elements
-git checkout Elements/0.18.1.12
+git checkout Elements/0.21.0.2-4
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/elements:0.18.1.12" .
-cd - && cd ..
-
-
-# Build lightning
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.9.0-1/Dockerfile
-DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.9.0-1/contrib/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="contrib/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v0.9.0-1/contrib/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="contrib/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/lightning:v0.9.0-1"
-git clone https://github.com/btcpayserver/lightning lightning
-cd lightning
-git checkout basedon-v0.9.0-1
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v0.9.0-1" .
-cd - && cd ..
-
-
-# Build lnd
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.11.0-beta/linuxamd64.Dockerfile
-DOCKERFILE="linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.11.0-beta/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.11.0-beta/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/lnd:v0.11.0-beta"
-git clone https://github.com/btcpayserver/lnd lnd
-cd lnd
-git checkout basedon-v0.11.0-beta
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.11.0-beta" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/elements:0.21.0.2-4" .
 cd - && cd ..
 
 
 # Build litecoin
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.17.1-1/Litecoin/0.17.1/linuxamd64.Dockerfile
-DOCKERFILE="Litecoin/0.17.1/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.17.1-1/Litecoin/0.17.1/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Litecoin/0.17.1/linuxarm32v7.Dockerfile"
-echo "Building btcpayserver/litecoin:0.17.1-1"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.21.2.1-2/Litecoin/0.21.2.1/linuxamd64.Dockerfile
+DOCKERFILE="Litecoin/0.21.2.1/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.21.2.1-2/Litecoin/0.21.2.1/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Litecoin/0.21.2.1/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.21.2.1-2/Litecoin/0.21.2.1/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Litecoin/0.21.2.1/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/litecoin:0.21.2.1-2"
 git clone https://github.com/btcpayserver/dockerfile-deps litecoin
 cd litecoin
-git checkout Litecoin/0.17.1-1
+git checkout Litecoin/0.21.2.1-2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/litecoin:0.17.1-1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/litecoin:0.21.2.1-2" .
 cd - && cd ..
 
 
 # Build docker-monacoin
-# https://raw.githubusercontent.com/wakiyamap/docker-bitcoin/master/monacoin/0.17.1/Dockerfile
-DOCKERFILE="monacoin/0.17.1/Dockerfile"
-echo "Building wakiyamap/docker-monacoin:0.17.1"
+# https://raw.githubusercontent.com/wakiyamap/docker-bitcoin/master/monacoin/0.20.2/Dockerfile
+DOCKERFILE="monacoin/0.20.2/Dockerfile"
+echo "Building wakiyamap/docker-monacoin:0.20.2"
 git clone https://github.com/wakiyamap/docker-bitcoin docker-monacoin
 cd docker-monacoin
 git checkout master
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "wakiyamap/docker-monacoin:0.17.1" .
+docker build -f "$DOCKERFILE" -t "wakiyamap/docker-monacoin:0.20.2" .
 cd - && cd ..
 
 
 # Build monero
-# https://raw.githubusercontent.com/Kukks/monero-docker/x86_64/Dockerfile
-DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/monero:0.17.2.0"
-git clone https://github.com/Kukks/monero-docker monero
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.1.1/Monero/0.18.1.1/linuxamd64.Dockerfile
+DOCKERFILE="Monero/0.18.1.1/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.1.1/Monero/0.18.1.1/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Monero/0.18.1.1/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.1.1/Monero/0.18.1.1/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Monero/0.18.1.1/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/monero:0.18.1.1"
+git clone https://github.com/btcpayserver/dockerfile-deps monero
 cd monero
-git checkout x86_64
+git checkout Monero/0.18.1.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.17.2.0" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.18.1.1" .
 cd - && cd ..
 
 
 # Build monero
-# https://raw.githubusercontent.com/Kukks/monero-docker/x86_64/Dockerfile
-DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/monero:0.17.2.0"
-git clone https://github.com/Kukks/monero-docker monero
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.1.1/Monero/0.18.1.1/linuxamd64.Dockerfile
+DOCKERFILE="Monero/0.18.1.1/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.1.1/Monero/0.18.1.1/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Monero/0.18.1.1/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.1.1/Monero/0.18.1.1/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Monero/0.18.1.1/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/monero:0.18.1.1"
+git clone https://github.com/btcpayserver/dockerfile-deps monero
 cd monero
-git checkout x86_64
+git checkout Monero/0.18.1.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.17.2.0" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.18.1.1" .
 cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.2.1/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.62/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.2.1/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.62/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.2.1/Dockerfile.linuxarm64v8
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.62/Dockerfile.linuxarm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.linuxarm64v8"
-echo "Building nicolasdorier/nbxplorer:2.2.1"
+echo "Building nicolasdorier/nbxplorer:2.3.62"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.2.1
+git checkout v2.3.62
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.2.1" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.3.62" .
 cd - && cd ..
 
 
@@ -560,16 +524,18 @@ cd - && cd ..
 
 
 # Build lndhub
-# https://raw.githubusercontent.com/BlueWallet/LndHub/v1.3.3/Dockerfile
+# https://raw.githubusercontent.com/BlueWallet/LndHub/v1.4.1/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/BlueWallet/LndHub/v1.3.3/Dockerfile
+# https://raw.githubusercontent.com/BlueWallet/LndHub/v1.4.1/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-echo "Building bluewalletorganization/lndhub:v1.3.3"
+# https://raw.githubusercontent.com/BlueWallet/LndHub/v1.4.1/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+echo "Building bluewalletorganization/lndhub:v1.4.1"
 git clone https://github.com/BlueWallet/LndHub lndhub
 cd lndhub
-git checkout v1.3.3
+git checkout v1.4.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "bluewalletorganization/lndhub:v1.3.3" .
+docker build -f "$DOCKERFILE" -t "bluewalletorganization/lndhub:v1.4.1" .
 cd - && cd ..
 
 
@@ -598,18 +564,18 @@ cd - && cd ..
 
 
 # Build btctransmuter
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.57/Dockerfiles/amd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.59/Dockerfiles/amd64.Dockerfile
 DOCKERFILE="Dockerfiles/amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.57/Dockerfiles/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.59/Dockerfiles/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfiles/arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.57/Dockerfiles/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.59/Dockerfiles/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfiles/arm64v8.Dockerfile"
-echo "Building btcpayserver/btctransmuter:0.0.57"
+echo "Building btcpayserver/btctransmuter:0.0.59"
 git clone https://github.com/btcpayserver/btctransmuter btctransmuter
 cd btctransmuter
-git checkout v0.0.57
+git checkout v0.0.59
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.57" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.59" .
 cd - && cd ..
 
 
@@ -626,6 +592,66 @@ cd bwt
 git checkout v0.2.2
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "shesek/bwt:0.2.2-electrum" .
+cd - && cd ..
+
+
+# Build chatwoot
+# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
+DOCKERFILE="docker/Dockerfile"
+# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/Dockerfile"
+# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/Dockerfile"
+echo "Building chatwoot/chatwoot:v1.7.0"
+git clone https://github.com/chatwoot/chatwoot chatwoot
+cd chatwoot
+git checkout v1.7.0
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "chatwoot/chatwoot:v1.7.0" .
+cd - && cd ..
+
+
+# Build chatwoot
+# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
+DOCKERFILE="docker/Dockerfile"
+# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/Dockerfile"
+# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/Dockerfile"
+echo "Building chatwoot/chatwoot:v1.7.0"
+git clone https://github.com/chatwoot/chatwoot chatwoot
+cd chatwoot
+git checkout v1.7.0
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "chatwoot/chatwoot:v1.7.0" .
+cd - && cd ..
+
+
+# Build redis
+# https://raw.githubusercontent.com/docker-library/redis/f1a8498333ae3ab340b5b39fbac1d7e1dc0d628c/5.0/Dockerfile
+DOCKERFILE="5.0/Dockerfile"
+echo "Building redis:5.0.2-alpine"
+git clone https://github.com/docker-library/redis redis
+cd redis
+git checkout f1a8498333ae3ab340b5b39fbac1d7e1dc0d628c
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "redis:5.0.2-alpine" .
+cd - && cd ..
+
+
+# Build cloudflared
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2022.6.3/Cloudflared/2022.6.3/linuxamd64.Dockerfile
+DOCKERFILE="Cloudflared/2022.6.3/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2022.6.3/Cloudflared/2022.6.3/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Cloudflared/2022.6.3/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2022.6.3/Cloudflared/2022.6.3/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Cloudflared/2022.6.3/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/cloudflared:2022.6.3"
+git clone https://github.com/btcpayserver/dockerfile-deps cloudflared
+cd cloudflared
+git checkout Cloudflared/2022.6.3
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/cloudflared:2022.6.3" .
 cd - && cd ..
 
 
@@ -646,18 +672,18 @@ cd - && cd ..
 
 
 # Build eps
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/EPS/0.2.1.1/EPS/0.2.1.1/linuxamd64.Dockerfile
-DOCKERFILE="EPS/0.2.1.1/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/EPS/0.2.1.1/EPS/0.2.1.1/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="EPS/0.2.1.1/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/EPS/0.2.1.1/EPS/0.2.1.1/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="EPS/0.2.1.1/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/eps:0.2.1.1"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/EPS/0.2.2/EPS/0.2.2/linuxamd64.Dockerfile
+DOCKERFILE="EPS/0.2.2/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/EPS/0.2.2/EPS/0.2.2/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="EPS/0.2.2/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/EPS/0.2.2/EPS/0.2.2/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="EPS/0.2.2/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/eps:0.2.2"
 git clone https://github.com/btcpayserver/dockerfile-deps eps
 cd eps
-git checkout EPS/0.2.1.1
+git checkout EPS/0.2.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/eps:0.2.1.1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/eps:0.2.2" .
 cd - && cd ..
 
 
@@ -670,6 +696,54 @@ cd electrumx
 git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "lukechilds/electrumx:latest" .
+cd - && cd ..
+
+
+# Build core
+# https://dev.azure.com/Firefly-III/66fb773b-063e-42d7-b6a5-e7729a22e8b3/_apis/git/repositories/e9c3dcf8-4533-4ef1-83cc-75527cab3377/items?path=%2FDockerfile&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=main&resolveLfs=true&%24format=octetStream&api-version=5.0&download=true
+DOCKERFILE="Dockerfile"
+# https://dev.azure.com/Firefly-III/66fb773b-063e-42d7-b6a5-e7729a22e8b3/_apis/git/repositories/e9c3dcf8-4533-4ef1-83cc-75527cab3377/items?path=%2FDockerfile&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=main&resolveLfs=true&%24format=octetStream&api-version=5.0&download=true
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+# https://dev.azure.com/Firefly-III/66fb773b-063e-42d7-b6a5-e7729a22e8b3/_apis/git/repositories/e9c3dcf8-4533-4ef1-83cc-75527cab3377/items?path=%2FDockerfile&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=main&resolveLfs=true&%24format=octetStream&api-version=5.0&download=true
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+echo "Building fireflyiii/core:latest"
+git clone https://dev.azure.com/Firefly-III/_git/MainImage core
+cd core
+git checkout 
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "fireflyiii/core:latest" .
+cd - && cd ..
+
+
+# Build podcasting20-helipad
+# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.10/umbrel/Dockerfile
+DOCKERFILE="umbrel/Dockerfile"
+# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.10/umbrel/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="umbrel/Dockerfile"
+# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.10/umbrel/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="umbrel/Dockerfile"
+echo "Building podcastindexorg/podcasting20-helipad:v0.1.10"
+git clone https://github.com/Podcastindex-org/helipad podcasting20-helipad
+cd podcasting20-helipad
+git checkout v0.1.10
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "podcastindexorg/podcasting20-helipad:v0.1.10" .
+cd - && cd ..
+
+
+# Build joinmarket
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.5/JoinMarket/0.9.5/linuxamd64.Dockerfile
+DOCKERFILE="JoinMarket/0.9.5/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.5/JoinMarket/0.9.5/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="JoinMarket/0.9.5/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.5/JoinMarket/0.9.5/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="JoinMarket/0.9.5/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/joinmarket:0.9.5"
+git clone https://github.com/btcpayserver/dockerfile-deps joinmarket
+cd joinmarket
+git checkout JoinMarket/0.9.5
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/joinmarket:0.9.5" .
 cd - && cd ..
 
 
@@ -697,6 +771,64 @@ docker build -f "$DOCKERFILE" -t "jvandrew/isso:atron.22" .
 cd - && cd ..
 
 
+# Build lightning-terminal
+# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.6.7-alpha/Dockerfile
+DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.6.7-alpha/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+echo "Building lightninglabs/lightning-terminal:v0.6.7-alpha-path-prefix"
+git clone https://github.com/lightninglabs/lightning-terminal lightning-terminal
+cd lightning-terminal
+git checkout v0.6.7-alpha
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.6.7-alpha-path-prefix" .
+cd - && cd ..
+
+
+# Build frontend
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/frontend/Dockerfile
+DOCKERFILE="docker/frontend/Dockerfile"
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/frontend/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/frontend/Dockerfile"
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/frontend/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/frontend/Dockerfile"
+echo "Building mempool/frontend:v2.5.0-dev1"
+git clone https://github.com/mempool/mempool frontend
+cd frontend
+git checkout v2.5.0-dev1
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "mempool/frontend:v2.5.0-dev1" .
+cd - && cd ..
+
+
+# Build backend
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/backend/Dockerfile
+DOCKERFILE="docker/backend/Dockerfile"
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/backend/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/backend/Dockerfile"
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/backend/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/backend/Dockerfile"
+echo "Building mempool/backend:v2.5.0-dev1"
+git clone https://github.com/mempool/mempool backend
+cd backend
+git checkout v2.5.0-dev1
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "mempool/backend:v2.5.0-dev1" .
+cd - && cd ..
+
+
+# Build mariadb
+# https://raw.githubusercontent.com/docker-library/mariadb/master/10.5/Dockerfile
+DOCKERFILE="10.5/Dockerfile"
+echo "Building mariadb:10.5.8"
+git clone https://github.com/docker-library/mariadb mariadb
+cd mariadb
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "mariadb:10.5.8" .
+cd - && cd ..
+
+
 # Build ndlc-cli
 # https://raw.githubusercontent.com/dgarage/ndlc/releases/1.0.1/amd64.Dockerfile
 DOCKERFILE="amd64.Dockerfile"
@@ -710,6 +842,22 @@ cd ndlc-cli
 git checkout releases/1.0.1
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "nicolasdorier/ndlc-cli:1.0.1" .
+cd - && cd ..
+
+
+# Build nnostr-relay
+# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.7/Relay/Dockerfile
+DOCKERFILE="Relay/Dockerfile"
+# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.7/Relay/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Relay/Dockerfile"
+# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.7/Relay/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Relay/Dockerfile"
+echo "Building kukks/nnostr-relay:v0.0.7"
+git clone https://github.com/kukks/nnostr nnostr-relay
+cd nnostr-relay
+git checkout Relay/v0.0.7
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "kukks/nnostr-relay:v0.0.7" .
 cd - && cd ..
 
 
@@ -730,28 +878,34 @@ cd - && cd ..
 
 
 # Build sphinx-relay
-# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.0/Dockerfile
+# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.9/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.0/Dockerfile
+# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.9/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.9/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building sphinxlightning/sphinx-relay:v2.2.0"
+echo "Building sphinxlightning/sphinx-relay:v2.2.9"
 git clone https://github.com/stakwork/sphinx-relay sphinx-relay
 cd sphinx-relay
-git checkout v2.2.0
+git checkout v2.2.9
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "sphinxlightning/sphinx-relay:v2.2.0" .
+docker build -f "$DOCKERFILE" -t "sphinxlightning/sphinx-relay:v2.2.9" .
 cd - && cd ..
 
 
 # Build tallycoin_connect
-# https://raw.githubusercontent.com/dennisreimann/tallycoin_connect/v1.4.0/Dockerfile
+# https://raw.githubusercontent.com/djbooth007/tallycoin_connect/v1.8.0/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building dennisreimann/tallycoin_connect:v1.4.0"
-git clone https://github.com/dennisreimann/tallycoin_connect tallycoin_connect
+# https://raw.githubusercontent.com/djbooth007/tallycoin_connect/v1.8.0/Dockerfile.arm32v7
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.arm32v7"
+# https://raw.githubusercontent.com/djbooth007/tallycoin_connect/v1.8.0/Dockerfile.arm64v8
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.arm64v8"
+echo "Building djbooth007/tallycoin_connect:v1.8.0"
+git clone https://github.com/djbooth007/tallycoin_connect tallycoin_connect
 cd tallycoin_connect
-git checkout v1.4.0
+git checkout v1.8.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "dennisreimann/tallycoin_connect:v1.4.0" .
+docker build -f "$DOCKERFILE" -t "djbooth007/tallycoin_connect:v1.8.0" .
 cd - && cd ..
 
 
@@ -772,18 +926,18 @@ cd - && cd ..
 
 
 # Build thunderhub
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.17/Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.11/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.17/arm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.12.17/arm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building apotdevin/thunderhub:base-v0.12.17"
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.11/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.11/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+echo "Building apotdevin/thunderhub:base-v0.13.11"
 git clone https://github.com/apotdevin/thunderhub thunderhub
 cd thunderhub
-git checkout v0.12.17
+git checkout v0.13.11
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:base-v0.12.17" .
+docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:base-v0.13.11" .
 cd - && cd ..
 
 
@@ -804,34 +958,34 @@ cd - && cd ..
 
 
 # Build tor
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.4.7/Tor/0.4.4.7/linuxamd64.Dockerfile
-DOCKERFILE="Tor/0.4.4.7/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.4.7/Tor/0.4.4.7/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Tor/0.4.4.7/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.4.7/Tor/0.4.4.7/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Tor/0.4.4.7/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/tor:0.4.4.7"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.7.10/Tor/0.4.7.10/linuxamd64.Dockerfile
+DOCKERFILE="Tor/0.4.7.10/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.7.10/Tor/0.4.7.10/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Tor/0.4.7.10/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.7.10/Tor/0.4.7.10/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Tor/0.4.7.10/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/tor:0.4.7.10"
 git clone https://github.com/btcpayserver/dockerfile-deps tor
 cd tor
-git checkout Tor/0.4.4.7
+git checkout Tor/0.4.7.10
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/tor:0.4.4.7" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/tor:0.4.7.10" .
 cd - && cd ..
 
 
 # Build tor
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.6.5/Tor/0.4.6.5/linuxamd64.Dockerfile
-DOCKERFILE="Tor/0.4.6.5/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.6.5/Tor/0.4.6.5/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Tor/0.4.6.5/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.6.5/Tor/0.4.6.5/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Tor/0.4.6.5/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/tor:0.4.6.5"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.7.10/Tor/0.4.7.10/linuxamd64.Dockerfile
+DOCKERFILE="Tor/0.4.7.10/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.7.10/Tor/0.4.7.10/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Tor/0.4.7.10/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.7.10/Tor/0.4.7.10/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Tor/0.4.7.10/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/tor:0.4.7.10"
 git clone https://github.com/btcpayserver/dockerfile-deps tor
 cd tor
-git checkout Tor/0.4.6.5
+git checkout Tor/0.4.7.10
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/tor:0.4.6.5" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/tor:0.4.7.10" .
 cd - && cd ..
 
 
@@ -851,15 +1005,49 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/docker-gen:0.7.8" .
 cd - && cd ..
 
 
-# Build docker-woocommerce
-# https://raw.githubusercontent.com/btcpayserver/docker-woocommerce/v3.0.12/Dockerfile
+# Build torq
+# https://raw.githubusercontent.com/lncapital/torq/v0.17.3/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/docker-woocommerce:3.0.12"
-git clone https://github.com/btcpayserver/docker-woocommerce docker-woocommerce
-cd docker-woocommerce
-git checkout v3.0.12
+# https://raw.githubusercontent.com/lncapital/torq/v0.17.3/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/lncapital/torq/v0.17.3/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+echo "Building lncapital/torq:0.17.3"
+git clone https://github.com/lncapital/torq torq
+cd torq
+git checkout v0.17.3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/docker-woocommerce:3.0.12" .
+docker build -f "$DOCKERFILE" -t "lncapital/torq:0.17.3" .
+cd - && cd ..
+
+
+# Build timescaledb
+# https://raw.githubusercontent.com/timescale/timescaledb-docker/main/Dockerfile
+DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/timescale/timescaledb-docker/main/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/timescale/timescaledb-docker/main/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+echo "Building timescale/timescaledb:latest-pg14"
+git clone https://github.com/timescale/timescaledb-docker timescaledb
+cd timescaledb
+git checkout main
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "timescale/timescaledb:latest-pg14" .
+cd - && cd ..
+
+
+# Build woocommerce
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/WooCommerce/3.1.0/WooCommerce/3.1.0/linuxamd64.Dockerfile
+DOCKERFILE="WooCommerce/3.1.0/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/WooCommerce/3.1.0/WooCommerce/3.1.0/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="WooCommerce/3.1.0/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/woocommerce:3.1.0"
+git clone https://github.com/btcpayserver/dockerfile-deps woocommerce
+cd woocommerce
+git checkout WooCommerce/3.1.0
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/woocommerce:3.1.0" .
 cd - && cd ..
 
 
@@ -876,36 +1064,36 @@ cd - && cd ..
 
 
 # Build zammad-docker-compose
-# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad-postgresql/Dockerfile
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/ff20084ce2829486076e9781fe27407ca6cc09bb/containers/zammad-postgresql/Dockerfile
 DOCKERFILE="containers/zammad-postgresql/Dockerfile"
 echo "Building zammad/zammad-docker-compose:zammad-postgresql-3.4.0-4"
 git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
 cd zammad-docker-compose
-git checkout master
+git checkout ff20084ce2829486076e9781fe27407ca6cc09bb
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-postgresql-3.4.0-4" .
 cd - && cd ..
 
 
 # Build zammad-docker-compose
-# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad-elasticsearch/Dockerfile
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/ff20084ce2829486076e9781fe27407ca6cc09bb/containers/zammad-elasticsearch/Dockerfile
 DOCKERFILE="containers/zammad-elasticsearch/Dockerfile"
 echo "Building zammad/zammad-docker-compose:zammad-elasticsearch-3.4.0-4"
 git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
 cd zammad-docker-compose
-git checkout master
+git checkout ff20084ce2829486076e9781fe27407ca6cc09bb
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-elasticsearch-3.4.0-4" .
 cd - && cd ..
 
 
 # Build zammad-docker-compose
-# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad/Dockerfile
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/ff20084ce2829486076e9781fe27407ca6cc09bb/containers/zammad/Dockerfile
 DOCKERFILE="containers/zammad/Dockerfile"
 echo "Building zammad/zammad-docker-compose:zammad-3.4.0-4"
 git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
 cd zammad-docker-compose
-git checkout master
+git checkout ff20084ce2829486076e9781fe27407ca6cc09bb
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-3.4.0-4" .
 cd - && cd ..
@@ -924,78 +1112,78 @@ cd - && cd ..
 
 
 # Build zammad-docker-compose
-# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad/Dockerfile
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/ff20084ce2829486076e9781fe27407ca6cc09bb/containers/zammad/Dockerfile
 DOCKERFILE="containers/zammad/Dockerfile"
 echo "Building zammad/zammad-docker-compose:zammad-3.4.0-4"
 git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
 cd zammad-docker-compose
-git checkout master
+git checkout ff20084ce2829486076e9781fe27407ca6cc09bb
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-3.4.0-4" .
 cd - && cd ..
 
 
 # Build zammad-docker-compose
-# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad/Dockerfile
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/ff20084ce2829486076e9781fe27407ca6cc09bb/containers/zammad/Dockerfile
 DOCKERFILE="containers/zammad/Dockerfile"
 echo "Building zammad/zammad-docker-compose:zammad-3.4.0-4"
 git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
 cd zammad-docker-compose
-git checkout master
+git checkout ff20084ce2829486076e9781fe27407ca6cc09bb
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-3.4.0-4" .
 cd - && cd ..
 
 
 # Build zammad-docker-compose
-# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad/Dockerfile
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/ff20084ce2829486076e9781fe27407ca6cc09bb/containers/zammad/Dockerfile
 DOCKERFILE="containers/zammad/Dockerfile"
 echo "Building zammad/zammad-docker-compose:zammad-3.4.0-4"
 git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
 cd zammad-docker-compose
-git checkout master
+git checkout ff20084ce2829486076e9781fe27407ca6cc09bb
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-3.4.0-4" .
 cd - && cd ..
 
 
 # Build zammad-docker-compose
-# https://raw.githubusercontent.com/zammad/zammad-docker-compose/master/containers/zammad/Dockerfile
+# https://raw.githubusercontent.com/zammad/zammad-docker-compose/ff20084ce2829486076e9781fe27407ca6cc09bb/containers/zammad/Dockerfile
 DOCKERFILE="containers/zammad/Dockerfile"
 echo "Building zammad/zammad-docker-compose:zammad-3.4.0-4"
 git clone https://github.com/zammad/zammad-docker-compose zammad-docker-compose
 cd zammad-docker-compose
-git checkout master
+git checkout ff20084ce2829486076e9781fe27407ca6cc09bb
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-3.4.0-4" .
 cd - && cd ..
 
 
 # Build postgres
-# https://raw.githubusercontent.com/docker-library/postgres/b7cb3c6eacea93be2259381033be3cc435649369/9.6/Dockerfile
-DOCKERFILE="9.6/Dockerfile"
-# https://raw.githubusercontent.com/docker-library/postgres/b7cb3c6eacea93be2259381033be3cc435649369/9.6/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="9.6/Dockerfile"
-# https://raw.githubusercontent.com/docker-library/postgres/b7cb3c6eacea93be2259381033be3cc435649369/9.6/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="9.6/Dockerfile"
-echo "Building postgres:9.6.20"
-git clone https://github.com/docker-library/postgres postgres
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.7/Postgres/13.7/linuxamd64.Dockerfile
+DOCKERFILE="Postgres/13.7/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.7/Postgres/13.7/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Postgres/13.7/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.7/Postgres/13.7/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Postgres/13.7/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/postgres:13.7"
+git clone https://github.com/btcpayserver/dockerfile-deps postgres
 cd postgres
-git checkout b7cb3c6eacea93be2259381033be3cc435649369
+git checkout Postgres/13.7
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "postgres:9.6.20" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/postgres:13.7" .
 cd - && cd ..
 
 
 # Build traefik
 # https://raw.githubusercontent.com/containous/traefik-library-image/master/scratch/Dockerfile
 DOCKERFILE="scratch/Dockerfile"
-echo "Building traefik:latest"
+echo "Building traefik:v2.6"
 git clone https://github.com/containous/traefik-library-image traefik
 cd traefik
 git checkout master
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "traefik:latest" .
+docker build -f "$DOCKERFILE" -t "traefik:v2.6" .
 cd - && cd ..
 
 
