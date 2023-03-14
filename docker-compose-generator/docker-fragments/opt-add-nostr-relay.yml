@@ -10,7 +10,10 @@ services:
     links:
       - postgres
       - btcpayserver
-
+    volumes:
+      - "nnostr_datadir:/datadir"
   btcpayserver:
     environment:
       BTCPAY_EXTERNALSERVICES: "Nostr Relay:nostr;"
+volumes:
+  nnostr_datadir:
