@@ -536,11 +536,11 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = "master";
                     break;
                 case "nginx":
-                    dockerInfo.DockerFilePath = $"stable/stretch/Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"stable/stretch/Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"stable/stretch/Dockerfile";
+                    dockerInfo.DockerFilePath = $"stable/debian/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"stable/debian/Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"stable/debian/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/nginxinc/docker-nginx";
-                    dockerInfo.GitRef = image.Tag;
+                    dockerInfo.GitRef = "1.23.2"; // In reality we are on 1.23.3, but they didn't published yet
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "docker-gen":

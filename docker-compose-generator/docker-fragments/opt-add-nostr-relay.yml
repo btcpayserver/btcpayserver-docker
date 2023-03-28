@@ -2,7 +2,7 @@ version: "3"
 services:
   nnostr-relay:
     restart: unless-stopped
-    image: kukks/nnostr-relay:v0.0.7
+    image: kukks/nnostr-relay:v0.0.10-1
     container_name: nnostr-relay
     environment:
       NOSTR_CONNECTIONSTRINGS__RelayDatabase: User ID=postgres;Host=postgres;Port=5432;Database=nnostr
@@ -10,7 +10,10 @@ services:
     links:
       - postgres
       - btcpayserver
-
+    volumes:
+      - "nnostr_datadir:/datadir"
   btcpayserver:
     environment:
       BTCPAY_EXTERNALSERVICES: "Nostr Relay:nostr;"
+volumes:
+  nnostr_datadir:
