@@ -26,3 +26,21 @@ To see the logs of the Lightning Terminal service, you can run this command:
 ```bash
 docker logs -f generated_lnd_lit_1
 ```
+
+To enable the RPC Middleware Interceptor in the LND settings (lnd.conf), create a custom fragment in `docker-compose-generator/docker-fragments/opt-lnd-config.custom.yml` like this:
+
+```yml
+version: "3"
+services:
+  lnd_bitcoin:
+    environment:
+      LND_EXTRA_ARGS: |
+        rpcmiddleware.enable=true
+```
+
+Afterwards the configuration has to be added to the additional fragments and setup needs to be run:
+
+```bash
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-lnd-config.custom"
+. ./btcpay-setup.sh -i
+```
