@@ -336,8 +336,6 @@ Note that BTCPayServer developers will not spend excessive time testing your ima
 
 # Support
 
-We are trying to update our dependencies to run on `arm32v7` and `x64` boards. Here is our progress:
-
 | Image | Version | x64 | arm32v7 | arm64v8 | links |
 |---|---|:-:|:-:|:-:|:-:|
 | btcpayserver/docker-compose-generator | latest | [✔️](https://raw.githubusercontent.com/btcpayserver/btcpayserver-docker/dcg-latest/docker-compose-generator/linuxamd64.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/btcpayserver-docker/dcg-latest/docker-compose-generator/linuxarm32v7.Dockerfile) | [✔️](https://raw.githubusercontent.com/btcpayserver/btcpayserver-docker/dcg-latest/docker-compose-generator/linuxarm64v8.Dockerfile) | [Github](https://github.com/btcpayserver/btcpayserver-docker) - [DockerHub](https://hub.docker.com/r/btcpayserver/docker-compose-generator) |
