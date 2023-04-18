@@ -116,7 +116,7 @@ services:
 
   mempool_web:
     environment:
-      LIGHTNIGN: "true"
+      LIGHTNING: "true"
 
 volumes:
   lnd_bitcoin_datadir:
