@@ -94,6 +94,14 @@ services:
     expose:
       - "3000"
 
+  mempool_api:
+    environment:
+      LIGHTNING_ENABLED: true
+      LIGHTNING_BACKEND: "cln"
+      CLIGHTNING_SOCKET: "/etc/lightning/lightning-rpc"
+    volumes:
+      - "clightning_bitcoin_datadir:/etc/lightning"
+
   btcpayserver:
     environment:
       BTCPAY_BTCLIGHTNING: "type=clightning;server=unix://etc/clightning_bitcoin/lightning-rpc"
