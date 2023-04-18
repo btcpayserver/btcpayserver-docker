@@ -45,7 +45,7 @@ services:
       DATABASE_PASSWORD: "mempool"
 
   mempool_db:
-    image: mariadb:10.5.8
+    image: mariadb:10.11
     restart: on-failure
     expose:
       - "3306"

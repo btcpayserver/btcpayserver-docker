@@ -819,13 +819,13 @@ cd - && cd ..
 
 # Build mariadb
 # https://raw.githubusercontent.com/docker-library/mariadb/master/10.5/Dockerfile
-DOCKERFILE="10.5/Dockerfile"
-echo "Building mariadb:10.5.8"
+DOCKERFILE="10.11/Dockerfile"
+echo "Building mariadb:10.11"
 git clone https://github.com/docker-library/mariadb mariadb
 cd mariadb
 git checkout master
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "mariadb:10.5.8" .
+docker build -f "$DOCKERFILE" -t "mariadb:10.11" .
 cd - && cd ..
 
 
