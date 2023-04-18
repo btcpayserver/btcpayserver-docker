@@ -24,8 +24,6 @@ services:
     restart: on-failure
     stop_grace_period: 1m
     command: "./wait-for-it.sh mempool_db:3306 --timeout=720 --strict -- ./start.sh"
-    volumes:
-      - "mempool_api_datadir:/backend/cache:rw"
     expose:
       - "8999"
     environment:
@@ -63,7 +61,6 @@ services:
 
 volumes:
   mempool_db_datadir:
-  mempool_api_datadir:
 
 required:
   - "opt-add-electrumx"
