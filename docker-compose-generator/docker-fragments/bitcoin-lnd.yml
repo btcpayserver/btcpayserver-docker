@@ -109,7 +109,7 @@ services:
       LIGHTNING_BACKEND: "lnd"
       LND_TLS_CERT_PATH: "/etc/lnd/tls.cert"
       LND_MACAROON_PATH: "/etc/lnd/readonly.macaroon"
-      LND_REST_API_URL: "https://localhost:8080"
+      LND_REST_API_URL: "https://lnd_bitcoin:8081"
       LND_TIMEOUT: 10000
     volumes:
       - "lnd_bitcoin_datadir:/etc/lnd"
