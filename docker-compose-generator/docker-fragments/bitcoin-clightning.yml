@@ -17,6 +17,7 @@ services:
         bitcoin-rpcconnect=bitcoind
         experimental-offers
         database-upgrade=true
+        rpc-file-mode=0666
     volumes:
       - "clightning_bitcoin_datadir:/root/.lightning"
       - "bitcoin_datadir:/etc/bitcoin"
