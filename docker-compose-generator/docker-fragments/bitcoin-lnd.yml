@@ -114,6 +114,10 @@ services:
     volumes:
       - "lnd_bitcoin_datadir:/etc/lnd"
 
+  mempool_web:
+    environment:
+      LIGHTNIGN: "true"
+
 volumes:
   lnd_bitcoin_datadir:
   lndloop_bitcoin_datadir:
