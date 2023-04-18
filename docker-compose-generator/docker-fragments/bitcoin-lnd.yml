@@ -102,10 +102,10 @@ services:
       - "lnd_bitcoin"
     volumes:
       - "lnd_bitcoin_datadir:/lnd"
-
+      
   mempool_api:
     environment:
-      LIGHTNING_ENABLED: true
+      LIGHTNING_ENABLED: "true"
       LIGHTNING_BACKEND: "lnd"
       LND_TLS_CERT_PATH: "/etc/lnd/tls.cert"
       LND_MACAROON_PATH: "/etc/lnd/admin.macaroon"

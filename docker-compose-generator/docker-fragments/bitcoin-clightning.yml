@@ -96,7 +96,7 @@ services:
 
   mempool_api:
     environment:
-      LIGHTNING_ENABLED: true
+      LIGHTNING_ENABLED: "true"
       LIGHTNING_BACKEND: "cln"
       CLIGHTNING_SOCKET: "/etc/lightning/lightning-rpc"
     volumes:
