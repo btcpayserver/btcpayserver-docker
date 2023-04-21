@@ -258,16 +258,16 @@ cd - && cd ..
 
 
 # Build dash
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/18.1.0/Dash/18.1.0/linuxamd64.Dockerfile
-DOCKERFILE="Dash/18.1.0/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/18.1.0/Dash/18.1.0/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dash/18.1.0/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/dash:18.1.0"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/19.0.0/Dash/19.0.0/linuxamd64.Dockerfile
+DOCKERFILE="Dash/19.0.0/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/19.0.0/Dash/19.0.0/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dash/19.0.0/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/dash:19.0.0"
 git clone https://github.com/btcpayserver/dockerfile-deps dash
 cd dash
-git checkout Dash/18.1.0
+git checkout Dash/19.0.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/dash:18.1.0" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/dash:19.0.0" .
 cd - && cd ..
 
 
