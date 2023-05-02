@@ -31,6 +31,7 @@ services:
         tlsextradomain=lnd_bitcoin
         no-rest-tls=1
         protocol.wumbo-channels=1
+        db.bolt.auto-compact=true
     ports:
       - "9735:9735"
     expose:
