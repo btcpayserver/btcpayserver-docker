@@ -2,7 +2,7 @@ version: "3"
 
 services:
   lnd_bitcoin:
-    image: btcpayserver/lnd:v0.15.4-beta-1
+    image: btcpayserver/lnd:v0.16.2-beta
     container_name: btcpayserver_lnd_bitcoin
     restart: unless-stopped
     environment:
@@ -62,6 +62,7 @@ services:
     volumes:
       - "bitcoin_datadir:/etc/bitcoin"
       - "lnd_bitcoin_datadir:/etc/lnd"
+      - "lnd_bitcoin_datadir:/root/.lnd"
       - "lndloop_bitcoin_datadir:/etc/lndloop"
       - "lnd_bitcoin_rtl_datadir:/data"
     expose:

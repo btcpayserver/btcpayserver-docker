@@ -14,7 +14,7 @@ Some of the benefits of using Traefik over NGinx are:
 - `BTCPAYGEN_REVERSEPROXY` to `traefik`.
 - `LETSENCRYPT_EMAIL`: Optional, The email Let's Encrypt will use to notify you about certificate expiration.
 - `BTCPAYGEN_ADDITIONAL_FRAGMENTS`: Add `traefik`
-- `BTCPAY_ADDITIONAL_HOSTS`: Traefic can not accept list of hosts. Add additional hosts in a new file named e.g. `btcpayserver-traefic.custom.yml`:
+- `BTCPAY_ADDITIONAL_HOSTS`: Traefik can not accept list of hosts. Add additional hosts in a new file named e.g. `btcpayserver-traefic.custom.yml`:
   ```
   version: "3"
   services:

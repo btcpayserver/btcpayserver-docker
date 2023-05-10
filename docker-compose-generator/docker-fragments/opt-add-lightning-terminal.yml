@@ -3,6 +3,10 @@ services:
   btcpayserver:
     environment:
       BTCPAY_EXTERNALSERVICES: "Lightning Terminal:${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/lit/;"
+  lnd_bitcoin:
+    environment:
+      LND_EXTRA_ARGS: |
+        rpcmiddleware.enable=true
   lnd_lit:
     image: "lightninglabs/lightning-terminal:v0.8.6-alpha-path-prefix"
     restart: unless-stopped

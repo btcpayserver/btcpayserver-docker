@@ -45,7 +45,7 @@ Log in to your server, switch to the `root` user and type the following:
 sudo su -
 
 # As the other scripts, it is inside the BTCPay base directory
-cd $BTCPAY_BASE_DIRECTORY
+cd $BTCPAY_BASE_DIRECTORY/btcpayserver-docker
 ./btcpay-backup.sh
 ```
 
@@ -128,7 +128,7 @@ Remember that if you set `BTCPAY_BACKUP_PASSPHRASE` on the backup, you also need
 sudo su -
 
 # As the other scripts, it is inside the BTCPay base directory
-cd $BTCPAY_BASE_DIRECTORY
+cd $BTCPAY_BASE_DIRECTORY/btcpayserver-docker
 
 # Optional: Set the passphrase if you have used one for the backup
 read -s -p "Enter passphrase: " BTCPAY_BACKUP_PASSPHRASE
