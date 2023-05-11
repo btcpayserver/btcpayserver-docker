@@ -8,12 +8,12 @@ services:
       LND_EXTRA_ARGS: |
         rpcmiddleware.enable=true
   lnd_lit:
-    image: "lightninglabs/lightning-terminal:v0.8.6-alpha-path-prefix"
+    image: "lightninglabs/lightning-terminal:v0.9.2-alpha-path-prefix"
     restart: unless-stopped
     expose:
       - "8080"
     volumes:
-      - "lnd_lit_datadir:/root/.lnd"
+      - "lnd_lit_datadir:/root/.lit"
       - "lnd_bitcoin_datadir:/data/lnd:ro"
     links:
       - bitcoind
