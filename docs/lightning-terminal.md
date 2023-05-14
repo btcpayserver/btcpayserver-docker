@@ -13,7 +13,7 @@ To install the Lightning Terminal service, you need to set a password for the lo
 export LIT_PASSWD="sUpErSeCuRe"
 
 # Add fragment and run setup
-BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-lightning-terminal"
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-lightning-terminal"
 . btcpay-setup.sh -i
 ```
 
