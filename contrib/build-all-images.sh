@@ -202,18 +202,18 @@ cd - && cd ..
 
 
 # Build bitcoin
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/24.0.1-1/Bitcoin/24.0.1/linuxamd64.Dockerfile
-DOCKERFILE="Bitcoin/24.0.1/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/24.0.1-1/Bitcoin/24.0.1/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Bitcoin/24.0.1/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/24.0.1-1/Bitcoin/24.0.1/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Bitcoin/24.0.1/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/bitcoin:24.0.1-1"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/24.1-1/Bitcoin/24.1/linuxamd64.Dockerfile
+DOCKERFILE="Bitcoin/24.1/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/24.1-1/Bitcoin/24.1/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Bitcoin/24.1/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/24.1-1/Bitcoin/24.1/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Bitcoin/24.1/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/bitcoin:24.1-1"
 git clone https://github.com/btcpayserver/dockerfile-deps bitcoin
 cd bitcoin
-git checkout Bitcoin/24.0.1-1
+git checkout Bitcoin/24.1-1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoin:24.0.1-1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoin:24.1-1" .
 cd - && cd ..
 
 
@@ -709,7 +709,7 @@ DOCKERFILE="Dockerfile"
 echo "Building fireflyiii/core:latest"
 git clone https://dev.azure.com/Firefly-III/_git/MainImage core
 cd core
-git checkout
+git checkout 
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "fireflyiii/core:latest" .
 cd - && cd ..
@@ -846,18 +846,18 @@ cd - && cd ..
 
 
 # Build nnostr-relay
-# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.10-1/Relay/Dockerfile
+# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.15/Relay/Dockerfile
 DOCKERFILE="Relay/Dockerfile"
-# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.10-1/Relay/Dockerfile
+# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.15/Relay/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Relay/Dockerfile"
-# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.10-1/Relay/Dockerfile
+# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.15/Relay/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Relay/Dockerfile"
-echo "Building kukks/nnostr-relay:v0.0.10-1"
+echo "Building kukks/nnostr-relay:v0.0.15"
 git clone https://github.com/kukks/nnostr nnostr-relay
 cd nnostr-relay
-git checkout Relay/v0.0.10-1
+git checkout Relay/v0.0.15
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "kukks/nnostr-relay:v0.0.10-1" .
+docker build -f "$DOCKERFILE" -t "kukks/nnostr-relay:v0.0.15" .
 cd - && cd ..
 
 
@@ -1006,16 +1006,16 @@ cd - && cd ..
 
 
 # Build torq
-# https://raw.githubusercontent.com/lncapital/torq/v0.20.3/Dockerfile
-DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/lncapital/torq/v0.20.3/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/lncapital/torq/v0.20.3/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/lncapital/torq/master/README.md
+DOCKERFILE="README.md"
+# https://raw.githubusercontent.com/lncapital/torq/master/README.md
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="README.md"
+# https://raw.githubusercontent.com/lncapital/torq/master/README.md
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="README.md"
 echo "Building lncapital/torq:0.20.3"
 git clone https://github.com/lncapital/torq torq
 cd torq
-git checkout v0.20.3
+git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "lncapital/torq:0.20.3" .
 cd - && cd ..
@@ -1209,3 +1209,5 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
+
+

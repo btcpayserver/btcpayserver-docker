@@ -719,11 +719,11 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = image.Tag;
                     break;
                 case "lncapital/torq":
-                    dockerInfo.DockerFilePath = $"Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
+                    dockerInfo.DockerFilePath = $"README.md";
+                    dockerInfo.DockerFilePathARM32v7 = $"README.md";
+                    dockerInfo.DockerFilePathARM64v8 = $"README.md";
                     dockerInfo.GitLink = "https://github.com/lncapital/torq";
-                    dockerInfo.GitRef = "v" + image.Tag;
+                    dockerInfo.GitRef = "master"; // they deleted old tags...
                     break;
                 case "timescale/timescaledb":
                     dockerInfo.DockerFilePath = $"Dockerfile";
