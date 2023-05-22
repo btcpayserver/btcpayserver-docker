@@ -100,6 +100,8 @@ echo "ℹ️ Archiving files in $(pwd)…"
     --exclude="volumes/generated_litecoin_datadir/_data" \
     --exclude="volumes/generated_elements_datadir/_data" \
     --exclude="volumes/generated_xmr_data/_data" \
+    --exclude="volumes/generated_dogecoin_datadir/_data/blocks" \
+    --exclude="volumes/generated_dogecoin_datadir/_data/chainstate" \
     --exclude="volumes/generated_dash_datadir/_data/blocks" \
     --exclude="volumes/generated_dash_datadir/_data/chainstate" \
     --exclude="volumes/generated_dash_datadir/_data/indexes" \
