@@ -786,46 +786,46 @@ cd - && cd ..
 
 
 # Build frontend
-# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/frontend/Dockerfile
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0/docker/frontend/Dockerfile
 DOCKERFILE="docker/frontend/Dockerfile"
-# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/frontend/Dockerfile
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0/docker/frontend/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/frontend/Dockerfile"
-# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/frontend/Dockerfile
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0/docker/frontend/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/frontend/Dockerfile"
-echo "Building mempool/frontend:v2.5.0-dev1"
+echo "Building mempool/frontend:v2.5.0"
 git clone https://github.com/mempool/mempool frontend
 cd frontend
-git checkout v2.5.0-dev1
+git checkout v2.5.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "mempool/frontend:v2.5.0-dev1" .
+docker build -f "$DOCKERFILE" -t "mempool/frontend:v2.5.0" .
 cd - && cd ..
 
 
 # Build backend
-# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/backend/Dockerfile
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0/docker/backend/Dockerfile
 DOCKERFILE="docker/backend/Dockerfile"
-# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/backend/Dockerfile
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0/docker/backend/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/backend/Dockerfile"
-# https://raw.githubusercontent.com/mempool/mempool/v2.5.0-dev1/docker/backend/Dockerfile
+# https://raw.githubusercontent.com/mempool/mempool/v2.5.0/docker/backend/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/backend/Dockerfile"
-echo "Building mempool/backend:v2.5.0-dev1"
+echo "Building mempool/backend:v2.5.0"
 git clone https://github.com/mempool/mempool backend
 cd backend
-git checkout v2.5.0-dev1
+git checkout v2.5.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "mempool/backend:v2.5.0-dev1" .
+docker build -f "$DOCKERFILE" -t "mempool/backend:v2.5.0" .
 cd - && cd ..
 
 
 # Build mariadb
 # https://raw.githubusercontent.com/docker-library/mariadb/master/10.5/Dockerfile
-DOCKERFILE="10.5/Dockerfile"
-echo "Building mariadb:10.5.8"
+DOCKERFILE="10.11/Dockerfile"
+echo "Building mariadb:10.11"
 git clone https://github.com/docker-library/mariadb mariadb
 cd mariadb
 git checkout master
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "mariadb:10.5.8" .
+docker build -f "$DOCKERFILE" -t "mariadb:10.11" .
 cd - && cd ..
 
 
