@@ -372,18 +372,18 @@ cd - && cd ..
 
 
 # Build elements
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2-4/Elements/0.21.0.2/linuxamd64.Dockerfile
-DOCKERFILE="Elements/0.21.0.2/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2-4/Elements/0.21.0.2/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Elements/0.21.0.2/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/0.21.0.2-4/Elements/0.21.0.2/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Elements/0.21.0.2/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/elements:0.21.0.2-4"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/22.1.1/Elements/22.1.1/linuxamd64.Dockerfile
+DOCKERFILE="Elements/22.1.1/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/22.1.1/Elements/22.1.1/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Elements/22.1.1/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/22.1.1/Elements/22.1.1/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Elements/22.1.1/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/elements:22.1.1"
 git clone https://github.com/btcpayserver/dockerfile-deps elements
 cd elements
-git checkout Elements/0.21.0.2-4
+git checkout Elements/22.1.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/elements:0.21.0.2-4" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/elements:22.1.1" .
 cd - && cd ..
 
 
@@ -448,18 +448,18 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.63/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.64/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.63/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.64/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.63/Dockerfile.linuxarm64v8
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.64/Dockerfile.linuxarm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.linuxarm64v8"
-echo "Building nicolasdorier/nbxplorer:2.3.63"
+echo "Building nicolasdorier/nbxplorer:2.3.64"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.3.63
+git checkout v2.3.64
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.3.63" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.3.64" .
 cd - && cd ..
 
 
@@ -818,7 +818,7 @@ cd - && cd ..
 
 
 # Build mariadb
-# https://raw.githubusercontent.com/docker-library/mariadb/master/10.5/Dockerfile
+# https://raw.githubusercontent.com/docker-library/mariadb/master/10.11/Dockerfile
 DOCKERFILE="10.11/Dockerfile"
 echo "Building mariadb:10.11"
 git clone https://github.com/docker-library/mariadb mariadb
