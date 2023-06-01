@@ -9,7 +9,7 @@ services:
         # Be careful if you copy the line below from the docker-compose.yml! A dollar sign is escaped.
         rpcauth=mempool:d77ee0acf132038f6aaa9d4500d745ec$$72cc78dcf18191c91d10c15ff8f7c3dbbd170c4d3107cca35d71c6bf96af2ed9
   mempool_web:
-    image: mempool/frontend:v2.5.0-dev1
+    image: mempool/frontend:v2.5.0
     restart: on-failure
     stop_grace_period: 1m
     command: "./wait-for mempool_db:3306 --timeout=720 -- nginx -g 'daemon off;'"
@@ -20,12 +20,10 @@ services:
       BACKEND_MAINNET_HTTP_HOST: "mempool_api"
 
   mempool_api:
-    image: mempool/backend:v2.5.0-dev1
+    image: mempool/backend:v2.5.0
     restart: on-failure
     stop_grace_period: 1m
     command: "./wait-for-it.sh mempool_db:3306 --timeout=720 --strict -- ./start.sh"
-    volumes:
-      - mempool_api_datadir:/backend/cache
     expose:
       - "8999"
     environment:
@@ -45,7 +43,7 @@ services:
       DATABASE_PASSWORD: "mempool"
 
   mempool_db:
-    image: mariadb:10.5.8
+    image: mariadb:10.11
     restart: on-failure
     expose:
       - "3306"
@@ -63,7 +61,6 @@ services:
 
 volumes:
   mempool_db_datadir:
-  mempool_api_datadir:
 
 required:
   - "opt-add-electrumx"

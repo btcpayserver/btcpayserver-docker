@@ -17,6 +17,7 @@ services:
         bitcoin-rpcconnect=bitcoind
         experimental-offers
         database-upgrade=true
+        rpc-file-mode=0666
     volumes:
       - "clightning_bitcoin_datadir:/root/.lightning"
       - "bitcoin_datadir:/etc/bitcoin"
@@ -96,6 +97,18 @@ services:
       - "clightning_bitcoin_rest_certsdir:/etc/clightning_bitcoin_rest_certs"
     expose:
       - "3000"
+
+  mempool_api:
+    environment:
+      LIGHTNING_ENABLED: "true"
+      LIGHTNING_BACKEND: "cln"
+      CLIGHTNING_SOCKET: "/etc/lightning/lightning-rpc"
+    volumes:
+      - "clightning_bitcoin_datadir:/etc/lightning"
+
+  mempool_web:
+    environment:
+      LIGHTNING: "true"
 
   btcpayserver:
     environment:
