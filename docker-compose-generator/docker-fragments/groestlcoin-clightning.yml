@@ -2,7 +2,7 @@ version: "3"
 
 services:
   clightning_groestlcoin:
-    image: groestlcoin/lightning:v22.11.1
+    image: groestlcoin/lightning:v23.05
     container_name: btcpayserver_clightning_groestlcoin
     restart: unless-stopped
     environment:
