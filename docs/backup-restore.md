@@ -109,7 +109,7 @@ Here is an example of a crontab script that does a nightly backup at 4:15 AM:
 ```
 SHELL=/bin/bash
 PATH=/bin:/usr/sbin:/usr/bin:/usr/local/bin
-15 4 * * * /root/btcpayserver-docker/btcpay-backup.sh >/dev/null 2>&1
+15 4 * * * /root/BTCPayServer/btcpayserver-docker/btcpay-backup.sh >/dev/null 2>&1
 ```
 
 You need to set the right `SHELL` and `PATH`, so that the script can run with the correct context.
