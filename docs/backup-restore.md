@@ -115,6 +115,8 @@ PATH=/bin:/usr/sbin:/usr/bin:/usr/local/bin
 You need to set the right `SHELL` and `PATH`, so that the script can run with the correct context.
 You might also want to set the `BTCPAY_BACKUP_PASSPHRASE` environment variable.
 
+Also ensure the base path (here `/root/BTCPayServer`) matches the output of `echo $BTCPAY_BASE_DIRECTORY`.
+
 ## How to restore?
 
 It's very similar to the `btcpay-backup.sh` process but in reverse.
