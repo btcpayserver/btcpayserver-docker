@@ -70,25 +70,18 @@ cd $BTCPAY_BASE_DIRECTORY/btcpayserver-docker
 
 ![BTCPay Server FastSync](../../docs/img/fastsync/btcpayfastsync1.jpg)
 
-After you've shut down BTCPay Server, you now go into the FastSync directory (`cd $BTCPAY_BASE_DIRECTORY/btcpayserver-docker/contrib/FastSync`).
-
-If you want to be sure you're in the correct directory, hit the `ls` command after the `cd contrib/FastSync`
+After you've shut down BTCPay Server, you now go into the FastSync directory and run the `load-utxo-set.sh` script:
 
 ```bash
 cd $BTCPAY_BASE_DIRECTORY/btcpayserver-docker/contrib/FastSync
-ls
+./load-utxo-set.sh
 ```
 
 The script [load-utxo-set.sh](load-utxo-set.sh) will download the utxo-set from the environment variable `UTXO_DOWNLOAD_LINK`.
 
 If `UTXO_DOWNLOAD_LINK` is empty, `NBITCOIN_NETWORK` (with value set to `mainnet` or `testnet`) will be used to take a default `UTXO_DOWNLOAD_LINK` that we hard coded inside [load-utxo-set.sh](load-utxo-set.sh).
 
-```bash
-./load-utxo-set.sh
-```
-
 ![BTCPay Server FastSync](../../docs/img/fastsync/btcpayfastsync2.jpg)
-
 
 Once the files are downloaded, the hash will be checked against those in [utxo-sets](utxo-sets).
 
@@ -175,6 +168,7 @@ You can verify that the handle `NicolasDorier` refers to the person who controls
 :::
 
 ## FAQ
+
 ### Can I add my signature to this repository?
 
 If you are a bitcoin developer or public figure, feel free to add your signature. For this, you need:
