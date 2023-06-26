@@ -159,6 +159,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-save-storage-s](docker-compose-generator/docker-fragments/opt-save-storage-s.yml) will keep around 6 months of blocks (prune BTC for 50 GB)
 * [opt-save-storage-xs](docker-compose-generator/docker-fragments/opt-save-storage-xs.yml) will keep around 3 months of blocks (prune BTC for 25 GB)
 * [opt-save-storage-xxs](docker-compose-generator/docker-fragments/opt-save-storage-xxs.yml) will keep around 2 weeks of blocks (prune BTC for 5 GB) (lightning not supported)
+* [opt-lnd-autocompact](docker-compose-generator/docker-fragments/opt-lnd-autocompact) will activate auto compacting of LND database.
 * [opt-lnd-autopilot](docker-compose-generator/docker-fragments/opt-lnd-autopilot.yml) will activate auto pilot on LND. (5 channels, 60% of allocation)
 * [opt-lnd-keysend](docker-compose-generator/docker-fragments/opt-lnd-keysend.yml) will activate keysend on LND.
 * [opt-lnd-wtclient](docker-compose-generator/docker-fragments/opt-lnd-wtclient.yml) will activate the watchtower client on LND. `LND_WTCLIENT_SWEEP_FEE` can be used to override the default 10 sat/byte justice transaction fee
