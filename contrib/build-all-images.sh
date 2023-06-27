@@ -77,38 +77,6 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v23.05" .
 cd - && cd ..
 
 
-# Build lightning-charge
-# https://raw.githubusercontent.com/ElementsProject/lightning-charge/v0.4.23/Dockerfile
-DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/ElementsProject/lightning-charge/v0.4.23/arm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/ElementsProject/lightning-charge/v0.4.23/arm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building shesek/lightning-charge:0.4.23-1-standalone"
-git clone https://github.com/ElementsProject/lightning-charge lightning-charge
-cd lightning-charge
-git checkout v0.4.23
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shesek/lightning-charge:0.4.23-1-standalone" .
-cd - && cd ..
-
-
-# Build spark-wallet
-# https://raw.githubusercontent.com/shesek/spark-wallet/v0.3.1/Dockerfile
-DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/shesek/spark-wallet/v0.3.1/arm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/shesek/spark-wallet/v0.3.1/arm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building shesek/spark-wallet:0.3.1-standalone"
-git clone https://github.com/shesek/spark-wallet spark-wallet
-cd spark-wallet
-git checkout v0.3.1
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shesek/spark-wallet:0.3.1-standalone" .
-cd - && cd ..
-
-
 # Build c-lightning-rest
 # https://raw.githubusercontent.com/Ride-The-Lightning/c-lightning-REST/v0.10.5/amd64.Dockerfile
 DOCKERFILE="amd64.Dockerfile"
@@ -242,18 +210,18 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.10.2/amd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.10.3/amd64.Dockerfile
 DOCKERFILE="amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.10.2/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.10.3/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.10.2/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.10.3/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building btcpayserver/btcpayserver:1.10.2$<BTCPAY_BUILD_CONFIGURATION>?"
+echo "Building btcpayserver/btcpayserver:1.10.3$<BTCPAY_BUILD_CONFIGURATION>?"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.10.2
+git checkout v1.10.3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.10.2$<BTCPAY_BUILD_CONFIGURATION>?" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.10.3$<BTCPAY_BUILD_CONFIGURATION>?" .
 cd - && cd ..
 
 
