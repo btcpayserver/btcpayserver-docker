@@ -593,3 +593,7 @@ SET search_path TO "BTCPayServer.Plugins.MyPlugin", public;
 # table list now also shows the MyPlugin tables
 \dt
 ```
+
+## How do I upgrade my BTCPay Server docker?
+
+Run the script `./btcpay-update.sh` and patiently wait for your server to be upgraded.
