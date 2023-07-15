@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  lnd_bitcoin:
+    environment:
+      LND_EXTRA_ARGS: |
+        db.bolt.auto-compact=true

@@ -40,7 +40,7 @@ services:
       - bitcoind
 
   bitcoin_rtl:
-    image: shahanafarooqui/rtl:0.13.3
+    image: shahanafarooqui/rtl:0.14.0
     restart: unless-stopped
     environment:
       LN_IMPLEMENTATION: ECL
