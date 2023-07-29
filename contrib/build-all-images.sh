@@ -973,22 +973,6 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/docker-gen:0.7.8" .
 cd - && cd ..
 
 
-# Build torq
-# https://raw.githubusercontent.com/lncapital/torq/master/README.md
-DOCKERFILE="README.md"
-# https://raw.githubusercontent.com/lncapital/torq/master/README.md
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="README.md"
-# https://raw.githubusercontent.com/lncapital/torq/master/README.md
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="README.md"
-echo "Building lncapital/torq:0.20.3"
-git clone https://github.com/lncapital/torq torq
-cd torq
-git checkout master
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "lncapital/torq:0.20.3" .
-cd - && cd ..
-
-
 # Build timescaledb
 # https://raw.githubusercontent.com/timescale/timescaledb-docker/main/Dockerfile
 DOCKERFILE="Dockerfile"
