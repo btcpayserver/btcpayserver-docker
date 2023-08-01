@@ -15,12 +15,12 @@ You will find below information about how you can install BTCPay Server easily i
 As you can see, BTCPay depends on several pieces of infrastructure, mainly:
 
 * A lightweight block explorer (NBXplorer),
-* A database (PostgreSQL or SQLite),
+* A database (PostgreSQL),
 * A full node (eg. Bitcoin Core)
 
 There can be more dependencies if you support more than just standard Bitcoin transactions, including:
 
-* [C-Lightning](https://github.com/ElementsProject/lightning)
+* [Core Lightning (CLN)](https://github.com/ElementsProject/lightning)
 * [LitecoinD](https://github.com/litecoin-project/litecoin) and other coin daemons
 * And more...
 
@@ -44,7 +44,7 @@ First, make sure you have a domain name pointing to your host `A record`, with p
 
 Let's assume your domain is `btcpay.EXAMPLE.com`.
 
-The setup below assumes you want to support Bitcoin, c-lightning, HTTPS automatically configured by Nginx. It also enables node pruning, which you can [modify](#generated-docker-compose) or ignore if you have enough disk space for a full node. Finally, your domain is `btcpay.EXAMPLE.com` should reflect your actual domain name.
+The setup below assumes you want to support Bitcoin, Core Lightning (CLN), HTTPS automatically configured by Nginx. It also enables node pruning, which you can [modify](#generated-docker-compose) or ignore if you have enough disk space for a full node. Finally, your domain is `btcpay.EXAMPLE.com` should reflect your actual domain name.
 
 [Environment variables](#environment-variables) can be tailored to your needs. Some variables require additional storage space.
 
@@ -134,7 +134,7 @@ Additionally, there are specific environment variables for some addons:
 A wide variety of useful scripts are available once BTCPay is installed:
 
 * `bitcoin-cli.sh`: Access your Bitcoin node instance (for RPC)
-* `bitcoin-lightning-cli.sh`: Access your C-Lightning node instance (for RPC)
+* `bitcoin-lightning-cli.sh`: Access your CLN node instance (for RPC)
 * `changedomain.sh`: Change the domain of your BTCPayServer (remember to disable 2FA/U2F first, as you risk being unable to log in to your account)
 * `btcpay-update.sh`: Update BTCPayServer to the latest version
 * `btcpay-up.sh`: Run `docker-compose up`
