@@ -210,18 +210,18 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.10.3/amd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.11.2/amd64.Dockerfile
 DOCKERFILE="amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.10.3/arm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.11.2/arm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.10.3/arm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.11.2/arm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building btcpayserver/btcpayserver:1.10.3$<BTCPAY_BUILD_CONFIGURATION>?"
+echo "Building btcpayserver/btcpayserver:1.11.2$<BTCPAY_BUILD_CONFIGURATION>?"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.10.3
+git checkout v1.11.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.10.3$<BTCPAY_BUILD_CONFIGURATION>?" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.11.2$<BTCPAY_BUILD_CONFIGURATION>?" .
 cd - && cd ..
 
 
@@ -384,50 +384,50 @@ cd - && cd ..
 
 
 # Build monero
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.2.2/Monero/0.18.2.2/linuxamd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.2.2-4/Monero/0.18.2.2/linuxamd64.Dockerfile
 DOCKERFILE="Monero/0.18.2.2/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.2.2/Monero/0.18.2.2/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.2.2-4/Monero/0.18.2.2/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Monero/0.18.2.2/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.2.2/Monero/0.18.2.2/linuxarm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.2.2-4/Monero/0.18.2.2/linuxarm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Monero/0.18.2.2/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/monero:0.18.2.2"
+echo "Building btcpayserver/monero:0.18.2.2-4"
 git clone https://github.com/btcpayserver/dockerfile-deps monero
 cd monero
-git checkout Monero/0.18.2.2
+git checkout Monero/0.18.2.2-4
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.18.2.2" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.18.2.2-4" .
 cd - && cd ..
 
 
 # Build monero
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.2.2/Monero/0.18.2.2/linuxamd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.2.2-4/Monero/0.18.2.2/linuxamd64.Dockerfile
 DOCKERFILE="Monero/0.18.2.2/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.2.2/Monero/0.18.2.2/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.2.2-4/Monero/0.18.2.2/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Monero/0.18.2.2/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.2.2/Monero/0.18.2.2/linuxarm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.2.2-4/Monero/0.18.2.2/linuxarm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Monero/0.18.2.2/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/monero:0.18.2.2"
+echo "Building btcpayserver/monero:0.18.2.2-4"
 git clone https://github.com/btcpayserver/dockerfile-deps monero
 cd monero
-git checkout Monero/0.18.2.2
+git checkout Monero/0.18.2.2-4
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.18.2.2" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.18.2.2-4" .
 cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.64/Dockerfile.linuxamd64
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.66/Dockerfile.linuxamd64
 DOCKERFILE="Dockerfile.linuxamd64"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.64/Dockerfile.linuxarm32v7
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.66/Dockerfile.linuxarm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.linuxarm32v7"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.64/Dockerfile.linuxarm64v8
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.3.66/Dockerfile.linuxarm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.linuxarm64v8"
-echo "Building nicolasdorier/nbxplorer:2.3.64"
+echo "Building nicolasdorier/nbxplorer:2.3.66"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.3.64
+git checkout v2.3.66
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.3.64" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.3.66" .
 cd - && cd ..
 
 
@@ -608,18 +608,18 @@ cd - && cd ..
 
 
 # Build cloudflared
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2022.6.3/Cloudflared/2022.6.3/linuxamd64.Dockerfile
-DOCKERFILE="Cloudflared/2022.6.3/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2022.6.3/Cloudflared/2022.6.3/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Cloudflared/2022.6.3/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2022.6.3/Cloudflared/2022.6.3/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Cloudflared/2022.6.3/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/cloudflared:2022.6.3"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2023.7.3/Cloudflared/2023.7.3/linuxamd64.Dockerfile
+DOCKERFILE="Cloudflared/2023.7.3/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2023.7.3/Cloudflared/2023.7.3/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Cloudflared/2023.7.3/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2023.7.3/Cloudflared/2023.7.3/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Cloudflared/2023.7.3/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/cloudflared:2023.7.3"
 git clone https://github.com/btcpayserver/dockerfile-deps cloudflared
 cd cloudflared
-git checkout Cloudflared/2022.6.3
+git checkout Cloudflared/2023.7.3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/cloudflared:2022.6.3" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/cloudflared:2023.7.3" .
 cd - && cd ..
 
 
@@ -677,7 +677,7 @@ DOCKERFILE="Dockerfile"
 echo "Building fireflyiii/core:latest"
 git clone https://dev.azure.com/Firefly-III/_git/MainImage core
 cd core
-git checkout
+git checkout 
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "fireflyiii/core:latest" .
 cd - && cd ..
@@ -831,11 +831,11 @@ cd - && cd ..
 
 # Build pihole
 # https://raw.githubusercontent.com/pi-hole/docker-pi-hole/2023.05.2/src/Dockerfile
-DOCKERFILE="Dockerfile"
+DOCKERFILE="src/Dockerfile"
 # https://raw.githubusercontent.com/pi-hole/docker-pi-hole/2023.05.2/src/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="src/Dockerfile"
 # https://raw.githubusercontent.com/pi-hole/docker-pi-hole/2023.05.2/src/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="src/Dockerfile"
 echo "Building pihole/pihole:2023.05.2"
 git clone https://github.com/pi-hole/docker-pi-hole pihole
 cd pihole
@@ -1177,3 +1177,5 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
+
+
