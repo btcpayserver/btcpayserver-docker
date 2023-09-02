@@ -3,7 +3,7 @@ version: "3"
 services:
   btcpayserver:
     restart: unless-stopped
-    image: ${BTCPAY_IMAGE:-btcpayserver/btcpayserver:1.11.3$<BTCPAY_BUILD_CONFIGURATION>?}
+    image: ${BTCPAY_IMAGE:-btcpayserver/btcpayserver:1.11.4$<BTCPAY_BUILD_CONFIGURATION>?}
     expose:
       - "49392"
     environment:
