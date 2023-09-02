@@ -32,7 +32,7 @@ if ! [[ "$BTCPAYGEN_ADDITIONAL_FRAGMENTS" == *"opt-save-storage"* ]]; then
   echo "Pruning must be enabled, please update BTCPAYGEN_ADDITIONAL_FRAGMENTS by running:"
   echo ""
   echo 'BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-save-storage-s"'
-  echo '. btcpay-setup -i'
+  echo '. btcpay-setup.sh -i'
   exit 1
 fi
 
