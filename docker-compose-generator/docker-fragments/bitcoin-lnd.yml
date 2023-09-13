@@ -2,7 +2,7 @@ version: "3"
 
 services:
   lnd_bitcoin:
-    image: btcpayserver/lnd:v0.16.4-beta
+    image: btcpayserver/lnd:v0.16.4-beta-1
     container_name: btcpayserver_lnd_bitcoin
     restart: unless-stopped
     environment:
