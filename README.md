@@ -163,6 +163,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-lnd-autopilot](docker-compose-generator/docker-fragments/opt-lnd-autopilot.yml) will activate auto pilot on LND. (5 channels, 60% of allocation)
 * [opt-lnd-keysend](docker-compose-generator/docker-fragments/opt-lnd-keysend.yml) will activate keysend on LND.
 * [opt-lnd-wtclient](docker-compose-generator/docker-fragments/opt-lnd-wtclient.yml) will activate the watchtower client on LND. `LND_WTCLIENT_SWEEP_FEE` can be used to override the default 10 sat/byte justice transaction fee
+* [opt-lnd-watchtower](docker-compose-generator/docker-fragments/opt-lnd-watchtower.yml) will activate the LND watchtower RPC
 * [opt-save-memory](docker-compose-generator/docker-fragments/opt-save-memory.yml) will decrease the default dbcache at the expense of longer synchronization time. (Useful if your machine is less than 2GB)
 * [opt-more-memory](docker-compose-generator/docker-fragments/opt-more-memory.yml) will increase the default dbcache to make synchronization faster (Useful if your machine is has around 4GB)
 * [opt-add-btcqbo](docker-compose-generator/docker-fragments/opt-add-btcqbo.yml) will allow you to create an invoice on Quickbooks which include a way for your customer to pay on BTCPay Server (More information on this [github repository](https://github.com/JeffVandrewJr/btcqbo/), this add-on is maintained by [JeffVandrewJr](https://github.com/JeffVandrewJr), see more on [this video](https://www.youtube.com/watch?v=srgwL9ozg6c))
