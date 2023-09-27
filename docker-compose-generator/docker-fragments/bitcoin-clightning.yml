@@ -28,7 +28,7 @@ services:
       - bitcoind
 
   clightning_bitcoin_rest:
-    image: saubyk/c-lightning-rest:0.10.5
+    image: saubyk/c-lightning-rest:0.10.6
     restart: unless-stopped
     environment:
       PROTOCOL: "http"
