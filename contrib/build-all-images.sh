@@ -154,18 +154,18 @@ cd - && cd ..
 
 
 # Build rtl
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.14.0/dockerfiles/Dockerfile
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.14.1/dockerfiles/Dockerfile
 DOCKERFILE="dockerfiles/Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.14.0/dockerfiles/Dockerfile.arm32v7
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.14.1/dockerfiles/Dockerfile.arm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.14.0/dockerfiles/Dockerfile.arm64v8
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.14.1/dockerfiles/Dockerfile.arm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.14.0"
+echo "Building shahanafarooqui/rtl:0.14.1"
 git clone https://github.com/Ride-The-Lightning/RTL rtl
 cd rtl
-git checkout v0.14.0
+git checkout v0.14.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.14.0" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.14.1" .
 cd - && cd ..
 
 
@@ -1068,12 +1068,12 @@ cd - && cd ..
 
 
 # Build memcached
-# https://raw.githubusercontent.com/docker-library/memcached/master/alpine/Dockerfile
+# https://raw.githubusercontent.com/docker-library/memcached/eb38bf28263b8e5bb7367797cb7b181b65d769bd/alpine/Dockerfile
 DOCKERFILE="alpine/Dockerfile"
 echo "Building memcached:1.5.22-alpine"
 git clone https://github.com/docker-library/memcached memcached
 cd memcached
-git checkout master
+git checkout eb38bf28263b8e5bb7367797cb7b181b65d769bd
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "memcached:1.5.22-alpine" .
 cd - && cd ..

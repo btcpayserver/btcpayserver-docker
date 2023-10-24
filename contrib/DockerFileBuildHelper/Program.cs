@@ -643,7 +643,7 @@ namespace DockerFileBuildHelper
                 case "memcached" when image.Tag.EndsWith("alpine"):
                     dockerInfo.DockerFilePath = $"alpine/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/docker-library/memcached";
-                    dockerInfo.GitRef = $"master";
+                    dockerInfo.GitRef = $"eb38bf28263b8e5bb7367797cb7b181b65d769bd";
                     dockerInfo.SupportedByUs = false;
                     break;
                 case "bwt":
