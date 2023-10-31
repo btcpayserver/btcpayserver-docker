@@ -21,6 +21,9 @@ services:
       VIRTUAL_HOST: ${BTCTRANSMUTER_HOST}
       VIRTUAL_HOST_NAME: "btctransmuter"
       TRANSMUTER_BTCPayAuthServer: "http://btcpayserver:49392"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.btctransmuter.rule: Host(`${BTCPAY_HOST}`) && (Path(`/btctransmuter`) || PathPrefix(`/btctransmuter/`))
     expose:
       - "80"
     links:

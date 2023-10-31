@@ -19,6 +19,9 @@ services:
       NO_CLIENT_ACCOUNTS: "true"
       LOG_LEVEL: debug
       LOGOUT_URL: "/server/services/thunderhub/BTC"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.bitcoin_thub.rule: Host(`${BTCPAY_HOST}`) && (Path(`/thub`) || PathPrefix(`/thub/`))
     volumes:
       - "lnd_bitcoin_datadir:/etc/lnd"
       - "lnd_bitcoin_thub_datadir:/data"

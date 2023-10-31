@@ -57,7 +57,7 @@ services:
     expose:
       - "3000"
     labels:
-      traefik.enable: true
+      traefik.enable: "true"
       traefik.http.routers.bitcoin_rtl.rule: Host(`${BTCPAY_HOST}`) && (Path(`/rtl`) || PathPrefix(`/rtl/`))
     links:
       - eclair_bitcoin
