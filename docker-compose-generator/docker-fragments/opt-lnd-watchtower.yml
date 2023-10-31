@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  lnd_bitcoin:
+    environment:
+      LND_EXTRA_ARGS: |
+        watchtower.active=true
+        watchtower.listen=lnd_bitcoin:9911
+        watchtower.listen=127.0.0.1:9911
+    ports:
+      - "9911:9911"

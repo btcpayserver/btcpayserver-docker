@@ -96,6 +96,7 @@ echo "ℹ️ Archiving files in $(pwd)…"
 {
   tar \
     --exclude="volumes/backup_datadir" \
+    --exclude="volumes/generated_btcpay_datadir/_data/host_*" \
     --exclude="volumes/generated_bitcoin_datadir/_data" \
     --exclude="volumes/generated_litecoin_datadir/_data" \
     --exclude="volumes/generated_elements_datadir/_data" \
