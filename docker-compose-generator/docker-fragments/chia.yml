@@ -10,6 +10,7 @@ services:
     environment:
       service: "wallet"
       self_hostname: "btcpayserver_chia"
+      keys: "none"
     volumes:
       - "xch_data:/root/.chia"
       - "xch_keys:/root/.chia_keys"
