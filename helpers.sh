@@ -144,6 +144,30 @@ docker_update() {
             apt install libseccomp2 -t buster-backports
         fi
     fi
+
+    # Can't run with docker-ce before 20.10.10... check against version 21 instead, easier to compare
+    if [ "21" \> "$(docker version -f "{{ .Server.Version }}")" ]; then
+        echo "Updating docker, old version can't run some images (https://docs.linuxserver.io/FAQ/#jammy)"
+        echo \
+        "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+        "$(lsb_release -cs)" stable" | \
+        tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+        apt-get update
+        apt-get upgrade -y  docker-ce docker-ce-cli containerd.io
+
+        # Possible that old distro like xenial doesn't have it anymore, if so, just take
+        # the next distrib
+        if [ "21" \> "$(docker version -f "{{ .Server.Version }}")" ]; then
+            echo "Updating docker, with bionic's version"
+            echo \
+            "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+            bionic stable" | \
+            tee /etc/apt/sources.list.d/docker.list > /dev/null
+            apt-get update
+            apt-get upgrade -y  docker-ce docker-ce-cli containerd.io
+        fi
+    fi
 }
 
 btcpay_up() {
