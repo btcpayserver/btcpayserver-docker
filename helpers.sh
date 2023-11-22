@@ -154,7 +154,7 @@ docker_update() {
         tee /etc/apt/sources.list.d/docker.list > /dev/null
 
         apt-get update
-        apt-get install --only-upgrade docker-ce docker-ce-cli containerd.io
+        apt-get install --only-upgrade -y docker-ce docker-ce-cli containerd.io
 
         # Possible that old distro like xenial doesn't have it anymore, if so, just take
         # the next distrib
@@ -165,7 +165,7 @@ docker_update() {
             bionic stable" | \
             tee /etc/apt/sources.list.d/docker.list > /dev/null
             apt-get update
-            apt-get install --only-upgrade docker-ce docker-ce-cli containerd.io
+            apt-get install --only-upgrade -y docker-ce docker-ce-cli containerd.io
         fi
     fi
 }
