@@ -66,6 +66,9 @@ btcpay_expand_variables() {
     if [[ "$BTCPAY_HOST" != *.local ]] && [[ "$BTCPAY_HOST" != *.lan ]]; then
         BTCPAY_ANNOUNCEABLE_HOST="$BTCPAY_HOST"
     fi
+    if [[ "$BTCPAY_LIGHTNING_HOST" ]]; then
+        BTCPAY_ANNOUNCEABLE_HOST="$BTCPAY_LIGHTNING_HOST"
+    fi
 }
 
 # Set .env file
@@ -94,6 +97,7 @@ fi
 echo "
 BTCPAY_PROTOCOL=$BTCPAY_PROTOCOL
 BTCPAY_HOST=$BTCPAY_HOST
+BTCPAY_LIGHTNING_HOST=$BTCPAY_LIGHTNING_HOST
 BTCPAY_ADDITIONAL_HOSTS=$BTCPAY_ADDITIONAL_HOSTS
 BTCPAY_ANNOUNCEABLE_HOST=$BTCPAY_ANNOUNCEABLE_HOST
 REVERSEPROXY_HTTP_PORT=$REVERSEPROXY_HTTP_PORT
@@ -138,6 +142,30 @@ docker_update() {
             echo 'deb http://httpredir.debian.org/debian buster-backports main contrib non-free' | sudo tee -a /etc/apt/sources.list.d/debian-backports.list
             apt update
             apt install libseccomp2 -t buster-backports
+        fi
+    fi
+
+    # Can't run with docker-ce before 20.10.10... check against version 21 instead, easier to compare
+    if [ "21" \> "$(docker version -f "{{ .Server.Version }}")" ]; then
+        echo "Updating docker, old version can't run some images (https://docs.linuxserver.io/FAQ/#jammy)"
+        echo \
+        "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+        "$(lsb_release -cs)" stable" | \
+        tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+        apt-get update
+        apt-get install --only-upgrade -y docker-ce docker-ce-cli containerd.io
+
+        # Possible that old distro like xenial doesn't have it anymore, if so, just take
+        # the next distrib
+        if [ "21" \> "$(docker version -f "{{ .Server.Version }}")" ]; then
+            echo "Updating docker, with bionic's version"
+            echo \
+            "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+            bionic stable" | \
+            tee /etc/apt/sources.list.d/docker.list > /dev/null
+            apt-get update
+            apt-get install --only-upgrade -y docker-ce docker-ce-cli containerd.io
         fi
     fi
 }

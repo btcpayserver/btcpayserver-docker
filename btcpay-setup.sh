@@ -81,6 +81,7 @@ Or, if you want to offload SSL because you have an existing web proxy, change RE
 
 Environment variables:
     BTCPAY_HOST: The hostname of your website (eg. btcpay.example.com)
+    BTCPAY_LIGHTNING_HOST: The hostname announced for your node on the lightning network (by default, the BTCPAY_HOST will be used)
     REVERSEPROXY_HTTP_PORT: The port the reverse proxy binds to for public HTTP requests. Default: 80
     REVERSEPROXY_HTTPS_PORT: The port the reverse proxy binds to for public HTTPS requests. Default: 443
     REVERSEPROXY_DEFAULT_HOST: Optional, if using a reverse proxy nginx, specify which website should be presented if the server is accessed by its IP.
@@ -282,6 +283,7 @@ echo "
 Parameters passed:
 BTCPAY_PROTOCOL:$BTCPAY_PROTOCOL
 BTCPAY_HOST:$BTCPAY_HOST
+BTCPAY_LIGHTNING_HOST: $BTCPAY_LIGHTNING_HOST
 BTCPAY_ADDITIONAL_HOSTS:$BTCPAY_ADDITIONAL_HOSTS
 REVERSEPROXY_HTTP_PORT:$REVERSEPROXY_HTTP_PORT
 REVERSEPROXY_HTTPS_PORT:$REVERSEPROXY_HTTPS_PORT
