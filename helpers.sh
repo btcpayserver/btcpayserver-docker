@@ -153,7 +153,14 @@ docker_update() {
         "$(lsb_release -cs)" stable" | \
         tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-        apt-get update
+        if apt-get update | grep -q "NO_PUBKEY"; then
+            echo "Installing new docker key..."
+            mkdir -p /etc/apt/keyrings
+            rm -f /etc/apt/keyrings/docker.gpg
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+            apt-get update
+        fi
+
         apt-get install --only-upgrade -y docker-ce docker-ce-cli containerd.io
 
         # Possible that old distro like xenial doesn't have it anymore, if so, just take
