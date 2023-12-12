@@ -39,6 +39,9 @@ if ! [ -f "/etc/docker/daemon.json" ] && [ -w "/etc/docker" ]; then
     echo "Setting limited log files in /etc/docker/daemon.json"
 fi
 
+. helpers.sh
+docker_update
+
 if ! ./build.sh; then
     echo "Failed to generate the docker-compose"
     exit 1
@@ -67,8 +70,6 @@ if [[ "$ACME_CA_URI" == "https://acme-staging.api.letsencrypt.org/directory" ]];
     echo "Info: Rewriting ACME_CA_URI from $original_acme to $ACME_CA_URI"
 fi
 
-. helpers.sh
-docker_update
 install_tooling
 
 if $BTCPAY_ENABLE_SSH && [[ "$BTCPAY_SSHKEYFILE" == "/datadir/host_id_rsa" ]]; then
