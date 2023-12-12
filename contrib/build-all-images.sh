@@ -454,12 +454,12 @@ DOCKERFILE="stable/debian/Dockerfile"
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="stable/debian/Dockerfile"
 # https://raw.githubusercontent.com/nginxinc/docker-nginx/1.23.2/stable/debian/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="stable/debian/Dockerfile"
-echo "Building nginx:1.23.3"
+echo "Building nginx:1.25.3-bookworm"
 git clone https://github.com/nginxinc/docker-nginx nginx
 cd nginx
 git checkout 1.23.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nginx:1.23.3" .
+docker build -f "$DOCKERFILE" -t "nginx:1.25.3-bookworm" .
 cd - && cd ..
 
 
