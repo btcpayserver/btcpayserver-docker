@@ -145,8 +145,9 @@ docker_update() {
         fi
     fi
 
+    docker_version="$(docker version -f "{{ .Server.Version }}")"
     # Can't run with docker-ce before 20.10.10... check against version 21 instead, easier to compare
-    if [ "21" \> "$(docker version -f "{{ .Server.Version }}")" ]; then
+    if [ "21" \> "$docker_version" ] && [[ "20.10.10" != "$docker_version" ]]; then
         echo "Updating docker, old version can't run some images (https://docs.linuxserver.io/FAQ/#jammy)"
         echo \
         "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
@@ -165,7 +166,8 @@ docker_update() {
 
         # Possible that old distro like xenial doesn't have it anymore, if so, just take
         # the next distrib
-        if [ "21" \> "$(docker version -f "{{ .Server.Version }}")" ] && [[ "20.10.10" != "$(docker version -f "{{ .Server.Version }}")" ]]; then
+        docker_version="$(docker version -f "{{ .Server.Version }}")"
+        if [ "21" \> "$docker_version" ] && [[ "20.10.10" != "$docker_version" ]]; then
             echo "Updating docker, with bionic's version"
             echo \
             "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
