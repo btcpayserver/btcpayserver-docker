@@ -165,7 +165,7 @@ docker_update() {
 
         # Possible that old distro like xenial doesn't have it anymore, if so, just take
         # the next distrib
-        if [ "21" \> "$(docker version -f "{{ .Server.Version }}")" ]; then
+        if [ "21" \> "$(docker version -f "{{ .Server.Version }}")" ] && [[ "20.10.10" != "$(docker version -f "{{ .Server.Version }}")" ]]; then
             echo "Updating docker, with bionic's version"
             echo \
             "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
