@@ -544,11 +544,11 @@ namespace DockerFileBuildHelper
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "docker-gen":
-                    dockerInfo.DockerFilePath = $"linuxamd64.Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"linuxarm32v7.Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"linuxarm64v8.Dockerfile";
+                    dockerInfo.DockerFilePath = $"Dockerfile.alpine";
+                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile.alpine";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile.alpine";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/docker-gen";
-                    dockerInfo.GitRef = $"v{image.Tag}";
+                    dockerInfo.GitRef = $"{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "letsencrypt-nginx-proxy-companion":
