@@ -138,7 +138,7 @@ docker_update() {
         if [[ "$(apt list libseccomp2 2>/dev/null)" == *" 2.3"* ]]; then
             echo "Outdated version of libseccomp2, updating... (see: https://blog.samcater.com/fix-workaround-rpi4-docker-libseccomp2-docker-20/)"
             # https://blog.samcater.com/fix-workaround-rpi4-docker-libseccomp2-docker-20/
-            apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC 648ACFD622F3D138
+            apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC 648ACFD622F3D138 0E98404D386FA1D9 6ED0E7B82643E131
             echo 'deb http://httpredir.debian.org/debian buster-backports main contrib non-free' | sudo tee -a /etc/apt/sources.list.d/debian-backports.list
             apt update
             apt install libseccomp2 -t buster-backports
