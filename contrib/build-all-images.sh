@@ -894,18 +894,18 @@ cd - && cd ..
 
 
 # Build thunderhub
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.23/Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.29/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.23/Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.29/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.23/Dockerfile
+# https://raw.githubusercontent.com/apotdevin/thunderhub/v0.13.29/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building apotdevin/thunderhub:base-v0.13.23"
+echo "Building apotdevin/thunderhub:base-v0.13.29"
 git clone https://github.com/apotdevin/thunderhub thunderhub
 cd thunderhub
-git checkout v0.13.23
+git checkout v0.13.29
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:base-v0.13.23" .
+docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:base-v0.13.29" .
 cd - && cd ..
 
 
