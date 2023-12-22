@@ -456,9 +456,9 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"Dash/{image.Tag}";
                     break;
                 case "btcpayserver":
-                    dockerInfo.DockerFilePath = "amd64.Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = "arm32v7.Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = "arm64v8.Dockerfile";
+                    dockerInfo.DockerFilePath = "Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/btcpayserver";
                     // v1.0.5.4$<BTCPAY_BUILD_CONFIGURATION>
                     dockerInfo.GitRef = $"v{image.Tag.Substring(0, image.Tag.IndexOf('$'))}";
