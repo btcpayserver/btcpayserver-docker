@@ -3,6 +3,7 @@ version: "3"
 services:
   postgres:
     restart: unless-stopped
+    container_name: generated_postgres_1
     image: btcpayserver/postgres:13.13
     command: [ "-c", "random_page_cost=1.0", "-c", "shared_preload_libraries=pg_stat_statements" ]
     environment:

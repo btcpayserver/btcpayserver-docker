@@ -133,6 +133,32 @@ CLOUDFLARE_TUNNEL_TOKEN=$CLOUDFLARE_TUNNEL_TOKEN" > $BTCPAY_ENV_FILE
 env | grep ^BWT_ >> $BTCPAY_ENV_FILE || true
 }
 
+docker_compose_set_plugin() {
+    echo "set 'docker compose' to /usr/local/bin/docker-compose"
+    plugin_path=$(docker info -f '{{ range .ClientInfo.Plugins }}{{ if eq .Name "compose" }}{{ .Path }}{{ end }}{{ end }}' || echo '/usr/libexec/docker/cli-plugins/docker-compose')
+    if [[ "$plugin_path" ]] && [ -f "$plugin_path" ]; then
+        rm -f "$plugin_path"
+        ln -s /usr/local/bin/docker-compose "$plugin_path"
+    fi
+}
+
+docker_compose_update() {
+    compose_version="2.23.3"
+    if ! [[ -x "$(command -v docker-compose)" ]] || [[ "$(docker-compose version --short)" != "$compose_version" ]]; then
+        if ! [[ "$OSTYPE" == "darwin"* ]] && $HAS_DOCKER; then
+            echo "Trying to install docker-compose by using docker/compose-bin ($(uname -m))"
+            ! [[ -d "dist" ]] && mkdir dist
+            container=$(docker create docker/compose-bin:v$compose_version /docker-compose)
+            docker cp "$container:/docker-compose" "dist/docker-compose"
+            docker rm "$container"
+            mv dist/docker-compose /usr/local/bin/docker-compose
+            chmod +x /usr/local/bin/docker-compose
+            rm -rf "dist"
+            docker_compose_set_plugin
+        fi
+    fi
+}
+
 docker_update() {
     if [[ "$(uname -m)" == "armv7l" ]] && cat "/etc/os-release" 2>/dev/null | grep -q "VERSION_CODENAME=buster" 2>/dev/null; then
         if [[ "$(apt list libseccomp2 2>/dev/null)" == *" 2.3"* ]]; then
@@ -176,17 +202,17 @@ docker_update() {
             apt-get update
             apt-get install --only-upgrade -y docker-ce docker-ce-cli containerd.io
         fi
+
+        docker_compose_set_plugin
     fi
+
+    docker_compose_update
 }
 
 btcpay_up() {
     pushd . > /dev/null
     cd "$(dirname "$BTCPAY_ENV_FILE")"
     docker-compose -f $BTCPAY_DOCKER_COMPOSE up --remove-orphans -d -t "${COMPOSE_HTTP_TIMEOUT:-180}"
-    # Depending on docker-compose, either the timeout does not work, or "compose -d and --timeout cannot be combined"
-    if ! [ $? -eq 0 ]; then
-        docker-compose -f $BTCPAY_DOCKER_COMPOSE up --remove-orphans -d
-    fi
     popd > /dev/null
 }
 
@@ -201,10 +227,6 @@ btcpay_down() {
     pushd . > /dev/null
     cd "$(dirname "$BTCPAY_ENV_FILE")"
     docker-compose -f $BTCPAY_DOCKER_COMPOSE down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
-    # Depending on docker-compose, the timeout does not work.
-    if ! [ $? -eq 0 ]; then
-        docker-compose -f $BTCPAY_DOCKER_COMPOSE down
-    fi
     popd > /dev/null
 }
 
@@ -212,10 +234,6 @@ btcpay_restart() {
     pushd . > /dev/null
     cd "$(dirname "$BTCPAY_ENV_FILE")"
     docker-compose -f $BTCPAY_DOCKER_COMPOSE restart -t "${COMPOSE_HTTP_TIMEOUT:-180}"
-    # Depending on docker-compose, the timeout does not work.
-    if ! [ $? -eq 0 ]; then
-        docker-compose -f $BTCPAY_DOCKER_COMPOSE restart
-    fi
     btcpay_up
     popd > /dev/null
 }
