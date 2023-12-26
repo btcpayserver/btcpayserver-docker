@@ -3,6 +3,7 @@ version: '3'
 services:
   fireflyiii:
     image: fireflyiii/core:latest
+    container_name: generated_fireflyiii_1
     environment:
       - APP_ENV=local
       - APP_KEY=MustBe32DropDbAndChangeItIfUWant

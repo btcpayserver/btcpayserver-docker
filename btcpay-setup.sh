@@ -428,17 +428,6 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
     fi
 
     docker_update
-
-    if ! [[ -x "$(command -v docker-compose)" ]]; then
-        if ! [[ "$OSTYPE" == "darwin"* ]] && $HAS_DOCKER; then
-            echo "Trying to install docker-compose by using the btcpayserver/docker-compose ($(uname -m))"
-            ! [[ -d "dist" ]] && mkdir dist
-            docker run --rm -v "$(pwd)/dist:/dist" btcpayserver/docker-compose:1.28.6
-            mv dist/docker-compose /usr/local/bin/docker-compose
-            chmod +x /usr/local/bin/docker-compose
-            rm -rf "dist"
-        fi
-    fi
 fi
 
 if $HAS_DOCKER; then
