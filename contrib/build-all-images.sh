@@ -21,22 +21,6 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/docker-compose-generator:latest" 
 cd - && cd ..
 
 
-# Build docker-compose
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/docker-compose/1.28.6/docker-compose/1.28.6/linuxamd64.Dockerfile
-DOCKERFILE="docker-compose/1.28.6/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/docker-compose/1.28.6/docker-compose/1.28.6/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker-compose/1.28.6/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/docker-compose/1.28.6/docker-compose/1.28.6/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker-compose/1.28.6/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/docker-compose:1.28.6"
-git clone https://github.com/btcpayserver/dockerfile-deps docker-compose
-cd docker-compose
-git checkout docker-compose/1.28.6
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/docker-compose:1.28.6" .
-cd - && cd ..
-
-
 # Build btglnd
 # https://raw.githubusercontent.com/vutov/lnd/master/Dockerfile
 DOCKERFILE="Dockerfile"
@@ -416,18 +400,18 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.4.4/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.4.5/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.4.4/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.4.5/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.4.4/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.4.5/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building nicolasdorier/nbxplorer:2.4.4"
+echo "Building nicolasdorier/nbxplorer:2.4.5"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.4.4
+git checkout v2.4.5
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.4.4" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.4.5" .
 cd - && cd ..
 
 

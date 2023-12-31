@@ -39,7 +39,6 @@ namespace DockerFileBuildHelper
             foreach (var image in new[]
             {
                 Image.Parse("btcpayserver/docker-compose-generator"),
-                Image.Parse("btcpayserver/docker-compose:1.28.6"),
             }.Concat(GetImages(fragmentDirectory)))
             {
                 Console.WriteLine($"Image: {image.ToString()}");
