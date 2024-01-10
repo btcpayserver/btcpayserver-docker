@@ -172,8 +172,8 @@ docker_update() {
     fi
 
     docker_version="$(docker version -f "{{ .Server.Version }}")"
-    # Can't run with docker-ce before 20.10.10... check against version 21 instead, easier to compare
-    if [ "21" \> "$docker_version" ] && [[ "20.10.10" != "$docker_version" ]]; then
+    # Can't run with docker-ce before 20.10.10
+    if dpkg --compare-versions "$docker_version" '<<' 20.10.10; then
         echo "Updating docker, old version can't run some images (https://docs.linuxserver.io/FAQ/#jammy)"
         echo \
         "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
