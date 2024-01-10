@@ -143,6 +143,9 @@ docker_compose_set_plugin() {
 }
 
 docker_compose_update() {
+    if [ -f "$BTCPAY_BASE_DIRECTORY/skip-docker-update" ]; then
+        return
+    fi
     compose_version="2.23.3"
     if ! [[ -x "$(command -v docker-compose)" ]] || [[ "$(docker-compose version --short)" != "$compose_version" ]]; then
         if ! [[ "$OSTYPE" == "darwin"* ]] && $HAS_DOCKER; then
