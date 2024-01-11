@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  lnbits:
+    image: lnbits:latest
+    restart: unless-stopped
+    environment:
+      LETSENCRYPT_HOST: ${LNBITS_HOST}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}
+      VIRTUAL_HOST: ${LNBITS_HOST}
+      VIRTUAL_HOST_NAME: "lnbits"
+    expose:
+      - "5000"
+    links:
+       - postgres
+    volumes:
+      - ./lnbits/data/:/app/data

@@ -1,0 +1,1 @@
+This is the LNBits Datadir. Don't remove it.

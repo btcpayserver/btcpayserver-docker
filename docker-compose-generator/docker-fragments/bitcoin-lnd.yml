@@ -122,6 +122,13 @@ services:
     environment:
       LIGHTNING: "true"
 
+  lnbits:
+    links:
+       - lnd_bitcoin
+    volumes:
+      - "lnd_bitcoin_datadir:/data/.lightning"
+      - ./lnbits/lnd-env:/app/.env
+
 volumes:
   lnd_bitcoin_datadir:
   lndloop_bitcoin_datadir:
