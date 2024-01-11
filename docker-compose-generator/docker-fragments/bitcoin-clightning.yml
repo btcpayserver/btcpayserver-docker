@@ -80,6 +80,11 @@ services:
     environment:
       LIGHTNING: "true"
 
+  lnbits:
+    volumes:
+      - "clightning_bitcoin_datadir:/data/.lightning"
+      - ./lnbits/clightning-env:/app/.env
+
   btcpayserver:
     environment:
       BTCPAY_BTCLIGHTNING: "type=clightning;server=unix://etc/clightning_bitcoin/lightning-rpc"
