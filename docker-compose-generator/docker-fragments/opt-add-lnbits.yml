@@ -2,7 +2,7 @@ version: '3'
 
 services:
   lnbits:
-    image: lnbits:latest
+    image: petzsch/lnbits:0.11.3
     restart: unless-stopped
     environment:
       LETSENCRYPT_HOST: ${LNBITS_HOST}
