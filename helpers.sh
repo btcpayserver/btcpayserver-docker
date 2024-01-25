@@ -143,6 +143,9 @@ docker_compose_set_plugin() {
 }
 
 docker_compose_update() {
+    if [ -f "$BTCPAY_BASE_DIRECTORY/skip-docker-update" ]; then
+        return
+    fi
     compose_version="2.23.3"
     if ! [[ -x "$(command -v docker-compose)" ]] || [[ "$(docker-compose version --short)" != "$compose_version" ]]; then
         if ! [[ "$OSTYPE" == "darwin"* ]] && $HAS_DOCKER; then
@@ -160,6 +163,9 @@ docker_compose_update() {
 }
 
 docker_update() {
+    if [ -f "$BTCPAY_BASE_DIRECTORY/skip-docker-update" ]; then
+        return
+    fi
     if [[ "$(uname -m)" == "armv7l" ]] && cat "/etc/os-release" 2>/dev/null | grep -q "VERSION_CODENAME=buster" 2>/dev/null; then
         if [[ "$(apt list libseccomp2 2>/dev/null)" == *" 2.3"* ]]; then
             echo "Outdated version of libseccomp2, updating... (see: https://blog.samcater.com/fix-workaround-rpi4-docker-libseccomp2-docker-20/)"
