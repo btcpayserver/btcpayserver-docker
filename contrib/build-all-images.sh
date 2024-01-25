@@ -194,18 +194,18 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.12.3/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.12.4/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.12.3/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.12.4/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.12.3/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.12.4/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/btcpayserver:1.12.3$<BTCPAY_BUILD_CONFIGURATION>?"
+echo "Building btcpayserver/btcpayserver:1.12.4$<BTCPAY_BUILD_CONFIGURATION>?"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.12.3
+git checkout v1.12.4
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.12.3$<BTCPAY_BUILD_CONFIGURATION>?" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.12.4$<BTCPAY_BUILD_CONFIGURATION>?" .
 cd - && cd ..
 
 
@@ -400,18 +400,18 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.4.5/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.0/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.4.5/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.0/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.4.5/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.0/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building nicolasdorier/nbxplorer:2.4.5"
+echo "Building nicolasdorier/nbxplorer:2.5.0"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.4.5
+git checkout v2.5.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.4.5" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.5.0" .
 cd - && cd ..
 
 
