@@ -159,6 +159,42 @@ docker_compose_update() {
     fi
 }
 
+version_gt() (
+    set +x
+
+    yy_a="$(echo "$1" | cut -d'.' -f1)"
+    yy_b="$(echo "$2" | cut -d'.' -f1)"
+    if [ "$yy_a" -lt "$yy_b" ]; then
+        return 1
+    fi
+    if [ "$yy_a" -gt "$yy_b" ]; then
+        return 0
+    fi
+    mm_a="$(echo "$1" | cut -d'.' -f2)"
+    mm_b="$(echo "$2" | cut -d'.' -f2)"
+    mm_a="${mm_a#0}"
+    mm_b="${mm_b#0}"
+    if [ "${mm_a:-0}" -lt "${mm_b:-0}" ]; then
+        return 1
+    fi
+    if [ "${mm_a:-0}" -gt "${mm_b:-0}" ]; then
+        return 0
+    fi
+
+    bb_a="$(echo "$1" | cut -d'.' -f3)"
+    bb_b="$(echo "$2" | cut -d'.' -f3)"
+    bb_a="${bb_a#0}"
+    bb_b="${bb_b#0}"
+    if [ "${bb_a:-0}" -lt "${bb_b:-0}" ]; then
+        return 1
+    fi
+    if [ "${bb_a:-0}" -gt "${bb_b:-0}" ]; then
+        return 0
+    fi
+
+    return 1
+)
+
 docker_update() {
     if [[ "$(uname -m)" == "armv7l" ]] && cat "/etc/os-release" 2>/dev/null | grep -q "VERSION_CODENAME=buster" 2>/dev/null; then
         if [[ "$(apt list libseccomp2 2>/dev/null)" == *" 2.3"* ]]; then
@@ -172,8 +208,7 @@ docker_update() {
     fi
 
     docker_version="$(docker version -f "{{ .Server.Version }}")"
-    # Can't run with docker-ce before 20.10.10... check against version 21 instead, easier to compare
-    if [ "21" \> "$docker_version" ] && [[ "20.10.10" != "$docker_version" ]]; then
+    if version_gt "20.10.10" "$docker_version"; then
         echo "Updating docker, old version can't run some images (https://docs.linuxserver.io/FAQ/#jammy)"
         echo \
         "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
@@ -193,7 +228,7 @@ docker_update() {
         # Possible that old distro like xenial doesn't have it anymore, if so, just take
         # the next distrib
         docker_version="$(docker version -f "{{ .Server.Version }}")"
-        if [ "21" \> "$docker_version" ] && [[ "20.10.10" != "$docker_version" ]]; then
+        if version_gt "20.10.10" "$docker_version"; then
             echo "Updating docker, with bionic's version"
             echo \
             "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
