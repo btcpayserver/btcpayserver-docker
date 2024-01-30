@@ -208,43 +208,44 @@ docker_update() {
         fi
     fi
 
-    docker_version="$(docker version -f "{{ .Server.Version }}")"
-    if version_gt "20.10.10" "$docker_version"; then
-        echo "Updating docker, old version can't run some images (https://docs.linuxserver.io/FAQ/#jammy)"
-        echo \
-        "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-        "$(lsb_release -cs)" stable" | \
-        tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-        if apt-get update | grep -q "NO_PUBKEY"; then
-            echo "Installing new docker key..."
-            mkdir -p /etc/apt/keyrings
-            rm -f /etc/apt/keyrings/docker.gpg
-            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-            apt-get update
-        fi
-
-        apt-get install --only-upgrade -y docker-ce docker-ce-cli containerd.io
-
-        # Possible that old distro like xenial doesn't have it anymore, if so, just take
-        # the next distrib
+    if $HAS_DOCKER; then
         docker_version="$(docker version -f "{{ .Server.Version }}")"
         if version_gt "20.10.10" "$docker_version"; then
-            echo "Updating docker, with bionic's version"
+            echo "Updating docker, old version can't run some images (https://docs.linuxserver.io/FAQ/#jammy)"
             echo \
             "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-            bionic stable" | \
+            "$(lsb_release -cs)" stable" | \
             tee /etc/apt/sources.list.d/docker.list > /dev/null
-            mkdir -p /etc/apt/keyrings
-            rm -f /etc/apt/keyrings/docker.gpg
-            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-            apt-get update
+
+            if apt-get update | grep -q "NO_PUBKEY"; then
+                echo "Installing new docker key..."
+                mkdir -p /etc/apt/keyrings
+                rm -f /etc/apt/keyrings/docker.gpg
+                curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+                apt-get update
+            fi
+
             apt-get install --only-upgrade -y docker-ce docker-ce-cli containerd.io
+
+            # Possible that old distro like xenial doesn't have it anymore, if so, just take
+            # the next distrib
+            docker_version="$(docker version -f "{{ .Server.Version }}")"
+            if version_gt "20.10.10" "$docker_version"; then
+                echo "Updating docker, with bionic's version"
+                echo \
+                "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+                bionic stable" | \
+                tee /etc/apt/sources.list.d/docker.list > /dev/null
+                mkdir -p /etc/apt/keyrings
+                rm -f /etc/apt/keyrings/docker.gpg
+                curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+                apt-get update
+                apt-get install --only-upgrade -y docker-ce docker-ce-cli containerd.io
+            fi
+
+            docker_compose_set_plugin
         fi
-
-        docker_compose_set_plugin
     fi
-
     docker_compose_update
 }
 
