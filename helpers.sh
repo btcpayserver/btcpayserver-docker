@@ -143,6 +143,7 @@ docker_compose_set_plugin() {
 }
 
 docker_compose_update() {
+    # If you change this, update also docker-compose-generator/src/DockerComposeDefinition.cs and the dcg-latest branch
     compose_version="2.23.3"
     if ! [[ -x "$(command -v docker-compose)" ]] || [[ "$(docker-compose version --short)" != "$compose_version" ]]; then
         if ! [[ "$OSTYPE" == "darwin"* ]] && $HAS_DOCKER; then
