@@ -12,59 +12,19 @@ jobs:
             sudo ./test-install.sh
   # Define in CircleCi Project Variables: $DOCKERHUB_REPO, $DOCKERHUB_USER, $DOCKERHUB_PASS
   # Publish jobs require those variables
-  amd64:
-    machine:
-      enabled: true
+  docker:
+    docker:
+      - image: cimg/base:stable
     steps:
-      - checkout  
+      - setup_remote_docker
+      - checkout
       - run:
           command: |
             cd docker-compose-generator
-            sudo docker login --username=$DOCKERHUB_USER --password=$DOCKERHUB_PASS
-            sudo docker build --pull -t $DOCKERHUB_REPO:latest-amd64 -f linuxamd64.Dockerfile .
-            sudo docker push $DOCKERHUB_REPO:latest-amd64
-
-  arm32v7:
-    machine:
-      enabled: true
-    steps:
-      - checkout  
-      - run:
-          command: |
-            sudo docker run --rm --privileged multiarch/qemu-user-static:register --reset
-            #
-            cd docker-compose-generator
-            sudo docker login --username=$DOCKERHUB_USER --password=$DOCKERHUB_PASS
-            sudo docker build --pull -t $DOCKERHUB_REPO:latest-arm32v7 -f linuxarm32v7.Dockerfile .
-            sudo docker push $DOCKERHUB_REPO:latest-arm32v7
-  arm64v8:
-    machine:
-      enabled: true
-    steps:
-      - checkout  
-      - run:
-          command: |
-            sudo docker run --rm --privileged multiarch/qemu-user-static:register --reset
-            #
-            cd docker-compose-generator
-            sudo docker login --username=$DOCKERHUB_USER --password=$DOCKERHUB_PASS
-            sudo docker build --pull -t $DOCKERHUB_REPO:latest-arm64v8 -f linuxarm64v8.Dockerfile .
-            sudo docker push $DOCKERHUB_REPO:latest-arm64v8
-  multiarch:
-    machine:
-      enabled: true
-      image: ubuntu-2004:202201-02
-    steps:
-      - run:
-          command: |
-            #
-            sudo docker login --username=$DOCKERHUB_USER --password=$DOCKERHUB_PASS
-            #
-            sudo docker manifest create --amend $DOCKERHUB_REPO:latest $DOCKERHUB_REPO:latest-amd64 $DOCKERHUB_REPO:latest-arm32v7 $DOCKERHUB_REPO:latest-arm64v8
-            sudo docker manifest annotate $DOCKERHUB_REPO:latest $DOCKERHUB_REPO:latest-amd64 --os linux --arch amd64
-            sudo docker manifest annotate $DOCKERHUB_REPO:latest $DOCKERHUB_REPO:latest-arm32v7 --os linux --arch arm --variant v7
-            sudo docker manifest annotate $DOCKERHUB_REPO:latest $DOCKERHUB_REPO:latest-arm64v8 --os linux --arch arm64 --variant v8
-            sudo docker manifest push $DOCKERHUB_REPO:latest -p
+            docker login --username=$DOCKERHUB_USER --password=$DOCKERHUB_PASS
+            docker buildx create --use
+            DOCKER_BUILDX_OPTS="--platform linux/amd64,linux/arm64,linux/arm/v7 --push"
+            docker buildx build $DOCKER_BUILDX_OPTS -t $DOCKERHUB_REPO:latest .
 
 workflows:
   version: 2
@@ -74,23 +34,7 @@ workflows:
           filters:
             branches:
               only: master
-      - amd64:
-          filters:
-            branches:
-              only: dcg-latest
-      - arm32v7:
-          filters:
-            branches:
-              only: dcg-latest
-      - arm64v8:
-          filters:
-            branches:
-              only: dcg-latest
-      - multiarch:
-          requires:
-            - amd64
-            - arm32v7
-            - arm64v8
+      - docker:
           filters:
             branches:
               only: dcg-latest
