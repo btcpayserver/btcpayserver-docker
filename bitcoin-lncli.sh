@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker exec btcpayserver_lnd_bitcoin lncli --macaroonpath /root/.lnd/admin.macaroon "$@"
+docker exec -it btcpayserver_lnd_bitcoin lncli --macaroonpath /root/.lnd/admin.macaroon "$@"
