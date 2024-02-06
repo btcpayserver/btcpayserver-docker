@@ -25,6 +25,7 @@ docker volume rm --force generated_lnd_bitcoin_datadir
 # https://github.com/btcpayserver/btcpayserver-docker/issues/272
 docker volume rm --force production_lnd_bitcoin_datadir
 
-btcpay-up.sh
+# doing this so if there are new env variables in lnd-bitcoin.yml they are taken into account (LND_SKIP_INITUNLOCK)
+. btcpay-setup.sh -i
 
 echo "LND container recreated"
