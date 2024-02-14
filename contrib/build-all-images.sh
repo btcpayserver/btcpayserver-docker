@@ -122,16 +122,16 @@ cd - && cd ..
 
 
 # Build lnd
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.17.3-beta/linuxamd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.17.4-beta/linuxamd64.Dockerfile
 DOCKERFILE="linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.17.3-beta/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.17.4-beta/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.17.3-beta/linuxarm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.17.4-beta/linuxarm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="linuxarm64v8.Dockerfile"
 echo "Building btcpayserver/lnd:v0.17.4-beta"
 git clone https://github.com/btcpayserver/lnd lnd
 cd lnd
-git checkout basedon-v0.17.3-beta
+git checkout basedon-v0.17.4-beta
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.17.4-beta" .
 cd - && cd ..
@@ -738,16 +738,16 @@ cd - && cd ..
 
 
 # Build lnbits
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/LNbits/0.12.0/LNbits/0.12.0/linuxamd64.Dockerfile
-DOCKERFILE="LNbits/0.12.0/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/LNbits/0.12.0/LNbits/0.12.0/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="LNbits/0.12.0/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/lnbits:0.12.0"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/LNbits/0.12.1/LNbits/0.12.1/linuxamd64.Dockerfile
+DOCKERFILE="LNbits/0.12.1/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/LNbits/0.12.1/LNbits/0.12.1/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="LNbits/0.12.1/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/lnbits:0.12.1"
 git clone https://github.com/btcpayserver/dockerfile-deps lnbits
 cd lnbits
-git checkout LNbits/0.12.0
+git checkout LNbits/0.12.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnbits:0.12.0" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnbits:0.12.1" .
 cd - && cd ..
 
 
