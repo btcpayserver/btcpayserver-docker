@@ -95,6 +95,7 @@ Check out this video if you're interested in learning more about setting up [BTC
 `btcpay-setup.sh` will use the following environment variables:
 
 * `BTCPAY_HOST`: The hostname of your website (eg. `btcpay.example.com`)
+* `BTCPAY_ENV_FILE`: Environment variables passed to the containers managed by your docker-compose.
 * `BTCPAY_ADDITIONAL_HOSTS`: Optional, specify additional domains to your BTCPayServer with https support if enabled. (eg. example2.com,example3.com)
 * `REVERSEPROXY_HTTP_PORT`: The public port the reverse proxy binds to for HTTP traffic (default: 80)
 * `REVERSEPROXY_HTTPS_PORT`: The public port the reverse proxy binds to for HTTPS traffic (default: 443)
