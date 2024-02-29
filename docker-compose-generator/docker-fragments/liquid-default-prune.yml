@@ -5,3 +5,4 @@ services:
     environment:
       ELEMENTS_EXTRA_ARGS: |
         prune=5000
+        trim_headers=1
