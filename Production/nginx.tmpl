@@ -39,9 +39,11 @@
 		{{ end }}
 		{{ if $container.Env.REAL_IP_HEADER }}
 		{{ range $containerNetwork := $container.Networks }}
-		set_real_ip_from {{ $containerNetwork.IP }};
+        set_real_ip_from {{ $containerNetwork.IP }};
 		{{ end }}
+		{{ if (ne $container.Env.REAL_IP_HEADER "X-Real-IP") }}
         real_ip_header {{ $container.Env.REAL_IP_HEADER }};
+		{{ end }}
 		{{ end }}
 		{{ if (eq $serviceName "bitcoin_rtl") }}
 	location /rtl/ {
@@ -358,10 +360,11 @@ server {
 {{ if (and (exists "/etc/nginx/certs/default.crt") (exists "/etc/nginx/certs/default.key")) }}
 server {
 	server_name _; # This is just an invalid value which will never trigger on a real hostname.
-	listen 443 ssl http2;
+	listen 443 ssl;
 	{{ if $enable_ipv6 }}
-	listen [::]:443 ssl http2;
+	listen [::]:443 ssl;
 	{{ end }}
+	http2  on;
 	access_log /var/log/nginx/access.log vhost;
 	return 503;
 
@@ -503,10 +506,11 @@ server {
 	proxy_set_header X-Forwarded-Port $proxy_x_forwarded_port;
 	client_max_body_size 100M;
 	server_name {{ $host }};
-	listen 443 ssl http2 {{ $default_server }};
+	listen 443 ssl {{ $default_server }};
 	{{ if $enable_ipv6 }}
-	listen [::]:443 ssl http2 {{ $default_server }};
+	listen [::]:443 ssl {{ $default_server }};
 	{{ end }}
+	http2  on;
 	access_log /var/log/nginx/access.log vhost;
 
 	{{ if eq $network_tag "internal" }}
@@ -648,10 +652,11 @@ server {
 server {
 	client_max_body_size 100M;
 	server_name {{ $host }};
-	listen 443 ssl http2 {{ $default_server }};
+	listen 443 ssl {{ $default_server }};
 	{{ if $enable_ipv6 }}
-	listen [::]:443 ssl http2 {{ $default_server }};
+	listen [::]:443 ssl {{ $default_server }};
 	{{ end }}
+	http2  on;
 	access_log /var/log/nginx/access.log vhost;
 	{{/* Enable usage of self-signed SSL certificate if .local hostname */}}
 	{{ if hasSuffix "local" $host }}

@@ -56,7 +56,7 @@ The snapshots recognized as valid by the `btcpayserver-docker` repository you've
 When you SSH into your new Sync BTCPay Server (by the use of Putty, for example), the first thing you have to do is become `root`.
 
 ```bash
-sudo -i
+sudo su -
 ```
 
 Before you start the [load-utxo-set.sh](load-utxo-set.sh), you must bring down your BTCPay Server.

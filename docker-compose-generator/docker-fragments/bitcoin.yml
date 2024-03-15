@@ -4,7 +4,7 @@ services:
   bitcoind:
     restart: unless-stopped
     container_name: btcpayserver_bitcoind
-    image: btcpayserver/bitcoin:25.0
+    image: btcpayserver/bitcoin:26.0
     environment:
       BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       CREATE_WALLET: "false"

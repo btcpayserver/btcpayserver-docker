@@ -3,7 +3,7 @@ version: "3"
 services:
   nginx:
     restart: unless-stopped
-    image: nginx:1.23.3
+    image: nginx:1.25.3-bookworm
     container_name: nginx
     ports:
       - "${REVERSEPROXY_HTTP_PORT:-80}:80"
@@ -13,7 +13,7 @@ services:
       - "nginx_html:/usr/share/nginx/html"
   nginx-gen:
     restart: unless-stopped
-    image: btcpayserver/docker-gen:0.7.8
+    image: btcpayserver/docker-gen:0.10.7
     container_name: nginx-gen
     environment:
       DEFAULT_HOST: ${REVERSEPROXY_DEFAULT_HOST:-none}

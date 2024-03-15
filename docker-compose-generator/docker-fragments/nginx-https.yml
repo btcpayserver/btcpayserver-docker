@@ -3,7 +3,7 @@ version: "3"
 services:
   letsencrypt-nginx-proxy-companion:
     restart: unless-stopped
-    image: btcpayserver/letsencrypt-nginx-proxy-companion:1.12.2
+    image: btcpayserver/letsencrypt-nginx-proxy-companion:2.2.9-2
     container_name: letsencrypt-nginx-proxy-companion
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
@@ -11,13 +11,13 @@ services:
       - "nginx_vhost:/etc/nginx/vhost.d"
       - "nginx_html:/usr/share/nginx/html"
       - "nginx_certs:/etc/nginx/certs:rw"
+      - "acme:/etc/acme.sh"
     environment:
       NGINX_DOCKER_GEN_CONTAINER: "nginx-gen"
       NGINX_PROXY_CONTAINER: "nginx"
       ACME_CA_URI: ${ACME_CA_URI:-production}
     links:
       - nginx-gen
-
   nginx:
     ports:
       - "${REVERSEPROXY_HTTPS_PORT:-443}:443"
@@ -27,3 +27,5 @@ services:
   nginx-gen:
     volumes:
       - "nginx_certs:/etc/nginx/certs:ro"
+volumes:
+  acme:

@@ -69,7 +69,7 @@ services:
 
   tor:
     restart: unless-stopped
-    image: btcpayserver/tor:0.4.7.10
+    image: btcpayserver/tor:0.4.8.10
     container_name: tor
     environment:
       TOR_PASSWORD: btcpayserver
@@ -109,7 +109,7 @@ services:
 
   tor-gen:
     restart: unless-stopped
-    image: btcpayserver/docker-gen:0.7.8
+    image: btcpayserver/docker-gen:0.10.7
     container_name: tor-gen
     volumes:
       - "/var/run/docker.sock:/tmp/docker.sock:ro"

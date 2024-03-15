@@ -7,6 +7,7 @@ services:
       - "tallycoin_connect_datadir:/etc/tallycoin_connect_datadir"
   tallycoin_connect:
     image: "djbooth007/tallycoin_connect:v1.8.0"
+    container_name: generated_tallycoin_connect_1
     restart: unless-stopped
     expose:
       - "8123"

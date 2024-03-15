@@ -2,7 +2,7 @@ version: "3"
 services:
   tor-relay-gen:
     restart: unless-stopped
-    image: btcpayserver/docker-gen:0.7.8
+    image: btcpayserver/docker-gen:0.10.7
     container_name: tor-relay-gen
     volumes:
       - "/var/run/docker.sock:/tmp/docker.sock:ro"
@@ -17,7 +17,7 @@ services:
 
   tor-relay:
     restart: unless-stopped
-    image: btcpayserver/tor:0.4.7.10
+    image: btcpayserver/tor:0.4.8.10
     container_name: tor-relay
     environment:
       TOR_PASSWORD: btcpayserver

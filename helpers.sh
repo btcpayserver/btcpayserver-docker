@@ -133,51 +133,126 @@ CLOUDFLARE_TUNNEL_TOKEN=$CLOUDFLARE_TUNNEL_TOKEN" > $BTCPAY_ENV_FILE
 env | grep ^BWT_ >> $BTCPAY_ENV_FILE || true
 }
 
+docker_compose_set_plugin() {
+    echo "set 'docker compose' to /usr/local/bin/docker-compose"
+    plugin_path=$(docker info -f '{{ range .ClientInfo.Plugins }}{{ if eq .Name "compose" }}{{ .Path }}{{ end }}{{ end }}' || echo '/usr/libexec/docker/cli-plugins/docker-compose')
+    if [[ "$plugin_path" ]] && [ -f "$plugin_path" ]; then
+        rm -f "$plugin_path"
+        ln -s /usr/local/bin/docker-compose "$plugin_path"
+    fi
+}
+
+docker_compose_update() {
+    # If you change this, update also docker-compose-generator/src/DockerComposeDefinition.cs and the dcg-latest branch
+    compose_version="2.23.3"
+    if ! [[ -x "$(command -v docker-compose)" ]] || [[ "$(docker-compose version --short)" != "$compose_version" ]]; then
+        if ! [[ "$OSTYPE" == "darwin"* ]] && $HAS_DOCKER; then
+            echo "Trying to install docker-compose by using docker/compose-bin ($(uname -m))"
+            ! [[ -d "dist" ]] && mkdir dist
+            container=$(docker create docker/compose-bin:v$compose_version /docker-compose)
+            docker cp "$container:/docker-compose" "dist/docker-compose"
+            docker rm "$container"
+            mv dist/docker-compose /usr/local/bin/docker-compose
+            chmod +x /usr/local/bin/docker-compose
+            rm -rf "dist"
+            docker_compose_set_plugin
+        fi
+    fi
+}
+
+version_gt() (
+    set +x
+
+    yy_a="$(echo "$1" | cut -d'.' -f1)"
+    yy_b="$(echo "$2" | cut -d'.' -f1)"
+    if [ "$yy_a" -lt "$yy_b" ]; then
+        return 1
+    fi
+    if [ "$yy_a" -gt "$yy_b" ]; then
+        return 0
+    fi
+    mm_a="$(echo "$1" | cut -d'.' -f2)"
+    mm_b="$(echo "$2" | cut -d'.' -f2)"
+    mm_a="${mm_a#0}"
+    mm_b="${mm_b#0}"
+    if [ "${mm_a:-0}" -lt "${mm_b:-0}" ]; then
+        return 1
+    fi
+    if [ "${mm_a:-0}" -gt "${mm_b:-0}" ]; then
+        return 0
+    fi
+
+    bb_a="$(echo "$1" | cut -d'.' -f3)"
+    bb_b="$(echo "$2" | cut -d'.' -f3)"
+    bb_a="${bb_a#0}"
+    bb_b="${bb_b#0}"
+    if [ "${bb_a:-0}" -lt "${bb_b:-0}" ]; then
+        return 1
+    fi
+    if [ "${bb_a:-0}" -gt "${bb_b:-0}" ]; then
+        return 0
+    fi
+
+    return 1
+)
+
 docker_update() {
     if [[ "$(uname -m)" == "armv7l" ]] && cat "/etc/os-release" 2>/dev/null | grep -q "VERSION_CODENAME=buster" 2>/dev/null; then
         if [[ "$(apt list libseccomp2 2>/dev/null)" == *" 2.3"* ]]; then
             echo "Outdated version of libseccomp2, updating... (see: https://blog.samcater.com/fix-workaround-rpi4-docker-libseccomp2-docker-20/)"
             # https://blog.samcater.com/fix-workaround-rpi4-docker-libseccomp2-docker-20/
-            apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC 648ACFD622F3D138
+            apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 04EE7237B7D453EC 648ACFD622F3D138 0E98404D386FA1D9 6ED0E7B82643E131
             echo 'deb http://httpredir.debian.org/debian buster-backports main contrib non-free' | sudo tee -a /etc/apt/sources.list.d/debian-backports.list
             apt update
             apt install libseccomp2 -t buster-backports
         fi
     fi
 
-    # Can't run with docker-ce before 20.10.10... check against version 21 instead, easier to compare
-    if [ "21" \> "$(docker version -f "{{ .Server.Version }}")" ]; then
-        echo "Updating docker, old version can't run some images (https://docs.linuxserver.io/FAQ/#jammy)"
-        echo \
-        "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-        "$(lsb_release -cs)" stable" | \
-        tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-        apt-get update
-        apt-get install --only-upgrade -y docker-ce docker-ce-cli containerd.io
-
-        # Possible that old distro like xenial doesn't have it anymore, if so, just take
-        # the next distrib
-        if [ "21" \> "$(docker version -f "{{ .Server.Version }}")" ]; then
-            echo "Updating docker, with bionic's version"
+    if $HAS_DOCKER; then
+        docker_version="$(docker version -f "{{ .Server.Version }}")"
+        if version_gt "20.10.10" "$docker_version"; then
+            echo "Updating docker, old version can't run some images (https://docs.linuxserver.io/FAQ/#jammy)"
             echo \
             "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-            bionic stable" | \
+            "$(lsb_release -cs)" stable" | \
             tee /etc/apt/sources.list.d/docker.list > /dev/null
-            apt-get update
+
+            if apt-get update | grep -q "NO_PUBKEY"; then
+                echo "Installing new docker key..."
+                mkdir -p /etc/apt/keyrings
+                rm -f /etc/apt/keyrings/docker.gpg
+                curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+                apt-get update
+            fi
+
             apt-get install --only-upgrade -y docker-ce docker-ce-cli containerd.io
+
+            # Possible that old distro like xenial doesn't have it anymore, if so, just take
+            # the next distrib
+            docker_version="$(docker version -f "{{ .Server.Version }}")"
+            if version_gt "20.10.10" "$docker_version"; then
+                echo "Updating docker, with bionic's version"
+                echo \
+                "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+                bionic stable" | \
+                tee /etc/apt/sources.list.d/docker.list > /dev/null
+                mkdir -p /etc/apt/keyrings
+                rm -f /etc/apt/keyrings/docker.gpg
+                curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+                apt-get update
+                apt-get install --only-upgrade -y docker-ce docker-ce-cli containerd.io
+            fi
+
+            docker_compose_set_plugin
         fi
     fi
+    docker_compose_update
 }
 
 btcpay_up() {
     pushd . > /dev/null
     cd "$(dirname "$BTCPAY_ENV_FILE")"
     docker-compose -f $BTCPAY_DOCKER_COMPOSE up --remove-orphans -d -t "${COMPOSE_HTTP_TIMEOUT:-180}"
-    # Depending on docker-compose, either the timeout does not work, or "compose -d and --timeout cannot be combined"
-    if ! [ $? -eq 0 ]; then
-        docker-compose -f $BTCPAY_DOCKER_COMPOSE up --remove-orphans -d
-    fi
     popd > /dev/null
 }
 
@@ -192,10 +267,6 @@ btcpay_down() {
     pushd . > /dev/null
     cd "$(dirname "$BTCPAY_ENV_FILE")"
     docker-compose -f $BTCPAY_DOCKER_COMPOSE down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
-    # Depending on docker-compose, the timeout does not work.
-    if ! [ $? -eq 0 ]; then
-        docker-compose -f $BTCPAY_DOCKER_COMPOSE down
-    fi
     popd > /dev/null
 }
 
@@ -203,10 +274,6 @@ btcpay_restart() {
     pushd . > /dev/null
     cd "$(dirname "$BTCPAY_ENV_FILE")"
     docker-compose -f $BTCPAY_DOCKER_COMPOSE restart -t "${COMPOSE_HTTP_TIMEOUT:-180}"
-    # Depending on docker-compose, the timeout does not work.
-    if ! [ $? -eq 0 ]; then
-        docker-compose -f $BTCPAY_DOCKER_COMPOSE restart
-    fi
     btcpay_up
     popd > /dev/null
 }

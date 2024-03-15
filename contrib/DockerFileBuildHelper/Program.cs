@@ -39,7 +39,6 @@ namespace DockerFileBuildHelper
             foreach (var image in new[]
             {
                 Image.Parse("btcpayserver/docker-compose-generator"),
-                Image.Parse("btcpayserver/docker-compose:1.28.6"),
             }.Concat(GetImages(fragmentDirectory)))
             {
                 Console.WriteLine($"Image: {image.ToString()}");
@@ -284,9 +283,9 @@ namespace DockerFileBuildHelper
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "docker-compose-generator":
-                    dockerInfo.DockerFilePath = "docker-compose-generator/linuxamd64.Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = "docker-compose-generator/linuxarm32v7.Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = "docker-compose-generator/linuxarm64v8.Dockerfile";
+                    dockerInfo.DockerFilePath = "docker-compose-generator/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "docker-compose-generator/Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "docker-compose-generator/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/btcpayserver-docker";
                     dockerInfo.GitRef = $"dcg-latest";
                     dockerInfo.SupportedByUs = true;
@@ -456,9 +455,9 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"Dash/{image.Tag}";
                     break;
                 case "btcpayserver":
-                    dockerInfo.DockerFilePath = "amd64.Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = "arm32v7.Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = "arm64v8.Dockerfile";
+                    dockerInfo.DockerFilePath = "Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/btcpayserver";
                     // v1.0.5.4$<BTCPAY_BUILD_CONFIGURATION>
                     dockerInfo.GitRef = $"v{image.Tag.Substring(0, image.Tag.IndexOf('$'))}";
@@ -473,9 +472,9 @@ namespace DockerFileBuildHelper
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "nbxplorer":
-                    dockerInfo.DockerFilePath = "Dockerfile.linuxamd64";
-                    dockerInfo.DockerFilePathARM32v7 = "Dockerfile.linuxarm32v7";
-                    dockerInfo.DockerFilePathARM64v8 = "Dockerfile.linuxarm64v8";
+                    dockerInfo.DockerFilePath = "Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "Dockerfile";
                     dockerInfo.GitLink = "https://github.com/dgarage/nbxplorer";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     dockerInfo.SupportedByUs = true;
@@ -544,17 +543,17 @@ namespace DockerFileBuildHelper
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "docker-gen":
-                    dockerInfo.DockerFilePath = $"linuxamd64.Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"linuxarm32v7.Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"linuxarm64v8.Dockerfile";
+                    dockerInfo.DockerFilePath = $"Dockerfile.alpine";
+                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile.alpine";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile.alpine";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/docker-gen";
-                    dockerInfo.GitRef = $"v{image.Tag}";
+                    dockerInfo.GitRef = $"{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "letsencrypt-nginx-proxy-companion":
-                    dockerInfo.DockerFilePath = $"linuxamd64.Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"linuxarm32v7.Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"linuxarm64v8.Dockerfile";
+                    dockerInfo.DockerFilePath = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/docker-letsencrypt-nginx-proxy-companion";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     dockerInfo.SupportedByUs = true;

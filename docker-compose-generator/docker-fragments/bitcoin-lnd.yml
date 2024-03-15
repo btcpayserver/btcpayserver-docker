@@ -2,7 +2,7 @@ version: "3"
 
 services:
   lnd_bitcoin:
-    image: btcpayserver/lnd:v0.17.2-beta
+    image: btcpayserver/lnd:v0.17.4-beta
     container_name: btcpayserver_lnd_bitcoin
     restart: unless-stopped
     environment:
@@ -31,7 +31,6 @@ services:
         tlsextradomain=lnd_bitcoin
         no-rest-tls=1
         protocol.wumbo-channels=1
-        restcors=*
     ports:
       - "9735:9735"
     expose:
@@ -48,6 +47,7 @@ services:
 
   bitcoin_rtl:
     image: shahanafarooqui/rtl:0.14.1
+    container_name: generated_lnd_bitcoin_rtl_1
     restart: unless-stopped
     environment:
       LND_SERVER_URL: http://lnd_bitcoin:8080/v1
