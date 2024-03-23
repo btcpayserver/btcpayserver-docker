@@ -2,7 +2,7 @@ version: '3'
 
 services:
   lnbits:
-    image: btcpayserver/lnbits:0.12.2
+    image: btcpayserver/lnbits:0.12.3
     init: true
     restart: unless-stopped
     environment:
