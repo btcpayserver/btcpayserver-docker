@@ -196,6 +196,9 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-nostr-relay](docker-compose-generator/docker-fragments/opt-add-nostr-relay.yml) for [Nostr Relay](https://github.com/kukks/Nnostr).
 * [opt-add-cloudflared](docker-compose-generator/docker-fragments/opt-add-cloudflared.yml) to expose your local server on clearnet painlessly ([see documentation](docs/cloudflare-tunnel.md)).
 * [opt-add-torq](docker-compose-generator/docker-fragments/opt-add-torq.yml) to install [Torq](https://github.com/lncapital/torq) node management application. Requires LND.
+* [opt-btc-permitbaremultisig](docker-compose-generator/docker-fragments/opt-btc-permitbaremultisig.yml) to set permitmultisig parameter to false. This prevents the Bitcoin node to accept bare multisig transactions, which are non-common multisig transactions and can be used as a spam attack.
+
+
 
 You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).
 
