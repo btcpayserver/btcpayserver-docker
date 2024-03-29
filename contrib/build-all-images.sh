@@ -194,18 +194,18 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.12.5/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.13.0/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.12.5/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.13.0/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.12.5/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.13.0/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/btcpayserver:1.12.5$<BTCPAY_BUILD_CONFIGURATION>?"
+echo "Building btcpayserver/btcpayserver:1.13.0$<BTCPAY_BUILD_CONFIGURATION>?"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.12.5
+git checkout v1.13.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.12.5$<BTCPAY_BUILD_CONFIGURATION>?" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.13.0$<BTCPAY_BUILD_CONFIGURATION>?" .
 cd - && cd ..
 
 
@@ -724,16 +724,16 @@ cd - && cd ..
 
 
 # Build lightning-terminal
-# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.9.2-alpha/Dockerfile
+# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.12.3-alpha/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.9.2-alpha/Dockerfile
+# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.12.3-alpha/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building lightninglabs/lightning-terminal:v0.9.2-alpha-path-prefix"
+echo "Building lightninglabs/lightning-terminal:v0.12.3-alpha-path-prefix"
 git clone https://github.com/lightninglabs/lightning-terminal lightning-terminal
 cd lightning-terminal
-git checkout v0.9.2-alpha
+git checkout v0.12.3-alpha
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.9.2-alpha-path-prefix" .
+docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.12.3-alpha-path-prefix" .
 cd - && cd ..
 
 
