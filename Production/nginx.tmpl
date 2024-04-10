@@ -81,10 +81,10 @@
 		proxy_pass http://clightning_bitcoin_charge:9112/;
 	}
 	{{ end }}
-	{{ if (eq $serviceName "clightning_bitcoin_rest") }}
+	{{ if (eq $serviceName "clightning_bitcoin") }}
 	location /clightning-rest/btc/ {
 	    rewrite ^/clightning-rest/btc/(.*) /$1 break;
-		proxy_pass http://clightning_bitcoin_rest:3001/;
+		proxy_pass http://clightning_bitcoin:3010/;
 	}
 		{{ end }}
 		{{ if (eq $serviceName "clightning_groestlcoin_spark") }}
