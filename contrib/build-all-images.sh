@@ -738,16 +738,16 @@ cd - && cd ..
 
 
 # Build lnbits
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/LNbits/0.12.4/LNbits/0.12.4/linuxamd64.Dockerfile
-DOCKERFILE="LNbits/0.12.4/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/LNbits/0.12.4/LNbits/0.12.4/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="LNbits/0.12.4/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/lnbits:0.12.4"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/LNbits/0.12.5/LNbits/0.12.5/linuxamd64.Dockerfile
+DOCKERFILE="LNbits/0.12.5/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/LNbits/0.12.5/LNbits/0.12.5/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="LNbits/0.12.5/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/lnbits:0.12.5"
 git clone https://github.com/btcpayserver/dockerfile-deps lnbits
 cd lnbits
-git checkout LNbits/0.12.4
+git checkout LNbits/0.12.5
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnbits:0.12.4" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnbits:0.12.5" .
 cd - && cd ..
 
 
