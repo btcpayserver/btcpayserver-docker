@@ -2,7 +2,7 @@ version: "3"
 
 services:
   clightning_bitcoin:
-    image: btcpayserver/lightning:v23.08
+    image: btcpayserver/lightning:v24.02.2
     container_name: btcpayserver_clightning_bitcoin
     restart: unless-stopped
     environment:
@@ -18,40 +18,27 @@ services:
         experimental-offers
         database-upgrade=true
         rpc-file-mode=0666
+        clnrest-port=3010
+        clnrest-protocol=http
+        clnrest-host=0.0.0.0
     volumes:
       - "clightning_bitcoin_datadir:/root/.lightning"
       - "bitcoin_datadir:/etc/bitcoin"
       - "nbxplorer_datadir:/root/.nbxplorer"
     ports:
       - "9735:9735"
+      - "3010"
     links:
       - bitcoind
 
-  clightning_bitcoin_rest:
-    image: saubyk/c-lightning-rest:0.10.6
-    restart: unless-stopped
-    environment:
-      PROTOCOL: "http"
-      NODE: clightning_bitcoin:9835
-      LIGHTNINGD_READY_FILE: /root/.nbxplorer/btc_fully_synched
-    links:
-      - clightning_bitcoin
-    volumes:
-      - "clightning_bitcoin_datadir:/root/.lightning"
-      - "bitcoin_datadir:/etc/bitcoin"
-      - "clightning_bitcoin_rest_certsdir:/usr/src/app/certs"
-      - "nbxplorer_datadir:/root/.nbxplorer"
-    expose:
-      - "3001"
-
   bitcoin_rtl:
-    image: shahanafarooqui/rtl:0.14.1
+    image: shahanafarooqui/rtl:0.15.0
     restart: unless-stopped
     environment:
       LN_IMPLEMENTATION: CLN
       CONFIG_PATH: /root/.lightning/config
-      LN_SERVER_URL: http://clightning_bitcoin_rest:3001/v1
-      MACAROON_PATH: /etc/clightning_bitcoin_rest_certs
+      LN_SERVER_URL: http://clightning_bitcoin:3010
+      RUNE_PATH: /root/.lightning/rune.env
       RTL_CONFIG_PATH: /data/
       BITCOIND_CONFIG_PATH: /etc/bitcoin/bitcoin.conf
       RTL_SSO: 1
@@ -64,7 +51,6 @@ services:
       - "clightning_bitcoin_datadir:/root/.lightning"
       - "bitcoin_datadir:/etc/bitcoin"
       - "clightning_bitcoin_rtl_datadir:/data"
-      - "clightning_bitcoin_rest_certsdir:/etc/clightning_bitcoin_rest_certs"
     expose:
       - "3000"
 
@@ -84,16 +70,13 @@ services:
     environment:
       BTCPAY_BTCLIGHTNING: "type=clightning;server=unix://etc/clightning_bitcoin/lightning-rpc"
       BTCPAY_BTCEXTERNALRTL: "server=/rtl/api/authenticate/cookie;cookiefile=/etc/clightning_bitcoin_rtl/.cookie"
-      BTCPAY_BTCEXTERNALCLIGHTNINGREST: "server=/clightning-rest/btc;macaroonfilepath=/etc/clightning_bitcoin_rest_certs/access.macaroon;macaroondirectorypath=/etc/clightning_bitcoin_rest_certs"
     volumes:
       - "clightning_bitcoin_datadir:/etc/clightning_bitcoin"
       - "clightning_bitcoin_rtl_datadir:/etc/clightning_bitcoin_rtl"
-      - "clightning_bitcoin_rest_certsdir:/etc/clightning_bitcoin_rest_certs"
     links:
       - clightning_bitcoin
 volumes:
   clightning_bitcoin_datadir:
   clightning_bitcoin_rtl_datadir:
-  clightning_bitcoin_rest_certsdir:
 exclusive:
   - lightning
