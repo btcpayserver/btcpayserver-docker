@@ -2,14 +2,14 @@ version: "3"
 
 services:
   chia:
-    container_name: btcpayserver_chia
+    container_name: ${BTCPAY_HOST}_chia
     restart: unless-stopped
     image: ghcr.io/chia-network/chia:latest
     expose:
       - "9256"
     environment:
       service: "wallet"
-      self_hostname: "btcpayserver_chia"
+      self_hostname: "${BTCPAY_HOST}_chia"
       keys: "none"
     volumes:
       - "xch_data:/root/.chia"
