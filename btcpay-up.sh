@@ -1,13 +1,11 @@
 #!/bin/bash
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-	# Mac OS
-	BASH_PROFILE_SCRIPT="$HOME/btcpay-env.sh"
-
-else
-	# Linux
-	BASH_PROFILE_SCRIPT="/etc/profile.d/btcpay-env.sh"
+if [[ -z "$BTCPAY_HOST" ]]; then
+    echo "BTCPAY_HOST should not be empty"
+    return
 fi
+
+BASH_PROFILE_SCRIPT="$HOME/btcpay-$BTCPAY_HOST-env.sh"
 
 . ${BASH_PROFILE_SCRIPT}
 

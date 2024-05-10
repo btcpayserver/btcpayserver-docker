@@ -7,6 +7,13 @@ if [[ "$0" = "$BASH_SOURCE" ]]; then
     exit 1
 fi
 
+if [[ -z "$BTCPAY_HOST" ]]; then
+    echo "BTCPAY_HOST should not be empty"
+    return
+fi
+
+BASH_PROFILE_SCRIPT="$HOME/btcpay-$BTCPAY_HOST-env.sh"
+
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # Mac OS
 
@@ -16,20 +23,20 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
         return
     fi
 
-    BASH_PROFILE_SCRIPT="$HOME/btcpay-env.sh"
+    # BASH_PROFILE_SCRIPT="$HOME/$BTCPAY_HOST/btcpay-env.sh"
 
     # Mac OS doesn't use /etc/profile.d/xxx.sh. Instead we create a new file and load that from ~/.bash_profile
-    if [[ ! -f "$HOME/.bash_profile" ]]; then
-        touch "$HOME/.bash_profile"
-    fi
-    if [[ -z $(grep ". \"$BASH_PROFILE_SCRIPT\"" "$HOME/.bash_profile") ]]; then
-        # Line does not exist, add it
-        echo ". \"$BASH_PROFILE_SCRIPT\"" >> "$HOME/.bash_profile"
-    fi
+    # if [[ ! -f "$HOME/.bash_profile" ]]; then
+    #     touch "$HOME/.bash_profile"
+    # fi
+    # if [[ -z $(grep ". \"$BASH_PROFILE_SCRIPT\"" "$HOME/.bash_profile") ]]; then
+    #     # Line does not exist, add it
+    #     echo ". \"$BASH_PROFILE_SCRIPT\"" >> "$HOME/.bash_profile"
+    # fi
 
 else
     # Root user is not needed for Mac OS
-    BASH_PROFILE_SCRIPT="/etc/profile.d/btcpay-env.sh"
+    # BASH_PROFILE_SCRIPT="/etc/profile.d/btcpay-env.sh"
 
     if [[ $EUID -ne 0 ]]; then
         echo "This script must be run as root after running \"sudo su -\""
@@ -210,7 +217,7 @@ fi
 
 OLD_BTCPAY_DOCKER_COMPOSE="$BTCPAY_DOCKER_COMPOSE"
 ORIGINAL_DIRECTORY="$(pwd)"
-BTCPAY_BASE_DIRECTORY="$(dirname "$(pwd)")"
+BTCPAY_BASE_DIRECTORY="$(pwd)"
 
 if [[ "$BTCPAYGEN_OLD_PREGEN" == "true" ]]; then
     if [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production ]]; then
@@ -272,11 +279,11 @@ if [[ "${BTCPAYGEN_ADDITIONAL_FRAGMENTS}" == *opt-txindex* ]] && \
         return
 fi
 
-cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
+# cd "$BTCPAY_BASE_DIRECTORY"
 . helpers.sh
 btcpay_expand_variables
 
-cd "$ORIGINAL_DIRECTORY"
+# cd "$ORIGINAL_DIRECTORY"
 
 echo "
 -------SETUP-----------
@@ -462,10 +469,10 @@ if $STARTUP_REGISTER && [[ -x "$(command -v systemctl)" ]]; then
         rm "/etc/init/start_containers.conf"
         initctl reload-configuration
     fi
-    echo "Adding btcpayserver.service to systemd"
+    echo "Adding btcpayserver.$BTCPAY_HOST.service to systemd"
     echo "
 [Unit]
-Description=BTCPayServer service
+Description=BTCPayServer $BTCPAY_HOST service
 After=docker.service network-online.target
 Requires=docker.service network-online.target
 
@@ -473,12 +480,12 @@ Requires=docker.service network-online.target
 Type=oneshot
 RemainAfterExit=yes
 
-ExecStart=/bin/bash -c  '. \"$BASH_PROFILE_SCRIPT\" && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_up'
-ExecStop=/bin/bash -c   '. \"$BASH_PROFILE_SCRIPT\" && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_down'
-ExecReload=/bin/bash -c '. \"$BASH_PROFILE_SCRIPT\" && cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\" && . helpers.sh && btcpay_restart'
+ExecStart=/bin/bash -c  '. \"$BASH_PROFILE_SCRIPT\" && cd \"\$BTCPAY_BASE_DIRECTORY\" && . helpers.sh && btcpay_up'
+ExecStop=/bin/bash -c   '. \"$BASH_PROFILE_SCRIPT\" && cd \"\$BTCPAY_BASE_DIRECTORY\" && . helpers.sh && btcpay_down'
+ExecReload=/bin/bash -c '. \"$BASH_PROFILE_SCRIPT\" && cd \"\$BTCPAY_BASE_DIRECTORY\" && . helpers.sh && btcpay_restart'
 
 [Install]
-WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
+WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.$BTCPAY_HOST.service
 
     if ! [[ -f "/etc/docker/daemon.json" ]] && [ -w "/etc/docker" ]; then
         echo "{
@@ -489,44 +496,44 @@ WantedBy=multi-user.target" > /etc/systemd/system/btcpayserver.service
         $SYSTEMD_RELOAD && $START && systemctl restart docker
     fi
 
-    echo -e "BTCPay Server systemd configured in /etc/systemd/system/btcpayserver.service\n"
+    echo -e "BTCPay Server systemd configured in /etc/systemd/system/btcpayserver.$BTCPAY_HOST.service\n"
     if $SYSTEMD_RELOAD; then
         systemctl daemon-reload
         systemctl enable btcpayserver
         if $START; then
             echo "BTCPay Server starting... this can take 5 to 10 minutes..."
-            systemctl start btcpayserver
+            systemctl start btcpayserver.$BTCPAY_HOST
             echo "BTCPay Server started"
         fi
     else
-        systemctl --no-reload enable btcpayserver
+        systemctl --no-reload enable btcpayserver.$BTCPAY_HOST
     fi
-elif $STARTUP_REGISTER && [[ -x "$(command -v initctl)" ]]; then
-    # Use upstart
-    echo "Using upstart"
-    echo "
-# File is saved under /etc/init/start_containers.conf
-# After file is modified, update config with : $ initctl reload-configuration
+# elif $STARTUP_REGISTER && [[ -x "$(command -v initctl)" ]]; then
+#     # Use upstart
+#     echo "Using upstart"
+#     echo "
+# # File is saved under /etc/init/start_containers.conf
+# # After file is modified, update config with : $ initctl reload-configuration
 
-description     \"Start containers (see http://askubuntu.com/a/22105 and http://askubuntu.com/questions/612928/how-to-run-docker-compose-at-bootup)\"
+# description     \"Start containers (see http://askubuntu.com/a/22105 and http://askubuntu.com/questions/612928/how-to-run-docker-compose-at-bootup)\"
 
-start on filesystem and started docker
-stop on runlevel [!2345]
+# start on filesystem and started docker
+# stop on runlevel [!2345]
 
-# if you want it to automatically restart if it crashes, leave the next line in
-# respawn # might cause over charge
+# # if you want it to automatically restart if it crashes, leave the next line in
+# # respawn # might cause over charge
 
-script
-    . \"$BASH_PROFILE_SCRIPT\"
-    cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\"
-    . helpers.sh
-    btcpay_up
-end script" > /etc/init/start_containers.conf
-    echo -e "BTCPay Server upstart configured in /etc/init/start_containers.conf\n"
+# script
+#     . \"$BASH_PROFILE_SCRIPT\"
+#     cd \"\$BTCPAY_BASE_DIRECTORY/btcpayserver-docker\"
+#     . helpers.sh
+#     btcpay_up
+# end script" > /etc/init/start_containers.conf
+#     echo -e "BTCPay Server upstart configured in /etc/init/start_containers.conf\n"
 
-    if $START; then
-        initctl reload-configuration
-    fi
+#     if $START; then
+#         initctl reload-configuration
+#     fi
 fi
 
 
@@ -550,7 +557,7 @@ if $START && [[ -f "$BTCPAY_HOST_SSHKEYFILE" ]]; then
     docker cp "$BTCPAY_HOST_SSHKEYFILE" $(docker ps --filter "name=_btcpayserver_" -q):$BTCPAY_SSHKEYFILE
 fi
 
-cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
-install_tooling
+# cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
+# install_tooling
 
-cd $ORIGINAL_DIRECTORY
+# cd $ORIGINAL_DIRECTORY
