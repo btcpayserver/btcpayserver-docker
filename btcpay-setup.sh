@@ -7,6 +7,13 @@ if [[ "$0" = "$BASH_SOURCE" ]]; then
     exit 1
 fi
 
+if [[ -z "$BTCPAY_HOST" ]]; then
+    echo "BTCPAY_HOST should not be empty"
+    return
+fi
+
+BASH_PROFILE_SCRIPT="$HOME/btcpay-$BTCPAY_HOST-env.sh"
+
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # Mac OS
 
@@ -16,20 +23,20 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
         return
     fi
 
-    BASH_PROFILE_SCRIPT="$HOME/btcpay-env.sh"
+    # BASH_PROFILE_SCRIPT="$HOME/$BTCPAY_HOST/btcpay-env.sh"
 
     # Mac OS doesn't use /etc/profile.d/xxx.sh. Instead we create a new file and load that from ~/.bash_profile
-    if [[ ! -f "$HOME/.bash_profile" ]]; then
-        touch "$HOME/.bash_profile"
-    fi
-    if [[ -z $(grep ". \"$BASH_PROFILE_SCRIPT\"" "$HOME/.bash_profile") ]]; then
-        # Line does not exist, add it
-        echo ". \"$BASH_PROFILE_SCRIPT\"" >> "$HOME/.bash_profile"
-    fi
+    # if [[ ! -f "$HOME/.bash_profile" ]]; then
+    #     touch "$HOME/.bash_profile"
+    # fi
+    # if [[ -z $(grep ". \"$BASH_PROFILE_SCRIPT\"" "$HOME/.bash_profile") ]]; then
+    #     # Line does not exist, add it
+    #     echo ". \"$BASH_PROFILE_SCRIPT\"" >> "$HOME/.bash_profile"
+    # fi
 
 else
     # Root user is not needed for Mac OS
-    BASH_PROFILE_SCRIPT="/etc/profile.d/btcpay-env.sh"
+    # BASH_PROFILE_SCRIPT="/etc/profile.d/btcpay-env.sh"
 
     if [[ $EUID -ne 0 ]]; then
         echo "This script must be run as root after running \"sudo su -\""
