@@ -23,4 +23,6 @@ services:
 
 volumes:
   xch_data:
+    name: ${BTCPAY_HOST}_xch_data
   xch_keys:
+    name: ${BTCPAY_HOST}_xch_keys

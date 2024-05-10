@@ -35,7 +35,9 @@ services:
 
 volumes:
   btcpay_datadir:
+    name: ${BTCPAY_HOST}_btcpay_datadir
   btcpay_pluginsdir:
+    name: ${BTCPAY_HOST}_btcpay_pluginsdir
 
 required:
   - "postgres"
