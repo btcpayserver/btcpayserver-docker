@@ -3,7 +3,7 @@ jobs:
   cansetup:
     machine:
       enabled: true
-      image: ubuntu-2004:202101-01
+      image: ubuntu-2204:current
     steps:
       - checkout
       - run:
