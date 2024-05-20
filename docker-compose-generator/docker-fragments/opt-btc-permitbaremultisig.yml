@@ -1,0 +1,9 @@
+version: "3"
+#  Filter bare multisig transactions
+
+services:
+  bitcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        permitbaremultisig=0
+
