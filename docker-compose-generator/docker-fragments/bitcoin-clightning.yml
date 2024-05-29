@@ -69,9 +69,14 @@ services:
   lnbits:
     links:
       - clightning_bitcoin_rest
+    environment:
+      LIGHTNINGD_READY_FILE: /root/.nbxplorer/btc_fully_synched
+      CORELIGHTNING_REST_URL: http://clightning_bitcoin_rest:3001
+      CORELIGHTNING_REST_MACAROON: "/data/.lightning/access.macaroon"
     volumes:
       - "clightning_bitcoin_rest_certsdir:/data/.lightning"
       - ./lnbits/clightning-env:/app/.env
+      - "nbxplorer_datadir:/root/.nbxplorer"
 
   btcpayserver:
     environment:

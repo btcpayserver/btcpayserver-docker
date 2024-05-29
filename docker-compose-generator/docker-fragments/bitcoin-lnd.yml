@@ -125,9 +125,14 @@ services:
   lnbits:
     links:
        - lnd_bitcoin
+    environment:
+      LND_READY_FILE: /root/.nbxplorer/btc_fully_synched
+      LND_REST_ENDPOINT: http://lnd_bitcoin:8080/
+      LND_REST_MACAROON: "/data/.lightning/admin.macaroon"
     volumes:
       - "lnd_bitcoin_datadir:/data/.lightning"
       - ./lnbits/lnd-env:/app/.env
+      - "nbxplorer_datadir:/root/.nbxplorer"
 
 volumes:
   lnd_bitcoin_datadir:
