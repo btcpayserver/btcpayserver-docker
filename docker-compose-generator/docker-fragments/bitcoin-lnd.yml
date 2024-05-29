@@ -131,7 +131,6 @@ services:
       LND_REST_MACAROON: "/data/.lightning/admin.macaroon"
     volumes:
       - "lnd_bitcoin_datadir:/data/.lightning"
-      - ./lnbits/lnd-env:/app/.env
       - "nbxplorer_datadir:/root/.nbxplorer"
 
 volumes:

@@ -75,7 +75,6 @@ services:
       CORELIGHTNING_REST_MACAROON: "/data/.lightning/access.macaroon"
     volumes:
       - "clightning_bitcoin_rest_certsdir:/data/.lightning"
-      - ./lnbits/clightning-env:/app/.env
       - "nbxplorer_datadir:/root/.nbxplorer"
 
   btcpayserver:
