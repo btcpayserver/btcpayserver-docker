@@ -127,6 +127,7 @@ services:
        - lnd_bitcoin
     environment:
       LND_READY_FILE: /root/.nbxplorer/btc_fully_synched
+      LNBITS_BACKEND_WALLET_CLASS: LndRestWallet
       LND_REST_ENDPOINT: http://lnd_bitcoin:8080/
       LND_REST_MACAROON: "/data/.lightning/admin.macaroon"
     volumes:

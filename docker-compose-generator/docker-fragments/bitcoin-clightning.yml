@@ -71,6 +71,7 @@ services:
       - clightning_bitcoin_rest
     environment:
       LIGHTNINGD_READY_FILE: /root/.nbxplorer/btc_fully_synched
+      LNBITS_BACKEND_WALLET_CLASS: CoreLightningRestWallet
       CORELIGHTNING_REST_URL: http://clightning_bitcoin_rest:3001
       CORELIGHTNING_REST_MACAROON: "/data/.lightning/access.macaroon"
     volumes:
