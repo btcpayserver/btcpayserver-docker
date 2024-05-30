@@ -72,10 +72,10 @@ services:
     environment:
       LIGHTNINGD_READY_FILE: /root/.nbxplorer/btc_fully_synched
       LNBITS_BACKEND_WALLET_CLASS: CoreLightningRestWallet
-      CORELIGHTNING_REST_URL: http://clightning_bitcoin_rest:3001
-      CORELIGHTNING_REST_MACAROON: "/data/.lightning/access.macaroon"
+      CORELIGHTNING_REST_URL: http://clightning_bitcoin:3010
+      RUNE_PATH: "/data/.lightning/rune.env"
     volumes:
-      - "clightning_bitcoin_rest_certsdir:/data/.lightning"
+      - "clightning_bitcoin_datadir:/data/.lightning"
       - "nbxplorer_datadir:/root/.nbxplorer"
 
   btcpayserver:
