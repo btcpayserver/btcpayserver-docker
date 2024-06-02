@@ -308,18 +308,18 @@ cd - && cd ..
 
 
 # Build elements
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/22.1.1/Elements/22.1.1/linuxamd64.Dockerfile
-DOCKERFILE="Elements/22.1.1/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/22.1.1/Elements/22.1.1/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Elements/22.1.1/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/22.1.1/Elements/22.1.1/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Elements/22.1.1/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/elements:22.1.1"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/23.2.1/Elements/23.2.1/linuxamd64.Dockerfile
+DOCKERFILE="Elements/23.2.1/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/23.2.1/Elements/23.2.1/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Elements/23.2.1/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/23.2.1/Elements/23.2.1/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Elements/23.2.1/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/elements:23.2.1"
 git clone https://github.com/btcpayserver/dockerfile-deps elements
 cd elements
-git checkout Elements/22.1.1
+git checkout Elements/23.2.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/elements:22.1.1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/elements:23.2.1" .
 cd - && cd ..
 
 
@@ -722,16 +722,16 @@ cd - && cd ..
 
 
 # Build lnbits
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/LNbits/0.12.5/LNbits/0.12.5/linuxamd64.Dockerfile
-DOCKERFILE="LNbits/0.12.5/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/LNbits/0.12.5/LNbits/0.12.5/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="LNbits/0.12.5/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/lnbits:0.12.5"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/LNbits/0.12.8/LNbits/0.12.8/linuxamd64.Dockerfile
+DOCKERFILE="LNbits/0.12.8/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/LNbits/0.12.8/LNbits/0.12.8/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="LNbits/0.12.8/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/lnbits:0.12.8"
 git clone https://github.com/btcpayserver/dockerfile-deps lnbits
 cd lnbits
-git checkout LNbits/0.12.5
+git checkout LNbits/0.12.8
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnbits:0.12.5" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnbits:0.12.8" .
 cd - && cd ..
 
 
@@ -796,18 +796,18 @@ cd - && cd ..
 
 
 # Build nnostr-relay
-# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.18/Relay/Dockerfile
+# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.23/Relay/Dockerfile
 DOCKERFILE="Relay/Dockerfile"
-# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.18/Relay/Dockerfile
+# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.23/Relay/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Relay/Dockerfile"
-# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.18/Relay/Dockerfile
+# https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.23/Relay/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Relay/Dockerfile"
-echo "Building kukks/nnostr-relay:v0.0.18"
+echo "Building kukks/nnostr-relay:v0.0.23"
 git clone https://github.com/kukks/nnostr nnostr-relay
 cd nnostr-relay
-git checkout Relay/v0.0.18
+git checkout Relay/v0.0.23
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "kukks/nnostr-relay:v0.0.18" .
+docker build -f "$DOCKERFILE" -t "kukks/nnostr-relay:v0.0.23" .
 cd - && cd ..
 
 
