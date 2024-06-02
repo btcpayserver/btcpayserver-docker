@@ -232,14 +232,14 @@ cd - && cd ..
 
 
 # Build lightning
-# https://raw.githubusercontent.com/Groestlcoin/lightning/v23.05/Dockerfile
+# https://raw.githubusercontent.com/Groestlcoin/lightning/v23.11/Dockerfile
 DOCKERFILE="Dockerfile"
-echo "Building groestlcoin/lightning:v23.05"
+echo "Building groestlcoin/lightning:v23.11"
 git clone https://github.com/Groestlcoin/lightning lightning
 cd lightning
-git checkout v23.05
+git checkout v23.11
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "groestlcoin/lightning:v23.05" .
+docker build -f "$DOCKERFILE" -t "groestlcoin/lightning:v23.11" .
 cd - && cd ..
 
 
@@ -292,18 +292,18 @@ cd - && cd ..
 
 
 # Build groestlcoin
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/25.0/Groestlcoin/25.0/linuxamd64.Dockerfile
-DOCKERFILE="Groestlcoin/25.0/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/25.0/Groestlcoin/25.0/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Groestlcoin/25.0/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/25.0/Groestlcoin/25.0/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Groestlcoin/25.0/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/groestlcoin:25.0"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/26.0/Groestlcoin/26.0/linuxamd64.Dockerfile
+DOCKERFILE="Groestlcoin/26.0/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/26.0/Groestlcoin/26.0/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Groestlcoin/26.0/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Groestlcoin/25.0/Groestlcoin/26.0/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Groestlcoin/26.0/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/groestlcoin:26.0"
 git clone https://github.com/btcpayserver/dockerfile-deps groestlcoin
 cd groestlcoin
-git checkout Groestlcoin/25.0
+git checkout Groestlcoin/26.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/groestlcoin:25.0" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/groestlcoin:26.0" .
 cd - && cd ..
 
 
@@ -645,7 +645,7 @@ DOCKERFILE="Dockerfile"
 echo "Building fireflyiii/core:latest"
 git clone https://dev.azure.com/Firefly-III/_git/MainImage core
 cd core
-git checkout 
+git checkout
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "fireflyiii/core:latest" .
 cd - && cd ..
@@ -1145,5 +1145,3 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
-
-
