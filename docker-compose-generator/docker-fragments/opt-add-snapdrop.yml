@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+
+  snapdrop:
+    restart: unless-stopped
+    image: btcpayserver/snapdrop:1.0
+    container_name: snapdrop
+    expose:
+      - "8080"
+
+  btcpayserver:
+      environment:
+          BTCPAY_EXTERNALSERVICES: "Snapdrop:${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/snapdrop;"
