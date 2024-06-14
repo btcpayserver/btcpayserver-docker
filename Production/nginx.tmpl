@@ -81,10 +81,10 @@
 		proxy_pass http://clightning_bitcoin_charge:9112/;
 	}
 	{{ end }}
-	{{ if (eq $serviceName "clightning_bitcoin_rest") }}
+	{{ if (eq $serviceName "clightning_bitcoin") }}
 	location /clightning-rest/btc/ {
 	    rewrite ^/clightning-rest/btc/(.*) /$1 break;
-		proxy_pass http://clightning_bitcoin_rest:3001/;
+		proxy_pass http://clightning_bitcoin:3010/;
 	}
 		{{ end }}
 		{{ if (eq $serviceName "clightning_groestlcoin_spark") }}
@@ -200,6 +200,30 @@
 		proxy_pass http://configurator;
 	}
   {{ end }}
+
+  {{ if (eq $serviceName "snapdrop") }}
+    location /snapdrop/ {
+        proxy_connect_timeout 300;
+        proxy_set_header Connection "";
+        proxy_set_header        Host               $host;
+        proxy_set_header        X-Real-IP          $remote_addr;
+        proxy_set_header        X-Forwarded-For    $proxy_add_x_forwarded_for;
+        proxy_set_header        X-Forwarded-Host   $host:443;
+        proxy_set_header        X-Forwarded-Server $host;
+        proxy_set_header        X-Forwarded-Port   443;
+        proxy_set_header        X-Forwarded-Proto  https;
+        proxy_pass http://snapdrop:8080/;
+    }
+    location /snapdrop/server {
+        proxy_connect_timeout 300;
+        proxy_pass http://snapdrop:8080/server;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header X-Forwarded-for $remote_addr;
+    }
+  {{ end }}
+
+
   {{ if (eq $serviceName "nnostr-relay") }}
 	location /nostr {
 		proxy_set_header Connection "";

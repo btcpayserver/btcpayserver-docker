@@ -21,6 +21,7 @@ services:
 
   mariadb:
     image: mariadb:10.4
+    container_name : generated_mariadb_1
     environment:
       MYSQL_ROOT_PASSWORD: wordpressdb
       MYSQL_DATABASE: wordpress
