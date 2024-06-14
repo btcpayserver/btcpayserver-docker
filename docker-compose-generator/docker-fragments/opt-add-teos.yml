@@ -3,7 +3,7 @@ version: "3"
 services:
   bitcoin_teos:
     restart: unless-stopped
-    image: talaia/python-teos:latest
+    image: benjaminchodroff/rust-teos:latest
     environment:
       API_BIND: "0.0.0.0"
       API_PORT: 9814
@@ -15,7 +15,7 @@ services:
       BTC_FEED_CONNECT: "bitcoind"
       BTC_FEED_PORT: 28334
     volumes:
-      - "bitcoin_teos_datadir:/root/.teos"
+      - "bitcoin_teos_datadir:/home/teos/.teos"
     ports:
       - "9814:9814"
   bitcoind:
@@ -32,4 +32,3 @@ volumes:
 required:
   - "opt-add-zmq"
   - "bitcoin"
-  - "opt-txindex"
