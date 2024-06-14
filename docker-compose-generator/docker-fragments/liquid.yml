@@ -4,7 +4,7 @@ services:
   elementsd_liquid:
     restart: unless-stopped
     container_name: btcpayserver_elementsd_liquid
-    image: btcpayserver/elements:22.1.1
+    image: btcpayserver/elements:23.2.1
     environment:
       ELEMENTS_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       ELEMENTS_MAINNET_CHAIN: "liquidv1"

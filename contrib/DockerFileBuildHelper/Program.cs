@@ -318,10 +318,18 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/Vutov/docker-bitcoin";
                     dockerInfo.GitRef = "master";
                     break;
+                case "snapdrop":
+                    dockerInfo.DockerFilePath = $"Snapdrop/{image.Tag}/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Snapdrop/{image.Tag}/Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Snapdrop/{image.Tag}/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"Snapdrop/{image.Tag}";
+                    dockerInfo.SupportedByUs = true;
+                    break;
                 case "lightning":
                     dockerInfo.DockerFilePath = $"Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = "contrib/docker/linuxarm32v7.Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = "contrib/docker/linuxarm64v8.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/lightning";
                     dockerInfo.GitRef = $"basedon-{image.Tag}";
                     dockerInfo.SupportedByUs = true;

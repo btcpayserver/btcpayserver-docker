@@ -2,7 +2,7 @@ version: "3"
 services:
   nnostr-relay:
     restart: unless-stopped
-    image: kukks/nnostr-relay:v0.0.18
+    image: kukks/nnostr-relay:v0.0.23
     container_name: nnostr-relay
     environment:
       NOSTR_CONNECTIONSTRINGS__RelayDatabase: User ID=postgres;Host=postgres;Port=5432;Database=nnostr
