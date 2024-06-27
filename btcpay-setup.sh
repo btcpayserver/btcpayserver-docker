@@ -224,7 +224,7 @@ else # new deployments must be in Generated
     BTCPAY_DOCKER_COMPOSE="$(pwd)/Generated/docker-compose.generated.yml"
 fi
 
-BTCPAY_ENV_FILE="$BTCPAY_BASE_DIRECTORY/.env"
+BTCPAY_ENV_FILE="${BTCPAY_ENV_FILE:-BTCPAY_BASE_DIRECTORY/.env}"
 
 BTCPAY_SSHKEYFILE=""
 BTCPAY_SSHTRUSTEDFINGERPRINTS=""
