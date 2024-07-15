@@ -629,6 +629,12 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"master";
                     dockerInfo.SupportedByUs = false;
                     break;
+                case "benjaminchodroff/rust-teos":
+                    dockerInfo.DockerFilePath = $"docker/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/benjaminchodroff/rust-teos";
+                    dockerInfo.GitRef = $"master";
+                    dockerInfo.SupportedByUs = false;
+                    break;
                 case "zammad/zammad-docker-compose" when image.Tag.StartsWith("zammad-postgresql-"):
                     dockerInfo.DockerFilePath = $"containers/zammad-postgresql/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/zammad/zammad-docker-compose";
