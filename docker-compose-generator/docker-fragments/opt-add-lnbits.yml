@@ -10,7 +10,6 @@ services:
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}
       VIRTUAL_HOST: ${LNBITS_HOST}
       VIRTUAL_HOST_NAME: "lnbits"
-      LNBITS_ADMIN_UI: "false"
       LNBITS_DATA_FOLDER: "./data"
       LNBITS_DATABASE_URL: "postgres://postgres@postgres/lnbits"
     expose:
