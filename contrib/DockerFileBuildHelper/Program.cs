@@ -253,6 +253,13 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"WooCommerce/{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
+                case "lnbits":
+                    dockerInfo.DockerFilePath = $"LNbits/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"LNbits/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"LNbits/{image.Tag}";
+                    dockerInfo.SupportedByUs = false;
+                    break;
                 case "cloudflared":
                     dockerInfo.DockerFilePath = $"Cloudflared/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"Cloudflared/{NoRevision(image.Tag)}/linuxarm32v7.Dockerfile";
