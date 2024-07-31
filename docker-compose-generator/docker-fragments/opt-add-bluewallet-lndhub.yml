@@ -1,5 +1,5 @@
 version: "3"
-
+# DO NOT USE THOSE ARE DEPRECATED
 services:
   bluewallet_lndhub_redis:
     container_name: bluewallet_lndhub_redis
