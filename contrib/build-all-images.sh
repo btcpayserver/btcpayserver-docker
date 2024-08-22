@@ -814,18 +814,18 @@ cd - && cd ..
 
 
 # Build snapdrop
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.0/Snapdrop/1.0/Dockerfile
-DOCKERFILE="Snapdrop/1.0/Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.0/Snapdrop/1.0/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Snapdrop/1.0/Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.0/Snapdrop/1.0/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Snapdrop/1.0/Dockerfile"
-echo "Building btcpayserver/snapdrop:1.0"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.1/Snapdrop/1.1/Dockerfile
+DOCKERFILE="Snapdrop/1.1/Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.1/Snapdrop/1.1/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Snapdrop/1.1/Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.1/Snapdrop/1.1/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Snapdrop/1.1/Dockerfile"
+echo "Building btcpayserver/snapdrop:1.1"
 git clone https://github.com/btcpayserver/dockerfile-deps snapdrop
 cd snapdrop
-git checkout Snapdrop/1.0
+git checkout Snapdrop/1.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/snapdrop:1.0" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/snapdrop:1.1" .
 cd - && cd ..
 
 
@@ -1000,14 +1000,14 @@ cd - && cd ..
 
 
 # Build mariadb
-# https://raw.githubusercontent.com/docker-library/mariadb/master/10.4/Dockerfile
-DOCKERFILE="10.4/Dockerfile"
-echo "Building mariadb:10.4"
+# https://raw.githubusercontent.com/docker-library/mariadb/master/10.11/Dockerfile
+DOCKERFILE="10.11/Dockerfile"
+echo "Building mariadb:10.11"
 git clone https://github.com/docker-library/mariadb mariadb
 cd mariadb
 git checkout master
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "mariadb:10.4" .
+docker build -f "$DOCKERFILE" -t "mariadb:10.11" .
 cd - && cd ..
 
 
