@@ -20,7 +20,7 @@ services:
       - "woocommerce_html:/var/www/html"
 
   mariadb:
-    image: mariadb:10.4
+    image: mariadb:10.11
     container_name : generated_mariadb_1
     environment:
       MYSQL_ROOT_PASSWORD: wordpressdb
