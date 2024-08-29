@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -158,6 +158,7 @@ namespace DockerFileBuildHelper
             dockerInfos = dockerInfos.OrderBy(i => i.Image.Source).ToList();
             foreach (var image in dockerInfos)
             {
+                if (image.Deprecated) continue;
                 tb.Append($"| {image.Image.ToString(false)} | {image.Image.Tag} |");
                 if (!string.IsNullOrEmpty(image.DockerFilePath))
                 {
@@ -681,6 +682,7 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/BlueWallet/LndHub";
                     dockerInfo.GitRef = $"{image.Tag.Split("@")[0]}";
                     dockerInfo.SupportedByUs = false;
+                    dockerInfo.Deprecated = true;
                     break;
                 case "fireflyiii/core":
                     dockerInfo.DockerFilePath = $"Dockerfile";

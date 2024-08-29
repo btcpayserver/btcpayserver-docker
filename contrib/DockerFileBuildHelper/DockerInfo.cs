@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DockerFileBuildHelper
+﻿namespace DockerFileBuildHelper
 {
     public class DockerInfo
     {
@@ -13,6 +9,7 @@ namespace DockerFileBuildHelper
         public string GitLink { get; set; }
         public string GitRef { get; set; }
         public bool SupportedByUs { get; set; }
+        public bool Deprecated { get; set; }
         public Image Image { get; internal set; }
         public string RawLink { get; set; }
         public string GetGithubLinkOf(string path)
