@@ -814,18 +814,18 @@ cd - && cd ..
 
 
 # Build snapdrop
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.1/Snapdrop/1.1/Dockerfile
-DOCKERFILE="Snapdrop/1.1/Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.1/Snapdrop/1.1/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Snapdrop/1.1/Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.1/Snapdrop/1.1/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Snapdrop/1.1/Dockerfile"
-echo "Building btcpayserver/snapdrop:1.1"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.2/Snapdrop/1.2/Dockerfile
+DOCKERFILE="Snapdrop/1.2/Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.2/Snapdrop/1.2/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Snapdrop/1.2/Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.2/Snapdrop/1.2/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Snapdrop/1.2/Dockerfile"
+echo "Building btcpayserver/snapdrop:1.2"
 git clone https://github.com/btcpayserver/dockerfile-deps snapdrop
 cd snapdrop
-git checkout Snapdrop/1.1
+git checkout Snapdrop/1.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/snapdrop:1.1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/snapdrop:1.2" .
 cd - && cd ..
 
 
