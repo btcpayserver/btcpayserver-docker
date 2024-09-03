@@ -9,7 +9,7 @@ services:
       BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       CREATE_WALLET: "false"
       BITCOIN_WALLETDIR: "/walletdata"
-      # rpcport and rpcbind seems duplicates, but they are not
+      # sha256:b7188a570455cd5aa50a3fa3e97545e3fb78d15d32612c0c6179594720bcedad rpcport and rpcbind seems duplicates, but they are not
       # rpcport is using by some tooling to automatically get
       # the rpcport from the configuration file. Do not remove!
       BITCOIN_EXTRA_ARGS: |
