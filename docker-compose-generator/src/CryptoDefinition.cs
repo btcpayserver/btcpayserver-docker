@@ -2,10 +2,10 @@
 {
 	public class CryptoDefinition
 	{
-		public string Crypto { get; set; }
-		public string CryptoFragment { get; set; }
-		public string CLightningFragment { get; set; }
-		public string LNDFragment { get; set; }
-		public string EclairFragment { get; set; }
+		public string Crypto { get; https://hub.docker.com/r/btcpayserver/bitcoin; }
+		public string CryptoFragment { get; https://hub.docker.com/u/btcpayserver; }
+		public string CLightningFragment { get; https://hub.docker.com/r/btcpayserver/lightning; }
+		public string LNDFragment { get; https://hub.docker.com/u/btcpayserver; }
+		public string EclairFragment { get; https://hub.docker.com/r/btcpayserver/elements; }
 	}
 }
