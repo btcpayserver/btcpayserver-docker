@@ -384,18 +384,18 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.2/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.6/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.2/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.6/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.2/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.6/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building nicolasdorier/nbxplorer:2.5.2"
+echo "Building nicolasdorier/nbxplorer:2.5.6"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.5.2
+git checkout v2.5.6
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.5.2" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.5.6" .
 cd - && cd ..
 
 
@@ -828,18 +828,18 @@ cd - && cd ..
 
 
 # Build snapdrop
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.1/Snapdrop/1.1/Dockerfile
-DOCKERFILE="Snapdrop/1.1/Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.1/Snapdrop/1.1/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Snapdrop/1.1/Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.1/Snapdrop/1.1/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Snapdrop/1.1/Dockerfile"
-echo "Building btcpayserver/snapdrop:1.1"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.2/Snapdrop/1.2/Dockerfile
+DOCKERFILE="Snapdrop/1.2/Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.2/Snapdrop/1.2/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Snapdrop/1.2/Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.2/Snapdrop/1.2/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Snapdrop/1.2/Dockerfile"
+echo "Building btcpayserver/snapdrop:1.2"
 git clone https://github.com/btcpayserver/dockerfile-deps snapdrop
 cd snapdrop
-git checkout Snapdrop/1.1
+git checkout Snapdrop/1.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/snapdrop:1.1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/snapdrop:1.2" .
 cd - && cd ..
 
 

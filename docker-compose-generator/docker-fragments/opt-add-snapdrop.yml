@@ -4,7 +4,7 @@ services:
 
   snapdrop:
     restart: unless-stopped
-    image: btcpayserver/snapdrop:1.1
+    image: btcpayserver/snapdrop:1.2
     container_name: snapdrop
     expose:
       - "8080"
