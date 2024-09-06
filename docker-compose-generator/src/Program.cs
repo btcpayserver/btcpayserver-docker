@@ -83,11 +83,6 @@ namespace DockerGenerator
 				}
 			}
 
-			if (hasAltcoins)
-				Environment.SetEnvironmentVariable("BTCPAY_BUILD_CONFIGURATION", "-altcoins");
-			else
-				Environment.SetEnvironmentVariable("BTCPAY_BUILD_CONFIGURATION", "");
-
 			foreach (var fragment in composition.AdditionalFragments)
 			{
 				fragments.Add(fragment);
