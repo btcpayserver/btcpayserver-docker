@@ -31,7 +31,7 @@ Backup postgres database and docker volumes without chain states
 END
 }
 
-EXCLUDE_LND_GRAPH=' --exclude="volumes/generated_lnd_bitcoin_datadir/_data/data/graph"'
+EXCLUDE_LND_GRAPH="volumes/generated_lnd_bitcoin_datadir/_data/data/graph"
 
 while (( "$#" )); do
   case "$1" in
@@ -40,8 +40,8 @@ while (( "$#" )); do
       exit
       ;;
     --lnd)
-      EXCLUDE_LND_GRAPH=""
-      shift 1
+      EXCLUDE_LND_GRAPH="$EXCLUDE_LND_GRAPH/false" # now does not exclude
+      shift
       ;;
     --) # end argument parsing
       shift
@@ -87,7 +87,6 @@ fi
 cd $btcpay_dir
 . helpers.sh
 
-
 # Postgres database
 postgres_container=$(docker ps -a -q -f "name=postgres_1")
 if [ -z "$postgres_container" ]; then
@@ -132,10 +131,12 @@ if [ ! -z "$mariadb_container" ]; then
 fi
 
 # If doing full lnd backup and lnd is enabled then disable lnd from restarting
-if [ -z "$EXCLUDE_LND_GRAPH" ] && [[ "$BTCPAYGEN_LIGHTNING" == "lnd" ]]; then
-     export BTCPAYGEN_LIGHTNING="none"
-     btcpay_update_docker_env
-  fi
+if [[ "$EXCLUDE_LND_GRAPH" == *false ]] && [[ "$BTCPAYGEN_LIGHTNING" == lnd ]]; then
+    echo "Disabling lnd from starting up."
+    export BTCPAYGEN_LIGHTNING="none"
+    # btcpay_update_docker_env # does not work to dsiable knd container
+    # source ./btcpay-setup.sh --install-only # using docker stats, lnd container not stopped before backup taken
+    source ./btcpay-setup.sh -i  # using docker stats, lnd container not stopped before backup taken
 fi
 
 # BTCPay Server backup
@@ -163,7 +164,7 @@ echo "ℹ️ Archiving files in $(pwd)…"
     --exclude="volumes/generated_mariadb_datadir" \
     --exclude="volumes/generated_postgres_datadir" \
     --exclude="volumes/generated_electrumx_datadir" \
-    "$EXCLUDE_LND_GRAPH" \
+    --exclude="$EXCLUDE_LND_GRAPH" \
     --exclude="volumes/generated_clightning_bitcoin_datadir/_data/lightning-rpc" \
     --exclude="**/logs/*" \
     -cvzf $backup_path $postgres_dump_name  $mariadb_dump_name volumes/generated_*
