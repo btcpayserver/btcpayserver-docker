@@ -130,21 +130,22 @@ if [ ! -z "$mariadb_container" ]; then
   }
 fi
 
-# If doing full lnd backup and lnd is enabled then disable lnd from restarting
-if [[ "$EXCLUDE_LND_GRAPH" == *false ]] && [[ "$BTCPAYGEN_LIGHTNING" == lnd ]]; then
-    echo "Disabling lnd from starting up."
-    export BTCPAYGEN_LIGHTNING="none"
-    # btcpay_update_docker_env # does not work to dsiable knd container
-    # source ./btcpay-setup.sh --install-only # using docker stats, lnd container not stopped before backup taken
-    source ./btcpay-setup.sh -i  # using docker stats, lnd container not stopped before backup taken
-fi
-
 # BTCPay Server backup
 printf "\nℹ️ Stopping BTCPay Server …\n\n"
 btcpay_down
 
+# If doing full lnd backup and lnd is enabled then disable lnd from restarting
+if [[ "$EXCLUDE_LND_GRAPH" == *false ]] && [[ "$BTCPAYGEN_LIGHTNING" == lnd ]]; then
+    echo "Disabling lnd from starting up."
+    echo
+    export BTCPAYGEN_LIGHTNING="none"
+    # btcpay_update_docker_env # does not work to disable lnd container
+    source ./btcpay-setup.sh --install-only # is there a better way to disable lnd using high level script commands?
+fi
+
 printf "\n"
 cd $docker_dir
+
 echo "ℹ️ Archiving files in $(pwd)…"
 
 {
