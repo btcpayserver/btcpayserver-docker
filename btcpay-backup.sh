@@ -16,6 +16,51 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
+
+function display_help () {
+cat <<-END
+Usage:
+------
+
+Backup postgres database and docker volumes without chain states
+    --lnd : For migration, also backup full lnd channel state and
+            leave lnd disabled.  When this option is used, do not
+            reuse this backup when lnd is enabled again. Otherwise
+            the lnd state may become toxic with loss of some or all funds.
+
+END
+}
+
+EXCLUDE_LND_GRAPH=' --exclude="volumes/generated_lnd_bitcoin_datadir/_data/data/graph"'
+
+while (( "$#" )); do
+  case "$1" in
+    -h|--help)
+      display_help
+      exit
+      ;;
+    --lnd)
+      EXCLUDE_LND_GRAPH=""
+      shift 1
+      ;;
+    --) # end argument parsing
+      shift
+      break
+      ;;
+    -*|--*=) # unsupported flags
+      echo "Error: Unsupported flag $1" >&2
+      display_help
+      return
+      ;;
+    *) # preserve positional arguments
+      PARAMS="$PARAMS $1"
+      shift
+      ;;
+  esac
+done
+
+
+
 # preparation
 if [[ "$OSTYPE" == "darwin"* ]]; then
 	# Mac OS
@@ -41,6 +86,7 @@ fi
 
 cd $btcpay_dir
 . helpers.sh
+
 
 # Postgres database
 postgres_container=$(docker ps -a -q -f "name=postgres_1")
@@ -85,6 +131,13 @@ if [ ! -z "$mariadb_container" ]; then
   }
 fi
 
+# If doing full lnd backup and lnd is enabled then disable lnd from restarting
+if [ -z "$EXCLUDE_LND_GRAPH" ] && [[ "$BTCPAYGEN_LIGHTNING" == "lnd" ]]; then
+     export BTCPAYGEN_LIGHTNING="none"
+     btcpay_update_docker_env
+  fi
+fi
+
 # BTCPay Server backup
 printf "\nℹ️ Stopping BTCPay Server …\n\n"
 btcpay_down
@@ -110,6 +163,7 @@ echo "ℹ️ Archiving files in $(pwd)…"
     --exclude="volumes/generated_mariadb_datadir" \
     --exclude="volumes/generated_postgres_datadir" \
     --exclude="volumes/generated_electrumx_datadir" \
+    "$EXCLUDE_LND_GRAPH" \
     --exclude="volumes/generated_clightning_bitcoin_datadir/_data/lightning-rpc" \
     --exclude="**/logs/*" \
     -cvzf $backup_path $postgres_dump_name  $mariadb_dump_name volumes/generated_*
