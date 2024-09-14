@@ -207,7 +207,7 @@ echo "ℹ️ Archiving files in $(pwd)…"
 }
 
 cd $btcpay_dir
-if $START; then
+if $RESTART; then
   printf "\nℹ️ Restarting BTCPay Server …\n\n"
   btcpay_up
 else
