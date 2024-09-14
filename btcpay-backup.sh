@@ -23,14 +23,23 @@ Usage:
 ------
 
 Backup postgres database and docker volumes without chain states
-    --lnd : For migration, also backup full lnd channel state and
-            leave lnd disabled.  When this option is used, do not
+
+For backup and restart with LND Static Channel Backup (SCB), if used, then run without options
+./btcpay-backup.sh
+
+For migration purposes with full LND state backup and no restart (if backup succeeds) run as
+./btcpay-backup.sh --include-lnd-graph --no-restart
+
+    --include-lnd-graph  For lnd migration purposes, backup full lnd channel state
+            and leave lnd disabled.  When this option is used, do not
             reuse this backup when lnd is enabled again. Otherwise
             the lnd state may become toxic with loss of some or all funds.
+    --no-restart  Do not restart btcpay if the backup succeeds
 
 END
 }
 
+RESTART=true
 EXCLUDE_LND_GRAPH="volumes/generated_lnd_bitcoin_datadir/_data/data/graph"
 
 while (( "$#" )); do
@@ -39,8 +48,12 @@ while (( "$#" )); do
       display_help
       exit
       ;;
-    --lnd)
+    --include-lnd-graph)
       EXCLUDE_LND_GRAPH="$EXCLUDE_LND_GRAPH/false" # now does not exclude
+      shift
+      ;;
+    --no-restart)
+      RESTART=false
       shift
       ;;
     --) # end argument parsing
@@ -50,7 +63,7 @@ while (( "$#" )); do
     -*|--*=) # unsupported flags
       echo "Error: Unsupported flag $1" >&2
       display_help
-      return
+      exit 1
       ;;
     *) # preserve positional arguments
       PARAMS="$PARAMS $1"
@@ -139,13 +152,11 @@ if [[ "$EXCLUDE_LND_GRAPH" == *false ]] && [[ "$BTCPAYGEN_LIGHTNING" == lnd ]]; 
     echo "Disabling lnd from starting up."
     echo
     export BTCPAYGEN_LIGHTNING="none"
-    # btcpay_update_docker_env # does not work to disable lnd container
-    source ./btcpay-setup.sh --install-only # is there a better way to disable lnd using high level script commands?
+    source ./btcpay-setup.sh --install-only
 fi
 
 printf "\n"
 cd $docker_dir
-
 echo "ℹ️ Archiving files in $(pwd)…"
 
 {
@@ -180,26 +191,35 @@ echo "ℹ️ Archiving files in $(pwd)…"
       backup_path="$backup_path.gpg"
       echo "✅ Encryption done."
     } || {
-      echo "🚨  Encrypting failed. Please check the error message above."
       printf "\nℹ️  Restarting BTCPay Server …\n\n"
+      echo "🚨  Encrypting failed. Please check the error message above."
       cd $btcpay_dir
       btcpay_up
       exit 1
     }
   fi
 } || {
+  printf "\nℹ️  Restarting BTCPay Server …\n\n"
   echo "🚨 Archiving failed. Please check the error message above."
-  printf "\nℹ️ Restarting BTCPay Server …\n\n"
   cd $btcpay_dir
   btcpay_up
   exit 1
 }
 
-printf "\nℹ️ Restarting BTCPay Server …\n\n"
 cd $btcpay_dir
-btcpay_up
+if $START; then
+  printf "\nℹ️ Restarting BTCPay Server …\n\n"
+  btcpay_up
+else
+  printf "\nℹ️ Not restarting BTCPay Server …\n\n"
+fi
 
 printf "\nℹ️ Cleaning up …\n\n"
 rm $postgres_dump_path
 
-printf "✅ Backup done => $backup_path\n\n"
+printf "\n✅ Backup done => $backup_path\n\n"
+
+if [[ "$EXCLUDE_LND_GRAPH" == *false ]]; then
+  printf "\n✅ Full lnd state, if available, has been fully backed up\n"
+  printf "\nℹ️ This backup should only be restored once and only onto to another server\n\n"
+fi
