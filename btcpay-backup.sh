@@ -41,7 +41,7 @@ END
 RESTART=true
 EXCLUDE_LND_GRAPH="volumes/generated_lnd_bitcoin_datadir/_data/data/graph"
 WARNING_LND_DIRE1A="🚨🚨🚨 LND is currently enabled and will be restarting 🚨🚨🚨"
-WARNING_LND_DIRE1B="🚨🚨🚨 LND is currently enabled and has been resarted 🚨🚨🚨"
+WARNING_LND_DIRE1B="🚨🚨🚨 LND is currently enabled and has been restarted 🚨🚨🚨"
 WARNING_LND_DIRE2="🚨🚨🚨 You cannot restore from this backup anywhere as is!!!  🚨🚨🚨"
 
 while (( "$#" )); do
