@@ -31,9 +31,8 @@ For migration purposes with full LND state backup and no restart (if backup succ
 ./btcpay-backup.sh --include-lnd-graph --no-restart
 
     --include-lnd-graph  For lnd migration purposes, backup full lnd channel state
-            and leave lnd disabled.  When this option is used, do not
-            reuse this backup when lnd is enabled again. Otherwise
-            the lnd state may become toxic with loss of some or all funds.
+            When this option is used, do not reuse this backup when lnd is enabled again.
+            Otherwise the lnd state may become toxic with loss of some or all funds.
     --no-restart  Do not restart btcpay if the backup succeeds
 
 END
@@ -41,6 +40,9 @@ END
 
 RESTART=true
 EXCLUDE_LND_GRAPH="volumes/generated_lnd_bitcoin_datadir/_data/data/graph"
+WARNING_LND_DIRE1A="🚨🚨🚨 LND is currently enabled and will be restarting 🚨🚨🚨"
+WARNING_LND_DIRE1B="🚨🚨🚨 LND is currently enabled and has been resarted 🚨🚨🚨"
+WARNING_LND_DIRE2="🚨🚨🚨 You cannot restore from this backup anywhere as is!!!  🚨🚨🚨"
 
 while (( "$#" )); do
   case "$1" in
@@ -143,17 +145,14 @@ if [ ! -z "$mariadb_container" ]; then
   }
 fi
 
+# If will be restarting, doing full lnd backup and lnd is enabled then give loud warning
+if $RESTART && [[ "$EXCLUDE_LND_GRAPH" == *false ]] && [[ "$BTCPAYGEN_LIGHTNING" == lnd ]]; then
+  printf '\n%s\n%s\n\n' "$WARNING_LND_DIRE1A" "$WARNING_LND_DIRE2"
+fi
+
 # BTCPay Server backup
 printf "\nℹ️ Stopping BTCPay Server …\n\n"
 btcpay_down
-
-# If doing full lnd backup and lnd is enabled then disable lnd from restarting
-if [[ "$EXCLUDE_LND_GRAPH" == *false ]] && [[ "$BTCPAYGEN_LIGHTNING" == lnd ]]; then
-    echo "Disabling lnd from starting up."
-    echo
-    export BTCPAYGEN_LIGHTNING="none"
-    source ./btcpay-setup.sh --install-only
-fi
 
 printf "\n"
 cd $docker_dir
@@ -221,5 +220,9 @@ printf "\n✅ Backup done => $backup_path\n\n"
 
 if [[ "$EXCLUDE_LND_GRAPH" == *false ]]; then
   printf "\n✅ Full lnd state, if available, has been fully backed up\n"
-  printf "\nℹ️ This backup should only be restored once and only onto to another server\n\n"
+  if $RESTART && [[ "$BTCPAYGEN_LIGHTNING" == lnd ]]; then
+      printf '\n%s\n%s\n\n' "$WARNING_LND_DIRE1B" "$WARNING_LND_DIRE2"
+  else
+    printf "\nℹ️ This backup should only be restored once and only onto to another server\n\n"
+  fi
 fi
