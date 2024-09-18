@@ -5,7 +5,7 @@ services:
   nbxplorer:
     restart: unless-stopped
     container_name: generated_nbxplorer_1
-    image: nicolasdorier/nbxplorer:2.5.2
+    image: nicolasdorier/nbxplorer:2.5.7
     expose:
       - "32838"
     environment:
@@ -14,9 +14,6 @@ services:
       NBXPLORER_TRIMEVENTS: 10000
       NBXPLORER_SIGNALFILESDIR: /datadir
       NBXPLORER_POSTGRES: User ID=postgres;Host=postgres;Port=5432;Application Name=nbxplorer;MaxPoolSize=20;Database=nbxplorer${NBITCOIN_NETWORK:-regtest}
-      NBXPLORER_AUTOMIGRATE: 1
-      NBXPLORER_NOMIGRATEEVTS: 1
-      NBXPLORER_DELETEAFTERMIGRATION: 1
     links:
       - postgres
     volumes:

@@ -308,18 +308,18 @@ cd - && cd ..
 
 
 # Build elements
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/23.2.1/Elements/23.2.1/linuxamd64.Dockerfile
-DOCKERFILE="Elements/23.2.1/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/23.2.1/Elements/23.2.1/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Elements/23.2.1/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/23.2.1/Elements/23.2.1/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Elements/23.2.1/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/elements:23.2.1"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/23.2.3/Elements/23.2.3/linuxamd64.Dockerfile
+DOCKERFILE="Elements/23.2.3/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/23.2.3/Elements/23.2.3/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Elements/23.2.3/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/23.2.3/Elements/23.2.3/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Elements/23.2.3/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/elements:23.2.3"
 git clone https://github.com/btcpayserver/dockerfile-deps elements
 cd elements
-git checkout Elements/23.2.1
+git checkout Elements/23.2.3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/elements:23.2.1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/elements:23.2.3" .
 cd - && cd ..
 
 
@@ -384,18 +384,18 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.2/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.7/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.2/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.7/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.2/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.7/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building nicolasdorier/nbxplorer:2.5.2"
+echo "Building nicolasdorier/nbxplorer:2.5.7"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.5.2
+git checkout v2.5.7
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.5.2" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.5.7" .
 cd - && cd ..
 
 
@@ -814,18 +814,18 @@ cd - && cd ..
 
 
 # Build snapdrop
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.1/Snapdrop/1.1/Dockerfile
-DOCKERFILE="Snapdrop/1.1/Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.1/Snapdrop/1.1/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Snapdrop/1.1/Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.1/Snapdrop/1.1/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Snapdrop/1.1/Dockerfile"
-echo "Building btcpayserver/snapdrop:1.1"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.2/Snapdrop/1.2/Dockerfile
+DOCKERFILE="Snapdrop/1.2/Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.2/Snapdrop/1.2/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Snapdrop/1.2/Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.2/Snapdrop/1.2/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Snapdrop/1.2/Dockerfile"
+echo "Building btcpayserver/snapdrop:1.2"
 git clone https://github.com/btcpayserver/dockerfile-deps snapdrop
 cd snapdrop
-git checkout Snapdrop/1.1
+git checkout Snapdrop/1.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/snapdrop:1.1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/snapdrop:1.2" .
 cd - && cd ..
 
 
