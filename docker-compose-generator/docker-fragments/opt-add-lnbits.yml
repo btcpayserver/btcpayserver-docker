@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  lnbits:
+    image: btcpayserver/lnbits:0.12.11
+    init: true
+    restart: unless-stopped
+    environment:
+      LETSENCRYPT_HOST: ${LNBITS_HOST}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}
+      VIRTUAL_HOST: ${LNBITS_HOST}
+      VIRTUAL_HOST_NAME: "lnbits"
+      LNBITS_DATA_FOLDER: "./data"
+      LNBITS_DATABASE_URL: "postgres://postgres@postgres/lnbits"
+    expose:
+      - "5000"
+    links:
+       - postgres
+    volumes:
+      - "lnbits_datadir:/app/data"
+
+volumes:
+  lnbits_datadir:
