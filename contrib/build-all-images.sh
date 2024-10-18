@@ -68,12 +68,12 @@ DOCKERFILE="dockerfiles/Dockerfile"
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm32v7"
 # https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.2/dockerfiles/Dockerfile.arm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.15.0"
+echo "Building shahanafarooqui/rtl:0.14.1"
 git clone https://github.com/Ride-The-Lightning/RTL rtl
 cd rtl
 git checkout v0.15.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.15.0" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.14.1" .
 cd - && cd ..
 
 
@@ -96,12 +96,12 @@ DOCKERFILE="dockerfiles/Dockerfile"
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm32v7"
 # https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.2/dockerfiles/Dockerfile.arm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.15.0"
+echo "Building shahanafarooqui/rtl:0.14.1"
 git clone https://github.com/Ride-The-Lightning/RTL rtl
 cd rtl
 git checkout v0.15.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.15.0" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.14.1" .
 cd - && cd ..
 
 
@@ -128,12 +128,12 @@ DOCKERFILE="dockerfiles/Dockerfile"
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm32v7"
 # https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.2/dockerfiles/Dockerfile.arm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.15.0"
+echo "Building shahanafarooqui/rtl:0.14.1"
 git clone https://github.com/Ride-The-Lightning/RTL rtl
 cd rtl
 git checkout v0.15.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.15.0" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.14.1" .
 cd - && cd ..
 
 
