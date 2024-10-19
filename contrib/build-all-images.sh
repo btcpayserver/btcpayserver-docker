@@ -645,7 +645,7 @@ DOCKERFILE="Dockerfile"
 echo "Building fireflyiii/core:latest"
 git clone https://dev.azure.com/Firefly-III/_git/MainImage core
 cd core
-git checkout
+git checkout 
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "fireflyiii/core:latest" .
 cd - && cd ..
@@ -722,16 +722,16 @@ cd - && cd ..
 
 
 # Build lnbits
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/LNbits/0.12.11/LNbits/0.12.11/linuxamd64.Dockerfile
-DOCKERFILE="LNbits/0.12.11/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/LNbits/0.12.11/LNbits/0.12.11/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="LNbits/0.12.11/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/lnbits:0.12.11"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/LNbits/0.12.12/LNbits/0.12.12/linuxamd64.Dockerfile
+DOCKERFILE="LNbits/0.12.12/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/LNbits/0.12.12/LNbits/0.12.12/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="LNbits/0.12.12/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/lnbits:0.12.12"
 git clone https://github.com/btcpayserver/dockerfile-deps lnbits
 cd lnbits
-git checkout LNbits/0.12.11
+git checkout LNbits/0.12.12
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnbits:0.12.11" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnbits:0.12.12" .
 cd - && cd ..
 
 
@@ -1171,3 +1171,5 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
+
+
