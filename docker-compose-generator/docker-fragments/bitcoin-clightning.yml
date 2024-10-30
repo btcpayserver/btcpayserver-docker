@@ -2,7 +2,7 @@ version: "3"
 
 services:
   clightning_bitcoin:
-    image: btcpayserver/lightning:v24.05
+    image: btcpayserver/lightning:v24.08.2
     container_name: btcpayserver_clightning_bitcoin
     restart: unless-stopped
     environment:

@@ -46,18 +46,18 @@ cd - && cd ..
 
 
 # Build lightning
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v24.05/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v24.08.2/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v24.05/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v24.08.2/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v24.05/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v24.08.2/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/lightning:v24.05"
+echo "Building btcpayserver/lightning:v24.08.2"
 git clone https://github.com/btcpayserver/lightning lightning
 cd lightning
-git checkout basedon-v24.05
+git checkout basedon-v24.08.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v24.05" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v24.08.2" .
 cd - && cd ..
 
 
@@ -178,18 +178,18 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.13.5/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.0/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.13.5/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.0/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v1.13.5/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.0/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/btcpayserver:1.13.5$<BTCPAY_BUILD_CONFIGURATION>?"
+echo "Building btcpayserver/btcpayserver:2.0.0"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v1.13.5
+git checkout v2.0.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:1.13.5$<BTCPAY_BUILD_CONFIGURATION>?" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:2.0.0" .
 cd - && cd ..
 
 
