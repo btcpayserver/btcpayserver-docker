@@ -48,7 +48,7 @@ if [ -z "$postgres_container" ]; then
   printf "\n"
   echo "ℹ️ Postgres container is not up and running. Starting BTCPay Server …"
   docker volume create generated_postgres_datadir
-  docker-compose -f $BTCPAY_DOCKER_COMPOSE up -d postgres
+  docker compose -f $BTCPAY_DOCKER_COMPOSE up -d postgres
 
   printf "\n"
   postgres_container=$(docker ps -a -q -f "name=postgres_1")

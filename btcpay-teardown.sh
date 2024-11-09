@@ -40,7 +40,7 @@ ORIGINAL_DIRECTORY="$(pwd)"
 BTCPAY_BASE_DIRECTORY="$(dirname "$(pwd)")"
 
 printf "\nℹ️  Stopping BTCPay Server and removing related Docker volumes and networks …\n\n"
-docker-compose -f $BTCPAY_DOCKER_COMPOSE down -v
+docker compose -f $BTCPAY_DOCKER_COMPOSE down -v
 docker system prune -f
 
 printf "\nℹ️  Removing BTCPay Server files …\n\n"

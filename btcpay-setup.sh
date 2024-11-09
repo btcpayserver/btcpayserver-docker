@@ -66,7 +66,6 @@ This script must be run as root, except on Mac OS
 This script will:
 
 * Install Docker
-* Install Docker-Compose
 * Setup BTCPay settings
 * Make sure it starts at reboot via upstart or systemd
 * Add BTCPay utilities in /usr/bin
@@ -385,7 +384,7 @@ echo -e "BTCPay Server docker-compose parameters saved in $BTCPAY_ENV_FILE\n"
 
 . "$BASH_PROFILE_SCRIPT"
 
-if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]]; then
+if ! [[ -x "$(command -v docker)" ]]; then
     if ! [[ -x "$(command -v curl)" ]]; then
         apt-get update 2>error
         apt-get install -y \
@@ -434,14 +433,9 @@ if $HAS_DOCKER; then
         echo "Failed to install 'docker'. Please install docker manually, then retry."
         return
     fi
-
-    if ! [[ -x "$(command -v docker-compose)" ]]; then
-        echo "Failed to install 'docker-compose'. Please install docker-compose manually, then retry."
-        return
-    fi
 fi
 
-# Generate the docker compose in BTCPAY_DOCKER_COMPOSE
+# Generate the docker-compose in BTCPAY_DOCKER_COMPOSE
 if $HAS_DOCKER; then
     if ! ./build.sh; then
         echo "Failed to generate the docker-compose"
@@ -533,7 +527,7 @@ cd "$(dirname $BTCPAY_ENV_FILE)"
 
 if $HAS_DOCKER && [[ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ]] && [[ "$OLD_BTCPAY_DOCKER_COMPOSE" != "$BTCPAY_DOCKER_COMPOSE" ]]; then
     echo "Closing old docker-compose at $OLD_BTCPAY_DOCKER_COMPOSE..."
-    docker-compose -f "$OLD_BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
+    docker compose -f "$OLD_BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
 fi
 
 if $START; then

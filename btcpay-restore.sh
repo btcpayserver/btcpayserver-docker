@@ -101,7 +101,7 @@ cd $restore_dir
 # Start Postgres database
 {
   printf "\nℹ️ Starting Postgres database container …\n"
-  docker-compose -f $BTCPAY_DOCKER_COMPOSE up -d postgres
+  docker compose -f $BTCPAY_DOCKER_COMPOSE up -d postgres
   sleep 10
   postgres_container=$(docker ps -a -q -f "name=postgres_1")
   if [ -z "$postgres_container" ]; then
@@ -123,7 +123,7 @@ cd $restore_dir
 if [ ! -z "$mariadb_dump_name" ]; then
   {
     printf "\nℹ️ Starting MariaDB database container …\n"
-    docker-compose -f $BTCPAY_DOCKER_COMPOSE up -d mariadb
+    docker compose -f $BTCPAY_DOCKER_COMPOSE up -d mariadb
     sleep 10
     mariadb_container=$(docker ps -a -q -f "name=mariadb_1")
     if [ -z "$mariadb_container" ]; then
