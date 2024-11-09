@@ -273,7 +273,7 @@ if [[ "${BTCPAYGEN_ADDITIONAL_FRAGMENTS}" == *opt-txindex* ]] && \
 fi
 
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
-. helpers.sh
+. ./helpers.sh
 btcpay_expand_variables
 
 cd "$ORIGINAL_DIRECTORY"
