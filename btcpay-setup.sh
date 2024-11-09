@@ -116,7 +116,7 @@ START=""
 HAS_DOCKER=true
 STARTUP_REGISTER=true
 SYSTEMD_RELOAD=true
-while (( "$#" )); do
+while (( $# )); do
   case "$1" in
     -i)
       START=true
