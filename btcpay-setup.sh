@@ -116,7 +116,7 @@ START=""
 HAS_DOCKER=true
 STARTUP_REGISTER=true
 SYSTEMD_RELOAD=true
-while (( "$#" )); do
+while (( $# )); do
   case "$1" in
     -i)
       START=true
@@ -206,6 +206,7 @@ fi
 : "${BTCPAY_ENABLE_SSH:=false}"
 : "${PIHOLE_SERVERIP:=}"
 : "${CLOUDFLARE_TUNNEL_TOKEN:=}"
+: "${COMPOSE_HTTP_TIMEOUT:=180}"
 
 OLD_BTCPAY_DOCKER_COMPOSE="$BTCPAY_DOCKER_COMPOSE"
 ORIGINAL_DIRECTORY="$(pwd)"
@@ -272,7 +273,7 @@ if [[ "${BTCPAYGEN_ADDITIONAL_FRAGMENTS}" == *opt-txindex* ]] && \
 fi
 
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
-. helpers.sh
+. ./helpers.sh
 btcpay_expand_variables
 
 cd "$ORIGINAL_DIRECTORY"
@@ -346,7 +347,7 @@ fi
 touch "$BASH_PROFILE_SCRIPT"
 echo "
 #!/bin/bash
-export COMPOSE_HTTP_TIMEOUT=\"180\"
+export COMPOSE_HTTP_TIMEOUT=\"$COMPOSE_HTTP_TIMEOUT\"
 export BTCPAYGEN_OLD_PREGEN=\"$BTCPAYGEN_OLD_PREGEN\"
 export BTCPAYGEN_CRYPTO1=\"$BTCPAYGEN_CRYPTO1\"
 export BTCPAYGEN_CRYPTO2=\"$BTCPAYGEN_CRYPTO2\"

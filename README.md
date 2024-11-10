@@ -117,6 +117,7 @@ Check out this video if you're interested in learning more about setting up [BTC
 * `BTCPAYGEN_EXCLUDE_FRAGMENTS`:  Semicolon-separated list of fragments you want to forcefully exclude (eg. `litecoin-clightning`)
 * `TOR_RELAY_NICKNAME`: If tor relay is activated with opt-add-tor-relay, the relay nickname
 * `TOR_RELAY_EMAIL`: If tor relay is activated with opt-add-tor-relay, the email for Tor to contact you regarding your relay
+* `COMPOSE_HTTP_TIMEOUT`: Timeout (in seconds) for `docker compose` command. Defaults to 180 seconds.
 
 Additionally, there are specific environment variables for some addons:
 
