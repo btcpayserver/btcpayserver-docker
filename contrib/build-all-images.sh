@@ -178,18 +178,18 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.2/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.3/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.2/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.3/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.2/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.3/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/btcpayserver:2.0.2"
+echo "Building btcpayserver/btcpayserver:2.0.3"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v2.0.2
+git checkout v2.0.3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:2.0.2" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:2.0.3" .
 cd - && cd ..
 
 
@@ -384,18 +384,18 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.10/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.12/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.10/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.12/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.10/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.12/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building nicolasdorier/nbxplorer:2.5.10"
+echo "Building nicolasdorier/nbxplorer:2.5.12"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.5.10
+git checkout v2.5.12
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.5.10" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.5.12" .
 cd - && cd ..
 
 
