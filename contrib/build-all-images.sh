@@ -62,18 +62,18 @@ cd - && cd ..
 
 
 # Build rtl
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.0/dockerfiles/Dockerfile
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.4/dockerfiles/Dockerfile
 DOCKERFILE="dockerfiles/Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.0/dockerfiles/Dockerfile.arm32v7
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.4/dockerfiles/Dockerfile.arm32v7
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.0/dockerfiles/Dockerfile.arm64v8
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.4/dockerfiles/Dockerfile.arm64v8
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.15.0"
+echo "Building shahanafarooqui/rtl:v0.15.4"
 git clone https://github.com/Ride-The-Lightning/RTL rtl
 cd rtl
-git checkout v0.15.0
+git checkout v0.15.4
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.15.0" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:v0.15.4" .
 cd - && cd ..
 
 
@@ -86,22 +86,6 @@ cd eclair
 git checkout v0.7.0
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "acinq/eclair:release-0.7.0" .
-cd - && cd ..
-
-
-# Build rtl
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.14.0/dockerfiles/Dockerfile
-DOCKERFILE="dockerfiles/Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.14.0/dockerfiles/Dockerfile.arm32v7
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.14.0/dockerfiles/Dockerfile.arm64v8
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.14.0"
-git clone https://github.com/Ride-The-Lightning/RTL rtl
-cd rtl
-git checkout v0.14.0
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.14.0" .
 cd - && cd ..
 
 
@@ -118,22 +102,6 @@ cd lnd
 git checkout basedon-v0.18.3-beta
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.18.3-beta" .
-cd - && cd ..
-
-
-# Build rtl
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.14.1/dockerfiles/Dockerfile
-DOCKERFILE="dockerfiles/Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.14.1/dockerfiles/Dockerfile.arm32v7
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm32v7"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.14.1/dockerfiles/Dockerfile.arm64v8
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="dockerfiles/Dockerfile.arm64v8"
-echo "Building shahanafarooqui/rtl:0.14.1"
-git clone https://github.com/Ride-The-Lightning/RTL rtl
-cd rtl
-git checkout v0.14.1
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:0.14.1" .
 cd - && cd ..
 
 
