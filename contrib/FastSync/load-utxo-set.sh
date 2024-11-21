@@ -39,7 +39,7 @@ fi
 TAR_FILE="$1"
 
 if ! [[ "$UTXO_DOWNLOAD_LINK" ]]; then
-    [[ $NBITCOIN_NETWORK == "mainnet" ]] && UTXO_DOWNLOAD_LINK="https://eu2.contabostorage.com/1f50a74c9dc14888a8664415dad3d020:utxosets/utxo-snapshot-bitcoin-mainnet-820852.tar"
+    [[ $NBITCOIN_NETWORK == "mainnet" ]] && UTXO_DOWNLOAD_LINK="https://snapshots.btcpay.tech/utxo-snapshot-bitcoin-mainnet-867690.tar"
     [[ $NBITCOIN_NETWORK == "testnet" ]] && UTXO_DOWNLOAD_LINK="https://eu2.contabostorage.com/1f50a74c9dc14888a8664415dad3d020:utxosets/utxo-snapshot-bitcoin-testnet-1445586.tar"
 fi
 
