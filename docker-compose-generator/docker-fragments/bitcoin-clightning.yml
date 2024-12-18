@@ -66,6 +66,15 @@ services:
     environment:
       LIGHTNING: "true"
 
+  lnbits:
+    environment:
+      LIGHTNINGD_READY_FILE: /root/.nbxplorer/btc_fully_synched
+      LNBITS_BACKEND_WALLET_CLASS: CoreLightningWallet
+      CORELIGHTNING_RPC: /data/.lightning/lightning-rpc
+    volumes:
+      - "clightning_bitcoin_datadir:/data/.lightning"
+      - "nbxplorer_datadir:/root/.nbxplorer"
+
   btcpayserver:
     environment:
       BTCPAY_BTCLIGHTNING: "type=clightning;server=unix://etc/clightning_bitcoin/lightning-rpc"
