@@ -4,7 +4,7 @@ services:
   bitcoind:
     restart: unless-stopped
     container_name: btcpayserver_bitcoind
-    image: btcpayserver/bitcoin:26.0
+    image: btcpayserver/bitcoin:28.0
     environment:
       BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       CREATE_WALLET: "false"
@@ -19,6 +19,8 @@ services:
         port=39388
         whitelist=0.0.0.0/0
         maxmempool=500
+        # for lnd 0.18.3 compatiblity
+        deprecatedrpc=warnings
     expose:
       - "43782"
       - "39388"
