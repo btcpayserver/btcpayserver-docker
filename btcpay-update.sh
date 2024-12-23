@@ -32,6 +32,11 @@ if [[ "$1" != "--skip-git-pull" ]]; then
     git pull --force
     exec "btcpay-update.sh" --skip-git-pull
     return
+else
+    git checkout master
+    git pull --force
+    exec "btcpay-update.sh" --skip-git-pull
+    return
 fi
 
 if ! [ -f "/etc/docker/daemon.json" ] && [ -w "/etc/docker" ]; then
