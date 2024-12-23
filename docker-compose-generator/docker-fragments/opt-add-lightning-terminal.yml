@@ -8,7 +8,7 @@ services:
       LND_EXTRA_ARGS: |
         rpcmiddleware.enable=true
   lnd_lit:
-    image: "lightninglabs/lightning-terminal:v0.12.3-alpha-path-prefix"
+    image: "lightninglabs/lightning-terminal:v0.13.5-alpha-path-prefix"
     restart: unless-stopped
     expose:
       - "8080"
