@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     container_name: generated_postgres_1
     shm_size: 256mb
-    image: btcpayserver/postgres:13.13
+    image: btcpayserver/postgres:13.18
     command: [ "-c", "random_page_cost=1.0", "-c", "shared_preload_libraries=pg_stat_statements" ]
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust

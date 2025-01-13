@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -468,16 +468,15 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePathARM32v7 = "Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = "Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/btcpayserver";
-                    // v1.0.5.4$<BTCPAY_BUILD_CONFIGURATION>
-                    dockerInfo.GitRef = $"v{image.Tag.Substring(0, image.Tag.IndexOf('$'))}";
+                    dockerInfo.GitRef = $"v{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "rtl":
-                    dockerInfo.DockerFilePath = "dockerfiles/Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = "dockerfiles/Dockerfile.arm32v7";
-                    dockerInfo.DockerFilePathARM64v8 = "dockerfiles/Dockerfile.arm64v8";
+                    dockerInfo.DockerFilePath = "Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "Dockerfile";
                     dockerInfo.GitLink = "https://github.com/Ride-The-Lightning/RTL";
-                    dockerInfo.GitRef = $"v{image.Tag}";
+                    dockerInfo.GitRef = $"{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "nbxplorer":
