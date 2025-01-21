@@ -178,18 +178,18 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.5/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.6/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.5/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.6/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.5/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.6/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/btcpayserver:2.0.5"
+echo "Building btcpayserver/btcpayserver:2.0.6"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v2.0.5
+git checkout v2.0.6
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:2.0.5" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:2.0.6" .
 cd - && cd ..
 
 
