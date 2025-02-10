@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  shopify-app:
+    restart: unless-stopped
+    image: btcpayserver/shopify-app:1.0
+    init: true
+    container_name: shopify-app
+    environment:
+      SHOPIFY_APP_URL: "${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/shopifyapp"
+      SHOPIFY_DOMAIN: ${BTCPAY_HOST}
+    volumes:
+      - "shopifyapp_datadir:/etc/shopifyapp"
+    expose:
+      - "8080"
+
+  btcpayserver:
+      environment:
+          BTCPAY_EXTERNALSERVICES: "Shopify:${BTCPAY_PROTOCOL:-https}://${BTCPAY_HOST}/shopifyapp;"
+volumes:
+  shopifyapp_datadir:

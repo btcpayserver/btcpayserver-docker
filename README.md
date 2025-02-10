@@ -144,6 +144,7 @@ A wide variety of useful scripts are available once BTCPay is installed:
 * `. ./btcpay-setup.sh`: Information about additional parameters
 * `. ./btcpay-setup.sh -i`: Set up your BTCPayServer
 * `btcpay-restart.sh`: Restart your BTCPayServer
+* `shopify.sh`: Access to the command line of your shopify-app installation
 
 # Under the hood
 
