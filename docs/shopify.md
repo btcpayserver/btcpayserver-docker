@@ -10,8 +10,9 @@ BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-shopify"
 
 Second, create an all on [Shopify Partner](https://partners.shopify.com/). Choose `Create app manually`.
 
-In the overview menu of the app page, note the `Client ID` and the `Client secret`.
-Then go into `Configuration` and note the `App handle`.
+1. In the Overview menu of the app, note the `Client ID` and the `Client secret`.
+2. In the Configuration menu of the app, note the `App handle`.
+3. Go to `API access` and click on `Allow network access`
 
 Back in your server, run `shopify-set-config.sh`.
 
