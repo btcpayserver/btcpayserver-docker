@@ -237,6 +237,18 @@
         proxy_pass http://shopify-app:3000/shopifyapp/;
 		proxy_set_header Upgrade $http_upgrade;
     	proxy_set_header Connection "Upgrade";
+		# Preflight request handling
+		add_header Access-Control-Allow-Origin '*' always;
+        add_header Access-Control-Allow-Methods 'GET, POST, OPTIONS, DELETE, PUT' always;
+        add_header Access-Control-Allow-Headers 'Authorization, Content-Type, X-Shopify-Hmac-Sha256' always;
+		if ($request_method = OPTIONS) {
+			add_header Access-Control-Allow-Origin '*' always;
+			add_header Access-Control-Allow-Methods 'GET, POST, OPTIONS, DELETE, PUT' always;
+			add_header Access-Control-Allow-Headers 'Authorization, Content-Type, X-Shopify-Hmac-Sha256' always;
+			add_header Content-Length 0;
+			add_header Content-Type text/plain;
+			return 204;
+		}
     }
   {{ end }}
 
