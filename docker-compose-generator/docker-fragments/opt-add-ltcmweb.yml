@@ -6,6 +6,7 @@ services:
       BTCPAY_LTC_MWEB_DAEMON_URI: http://mwebd:12345
   mwebd:
     restart: unless-stopped
+    container_name: mwebd
     image: hectorchu1/mwebd
     volumes:
       - "mwebd_datadir:/data"
