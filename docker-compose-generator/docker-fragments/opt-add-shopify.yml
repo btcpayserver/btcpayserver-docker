@@ -9,4 +9,4 @@ services:
 
   btcpayserver:
     environment:
-      BTCPAY_SHOPIFY_PLUGIN_DEPLOYER: "http://shopify-app-deployer:32204/"
+      BTCPAY_SHOPIFY_PLUGIN_DEPLOYER: "http://shopify-app-deployer:5000/"
