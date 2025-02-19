@@ -255,9 +255,9 @@ namespace DockerFileBuildHelper
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "cloudflared":
-                    dockerInfo.DockerFilePath = $"Cloudflared/{NoRevision(image.Tag)}/Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = dockerInfo.DockerFilePath;
-                    dockerInfo.DockerFilePathARM64v8 = dockerInfo.DockerFilePath;
+                    dockerInfo.DockerFilePath = $"Cloudflared/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Cloudflared/{NoRevision(image.Tag)}/linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Cloudflared/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
                     dockerInfo.GitRef = $"Cloudflared/{image.Tag}";
                     dockerInfo.SupportedByUs = true;
