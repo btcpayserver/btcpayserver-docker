@@ -196,6 +196,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-cloudflared](docker-compose-generator/docker-fragments/opt-add-cloudflared.yml) to expose your local server on clearnet painlessly ([see documentation](docs/cloudflare-tunnel.md)).
 * [opt-add-torq](docker-compose-generator/docker-fragments/opt-add-torq.yml) to install [Torq](https://github.com/lncapital/torq) node management application. Requires LND.
 * [opt-add-snapdrop](docker-compose-generator/docker-fragments/opt-add-snapdrop.yml) to install [Snapdrop](https://snapdrop.net/). You can then browse to `/snapdrop` of your server to access it.
+* [opt-add-ltcmweb](docker-compose-generator/docker-fragments/opt-add-ltcmweb.yml) to add the support service for the Litecoin MWEB payment method plugin.
 
 You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).
 
@@ -404,6 +405,7 @@ Note that BTCPayServer developers will not spend excessive time testing your ima
 | traefik | v2.6 | [✔️](https://raw.githubusercontent.com/containous/traefik-library-image/master/scratch/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/containous/traefik-library-image) - [DockerHub](https://hub.docker.com/_/traefik) |
 | chekaz/docker-trezarcoin | 0.13.0 | [✔️](https://raw.githubusercontent.com/ChekaZ/docker/master/trezarcoin/1.2.0/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/ChekaZ/docker) - [DockerHub](https://hub.docker.com/r/chekaz/docker-trezarcoin) |
 | romanornr/docker-viacoin | 0.15.2 | [✔️](https://raw.githubusercontent.com/viacoin/docker-viacoin/master/viacoin/0.15.2/docker-viacoin) | ️❌ | ️❌ | [Github](https://github.com/viacoin/docker-viacoin) - [DockerHub](https://hub.docker.com/r/romanornr/docker-viacoin) |
+| hectorchu1/mwebd | latest | [✔️](https://raw.githubusercontent.com/ltcmweb/btcpayserver-ltcmweb-plugin/main/Dockerfile) | ️[✔️](https://raw.githubusercontent.com/ltcmweb/btcpayserver-ltcmweb-plugin/main/Dockerfile) | ️[✔️](https://raw.githubusercontent.com/ltcmweb/btcpayserver-ltcmweb-plugin/main/Dockerfile) | [Github](https://github.com/ltcmweb/mwebd) - [DockerHub](https://hub.docker.com/r/hectorchu1/mwebd) |
 
 # FAQ
 
