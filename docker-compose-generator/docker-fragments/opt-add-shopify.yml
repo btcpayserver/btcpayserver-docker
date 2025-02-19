@@ -1,0 +1,8 @@
+version: '3'
+services:
+  shopify-app-deployer:
+    image: btcpayserver/shopify-app-deployer:1.0
+    restart: unless-stopped
+    init: true
+    expose:
+      - "5000"
