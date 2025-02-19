@@ -6,3 +6,7 @@ services:
     init: true
     expose:
       - "5000"
+
+  btcpayserver:
+    environment:
+      BTCPAY_SHOPIFY_PLUGIN_DEPLOYER: "http://shopify-app-deployer:32204/"
