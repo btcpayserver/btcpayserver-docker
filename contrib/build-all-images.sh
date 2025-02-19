@@ -576,18 +576,18 @@ cd - && cd ..
 
 
 # Build cloudflared
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2024.8.2/Cloudflared/2024.8.2/linuxamd64.Dockerfile
-DOCKERFILE="Cloudflared/2024.8.2/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2024.8.2/Cloudflared/2024.8.2/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Cloudflared/2024.8.2/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2024.8.2/Cloudflared/2024.8.2/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Cloudflared/2024.8.2/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/cloudflared:2024.8.2"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2024.8.2-3/Cloudflared/2024.8.2/Dockerfile
+DOCKERFILE="Cloudflared/2024.8.2/Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2024.8.2-3/Cloudflared/2024.8.2/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Cloudflared/2024.8.2/Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2024.8.2-3/Cloudflared/2024.8.2/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Cloudflared/2024.8.2/Dockerfile"
+echo "Building btcpayserver/cloudflared:2024.8.2-3"
 git clone https://github.com/btcpayserver/dockerfile-deps cloudflared
 cd cloudflared
-git checkout Cloudflared/2024.8.2
+git checkout Cloudflared/2024.8.2-3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/cloudflared:2024.8.2" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/cloudflared:2024.8.2-3" .
 cd - && cd ..
 
 
