@@ -725,6 +725,8 @@ cd - && cd ..
 # https://raw.githubusercontent.com/ltcmweb/btcpayserver-ltcmweb-plugin/main/Dockerfile
 DOCKERFILE="Dockerfile"
 # https://raw.githubusercontent.com/ltcmweb/btcpayserver-ltcmweb-plugin/main/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/ltcmweb/btcpayserver-ltcmweb-plugin/main/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
 echo "Building hectorchu1/mwebd:latest"
 git clone https://github.com/ltcmweb/btcpayserver-ltcmweb-plugin mwebd
