@@ -301,8 +301,8 @@ namespace DockerFileBuildHelper
                     break;
                 case "mwebd":
                     dockerInfo.DockerFilePath = "Dockerfile";
-                    //dockerInfo.DockerFilePath = "Dockerfile";
-                    //dockerInfo.DockerFilePath = "Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "Dockerfile";
                     dockerInfo.GitLink = "https://github.com/ltcmweb/btcpayserver-ltcmweb-plugin";
                     dockerInfo.GitRef = "main";
                     dockerInfo.SupportedByUs = false;
