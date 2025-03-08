@@ -197,6 +197,7 @@ Available `BTCPAYGEN_ADDITIONAL_FRAGMENTS` currently are:
 * [opt-add-torq](docker-compose-generator/docker-fragments/opt-add-torq.yml) to install [Torq](https://github.com/lncapital/torq) node management application. Requires LND.
 * [opt-add-snapdrop](docker-compose-generator/docker-fragments/opt-add-snapdrop.yml) to install [Snapdrop](https://snapdrop.net/). You can then browse to `/snapdrop` of your server to access it.
 * [opt-add-ltcmweb](docker-compose-generator/docker-fragments/opt-add-ltcmweb.yml) to add the support service for the Litecoin MWEB payment method plugin.
+* [opt-add-shopify](docker-compose-generator/docker-fragments/opt-add-shopify.yml) to install the [Shopify App Deployer](https://github.com/btcpayserver/shopify-app). Used by the [BTCPay Server Shopify plugin](https://github.com/btcpayserver/btcpayserver-shopify-plugin).
 
 You can also create your own [custom fragments](#how-can-i-customize-the-generated-docker-compose-file).
 
