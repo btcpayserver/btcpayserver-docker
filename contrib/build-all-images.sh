@@ -178,18 +178,18 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.6/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.7/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.6/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.7/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.6/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.0.7/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/btcpayserver:2.0.6"
+echo "Building btcpayserver/btcpayserver:2.0.7"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v2.0.6
+git checkout v2.0.7
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:2.0.6" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:2.0.7" .
 cd - && cd ..
 
 
@@ -721,6 +721,18 @@ docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.14.1-alpha
 cd - && cd ..
 
 
+# Build mwebd
+# https://raw.githubusercontent.com/ltcmweb/btcpayserver-ltcmweb-plugin/main/Dockerfile
+DOCKERFILE="Dockerfile"
+echo "Building hectorchu1/mwebd:latest"
+git clone https://github.com/ltcmweb/btcpayserver-ltcmweb-plugin mwebd
+cd mwebd
+git checkout main
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "hectorchu1/mwebd:latest" .
+cd - && cd ..
+
+
 # Build frontend
 # https://raw.githubusercontent.com/mempool/mempool/v2.5.0/docker/frontend/Dockerfile
 DOCKERFILE="docker/frontend/Dockerfile"
@@ -810,6 +822,22 @@ cd pihole
 git checkout 2023.05.2
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "pihole/pihole:2023.05.2" .
+cd - && cd ..
+
+
+# Build shopify-app-deployer
+# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.2/Dockerfile
+DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.2/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.2/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+echo "Building btcpayserver/shopify-app-deployer:1.2"
+git clone https://github.com/btcpayserver/shopify-app shopify-app-deployer
+cd shopify-app-deployer
+git checkout 1.2
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/shopify-app-deployer:1.2" .
 cd - && cd ..
 
 

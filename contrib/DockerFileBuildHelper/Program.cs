@@ -291,6 +291,22 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"dcg-latest";
                     dockerInfo.SupportedByUs = true;
                     break;
+                case "shopify-app-deployer":
+                    dockerInfo.DockerFilePath = "Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = "Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/shopify-app";
+                    dockerInfo.GitRef = image.Tag;
+                    dockerInfo.SupportedByUs = true;
+                    break;
+                case "mwebd":
+                    dockerInfo.DockerFilePath = "Dockerfile";
+                    //dockerInfo.DockerFilePath = "Dockerfile";
+                    //dockerInfo.DockerFilePath = "Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/ltcmweb/btcpayserver-ltcmweb-plugin";
+                    dockerInfo.GitRef = "main";
+                    dockerInfo.SupportedByUs = false;
+                    break;
                 case "tallycoin_connect":
                     dockerInfo.DockerFilePath = "Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"Dockerfile.arm32v7";
