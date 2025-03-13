@@ -2,7 +2,7 @@ version: "3"
 
 services:
   clightning_groestlcoin:
-    image: groestlcoin/lightning:v23.05
+    image: groestlcoin/lightning:v24.08
     container_name: btcpayserver_clightning_groestlcoin
     restart: unless-stopped
     environment:
@@ -13,8 +13,8 @@ services:
       LIGHTNINGD_PORT: 9736
       LIGHTNINGD_EXPLORERURL: "http://nbxplorer:32838/"
       LIGHTNINGD_OPT: |
-        bitcoin-datadir=/etc/groestlcoin
-        bitcoin-rpcconnect=groestlcoind
+        groestlcoin-datadir=/etc/groestlcoin
+        groestlcoin-rpcconnect=groestlcoind
     volumes:
       - "clightning_groestlcoin_datadir:/root/.lightning"
       - "groestlcoin_datadir:/etc/groestlcoin"
