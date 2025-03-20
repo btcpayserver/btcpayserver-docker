@@ -5,6 +5,7 @@ services:
         container_name: pihole
         image: pihole/pihole:2025.03.0
         environment:
+            FTLCONF_dns_reply_host_IPv4: "${PIHOLE_SERVERIP:-127.0.0.1}"
             VIRTUAL_HOST: pi.hole
             VIRTUAL_HOST_NAME: "pihole"
             FTLCONF_dns_listeningMode: 'all'
