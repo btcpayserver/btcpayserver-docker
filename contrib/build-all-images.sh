@@ -814,18 +814,18 @@ cd - && cd ..
 
 
 # Build pihole
-# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/2023.05.2/src/Dockerfile
+# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/2025.03.0/src/Dockerfile
 DOCKERFILE="src/Dockerfile"
-# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/2023.05.2/src/Dockerfile
+# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/2025.03.0/src/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="src/Dockerfile"
-# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/2023.05.2/src/Dockerfile
+# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/2025.03.0/src/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="src/Dockerfile"
-echo "Building pihole/pihole:2023.05.2"
+echo "Building pihole/pihole:2025.03.0"
 git clone https://github.com/pi-hole/docker-pi-hole pihole
 cd pihole
-git checkout 2023.05.2
+git checkout 2025.03.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "pihole/pihole:2023.05.2" .
+docker build -f "$DOCKERFILE" -t "pihole/pihole:2025.03.0" .
 cd - && cd ..
 
 
