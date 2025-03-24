@@ -20,7 +20,8 @@ services:
         whitelist=0.0.0.0/0
         rpcauth=liquid:c8bf1a8961d97f224cb21224aaa8235d$$402f4a8907683d057b8c58a42940b6e54d1638322a42986ae28ebb844e603ae6        
         validatepegin=0
-        fallbackfee=0.000001
+        acceptdiscountct=1
+        creatediscountct=1
     expose:
       - "43782"
       - "39388"
