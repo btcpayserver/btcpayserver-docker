@@ -29,4 +29,3 @@ volumes:
   tallycoin_connect_datadir:
 required:
   - "bitcoin-lnd"
-  - "opt-lnd-grpc"
