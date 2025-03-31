@@ -46,18 +46,18 @@ cd - && cd ..
 
 
 # Build lightning
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v24.08.2/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v25.02/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v24.08.2/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v25.02/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v24.08.2/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v25.02/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/lightning:v24.08.2"
+echo "Building btcpayserver/lightning:v25.02"
 git clone https://github.com/btcpayserver/lightning lightning
 cd lightning
-git checkout basedon-v24.08.2
+git checkout basedon-v25.02
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v24.08.2" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v25.02" .
 cd - && cd ..
 
 
