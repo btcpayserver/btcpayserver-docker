@@ -23,7 +23,6 @@ services:
       - monerod
   btcpayserver:
     environment:
-      BTCPAY_CHAINS: "xmr"
       BTCPAY_XMR_DAEMON_URI: http://monerod:18081
       BTCPAY_XMR_WALLET_DAEMON_URI: http://monerod_wallet:18082
       BTCPAY_XMR_WALLET_DAEMON_WALLETDIR: /root/xmr_wallet
