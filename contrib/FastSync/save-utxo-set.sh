@@ -33,7 +33,7 @@ docker-compose -f $BTCPAY_DOCKER_COMPOSE run --rm -e "NBITCOIN_NETWORK=$NBITCOIN
 btcpay-up.sh
 
 echo "Calculating the hash of the tar file..."
-TAR_FILE="$(echo /var/lib/docker/volumes/generated_bitcoin_datadir/_data/utxo-snapshot-*)"
+TAR_FILE="$(echo /var/lib/docker/volumes/generated_bitcoin_datadir/_data/utxo-snapshot-*.tar.gz)"
 echo "Tar file of size $(ls -s -h $TAR_FILE)"
 TAR_FILE_HASH="$(sha256sum "$TAR_FILE" | cut -d " " -f 1)"
 
@@ -46,7 +46,7 @@ if [[ "$AZURE_STORAGE_CONNECTION_STRING" ]]; then
     az storage blob upload -f "$TAR_FILE" \
                         -c "$AZURE_STORAGE_CONTAINER" \
                         -n "$BLOB_NAME" \
-                        --content-type "application/x-tar"
+                        --content-type "application/gzip"
 
     az storage blob metadata update --container-name "$AZURE_STORAGE_CONTAINER" --name "$BLOB_NAME" --metadata "sha256=$TAR_FILE_HASH"
 

@@ -23,13 +23,13 @@ if [[ $NBITCOIN_NETWORK == "testnet" ]]; then
 fi
 
 cd /data
-TAR_NAME="utxo-snapshot-bitcoin-$NBITCOIN_NETWORK-$PRUNED_HEIGHT.tar"
+TAR_NAME="utxo-snapshot-bitcoin-$NBITCOIN_NETWORK-$PRUNED_HEIGHT.tar.gz"
 echo "Creating $TAR_NAME..."
 echo "Adding $NETWORK_DIRECTORY/blocks/*"
 cd "$NETWORK_DIRECTORY"
-tar -cvf "$TAR_NAME" "blocks/"
+tar -czvf "$TAR_NAME" "blocks/"
 echo "Adding $NETWORK_DIRECTORY/chainstate/*"
-tar -rvf "$TAR_NAME" "chainstate/"
+tar -rzvf "$TAR_NAME" "chainstate/"
 [[ $NBITCOIN_NETWORK == "mainnet" ]] || mv "$TAR_NAME" "/data/$TAR_NAME"
 echo "TAR file created to /data/$TAR_NAME"
 exit

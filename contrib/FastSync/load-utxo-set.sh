@@ -96,11 +96,33 @@ NETWORK_DIRECTORY="$BITCOIN_DATA_DIR/$NETWORK_DIRECTORY"
 [ -d "$NETWORK_DIRECTORY/chainstate" ] && rm -rf "$NETWORK_DIRECTORY/chainstate"
 [ ! -d "$NETWORK_DIRECTORY" ] && mkdir "$NETWORK_DIRECTORY"
 
-echo "Extracting..."
-if ! tar -xf "$TAR_FILE" -C "$BITCOIN_DATA_DIR"; then
-  echo "Failed extracting, did you turned bitcoin off? (btcpay-down.sh)"
-  exit 1
+# Detect if snapshot is compressed based on URL
+if [[ $TAR_NAME == *.tar.gz ]]; then
+    COMPRESSED=true
+    TAR_SUFFIX=".tar.gz"
+elif [[ $TAR_NAME == *.tar ]]; then
+    COMPRESSED=false
+    TAR_SUFFIX=".tar"
+else
+    echo "Error: Unsupported snapshot format in URL (expected .tar or .tar.gz suffix)"
+    exit 1
 fi
+
+echo "Detected snapshot format: ${TAR_SUFFIX} (Compressed: ${COMPRESSED})"
+
+echo "Extracting..."
+if $COMPRESSED; then
+    if ! tar -xzvf "$TAR_FILE" -C "$BITCOIN_DATA_DIR"; then
+        echo "Error: Failed to extract compressed snapshot from $TAR_FILE, did you turned bitcoin off? (btcpay-down.sh)"
+        exit 1
+    fi
+else
+    if ! tar -xvf "$TAR_FILE" -C "$BITCOIN_DATA_DIR"; then
+        echo "Error: Failed to extract uncompressed snapshot from $TAR_FILE, did you turned bitcoin off? (btcpay-down.sh)"
+        exit 1
+    fi
+fi
+
 $IS_DOWNLOADED && rm -f "$TAR_FILE"
 
 BTCPAY_DATA_DIR="$(docker volume inspect generated_btcpay_datadir -f "{{.Mountpoint}}" 2>/dev/null)" || \
