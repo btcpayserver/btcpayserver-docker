@@ -7,5 +7,6 @@
 		public string CLightningFragment { get; set; }
 		public string LNDFragment { get; set; }
 		public string EclairFragment { get; set; }
+		public string PhoenixdFragment { get; set; }
 	}
 }
