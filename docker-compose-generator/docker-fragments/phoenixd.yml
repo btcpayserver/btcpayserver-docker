@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  phoenixd:
+    image: acinq/phoenixd:0.5.1
+    container_name: phoenixd
+    restart: unless-stopped
+    networks:
+      - default
+    command: ["--chain=${NBITCOIN_NETWORK:-regtest}"]
+    expose:
+      - "9740"
+    depends_on:
+      - btcpayserver
+    volumes:
+      - "phoenixd_datadir:/phoenix"
+
+volumes:
+  phoenixd_datadir:
+
+exclusive:
+  - lightning
