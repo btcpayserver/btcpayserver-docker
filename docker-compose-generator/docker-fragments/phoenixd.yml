@@ -13,14 +13,12 @@ services:
     ]
     expose:
       - "9740"
-    depends_on:
-      - btcpayserver
     volumes:
       - "phoenixd_datadir:/phoenix/.phoenix"
 
   btcpayserver:
     environment:
-      BTCPAY_BTCLIGHTNING: "type=phoenixd;server=http://phoenixd:8080;password=ca2e61de4dbab98a0c0ed9a8713ec95b"
+      BTCPAY_BTCLIGHTNING: "type=phoenixd;server=http://phoenixd:9740;password=ca2e61de4dbab98a0c0ed9a8713ec95b"
     volumes:
       - "phoenixd_datadir:/etc/phoenix"
     links:
