@@ -7,13 +7,24 @@ services:
     restart: unless-stopped
     networks:
       - default
-    command: ["--chain=${NBITCOIN_NETWORK:-regtest}"]
+    command: [
+      "--chain=${NBITCOIN_NETWORK:-regtest}",
+      "--http-password=ca2e61de4dbab98a0c0ed9a8713ec95b"
+    ]
     expose:
       - "9740"
     depends_on:
       - btcpayserver
     volumes:
       - "phoenixd_datadir:/phoenix"
+
+  btcpayserver:
+    environment:
+      BTCPAY_BTCLIGHTNING: "type=phoenixd;server=http://phoenixd:8080;password=ca2e61de4dbab98a0c0ed9a8713ec95b"
+    volumes:
+      - "phoenixd_datadir:/etc/phoenix"
+    links:
+      - phoenixd
 
 volumes:
   phoenixd_datadir:
