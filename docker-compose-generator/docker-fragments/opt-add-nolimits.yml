@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  bitcoind:
+    environment:
+      BITCOIN_EXTRA_ARGS: |
+        datacarriersize=9999999
+        minrelaytxfee=0
