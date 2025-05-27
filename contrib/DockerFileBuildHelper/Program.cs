@@ -422,6 +422,14 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/ChekaZ/docker";
                     dockerInfo.GitRef = "master";
                     break;
+                case "phoenixd":
+                    dockerInfo.DockerFilePath = ".docker/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = ".docker/Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = ".docker/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/ACINQ/phoenixd";
+                    dockerInfo.GitRef = $"v{image.Tag}";
+                    dockerInfo.SupportedByUs = true;
+                    break;
                 case "lnd":
                     dockerInfo.DockerFilePath = "linuxamd64.Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = "linuxarm32v7.Dockerfile";
@@ -452,6 +460,17 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePathARM64v8 = $"Bitcoin/{tagNoRevision}/linuxarm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
                     dockerInfo.GitRef = $"Bitcoin/{image.Tag}";
+                    dockerInfo.SupportedByUs = true;
+                    break;
+                }
+                case "bitcoinknots":
+                {
+                    var tagNoRevision = image.Tag.Split('-').First();
+                    dockerInfo.DockerFilePath = $"BitcoinKnots/{tagNoRevision}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"BitcoinKnots/{tagNoRevision}/linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"BitcoinKnots/{tagNoRevision}/linuxarm64v8.Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
+                    dockerInfo.GitRef = $"BitcoinKnots/{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
                 }

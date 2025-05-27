@@ -153,6 +153,22 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoin:27.1" .
 cd - && cd ..
 
 
+# Build bitcoinknots
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/BitcoinKnots/28.1/BitcoinKnots/28.1/linuxamd64.Dockerfile
+DOCKERFILE="BitcoinKnots/28.1/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/BitcoinKnots/28.1/BitcoinKnots/28.1/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="BitcoinKnots/28.1/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/BitcoinKnots/28.1/BitcoinKnots/28.1/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="BitcoinKnots/28.1/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/bitcoinknots:28.1"
+git clone https://github.com/btcpayserver/dockerfile-deps bitcoinknots
+cd bitcoinknots
+git checkout BitcoinKnots/28.1
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoinknots:28.1" .
+cd - && cd ..
+
+
 # Build docker-bitcoinplus
 # https://raw.githubusercontent.com/ChekaZ/docker/master/bitcoinplus/2.7.0/Dockerfile
 DOCKERFILE="bitcoinplus/2.7.0/Dockerfile"
@@ -1136,6 +1152,22 @@ cd zammad-docker-compose
 git checkout ff20084ce2829486076e9781fe27407ca6cc09bb
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "zammad/zammad-docker-compose:zammad-3.4.0-4" .
+cd - && cd ..
+
+
+# Build phoenixd
+# https://raw.githubusercontent.com/ACINQ/phoenixd/v0.6.0/.docker/Dockerfile
+DOCKERFILE=".docker/Dockerfile"
+# https://raw.githubusercontent.com/ACINQ/phoenixd/v0.6.0/.docker/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE=".docker/Dockerfile"
+# https://raw.githubusercontent.com/ACINQ/phoenixd/v0.6.0/.docker/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE=".docker/Dockerfile"
+echo "Building acinq/phoenixd:0.6.0"
+git clone https://github.com/ACINQ/phoenixd phoenixd
+cd phoenixd
+git checkout v0.6.0
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "acinq/phoenixd:0.6.0" .
 cd - && cd ..
 
 
