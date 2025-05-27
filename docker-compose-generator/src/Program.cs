@@ -81,6 +81,10 @@ namespace DockerGenerator
 				{
 					fragments.Add(crypto.EclairFragment);
 				}
+				if (composition.SelectedLN == "phoenixd" && crypto.PhoenixdFragment != null)
+				{
+					fragments.Add(crypto.PhoenixdFragment);
+				}
 			}
 
 			foreach (var fragment in composition.AdditionalFragments)

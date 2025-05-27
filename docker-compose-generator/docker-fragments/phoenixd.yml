@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  phoenixd:
+    image: acinq/phoenixd:0.6.0
+    container_name: phoenixd
+    restart: unless-stopped
+    networks:
+      - default
+    command: [
+      "--chain=${NBITCOIN_NETWORK:-regtest}",
+      "--http-password=ca2e61de4dbab98a0c0ed9a8713ec95b"
+    ]
+    expose:
+      - "9740"
+    volumes:
+      - "phoenixd_datadir:/phoenix/.phoenix"
+
+  btcpayserver:
+    environment:
+      BTCPAY_BTCLIGHTNING: "type=phoenixd;server=http://phoenixd:9740;password=ca2e61de4dbab98a0c0ed9a8713ec95b"
+    volumes:
+      - "phoenixd_datadir:/etc/phoenix"
+    links:
+      - phoenixd
+
+volumes:
+  phoenixd_datadir:
+
+exclusive:
+  - lightning
