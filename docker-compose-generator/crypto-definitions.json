@@ -94,5 +94,13 @@
     "LNDFragment": null,
     "EclairFragment": null,
     "PhoenixdFragment": null
+  },
+  {
+    "Crypto": "zec",
+    "CryptoFragment": "zcash",
+    "CLightningFragment": null,
+    "LNDFragment": null,
+    "EclairFragment": null,
+    "PhoenixdFragment": null
   }
 ]
