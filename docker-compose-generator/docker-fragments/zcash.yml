@@ -3,7 +3,7 @@ version: "3"
 services:
   zcash_walletd:
     restart: unless-stopped
-    image: 1337bytes/zcash-walletd:latest
+    image: 1337bytes/zcash-walletd:0.0.2-alpha
     environment:
       NOTIFY_TX_URL: http://btcpayserver:49392/zcashlikedaemoncallback/tx?cryptoCode=zec&hash=
     expose:
@@ -12,8 +12,8 @@ services:
     - "zec_wallet:/data"
   btcpayserver:
     environment:
-      BTCPAY_ZEC_DAEMON_URI: http://zcash_walletd:18090
-      BTCPAY_ZEC_WALLET_DAEMON_URI: http://zcash_walletd:18090
+      BTCPAY_ZEC_DAEMON_URI: http://zcash_walletd:8000
+      BTCPAY_ZEC_WALLET_DAEMON_URI: http://zcash_walletd:8000
       BTCPAY_ZEC_WALLET_DAEMON_WALLETDIR: /root/zec_wallet
     volumes:
       - "zec_wallet:/root/zec_wallet"
