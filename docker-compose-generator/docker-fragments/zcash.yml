@@ -6,6 +6,8 @@ services:
     image: 1337bytes/zcash-walletd:0.0.2-alpha
     environment:
       NOTIFY_TX_URL: http://btcpayserver:49392/zcashlikedaemoncallback/tx?cryptoCode=zec&hash=
+      LWD_URL: https://lwd1.zcash-infra.com:9067
+      ROCKET_DB_PATH: /data/zec-wallet.db
     expose:
       - "8000"
     volumes:

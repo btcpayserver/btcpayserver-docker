@@ -1,0 +1,63 @@
+configs:
+  lwd_config:
+    file: ./zcash.conf
+services:
+  zcash_walletd:
+    environment:
+      LWD_URL: http://lightwalletd:9067/zcashlikedaemoncallback/tx?cryptoCode=zec&hash=
+  zebra:
+    container_name: zebra
+    image: zfnd/zebra
+    platform: linux/amd64
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          cpus: "4"
+          memory: 16G
+    volumes:
+      - zebrad-cache:/home/zebra/.cache/zebra
+    tty: true
+    environment:
+      - ZEBRA_RPC_PORT=8232
+      - ENABLE_COOKIE_AUTH=false
+    ports:
+      - "8232:8232"
+  lightwalletd:
+    image: electriccoinco/lightwalletd
+    platform: linux/amd64
+    depends_on:
+      zebra:
+        condition: service_started
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          cpus: "4"
+          memory: 16G
+    environment:
+      - LWD_GRPC_PORT=9067
+      - LWD_HTTP_PORT=9068
+    configs:
+      - source: lwd_config
+        target: /etc/lightwalletd/zcash.conf
+    volumes:
+      - lwd-cache:/var/lib/lightwalletd/db
+    #! This setup with `--no-tls-very-insecure` is only for testing purposes.
+    #! For production environments, follow the guidelines here:
+    #! https://github.com/zcash/lightwalletd#production-usage
+    command: >
+      --no-tls-very-insecure
+      --grpc-bind-addr=0.0.0.0:9067
+      --http-bind-addr=0.0.0.0:9068
+      --zcash-conf-path=/etc/lightwalletd/zcash.conf
+      --data-dir=/var/lib/lightwalletd/db
+      --log-file=/dev/stdout
+      --log-level=7
+volumes:
+  zebrad-cache:
+    driver: local
+  lwd-cache:
+    driver: local
+required:
+    - "zcash"
