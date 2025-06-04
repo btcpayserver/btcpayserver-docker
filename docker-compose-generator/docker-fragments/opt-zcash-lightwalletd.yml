@@ -1,6 +1,3 @@
-configs:
-  lwd_config:
-    file: ./zcash.conf
 services:
   zcash_walletd:
     environment:
@@ -38,11 +35,9 @@ services:
     environment:
       - LWD_GRPC_PORT=9067
       - LWD_HTTP_PORT=9068
-    configs:
-      - source: lwd_config
-        target: /etc/lightwalletd/zcash.conf
     volumes:
       - lwd-cache:/var/lib/lightwalletd/db
+      - ./zcash.conf:/etc/lightwalletd/zcash.conf
     #! This setup with `--no-tls-very-insecure` is only for testing purposes.
     #! For production environments, follow the guidelines here:
     #! https://github.com/zcash/lightwalletd#production-usage
