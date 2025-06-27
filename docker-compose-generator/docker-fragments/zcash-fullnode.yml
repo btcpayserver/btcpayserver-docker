@@ -1,7 +1,24 @@
 services:
   zcash_walletd:
+    restart: unless-stopped
+    image: 1337bytes/zcash-walletd:0.0.2
     environment:
-      LWD_URL: http://lightwalletd:9067/zcashlikedaemoncallback/tx?cryptoCode=zec&hash=
+      NOTIFY_TX_URL: http://btcpayserver:49392/zcashlikedaemoncallback/tx?cryptoCode=zec&hash=
+      ROCKET_DB_PATH: /data/zec-wallet.db
+      LWD_URL: http://lightwalletd:9067
+    expose:
+      - "8000"
+    volumes:
+    - "zec_wallet:/data"
+
+  btcpayserver:
+    environment:
+      BTCPAY_ZEC_DAEMON_URI: http://zcash_walletd:8000
+      BTCPAY_ZEC_WALLET_DAEMON_URI: http://zcash_walletd:8000
+      BTCPAY_ZEC_WALLET_DAEMON_WALLETDIR: /root/zec_wallet
+    volumes:
+      - "zec_wallet:/root/zec_wallet"
+
   zebra:
     container_name: zebra
     image: zfnd/zebra
@@ -20,6 +37,9 @@ services:
       - ENABLE_COOKIE_AUTH=false
     ports:
       - "8232:8232"
+    #networks:
+    #  - generated_default
+
   lightwalletd:
     image: electriccoinco/lightwalletd
     platform: linux/amd64
@@ -35,9 +55,11 @@ services:
     environment:
       - LWD_GRPC_PORT=9067
       - LWD_HTTP_PORT=9068
+    configs:
+      - source: lwd_config
+        target: /etc/lightwalletd/zcash.conf
     volumes:
       - lwd-cache:/var/lib/lightwalletd/db
-      - ./zcash.conf:/etc/lightwalletd/zcash.conf
     #! This setup with `--no-tls-very-insecure` is only for testing purposes.
     #! For production environments, follow the guidelines here:
     #! https://github.com/zcash/lightwalletd#production-usage
@@ -49,10 +71,22 @@ services:
       --data-dir=/var/lib/lightwalletd/db
       --log-file=/dev/stdout
       --log-level=7
+    ports:
+      - "127.0.0.1:9067:9067" # gRPC
+      - "127.0.0.1:9068:9068" # HTTP
+
+configs:
+  lwd_config:
+    file: ./zcash.conf
+
 volumes:
+  zec_wallet:
+  zec_data:
   zebrad-cache:
     driver: local
+
   lwd-cache:
     driver: local
-required:
-    - "zcash"
+
+exclusive:
+  - zcash-node

@@ -22,3 +22,6 @@ services:
 volumes:
   zec_wallet:
   zec_data:
+
+exclusive:
+  - zcash-node
