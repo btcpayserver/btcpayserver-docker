@@ -142,6 +142,7 @@ namespace DockerGenerator
 
 			var services = new List<KeyValuePair<YamlNode, YamlNode>>();
 			var volumes = new List<KeyValuePair<YamlNode, YamlNode>>();
+			var configs = new List<KeyValuePair<YamlNode, YamlNode>>();
 			var networks = new List<KeyValuePair<YamlNode, YamlNode>>();
 			foreach (var o in processedFragments.Select(f => (f, ParseDocument(f))).ToList())
 			{
@@ -155,6 +156,10 @@ namespace DockerGenerator
 				{
 					volumes.AddRange(fragmentVolumesRoot.Children);
 				}
+				if (doc.Children.ContainsKey("configs") && doc.Children["configs"] is YamlMappingNode fragmentConfigsRoot)
+				{
+					volumes.AddRange(fragmentConfigsRoot.Children);
+				}
 				if (doc.Children.ContainsKey("networks") && doc.Children["networks"] is YamlMappingNode fragmentNetworksRoot)
 				{
 					networks.AddRange(fragmentNetworksRoot.Children);
@@ -165,6 +170,7 @@ namespace DockerGenerator
 			output.Add("version", new YamlScalarNode("3") { Style = YamlDotNet.Core.ScalarStyle.DoubleQuoted });
 			output.Add("services", new YamlMappingNode(Merge(services)));
 			output.Add("volumes", new YamlMappingNode(volumes));
+			output.Add("configs", new YamlMappingNode(configs));
 			output.Add("networks", new YamlMappingNode(networks));
 			PostProcess(output);
 
