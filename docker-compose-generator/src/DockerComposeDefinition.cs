@@ -158,7 +158,7 @@ namespace DockerGenerator
 				}
 				if (doc.Children.ContainsKey("configs") && doc.Children["configs"] is YamlMappingNode fragmentConfigsRoot)
 				{
-					volumes.AddRange(fragmentConfigsRoot.Children);
+					configs.AddRange(fragmentConfigsRoot.Children);
 				}
 				if (doc.Children.ContainsKey("networks") && doc.Children["networks"] is YamlMappingNode fragmentNetworksRoot)
 				{
