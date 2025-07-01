@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  zcash_walletd:
+    restart: unless-stopped
+    image: 1337bytes/zcash-walletd:0.0.2
+    environment:
+      NOTIFY_TX_URL: http://btcpayserver:49392/zcashlikedaemoncallback/tx?cryptoCode=zec&hash=
+      ROCKET_DB_PATH: /data/zec-wallet.db
+      LWD_URL: https://zec.rocks:443
+    expose:
+      - "8000"
+    volumes:
+    - "zec_wallet:/data"
+  btcpayserver:
+    environment:
+      BTCPAY_ZEC_DAEMON_URI: http://zcash_walletd:8000
+      BTCPAY_ZEC_WALLET_DAEMON_URI: http://zcash_walletd:8000
+      BTCPAY_ZEC_WALLET_DAEMON_WALLETDIR: /root/zec_wallet
+    volumes:
+      - "zec_wallet:/root/zec_wallet"
+volumes:
+  zec_wallet:
+  zec_data:
+
+exclusive:
+  - zcash-node
