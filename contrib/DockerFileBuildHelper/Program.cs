@@ -428,7 +428,25 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePathARM64v8 = ".docker/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/ACINQ/phoenixd";
                     dockerInfo.GitRef = $"v{image.Tag}";
-                    dockerInfo.SupportedByUs = true;
+                    dockerInfo.SupportedByUs = false;
+                    break;
+                case "lightwalletd":
+                    dockerInfo.DockerFilePath = "Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/zcash/lightwalletd";
+                    dockerInfo.GitRef = $"master";
+                    dockerInfo.SupportedByUs = false;
+                    break;
+                case "zebra":
+                    dockerInfo.DockerFilePath = "docker/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/ZcashFoundation/zebra";
+                    dockerInfo.GitRef = $"main";
+                    dockerInfo.SupportedByUs = false;
+                    break;
+                case "zcash-walletd":
+                    dockerInfo.DockerFilePath = "docker/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/hhanh00/zcash-walletd";
+                    dockerInfo.GitRef = $"main";
+                    dockerInfo.SupportedByUs = false;
                     break;
                 case "lnd":
                     dockerInfo.DockerFilePath = "linuxamd64.Dockerfile";
