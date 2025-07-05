@@ -444,8 +444,8 @@ namespace DockerFileBuildHelper
                     break;
                 case "zcash-walletd":
                     dockerInfo.DockerFilePath = "docker/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/hhanh00/zcash-walletd";
-                    dockerInfo.GitRef = $"main";
+                    dockerInfo.GitLink = "https://github.com/elemental-pay/zcash-walletd";
+                    dockerInfo.GitRef = $"feat/data-config";
                     dockerInfo.SupportedByUs = false;
                     break;
                 case "lnd":
