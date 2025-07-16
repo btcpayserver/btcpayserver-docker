@@ -46,18 +46,18 @@ cd - && cd ..
 
 
 # Build lightning
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v25.02/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v25.05/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v25.02/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v25.05/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v25.02/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lightning/basedon-v25.05/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/lightning:v25.02"
+echo "Building btcpayserver/lightning:v25.05"
 git clone https://github.com/btcpayserver/lightning lightning
 cd lightning
-git checkout basedon-v25.02
+git checkout basedon-v25.05
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v25.02" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v25.05" .
 cd - && cd ..
 
 
@@ -1224,12 +1224,12 @@ cd - && cd ..
 
 
 # Build zcash-walletd
-# https://raw.githubusercontent.com/hhanh00/zcash-walletd/main/docker/Dockerfile
+# https://raw.githubusercontent.com/elemental-pay/zcash-walletd/feat/data-config/docker/Dockerfile
 DOCKERFILE="docker/Dockerfile"
 echo "Building 1337bytes/zcash-walletd:0.0.2"
-git clone https://github.com/hhanh00/zcash-walletd zcash-walletd
+git clone https://github.com/elemental-pay/zcash-walletd zcash-walletd
 cd zcash-walletd
-git checkout main
+git checkout feat/data-config
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "1337bytes/zcash-walletd:0.0.2" .
 cd - && cd ..
@@ -1260,12 +1260,12 @@ cd - && cd ..
 
 
 # Build zcash-walletd
-# https://raw.githubusercontent.com/hhanh00/zcash-walletd/main/docker/Dockerfile
+# https://raw.githubusercontent.com/elemental-pay/zcash-walletd/feat/data-config/docker/Dockerfile
 DOCKERFILE="docker/Dockerfile"
 echo "Building 1337bytes/zcash-walletd:0.0.2"
-git clone https://github.com/hhanh00/zcash-walletd zcash-walletd
+git clone https://github.com/elemental-pay/zcash-walletd zcash-walletd
 cd zcash-walletd
-git checkout main
+git checkout feat/data-config
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "1337bytes/zcash-walletd:0.0.2" .
 cd - && cd ..
