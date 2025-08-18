@@ -9,7 +9,7 @@ services:
     expose:
       - "18081"
     volumes:
-      - "xmr_data:/home/monero/.bitmonero"
+      - "xmr_data:/data"
   monerod_wallet:
     restart: unless-stopped
     container_name: btcpayserver_monero_wallet
