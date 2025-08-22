@@ -37,6 +37,7 @@ services:
       - "8080"
       - "8081"
       - "9735"
+      - "10009"
     volumes:
       - "lnd_bitcoin_datadir:/data"
       - "lndloop_bitcoin_datadir:/root/.loop/${NBITCOIN_NETWORK:-regtest}"
