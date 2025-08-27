@@ -6,7 +6,7 @@ services:
     volumes:
       - "lnd_bitcoin_thub_datadir:/etc/lnd_bitcoin_thub_datadir"
   bitcoin_thub:
-    image: apotdevin/thunderhub:base-v0.13.32@sha256:73e1ab304c23a0d3406b2e8bddd018bac19c7b6fb61e5e4383870e3dd9e133fc
+    image: apotdevin/thunderhub:base-v0.14.2@sha256:c72899b789b7ff7c9554e57ed029fd5c5852cca4dbfe496da41df5a75c682353
     container_name: generated_bitcoin_thub_1
     restart: unless-stopped
     stop_signal: SIGKILL
