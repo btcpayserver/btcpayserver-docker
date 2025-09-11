@@ -127,6 +127,8 @@ volumes:
   lndloop_bitcoin_datadir:
   lnd_bitcoin_rtl_datadir:
 
+recommended:
+  - "opt-lnd-grpc"
 required:
   - "opt-add-zmq"
 exclusive:
