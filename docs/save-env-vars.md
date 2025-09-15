@@ -33,6 +33,33 @@ export BTCPAY_ENABLE_SSH=true
 
 exit
 ```
+
+### Updating
+SSH into the server, log in as root and navigate to the `btcpayserver-docker` folder.
+```bash
+# Login as root
+sudo su -
+
+# Navigate to directory
+cd BTCPayServer/btcpayserver-docker/
+
+# export ALL environment variables fresh because they didn't stick from the first time.
+export BTCPAY_HOST="btcpay.EXAMPLE.com"
+export NBITCOIN_NETWORK="mainnet"
+export BTCPAYGEN_CRYPTO1="btc"
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage-s"
+export BTCPAYGEN_REVERSEPROXY="nginx"
+export BTCPAYGEN_LIGHTNING="clightning"
+export BTCPAY_ENABLE_SSH=true
+[[ "$REVERSEPROXY_DEFAULT_HOST" ]] && REVERSEPROXY_DEFAULT_HOST="$BTCPAY_HOST"
+export CLOUDFLARE_TUNNEL_TOKEN="<YOUR_TOKEN_HERE>"
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-cloudflared"
+export BTCPAYGEN_EXCLUDE_FRAGMENTS="$BTCPAYGEN_EXCLUDE_FRAGMENTS;nginx-https"
+
+# build again
+. ./btcpay-setup.sh -i
+```
+
 ## Script Solution
 Ours will look like this:
 
@@ -74,7 +101,7 @@ source ./btcpay.cust-env.sh
 . ./btcpay-setup.sh -i
 ```
 
-## Updating the server
+### Updating with the script
 
 So you logged out after building your very own BTCPay server implementation. 
 Things are going smoothly but now you find that you need to update the configuration to add support for a feature you hadn't originally implemented.
