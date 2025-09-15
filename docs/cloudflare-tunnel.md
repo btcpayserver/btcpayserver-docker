@@ -45,13 +45,16 @@ First, we are going to create the tunnel on Cloudflare.
 
 ![BTCPay Server Cloudflare Tunnel](./img/btcpayexposecloudflare5.jpg)
 
-8. In the SSH section of your server, add Cloudflare tunnel by running the following script. (replace `<YOUR_TOKEN_HERE>` with what you copied in step `5.`, and also replace `<YOUR_DOMAIN_HERE>` with the domain you entered in steps `7.`)
+8. Log in to your server via SSH, login as root using `sudo su -` and change directory into `/path/to/btcpayserver-docker/`. Add Cloudflare tunnel by running the following script by pasting and running each line in order. (Replace `<YOUR_TOKEN_HERE>` with what you copied in step `5.`, and also replace `<YOUR_DOMAIN_HERE>` with the domain you entered in step `7.`).
+
+Reminder: if you have logged out since originally building the server, you need to load ALL environment variables that your server is using before running `btcpay-setup.sh`.
+See [here](./docs/save-env-vars.md) for more details.
 ```bash
-BTCPAY_HOST="<YOUR_DOMAIN_HERE>"
+export BTCPAY_HOST="<YOUR_DOMAIN_HERE>"
 [[ "$REVERSEPROXY_DEFAULT_HOST" ]] && REVERSEPROXY_DEFAULT_HOST="$BTCPAY_HOST"
-CLOUDFLARE_TUNNEL_TOKEN="<YOUR_TOKEN_HERE>"
-BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-cloudflared"
-BTCPAYGEN_EXCLUDE_FRAGMENTS="$BTCPAYGEN_EXCLUDE_FRAGMENTS;nginx-https"
+export CLOUDFLARE_TUNNEL_TOKEN="<YOUR_TOKEN_HERE>"
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-cloudflared"
+export BTCPAYGEN_EXCLUDE_FRAGMENTS="$BTCPAYGEN_EXCLUDE_FRAGMENTS;nginx-https"
 . btcpay-setup.sh -i
 ```
 
@@ -61,6 +64,10 @@ Now you should be able to access your server from the internet! (If you get an N
 
 In [cloudflare dashboard](https://dash.cloudflare.com), navigate to your websites, go to `Edge Certificates`, and check `Always Use HTTPS`. This will make sure that any request to your website uses HTTPS.
 ![](./img/Cloudflare-Always-Https.png)
+
+## If using a script to save/load environment variables
+
+Add/update any environment variables you would export in step `8.` to the file you created using this [guide](./docs/save-env-vars.md)
 
 ## Known error
 
