@@ -45,10 +45,8 @@ First, we are going to create the tunnel on Cloudflare.
 
 ![BTCPay Server Cloudflare Tunnel](./img/btcpayexposecloudflare5.jpg)
 
-8. Log in to your server via SSH, login as root using `sudo su -` and change directory into `/path/to/btcpayserver-docker/`. Add Cloudflare tunnel by running the following script by pasting and running each line in order. (Replace `<YOUR_TOKEN_HERE>` with what you copied in step `5.`, and also replace `<YOUR_DOMAIN_HERE>` with the domain you entered in step `7.`).
+8. Log in to your server via SSH, login as root and navigate to `path/to/btcpayserver-docker/`. Add Cloudflare tunnel by running the following script. (Replace `<YOUR_TOKEN_HERE>` with what you copied in step `5.`, and also replace `<YOUR_DOMAIN_HERE>` with the domain you entered in step `7.`). If using [this guide](./docs/save-env-vars.md), remember to update script.
 
-Reminder: if you have logged out since originally building the server, you need to load ALL environment variables that your server is using before running `btcpay-setup.sh`.
-See [here](./docs/save-env-vars.md) for more details.
 ```bash
 export BTCPAY_HOST="<YOUR_DOMAIN_HERE>"
 [[ "$REVERSEPROXY_DEFAULT_HOST" ]] && REVERSEPROXY_DEFAULT_HOST="$BTCPAY_HOST"
@@ -64,10 +62,6 @@ Now you should be able to access your server from the internet! (If you get an N
 
 In [cloudflare dashboard](https://dash.cloudflare.com), navigate to your websites, go to `Edge Certificates`, and check `Always Use HTTPS`. This will make sure that any request to your website uses HTTPS.
 ![](./img/Cloudflare-Always-Https.png)
-
-## If using a script to save/load environment variables
-
-Add/update any environment variables you would export in step `8.` to the file you created using this [guide](./docs/save-env-vars.md)
 
 ## Known error
 
