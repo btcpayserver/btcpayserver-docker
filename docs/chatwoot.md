@@ -16,6 +16,7 @@ cat >> Generated/chatwoot-config.env <<EOL
 EOL
 ```
 3. Add chatwoot as an option to your BTCPay deployment and set the host to use (point DNS to server as well)
+   *Note: if using a script to save your environment variables, save them to the script - [guide here](./docs/save-env-vars.md)
 
 ```bash
 CHATWOOT_HOST="chatwoot.xpayserver.com"
@@ -23,7 +24,7 @@ BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-chatwoot
 . btcpay-setup.sh -i
 
 ```
-4. Wait for BTPay to be online and then create the database for chatwoot
+4. Wait for BTCPay to be online and then create the database for chatwoot
 
 ```bash
 docker exec -ti chatwoot sh -c "export DISABLE_DATABASE_ENVIRONMENT_CHECK=1 && bundle exec rails db:reset"
