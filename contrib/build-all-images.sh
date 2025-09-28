@@ -661,7 +661,7 @@ DOCKERFILE="Dockerfile"
 echo "Building fireflyiii/core:latest"
 git clone https://dev.azure.com/Firefly-III/_git/MainImage core
 cd core
-git checkout 
+git checkout
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "fireflyiii/core:latest" .
 cd - && cd ..
@@ -1257,17 +1257,3 @@ git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "electriccoinco/lightwalletd:latest" .
 cd - && cd ..
-
-
-# Build zcash-walletd
-# https://raw.githubusercontent.com/elemental-pay/zcash-walletd/feat/data-config/docker/Dockerfile
-DOCKERFILE="docker/Dockerfile"
-echo "Building 1337bytes/zcash-walletd:0.0.2"
-git clone https://github.com/elemental-pay/zcash-walletd zcash-walletd
-cd zcash-walletd
-git checkout feat/data-config
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "1337bytes/zcash-walletd:0.0.2" .
-cd - && cd ..
-
-
