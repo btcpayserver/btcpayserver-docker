@@ -1,10 +1,11 @@
 services:
   zcash_walletd:
     restart: unless-stopped
-    image: 1337bytes/zcash-walletd:0.0.2
+    image: hhanh00/zcash-walletd:latest
     environment:
       NOTIFY_TX_URL: http://btcpayserver:49392/zcashlikedaemoncallback/tx?cryptoCode=zec&hash=
-      ROCKET_DB_PATH: /data/zec-wallet.db
+      ROCKET_DB_PATH: /data/zec-wallet2.db
+      CONFIG_PATH: /data/config2.json
       LWD_URL: http://lightwalletd:9067
     expose:
       - "8000"
