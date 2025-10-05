@@ -39,6 +39,7 @@ You need to add ndlc's docker fragment to your install with:
 BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-ndlc"
 . btcpay-setup.sh -i
 ```
+If using [this guide](./docs/save-env-vars.md), remember to update script.
 
 You can then use `ndlc-cli.sh` to run use ndlc-cli, for example:
 
