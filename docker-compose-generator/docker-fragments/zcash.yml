@@ -3,7 +3,7 @@ version: "3"
 services:
   zcash_walletd:
     restart: unless-stopped
-    image: hhanh00/zcash-walletd:latest
+    image: hhanh00/zcash-walletd:1.1.3
     environment:
       NOTIFY_TX_URL: http://btcpayserver:49392/zcashlikedaemoncallback/tx?cryptoCode=zec&hash=
       ROCKET_DB_PATH: /data/zec-wallet2.db
