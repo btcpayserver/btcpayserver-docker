@@ -17,6 +17,7 @@ services:
       BTCPAY_ZEC_DAEMON_URI: http://zcash_walletd:8000
       BTCPAY_ZEC_WALLET_DAEMON_URI: http://zcash_walletd:8000
       BTCPAY_ZEC_WALLET_DAEMON_WALLETDIR: /root/zec_wallet
+      BTCPAY_ZEC_WALLET_DAEMON_CONFIG_PATH: /data/config2.json
     volumes:
       - "zec_wallet:/root/zec_wallet"
 
