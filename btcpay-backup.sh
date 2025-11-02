@@ -99,6 +99,7 @@ echo "ℹ️ Archiving files in $(pwd)…"
     --exclude="volumes/generated_btcpay_datadir/_data/host_*" \
     --exclude="volumes/generated_bitcoin_datadir/_data" \
     --exclude="volumes/generated_litecoin_datadir/_data" \
+    --exclude="volumes/generated_mwebd_datadir" \
     --exclude="volumes/generated_elements_datadir/_data" \
     --exclude="volumes/generated_xmr_data/_data" \
     --exclude="volumes/generated_dogecoin_datadir/_data/blocks" \
@@ -107,11 +108,15 @@ echo "ℹ️ Archiving files in $(pwd)…"
     --exclude="volumes/generated_dash_datadir/_data/chainstate" \
     --exclude="volumes/generated_dash_datadir/_data/indexes" \
     --exclude="volumes/generated_dash_datadir/_data/debug.log" \
+    --exclude="volumes/generated_dash_datadir/_data/evodb" \
     --exclude="volumes/generated_mariadb_datadir" \
     --exclude="volumes/generated_postgres_datadir" \
     --exclude="volumes/generated_electrumx_datadir" \
     --exclude="volumes/generated_lnd_bitcoin_datadir/_data/data/graph" \
     --exclude="volumes/generated_clightning_bitcoin_datadir/_data/lightning-rpc" \
+    --exclude="volumes/generated_lwd-cache" \
+    --exclude="volumes/generated_zebrad-cache" \
+    --exclude="volumes/generated_zec_data" \
     --exclude="**/logs/*" \
     -cvzf $backup_path $postgres_dump_name  $mariadb_dump_name volumes/generated_*
   echo "✅ Archive done."
