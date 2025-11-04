@@ -28,11 +28,10 @@ services:
     restart: unless-stopped
     container_name: btcpayserver_nano_pippin_wallet
     image: bananocoin/pippin:latest
-    # command: monerod --rpc-bind-ip=0.0.0.0 --confirm-external-bind --rpc-bind-port=18081 --non-interactive --block-notify="/bin/sh ./scripts/notifier.sh -X GET http://btcpayserver:49392/monerolikedaemoncallback/block?cryptoCode=xmr&hash=%s" --hide-my-port --prune-blockchain --enable-dns-blocklist
     expose:
       - "11338"
     volumes:
-      - "~:/root"
+      - "~/PippinData:/root/PippinData"
     depends_on:
       - nano-node
       - nano-work-gen
