@@ -12,7 +12,7 @@ services:
       - "7075"
     volumes:
       - "~:/root"
-  nano_work_gen:
+  nano-work-gen:
     restart: unless-stopped
     container_name: btcpayserver_nano_work_gen
     image: pbuyle/nano-work-server:nvidia
@@ -24,9 +24,28 @@ services:
     #   - "xmr_wallet:/wallet"
     depends_on:
       - nano-node
+  nano-pippin-wallet:
+    restart: unless-stopped
+    container_name: btcpayserver_nano_pippin_wallet
+    image: bananocoin/pippin:latest
+    # command: monerod --rpc-bind-ip=0.0.0.0 --confirm-external-bind --rpc-bind-port=18081 --non-interactive --block-notify="/bin/sh ./scripts/notifier.sh -X GET http://btcpayserver:49392/monerolikedaemoncallback/block?cryptoCode=xmr&hash=%s" --hide-my-port --prune-blockchain --enable-dns-blocklist
+    expose:
+      - "11338"
+    volumes:
+      - "~:/root"
+    depends_on:
+      - nano-node
+      - nano-work-gen
+      - nano-pippin-redis
+  nano-pippin-redis:
+    container_name: btcpayserver_nano_pippin_redis
+    image: redis:latest
+    restart: unless-stopped
+    expose:
+        - '6379'
   btcpayserver:
     environment:
-      BTCPAY_XNO_RPC_URI: http://nano-node:7076
-      BTCPAY_XNO_WEBSOCKET_URI: http://nano-node:7078
+      BTCPAY_XNO_RPC_URI: http://btcpayserver_nano_node:7076
+      BTCPAY_XNO_WEBSOCKET_URI: ws://btcpayserver_nano_node:7078
     # volumes:
     #   - "xmr_wallet:/root/xmr_wallet"
