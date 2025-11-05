@@ -30,6 +30,8 @@ services:
     image: bananocoin/pippin:latest
     expose:
       - "11338"
+    environment: 
+      - REDIS_HOST: 'btcpayserver_nano_pippin_redis'
     volumes:
       - "~/PippinData:/root/PippinData"
     depends_on:
