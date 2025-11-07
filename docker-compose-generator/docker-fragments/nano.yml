@@ -46,7 +46,7 @@ services:
         - '6379'
   btcpayserver:
     environment:
-      BTCPAY_XNO_RPC_URI: http://btcpayserver_nano_node:7076
-      BTCPAY_XNO_WEBSOCKET_URI: ws://btcpayserver_nano_node:7078
+      BTCPAY_XNO_RPC_URI: http://btcpayserver_nano_pippin_wallet:11338
+      BTCPAY_XNO_WEBSOCKET_URI: ws://btcpayserver_nano_pippin_wallet:11338
     # volumes:
     #   - "xmr_wallet:/root/xmr_wallet"
