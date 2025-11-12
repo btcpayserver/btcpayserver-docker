@@ -2,7 +2,7 @@ version: "3"
 
 services:
   phoenixd:
-    image: acinq/phoenixd:0.6.0
+    image: acinq/phoenixd:0.6.3
     container_name: phoenixd
     restart: unless-stopped
     networks:
