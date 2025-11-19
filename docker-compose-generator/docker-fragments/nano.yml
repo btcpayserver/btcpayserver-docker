@@ -5,25 +5,24 @@ services:
     restart: unless-stopped
     container_name: btcpayserver_nano_node
     image: nanocurrency/nano:V28.2
-    # command: monerod --rpc-bind-ip=0.0.0.0 --confirm-external-bind --rpc-bind-port=18081 --non-interactive --block-notify="/bin/sh ./scripts/notifier.sh -X GET http://btcpayserver:49392/monerolikedaemoncallback/block?cryptoCode=xmr&hash=%s" --hide-my-port --prune-blockchain --enable-dns-blocklist
     expose:
       - "7076"
       - "7078"
       - "7075"
     volumes:
       - "~:/root"
-  nano-work-gen:
-    restart: unless-stopped
-    container_name: btcpayserver_nano_work_gen
-    image: pbuyle/nano-work-server:nvidia
-    # command: docker run --rm -p 127.0.0.1:7000:7000/tcp pbuyle/nano-work-server --cpu-threads 4 --listen-address 0.0.0.0:7000
-    expose: 
-      - "7000"
-    command: ["--cpu-threads", "4", "--listen-address", "0.0.0.0:7000"]
-    # volumes:
-    #   - "xmr_wallet:/wallet"
-    depends_on:
-      - nano-node
+  # nano-work-gen:
+  #   restart: unless-stopped
+  #   container_name: btcpayserver_nano_work_gen
+  #   image: pbuyle/nano-work-server:nvidia
+  #   # command: docker run --rm -p 127.0.0.1:7000:7000/tcp pbuyle/nano-work-server --cpu-threads 4 --listen-address 0.0.0.0:7000
+  #   expose: 
+  #     - "7000"
+  #   command: ["--cpu-threads", "4", "--listen-address", "0.0.0.0:7000"]
+  #   # volumes:
+  #   #   - "xmr_wallet:/wallet"
+  #   depends_on:
+  #     - nano-node
   nano-pippin-wallet:
     restart: unless-stopped
     container_name: btcpayserver_nano_pippin_wallet
@@ -48,5 +47,3 @@ services:
     environment:
       BTCPAY_XNO_RPC_URI: http://btcpayserver_nano_pippin_wallet:11338
       BTCPAY_XNO_WEBSOCKET_URI: ws://btcpayserver_nano_node:7078
-    # volumes:
-    #   - "xmr_wallet:/root/xmr_wallet"
