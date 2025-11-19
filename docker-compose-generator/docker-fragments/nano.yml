@@ -35,7 +35,7 @@ services:
       - "~/PippinData:/root/PippinData"
     depends_on:
       - nano-node
-      - nano-work-gen
+      # - nano-work-gen
       - nano-pippin-redis
   nano-pippin-redis:
     container_name: btcpayserver_nano_pippin_redis
