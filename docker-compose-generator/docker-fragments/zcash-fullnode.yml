@@ -36,7 +36,7 @@ services:
       - zebrad-cache:/home/zebra/.cache/zebra
     tty: true
     environment:
-      - ZEBRA_RPC__LISTEN_ADDR=127.0.0.1:8232
+      - ZEBRA_RPC__LISTEN_ADDR=0.0.0.0:8232
       - ZEBRA_RPC__ENABLE_COOKIE_AUTH=false
     ports:
       - "8232:8232"
