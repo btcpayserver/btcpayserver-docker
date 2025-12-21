@@ -88,6 +88,14 @@
     "PhoenixdFragment": null
   },
   {
+    "Crypto": "xno",
+    "CryptoFragment": "nano",
+    "CLightningFragment": null,
+    "LNDFragment": null,
+    "EclairFragment": null,
+    "PhoenixdFragment": null
+  },
+  {
     "Crypto": "lbtc",
     "CryptoFragment": "liquid",
     "CLightningFragment": null,
