@@ -377,7 +377,6 @@ server {
 	{{ if $enable_ipv6 }}
 	listen [::]:80;
 	{{ end }}
-	access_log /var/log/nginx/access.log vhost;
 	return 503;
 }
 
@@ -389,7 +388,6 @@ server {
 	listen [::]:443 ssl;
 	{{ end }}
 	http2  on;
-	access_log /var/log/nginx/access.log vhost;
 	return 503;
 
 	ssl_session_tickets off;
@@ -450,7 +448,6 @@ server {
 	proxy_set_header X-Forwarded-Proto $proxy_x_forwarded_proto;
 	proxy_set_header X-Forwarded-Ssl $proxy_x_forwarded_ssl;
 	proxy_set_header X-Forwarded-Port $proxy_x_forwarded_port;
-	access_log /var/log/nginx/access.log vhost;
 	{{ if (exists "/etc/nginx/vhost.d/default") }}
 	include /etc/nginx/vhost.d/default;
 	{{ end }}
@@ -513,7 +510,6 @@ server {
 	{{ if $enable_ipv6 }}
 	listen [::]:80 {{ $default_server }};
 	{{ end }}
-	access_log /var/log/nginx/access.log vhost;
 
 	# Allow acme challenge requests without redirect
 	location ^~ /.well-known/acme-challenge/ {
@@ -549,7 +545,6 @@ server {
 	listen [::]:443 ssl {{ $default_server }};
 	{{ end }}
 	http2  on;
-	access_log /var/log/nginx/access.log vhost;
 
 	{{ if eq $network_tag "internal" }}
 	# Only allow traffic from internal clients
@@ -649,7 +644,6 @@ server {
 	{{ if $enable_ipv6 }}
 	listen [::]:80 {{ $default_server }};
 	{{ end }}
-	access_log /var/log/nginx/access.log vhost;
 
 	{{ if eq $network_tag "internal" }}
 	# Only allow traffic from internal clients
@@ -695,7 +689,6 @@ server {
 	listen [::]:443 ssl {{ $default_server }};
 	{{ end }}
 	http2  on;
-	access_log /var/log/nginx/access.log vhost;
 	{{/* Enable usage of self-signed SSL certificate if .local hostname */}}
 	{{ if hasSuffix "local" $host }}
 	{{ if eq $network_tag "internal" }}
