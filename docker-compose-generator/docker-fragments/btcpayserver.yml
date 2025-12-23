@@ -4,7 +4,7 @@ services:
   btcpayserver:
     restart: unless-stopped
     container_name: generated_btcpayserver_1
-    image: ${BTCPAY_IMAGE:-btcpayserver/btcpayserver:2.3.0}
+    image: ${BTCPAY_IMAGE:-btcpayserver/btcpayserver:2.3.1}
     expose:
       - "49392"
     environment:
