@@ -1,4 +1,3 @@
-version: "3"
 # If your machine has more than 1GB of memory dedicated for bitcoind, use this
 
 services:

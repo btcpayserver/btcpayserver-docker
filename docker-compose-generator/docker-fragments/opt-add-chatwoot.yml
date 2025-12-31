@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   chatwoot:
     image: chatwoot/chatwoot:v1.7.0 

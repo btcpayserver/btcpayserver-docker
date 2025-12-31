@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   dashd:
     restart: unless-stopped

@@ -1,4 +1,3 @@
-version: "3"
 # DO NOT USE THOSE ARE DEPRECATED
 services:
   bluewallet_lndhub_redis:

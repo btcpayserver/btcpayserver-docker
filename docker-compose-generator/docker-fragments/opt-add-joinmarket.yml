@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   joinmarket:
     container_name: joinmarket

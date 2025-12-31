@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   bitcoind:
     restart: unless-stopped

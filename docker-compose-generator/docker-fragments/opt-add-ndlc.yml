@@ -1,4 +1,3 @@
-version: '3'
 services:
   ndlc:
     container_name: ndlci_cli
