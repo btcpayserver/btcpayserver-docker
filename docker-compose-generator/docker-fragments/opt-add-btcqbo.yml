@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   btcqbo:
     image: jvandrew/btcqbo:0.3.36

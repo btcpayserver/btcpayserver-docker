@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   letsencrypt-nginx-proxy-companion:
     restart: unless-stopped

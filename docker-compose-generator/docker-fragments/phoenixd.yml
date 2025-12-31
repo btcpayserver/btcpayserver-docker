@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   phoenixd:
     image: acinq/phoenixd:0.6.3

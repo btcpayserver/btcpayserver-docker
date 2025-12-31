@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   cloudflared:
     container_name: 'cloudflared-tunnel'

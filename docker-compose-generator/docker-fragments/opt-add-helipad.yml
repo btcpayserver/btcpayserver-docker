@@ -1,6 +1,4 @@
-﻿version: '3'
-
-services:
+﻿services:
   helipad:
     container_name: helipad
     image: podcastindexorg/podcasting20-helipad:v0.1.10
