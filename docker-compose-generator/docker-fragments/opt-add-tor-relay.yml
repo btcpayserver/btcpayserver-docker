@@ -1,4 +1,3 @@
-version: "3"
 services:
   tor-relay-gen:
     restart: unless-stopped

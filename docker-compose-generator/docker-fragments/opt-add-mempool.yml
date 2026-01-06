@@ -1,5 +1,3 @@
-version: '3'
-
 # reference: https://github.com/mempool/mempool/blob/master/docker/docker-compose.yml
 services:
   bitcoind:

@@ -1,4 +1,3 @@
-version: "3"
 # unsafely exposes bitcoind P2P port, for use on trusted LAN only
 
 services:

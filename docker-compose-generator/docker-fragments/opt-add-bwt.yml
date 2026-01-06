@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   bwt:
     image: shesek/bwt:0.2.2-electrum
