@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     container_name: btcpayserver_beldexd
     image: victortucci/beldex:7.0.0
-    command: beldexd --rpc-bind-ip=0.0.0.0 --confirm-external-bind --rpc-bind-port=19091 --non-interactive --block-notify="/bin/sh ./scripts/notifier.sh -X GET http://btcpayserver:49392/beldexlikedaemoncallback/block?cryptoCode=bdx&hash=%s" --hide-my-port --prune-blockchain --enable-dns-blocklist --bootstrap-daemon-address publicnode3.rpcnode.stream --no-sync
+    command: beldexd --rpc-bind-ip=0.0.0.0 --confirm-external-bind --rpc-bind-port=19091 --non-interactive --block-notify="/bin/sh ./scripts/notifier.sh -X GET http://btcpayserver:49392/beldexlikedaemoncallback/block?cryptoCode=bdx&hash=%s" --hide-my-port --bootstrap-daemon-address publicnode3.rpcnode.stream:29095 --no-sync
     expose:
       - "19091"
     volumes:
