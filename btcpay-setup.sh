@@ -98,6 +98,7 @@ Environment variables:
     BTCPAY_ENABLE_SSH: Optional, gives BTCPay Server SSH access to the host by allowing it to edit authorized_keys of the host, it can be used for managing the authorized_keys or updating BTCPay Server directly through the website. (Default: false)
     BTCPAYGEN_DOCKER_IMAGE: Allows you to specify a custom docker image for the generator (Default: btcpayserver/docker-compose-generator)
     BTCPAY_IMAGE: Allows you to specify the btcpayserver docker image to use over the default version. (Default: current stable version of btcpayserver, eg. btcpayserver/btcpayserver:version)
+    BTCPAY_UPDATE_CLEAN: Clean (prune) all old BTCPayServer images after an update. WARNING: also removes all non-BTCPayServer images! (default: true)
     BTCPAY_PROTOCOL: Allows you to specify the external transport protocol of BTCPayServer. (Default: https)
     BTCPAY_ADDITIONAL_HOSTS: Allows you to specify additional domains to your BTCPayServer with https support if enabled. (eg. example2.com,example3.com)
 Add-on specific variables:
@@ -206,6 +207,7 @@ fi
 : "${BTCPAY_ENABLE_SSH:=false}"
 : "${PIHOLE_SERVERIP:=}"
 : "${CLOUDFLARE_TUNNEL_TOKEN:=}"
+: "${BTCPAY_UPDATE_CLEAN:=true}"
 
 OLD_BTCPAY_DOCKER_COMPOSE="$BTCPAY_DOCKER_COMPOSE"
 ORIGINAL_DIRECTORY="$(pwd)"
@@ -311,6 +313,7 @@ BTCPAYGEN_LIGHTNING:$BTCPAYGEN_LIGHTNING
 BTCPAYGEN_ADDITIONAL_FRAGMENTS:$BTCPAYGEN_ADDITIONAL_FRAGMENTS
 BTCPAYGEN_EXCLUDE_FRAGMENTS:$BTCPAYGEN_EXCLUDE_FRAGMENTS
 BTCPAY_IMAGE:$BTCPAY_IMAGE
+BTCPAY_UPDATE_CLEAN:$BTCPAY_UPDATE_CLEAN
 ACME_CA_URI:$ACME_CA_URI
 TOR_RELAY_NICKNAME: $TOR_RELAY_NICKNAME
 TOR_RELAY_EMAIL: $TOR_RELAY_EMAIL

@@ -80,4 +80,4 @@ btcpay_update_docker_env
 btcpay_up
 
 set +e
-docker image prune -af --filter "label!=org.btcpayserver.image=docker-compose-generator"
+[ "$BTCPAY_UPDATE_CLEAN" == true ] && ./btcpay-clean.sh || exit 0
