@@ -80,4 +80,6 @@ btcpay_update_docker_env
 btcpay_up
 
 set +e
-[ "$BTCPAY_UPDATE_CLEAN" == true ] && ./btcpay-clean.sh || exit 0
+if [ "$BTCPAY_UPDATE_CLEAN" == true ]; then
+    ./btcpay-clean.sh
+fi
