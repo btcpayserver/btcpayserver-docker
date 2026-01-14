@@ -83,3 +83,4 @@ set +e
 if [ "$BTCPAY_UPDATE_CLEAN" == true ]; then
     ./btcpay-clean.sh
 fi
+exit 0
