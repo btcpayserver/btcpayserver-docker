@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   feathercoind:
     restart: unless-stopped
