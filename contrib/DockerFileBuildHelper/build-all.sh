@@ -354,6 +354,26 @@ cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.18.4.3" .
 cd - && cd ..
 
+# Build beldex
+# Default Dockerfile (amd64)
+DOCKERFILE="Beldex/7.0.0/Dockerfile"
+IMAGE_NAME="victortucci/beldex:7.0.0"
+
+ARCH="$(uname -m)"
+
+# ARM architectures fallback (if you later add ARM Dockerfiles)
+if [[ "$ARCH" == "armv7l" || "$ARCH" == "aarch64" ]]; then
+  echo "ARM architecture detected ($ARCH) – no Beldex ARM Dockerfile available"
+  exit 1
+fi
+echo "Building ${IMAGE_NAME}"
+git clone https://github.com/btcpayserver/dockerfile-deps beldex
+cd beldex
+git checkout master
+cd "$(dirname $DOCKERFILE)"
+# Build image
+docker build -f Dockerfile -t "${IMAGE_NAME}" .
+cd - && cd ..
 
 # Build nbxplorer
 # https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.30-1/Dockerfile
