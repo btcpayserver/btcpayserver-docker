@@ -801,22 +801,6 @@ docker build -f "$DOCKERFILE" -t "pihole/pihole:2025.03.0" .
 cd - && cd ..
 
 
-# Build shopify-app-deployer
-# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.5/Dockerfile
-DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.5/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.5/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/shopify-app-deployer:1.5"
-git clone https://github.com/btcpayserver/shopify-app shopify-app-deployer
-cd shopify-app-deployer
-git checkout 1.5
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/shopify-app-deployer:1.5" .
-cd - && cd ..
-
-
 # Build snapdrop
 # https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.2/Snapdrop/1.2/Dockerfile
 DOCKERFILE="Snapdrop/1.2/Dockerfile"
@@ -1112,18 +1096,18 @@ cd - && cd ..
 
 
 # Build postgres
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.18/Postgres/13.18/linuxamd64.Dockerfile
-DOCKERFILE="Postgres/13.18/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.18/Postgres/13.18/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Postgres/13.18/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/13.18/Postgres/13.18/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Postgres/13.18/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/postgres:13.18"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/18.1/Postgres/18.1/linuxamd64.Dockerfile
+DOCKERFILE="Postgres/18.1/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/18.1/Postgres/18.1/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Postgres/18.1/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/18.1/Postgres/18.1/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Postgres/18.1/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/postgres:18.1"
 git clone https://github.com/btcpayserver/dockerfile-deps postgres
 cd postgres
-git checkout Postgres/13.18
+git checkout Postgres/18.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/postgres:13.18" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/postgres:18.1" .
 cd - && cd ..
 
 
@@ -1243,6 +1227,34 @@ docker build -f "$DOCKERFILE" -t "hhanh00/zcash-walletd:1.1.5" .
 cd - && cd ..
 
 
+# Build dogecoin
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dogecoin/1.14.7/Dogecoin/1.14.7/linuxamd64.Dockerfile
+DOCKERFILE="Dogecoin/1.14.7/linuxamd64.Dockerfile"
+echo "Building btcpayserver/dogecoin:1.14.7"
+git clone https://github.com/btcpayserver/dockerfile-deps dogecoin
+cd dogecoin
+git checkout Dogecoin/1.14.7
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/dogecoin:1.14.7" .
+cd - && cd ..
+
+
+# Build shopify-app-deployer
+# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.6/Dockerfile
+DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.6/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.6/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+echo "Building btcpayserver/shopify-app-deployer:1.6"
+git clone https://github.com/btcpayserver/shopify-app shopify-app-deployer
+cd shopify-app-deployer
+git checkout 1.6
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/shopify-app-deployer:1.6" .
+cd - && cd ..
+
+
 # Build btcpayserver
 # https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.3.4/Dockerfile
 DOCKERFILE="Dockerfile"
@@ -1256,18 +1268,6 @@ cd btcpayserver
 git checkout v2.3.4
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:2.3.4" .
-cd - && cd ..
-
-
-# Build dogecoin
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dogecoin/1.14.7/Dogecoin/1.14.7/linuxamd64.Dockerfile
-DOCKERFILE="Dogecoin/1.14.7/linuxamd64.Dockerfile"
-echo "Building btcpayserver/dogecoin:1.14.7"
-git clone https://github.com/btcpayserver/dockerfile-deps dogecoin
-cd dogecoin
-git checkout Dogecoin/1.14.7
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/dogecoin:1.14.7" .
 cd - && cd ..
 
 
