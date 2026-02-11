@@ -16,6 +16,7 @@ Let's imagine the local IP of your BTCPay Server is `192.168.1.2`.
 BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-pihole"
 . btcpay-setup.sh -i
 ```
+If using [this guide](./docs/save-env-vars.md), remember to update script.
 
 3. If your server has a firewall, make sure it allow incoming traffic to port `53 (UDP)`.
 4. Configure your home router DHCP server to use `192.168.1.2` as primary DNS server.
