@@ -357,7 +357,7 @@ cd - && cd ..
 # Build beldex
 # Default Dockerfile (amd64)
 DOCKERFILE="Beldex/7.0.0/Dockerfile"
-IMAGE_NAME="victortucci/beldex:7.0.0"
+IMAGE_NAME="beldex/beldex:7.0.0"
 
 ARCH="$(uname -m)"
 
