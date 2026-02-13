@@ -29,3 +29,5 @@ services:
       BTCPAY_FTCEXPLORERURL: http://nbxplorer:32838/
 volumes:
   feathercoin_datadir:
+required:
+  - "nbxplorer"

@@ -35,3 +35,5 @@ services:
 volumes:
   litecoin_datadir:
   litecoin_wallet_datadir:
+required:
+  - "nbxplorer"
