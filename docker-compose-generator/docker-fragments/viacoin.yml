@@ -29,3 +29,5 @@ services:
       BTCPAY_VIAEXPLORERURL: http://nbxplorer:32838/
 volumes:
   viacoin_datadir:
+required:
+  - "nbxplorer"

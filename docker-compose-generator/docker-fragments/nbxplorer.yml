@@ -19,5 +19,11 @@ services:
     volumes:
       - "nbxplorer_datadir:/datadir"
 
+  btcpayserver:
+    environment:
+          BTCPAY_EXPLORERPOSTGRES: User ID=postgres;Host=postgres;Port=5432;Application Name=btcpayserver;MaxPoolSize=80;Database=nbxplorer${NBITCOIN_NETWORK:-regtest}
+    volumes:
+      - "nbxplorer_datadir:/root/.nbxplorer"
+
 volumes:
   nbxplorer_datadir:

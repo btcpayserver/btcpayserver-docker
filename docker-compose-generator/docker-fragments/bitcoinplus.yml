@@ -33,3 +33,5 @@ services:
       BTCPAY_TZCEXPLORERURL: http://nbxplorer:32838/
 volumes:
   bitcoinplus_datadir:
+required:
+  - "nbxplorer"

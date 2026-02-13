@@ -44,3 +44,5 @@ exclusive:
   - bitcoin-node
 recommended:
   - "opt-mempoolfullrbf"
+required:
+  - "nbxplorer"

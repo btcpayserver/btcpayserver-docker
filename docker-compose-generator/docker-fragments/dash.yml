@@ -34,3 +34,5 @@ services:
       BTCPAY_DASHEXPLORERURL: http://nbxplorer:32838/
 volumes:
   dash_datadir:
+required:
+  - "nbxplorer"
