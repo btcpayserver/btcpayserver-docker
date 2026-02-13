@@ -32,3 +32,5 @@ services:
 
 volumes:
   monacoin_datadir:
+required:
+  - "nbxplorer"

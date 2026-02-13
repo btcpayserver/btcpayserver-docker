@@ -10,7 +10,6 @@ services:
     environment:
       # BTCPay settings
       BTCPAY_POSTGRES: User ID=postgres;Host=postgres;Port=5432;Application Name=btcpayserver;Database=btcpayserver${NBITCOIN_NETWORK:-regtest}
-      BTCPAY_EXPLORERPOSTGRES: User ID=postgres;Host=postgres;Port=5432;Application Name=btcpayserver;MaxPoolSize=80;Database=nbxplorer${NBITCOIN_NETWORK:-regtest}
       BTCPAY_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       BTCPAY_BIND: 0.0.0.0:49392
       BTCPAY_ROOTPATH: ${BTCPAY_ROOTPATH:-/}
@@ -21,6 +20,7 @@ services:
       BTCPAY_DEBUGLOG: btcpay.log
       BTCPAY_UPDATEURL: https://api.github.com/repos/btcpayserver/btcpayserver/releases/latest
       BTCPAY_DOCKERDEPLOYMENT: "true"
+      BTCPAY_NODEFAULTCHAIN: "true"
     labels:
       traefik.enable: "true"
       traefik.http.routers.btcpayserver.rule: Host(`${BTCPAY_HOST}`)
@@ -29,7 +29,6 @@ services:
       - postgres
     volumes:
       - "btcpay_datadir:/datadir"
-      - "nbxplorer_datadir:/root/.nbxplorer"
       - "$<BTCPAY_HOST_SSHAUTHORIZEDKEYS>?:${BTCPAY_SSHAUTHORIZEDKEYS}"
       - "btcpay_pluginsdir:/root/.btcpayserver/Plugins"
 
@@ -39,7 +38,6 @@ volumes:
 
 required:
   - "postgres"
-  - "nbxplorer"
   - "btcpayserver"
 recommended:
   - "opt-add-tor"
