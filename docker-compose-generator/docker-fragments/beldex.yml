@@ -14,7 +14,7 @@ services:
     restart: unless-stopped
     container_name: btcpayserver_beldex_wallet
     image: beldex/beldex:7.0.0
-    command: beldex-wallet-rpc --rpc-bind-ip=0.0.0.0 --disable-rpc-login --confirm-external-bind --rpc-bind-port=19092 --non-interactive --trusted-daemon  --daemon-address=beldexd:19091 --wallet-file=/wallet/wallet --password-file=/wallet/password --tx-notify="/bin/sh ./scripts/notifier.sh  -X GET http://btcpayserver:49392/beldexlikedaemoncallback/tx?cryptoCode=bdx&hash=%s"
+    command: beldex-wallet-rpc --rpc-bind-ip=0.0.0.0 --disable-rpc-login --confirm-external-bind --rpc-bind-port=19092 --non-interactive --trusted-daemon  --daemon-address=beldexd:19091 --wallet-dir=/wallet --tx-notify="/bin/sh ./scripts/notifier.sh  -X GET http://btcpayserver:49392/beldexlikedaemoncallback/tx?cryptoCode=bdx&hash=%s"
     expose:
       - "19092"
     volumes:
