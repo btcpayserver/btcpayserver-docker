@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  beldexd:
+    ports:
+    - "127.0.0.1:19091:19091"
+  beldex_wallet:
+    ports:
+    - "127.0.0.1:19092:19092"
+required:
+    - "beldex"

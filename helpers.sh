@@ -19,6 +19,7 @@ install_tooling() {
                 "btcpayserver_viacoind" "viacoin-cli.sh" "Command line for your Viacoin instance" \
                 "btcpayserver_elementsd" "elements-cli.sh" "Command line for your Elements/Liquid instance" \
                 "btcpayserver_monerod" "monero-wallet-cli.sh" "Command line for your Monero instance" \
+                "btcpayserver_beldexd" "beldex-wallet-cli.sh" "Command line for your Beldex instance" \
                 "joinmarket" "jm.sh" "Command line for your joinmarket instance" \
                 "ndlci_cli" "ndlc-cli.sh" "Command line for NDLC-CLI" \
                 "pihole" "pihole.sh" "Command line for running pihole commands" \

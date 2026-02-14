@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  beldexd:
+    restart: unless-stopped
+    container_name: btcpayserver_beldexd
+    image: beldex/beldex:7.0.0
+    command: beldexd --rpc-bind-ip=0.0.0.0 --confirm-external-bind --rpc-bind-port=19091 --non-interactive --block-notify="/bin/sh ./scripts/notifier.sh -X GET http://btcpayserver:49392/beldexlikedaemoncallback/block?cryptoCode=bdx&hash=%s" --hide-my-port
+    expose:
+      - "19091"
+    volumes:
+      - "bdx_data:/data"
+  beldexd_wallet:
+    restart: unless-stopped
+    container_name: btcpayserver_beldex_wallet
+    image: beldex/beldex:7.0.0
+    command: beldex-wallet-rpc --rpc-bind-ip=0.0.0.0 --disable-rpc-login --confirm-external-bind --rpc-bind-port=19092 --non-interactive --trusted-daemon  --daemon-address=beldexd:19091 --wallet-dir=/wallet --tx-notify="/bin/sh ./scripts/notifier.sh  -X GET http://btcpayserver:49392/beldexlikedaemoncallback/tx?cryptoCode=bdx&hash=%s"
+    expose:
+      - "19092"
+    volumes:
+      - "bdx_wallet:/wallet"
+    depends_on:
+      - beldexd
+  btcpayserver:
+    environment:
+      BTCPAY_BDX_DAEMON_URI: http://beldexd:19091
+      BTCPAY_BDX_WALLET_DAEMON_URI: http://beldexd_wallet:19092
+      BTCPAY_BDX_WALLET_DAEMON_WALLETDIR: /root/bdx_wallet
+    volumes:
+      - "bdx_wallet:/root/bdx_wallet"
+volumes:
+  bdx_wallet:
+  bdx_data:

@@ -88,6 +88,14 @@
     "PhoenixdFragment": null
   },
   {
+    "Crypto": "bdx",
+    "CryptoFragment": "beldex",
+    "CLightningFragment": null,
+    "LNDFragment": null,
+    "EclairFragment": null,
+    "PhoenixdFragment": null
+  },
+  {
     "Crypto": "lbtc",
     "CryptoFragment": "liquid",
     "CLightningFragment": null,
