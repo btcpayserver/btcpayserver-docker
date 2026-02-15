@@ -102,7 +102,7 @@ Check out this video if you're interested in learning more about setting up [BTC
 * `NOREVERSEPROXY_HTTP_PORT`: Optional, if not using a reverse proxy, specify which port should be opened for HTTP traffic. (default: 80)
 * `NBITCOIN_NETWORK`: The type of network to use (eg. `mainnet`, `testnet`, or `regtest`. Default: `mainnet`)
 * `LIGHTNING_ALIAS`: An alias for your lightning network node, if used
-* `BTCPAYGEN_CRYPTO1`: First supported crypto currency (eg. `btc`, `ltc`. Default: `btc`)
+* `BTCPAYGEN_CRYPTO1`: First supported crypto currency (eg. `btc`, `ltc`, `none`. Default: `btc`)
 * `BTCPAYGEN_CRYPTO2`: Second supported crypto currency (eg. `btc`, `ltc`. Default: `(empty)`)
 * `BTCPAYGEN_CRYPTON`: N'th supported crypto currency where N is 9 at maximum. (eg. `btc`, `ltc`. Default: `(empty)`)
 * `BTCPAYGEN_REVERSEPROXY`: Specify reverse proxy to use; NGinx has HTTPS support. (eg. `nginx`, `traefik`,  `(empty)`. Default: `nginx`)
