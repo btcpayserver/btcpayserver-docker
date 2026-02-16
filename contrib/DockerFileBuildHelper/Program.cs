@@ -41,6 +41,9 @@ namespace DockerFileBuildHelper
                 Image.Parse("btcpayserver/docker-compose-generator"),
             }.Concat(GetImages(fragmentDirectory)))
             {
+                // TODO: Ask beldex guys
+                if (image.Name == "beldex")
+                    continue;
                 Console.WriteLine($"Image: {image.ToString()}");
                 var info = GetDockerInfo(image);
                 if (info == null)
