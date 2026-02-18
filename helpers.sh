@@ -213,7 +213,7 @@ docker_update() {
 
     if $HAS_DOCKER; then
         docker_version="$(docker version -f "{{ .Server.Version }}")"
-        if version_gt "20.10.10" "$docker_version"; then
+        if dpkg --compare-versions "$docker_version" '<<' 20.10.10; then
             echo "Updating docker, old version can't run some images (https://docs.linuxserver.io/FAQ/#jammy)"
             echo \
             "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
