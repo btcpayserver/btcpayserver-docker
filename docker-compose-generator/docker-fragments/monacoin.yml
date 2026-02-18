@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   monacoind:
     restart: unless-stopped

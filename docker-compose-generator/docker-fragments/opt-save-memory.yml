@@ -1,4 +1,3 @@
-version: "3"
 # If your machine has less than 1GB of memory, use this
 
 services:

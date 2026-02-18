@@ -487,8 +487,7 @@ First, copy [opt-save-storage](docker-compose-generator/docker-fragments/opt-sav
 Modify the new `opt-save-storage.custom.yml` file to your taste:
 
 ```diff
-@@ -14,8 +14,7 @@ version: "3"
- services:
+@@ -14,8 +14,7 @@ services:
    bitcoind:
      environment:
 -       BITCOIN_EXTRA_ARGS: prune=100000

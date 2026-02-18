@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   clightning_groestlcoin:
     image: groestlcoin/lightning:v24.08

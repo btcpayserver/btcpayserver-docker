@@ -1,4 +1,3 @@
-version: "3"
 services:
   nnostr-relay:
     restart: unless-stopped

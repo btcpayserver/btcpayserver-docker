@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   lnd_bitcoingold:
     image: kamigawabul/btglnd:latest

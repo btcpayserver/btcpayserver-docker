@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   zcash_walletd:
     restart: unless-stopped
