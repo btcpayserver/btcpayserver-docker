@@ -985,70 +985,6 @@ docker build -f "$DOCKERFILE" -t "hhanh00/zcash-walletd:1.1.5" .
 cd - && cd ..
 
 
-# Build shopify-app-deployer
-# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.6/Dockerfile
-DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.6/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.6/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/shopify-app-deployer:1.6"
-git clone https://github.com/btcpayserver/shopify-app shopify-app-deployer
-cd shopify-app-deployer
-git checkout 1.6
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/shopify-app-deployer:1.6" .
-cd - && cd ..
-
-
-# Build postgres
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/18.1/Postgres/18.1/linuxamd64.Dockerfile
-DOCKERFILE="Postgres/18.1/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/18.1/Postgres/18.1/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Postgres/18.1/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/18.1/Postgres/18.1/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Postgres/18.1/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/postgres:18.1"
-git clone https://github.com/btcpayserver/dockerfile-deps postgres
-cd postgres
-git checkout Postgres/18.1
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/postgres:18.1" .
-cd - && cd ..
-
-
-# Build monero
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.4.3/Monero/0.18.4.3/Dockerfile
-DOCKERFILE="Monero/0.18.4.3/Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.4.3/Monero/0.18.4.3/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Monero/0.18.4.3/Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.4.3/Monero/0.18.4.3/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Monero/0.18.4.3/Dockerfile"
-echo "Building btcpayserver/monero:0.18.4.3"
-git clone https://github.com/btcpayserver/dockerfile-deps monero
-cd monero
-git checkout Monero/0.18.4.3
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.18.4.3" .
-cd - && cd ..
-
-
-# Build monero
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.4.3/Monero/0.18.4.3/Dockerfile
-DOCKERFILE="Monero/0.18.4.3/Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.4.3/Monero/0.18.4.3/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Monero/0.18.4.3/Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.4.3/Monero/0.18.4.3/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Monero/0.18.4.3/Dockerfile"
-echo "Building btcpayserver/monero:0.18.4.3"
-git clone https://github.com/btcpayserver/dockerfile-deps monero
-cd monero
-git checkout Monero/0.18.4.3
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.18.4.3" .
-cd - && cd ..
-
-
 # Build docker-bitcoingold
 # https://raw.githubusercontent.com/Vutov/docker-bitcoin/master/bitcoingold/0.15.2/Dockerfile
 DOCKERFILE="bitcoingold/0.15.2/Dockerfile"
@@ -1231,6 +1167,38 @@ docker build -f "$DOCKERFILE" -t "wakiyamap/docker-monacoin:0.20.2" .
 cd - && cd ..
 
 
+# Build monero
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.4.3/Monero/0.18.4.3/Dockerfile
+DOCKERFILE="Monero/0.18.4.3/Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.4.3/Monero/0.18.4.3/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Monero/0.18.4.3/Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.4.3/Monero/0.18.4.3/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Monero/0.18.4.3/Dockerfile"
+echo "Building btcpayserver/monero:0.18.4.3"
+git clone https://github.com/btcpayserver/dockerfile-deps monero
+cd monero
+git checkout Monero/0.18.4.3
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.18.4.3" .
+cd - && cd ..
+
+
+# Build monero
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.4.3/Monero/0.18.4.3/Dockerfile
+DOCKERFILE="Monero/0.18.4.3/Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.4.3/Monero/0.18.4.3/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Monero/0.18.4.3/Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.4.3/Monero/0.18.4.3/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Monero/0.18.4.3/Dockerfile"
+echo "Building btcpayserver/monero:0.18.4.3"
+git clone https://github.com/btcpayserver/dockerfile-deps monero
+cd monero
+git checkout Monero/0.18.4.3
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.18.4.3" .
+cd - && cd ..
+
+
 # Build nbxplorer
 # https://raw.githubusercontent.com/dgarage/nbxplorer/v2.5.30-1/Dockerfile
 DOCKERFILE="Dockerfile"
@@ -1244,6 +1212,38 @@ cd nbxplorer
 git checkout v2.5.30-1
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.5.30-1" .
+cd - && cd ..
+
+
+# Build shopify-app-deployer
+# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.6/Dockerfile
+DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.6/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.6/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+echo "Building btcpayserver/shopify-app-deployer:1.6"
+git clone https://github.com/btcpayserver/shopify-app shopify-app-deployer
+cd shopify-app-deployer
+git checkout 1.6
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/shopify-app-deployer:1.6" .
+cd - && cd ..
+
+
+# Build postgres
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/18.1-1/Postgres/18.1/linuxamd64.Dockerfile
+DOCKERFILE="Postgres/18.1/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/18.1-1/Postgres/18.1/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Postgres/18.1/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/18.1-1/Postgres/18.1/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Postgres/18.1/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/postgres:18.1-1"
+git clone https://github.com/btcpayserver/dockerfile-deps postgres
+cd postgres
+git checkout Postgres/18.1-1
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/postgres:18.1-1" .
 cd - && cd ..
 
 
