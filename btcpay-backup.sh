@@ -16,6 +16,66 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
+
+function display_help () {
+cat <<-END
+Usage:
+------
+
+Backup postgres database and docker volumes without chain states
+
+For backup and restart with LND Static Channel Backup (SCB), if used, then run without options
+./btcpay-backup.sh
+
+For migration purposes with full LND state backup and no restart (if backup succeeds) run as
+./btcpay-backup.sh --include-lnd-graph --no-restart
+
+    --include-lnd-graph  For lnd migration purposes, backup full lnd channel state
+            When this option is used, do not reuse this backup when lnd is enabled again.
+            Otherwise the lnd state may become toxic with loss of some or all funds.
+    --no-restart  Do not restart btcpay if the backup succeeds
+
+END
+}
+
+RESTART=true
+EXCLUDE_LND_GRAPH="volumes/generated_lnd_bitcoin_datadir/_data/data/graph"
+WARNING_LND_DIRE1A="🚨🚨🚨 LND is currently enabled and will be restarting 🚨🚨🚨"
+WARNING_LND_DIRE1B="🚨🚨🚨 LND is currently enabled and has been restarted 🚨🚨🚨"
+WARNING_LND_DIRE2="🚨🚨🚨 You cannot restore from this backup anywhere as is!!!  🚨🚨🚨"
+
+while (( "$#" )); do
+  case "$1" in
+    -h|--help)
+      display_help
+      exit
+      ;;
+    --include-lnd-graph)
+      EXCLUDE_LND_GRAPH="$EXCLUDE_LND_GRAPH/false" # now does not exclude
+      shift
+      ;;
+    --no-restart)
+      RESTART=false
+      shift
+      ;;
+    --) # end argument parsing
+      shift
+      break
+      ;;
+    -*|--*=) # unsupported flags
+      echo "Error: Unsupported flag $1" >&2
+      display_help
+      exit 1
+      ;;
+    *) # preserve positional arguments
+      PARAMS="$PARAMS $1"
+      shift
+      ;;
+  esac
+done
+
+
+
 # preparation
 if [[ "$OSTYPE" == "darwin"* ]]; then
 	# Mac OS
@@ -85,6 +145,11 @@ if [ ! -z "$mariadb_container" ]; then
   }
 fi
 
+# If will be restarting, doing full lnd backup and lnd is enabled then give loud warning
+if $RESTART && [[ "$EXCLUDE_LND_GRAPH" == *false ]] && [[ "$BTCPAYGEN_LIGHTNING" == lnd ]]; then
+  printf '\n%s\n%s\n\n' "$WARNING_LND_DIRE1A" "$WARNING_LND_DIRE2"
+fi
+
 # BTCPay Server backup
 printf "\nℹ️ Stopping BTCPay Server …\n\n"
 btcpay_down
@@ -113,7 +178,7 @@ echo "ℹ️ Archiving files in $(pwd)…"
     --exclude="volumes/generated_mariadb_datadir" \
     --exclude="volumes/generated_postgres_datadir" \
     --exclude="volumes/generated_electrumx_datadir" \
-    --exclude="volumes/generated_lnd_bitcoin_datadir/_data/data/graph" \
+    --exclude="$EXCLUDE_LND_GRAPH" \
     --exclude="volumes/generated_clightning_bitcoin_datadir/_data/lightning-rpc" \
     --exclude="volumes/generated_lwd-cache" \
     --exclude="volumes/generated_zebrad-cache" \
@@ -131,26 +196,39 @@ echo "ℹ️ Archiving files in $(pwd)…"
       backup_path="$backup_path.gpg"
       echo "✅ Encryption done."
     } || {
-      echo "🚨  Encrypting failed. Please check the error message above."
       printf "\nℹ️  Restarting BTCPay Server …\n\n"
+      echo "🚨  Encrypting failed. Please check the error message above."
       cd $btcpay_dir
       btcpay_up
       exit 1
     }
   fi
 } || {
+  printf "\nℹ️  Restarting BTCPay Server …\n\n"
   echo "🚨 Archiving failed. Please check the error message above."
-  printf "\nℹ️ Restarting BTCPay Server …\n\n"
   cd $btcpay_dir
   btcpay_up
   exit 1
 }
 
-printf "\nℹ️ Restarting BTCPay Server …\n\n"
 cd $btcpay_dir
-btcpay_up
+if $RESTART; then
+  printf "\nℹ️ Restarting BTCPay Server …\n\n"
+  btcpay_up
+else
+  printf "\nℹ️ Not restarting BTCPay Server …\n\n"
+fi
 
 printf "\nℹ️ Cleaning up …\n\n"
 rm $postgres_dump_path
 
-printf "✅ Backup done => $backup_path\n\n"
+printf "\n✅ Backup done => $backup_path\n\n"
+
+if [[ "$EXCLUDE_LND_GRAPH" == *false ]]; then
+  printf "\n✅ Full lnd state, if available, has been fully backed up\n"
+  if $RESTART && [[ "$BTCPAYGEN_LIGHTNING" == lnd ]]; then
+      printf '\n%s\n%s\n\n' "$WARNING_LND_DIRE1B" "$WARNING_LND_DIRE2"
+  else
+    printf "\nℹ️ This backup should only be restored once and only onto to another server\n\n"
+  fi
+fi
