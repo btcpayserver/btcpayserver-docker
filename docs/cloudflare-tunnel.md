@@ -45,13 +45,14 @@ First, we are going to create the tunnel on Cloudflare.
 
 ![BTCPay Server Cloudflare Tunnel](./img/btcpayexposecloudflare5.jpg)
 
-8. In the SSH section of your server, add Cloudflare tunnel by running the following script. (replace `<YOUR_TOKEN_HERE>` with what you copied in step `5.`, and also replace `<YOUR_DOMAIN_HERE>` with the domain you entered in steps `7.`)
+8. Log in to your server via SSH, login as root and navigate to `path/to/btcpayserver-docker/`. Add Cloudflare tunnel by running the following script. (Replace `<YOUR_TOKEN_HERE>` with what you copied in step `5.`, and also replace `<YOUR_DOMAIN_HERE>` with the domain you entered in step `7.`). If using [this guide](./docs/save-env-vars.md), remember to update script.
+
 ```bash
-BTCPAY_HOST="<YOUR_DOMAIN_HERE>"
+export BTCPAY_HOST="<YOUR_DOMAIN_HERE>"
 [[ "$REVERSEPROXY_DEFAULT_HOST" ]] && REVERSEPROXY_DEFAULT_HOST="$BTCPAY_HOST"
-CLOUDFLARE_TUNNEL_TOKEN="<YOUR_TOKEN_HERE>"
-BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-cloudflared"
-BTCPAYGEN_EXCLUDE_FRAGMENTS="$BTCPAYGEN_EXCLUDE_FRAGMENTS;nginx-https"
+export CLOUDFLARE_TUNNEL_TOKEN="<YOUR_TOKEN_HERE>"
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-cloudflared"
+export BTCPAYGEN_EXCLUDE_FRAGMENTS="$BTCPAYGEN_EXCLUDE_FRAGMENTS;nginx-https"
 . btcpay-setup.sh -i
 ```
 
