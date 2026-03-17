@@ -687,7 +687,7 @@ git clone https://github.com/apotdevin/thunderhub thunderhub
 cd thunderhub
 git checkout v0.15.4
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:base-v0.15.4" .
+docker build -f "$DOCKERFILE" -t "apotdevin/thunderhub:base-0.15.4" .
 cd - && cd ..
 
 
