@@ -674,7 +674,7 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePathARM32v7 = "Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = "Dockerfile";
                     dockerInfo.GitLink = "https://github.com/apotdevin/thunderhub";
-                    dockerInfo.GitRef = $"{image.Tag.Split('-')[1]}";
+                    dockerInfo.GitRef = $"v{image.Tag.Split('-')[1]}";
                     dockerInfo.SupportedByUs = false;
                     break;
                 case "python-teos":
