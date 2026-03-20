@@ -167,7 +167,6 @@ namespace DockerGenerator
 			}
 
 			YamlMappingNode output = new YamlMappingNode();
-			output.Add("version", new YamlScalarNode("3") { Style = YamlDotNet.Core.ScalarStyle.DoubleQuoted });
 			output.Add("services", new YamlMappingNode(Merge(services)));
 			output.Add("volumes", new YamlMappingNode(volumes));
 			output.Add("configs", new YamlMappingNode(configs));
