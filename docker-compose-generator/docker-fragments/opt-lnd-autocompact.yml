@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   lnd_bitcoin:
     environment:

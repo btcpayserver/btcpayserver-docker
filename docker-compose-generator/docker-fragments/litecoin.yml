@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   litecoind:
     restart: unless-stopped

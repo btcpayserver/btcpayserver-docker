@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   configurator:
     restart: unless-stopped

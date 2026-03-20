@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   bitcoinplusd:
     restart: unless-stopped

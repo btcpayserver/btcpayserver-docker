@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   dogecoind:
     restart: unless-stopped

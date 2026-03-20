@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   lnd_groestlcoin:
     image: groestlcoin/lnd:v0.10.0-grs
