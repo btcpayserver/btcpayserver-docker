@@ -1,6 +1,6 @@
 services:
   shopify-app-deployer:
-    image: btcpayserver/shopify-app-deployer:1.6
+    image: btcpayserver/shopify-app-deployer:1.7
     restart: unless-stopped
     init: true
     expose:
