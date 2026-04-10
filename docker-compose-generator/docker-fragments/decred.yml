@@ -1,0 +1,23 @@
+services:
+  dcrwallet:
+    restart: unless-stopped
+    container_name: btcpayserver_dcrwallet
+    image: ghcr.io/bisoncraft/decred:2.1.5
+    command:
+      - dcrwallet
+      - --spv
+      - --username=btcpay
+      - --password=btcpay
+      - --rpclisten=0.0.0.0:9110
+      - --pass=${BTCPAY_DCR_WALLET_PASSPHRASE}
+    expose:
+      - "9110"
+    volumes:
+      - "dcr_wallet:/root/.dcrwallet"
+  btcpayserver:
+    environment:
+      BTCPAY_DCR_WALLET_URI: https://dcrwallet:9110
+      BTCPAY_DCR_RPC_USERNAME: btcpay
+      BTCPAY_DCR_RPC_PASSWORD: btcpay
+volumes:
+  dcr_wallet:

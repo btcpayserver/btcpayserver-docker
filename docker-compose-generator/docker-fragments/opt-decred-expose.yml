@@ -1,0 +1,6 @@
+services:
+  dcrwallet:
+    ports:
+      - "127.0.0.1:9110:9110"
+required:
+  - "decred"
