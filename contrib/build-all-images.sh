@@ -161,22 +161,6 @@ docker build -f "$DOCKERFILE" -t "dalijolijo/docker-bitcore:0.90.9.10" .
 cd - && cd ..
 
 
-# Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.3.7/Dockerfile
-DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.3.7/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.3.7/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/btcpayserver:2.3.7"
-git clone https://github.com/btcpayserver/btcpayserver btcpayserver
-cd btcpayserver
-git checkout v2.3.7
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:2.3.7" .
-cd - && cd ..
-
-
 # Build dash
 # https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Dash/23.1.2/Dash/23.1.2/linuxamd64.Dockerfile
 DOCKERFILE="Dash/23.1.2/linuxamd64.Dockerfile"
@@ -364,22 +348,6 @@ cd monero
 git checkout Monero/0.18.4.3
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.18.4.3" .
-cd - && cd ..
-
-
-# Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.2/Dockerfile
-DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.2/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.2/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building nicolasdorier/nbxplorer:2.6.2"
-git clone https://github.com/dgarage/nbxplorer nbxplorer
-cd nbxplorer
-git checkout v2.6.2
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.6.2" .
 cd - && cd ..
 
 
@@ -1255,6 +1223,34 @@ docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:v0.15.4" .
 cd - && cd ..
 
 
+# Build btcpayserver
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.3.7/Dockerfile
+DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.3.7/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.3.7/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+echo "Building btcpayserver/btcpayserver:2.3.7"
+git clone https://github.com/btcpayserver/btcpayserver btcpayserver
+cd btcpayserver
+git checkout v2.3.7
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:2.3.7" .
+cd - && cd ..
+
+
+# Build bisoncraft/decred
+# https://raw.githubusercontent.com/bisoncraft/btcpayserver-decred-plugin/v2.1.5/Dockerfile.decred
+DOCKERFILE="Dockerfile.decred"
+echo "Building ghcr.io/bisoncraft/decred:2.1.5"
+git clone https://github.com/bisoncraft/btcpayserver-decred-plugin bisoncraft/decred
+cd bisoncraft/decred
+git checkout v2.1.5
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "ghcr.io/bisoncraft/decred:2.1.5" .
+cd - && cd ..
+
+
 # Build shopify-app-deployer
 # https://raw.githubusercontent.com/btcpayserver/shopify-app/1.8/Dockerfile
 DOCKERFILE="Dockerfile"
@@ -1268,6 +1264,22 @@ cd shopify-app-deployer
 git checkout 1.8
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/shopify-app-deployer:1.8" .
+cd - && cd ..
+
+
+# Build nbxplorer
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.3/Dockerfile
+DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.3/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.3/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+echo "Building nicolasdorier/nbxplorer:2.6.3"
+git clone https://github.com/dgarage/nbxplorer nbxplorer
+cd nbxplorer
+git checkout v2.6.3
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.6.3" .
 cd - && cd ..
 
 

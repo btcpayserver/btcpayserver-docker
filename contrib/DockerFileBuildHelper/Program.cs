@@ -802,6 +802,13 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/timescale/timescaledb-docker";
                     dockerInfo.GitRef = "main";
                     break;
+                case "ghcr.io/bisoncraft/decred":
+                    dockerInfo.DockerFilePath = $"Dockerfile.decred";
+                    //dockerInfo.DockerFilePathARM32v7 = $"Dockerfile.decred";
+                    //dockerInfo.DockerFilePathARM64v8 = $"Dockerfile.decred";
+                    dockerInfo.GitLink = "https://github.com/bisoncraft/btcpayserver-decred-plugin";
+                    dockerInfo.GitRef = $"v{image.Tag}";
+                    break;
                 default:
                     if (firstTry)
                     {
