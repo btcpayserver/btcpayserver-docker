@@ -1268,18 +1268,18 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.3/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.4/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.3/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.4/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.3/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.4/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building nicolasdorier/nbxplorer:2.6.3"
+echo "Building nicolasdorier/nbxplorer:2.6.4"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.6.3
+git checkout v2.6.4
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.6.3" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.6.4" .
 cd - && cd ..
 
 
