@@ -2,7 +2,7 @@ services:
   litecoind:
     restart: unless-stopped
     container_name: btcpayserver_litecoind
-    image: btcpayserver/litecoin:0.21.2.1-2
+    image: btcpayserver/litecoin:0.21.5.4
     environment:
       BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       BITCOIN_WALLETDIR: "/walletdata"
