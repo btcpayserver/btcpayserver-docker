@@ -27,6 +27,7 @@ install_tooling() {
                 "*" "btcpay-down.sh" "Command line for stopping all services related to BTCPay Server" \
                 "*" "btcpay-restart.sh" "Command line for restarting all services related to BTCPay Server" \
                 "*" "btcpay-setup.sh" "Command line for restarting all services related to BTCPay Server" \
+                "*" "switch-node.sh" "Command line for switching the Bitcoin node implementation" \
                 "*" "btcpay-up.sh" "Command line for starting all services related to BTCPay Server" \
                 "*" "btcpay-admin.sh" "Command line for some administrative operation in BTCPay Server" \
                 "*" "btcpay-update.sh" "Command line for updating your BTCPay Server to the latest commit of this repository" \
