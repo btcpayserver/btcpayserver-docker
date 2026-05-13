@@ -13,16 +13,6 @@ fi
 
 . ${BASH_PROFILE_SCRIPT}
 
-if [ ! -z $BTCPAY_DOCKER_COMPOSE ] && [ ! -z $DOWNLOAD_ROOT ] && [ -z $BTCPAYGEN_OLD_PREGEN ]; then 
-    echo "Your deployment is too old, you need to migrate by following instructions on this link https://github.com/btcpayserver/btcpayserver-docker/tree/master#i-deployed-before-btcpay-setupsh-existed-before-may-17-can-i-migrate-to-this-new-system"
-    exit
-fi
-
-if [[ $BTCPAY_DOCKER_COMPOSE != *docker-compose.generated.yml ]]; then
-    echo "Your deployment is too old, you need to migrate by following instructions on this link https://github.com/btcpayserver/btcpayserver-docker/tree/master#i-deployed-before-btcpay-setupsh-existed-before-may-17-can-i-migrate-to-this-new-system"
-    exit
-fi
-
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 
 if [[ "$1" != "--skip-git-pull" ]]; then
@@ -45,11 +35,6 @@ docker_update
 if ! ./build.sh; then
     echo "Failed to generate the docker-compose"
     exit 1
-fi
-
-if [ "$BTCPAYGEN_OLD_PREGEN" == "true" ]; then
-    cp Generated/docker-compose.generated.yml $BTCPAY_DOCKER_COMPOSE
-    cp Generated/torrc.tmpl "$(dirname "$BTCPAY_DOCKER_COMPOSE")/torrc.tmpl"
 fi
 
 if ! grep -Fxq "export COMPOSE_HTTP_TIMEOUT=\"180\"" "$BASH_PROFILE_SCRIPT"; then

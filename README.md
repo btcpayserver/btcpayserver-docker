@@ -261,7 +261,8 @@ Next, you will need to configure the runtime environment variables for `Generate
 `/etc/profile.d/btcpay-env.sh` ensures that your environment variables are correctly setup when you login, so you can use the tools:
 
 ```bash
-export BTCPAYGEN_OLD_PREGEN="false"
+#!/bin/bash
+export COMPOSE_HTTP_TIMEOUT="180"
 export BTCPAYGEN_CRYPTO1="btc"
 export BTCPAYGEN_CRYPTO2=""
 export BTCPAYGEN_CRYPTO3=""
@@ -271,15 +272,20 @@ export BTCPAYGEN_CRYPTO6=""
 export BTCPAYGEN_CRYPTO7=""
 export BTCPAYGEN_CRYPTO8=""
 export BTCPAYGEN_CRYPTO9=""
-export BTCPAYGEN_LIGHTNING="clightning"
+export BTCPAYGEN_LIGHTNING="lnd"
 export BTCPAYGEN_REVERSEPROXY="nginx"
-export BTCPAYGEN_ADDITIONAL_FRAGMENTS=""
-export BTCPAY_DOCKER_COMPOSE="/var/lib/waagent/custom-script/download/0/btcpayserver-docker/Production/docker-compose.generated.yml"
-export BTCPAY_BASE_DIRECTORY="/var/lib/waagent/custom-script/download/0"
-export BTCPAY_ENV_FILE="/var/lib/waagent/custom-script/download/0/.env"
-export BTCPAY_HOST_SSHKEYFILE="/root/.ssh/id_rsa_btcpay"
-if cat $BTCPAY_ENV_FILE &> /dev/null; then
-  export $(grep -v '^#' "$BTCPAY_ENV_FILE" | xargs)
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage-s;opt-add-nolimits"
+export BTCPAYGEN_EXCLUDE_FRAGMENTS=";bitcoin"
+export BTCPAY_DOCKER_COMPOSE="/root/btcpayserver-docker/Generated/docker-compose.generated.yml"
+export BTCPAY_BASE_DIRECTORY="/root"
+export BTCPAY_ENV_FILE="/root/.env"
+export BTCPAY_HOST_SSHKEYFILE=""
+export BTCPAY_ENABLE_SSH=true
+export PIHOLE_SERVERIP=""
+if cat "$BTCPAY_ENV_FILE" &> /dev/null; then
+  while IFS= read -r line; do
+    ! [[ "$line" == "#"* ]] && [[ "$line" == *"="* ]] && export "$line"
+  done < "$BTCPAY_ENV_FILE"
 fi
 ```
 
@@ -429,41 +435,6 @@ For example, if you support `btc` and `ltc` already, and want to add `btg`:
 export BTCPAYGEN_CRYPTO3='btg'
 . btcpay-setup.sh -i
 ```
-
-## I deployed before `btcpay-setup.sh` existed (before May 17, 2018), can I migrate to this new system?
-
-Yes, run the following commands to update:
-
-```bash
-sudo su -
-
-cd $DOWNLOAD_ROOT/btcpayserver-docker
-git checkout master
-git pull
-git checkout 9acb5d8067cb5c46f59858137feb699b41ac9f19
-btcpay-update.sh
-. ./btcpay-setup.sh -i
-git checkout master
-btcpay-update.sh
-
-exit
-```
-
-## I'm getting an error on Windows: `Cannot create container for service docker: Mount denied`?
-
-If you see this error:
-
-`Cannot create container for service docker: b'Mount denied:\nThe source path "\\\\var\\\\run\\\\docker.sock:/var/run/docker.sock"\nis not a valid Windows path'`.
-
-Run this in [powershell](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/starting-windows-powershell):
-
-```powershell
-$Env:COMPOSE_CONVERT_WINDOWS_PATHS=1
-```
-
-Then, run `docker-compose -f EXAMPLE.yml up`.
-
-This bug comes from Docker for Windows and is [tracked on Github](https://github.com/docker/for-win/issues/1829).
 
 ## How I can prune my node(s)?
 

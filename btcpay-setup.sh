@@ -183,17 +183,10 @@ if [ ! -z "$BTCPAY_ADDITIONAL_HOSTS" ] && [[ "$BTCPAY_ADDITIONAL_HOSTS" == .onio
     echo "$BTCPAY_ADDITIONAL_HOSTS should not contain onion hosts, additional hosts is only for getting https certificates, those are not available to tor addresses"
     return;
 fi
-######### Migration: old pregen environment to new environment ############
-if [[ ! -z $BTCPAY_DOCKER_COMPOSE ]] && [[ ! -z $DOWNLOAD_ROOT ]] && [[ -z $BTCPAYGEN_OLD_PREGEN ]]; then
-    echo "Your deployment is too old, you need to migrate by following instructions on this link https://docs.btcpayserver.org/Docker/#i-deployed-before-btcpay-setup-sh-existed-before-may-17-2018-can-i-migrate-to-this-new-system"
-    return
-fi
-#########################################################
 
 [[ $LETSENCRYPT_EMAIL == *@example.com ]] && echo "LETSENCRYPT_EMAIL ends with @example.com, setting to empty email instead" && LETSENCRYPT_EMAIL=""
 
 : "${LETSENCRYPT_EMAIL:=}"
-: "${BTCPAYGEN_OLD_PREGEN:=false}"
 : "${NBITCOIN_NETWORK:=mainnet}"
 : "${BTCPAYGEN_CRYPTO1:=btc}"
 : "${BTCPAYGEN_REVERSEPROXY:=nginx}"
@@ -212,18 +205,7 @@ fi
 OLD_BTCPAY_DOCKER_COMPOSE="$BTCPAY_DOCKER_COMPOSE"
 ORIGINAL_DIRECTORY="$(pwd)"
 BTCPAY_BASE_DIRECTORY="$(dirname "$(pwd)")"
-
-if [[ "$BTCPAYGEN_OLD_PREGEN" == "true" ]]; then
-    if [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production ]]; then
-        BTCPAY_DOCKER_COMPOSE="$(pwd)/Production/docker-compose.generated.yml"
-    elif [[ $(dirname $BTCPAY_DOCKER_COMPOSE) == *Production-NoReverseProxy ]]; then
-        BTCPAY_DOCKER_COMPOSE="$(pwd)/Production-NoReverseProxy/docker-compose.generated.yml"
-    else
-        BTCPAY_DOCKER_COMPOSE="$(pwd)/Production/docker-compose.generated.yml"
-    fi
-else # new deployments must be in Generated
-    BTCPAY_DOCKER_COMPOSE="$(pwd)/Generated/docker-compose.generated.yml"
-fi
+BTCPAY_DOCKER_COMPOSE="$(pwd)/Generated/docker-compose.generated.yml"
 
 BTCPAY_ENV_FILE="$BTCPAY_BASE_DIRECTORY/.env"
 
@@ -324,7 +306,6 @@ Additional exported variables:
 BTCPAY_DOCKER_COMPOSE=$BTCPAY_DOCKER_COMPOSE
 BTCPAY_BASE_DIRECTORY=$BTCPAY_BASE_DIRECTORY
 BTCPAY_ENV_FILE=$BTCPAY_ENV_FILE
-BTCPAYGEN_OLD_PREGEN=$BTCPAYGEN_OLD_PREGEN
 BTCPAY_SSHKEYFILE=$BTCPAY_SSHKEYFILE
 BTCPAY_SSHAUTHORIZEDKEYS=$BTCPAY_SSHAUTHORIZEDKEYS
 BTCPAY_HOST_SSHAUTHORIZEDKEYS:$BTCPAY_HOST_SSHAUTHORIZEDKEYS
@@ -350,7 +331,6 @@ touch "$BASH_PROFILE_SCRIPT"
 echo "
 #!/bin/bash
 export COMPOSE_HTTP_TIMEOUT=\"180\"
-export BTCPAYGEN_OLD_PREGEN=\"$BTCPAYGEN_OLD_PREGEN\"
 export BTCPAYGEN_CRYPTO1=\"$BTCPAYGEN_CRYPTO1\"
 export BTCPAYGEN_CRYPTO2=\"$BTCPAYGEN_CRYPTO2\"
 export BTCPAYGEN_CRYPTO3=\"$BTCPAYGEN_CRYPTO3\"
@@ -450,10 +430,6 @@ if $HAS_DOCKER; then
         echo "Failed to generate the docker-compose"
         return
     fi
-fi
-
-if [[ "$BTCPAYGEN_OLD_PREGEN" == "true" ]]; then
-    cp Generated/docker-compose.generated.yml $BTCPAY_DOCKER_COMPOSE
 fi
 
 # Schedule for reboot
