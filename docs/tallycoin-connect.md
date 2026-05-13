@@ -19,6 +19,7 @@ export TALLYCOIN_PASSWD_CLEARTEXT="sUpErSeCuRe"
 BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-tallycoin-connect"
 . btcpay-setup.sh -i
 ```
+If using [this guide](./docs/save-env-vars.md), remember to update script.
 
 Afterwards you should see Tallycoin Connect appear as a service on the Server Settings > Services page in BTCPay Server.
 

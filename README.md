@@ -46,7 +46,7 @@ Let's assume your domain is `btcpay.EXAMPLE.com`.
 
 The setup below assumes you want to support Bitcoin, Core Lightning (CLN), HTTPS automatically configured by Nginx. It also enables node pruning, which you can [modify](#generated-docker-compose) or ignore if you have enough disk space for a full node. Finally, your domain is `btcpay.EXAMPLE.com` should reflect your actual domain name.
 
-[Environment variables](#environment-variables) can be tailored to your needs. Some variables require additional storage space.
+[Environment variables](#environment-variables) can be tailored to your needs. Some variables require additional storage space. It may be useful to you to save your environment variables to a script, [details here](./docs/save-env-vars.md).
 
 ```bash
 # Login as root
