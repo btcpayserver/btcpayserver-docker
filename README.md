@@ -145,7 +145,7 @@ A wide variety of useful scripts are available once BTCPay is installed:
 * `. ./btcpay-setup.sh`: Information about additional parameters
 * `. ./btcpay-setup.sh -i`: Set up your BTCPayServer
 * `btcpay-restart.sh`: Restart your BTCPayServer
-* `switch-node.sh bitcoin|bitcoincore|bitcoinknots`: Switch your Bitcoin node implementation
+* `switch-node.sh default|bitcoincore|bitcoinknots`: Switch your Bitcoin node implementation
 
 # Under the hood
 
