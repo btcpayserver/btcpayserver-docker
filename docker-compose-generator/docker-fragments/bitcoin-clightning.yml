@@ -1,6 +1,6 @@
 services:
   clightning_bitcoin:
-    image: btcpayserver/lightning:v25.05
+    image: btcpayserver/lightning:v26.06.1
     container_name: btcpayserver_clightning_bitcoin
     restart: unless-stopped
     environment:
@@ -13,7 +13,6 @@ services:
       LIGHTNINGD_OPT: |
         bitcoin-datadir=/etc/bitcoin
         bitcoin-rpcconnect=bitcoind
-        experimental-offers
         database-upgrade=true
         rpc-file-mode=0666
         clnrest-port=3010

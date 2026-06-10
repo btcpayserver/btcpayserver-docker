@@ -1,6 +1,6 @@
 services:
   phoenixd:
-    image: acinq/phoenixd:0.6.3
+    image: acinq/phoenixd:0.8.0
     container_name: phoenixd
     restart: unless-stopped
     networks:
