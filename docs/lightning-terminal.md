@@ -16,6 +16,7 @@ export LIT_PASSWD="sUpErSeCuRe"
 export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-lightning-terminal"
 . btcpay-setup.sh -i
 ```
+If using [this guide](./docs/save-env-vars.md) to save your config to a script, remember to add the new options.
 
 Afterwards you should see Lightning Terminal appear as a service on the Server Settings > Services page in BTCPay Server.
 
