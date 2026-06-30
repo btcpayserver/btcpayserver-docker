@@ -960,18 +960,18 @@ cd - && cd ..
 
 
 # Build postgres
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/18.1-1/Postgres/18.1/linuxamd64.Dockerfile
-DOCKERFILE="Postgres/18.1/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/18.1-1/Postgres/18.1/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Postgres/18.1/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/18.1-1/Postgres/18.1/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Postgres/18.1/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/postgres:18.1-1"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/18.4/Postgres/18.4/linuxamd64.Dockerfile
+DOCKERFILE="Postgres/18.4/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/18.4/Postgres/18.4/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Postgres/18.4/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Postgres/18.4/Postgres/18.4/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Postgres/18.4/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/postgres:18.4"
 git clone https://github.com/btcpayserver/dockerfile-deps postgres
 cd postgres
-git checkout Postgres/18.1-1
+git checkout Postgres/18.4
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/postgres:18.1-1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/postgres:18.4" .
 cd - && cd ..
 
 
