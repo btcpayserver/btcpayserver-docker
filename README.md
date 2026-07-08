@@ -110,6 +110,7 @@ Check out this video if you're interested in learning more about setting up [BTC
 * `BTCPAYGEN_SUBNAME`: The subname of the generated docker-compose file, where the full name is `Generated/docker-compose.SUBNAME.yml` (Default: `generated`)
 * `BTCPAYGEN_ADDITIONAL_FRAGMENTS`: Semicolon-separated list of additional fragments you want to use (eg. `opt-save-storage`)
 * `LETSENCRYPT_EMAIL`: An email will be sent to this address if certificate expires and fails to renew automatically (eg. `me@example.com`)
+* `BTCPAY_LETSENCRYPT_HOSTS`: Optional, comma-separated subset of your hosts to request a Let's Encrypt certificate for. Set to an empty string (`export BTCPAY_LETSENCRYPT_HOSTS=""`) to disable Let's Encrypt entirely, for example when TLS certificates are provisioned out of band (Cloudflare Origin CA, corporate CA, ...). When unset, certificates are requested for `BTCPAY_HOST` and `BTCPAY_ADDITIONAL_HOSTS`, as before.
 * `ACME_CA_URI`: The API endpoint to ask for HTTPS certificate (Default: `production`)
 * `BTCPAY_ENABLE_SSH`: Optional, gives BTCPay Server SSH access to the host by allowing it to edit authorized_keys of the host, it can be used for managing the authorized_keys or updating BTCPay Server directly through the website. (Default: false)
 * `BTCPAYGEN_DOCKER_IMAGE`: Optional, Specify which generator image to use if you have customized the C# generator. Set to `btcpayserver/docker-compose-generator:local` to build the generator locally at runtime.

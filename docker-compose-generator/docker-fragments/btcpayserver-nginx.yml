@@ -10,5 +10,9 @@ services:
       SSL_POLICY: Mozilla-Modern
 
       # Let's encrypt settings
-      LETSENCRYPT_HOST: ${BTCPAY_HOST},${BTCPAY_ADDITIONAL_HOSTS}
+      # BTCPAY_LETSENCRYPT_HOSTS narrows which hosts a certificate is
+      # requested for; setting it to an empty string disables Let's Encrypt
+      # entirely (e.g. when certificates are provisioned out of band).
+      # When unset, all hosts get a certificate, as before.
+      LETSENCRYPT_HOST: ${BTCPAY_LETSENCRYPT_HOSTS-${BTCPAY_HOST},${BTCPAY_ADDITIONAL_HOSTS}}
       LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-<no value>}
