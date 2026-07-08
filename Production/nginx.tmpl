@@ -390,6 +390,21 @@ server {
 }
 {{ end }}
 
+{{/*
+	Unlike upstream nginx-proxy, this template groups upstreams by
+	VIRTUAL_HOST_NAME instead of VIRTUAL_HOST. A container that only defines
+	VIRTUAL_HOST is not routed at all: its hosts fall through to the default
+	server above and return 503, with no hint as to why. Surface such
+	containers here so the misconfiguration is visible in the generated file.
+*/}}
+{{ range $container := whereExist (whereNotExist $ "Env.VIRTUAL_HOST_NAME") "Env.VIRTUAL_HOST" }}
+# WARNING: container "{{ $container.Name }}" defines VIRTUAL_HOST={{ $container.Env.VIRTUAL_HOST }}
+# but not VIRTUAL_HOST_NAME, so it is NOT routed and requests for its host(s)
+# return the default 503. Unlike upstream nginx-proxy, this template also
+# requires VIRTUAL_HOST_NAME (a short name, unique per upstream) on the
+# container.
+{{ end }}
+
 {{ range $host_name, $containers := groupByMulti $ "Env.VIRTUAL_HOST_NAME" "," }}
 
 {{ $host_name := trim $host_name }}
