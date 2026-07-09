@@ -357,6 +357,13 @@ if cat \"\$BTCPAY_ENV_FILE\" &> /dev/null; then
 fi
 " > ${BASH_PROFILE_SCRIPT}
 
+# Contrary to the other environment variables, an empty BTCPAY_LETSENCRYPT_HOSTS and an unset one
+# behave differently (empty disables Let's Encrypt, unset requests certificates for all hosts),
+# so only save it when it is explicitly set.
+if [[ "${BTCPAY_LETSENCRYPT_HOSTS+x}" ]]; then
+    echo "export BTCPAY_LETSENCRYPT_HOSTS=\"$BTCPAY_LETSENCRYPT_HOSTS\"" >> ${BASH_PROFILE_SCRIPT}
+fi
+
 chmod +x ${BASH_PROFILE_SCRIPT}
 
 echo -e "BTCPay Server environment variables successfully saved in $BASH_PROFILE_SCRIPT\n"
