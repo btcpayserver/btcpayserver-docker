@@ -145,8 +145,8 @@ The script will do the following steps:
 * Extract (and decrypt) the backup archive
 * Stop BTCPay Server
 * Restore the Docker volumes
-* Start the database container
-* Import the database dump
+* Start the database containers and wait until they are ready
+* Import the database dumps with strict error handling
 * Restart BTCPay Server
 * Cleanup: Remove the temporary restore directory
 
@@ -156,11 +156,13 @@ If the backup file cannot be found in the provided path, the script will exit wi
 🚨 /var/backups/backup.tar.gz.gpg does not exist.
 ```
 
-Just as the `btcpay-backup.sh` script, the restore will stop at ANY error it may encounter.
+Just as the `btcpay-backup.sh` script, the restore will stop at any error it encounters.
+If an error occurs after BTCPay Server has been stopped, the containers remain stopped to avoid running against partially restored data.
+The temporary restore directory is retained for diagnosis and its path is printed in the error output.
 If the backup file was created while the `BTCPAY_BACKUP_PASSPHRASE` was set but not used on restoring, the following error would occur:
 
 ```
-🚨  Decryption failed. Please check the error message above.
+🚨 Decryption or archive extraction failed. Please check the error above.
 ```
 
 When the restore has completed, you get the message:
