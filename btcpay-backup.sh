@@ -34,6 +34,12 @@ backup_dir="$docker_dir/volumes/backup_datadir/_data"
 postgres_dump_path="$docker_dir/$postgres_dump_name"
 backup_path="$backup_dir/backup.tar.gz"
 
+# Backup with custom file name and timestamp:
+if [ "$BACKUP_TIMESTAMP" == true ]; then
+  timestamp=$(date "+%Y%m%d-%H%M%S")
+  backup_path="$backup_dir/$timestamp-backup.tar.gz"
+fi
+
 # ensure backup dir exists
 if [ ! -d "$backup_dir" ]; then
   mkdir -p $backup_dir
