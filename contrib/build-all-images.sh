@@ -933,6 +933,38 @@ docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:v0.15.10" .
 cd - && cd ..
 
 
+# Build lnd
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.1-beta/linuxamd64.Dockerfile
+DOCKERFILE="linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.1-beta/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.1-beta/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/lnd:v0.21.1-beta"
+git clone https://github.com/btcpayserver/lnd lnd
+cd lnd
+git checkout basedon-v0.21.1-beta
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.21.1-beta" .
+cd - && cd ..
+
+
+# Build rtl
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.10/Dockerfile
+DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.10/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.10/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+echo "Building shahanafarooqui/rtl:v0.15.10"
+git clone https://github.com/Ride-The-Lightning/RTL rtl
+cd rtl
+git checkout v0.15.10
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:v0.15.10" .
+cd - && cd ..
+
+
 # Build bitcoin
 # https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Bitcoin/29.2/Bitcoin/29.2/linuxamd64.Dockerfile
 DOCKERFILE="Bitcoin/29.2/linuxamd64.Dockerfile"
@@ -1234,51 +1266,19 @@ docker build -f "$DOCKERFILE" -t "hhanh00/zcash-walletd:1.1.10" .
 cd - && cd ..
 
 
-# Build lnd
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.1-beta/linuxamd64.Dockerfile
-DOCKERFILE="linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.1-beta/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.1-beta/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/lnd:v0.21.1-beta"
-git clone https://github.com/btcpayserver/lnd lnd
-cd lnd
-git checkout basedon-v0.21.1-beta
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.21.1-beta" .
-cd - && cd ..
-
-
-# Build rtl
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.10/Dockerfile
-DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.10/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.10/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building shahanafarooqui/rtl:v0.15.10"
-git clone https://github.com/Ride-The-Lightning/RTL rtl
-cd rtl
-git checkout v0.15.10
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:v0.15.10" .
-cd - && cd ..
-
-
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.11/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.10/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.11/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.10/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.11/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.10/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building nicolasdorier/nbxplorer:2.6.11"
+echo "Building nicolasdorier/nbxplorer:2.6.10"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.6.11
+git checkout v2.6.10
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.6.11" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.6.10" .
 cd - && cd ..
 
 
