@@ -982,7 +982,7 @@ cd - && cd ..
 
 
 # Build btcpayserver
-# NOTE: The active deployment image is btcpayserver/btcpayserver-internal:2.4.3-rc4,
+# NOTE: The active deployment image is btcpayserver/btcpayserver-internal:2.4.3-rc5,
 # built from an internal repository that cannot be cloned here. The block below
 # still builds the last public release (2.4.2) from btcpayserver/btcpayserver.
 # https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.4.2/Dockerfile
