@@ -2,6 +2,11 @@ services:
   nginx:
     restart: unless-stopped
     image: nginx:1.25.3-bookworm
+    logging:
+      driver: local
+      options:
+        max-size: "20m"
+        max-file: "3"
     container_name: nginx
     ports:
       - "${REVERSEPROXY_HTTP_PORT:-80}:80"
