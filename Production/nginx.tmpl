@@ -27,6 +27,18 @@
 	{{ range $container := $.Containers }}
 		{{ $serviceName := (index $container.Labels "com.docker.compose.service") }}
 		{{ if (eq $serviceName "lnd_bitcoin") }}
+
+	# Those routes on LND are not protected by macaroon.
+	# We returns 500 to mimic calls to ChangePassword when a wallet has already been opened.
+	# We stop logging them to avoid spam of logs from bots.
+	location ~* ^/lnrpc\.WalletUnlocker/(GenSeed|InitWallet|UnlockWallet|ChangePassword)$ {
+		access_log off;
+		return 500;
+	}
+	location ~* ^/lnd-rest/btc/v1/(genseed|initwallet|unlockwallet|changepassword)$ {
+		access_log off;
+		return 500;
+	}
 	location ~* ^/(lnrpc|routerrpc|verrpc|walletrpc)\. {
 		grpc_read_timeout 6000s;
 		grpc_send_timeout 6000s;
