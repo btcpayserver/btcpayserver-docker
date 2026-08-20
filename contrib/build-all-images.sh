@@ -890,18 +890,18 @@ cd - && cd ..
 
 
 # Build rtl
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.10/Dockerfile
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.11/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.10/Dockerfile
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.11/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.10/Dockerfile
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.11/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building shahanafarooqui/rtl:v0.15.10"
+echo "Building shahanafarooqui/rtl:v0.15.11"
 git clone https://github.com/Ride-The-Lightning/RTL rtl
 cd rtl
-git checkout v0.15.10
+git checkout v0.15.11
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:v0.15.10" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:v0.15.11" .
 cd - && cd ..
 
 
@@ -918,18 +918,18 @@ cd - && cd ..
 
 
 # Build rtl
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.10/Dockerfile
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.11/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.10/Dockerfile
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.11/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.10/Dockerfile
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.11/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building shahanafarooqui/rtl:v0.15.10"
+echo "Building shahanafarooqui/rtl:v0.15.11"
 git clone https://github.com/Ride-The-Lightning/RTL rtl
 cd rtl
-git checkout v0.15.10
+git checkout v0.15.11
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:v0.15.10" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:v0.15.11" .
 cd - && cd ..
 
 
@@ -1251,18 +1251,18 @@ cd - && cd ..
 
 
 # Build rtl
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.10/Dockerfile
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.11/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.10/Dockerfile
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.11/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.10/Dockerfile
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.11/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building shahanafarooqui/rtl:v0.15.10"
+echo "Building shahanafarooqui/rtl:v0.15.11"
 git clone https://github.com/Ride-The-Lightning/RTL rtl
 cd rtl
-git checkout v0.15.10
+git checkout v0.15.11
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:v0.15.10" .
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:v0.15.11" .
 cd - && cd ..
 
 
