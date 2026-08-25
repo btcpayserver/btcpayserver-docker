@@ -2,6 +2,9 @@
 
 set -e
 
+. helpers.sh
+btcpay_setup_ssh
+
 : "${BTCPAYGEN_DOCKER_IMAGE:=btcpayserver/docker-compose-generator}"
 if [ "$BTCPAYGEN_DOCKER_IMAGE" == "btcpayserver/docker-compose-generator:local" ]
 then
@@ -31,7 +34,6 @@ docker run -v "$(pwd)/Generated:/app/Generated" \
            -e "BTCPAYGEN_EXCLUDE_FRAGMENTS=$BTCPAYGEN_EXCLUDE_FRAGMENTS" \
            -e "BTCPAYGEN_LIGHTNING=$BTCPAYGEN_LIGHTNING" \
            -e "BTCPAYGEN_SUBNAME=$BTCPAYGEN_SUBNAME" \
-           -e "BTCPAY_HOST_SSHAUTHORIZEDKEYS=$BTCPAY_HOST_SSHAUTHORIZEDKEYS" \
            -e "EPS_XPUB=$EPS_XPUB" \
            --rm $BTCPAYGEN_DOCKER_IMAGE
 

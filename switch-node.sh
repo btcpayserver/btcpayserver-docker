@@ -32,48 +32,15 @@ else
 	BASH_PROFILE_SCRIPT="/etc/profile.d/btcpay-env.sh"
 fi
 
-remove_fragments() {
-    local value="$1"
-    local result=""
-    local fragment
+. helpers.sh
 
-    value="${value//,/;}"
-    IFS=';' read -ra fragments <<< "$value"
-    for fragment in "${fragments[@]}"; do
-        fragment="${fragment//[[:space:]]/}"
-        case "$fragment" in
-            ""|bitcoin|bitcoincore)
-                continue
-                ;;
-        esac
 
-        if [ -z "$result" ]; then
-            result="$fragment"
-        else
-            result="$result;$fragment"
-        fi
-    done
-
-    echo "$result"
-}
-
-append_fragment() {
-    local value="$1"
-    local fragment="$2"
-
-    if [ -z "$value" ]; then
-        echo "$fragment"
-    else
-        echo "$value;$fragment"
-    fi
-}
-
-BTCPAYGEN_ADDITIONAL_FRAGMENTS="$(remove_fragments "$BTCPAYGEN_ADDITIONAL_FRAGMENTS")"
-BTCPAYGEN_EXCLUDE_FRAGMENTS="$(remove_fragments "$BTCPAYGEN_EXCLUDE_FRAGMENTS")"
+BTCPAYGEN_ADDITIONAL_FRAGMENTS="$(remove_fragments "$BTCPAYGEN_ADDITIONAL_FRAGMENTS" "bitcoincore" "bitcoinknots")"
+BTCPAYGEN_EXCLUDE_FRAGMENTS="$(remove_fragments "$BTCPAYGEN_EXCLUDE_FRAGMENTS" "bitcoin")"
 
 if [ "$node" != "default" ]; then
-    BTCPAYGEN_EXCLUDE_FRAGMENTS="$(append_fragment "$BTCPAYGEN_EXCLUDE_FRAGMENTS" "bitcoin")"
-    BTCPAYGEN_ADDITIONAL_FRAGMENTS="$(append_fragment "$BTCPAYGEN_ADDITIONAL_FRAGMENTS" "$node")"
+    BTCPAYGEN_EXCLUDE_FRAGMENTS="$(add_fragments "$BTCPAYGEN_EXCLUDE_FRAGMENTS" "bitcoin")"
+    BTCPAYGEN_ADDITIONAL_FRAGMENTS="$(add_fragments "$BTCPAYGEN_ADDITIONAL_FRAGMENTS" "$node")"
 fi
 
 export BTCPAYGEN_ADDITIONAL_FRAGMENTS

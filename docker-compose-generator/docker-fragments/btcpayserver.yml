@@ -11,10 +11,6 @@ services:
       BTCPAY_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       BTCPAY_BIND: 0.0.0.0:49392
       BTCPAY_ROOTPATH: ${BTCPAY_ROOTPATH:-/}
-      BTCPAY_SSHCONNECTION: "root@host.docker.internal"
-      BTCPAY_SSHTRUSTEDFINGERPRINTS: ${BTCPAY_SSHTRUSTEDFINGERPRINTS}
-      BTCPAY_SSHKEYFILE: ${BTCPAY_SSHKEYFILE}
-      BTCPAY_SSHAUTHORIZEDKEYS: ${BTCPAY_SSHAUTHORIZEDKEYS}
       BTCPAY_DEBUGLOG: btcpay.log
       BTCPAY_UPDATEURL: https://api.github.com/repos/btcpayserver/btcpayserver/releases/latest
       BTCPAY_DOCKERDEPLOYMENT: "true"
@@ -27,7 +23,6 @@ services:
       - postgres
     volumes:
       - "btcpay_datadir:/datadir"
-      - "$<BTCPAY_HOST_SSHAUTHORIZEDKEYS>?:${BTCPAY_SSHAUTHORIZEDKEYS}"
       - "btcpay_pluginsdir:/root/.btcpayserver/Plugins"
 
 volumes:

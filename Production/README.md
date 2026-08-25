@@ -23,8 +23,6 @@ The relevant environment variables are:
 * `LETSENCRYPT_EMAIL`: The email Let's Encrypt will use to notify you about certificate expiration.
 * `ACME_CA_URI`: Let's encrypt API endpoint (`staging` for a staging certificate, `production` for a production one)
 * `LIGHTNING_ALIAS`: Optional, if using the integrated lightning feature, customize the alias of your nodes
-* `BTCPAY_SSHKEYFILE`: Optional, SSH private key that BTCPay can use to connect to this VM's SSH server (You need to copy the key file on BTCPay's datadir volume)
-* `BTCPAY_SSHTRUSTEDFINGERPRINTS`: Optional, BTCPay will ensure that it is connecting to the expected SSH server by checking the host public's key against those fingerprints
 
 If `BTCPAY_HOST` is `btcpay.example.com` and `BTCPAY_ROOTPATH` is `/btcpay`, then you can access the site via `https://btcpay.example.com/btcpay`
 
