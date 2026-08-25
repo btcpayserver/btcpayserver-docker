@@ -1,0 +1,102 @@
+#!/bin/bash
+
+set -euo pipefail
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    BASH_PROFILE_SCRIPT="$HOME/btcpay-env.sh"
+else
+    BASH_PROFILE_SCRIPT="/etc/profile.d/btcpay-env.sh"
+fi
+
+if [ -f "$BASH_PROFILE_SCRIPT" ]; then
+    # shellcheck source=/dev/null
+    . "$BASH_PROFILE_SCRIPT"
+fi
+
+authorized_keys="/root/.ssh/authorized_keys"
+ssh_dir="$(dirname "$authorized_keys")"
+allowed_commands=(env help)
+if [[ "${BTCPAY_ENABLE_SSH:-false}" == "true" ]]; then
+    allowed_commands+=(changedomain update clean restart)
+fi
+
+json_string() {
+    jq -Rs .
+}
+
+json_null() {
+    printf 'null\n'
+}
+
+print_help() {
+    cat <<EOF
+Usage: btcpay-host <command> [arguments]
+
+Commands:
+  env                   Return deployment metadata and supported host commands as JSON.
+  help                  Show this help.
+  showauthorizedkeys    Return authorized SSH public keys as JSON.
+  setauthorizedkeys     Replace authorized SSH public keys with argument 1.
+  changedomain <domain> Change the BTCPay Server domain.
+  update                Update BTCPay Server.
+  clean                 Clean unused host resources.
+  restart               Restart BTCPay Server and related services.
+EOF
+}
+
+command="${1:-}"
+if [ -z "$command" ]; then
+    print_help
+    exit 0
+fi
+
+command_allowed=false
+for allowed_command in "${allowed_commands[@]}"; do
+    if [ "$command" == "$allowed_command" ]; then
+        command_allowed=true
+        break
+    fi
+done
+
+if [ "$command_allowed" != true ]; then
+    echo "Unknown btcpay-host command: $command" >&2
+    exit 1
+fi
+
+case "$command" in
+    env)
+        printf '%s\n' "${allowed_commands[@]}" | jq -Rsc '{deploymentType:"btcpayserver-docker",commands:(split("\n")[:-1])}'
+        ;;
+    help)
+        print_help
+        ;;
+    showauthorizedkeys)
+        if [ -f "$authorized_keys" ]; then
+            json_string < "$authorized_keys"
+        else
+            printf '""\n'
+        fi
+        ;;
+    setauthorizedkeys)
+        mkdir -p "$ssh_dir"
+        chmod 700 "$ssh_dir"
+        if [ ! -f "$authorized_keys" ]; then
+            touch "$authorized_keys"
+            chmod 600 "$authorized_keys"
+        fi
+        printf '%s' "${2:-}" > "$authorized_keys"
+        json_null
+        ;;
+    changedomain)
+        changedomain.sh "${2:-}"
+        ;;
+    update)
+        btcpay-update.sh
+        ;;
+    clean)
+        btcpay-clean.sh
+        ;;
+    restart)
+        btcpay-restart.sh
+        ;;
+esac

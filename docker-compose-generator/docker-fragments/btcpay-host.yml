@@ -1,0 +1,9 @@
+services:
+  btcpayserver:
+    environment:
+        BTCPAY_BTCPAYHOSTENABLED: "true"
+        BTCPAY_SSHCONNECTION: "root@host.docker.internal"
+        BTCPAY_SSHKEYFILE: /root/.ssh/btcpay_host_id_ed25519
+    volumes:
+      - "btcpay_datadir:/datadir"
+      - "/root/.ssh/btcpay_host_id_ed25519:/root/.ssh/btcpay_host_id_ed25519"

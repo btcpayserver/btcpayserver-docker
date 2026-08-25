@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euo pipefail
+
+if ! command -v jq >/dev/null 2>&1; then
+    apt-get update -qq >/dev/null
+    DEBIAN_FRONTEND=noninteractive apt-get install -y -qq jq >/dev/null || {
+        DEBIAN_FRONTEND=noninteractive apt --fix-broken install -y -qq >/dev/null
+        DEBIAN_FRONTEND=noninteractive apt-get install -y -qq jq >/dev/null
+    }
+fi
+
+eval "set -- $(jq -r '@sh' < /dev/stdin)"
+exec btcpay-host "$@"

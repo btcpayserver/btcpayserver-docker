@@ -4,7 +4,6 @@
       "commandName": "Project",
       "commandLineArgs": "pregen",
       "environmentVariables": {
-        "BTCPAY_HOST_SSHKEYFILE": "test.rsa",
         "BTCPAYGEN_LIGHTNING": "clightning",
         "BTCPAYGEN_ADDITIONAL_FRAGMENTS": "opt-save-storage",
         "BTCPAYGEN_CRYPTO4": "ftc",

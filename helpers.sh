@@ -23,6 +23,7 @@ install_tooling() {
                 "joinmarket" "jm.sh" "Command line for your joinmarket instance" \
                 "ndlci_cli" "ndlc-cli.sh" "Command line for NDLC-CLI" \
                 "pihole" "pihole.sh" "Command line for running pihole commands" \
+                "*" "btcpay-host" "Command line exposing the services of the host (see https://github.com/btcpayserver/btcpayserver/pull/7511)" \
                 "*" "btcpay-clean.sh" "Command line for deleting old unused docker images" \
                 "*" "btcpay-down.sh" "Command line for stopping all services related to BTCPay Server" \
                 "*" "btcpay-restart.sh" "Command line for restarting all services related to BTCPay Server" \
@@ -54,6 +55,112 @@ install_tooling() {
     done
 }
 
+remove_fragments() {
+    local value="$1"
+    shift
+    local result=""
+    local fragment
+    local fragments
+    local excluded_fragment
+
+    value="${value//,/;}"
+    IFS=';' read -ra fragments <<< "$value"
+    for fragment in "${fragments[@]}"; do
+        fragment="${fragment//[[:space:]]/}"
+        if [ -z "$fragment" ]; then
+            continue
+        fi
+
+        for excluded_fragment in "$@"; do
+            if [ "$fragment" == "$excluded_fragment" ]; then
+                continue 2
+            fi
+        done
+
+        if [ -z "$result" ]; then
+            result="$fragment"
+        else
+            result="$result;$fragment"
+        fi
+    done
+
+    echo "$result"
+}
+
+add_fragments() {
+    local value="$1"
+    shift
+    local result
+    local fragment
+
+    result="$(remove_fragments "$value" "$@")"
+    for fragment in "$@"; do
+        if [ -z "$fragment" ]; then
+            continue
+        fi
+
+        if [ -z "$result" ]; then
+            result="$fragment"
+        else
+            result="$result;$fragment"
+        fi
+    done
+
+    echo "$result"
+}
+
+btcpay_setup_ssh() {
+    local ssh_dir="/root/.ssh"
+    local key_file="$ssh_dir/btcpay_host_id_ed25519"
+    local authorized_keys="$ssh_dir/authorized_keys"
+    local authorized_keys_tmp="$ssh_dir/authorized_keys.tmp"
+
+    BTCPAYGEN_ADDITIONAL_FRAGMENTS="$(remove_fragments "$BTCPAYGEN_ADDITIONAL_FRAGMENTS" "btcpay-host")"
+    if [[ "$BTCPAY_ENABLE_SSH" == "true" ]]; then
+        BTCPAYGEN_ADDITIONAL_FRAGMENTS="$(add_fragments "$BTCPAYGEN_ADDITIONAL_FRAGMENTS" "btcpay-host")"
+    fi
+
+    if [ "$(id -u)" -ne 0 ]; then
+        if [[ "$BTCPAY_ENABLE_SSH" == "true" ]]; then
+            echo "BTCPAY_ENABLE_SSH=true requires root access to update $authorized_keys"
+            return 1
+        fi
+        return 0
+    fi
+
+    mkdir -p "$ssh_dir"
+    chmod 700 "$ssh_dir"
+
+    if [ ! -f "$authorized_keys" ]; then
+        touch "$authorized_keys"
+        chmod 600 "$authorized_keys"
+    fi
+    cp "$authorized_keys" "$authorized_keys_tmp"
+    sed -i '/ btcpayserver$/d' "$authorized_keys_tmp"
+    sed -i '/ btcpay-host$/d' "$authorized_keys_tmp"
+
+    if [[ "$BTCPAY_ENABLE_SSH" == "true" ]]; then
+        if [ ! -f "$key_file" ]; then
+            ssh-keygen -t ed25519 -f "$key_file" -N "" -C "btcpay-host" -q
+        fi
+        if [ ! -f "$key_file.pub" ]; then
+            ssh-keygen -y -f "$key_file" > "$key_file.pub"
+        fi
+
+        printf 'restrict,command="%s" %s\n' \
+                "${BTCPAY_BASE_DIRECTORY}/btcpayserver-docker/Generated/btcpay-host-proxy" \
+                "$(cat "$key_file.pub")" >> "$authorized_keys_tmp"
+    fi
+
+    if ! cmp -s "$authorized_keys_tmp" "$authorized_keys"; then
+        echo "$authorized_keys updated"
+        mv "$authorized_keys_tmp" "$authorized_keys"
+        chmod 600 "$authorized_keys"
+    else
+        rm "$authorized_keys_tmp"
+    fi
+}
+
 btcpay_expand_variables() {
     BTCPAY_CRYPTOS=""
     for i in "$BTCPAYGEN_CRYPTO1" "$BTCPAYGEN_CRYPTO2" "$BTCPAYGEN_CRYPTO3" "$BTCPAYGEN_CRYPTO4" "$BTCPAYGEN_CRYPTO5" "$BTCPAYGEN_CRYPTO5" "$BTCPAYGEN_CRYPTO6" "$BTCPAYGEN_CRYPTO7" "$BTCPAYGEN_CRYPTO8"
@@ -78,14 +185,6 @@ btcpay_expand_variables() {
 btcpay_update_docker_env() {
 btcpay_expand_variables
 touch $BTCPAY_ENV_FILE
-
-# In a previous release, BTCPAY_HOST_SSHAUTHORIZEDKEYS was not saved into the .env, so the next update after setup
-# with BTCPAY_ENABLE_SSH set, BTCPAY_HOST_SSHAUTHORIZEDKEYS would get empty and break the SSH feature in btcpayserver
-# This condition detect this situation, and fix up BTCPAY_HOST_SSHAUTHORIZEDKEYS
-if [[ "$BTCPAY_ENABLE_SSH" == "true" ]] && ! [[ "$BTCPAY_HOST_SSHAUTHORIZEDKEYS" ]]; then
-    BTCPAY_HOST_SSHAUTHORIZEDKEYS=~/.ssh/authorized_keys
-    BTCPAY_HOST_SSHKEYFILE=""
-fi
 
 sshd_config="/etc/ssh/sshd_config"
 if [[ "$BTCPAY_ENABLE_SSH" == "true" ]] && \
@@ -113,10 +212,6 @@ ACME_CA_URI=$ACME_CA_URI
 NBITCOIN_NETWORK=$NBITCOIN_NETWORK
 LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL
 LIGHTNING_ALIAS=$LIGHTNING_ALIAS
-BTCPAY_SSHTRUSTEDFINGERPRINTS=$BTCPAY_SSHTRUSTEDFINGERPRINTS
-BTCPAY_SSHKEYFILE=$BTCPAY_SSHKEYFILE
-BTCPAY_SSHAUTHORIZEDKEYS=$BTCPAY_SSHAUTHORIZEDKEYS
-BTCPAY_HOST_SSHAUTHORIZEDKEYS=$BTCPAY_HOST_SSHAUTHORIZEDKEYS
 LIBREPATRON_HOST=$LIBREPATRON_HOST
 ZAMMAD_HOST=$ZAMMAD_HOST
 BTCTRANSMUTER_HOST=$BTCTRANSMUTER_HOST

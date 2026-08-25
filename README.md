@@ -265,7 +265,6 @@ export BTCPAYGEN_EXCLUDE_FRAGMENTS=";bitcoin"
 export BTCPAY_DOCKER_COMPOSE="/root/btcpayserver-docker/Generated/docker-compose.generated.yml"
 export BTCPAY_BASE_DIRECTORY="/root"
 export BTCPAY_ENV_FILE="/root/.env"
-export BTCPAY_HOST_SSHKEYFILE=""
 export BTCPAY_ENABLE_SSH=true
 export PIHOLE_SERVERIP=""
 if cat "$BTCPAY_ENV_FILE" &> /dev/null; then
@@ -302,8 +301,6 @@ BTCPAY_HOST=btcpay.EXAMPLE.com
 ACME_CA_URI=production
 NBITCOIN_NETWORK=mainnet
 LETSENCRYPT_EMAIL=me@EXAMPLE.com
-BTCPAY_SSHTRUSTEDFINGERPRINTS=SHA256:eSCD7NtQ/Q6IBl2iRB9caAQ3lDZd8s8iUL6SdeNnhpA
-BTCPAY_SSHKEYFILE=/datadir/id_rsa
 ```
 
 # How can I add an altcoin to BTCPayServer?
