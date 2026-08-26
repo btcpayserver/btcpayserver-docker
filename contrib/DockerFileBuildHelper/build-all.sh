@@ -77,18 +77,6 @@ docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:v0.15.4" .
 cd - && cd ..
 
 
-# Build eclair
-# https://raw.githubusercontent.com/ACINQ/eclair/v0.7.0/Dockerfile
-DOCKERFILE="Dockerfile"
-echo "Building acinq/eclair:release-0.7.0"
-git clone https://github.com/ACINQ/eclair eclair
-cd eclair
-git checkout v0.7.0
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "acinq/eclair:release-0.7.0" .
-cd - && cd ..
-
-
 # Build rtl
 # https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.4/Dockerfile
 DOCKERFILE="Dockerfile"
@@ -236,18 +224,6 @@ cd groestlcoin-spark
 git checkout v0.2.16
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "groestlcoin/groestlcoin-spark:version-0.2.16" .
-cd - && cd ..
-
-
-# Build eclair
-# https://raw.githubusercontent.com/Groestlcoin/eclair/v0.6.0/Dockerfile
-DOCKERFILE="Dockerfile"
-echo "Building groestlcoin/eclair:v0.6.0"
-git clone https://github.com/Groestlcoin/eclair eclair
-cd eclair
-git checkout v0.6.0
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "groestlcoin/eclair:v0.6.0" .
 cd - && cd ..
 
 
@@ -1273,4 +1249,3 @@ git checkout Dogecoin/1.14.7
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/dogecoin:1.14.7" .
 cd - && cd ..
-

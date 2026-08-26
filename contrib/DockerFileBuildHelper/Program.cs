@@ -398,16 +398,6 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/lukechilds/docker-electrumx";
                     dockerInfo.GitRef = $"master";
                     break;
-                case "eclair":
-                    dockerInfo.DockerFilePath = $"Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/ACINQ/eclair";
-                    dockerInfo.GitRef = $"v{image.Tag.Substring("release-".Length)}";
-                    break;
-                case "groestlcoin/eclair":
-                    dockerInfo.DockerFilePath = $"Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/Groestlcoin/eclair";
-                    dockerInfo.GitRef = $"{image.Tag}";
-                    break;
                 case "isso":
                     dockerInfo.DockerFilePath = $"Dockerfile";
                     dockerInfo.GitLink = "https://github.com/JeffVandrewJr/isso";
