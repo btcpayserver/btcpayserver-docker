@@ -18,6 +18,7 @@ services:
         clnrest-port=3010
         clnrest-protocol=http
         clnrest-host=0.0.0.0
+        offline=1
         grpc-port=9736
     volumes:
       - "clightning_bitcoin_datadir:/root/.lightning"
