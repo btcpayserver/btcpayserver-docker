@@ -1,7 +1,7 @@
 services:
   taler-merchant:
     restart: unless-stopped
-    image: rachyand/taler-merchant:1.6.9
+    image: rachyand/taler-merchant:1.6.13
     environment:
       TALER_MERCHANT_PORT: 9966
       TALER_MERCHANT_BASE_URL: "https://${BTCPAY_HOST}/taler-merchant/"
