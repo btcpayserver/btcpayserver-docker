@@ -25,22 +25,9 @@ Note that you need to set `BTCPAY_PROTOCOL=http` if you want to do some tests lo
 
 If you forget, you will get an error HTTP 400 when trying to register a new account on the website.
 
-## Example:
+## Example
 
-With Powershell:
-
-```
-$env:BTCPAY_ROOTPATH="/test";
-$env:BTCPAY_PROTOCOL="http";
-$env:BTCPAY_HOST="btcpay.example.com";
-$env:BTCPAYGEN_REVERSEPROXY="none";
-.\build.ps1
-docker-compose -f "Generated/docker-compose.generated.yml" up --remove-orphans -d
-```
-
-With Linux:
-
-```
+```bash
 export BTCPAY_ROOTPATH="/test"
 export BTCPAY_PROTOCOL="http"
 export BTCPAY_HOST="btcpay.example.com"

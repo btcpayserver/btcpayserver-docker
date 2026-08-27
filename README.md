@@ -152,7 +152,7 @@ A wide variety of useful scripts are available once BTCPay is installed:
 
 ## Generated docker-compose
 
-When you run `btcpay-setup.sh`, your environment variables are used by [build.sh](build.sh) (or [build.ps1](build.ps1)) to generate a docker-compose adapted for your needs. For the full list of options, see: [Environment variables](#environment-variables)
+When you run `btcpay-setup.sh`, your environment variables are used by [build.sh](build.sh) to generate a docker-compose adapted for your needs. For the full list of options, see: [Environment variables](#environment-variables)
 
 By default, the generated file is `Generated/docker-compose.generated.yml`, constructed from the relevant [Docker fragments](docker-compose-generator/docker-fragments) for your setup.
 
@@ -215,21 +215,6 @@ export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-lnd-a
 For example, if you want `btc` and `ltc` support with `nginx` and `clightning` inside `Generated/docker-compose.custom.yml`:
 
 Note: The first run might take a while, but following runs are instantaneous.
-
-On Windows (run in [powershell](https://docs.microsoft.com/en-us/powershell/scripting/windows-powershell/starting-windows-powershell)):
-
-```powershell
-Invoke-Command {
-    $BTCPAYGEN_CRYPTO1="btc"
-    $BTCPAYGEN_CRYPTO2="ltc"
-    $BTCPAYGEN_REVERSEPROXY="nginx"
-    $BTCPAYGEN_LIGHTNING="clightning"
-    $BTCPAYGEN_SUBNAME="custom"
-    . .\build.ps1
-}
-```
-
-On Linux:
 
 ```bash
 BTCPAYGEN_CRYPTO1="btc" \
@@ -343,7 +328,7 @@ cd docker-compose-generator
 $BTCPAYGEN_DOCKER_IMAGE="btcpayserver/docker-compose-generator:local"
 ```
 
-Then run `./build.sh` or `. .\build.ps1`.
+Then run `./build.sh`.
 This will generate your docker-compose in the `Generated` folder, which you can then run and test.
 
 Note that BTCPayServer developers will not spend excessive time testing your image, so make sure it works.
