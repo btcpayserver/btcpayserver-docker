@@ -4,11 +4,25 @@ services:
       BTCPAY_BTCEXTERNALTHUNDERHUB: "server=/thub/sso;cookiefile=/etc/lnd_bitcoin_thub_datadir/.cookie"
     volumes:
       - "lnd_bitcoin_thub_datadir:/etc/lnd_bitcoin_thub_datadir"
+  # ThunderHub runs as uid 1000 (node) while btcpayserver runs as root and
+  # shares lnd_bitcoin_thub_datadir. If the volume or the SSO cookie file ends
+  # up owned by root, ThunderHub cannot rotate the cookie and SSO login fails
+  # (https://github.com/btcpayserver/btcpayserver-docker/issues/1072).
+  # This one-shot container fixes ownership before ThunderHub starts.
+  bitcoin_thub_dircheck:
+    image: busybox:1.36.1@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+    container_name: generated_bitcoin_thub_dircheck
+    restart: "no"
+    command: ["sh", "-c", "chown 1000:1000 /data && { [ ! -e /data/.cookie ] || chown 1000:1000 /data/.cookie; }"]
+    volumes:
+      - "lnd_bitcoin_thub_datadir:/data"
   bitcoin_thub:
     image: apotdevin/thunderhub:base-0.15.4@sha256:5a36615e4fc300837595156869d67d4c9ef9703d5ead8276911b3e80077b3d3f
     container_name: generated_bitcoin_thub_1
     restart: unless-stopped
     stop_signal: SIGKILL
+    depends_on:
+      - bitcoin_thub_dircheck
     environment:
       NO_VERSION_CHECK: "true"
       COOKIE_PATH: "/data/.cookie"
