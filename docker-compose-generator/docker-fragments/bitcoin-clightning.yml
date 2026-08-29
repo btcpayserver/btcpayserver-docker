@@ -1,6 +1,6 @@
 services:
   clightning_bitcoin:
-    image: btcpayserver/lightning:v26.06.1-1
+    image: btcpayserver/lightning:v26.06.7
     container_name: btcpayserver_clightning_bitcoin
     restart: unless-stopped
     environment:
