@@ -77,22 +77,6 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoin:31.0" .
 cd - && cd ..
 
 
-# Build bitcoinknots
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/BitcoinKnots/29.3.knots20260508/BitcoinKnots/29.3.knots20260508/linuxamd64.Dockerfile
-DOCKERFILE="BitcoinKnots/29.3.knots20260508/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/BitcoinKnots/29.3.knots20260508/BitcoinKnots/29.3.knots20260508/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="BitcoinKnots/29.3.knots20260508/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/BitcoinKnots/29.3.knots20260508/BitcoinKnots/29.3.knots20260508/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="BitcoinKnots/29.3.knots20260508/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/bitcoinknots:29.3.knots20260508"
-git clone https://github.com/btcpayserver/dockerfile-deps bitcoinknots
-cd bitcoinknots
-git checkout BitcoinKnots/29.3.knots20260508
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoinknots:29.3.knots20260508" .
-cd - && cd ..
-
-
 # Build docker-bitcoinplus
 # https://raw.githubusercontent.com/ChekaZ/docker/master/bitcoinplus/2.7.0/Dockerfile
 DOCKERFILE="bitcoinplus/2.7.0/Dockerfile"
@@ -1237,5 +1221,4 @@ git checkout v2.4.3
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:2.4.3" .
 cd - && cd ..
-
 

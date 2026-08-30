@@ -1143,22 +1143,6 @@ docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
 
 
-# Build bitcoinknots
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/BitcoinKnots/29.2.knots20251110/BitcoinKnots/29.2.knots20251110/linuxamd64.Dockerfile
-DOCKERFILE="BitcoinKnots/29.2.knots20251110/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/BitcoinKnots/29.2.knots20251110/BitcoinKnots/29.2.knots20251110/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="BitcoinKnots/29.2.knots20251110/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/BitcoinKnots/29.2.knots20251110/BitcoinKnots/29.2.knots20251110/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="BitcoinKnots/29.2.knots20251110/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/bitcoinknots:29.2.knots20251110"
-git clone https://github.com/btcpayserver/dockerfile-deps bitcoinknots
-cd bitcoinknots
-git checkout BitcoinKnots/29.2.knots20251110
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoinknots:29.2.knots20251110" .
-cd - && cd ..
-
-
 # Build phoenixd
 # https://raw.githubusercontent.com/ACINQ/phoenixd/v0.6.3/.docker/Dockerfile
 DOCKERFILE=".docker/Dockerfile"
