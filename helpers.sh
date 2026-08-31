@@ -258,6 +258,57 @@ btcpay_up() {
     cd "$(dirname "$BTCPAY_ENV_FILE")"
     docker-compose -f $BTCPAY_DOCKER_COMPOSE up --remove-orphans -d -t "${COMPOSE_HTTP_TIMEOUT:-180}"
     popd > /dev/null
+    ensure_reverse_proxy_up
+}
+
+# nginx can lose a race against the letsencrypt companion while the stack is
+# being recreated. The companion drops the certificate symlinks of every vhost
+# whose container is momentarily down, nginx then starts with a config that
+# still points at them and exits:
+#
+#   [emerg] cannot load certificate "/etc/nginx/certs/<host>.crt"
+#
+# Docker does not bring it back, because compose had stopped it on purpose
+# (hasBeenManuallyStopped), and the companion refuses to repair anything while
+# nginx is down ("nginx-proxy container nginx isn't running"). The deadlock
+# therefore outlives the update: compose reports success, every other container
+# is healthy, and the server answers nothing on ports 80/443 until a human
+# notices. By then docker-gen has already regenerated a config that falls back
+# to the default certificate, so starting nginx once more breaks the loop and
+# lets the companion restore the symlinks on its next run.
+ensure_reverse_proxy_up() {
+    [[ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]] || return 0
+    docker inspect nginx > /dev/null 2>&1 || return 0
+
+    local status
+    local i
+    # Give it a moment to settle, but do not sit through the whole grace period
+    # once it has already given up.
+    for i in $(seq 1 6); do
+        status="$(docker inspect -f '{{.State.Status}}' nginx 2>/dev/null)"
+        case "$status" in
+            running) return 0 ;;
+            exited|dead) break ;;
+        esac
+        sleep 5
+    done
+
+    echo "Warning: the nginx container is '$status' after the stack was brought up, starting it again..."
+    docker start nginx > /dev/null 2>&1
+    sleep 5
+
+    for i in $(seq 1 6); do
+        status="$(docker inspect -f '{{.State.Status}}' nginx 2>/dev/null)"
+        case "$status" in
+            running) echo "Info: nginx is running again."; return 0 ;;
+            exited|dead) break ;;
+        esac
+        sleep 5
+    done
+
+    echo "Error: nginx is '$status', this server will not answer on ports 80/443. Last lines of its log:"
+    docker logs --tail 10 nginx 2>&1 | sed 's/^/    /'
+    return 1
 }
 
 btcpay_pull() {
