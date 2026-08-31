@@ -474,17 +474,6 @@ namespace DockerFileBuildHelper
                     dockerInfo.SupportedByUs = true;
                     break;
                 }
-                case "bitcoinknots":
-                {
-                    var tagNoRevision = image.Tag.Split('-').First();
-                    dockerInfo.DockerFilePath = $"BitcoinKnots/{tagNoRevision}/linuxamd64.Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"BitcoinKnots/{tagNoRevision}/linuxarm32v7.Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"BitcoinKnots/{tagNoRevision}/linuxarm64v8.Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
-                    dockerInfo.GitRef = $"BitcoinKnots/{image.Tag}";
-                    dockerInfo.SupportedByUs = true;
-                    break;
-                }
                 case "elements":
                 {
                     var tagNoRevision = image.Tag.Split('-').First();

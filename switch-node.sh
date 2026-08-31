@@ -4,18 +4,18 @@ set -e
 
 usage() {
     cat <<-END
-Usage: switch-node.sh default|bitcoincore|bitcoinknots
+Usage: switch-node.sh default|bitcoincore
 
 The default Bitcoin node implementation is selected by the BTCPay Server team.
 This is currently Bitcoin Core 29.x and is planned to move to Bitcoin Core 31.0 later.
-Use bitcoincore or bitcoinknots to explicitly pin your deployment to one of those implementations.
+Use bitcoincore to explicitly pin your deployment to that implementation.
 END
 }
 
 node="$1"
 
 case "$node" in
-    default|bitcoincore|bitcoinknots)
+    default|bitcoincore)
         ;;
     *)
         usage
@@ -42,7 +42,7 @@ remove_fragments() {
     for fragment in "${fragments[@]}"; do
         fragment="${fragment//[[:space:]]/}"
         case "$fragment" in
-            ""|bitcoin|bitcoincore|bitcoinknots)
+            ""|bitcoin|bitcoincore)
                 continue
                 ;;
         esac
