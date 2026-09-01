@@ -7,11 +7,8 @@ apt-get remove docker-ce
 rm -rf /usr/bin/docker
 rm -rf /usr/local/bin/docker-compose
 
-cd ../..
-
-[ -d btcpayserver-docker ] || mv project btcpayserver-docker
-
-cd btcpayserver-docker
+REPOSITORY_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$REPOSITORY_ROOT"
 
 export BTCPAY_HOST="btcpay.local"
 export REVERSEPROXY_DEFAULT_HOST="btcpay.local"
@@ -22,8 +19,8 @@ export BTCPAYGEN_REVERSEPROXY="nginx"
 export BTCPAYGEN_LIGHTNING="clightning"
 source ./btcpay-setup.sh -i
 
-timeout 1m bash .circleci/test-connectivity.sh
+timeout 1m bash .github/scripts/test-connectivity.sh
 
-# Testing scripts are not crashing and installed
+# Test that the installed scripts run without crashing.
 btcpay-up.sh
 btcpay-down.sh
