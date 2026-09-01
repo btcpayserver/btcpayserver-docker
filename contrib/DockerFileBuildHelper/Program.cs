@@ -42,7 +42,7 @@ namespace DockerFileBuildHelper
             }.Concat(GetImages(fragmentDirectory)))
             {
                 // TODO: Ask beldex guys
-                if (image.Name == "beldex")
+                if (image.Name == "beldex" || image.Name == "busybox")
                     continue;
                 Console.WriteLine($"Image: {image.ToString()}");
                 var info = GetDockerInfo(image);
@@ -104,7 +104,8 @@ namespace DockerFileBuildHelper
                 builder.AppendLine($"echo \"Building {info.Image.ToString()}\"");
                 builder.AppendLine($"git clone {info.GitLink} {info.Image.Name}");
                 builder.AppendLine($"cd {info.Image.Name}");
-                builder.AppendLine($"git checkout {info.GitRef}");
+                if (!string.IsNullOrEmpty(info.GitRef))
+                    builder.AppendLine($"git checkout {info.GitRef}");
                 builder.AppendLine($"cd \"$(dirname $DOCKERFILE)\"");
                 builder.AppendLine($"docker build -f \"$DOCKERFILE\" -t \"{info.Image}\" .");
                 builder.AppendLine($"cd - && cd ..");
@@ -116,7 +117,7 @@ namespace DockerFileBuildHelper
                 builder.AppendLine();
                 builder.AppendLine();
             }
-            var script = builder.ToString().Replace("\r\n", "\n");
+            var script = builder.ToString().Replace("\r\n", "\n").TrimEnd() + "\n";
             if (string.IsNullOrEmpty(options.BuildAllScriptOutput))
                 options.BuildAllScriptOutput = "build-all.sh";
             File.WriteAllText(options.BuildAllScriptOutput, script);
@@ -210,7 +211,7 @@ namespace DockerFileBuildHelper
         {
             var deserializer = new DeserializerBuilder().Build();
             var serializer = new SerializerBuilder().Build();
-            foreach (var file in Directory.EnumerateFiles(fragmentDirectory, "*.yml"))
+            foreach (var file in Directory.EnumerateFiles(fragmentDirectory, "*.yml").OrderBy(file => file, StringComparer.Ordinal))
             {
                 var root = ParseDocument(file);
                 if (root.TryGet("services") == null)
@@ -351,7 +352,9 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePathARM32v7 = "Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = "Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/lightning";
-                    dockerInfo.GitRef = $"basedon-{image.Tag}";
+                    // This image was published from an untagged repository commit.
+                    dockerInfo.GitRef = image.Tag == "v26.06.7" ?
+                        "260d82c4ffcb79f0e8cbb22fb536bc3bf5ec7db9" : $"basedon-{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "groestlcoin/lightning":
