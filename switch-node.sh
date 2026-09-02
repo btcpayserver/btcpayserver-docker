@@ -6,9 +6,9 @@ usage() {
     cat <<-END
 Usage: switch-node.sh default|bitcoincore
 
-The default Bitcoin node implementation is selected by the BTCPay Server team.
-This is currently Bitcoin Core 29.x and is planned to move to Bitcoin Core 31.0 later.
-Use bitcoincore to explicitly pin your deployment to that implementation.
+The default and bitcoincore options currently both select Bitcoin Core 31.1.
+Use default to follow the implementation selected by the BTCPay Server team.
+Use bitcoincore to explicitly select Bitcoin Core.
 END
 }
 
