@@ -23,6 +23,8 @@ timeout 1m bash .github/scripts/test-connectivity.sh
 
 # Test that the installed scripts run without crashing.
 btcpay-up.sh
+dotnet tool install --tool-path /tmp/dotnet-tools dotnet-stack
+docker cp /tmp/dotnet-tools/dotnet-stack generated_nbxplorer_1:/tmp/dotnet-stack
 btcpay-down.sh &
 down_pid=$!
 
@@ -30,6 +32,7 @@ sleep 15
 echo "NBXplorer state while shutdown is pending:"
 docker inspect generated_nbxplorer_1 --format '{{json .State}}' || true
 docker top generated_nbxplorer_1 -eo pid,ppid,stat,wchan:32,comm,args || true
+docker exec generated_nbxplorer_1 /tmp/dotnet-stack report -p 1 || true
 docker logs --since 30s generated_nbxplorer_1 || true
 echo "PostgreSQL activity while NBXplorer shutdown is pending:"
 docker exec generated_postgres_1 psql -U postgres -d postgres -x -c \
