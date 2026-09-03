@@ -23,4 +23,16 @@ timeout 1m bash .github/scripts/test-connectivity.sh
 
 # Test that the installed scripts run without crashing.
 btcpay-up.sh
-btcpay-down.sh
+btcpay-down.sh &
+down_pid=$!
+
+sleep 15
+echo "NBXplorer state while shutdown is pending:"
+docker inspect generated_nbxplorer_1 --format '{{json .State}}' || true
+docker top generated_nbxplorer_1 -eo pid,ppid,stat,wchan:32,comm,args || true
+docker logs --since 30s generated_nbxplorer_1 || true
+echo "PostgreSQL activity while NBXplorer shutdown is pending:"
+docker exec generated_postgres_1 psql -U postgres -d postgres -x -c \
+  "SELECT pid, datname, application_name, state, wait_event_type, wait_event, now() - query_start AS age, query FROM pg_stat_activity WHERE application_name ILIKE '%nbx%' OR datname LIKE 'nbxplorer%';" || true
+
+wait "$down_pid"
