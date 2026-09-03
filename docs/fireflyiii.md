@@ -7,7 +7,7 @@ It can help you keep track of expenses, income, budgets and everything in betwee
 
 1. Connect as root to your server
 2. Configure a domain's DNS to point to your server ip. e.g. `firefly.yourserver.org`
-3. Add fireflyiii as an option to your docker deployment
+3. Add fireflyiii as an option to your docker deployment. *Note: if using a script to save your environment variables, save them to the script - [guide here](./docs/save-env-vars.md)
 
 ```bash
 BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-fireflyiii"

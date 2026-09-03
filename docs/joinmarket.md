@@ -16,6 +16,7 @@ For hardcore bitcoiners only.
 BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-joinmarket"
 . btcpay-setup.sh -i
 ```
+Or add to script if using [this guide](./docs/save-env-vars.md).
 
 Then you need to setup your default joinmarket wallet:
 
