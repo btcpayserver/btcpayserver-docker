@@ -68,8 +68,8 @@ append_fragment() {
     fi
 }
 
-BTCPAYGEN_ADDITIONAL_FRAGMENTS="$(remove_fragments "$BTCPAYGEN_ADDITIONAL_FRAGMENTS" "bitcoin")"
-BTCPAYGEN_EXCLUDE_FRAGMENTS="$(remove_fragments "$BTCPAYGEN_EXCLUDE_FRAGMENTS" "bitcoin")"
+BTCPAYGEN_ADDITIONAL_FRAGMENTS="$(remove_fragments "$BTCPAYGEN_ADDITIONAL_FRAGMENTS")"
+BTCPAYGEN_EXCLUDE_FRAGMENTS="$(remove_fragments "$BTCPAYGEN_EXCLUDE_FRAGMENTS")"
 
 if [ "$node" != "default" ]; then
     BTCPAYGEN_EXCLUDE_FRAGMENTS="$(append_fragment "$BTCPAYGEN_EXCLUDE_FRAGMENTS" "bitcoin")"
