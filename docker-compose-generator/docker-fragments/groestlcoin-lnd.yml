@@ -18,7 +18,7 @@ services:
         rpclisten=127.0.0.1:10009
         groestlcoin.node=groestlcoind
         groestlcoind.rpchost=groestlcoind:43782
-        groestlcoind.rpcuser=lnd
+        groestlcoind.rpcuser=lndgrs
         groestlcoind.rpcpass=afixedpasswordbecauselndsuckswithcookiefile
         groestlcoind.zmqpubrawblock=tcp://groestlcoind:21441
         groestlcoind.zmqpubrawtx=tcp://groestlcoind:21441
@@ -59,7 +59,7 @@ services:
         # rpcpassword=afixedpasswordbecauselndsuckswithcookiefile
         # We need to use rpcauth because we also need cookieauth. rpcpassword disabled cookie file auth.
         # Be careful if you copy the line below from the docker-compose.yml! A dollar sign is escaped.
-        rpcauth=lnd:d031f7567c5b02ba95524170e51c77f4$$827ce5412f653d6613c2f480e521eb437c866b999bdeb2ee4f9c41d3b00dff1c
+        rpcauth=lndgrs:d031f7567c5b02ba95524170e51c77f4$$827ce5412f653d6613c2f480e521eb437c866b999bdeb2ee4f9c41d3b00dff1c
 
   nginx:
     links:
