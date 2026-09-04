@@ -28,11 +28,6 @@ json_null() {
     printf 'null\n'
 }
 
-run_command() {
-    "$@" >/dev/null
-    json_null
-}
-
 print_help() {
     cat <<EOF
 Usage: btcpay-host <command> [arguments]
@@ -93,15 +88,15 @@ case "$command" in
         json_null
         ;;
     changedomain)
-        run_command "changedomain.sh" "${2:-}"
+        changedomain.sh "${2:-}"
         ;;
     update)
-        run_command "btcpay-update.sh"
+        btcpay-update.sh
         ;;
     clean)
-        run_command "btcpay-clean.sh"
+        btcpay-clean.sh
         ;;
     restart)
-        run_command "btcpay-restart.sh"
+        btcpay-restart.sh
         ;;
 esac
