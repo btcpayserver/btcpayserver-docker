@@ -383,6 +383,7 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
             apt-transport-https \
             ca-certificates \
             software-properties-common \
+            jq \
             2>error
     fi
     if ! [[ -x "$(command -v docker)" ]]; then
