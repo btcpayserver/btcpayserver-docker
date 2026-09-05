@@ -13,6 +13,7 @@ services:
       LND_REST_LISTEN_HOST: http://lnd_bitcoin:8080
       LND_HOST_FOR_LOOP: 127.0.0.1:10009
       LND_MACAROON_ROTATION_ID: "lnd-security-2026-08-v1"
+      RPCUSER_FILE: /deps/.bitcoin/RPCUsers/lnd
       LND_EXTRA_ARGS: |
         restlisten=lnd_bitcoin:8080
         rpclisten=127.0.0.1:10008
@@ -21,7 +22,6 @@ services:
         bitcoin.node=bitcoind
         bitcoind.rpchost=bitcoind:43782
         bitcoind.rpcuser=lnd
-        bitcoind.rpcpass=afixedpasswordbecauselndsuckswithcookiefile
         bitcoind.zmqpubrawblock=tcp://bitcoind:28332
         bitcoind.zmqpubrawtx=tcp://bitcoind:28333
         adminmacaroonpath=/data/admin.macaroon
@@ -88,12 +88,7 @@ services:
 
   bitcoind:
     environment:
-      BITCOIN_EXTRA_ARGS: |
-        # rpcuser=lnd
-        # rpcpassword=afixedpasswordbecauselndsuckswithcookiefile
-        # We need to use rpcauth because we also need cookieauth. rpcpassword disabled cookie file auth.
-        # Be careful if you copy the line below from the docker-compose.yml! A dollar sign is escaped.
-        rpcauth=lnd:d031f7567c5b02ba95524170e51c77f4$$827ce5412f653d6613c2f480e521eb437c866b999bdeb2ee4f9c41d3b00dff1c
+      BITCOIN_RPCUSERS: lnd
 
   nginx:
     links:

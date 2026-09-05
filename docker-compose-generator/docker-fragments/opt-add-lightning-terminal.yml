@@ -7,7 +7,7 @@ services:
       LND_EXTRA_ARGS: |
         rpcmiddleware.enable=true
   lnd_lit:
-    image: "lightninglabs/lightning-terminal:v0.17.0-alpha-path-prefix"
+    image: "lightninglabs/lightning-terminal:v0.17.4-alpha"
     restart: unless-stopped
     environment:
       LIT_AUTO_MIGRATE_TO_SQL: "true"
@@ -16,6 +16,7 @@ services:
     volumes:
       - "lnd_lit_datadir:/root/.lit"
       - "lnd_bitcoin_datadir:/data/lnd:ro"
+      - "bitcoin_datadir:/deps/.bitcoin:ro"
     links:
       - bitcoind
       - lnd_bitcoin
@@ -30,7 +31,7 @@ services:
       - "--faraday.connect_bitcoin"
       - "--faraday.bitcoin.host=bitcoind:43782"
       - "--faraday.bitcoin.user=lnd"
-      - "--faraday.bitcoin.password=afixedpasswordbecauselndsuckswithcookiefile"
+      - "--faraday.bitcoin.passwordfile=/deps/.bitcoin/RPCUsers/lnd"
 volumes:
   lnd_lit_datadir:
 required:
