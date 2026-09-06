@@ -7,7 +7,7 @@ services:
       LND_EXTRA_ARGS: |
         rpcmiddleware.enable=true
   lnd_lit:
-    image: "lightninglabs/lightning-terminal:v0.17.4-alpha"
+    image: "lightninglabs/lightning-terminal:v0.17.4-alpha-path-prefix"
     restart: unless-stopped
     environment:
       LIT_AUTO_MIGRATE_TO_SQL: "true"

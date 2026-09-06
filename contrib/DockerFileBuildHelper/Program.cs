@@ -107,7 +107,8 @@ namespace DockerFileBuildHelper
                 if (!string.IsNullOrEmpty(info.GitRef))
                     builder.AppendLine($"git checkout {info.GitRef}");
                 builder.AppendLine($"cd \"$(dirname $DOCKERFILE)\"");
-                builder.AppendLine($"docker build -f \"$DOCKERFILE\" -t \"{info.Image}\" .");
+                var buildArguments = string.IsNullOrEmpty(info.DockerBuildArguments) ? string.Empty : $"{info.DockerBuildArguments} ";
+                builder.AppendLine($"docker build {buildArguments}-f \"$DOCKERFILE\" -t \"{info.Image}\" .");
                 builder.AppendLine($"cd - && cd ..");
                 if (mightBeUnavailable)
                 {
@@ -734,6 +735,8 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePath = $"Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
                     dockerInfo.GitRef = image.Tag.Replace("-path-prefix", "");
+                    if (image.Tag.EndsWith("-path-prefix"))
+                        dockerInfo.DockerBuildArguments = "--build-arg public_url=/lit/";
                     break;
                 case "chatwoot/chatwoot":
                     dockerInfo.DockerFilePath = $"docker/Dockerfile";
