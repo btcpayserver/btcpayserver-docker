@@ -78,18 +78,18 @@ cd - && cd ..
 
 
 # Build lnd
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.2-beta/linuxamd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.3-beta/linuxamd64.Dockerfile
 DOCKERFILE="linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.2-beta/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.3-beta/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.2-beta/linuxarm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.3-beta/linuxarm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/lnd:v0.21.2-beta"
+echo "Building btcpayserver/lnd:v0.21.3-beta"
 git clone https://github.com/btcpayserver/lnd lnd
 cd lnd
-git checkout basedon-v0.21.2-beta
+git checkout basedon-v0.21.3-beta
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.21.2-beta" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.21.3-beta" .
 cd - && cd ..
 
 
@@ -312,18 +312,18 @@ cd - && cd ..
 
 
 # Build litecoin
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.21.5.5/Litecoin/0.21.5.5/linuxamd64.Dockerfile
-DOCKERFILE="Litecoin/0.21.5.5/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.21.5.5/Litecoin/0.21.5.5/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Litecoin/0.21.5.5/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.21.5.5/Litecoin/0.21.5.5/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Litecoin/0.21.5.5/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/litecoin:0.21.5.5"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.21.5.6/Litecoin/0.21.5.6/linuxamd64.Dockerfile
+DOCKERFILE="Litecoin/0.21.5.6/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.21.5.6/Litecoin/0.21.5.6/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Litecoin/0.21.5.6/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Litecoin/0.21.5.6/Litecoin/0.21.5.6/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Litecoin/0.21.5.6/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/litecoin:0.21.5.6"
 git clone https://github.com/btcpayserver/dockerfile-deps litecoin
 cd litecoin
-git checkout Litecoin/0.21.5.5
+git checkout Litecoin/0.21.5.6
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/litecoin:0.21.5.5" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/litecoin:0.21.5.6" .
 cd - && cd ..
 
 
@@ -372,18 +372,18 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.11/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.12/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.11/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.12/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.11/Dockerfile
+# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.12/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building nicolasdorier/nbxplorer:2.6.11"
+echo "Building nicolasdorier/nbxplorer:2.6.12"
 git clone https://github.com/dgarage/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.6.11
+git checkout v2.6.12
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.6.11" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.6.12" .
 cd - && cd ..
 
 

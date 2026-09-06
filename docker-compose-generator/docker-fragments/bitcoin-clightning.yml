@@ -2,6 +2,7 @@ services:
   clightning_bitcoin:
     image: btcpayserver/lightning:v26.06.7
     container_name: btcpayserver_clightning_bitcoin
+    init: true
     restart: unless-stopped
     environment:
       LIGHTNINGD_NETWORK: ${NBITCOIN_NETWORK:-regtest}
