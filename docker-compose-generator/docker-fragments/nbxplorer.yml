@@ -3,7 +3,7 @@ services:
   nbxplorer:
     restart: unless-stopped
     container_name: generated_nbxplorer_1
-    image: nicolasdorier/nbxplorer:2.6.12
+    image: nicolasdorier/nbxplorer:2.6.13
     expose:
       - "32838"
     environment:
