@@ -45,7 +45,7 @@ services:
       - bitcoind
 
   bitcoin_rtl:
-    image: shahanafarooqui/rtl:v0.15.11
+    image: shahanafarooqui/rtl:v0.15.12
     container_name: generated_lnd_bitcoin_rtl_1
     restart: unless-stopped
     environment:
