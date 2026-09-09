@@ -1,4 +1,0 @@
-services:
-  btcpayserver:
-    environment:
-      BTCPAY_CHAINS: "eth"

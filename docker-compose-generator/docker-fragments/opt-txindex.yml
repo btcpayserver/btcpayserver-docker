@@ -5,10 +5,6 @@ services:
     environment:
       BITCOIN_EXTRA_ARGS: |
         txindex=1
-  bgoldd:
-    environment:
-      BITCOIN_EXTRA_ARGS: |
-        txindex=1
   feathercoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
@@ -18,10 +14,6 @@ services:
       BITCOIN_EXTRA_ARGS: |
         txindex=1
   litecoind:
-    environment:
-      BITCOIN_EXTRA_ARGS: |
-        txindex=1
-  viacoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
         txindex=1

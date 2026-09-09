@@ -33,7 +33,7 @@ The ports mapped on the host are:
 1. `80` for Let's encrypt
 2. `443` for the website
 3. `9735` for the bitcoin lightning network node (if used)
-4. `9736` for the litecoin lightning network node (if used)
+4. `9736` for an altcoin lightning network node (if used)
 
 Example for running on `mainnet`:
 

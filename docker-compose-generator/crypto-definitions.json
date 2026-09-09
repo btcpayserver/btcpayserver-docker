@@ -14,20 +14,6 @@
     "PhoenixdFragment": "phoenixd"
   },
   {
-    "Crypto": "btx",
-    "CryptoFragment": "bitcore",
-    "CLightningFragment": null,
-    "LNDFragment": null,
-    "PhoenixdFragment": null
-  },
-  {
-    "Crypto": "btg",
-    "CryptoFragment": "bgold",
-    "CLightningFragment": null,
-    "LNDFragment": "bgold-lnd",
-    "PhoenixdFragment": null
-  },
-  {
     "Crypto": "ftc",
     "CryptoFragment": "feathercoin",
     "CLightningFragment": null,
@@ -39,13 +25,6 @@
     "CryptoFragment": "groestlcoin",
     "CLightningFragment": "groestlcoin-clightning",
     "LNDFragment": "groestlcoin-lnd",
-    "PhoenixdFragment": null
-  },
-  {
-    "Crypto": "via",
-    "CryptoFragment": "viacoin",
-    "CLightningFragment": null,
-    "LNDFragment": null,
     "PhoenixdFragment": null
   },
   {

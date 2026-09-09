@@ -89,18 +89,6 @@ services:
       - "tor_servicesdir:/var/lib/tor/hidden_services"
     links:
       - tor
-  clightning_litecoin:
-    environment:
-      HIDDENSERVICE_NAME: c-lightning-ltc
-      HIDDENSERVICE_PORT: 9736
-      LIGHTNINGD_HIDDENSERVICE_HOSTNAME_FILE: /var/lib/tor/hidden_services/c-lightning-ltc/hostname
-      LIGHTNINGD_OPT: |
-        proxy=tor:9050
-    volumes:
-      - "tor_servicesdir:/var/lib/tor/hidden_services"
-    links:
-      - tor
-
   tor-gen:
     restart: unless-stopped
     image: btcpayserver/docker-gen:0.10.7
@@ -121,20 +109,6 @@ services:
       LND_EXTRA_ARGS: |
         tor.active=1
         tor.skip-proxy-for-clearnet-targets=1
-        tor.socks=tor:9050
-    links:
-      - tor
-    volumes:
-      - "tor_datadir:/home/tor/.tor"
-      - "tor_servicesdir:/var/lib/tor/hidden_services"
-
-  lnd_litecoin:
-    environment:
-      HIDDENSERVICE_NAME: lnd-ltc
-      HIDDENSERVICE_PORT: 9736
-      LND_HIDDENSERVICE_HOSTNAME_FILE: /var/lib/tor/hidden_services/lnd-ltc/hostname
-      LND_EXTRA_ARGS: |
-        tor.active=1
         tor.socks=tor:9050
     links:
       - tor
