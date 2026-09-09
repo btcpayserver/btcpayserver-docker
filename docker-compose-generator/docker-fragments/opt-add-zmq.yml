@@ -26,12 +26,3 @@ services:
         zmqpubhashblock=tcp://0.0.0.0:21441
     expose:
       - "21441"
-  bgoldd:
-    environment:
-      BITCOIN_EXTRA_ARGS: |
-        zmqpubrawtx=tcp://0.0.0.0:28332
-        zmqpubrawblock=tcp://0.0.0.0:28332
-        zmqpubrawtxlock=tcp://0.0.0.0:28332
-        zmqpubhashblock=tcp://0.0.0.0:28332
-    expose:
-      - "28332"

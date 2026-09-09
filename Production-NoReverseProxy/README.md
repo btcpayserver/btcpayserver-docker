@@ -17,7 +17,7 @@ The ports mapped on the host are:
 
 1. `80` for the website
 3. `9735` for the bitcoin lightning network node (if used)
-4. `9736` for the litecoin lightning network node (if used)
+4. `9736` for an altcoin lightning network node (if used)
 
 Note that you need to set `BTCPAY_PROTOCOL=http` if you want to do some tests locally without https.
 

@@ -10,11 +10,6 @@ services:
     environment:
       - CACHE_MB=50
       - MAX_SESSIONS=100
-  bgoldd:
-    environment:
-      BITCOIN_EXTRA_ARGS: |
-        dbcache=50
-        maxmempool=50
   dogecoind:
     environment:
       DOGECOIN_EXTRA_ARGS: |
@@ -31,11 +26,6 @@ services:
         dbcache=50
         maxmempool=50
   litecoind:
-    environment:
-      BITCOIN_EXTRA_ARGS: |
-        dbcache=50
-        maxmempool=50
-  viacoind:
     environment:
       BITCOIN_EXTRA_ARGS: |
         dbcache=50

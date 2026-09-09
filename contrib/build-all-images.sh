@@ -21,30 +21,6 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/docker-compose-generator:latest" 
 cd - && cd ..
 
 
-# Build btglnd
-# https://raw.githubusercontent.com/vutov/lnd/master/Dockerfile
-DOCKERFILE="Dockerfile"
-echo "Building kamigawabul/btglnd:latest"
-git clone https://github.com/vutov/lnd btglnd
-cd btglnd
-git checkout master
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "kamigawabul/btglnd:latest" .
-cd - && cd ..
-
-
-# Build docker-bitcoingold
-# https://raw.githubusercontent.com/Vutov/docker-bitcoin/master/bitcoingold/0.15.2/Dockerfile
-DOCKERFILE="bitcoingold/0.15.2/Dockerfile"
-echo "Building kamigawabul/docker-bitcoingold:0.15.2"
-git clone https://github.com/Vutov/docker-bitcoin docker-bitcoingold
-cd docker-bitcoingold
-git checkout master
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "kamigawabul/docker-bitcoingold:0.15.2" .
-cd - && cd ..
-
-
 # Build lightning
 # https://raw.githubusercontent.com/btcpayserver/lightning/260d82c4ffcb79f0e8cbb22fb536bc3bf5ec7db9/Dockerfile
 DOCKERFILE="Dockerfile"
@@ -141,43 +117,19 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/bitcoin:31.1-1" .
 cd - && cd ..
 
 
-# Build docker-bitcoinplus
-# https://raw.githubusercontent.com/ChekaZ/docker/master/bitcoinplus/2.7.0/Dockerfile
-DOCKERFILE="bitcoinplus/2.7.0/Dockerfile"
-echo "Building chekaz/docker-bitcoinplus:2.7.0"
-git clone https://github.com/ChekaZ/docker docker-bitcoinplus
-cd docker-bitcoinplus
-git checkout master
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "chekaz/docker-bitcoinplus:2.7.0" .
-cd - && cd ..
-
-
-# Build docker-bitcore
-# https://raw.githubusercontent.com/dalijolijo/btcpayserver-docker-bitcore/master/docker-bitcored/Dockerfile
-DOCKERFILE="docker-bitcored/Dockerfile"
-echo "Building dalijolijo/docker-bitcore:0.90.9.10"
-git clone https://github.com/dalijolijo/btcpayserver-docker-bitcore docker-bitcore
-cd docker-bitcore
-git checkout master
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "dalijolijo/docker-bitcore:0.90.9.10" .
-cd - && cd ..
-
-
 # Build btcpayserver
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.4.3/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.4.4/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.4.3/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.4.4/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.4.3/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/btcpayserver/v2.4.4/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/btcpayserver:2.4.3"
+echo "Building btcpayserver/btcpayserver:2.4.4"
 git clone https://github.com/btcpayserver/btcpayserver btcpayserver
 cd btcpayserver
-git checkout v2.4.3
+git checkout v2.4.4
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:2.4.3" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver:2.4.4" .
 cd - && cd ..
 
 
@@ -1147,30 +1099,6 @@ cd traefik
 git checkout master
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "traefik:v2.6" .
-cd - && cd ..
-
-
-# Build docker-trezarcoin
-# https://raw.githubusercontent.com/ChekaZ/docker/master/trezarcoin/1.2.0/Dockerfile
-DOCKERFILE="trezarcoin/1.2.0/Dockerfile"
-echo "Building chekaz/docker-trezarcoin:0.13.0"
-git clone https://github.com/ChekaZ/docker docker-trezarcoin
-cd docker-trezarcoin
-git checkout master
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "chekaz/docker-trezarcoin:0.13.0" .
-cd - && cd ..
-
-
-# Build docker-viacoin
-# https://raw.githubusercontent.com/viacoin/docker-viacoin/master/viacoin/0.15.2/docker-viacoin
-DOCKERFILE="viacoin/0.15.2/docker-viacoin"
-echo "Building romanornr/docker-viacoin:0.15.2"
-git clone https://github.com/viacoin/docker-viacoin docker-viacoin
-cd docker-viacoin
-git checkout master
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "romanornr/docker-viacoin:0.15.2" .
 cd - && cd ..
 
 

@@ -275,11 +275,6 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"JoinMarket/{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
-                case "btglnd":
-                    dockerInfo.DockerFilePath = "Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/vutov/lnd";
-                    dockerInfo.GitRef = "master";
-                    break;
                 case "docker-compose":
                     dockerInfo.DockerFilePath = $"docker-compose/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"docker-compose/{NoRevision(image.Tag)}/linuxarm32v7.Dockerfile";
@@ -335,11 +330,6 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"{image.Tag}";
                     dockerInfo.SupportedByUs = false;
                     break;
-                case "docker-bitcoingold":
-                    dockerInfo.DockerFilePath = $"bitcoingold/{image.Tag}/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/Vutov/docker-bitcoin";
-                    dockerInfo.GitRef = "master";
-                    break;
                 case "snapdrop":
                     dockerInfo.DockerFilePath = $"Snapdrop/{image.Tag}/Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"Snapdrop/{image.Tag}/Dockerfile";
@@ -377,11 +367,6 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef =  NoRevision($"v{image.Tag.Replace("-standalone", "")}");
                     dockerInfo.SupportedByUs = true;
                     break;
-                case "docker-bitcoinplus":
-                    dockerInfo.DockerFilePath = $"bitcoinplus/{image.Tag}/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/ChekaZ/docker";
-                    dockerInfo.GitRef = "master";
-                    break;
                 case "groestlcoin-lightning-charge":
                     dockerInfo.DockerFilePath = $"Dockerfile";
                     dockerInfo.GitLink = "https://github.com/Groestlcoin/groestlcoin-lightning-charge";
@@ -413,11 +398,6 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePath = $"{tag.Value}/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/docker-library/mariadb";
                     dockerInfo.GitRef = $"master";
-                    break;
-                case "docker-trezarcoin":
-                    dockerInfo.DockerFilePath = $"trezarcoin/1.2.0/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/ChekaZ/docker";
-                    dockerInfo.GitRef = "master";
                     break;
                 case "phoenixd":
                     dockerInfo.DockerFilePath = ".docker/Dockerfile";
@@ -547,11 +527,6 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
                     dockerInfo.GitRef = $"Dogecoin/{image.Tag}";
                     break;
-                case "docker-bitcore":
-                    dockerInfo.DockerFilePath = "docker-bitcored/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/dalijolijo/btcpayserver-docker-bitcore";
-                    dockerInfo.GitRef = "master";
-                    break;
                 case "docker-feathercoin":
                     dockerInfo.DockerFilePath = $"feathercoin/{image.Tag}/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/ChekaZ/docker";
@@ -563,11 +538,6 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePathARM64v8 = $"Groestlcoin/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
                     dockerInfo.GitRef = $"Groestlcoin/{NoRevision(image.Tag)}";
-                    break;
-                case "docker-viacoin":
-                    dockerInfo.DockerFilePath = $"viacoin/{image.Tag}/docker-viacoin";
-                    dockerInfo.GitLink = "https://github.com/viacoin/docker-viacoin";
-                    dockerInfo.GitRef = "master";
                     break;
                 case "litecoin":
                     dockerInfo.DockerFilePath = $"Litecoin/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";

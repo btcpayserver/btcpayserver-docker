@@ -3,20 +3,13 @@ install_tooling() {
                 "btcpayserver_bitcoind" "bitcoin-cli.sh" "Command line for your Bitcoin instance" \
                 "btcpayserver_clightning_bitcoin" "bitcoin-lightning-cli.sh" "Command line for your Bitcoin C-Lightning instance" \
                 "btcpayserver_lnd_bitcoin" "bitcoin-lncli.sh" "Command line for your Bitcoin LND instance" \
-                "btcpayserver_bgoldd" "bgold-cli.sh" "Command line for your BGold instance" \
-                "btcpayserver_bitcored" "bitcore-cli.sh" "Command line for your Bitcore instance" \
-                "btcpayserver_bitcoinplusd" "bplus-cli.sh" "Command line for your BPlus instance" \
                 "btcpayserver_dashd" "dash-cli.sh" "Command line for your Dash instance" \
                 "btcpayserver_dogecoind" "dogecoin-cli.sh" "Command line for your Dogecoin instance" \
                 "btcpayserver_feathercoind" "feathercoin-cli.sh" "Command line for your Feathercoin instance" \
                 "btcpayserver_groestlcoind" "groestlcoin-cli.sh" "Command line for your Groestlcoin instance" \
                 "btcpayserver_clightning_groestlcoin" "groestlcoin-lightning-cli.sh" "Command line for your Groestlcoin C-Lightning instance" \
                 "btcpayserver_litecoind" "litecoin-cli.sh" "Command line for your Litecoin instance" \
-                "btcpayserver_clightning_litecoin" "litecoin-lightning-cli.sh" "Command line for your Litecoin C-Lightning instance" \
-                "btcpayserver_lnd_litecoin" "litecoin-lncli.sh" "Command line for your Litecoin LND instance" \
                 "btcpayserver_monacoind" "monacoin-cli.sh" "Command line for your Monacoin instance" \
-                "btcpayserver_trezarcoind" "trezarcoin-cli.sh" "Command line for your Trezar instance" \
-                "btcpayserver_viacoind" "viacoin-cli.sh" "Command line for your Viacoin instance" \
                 "btcpayserver_elementsd" "elements-cli.sh" "Command line for your Elements/Liquid instance" \
                 "btcpayserver_monerod" "monero-wallet-cli.sh" "Command line for your Monero instance" \
                 "btcpayserver_beldexd" "beldex-wallet-cli.sh" "Command line for your Beldex instance" \
