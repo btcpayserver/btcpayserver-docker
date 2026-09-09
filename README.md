@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/btcpayserver/btcpayserver-docker.svg?style=svg)](https://app.circleci.com/pipelines/github/btcpayserver/btcpayserver-docker)
+![example workflow](https://github.com/btcpayserver/btcpayserver-docker/actions/workflows/ci.yml/badge.svg)
 
 #### Start accepting Bitcoin today with BTCPay Server! This guide will walk you through the installation.
 
