@@ -606,22 +606,6 @@ docker build -f "$DOCKERFILE" -t "podcastindexorg/podcasting20-helipad:v0.1.10" 
 cd - && cd ..
 
 
-# Build joinmarket
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.10/JoinMarket/0.9.10/linuxamd64.Dockerfile
-DOCKERFILE="JoinMarket/0.9.10/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.10/JoinMarket/0.9.10/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="JoinMarket/0.9.10/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/JoinMarket/0.9.10/JoinMarket/0.9.10/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="JoinMarket/0.9.10/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/joinmarket:0.9.10"
-git clone https://github.com/btcpayserver/dockerfile-deps joinmarket
-cd joinmarket
-git checkout JoinMarket/0.9.10
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/joinmarket:0.9.10" .
-cd - && cd ..
-
-
 # Build librepatron
 # https://raw.githubusercontent.com/JeffVandrewJr/patron/v0.7.39/Dockerfile
 DOCKERFILE="Dockerfile"
