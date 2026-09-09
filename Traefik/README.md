@@ -7,7 +7,7 @@ Some of the benefits of using Traefik over NGinx are:
 - Real-time configuration changes - no need to reload the proxy
 - Auto discovery and configuration of services through a vast amount of container orchestrators.
 - Built-in official support for Let's Encrypt SSL with certificate auto-renewal
-- Supports path-based routing without need to [hard-code it in global config](../Production/nginx.tmpl).
+- Supports path-based routing without need to [hard-code it in global config](../Generated/nginx.tmpl).
 
 ## Traefik Specific Environment Variables
 

@@ -37,9 +37,5 @@ docker run -v "$(pwd)/Generated:/app/Generated" \
            -e "EPS_XPUB=$EPS_XPUB" \
            --rm $BTCPAYGEN_DOCKER_IMAGE
 
-if [ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]; then
-    cp Production/nginx.tmpl Generated/nginx.tmpl
-fi
-
 [[ -f "Generated/pull-images.sh" ]] && chmod +x Generated/pull-images.sh
 [[ -f "Generated/save-images.sh" ]] && chmod +x Generated/save-images.sh

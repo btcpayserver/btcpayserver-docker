@@ -1,4 +1,3 @@
 *.yml
-nginx.tmpl
 *.json
 pull-images.sh
