@@ -225,10 +225,20 @@ BTCPAYGEN_SUBNAME="custom" \
 ./build.sh
 ```
 
-Next, you will need to configure the runtime environment variables for `Generated/docker-compose.custom.yml`:
+Next, configure the runtime environment variables for `Generated/docker-compose.custom.yml`. With `BTCPAYGEN_REVERSEPROXY=nginx`, `BTCPAY_HOST` must resolve to the host and ports `80` and `443` must be publicly accessible so NGINX can serve the site and obtain HTTPS certificates. Set `LETSENCRYPT_EMAIL` to receive certificate-expiration notifications.
 
-* If you are using NGinx, [read this](Production/README.md).
-* If you are not using NGinx, [read this instead](Production-NoReverseProxy/README.md).
+If HTTPS is handled by an existing reverse proxy, generate a compose file without the bundled proxy and expose BTCPay Server directly:
+
+```bash
+export BTCPAYGEN_REVERSEPROXY="none"
+export BTCPAY_HOST="btcpay.example.com"
+export BTCPAY_PROTOCOL="https"
+export NOREVERSEPROXY_HTTP_PORT="80"
+./build.sh
+docker compose -f "Generated/docker-compose.generated.yml" up --remove-orphans -d
+```
+
+The external reverse proxy should forward requests for `BTCPAY_HOST` to `NOREVERSEPROXY_HTTP_PORT`. For local HTTP testing, set `BTCPAY_PROTOCOL=http`.
 
 ## Again, what does `btcpay-setup.sh` do?
 
