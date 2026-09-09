@@ -292,7 +292,6 @@ __pycache__/
 BTCPayServer/wwwroot/bundles/*
 !BTCPayServer/wwwroot/bundles/.gitignore
 
-Production/.env
 .env
 .vscode/
 *docker-compose.generated.yml
