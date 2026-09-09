@@ -593,11 +593,6 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"Postgres/{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
-                case "traefik":
-                    dockerInfo.DockerFilePath = $"scratch/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/containous/traefik-library-image";
-                    dockerInfo.GitRef = $"master";
-                    break;
                 case "spark-wallet":
                     dockerInfo.DockerFilePath = $"Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = $"arm32v7.Dockerfile";
