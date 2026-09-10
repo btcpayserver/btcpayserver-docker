@@ -356,18 +356,18 @@ cd - && cd ..
 
 
 # Build nginx
-# https://raw.githubusercontent.com/nginxinc/docker-nginx/1.23.2/stable/debian/Dockerfile
-DOCKERFILE="stable/debian/Dockerfile"
-# https://raw.githubusercontent.com/nginxinc/docker-nginx/1.23.2/stable/debian/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="stable/debian/Dockerfile"
-# https://raw.githubusercontent.com/nginxinc/docker-nginx/1.23.2/stable/debian/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="stable/debian/Dockerfile"
-echo "Building nginx:1.25.3-bookworm"
-git clone https://github.com/nginxinc/docker-nginx nginx
+# https://raw.githubusercontent.com/nginx/docker-nginx/c5b3ce398e37067d93ab1edf803e9b96a1116092/mainline/debian/Dockerfile
+DOCKERFILE="mainline/debian/Dockerfile"
+# https://raw.githubusercontent.com/nginx/docker-nginx/c5b3ce398e37067d93ab1edf803e9b96a1116092/mainline/debian/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="mainline/debian/Dockerfile"
+# https://raw.githubusercontent.com/nginx/docker-nginx/c5b3ce398e37067d93ab1edf803e9b96a1116092/mainline/debian/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="mainline/debian/Dockerfile"
+echo "Building nginx:1.31.5-trixie"
+git clone https://github.com/nginx/docker-nginx nginx
 cd nginx
-git checkout 1.23.2
+git checkout c5b3ce398e37067d93ab1edf803e9b96a1116092
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nginx:1.25.3-bookworm" .
+docker build -f "$DOCKERFILE" -t "nginx:1.31.5-trixie" .
 cd - && cd ..
 
 
