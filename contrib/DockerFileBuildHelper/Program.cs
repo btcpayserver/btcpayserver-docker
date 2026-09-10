@@ -544,11 +544,11 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = "master";
                     break;
                 case "nginx":
-                    dockerInfo.DockerFilePath = $"stable/debian/Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"stable/debian/Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"stable/debian/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/nginxinc/docker-nginx";
-                    dockerInfo.GitRef = "1.23.2"; // In reality we are on 1.23.3, but they didn't published yet
+                    dockerInfo.DockerFilePath = $"mainline/debian/Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"mainline/debian/Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"mainline/debian/Dockerfile";
+                    dockerInfo.GitLink = "https://github.com/nginx/docker-nginx";
+                    dockerInfo.GitRef = "c5b3ce398e37067d93ab1edf803e9b96a1116092";
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "docker-gen":
