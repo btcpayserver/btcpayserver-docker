@@ -49,8 +49,7 @@ namespace DockerGenerator
 					fragments.Add("nginx");
 					break;
 				case "traefik":
-					fragments.Add("traefik");
-					break;
+					throw new YamlBuildException("Traefik support has been removed. Set BTCPAYGEN_REVERSEPROXY to 'nginx' or 'none'.");
 				case "no-reverseproxy":
 				case "none":
 				case "":

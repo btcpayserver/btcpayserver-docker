@@ -1090,18 +1090,6 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/postgres:18.6" .
 cd - && cd ..
 
 
-# Build traefik
-# https://raw.githubusercontent.com/containous/traefik-library-image/master/scratch/Dockerfile
-DOCKERFILE="scratch/Dockerfile"
-echo "Building traefik:v2.6"
-git clone https://github.com/containous/traefik-library-image traefik
-cd traefik
-git checkout master
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "traefik:v2.6" .
-cd - && cd ..
-
-
 # Build zcash-walletd
 # https://raw.githubusercontent.com/elemental-pay/zcash-walletd/feat/data-config/docker/Dockerfile
 DOCKERFILE="docker/Dockerfile"

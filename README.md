@@ -105,7 +105,7 @@ Check out this video if you're interested in learning more about setting up [BTC
 * `BTCPAYGEN_CRYPTO1`: First supported crypto currency (eg. `btc`, `ltc`, `none`. Default: `btc`)
 * `BTCPAYGEN_CRYPTO2`: Second supported crypto currency (eg. `btc`, `ltc`. Default: `(empty)`)
 * `BTCPAYGEN_CRYPTON`: N'th supported crypto currency where N is 9 at maximum. (eg. `btc`, `ltc`. Default: `(empty)`)
-* `BTCPAYGEN_REVERSEPROXY`: Specify reverse proxy to use; NGinx has HTTPS support. (eg. `nginx`, `traefik`,  `(empty)`. Default: `nginx`)
+* `BTCPAYGEN_REVERSEPROXY`: Specify whether to use the NGinx reverse proxy, which has HTTPS support. (eg. `nginx`, `none`. Default: `nginx`)
 * `BTCPAYGEN_LIGHTNING`: Lightning network implementation to use (eg. `clightning`, `lnd`, `phoenixd` Default: `(empty)`)
 * `BTCPAYGEN_SUBNAME`: The subname of the generated docker-compose file, where the full name is `Generated/docker-compose.SUBNAME.yml` (Default: `generated`)
 * `BTCPAYGEN_ADDITIONAL_FRAGMENTS`: Semicolon-separated list of additional fragments you want to use (eg. `opt-save-storage`)
@@ -400,7 +400,6 @@ Note that BTCPayServer developers will not spend excessive time testing your ima
 | zammad/zammad-docker-compose | zammad-postgresql-3.4.0-4 | [✔️](https://raw.githubusercontent.com/zammad/zammad-docker-compose/ff20084ce2829486076e9781fe27407ca6cc09bb/containers/zammad-postgresql/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/zammad/zammad-docker-compose) - [DockerHub](https://hub.docker.com/r/zammad/zammad-docker-compose) |
 | memcached | 1.5.22-alpine | [✔️](https://raw.githubusercontent.com/docker-library/memcached/eb38bf28263b8e5bb7367797cb7b181b65d769bd/alpine/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/docker-library/memcached) - [DockerHub](https://hub.docker.com/_/memcached) |
 | acinq/phoenixd | 0.8.0 | [✔️](https://raw.githubusercontent.com/ACINQ/phoenixd/v0.8.0/.docker/Dockerfile) | [✔️](https://raw.githubusercontent.com/ACINQ/phoenixd/v0.8.0/.docker/Dockerfile) | [✔️](https://raw.githubusercontent.com/ACINQ/phoenixd/v0.8.0/.docker/Dockerfile) | [Github](https://github.com/ACINQ/phoenixd) - [DockerHub](https://hub.docker.com/r/acinq/phoenixd) |
-| traefik | v2.6 | [✔️](https://raw.githubusercontent.com/containous/traefik-library-image/master/scratch/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/containous/traefik-library-image) - [DockerHub](https://hub.docker.com/_/traefik) |
 | hhanh00/zcash-walletd | 1.1.10 | [✔️](https://raw.githubusercontent.com/elemental-pay/zcash-walletd/feat/data-config/docker/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/elemental-pay/zcash-walletd) - [DockerHub](https://hub.docker.com/r/hhanh00/zcash-walletd) |
 | zfnd/zebra | 3.0.0 | [✔️](https://raw.githubusercontent.com/ZcashFoundation/zebra/main/docker/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/ZcashFoundation/zebra) - [DockerHub](https://hub.docker.com/r/zfnd/zebra) |
 | electriccoinco/lightwalletd | v0.4.18 | [✔️](https://raw.githubusercontent.com/zcash/lightwalletd/master/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/zcash/lightwalletd) - [DockerHub](https://hub.docker.com/r/electriccoinco/lightwalletd) |
