@@ -16,6 +16,7 @@ install_tooling() {
                 "ndlci_cli" "ndlc-cli.sh" "Command line for NDLC-CLI" \
                 "pihole" "pihole.sh" "Command line for running pihole commands" \
                 "*" "btcpay-host" "Command line exposing the services of the host (see https://github.com/btcpayserver/btcpayserver/pull/7511)" \
+                "*" "btcpay-routes" "Command line for managing optional nginx routes" \
                 "*" "btcpay-clean.sh" "Command line for deleting old unused docker images" \
                 "*" "btcpay-down.sh" "Command line for stopping all services related to BTCPay Server" \
                 "*" "btcpay-restart.sh" "Command line for restarting all services related to BTCPay Server" \

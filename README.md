@@ -146,6 +146,7 @@ A wide variety of useful scripts are available once BTCPay is installed:
 * `. ./btcpay-setup.sh`: Information about additional parameters
 * `. ./btcpay-setup.sh -i`: Set up your BTCPayServer
 * `btcpay-restart.sh`: Restart your BTCPayServer
+* `btcpay-routes`: Show, expose, or hide optional Nginx routes
 * `switch-node.sh default|bitcoincore`: Switch your Bitcoin node implementation
 
 # Under the hood
@@ -453,6 +454,28 @@ Then set it up:
 export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-save-storage.custom"
 . ./btcpay-setup.sh -i
 ```
+
+## How can I manage optional Nginx routes?
+
+The Compose fragments declare which Nginx routes are required and which are optional. Required routes are enabled automatically when their fragments are selected. Optional routes, including the LND and CLN REST APIs, are disabled by default and can be managed with `btcpay-routes`:
+
+```bash
+btcpay-routes show
+btcpay-routes add lnd-rest
+btcpay-routes add clightning-rest
+btcpay-routes remove lnd-rest
+btcpay-routes help
+```
+
+`show`, `add`, and `remove` return JSON reporting the optional routes for the current stack and all currently enabled routes. Running `btcpay-routes` without arguments, or with `help`, prints usage information as plain text.
+
+```json
+{"optionalRoutes":["lnd-grpc","lnd-rest"],"enabledRoutes":["rtl"]}
+```
+
+The generator records the selected fragments and their routes in `Generated/manifest.json`. Active routes are represented by relative symlinks from `nginx/enabled-routes` to the canonical snippets in `nginx/routes`; this includes every required route and any optional routes you enabled. Adding or removing an optional route validates and reloads a running Nginx instance; saved selections are synchronized when the Compose configuration is generated.
+
+LND's REST and gRPC APIs are optional and can be enabled independently through `lnd-rest` and `lnd-grpc`. The unauthenticated wallet creation and unlocking methods remain blocked by Nginx; all other calls require the appropriate LND macaroon.
 
 ## Can I run BTCPay Server on ports other than 80 and 443?
 

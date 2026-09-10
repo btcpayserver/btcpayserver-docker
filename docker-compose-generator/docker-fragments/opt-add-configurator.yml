@@ -1,3 +1,5 @@
+required-routes:
+  - "configurator"
 services:
   configurator:
     restart: unless-stopped

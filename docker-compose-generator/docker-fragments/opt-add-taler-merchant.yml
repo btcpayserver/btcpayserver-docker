@@ -1,3 +1,5 @@
+required-routes:
+  - "taler-merchant"
 services:
   taler-merchant:
     restart: unless-stopped

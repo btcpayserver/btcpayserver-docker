@@ -15,15 +15,17 @@ services:
       - "nginx_conf:/etc/nginx/conf.d"
       - "nginx_vhost:/etc/nginx/vhost.d"
       - "nginx_html:/usr/share/nginx/html"
+      - "../nginx:/etc/nginx/btcpay-routes:ro"
   nginx-gen:
     restart: unless-stopped
     image: btcpayserver/docker-gen:0.10.7
     container_name: nginx-gen
     environment:
       DEFAULT_HOST: ${REVERSEPROXY_DEFAULT_HOST:-none}
+      RESOLVERS: 127.0.0.11 valid=30s ipv6=off
     volumes:
       - "/var/run/docker.sock:/tmp/docker.sock:ro"
-      - "./nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl:ro"
+      - "../nginx:/etc/docker-gen/templates:ro"
       - "nginx_conf:/etc/nginx/conf.d"
       - "nginx_vhost:/etc/nginx/vhost.d"
       - "nginx_html:/usr/share/nginx/html"

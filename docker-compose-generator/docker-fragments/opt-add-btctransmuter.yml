@@ -1,3 +1,5 @@
+required-routes:
+  - "btctransmuter"
 services:
   btctransmuter:
     restart: unless-stopped

@@ -1,0 +1,232 @@
+#!/bin/bash
+
+set -Eeuo pipefail
+
+if [[ "${BTCPAY_ROUTES_SKIP_PROFILE:-false}" != "true" ]]; then
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        BASH_PROFILE_SCRIPT="$HOME/btcpay-env.sh"
+    else
+        BASH_PROFILE_SCRIPT="/etc/profile.d/btcpay-env.sh"
+    fi
+
+    if [ -f "$BASH_PROFILE_SCRIPT" ]; then
+        # shellcheck source=/dev/null
+        . "$BASH_PROFILE_SCRIPT"
+    fi
+fi
+
+enabled_backup=""
+shlock_file=""
+
+json_error() {
+    jq -cn --arg error "$1" '{error:$error}'
+}
+
+fail() {
+    json_error "$1"
+    exit 1
+}
+
+print_help() {
+    cat <<'EOF'
+Usage: btcpay-routes <command> [routes...]
+
+Commands:
+  show              Show optional and enabled routes as JSON.
+  add <route...>    Enable one or more optional routes.
+  remove <route...> Disable one or more optional routes.
+  help              Show this help.
+EOF
+}
+
+cleanup() {
+    [ -z "$enabled_backup" ] || rm -rf "$enabled_backup"
+    if [ -n "$shlock_file" ] && [ "$(cat "$shlock_file" 2>/dev/null || true)" = "$$" ]; then
+        rm -f "$shlock_file"
+    fi
+}
+
+unexpected_error() {
+    local status="$1"
+    local line="$2"
+    trap - ERR
+    json_error "Unexpected failure at line $line"
+    exit "$status"
+}
+
+trap cleanup EXIT
+trap 'unexpected_error $? $LINENO' ERR
+
+require_environment() {
+    command -v flock >/dev/null 2>&1 || command -v shlock >/dev/null 2>&1 || fail "flock or shlock is required"
+    [ "${BTCPAYGEN_REVERSEPROXY:-}" = "nginx" ] || fail "BTCPAYGEN_REVERSEPROXY must be nginx"
+    [ -n "${BTCPAY_BASE_DIRECTORY:-}" ] || fail "BTCPAY_BASE_DIRECTORY is not set"
+}
+
+validate_catalog() {
+    [ -d "$source_routes" ] || fail "Route catalog directory does not exist: $source_routes"
+    [ -f "$manifest_file" ] || fail "Generated manifest does not exist: $manifest_file"
+    jq -e '
+        type == "object" and keys == ["fragments", "optionalRoutes", "requiredRoutes"] and
+        all(.requiredRoutes[], .optionalRoutes[]; type == "string" and test("^[a-z0-9][a-z0-9-]*$")) and
+        all(.fragments[]; type == "string") and
+        ((.requiredRoutes | length) == (.requiredRoutes | unique | length)) and
+        ((.optionalRoutes | length) == (.optionalRoutes | unique | length)) and
+        (([.requiredRoutes[]] - [.optionalRoutes[]] | length) == (.requiredRoutes | length))
+    ' "$manifest_file" >/dev/null 2>&1 || fail "Generated manifest contains invalid route metadata"
+
+    local alias
+    while IFS= read -r alias; do
+        [ -f "$source_routes/$alias.conf" ] || fail "Route '$alias' has no nginx snippet"
+    done < <(jq -r '.requiredRoutes[], .optionalRoutes[]' "$manifest_file")
+}
+
+prepare_directories() {
+    config_root="${BTCPAY_ROUTES_CONFIG_DIR:-$BTCPAY_BASE_DIRECTORY/btcpayserver-docker/nginx}"
+    source_routes="$config_root/routes"
+    enabled_routes="$config_root/enabled-routes"
+    mkdir -p "$enabled_routes"
+}
+
+acquire_lock() {
+    if command -v flock >/dev/null 2>&1; then
+        exec 9<"$enabled_routes"
+        flock -w 10 9 || fail "Timed out waiting for another btcpay-routes process"
+    else
+        shlock_file="${TMPDIR:-/tmp}/btcpay-routes.$(id -u).lock"
+        shlock -p "$$" -f "$shlock_file" || fail "Another btcpay-routes process is running"
+    fi
+}
+
+sync_routes() {
+    local alias
+    local route_file
+    local target
+
+    while IFS= read -r alias; do
+        target="$enabled_routes/$alias.conf"
+        ln -sfn "../routes/$alias.conf" "$target"
+    done < <(jq -r '.requiredRoutes[]' "$manifest_file")
+
+    for route_file in "$enabled_routes"/*; do
+        [ -e "$route_file" ] || [ -L "$route_file" ] || continue
+        alias="$(basename "$route_file" .conf)"
+        target="../routes/$alias.conf"
+        if ! jq -e --arg alias "$alias" \
+                '(.requiredRoutes + .optionalRoutes) | index($alias) != null' "$manifest_file" >/dev/null || \
+           [ ! -L "$route_file" ] || [ "$(readlink "$route_file")" != "$target" ] || [ ! -e "$route_file" ]; then
+            rm -f "$route_file"
+        fi
+    done
+}
+
+json_array() {
+    if [ "$#" -gt 0 ]; then
+        printf '%s\n' "$@"
+    fi | jq -Rsc 'split("\n")[:-1] | sort'
+}
+
+print_state() {
+    local alias
+    local -a optional=()
+    local -a enabled=()
+
+    while IFS= read -r alias; do
+        optional+=("$alias")
+        if [ -L "$enabled_routes/$alias.conf" ] && [ -e "$enabled_routes/$alias.conf" ]; then
+            enabled+=("$alias")
+        fi
+    done < <(jq -r '.optionalRoutes[]' "$manifest_file")
+    while IFS= read -r alias; do
+        if [ -f "$enabled_routes/$alias.conf" ]; then
+            enabled+=("$alias")
+        fi
+    done < <(jq -r '.requiredRoutes[]' "$manifest_file")
+
+    jq -cn \
+        --argjson optionalRoutes "$(json_array "${optional[@]}")" \
+        --argjson enabledRoutes "$(json_array "${enabled[@]}")" \
+        '{optionalRoutes:$optionalRoutes,enabledRoutes:$enabledRoutes}'
+}
+
+restore_enabled_routes() {
+    rm -f "$enabled_routes"/*
+    cp -a "$enabled_backup"/. "$enabled_routes"/
+}
+
+mutate_routes() {
+    local action="$1"
+    shift
+    [ "$#" -gt 0 ] || fail "$action requires at least one route alias"
+
+    local alias
+    local -a aliases=("$@")
+    for alias in "${aliases[@]}"; do
+        if ! jq -e --arg alias "$alias" '.optionalRoutes | index($alias) != null' "$manifest_file" >/dev/null; then
+            if jq -e --arg alias "$alias" '.requiredRoutes | index($alias) != null' "$manifest_file" >/dev/null; then
+                fail "Route is required and cannot be changed: $alias"
+            fi
+            fail "Unknown route: $alias"
+        fi
+    done
+
+    enabled_backup="$(mktemp -d "$config_root/.enabled-routes.XXXXXX")"
+    cp -a "$enabled_routes"/. "$enabled_backup"/
+
+    for alias in "${aliases[@]}"; do
+        if [ "$action" = "add" ]; then
+            ln -sfn "../routes/$alias.conf" "$enabled_routes/$alias.conf"
+        else
+            rm -f "$enabled_routes/$alias.conf"
+        fi
+    done
+
+    if [ "$(docker inspect -f '{{.State.Running}}' nginx 2>/dev/null || true)" != "true" ]; then
+        fail "nginx is not running; route selection was saved and will be applied by btcpay_up"
+    fi
+
+    local validation_error
+    if ! validation_error="$(docker exec nginx nginx -t 2>&1)"; then
+        restore_enabled_routes
+        fail "nginx validation failed: $validation_error"
+    fi
+    if ! docker kill --signal HUP nginx >/dev/null 2>&1; then
+        restore_enabled_routes
+        fail "nginx configuration is valid, but nginx could not be reloaded"
+    fi
+
+    rm -rf "$enabled_backup"
+    enabled_backup=""
+    print_state
+}
+
+command_name="${1:-}"
+if [ -z "$command_name" ] || [ "$command_name" = "help" ]; then
+    print_help
+    exit 0
+fi
+
+require_environment
+manifest_file="${BTCPAY_ROUTES_MANIFEST:-$BTCPAY_BASE_DIRECTORY/btcpayserver-docker/Generated/manifest.json}"
+prepare_directories
+validate_catalog
+acquire_lock
+
+case "$command_name" in
+    show)
+        [ "$#" -eq 1 ] || fail "show does not accept arguments"
+        print_state
+        ;;
+    add|remove)
+        sync_routes
+        mutate_routes "$@"
+        ;;
+    sync)
+        [ "$#" -eq 1 ] || fail "sync does not accept arguments"
+        sync_routes
+        print_state
+        ;;
+    *)
+        fail "Unknown command: $command_name"
+        ;;
+esac

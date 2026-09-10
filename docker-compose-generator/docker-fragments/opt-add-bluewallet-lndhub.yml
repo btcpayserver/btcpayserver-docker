@@ -1,4 +1,6 @@
 # DO NOT USE THOSE ARE DEPRECATED
+required-routes:
+  - "bluewallet-lndhub"
 services:
   bluewallet_lndhub_redis:
     container_name: bluewallet_lndhub_redis

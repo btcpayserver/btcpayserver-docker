@@ -1,4 +1,0 @@
-services:
-  lnd_bitcoin:
-    expose:
-      - "10009"

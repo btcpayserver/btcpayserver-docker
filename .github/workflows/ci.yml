@@ -20,6 +20,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - name: Test nginx route management
+        run: tests/btcpay-routes-test.sh
+      - name: Validate nginx route catalog
+        run: docker run --rm -v "$PWD/nginx/routes:/etc/nginx/routes:ro" -v "$PWD/tests/nginx-routes.conf:/etc/nginx/nginx.conf:ro" nginx:1.25.3-bookworm nginx -t
       - name: Test installation
         run: sudo .github/scripts/test-install.sh
 
