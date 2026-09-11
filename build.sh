@@ -8,10 +8,10 @@ btcpay_setup_ssh
 : "${BTCPAYGEN_DOCKER_IMAGE:=btcpayserver/docker-compose-generator}"
 if [ "$BTCPAYGEN_DOCKER_IMAGE" == "btcpayserver/docker-compose-generator:local" ]
 then
-    docker build docker-compose-generator -f docker-compose-generator/linuxamd64.Dockerfile --tag $BTCPAYGEN_DOCKER_IMAGE
+    docker build docker-compose-generator -f docker-compose-generator/Dockerfile --tag "$BTCPAYGEN_DOCKER_IMAGE"
 else
     set +e
-    docker pull $BTCPAYGEN_DOCKER_IMAGE
+    docker pull "$BTCPAYGEN_DOCKER_IMAGE"
     docker rmi $(docker images btcpayserver/docker-compose-generator --format "{{.Tag}};{{.ID}}" | grep "^<none>" | cut -f2 -d ';') > /dev/null 2>&1
     set -e
 fi
@@ -35,7 +35,7 @@ docker run -v "$(pwd)/Generated:/app/Generated" \
            -e "BTCPAYGEN_LIGHTNING=$BTCPAYGEN_LIGHTNING" \
            -e "BTCPAYGEN_SUBNAME=$BTCPAYGEN_SUBNAME" \
            -e "EPS_XPUB=$EPS_XPUB" \
-           --rm $BTCPAYGEN_DOCKER_IMAGE
+           --rm "$BTCPAYGEN_DOCKER_IMAGE"
 
 [[ -f "Generated/pull-images.sh" ]] && chmod +x Generated/pull-images.sh
 [[ -f "Generated/save-images.sh" ]] && chmod +x Generated/save-images.sh

@@ -5,6 +5,8 @@ using System.Text;
 using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
 using System.IO;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace DockerGenerator
 {
@@ -144,6 +146,8 @@ namespace DockerGenerator
 			var volumes = new List<KeyValuePair<YamlNode, YamlNode>>();
 			var configs = new List<KeyValuePair<YamlNode, YamlNode>>();
 			var networks = new List<KeyValuePair<YamlNode, YamlNode>>();
+			var requiredRoutes = new HashSet<string>(StringComparer.Ordinal);
+			var optionalRoutes = new HashSet<string>(StringComparer.Ordinal);
 			foreach (var o in processedFragments.Select(f => (f, ParseDocument(f))).ToList())
 			{
 				var doc = o.Item2;
@@ -164,7 +168,12 @@ namespace DockerGenerator
 				{
 					networks.AddRange(fragmentNetworksRoot.Children);
 				}
+				AddRoutes(doc, "required-routes", requiredRoutes, fragment);
+				AddRoutes(doc, "optional-routes", optionalRoutes, fragment);
 			}
+			var conflictingRoute = requiredRoutes.Intersect(optionalRoutes).FirstOrDefault();
+			if (conflictingRoute != null)
+				throw new YamlBuildException($"Route {conflictingRoute} cannot be both required and optional");
 
 			YamlMappingNode output = new YamlMappingNode();
 			output.Add("services", new YamlMappingNode(Merge(services)));
@@ -200,7 +209,34 @@ namespace DockerGenerator
 			outputFile = GetFilePath();
 			File.WriteAllText(outputFile, result.Replace("''", ""));
 			Console.WriteLine($"Generated {outputFile}");
+
+			var manifest = new
+			{
+				requiredRoutes = requiredRoutes.OrderBy(r => r, StringComparer.Ordinal).ToArray(),
+				optionalRoutes = optionalRoutes.OrderBy(r => r, StringComparer.Ordinal).ToArray(),
+				fragments = processedFragments.Select(f => f.Name).OrderBy(f => f, StringComparer.Ordinal).ToArray()
+			};
+			outputFile = GetFilePath("manifest.json");
+			File.WriteAllText(outputFile, JsonSerializer.Serialize(manifest, new JsonSerializerOptions { WriteIndented = true }));
+			Console.WriteLine($"Generated {outputFile}");
 			Console.WriteLine();
+		}
+
+		private void AddRoutes(YamlMappingNode document, string key, HashSet<string> routes, FragmentName fragment)
+		{
+			if (!document.Children.TryGetValue(key, out var routeNode))
+				return;
+			if (routeNode is not YamlSequenceNode routeSequence)
+				throw new YamlBuildException($"{key} in fragment {fragment} must be a sequence");
+			foreach (var route in routeSequence)
+			{
+				if (route is not YamlScalarNode routeScalar ||
+					string.IsNullOrWhiteSpace(routeScalar.Value) ||
+					!Regex.IsMatch(routeScalar.Value, "^[a-z0-9][a-z0-9-]*$"))
+					throw new YamlBuildException($"{key} in fragment {fragment} contains an invalid route alias");
+				var routeName = routeScalar.Value;
+				routes.Add(routeName);
+			}
 		}
 
 		private bool NotExcluded(FragmentName arg)
