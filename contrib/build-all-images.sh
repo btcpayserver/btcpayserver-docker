@@ -248,18 +248,18 @@ cd - && cd ..
 
 
 # Build elements
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/23.3.3/Elements/23.3.3/linuxamd64.Dockerfile
-DOCKERFILE="Elements/23.3.3/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/23.3.3/Elements/23.3.3/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Elements/23.3.3/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/23.3.3/Elements/23.3.3/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Elements/23.3.3/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/elements:23.3.3"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/23.3.4/Elements/23.3.4/linuxamd64.Dockerfile
+DOCKERFILE="Elements/23.3.4/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/23.3.4/Elements/23.3.4/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Elements/23.3.4/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Elements/23.3.4/Elements/23.3.4/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Elements/23.3.4/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/elements:23.3.4"
 git clone https://github.com/btcpayserver/dockerfile-deps elements
 cd elements
-git checkout Elements/23.3.3
+git checkout Elements/23.3.4
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/elements:23.3.3" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/elements:23.3.4" .
 cd - && cd ..
 
 
