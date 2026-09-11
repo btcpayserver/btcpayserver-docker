@@ -455,22 +455,6 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.59" .
 cd - && cd ..
 
 
-# Build bwt
-# https://raw.githubusercontent.com/bwt-dev/bwt/v0.2.2/docker/Dockerfile
-DOCKERFILE="docker/Dockerfile"
-# https://raw.githubusercontent.com/bwt-dev/bwt/v0.2.2/docker/arm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/bwt-dev/bwt/v0.2.2/docker/arm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/arm64v8.Dockerfile"
-echo "Building shesek/bwt:0.2.2-electrum"
-git clone https://github.com/bwt-dev/bwt bwt
-cd bwt
-git checkout v0.2.2
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shesek/bwt:0.2.2-electrum" .
-cd - && cd ..
-
-
 # Build chatwoot
 # https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
 DOCKERFILE="docker/Dockerfile"
@@ -544,22 +528,6 @@ cd btcpayserver-configurator
 git checkout v0.0.21
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver-configurator:0.0.21" .
-cd - && cd ..
-
-
-# Build eps
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/EPS/0.2.2/EPS/0.2.2/linuxamd64.Dockerfile
-DOCKERFILE="EPS/0.2.2/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/EPS/0.2.2/EPS/0.2.2/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="EPS/0.2.2/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/EPS/0.2.2/EPS/0.2.2/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="EPS/0.2.2/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/eps:0.2.2"
-git clone https://github.com/btcpayserver/dockerfile-deps eps
-cd eps
-git checkout EPS/0.2.2
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/eps:0.2.2" .
 cd - && cd ..
 
 

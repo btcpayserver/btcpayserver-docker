@@ -244,14 +244,6 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
-                case "eps":
-                    dockerInfo.DockerFilePath = $"EPS/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"EPS/{NoRevision(image.Tag)}/linuxarm32v7.Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"EPS/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
-                    dockerInfo.GitRef = $"EPS/{image.Tag}";
-                    dockerInfo.SupportedByUs = true;
-                    break;
                 case "woocommerce":
                     dockerInfo.DockerFilePath = $"WooCommerce/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = $"WooCommerce/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
@@ -654,13 +646,6 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/docker-library/memcached";
                     dockerInfo.GitRef = $"eb38bf28263b8e5bb7367797cb7b181b65d769bd";
                     dockerInfo.SupportedByUs = false;
-                    break;
-                case "bwt":
-                    dockerInfo.DockerFilePath = $"docker/Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"docker/arm32v7.Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"docker/arm64v8.Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/bwt-dev/bwt";
-                    dockerInfo.GitRef = $"v{image.Tag.Split('-')[0]}";
                     break;
                 case "sphinx-relay":
                     dockerInfo.DockerFilePath = $"Dockerfile";
