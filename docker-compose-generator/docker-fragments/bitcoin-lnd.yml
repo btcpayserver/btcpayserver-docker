@@ -17,7 +17,7 @@ services:
       LND_READY_FILE: /root/.nbxplorer/btc_fully_synched
       LND_REST_LISTEN_HOST: http://lnd_bitcoin:8080
       LND_HOST_FOR_LOOP: 127.0.0.1:10009
-      LND_MACAROON_ROTATION_ID: "lnd-security-2026-08-v1"
+      LND_MACAROON_ROTATION_ID: "lnd-security-2026-09-v2"
       RPCUSER_FILE: /deps/.bitcoin/RPCUsers/lnd
       LND_EXTRA_ARGS: |
         restlisten=lnd_bitcoin:8080
