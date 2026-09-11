@@ -1,3 +1,5 @@
+required-routes:
+  - "nostr-relay"
 services:
   nnostr-relay:
     restart: unless-stopped

@@ -1,3 +1,7 @@
+required-routes:
+  - "rtl"
+optional-routes:
+  - "clightning-rest"
 services:
   clightning_bitcoin:
     image: btcpayserver/lightning:v26.06.7

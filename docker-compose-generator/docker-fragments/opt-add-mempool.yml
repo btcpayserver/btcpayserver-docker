@@ -1,4 +1,6 @@
 # reference: https://github.com/mempool/mempool/blob/master/docker/docker-compose.yml
+required-routes:
+  - "mempool"
 services:
   bitcoind:
     environment:

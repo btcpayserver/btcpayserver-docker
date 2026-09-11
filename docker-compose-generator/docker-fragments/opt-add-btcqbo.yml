@@ -1,3 +1,5 @@
+required-routes:
+  - "btcqbo"
 services:
   btcqbo:
     image: jvandrew/btcqbo:0.3.36

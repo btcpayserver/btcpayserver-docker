@@ -17,7 +17,14 @@ export BTCPAYGEN_CRYPTO1="btc"
 export BTCPAYGEN_CRYPTO2="ltc"
 export BTCPAYGEN_REVERSEPROXY="nginx"
 export BTCPAYGEN_LIGHTNING="clightning"
+export BTCPAYGEN_DOCKER_IMAGE="btcpayserver/docker-compose-generator:local"
 source ./btcpay-setup.sh -i
+
+jq -e '
+  .requiredRoutes == ["rtl"] and
+  .optionalRoutes == ["clightning-rest"] and
+  (.fragments | index("bitcoin-clightning") != null)
+' Generated/manifest.json > /dev/null
 
 timeout 1m bash .github/scripts/test-connectivity.sh
 

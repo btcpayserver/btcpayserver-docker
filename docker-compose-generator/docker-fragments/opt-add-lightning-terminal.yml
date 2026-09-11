@@ -1,3 +1,5 @@
+required-routes:
+  - "lightning-terminal"
 services:
   btcpayserver:
     environment:
@@ -36,4 +38,3 @@ volumes:
   lnd_lit_datadir:
 required:
   - "bitcoin-lnd"
-  - "opt-lnd-grpc"

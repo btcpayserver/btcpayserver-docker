@@ -30,6 +30,20 @@ if ! [ -f "/etc/docker/daemon.json" ] && [ -w "/etc/docker" ]; then
 fi
 
 . helpers.sh
+
+if ! command -v jq > /dev/null 2>&1; then
+    echo "jq is required, installing it now..."
+    if [[ "$OSTYPE" == "darwin"* ]] && command -v brew > /dev/null 2>&1; then
+        brew install jq
+    elif command -v apt-get > /dev/null 2>&1; then
+        apt-get update
+        apt-get install -y jq
+    else
+        echo "Error: jq is required but could not be installed automatically." >&2
+        exit 1
+    fi
+fi
+
 docker_update
 
 if ! ./build.sh; then

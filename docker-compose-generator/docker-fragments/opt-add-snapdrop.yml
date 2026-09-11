@@ -1,3 +1,5 @@
+required-routes:
+  - "snapdrop"
 services:
 
   snapdrop:

@@ -1,3 +1,6 @@
+required-routes:
+  - "groestlcoin-lightning-charge"
+  - "groestlcoin-spark"
 services:
   clightning_groestlcoin:
     image: groestlcoin/lightning:v24.08
