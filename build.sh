@@ -34,7 +34,6 @@ docker run -v "$(pwd)/Generated:/app/Generated" \
            -e "BTCPAYGEN_EXCLUDE_FRAGMENTS=$BTCPAYGEN_EXCLUDE_FRAGMENTS" \
            -e "BTCPAYGEN_LIGHTNING=$BTCPAYGEN_LIGHTNING" \
            -e "BTCPAYGEN_SUBNAME=$BTCPAYGEN_SUBNAME" \
-           -e "EPS_XPUB=$EPS_XPUB" \
            --rm "$BTCPAYGEN_DOCKER_IMAGE"
 
 [[ -f "Generated/pull-images.sh" ]] && chmod +x Generated/pull-images.sh
