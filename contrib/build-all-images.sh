@@ -387,34 +387,6 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/docker-gen:0.10.7" .
 cd - && cd ..
 
 
-# Build redis
-# https://raw.githubusercontent.com/docker-library/redis/f1a8498333ae3ab340b5b39fbac1d7e1dc0d628c/5.0/Dockerfile
-DOCKERFILE="5.0/Dockerfile"
-echo "Building redis:6.2.2-buster"
-git clone https://github.com/docker-library/redis redis
-cd redis
-git checkout f1a8498333ae3ab340b5b39fbac1d7e1dc0d628c
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "redis:6.2.2-buster" .
-cd - && cd ..
-
-
-# Build lndhub
-# https://raw.githubusercontent.com/BlueWallet/LndHub/v1.4.1/Dockerfile
-DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/BlueWallet/LndHub/v1.4.1/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/BlueWallet/LndHub/v1.4.1/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building bluewalletorganization/lndhub:v1.4.1"
-git clone https://github.com/BlueWallet/LndHub lndhub
-cd lndhub
-git checkout v1.4.1
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "bluewalletorganization/lndhub:v1.4.1" .
-cd - && cd ..
-
-
 # Build btcqbo
 # https://raw.githubusercontent.com/JeffVandrewJr/btcqbo/v0.3.36/Dockerfile
 DOCKERFILE="Dockerfile"
@@ -672,22 +644,6 @@ docker build -f "$DOCKERFILE" -t "mariadb:10.11" .
 cd - && cd ..
 
 
-# Build ndlc-cli
-# https://raw.githubusercontent.com/dgarage/ndlc/releases/1.0.1/amd64.Dockerfile
-DOCKERFILE="amd64.Dockerfile"
-# https://raw.githubusercontent.com/dgarage/ndlc/releases/1.0.1/arm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/dgarage/ndlc/releases/1.0.1/arm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="arm64v8.Dockerfile"
-echo "Building nicolasdorier/ndlc-cli:1.0.1"
-git clone https://github.com/dgarage/ndlc ndlc-cli
-cd ndlc-cli
-git checkout releases/1.0.1
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/ndlc-cli:1.0.1" .
-cd - && cd ..
-
-
 # Build nnostr-relay
 # https://raw.githubusercontent.com/kukks/nnostr/Relay/v0.0.23/Relay/Dockerfile
 DOCKERFILE="Relay/Dockerfile"
@@ -733,22 +689,6 @@ cd shopify-app-deployer
 git checkout 1.10
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/shopify-app-deployer:1.10" .
-cd - && cd ..
-
-
-# Build snapdrop
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.2/Snapdrop/1.2/Dockerfile
-DOCKERFILE="Snapdrop/1.2/Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.2/Snapdrop/1.2/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Snapdrop/1.2/Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Snapdrop/1.2/Snapdrop/1.2/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Snapdrop/1.2/Dockerfile"
-echo "Building btcpayserver/snapdrop:1.2"
-git clone https://github.com/btcpayserver/dockerfile-deps snapdrop
-cd snapdrop
-git checkout Snapdrop/1.2
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/snapdrop:1.2" .
 cd - && cd ..
 
 
