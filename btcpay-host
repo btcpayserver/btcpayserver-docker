@@ -65,7 +65,13 @@ fi
 
 case "$command" in
     env)
-        printf '%s\n' "${allowed_commands[@]}" | jq -Rsc '{deploymentType:"btcpayserver-docker",commands:(split("\n")[:-1])}'
+        if routes="$(btcpay-routes show 2>/dev/null)"; then
+            printf '%s\n' "${allowed_commands[@]}" | jq -Rsc --argjson routes "$routes" \
+                '{deploymentType:"btcpayserver-docker",commands:(split("\n")[:-1]),routes:$routes}'
+        else
+            printf '%s\n' "${allowed_commands[@]}" | jq -Rsc \
+                '{deploymentType:"btcpayserver-docker",commands:(split("\n")[:-1])}'
+        fi
         ;;
     help)
         print_help

@@ -149,6 +149,10 @@ print_state() {
         '{optionalRoutes:$optionalRoutes,enabledRoutes:$enabledRoutes}'
 }
 
+notify_btcpayserver() {
+    docker kill --signal HUP generated_btcpayserver_1 >/dev/null 2>&1 || true
+}
+
 restore_enabled_routes() {
     rm -f "$enabled_routes"/*
     cp -a "$enabled_backup"/. "$enabled_routes"/
@@ -182,6 +186,7 @@ mutate_routes() {
     done
 
     if [ "$(docker inspect -f '{{.State.Running}}' nginx 2>/dev/null || true)" != "true" ]; then
+        notify_btcpayserver
         fail "nginx is not running; route selection was saved and will be applied by btcpay_up"
     fi
 
@@ -197,6 +202,7 @@ mutate_routes() {
 
     rm -rf "$enabled_backup"
     enabled_backup=""
+    notify_btcpayserver
     print_state
 }
 

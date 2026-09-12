@@ -24,7 +24,11 @@ case "$1" in
         fi
         ;;
     kill)
-        if [ "${HUP_FAIL:-false}" = "true" ]; then
+        printf '%s\n' "$*" >> "${DOCKER_KILLS_FILE:?}"
+        if [ "${HUP_FAIL:-false}" = "true" ] && [ "${*: -1}" = "nginx" ]; then
+            exit 1
+        fi
+        if [ "${BTCPAY_HUP_FAIL:-false}" = "true" ] && [ "${*: -1}" = "generated_btcpayserver_1" ]; then
             exit 1
         fi
         ;;
@@ -42,6 +46,8 @@ export BTCPAY_ROUTES_CONFIG_DIR="$test_dir/config"
 export BTCPAY_ROUTES_MANIFEST="$test_dir/manifest.json"
 export BTCPAY_BASE_DIRECTORY="$test_dir"
 export BTCPAYGEN_REVERSEPROXY=nginx
+export DOCKER_KILLS_FILE="$test_dir/docker-kills"
+: > "$DOCKER_KILLS_FILE"
 
 write_manifest() {
     jq -n --argjson required "$1" --argjson optional "$2" \
@@ -88,6 +94,7 @@ assert_json_state '["thunderhub"]' '["mempool"]'
 run_routes add thunderhub
 [ "$status" -eq 0 ]
 assert_json_state '["thunderhub"]' '["mempool","thunderhub"]'
+grep -Fxq 'kill --signal HUP generated_btcpayserver_1' "$DOCKER_KILLS_FILE"
 
 run_routes sync
 [ "$status" -eq 0 ]
@@ -135,6 +142,15 @@ jq -e 'keys == ["error"] and (.error | startswith("nginx configuration is valid,
 [ -L "$test_dir/config/enabled-routes/thunderhub.conf" ]
 unset HUP_FAIL
 
+export BTCPAY_HUP_FAIL=true
+run_routes remove thunderhub
+[ "$status" -eq 0 ]
+assert_json_state '["thunderhub"]' '["mempool"]'
+unset BTCPAY_HUP_FAIL
+
+run_routes add thunderhub
+[ "$status" -eq 0 ]
+
 write_manifest '["rtl"]' '["lnd-grpc","lnd-rest"]'
 run_routes sync
 [ "$status" -eq 0 ]
@@ -161,5 +177,17 @@ export BTCPAYGEN_REVERSEPROXY=none
 run_routes show
 [ "$status" -eq 1 ]
 jq -e 'keys == ["error"] and .error == "BTCPAYGEN_REVERSEPROXY must be nginx"' <<< "$output" >/dev/null
+host_environment="$(BTCPAY_ENABLE_SSH=false "$repo_dir/btcpay-host" env)"
+jq -e 'has("routes") | not' <<< "$host_environment" >/dev/null
+
+export BTCPAYGEN_REVERSEPROXY=nginx
+run_routes sync
+host_environment="$(BTCPAY_ENABLE_SSH=false "$repo_dir/btcpay-host" env)"
+jq -e '
+    .deploymentType == "btcpayserver-docker" and
+    .commands == ["env", "help"] and
+    .routes.optionalRoutes == ["clightning-rest"] and
+    .routes.enabledRoutes == ["clightning-rest", "rtl"]
+' <<< "$host_environment" >/dev/null
 
 printf 'btcpay-routes tests passed\n'
