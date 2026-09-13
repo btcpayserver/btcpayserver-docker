@@ -338,6 +338,8 @@ docker_update() {
     docker_compose_update
 }
 
+# Save project container output before replacement, retaining the configured
+# number of private, compressed snapshots. Return nonzero if archiving fails.
 btcpay_archive_logs() (
     set -o pipefail
     local keep="${BTCPAY_LOG_ARCHIVE_COUNT:-5}"
@@ -361,10 +363,11 @@ btcpay_archive_logs() (
     temporary_file="$(mktemp "$archive_dir/.update-$(date -u +%Y%m%dT%H%M%SZ)-XXXXXX")" || return 1
     trap 'rm -f -- "$temporary_file"' EXIT
 
-    # Query by project name, without a Compose file, to include orphaned services
-    # that the new configuration will remove. Compose preserves service prefixes
-    # and timestamps, and warns if a logging driver cannot supply local logs.
-    if ! COMPOSE_FILE= docker-compose -p "$project_name" logs --no-color --timestamps |
+    # Compose's logs -p path skips loading a Compose file when -f is absent.
+    # This includes orphaned services; passing -f would filter them out. Clear
+    # COMPOSE_FILE explicitly so an inherited value cannot change that behavior.
+    # Compose preserves prefixes/timestamps and warns about unreadable log drivers.
+    if ! COMPOSE_FILE='' docker-compose -p "$project_name" logs --no-color --timestamps |
         gzip > "$temporary_file"; then
         echo "Error: could not archive container logs; containers have not been replaced." >&2
         echo "Resolve the logging/storage error, or set BTCPAY_LOG_ARCHIVE_COUNT=0 in $BTCPAY_ENV_FILE to skip archiving." >&2
