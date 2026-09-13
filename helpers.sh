@@ -200,6 +200,7 @@ REVERSEPROXY_DEFAULT_HOST=$REVERSEPROXY_DEFAULT_HOST
 NOREVERSEPROXY_HTTP_PORT=$NOREVERSEPROXY_HTTP_PORT
 BTCPAY_IMAGE=$BTCPAY_IMAGE
 BTCPAY_UPDATE_CLEAN=$BTCPAY_UPDATE_CLEAN
+BTCPAY_LOG_ARCHIVE_COUNT=${BTCPAY_LOG_ARCHIVE_COUNT:-5}
 ACME_CA_URI=$ACME_CA_URI
 NBITCOIN_NETWORK=$NBITCOIN_NETWORK
 LETSENCRYPT_EMAIL=$LETSENCRYPT_EMAIL
@@ -336,6 +337,55 @@ docker_update() {
     fi
     docker_compose_update
 }
+
+btcpay_archive_logs() (
+    set -o pipefail
+    local keep="${BTCPAY_LOG_ARCHIVE_COUNT:-5}"
+    if ! [[ "$keep" =~ ^[0-9]{1,4}$ ]]; then
+        echo "Error: BTCPAY_LOG_ARCHIVE_COUNT must be an integer between 0 and 9999." >&2
+        return 1
+    fi
+    keep=$((10#$keep))
+    [ "$keep" -eq 0 ] && return 0
+
+    local project_name archive_dir temporary_file archive_file archive_name
+    local archives expired_archives
+    cd "$(dirname "$BTCPAY_ENV_FILE")" || return 1
+    project_name="$(docker-compose -f "$BTCPAY_DOCKER_COMPOSE" config --format json |
+        jq -er '.name | select(type == "string" and length > 0)')" || return 1
+
+    # Logs can contain sensitive information. Keep archives outside the checkout.
+    umask 077
+    archive_dir="$BTCPAY_BASE_DIRECTORY/btcpay-update-logs"
+    mkdir -p "$archive_dir" && chmod 700 "$archive_dir" || return 1
+    temporary_file="$(mktemp "$archive_dir/.update-$(date -u +%Y%m%dT%H%M%SZ)-XXXXXX")" || return 1
+    trap 'rm -f -- "$temporary_file"' EXIT
+
+    # Query by project name, without a Compose file, to include orphaned services
+    # that the new configuration will remove. Compose preserves service prefixes
+    # and timestamps, and warns if a logging driver cannot supply local logs.
+    if ! COMPOSE_FILE= docker-compose -p "$project_name" logs --no-color --timestamps |
+        gzip > "$temporary_file"; then
+        echo "Error: could not archive container logs; containers have not been replaced." >&2
+        echo "Resolve the logging/storage error, or set BTCPAY_LOG_ARCHIVE_COUNT=0 in $BTCPAY_ENV_FILE to skip archiving." >&2
+        return 1
+    fi
+
+    archive_name="${temporary_file##*/}"
+    archive_file="$archive_dir/${archive_name#.}.log.gz"
+    mv -- "$temporary_file" "$archive_file" || return 1
+    echo "Container logs saved to $archive_file"
+
+    # Prune only completed archives, and only after saving the new one.
+    shopt -s nullglob
+    archives=("$archive_dir"/update-*.log.gz)
+    if [ "${#archives[@]}" -gt "$keep" ]; then
+        expired_archives="$(LC_ALL=C ls -1t -- "${archives[@]}" | tail -n "+$((keep + 1))")" || return 1
+        while IFS= read -r archive_file; do
+            rm -f -- "$archive_file" || return 1
+        done <<< "$expired_archives"
+    fi
+)
 
 btcpay_up() {
     pushd . > /dev/null

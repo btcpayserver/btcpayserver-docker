@@ -71,6 +71,7 @@ fi
 
 install_tooling
 btcpay_update_docker_env
+btcpay_archive_logs
 btcpay_up
 
 set +e

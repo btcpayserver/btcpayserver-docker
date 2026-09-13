@@ -28,6 +28,23 @@ jq -e '
 
 timeout 1m bash .github/scripts/test-connectivity.sh
 
+# A removed service's stdout and stderr must survive container deletion.
+docker run --name btcpay-test-log-orphan \
+    --label com.docker.compose.project=generated \
+    --label com.docker.compose.service=retired-service \
+    --label com.docker.compose.oneoff=False \
+    --label com.docker.compose.config-hash=log-archive-test \
+    --entrypoint /bin/sh btcpayserver/docker-compose-generator:local \
+    -c 'echo archive-stdout-marker; echo archive-stderr-marker >&2'
+. ./helpers.sh
+btcpay_archive_logs
+docker rm btcpay-test-log-orphan
+archives=("$BTCPAY_BASE_DIRECTORY"/btcpay-update-logs/update-*.log.gz)
+[ "${#archives[@]}" -eq 1 ]
+gzip -t "${archives[0]}"
+gzip -cd "${archives[0]}" | grep -F archive-stdout-marker
+gzip -cd "${archives[0]}" | grep -F archive-stderr-marker
+
 # Test that the installed scripts run without crashing.
 btcpay-up.sh
 btcpay-down.sh
