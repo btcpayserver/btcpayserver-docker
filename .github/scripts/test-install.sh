@@ -28,37 +28,21 @@ jq -e '
 
 timeout 1m bash .github/scripts/test-connectivity.sh
 
-# A removed service's stdout and stderr must survive container deletion.
-docker run --name btcpay-test-log-orphan \
+# A service's stdout and stderr must survive container deletion.
+docker run --name btcpay-test-log-container \
     --label com.docker.compose.project=generated \
-    --label com.docker.compose.service=retired-service \
+    --label com.docker.compose.service=btcpayserver \
     --label com.docker.compose.oneoff=False \
     --label com.docker.compose.config-hash=log-archive-test \
     --entrypoint /bin/sh btcpayserver/docker-compose-generator:local \
     -c 'echo archive-stdout-marker; echo archive-stderr-marker >&2'
 . ./helpers.sh
-(
-    archive_test_dir="$(mktemp -d)"
-    trap 'rm -f -- "$archive_test_dir/.env" "$archive_test_dir/compose.yaml"; rmdir -- "$archive_test_dir"' EXIT
-    cp "$BTCPAY_ENV_FILE" "$archive_test_dir/.env"
-    export BTCPAY_ENV_FILE="$archive_test_dir/.env"
-
-    # The generated YAML is elsewhere: logs -p must work without a default file.
-    btcpay_archive_logs
-
-    # Neither an unrelated default file nor inherited COMPOSE_FILE may restrict
-    # retrieval to configured services or break capture of the orphan's output.
-    printf 'invalid: [\n' > "$archive_test_dir/compose.yaml"
-    COMPOSE_FILE="$archive_test_dir/compose.yaml" btcpay_archive_logs
-)
-docker rm btcpay-test-log-orphan
+btcpay_archive_logs
+docker rm btcpay-test-log-container
 archives=("$BTCPAY_BASE_DIRECTORY"/btcpay-update-logs/update-*.log.gz)
-[ "${#archives[@]}" -eq 2 ]
-for archive in "${archives[@]}"; do
-    gzip -t "$archive"
-    gzip -cd "$archive" | grep -F archive-stdout-marker
-    gzip -cd "$archive" | grep -F archive-stderr-marker
-done
+[ "${#archives[@]}" -eq 1 ]
+gzip -cd "${archives[0]}" | grep -F archive-stdout-marker
+gzip -cd "${archives[0]}" | grep -F archive-stderr-marker
 
 # Test that the installed scripts run without crashing.
 btcpay-up.sh

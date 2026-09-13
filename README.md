@@ -116,7 +116,6 @@ Check out this video if you're interested in learning more about setting up [BTC
 * `BTCPAYGEN_DOCKER_IMAGE`: Optional, Specify which generator image to use if you have customized the C# generator. Set to `btcpayserver/docker-compose-generator:local` to build the generator locally at runtime.
 * `BTCPAY_IMAGE`: Optional, Specify which btcpayserver image to use if you have a customized btcpayserver.
 * `BTCPAY_UPDATE_CLEAN`: Clean (prune) all old BTCPayServer images after an update. WARNING: also removes all non-BTCPayServer images! (default: true)
-* `BTCPAY_LOG_ARCHIVE_COUNT`: Number of compressed container log archives to keep from updates (default: `5`, range: `0`-`9999`). Set to `0` to disable. See [Update log archives](#update-log-archives).
 * `BTCPAYGEN_EXCLUDE_FRAGMENTS`:  Semicolon-separated list of fragments you want to forcefully exclude (eg. `bitcoin-clightning`)
 * `TOR_RELAY_NICKNAME`: If tor relay is activated with opt-add-tor-relay, the relay nickname
 * `TOR_RELAY_EMAIL`: If tor relay is activated with opt-add-tor-relay, the email for Tor to contact you regarding your relay
@@ -157,12 +156,9 @@ Archives include service names and timestamps and are stored on the host in
 The directory and compressed files are accessible only to the administrator who
 runs the update. This works with the existing logging driver on Linux and macOS.
 
-The last five successful archives are kept by default. Set `BTCPAY_LOG_ARCHIVE_COUNT`
-in `$BTCPAY_BASE_DIRECTORY/.env` to change this number, or to `0` to disable archiving.
-Existing installations receive the default on their next update. Old archives are
-removed only after a new archive has been saved successfully. If reading or saving
-logs fails, the update stops before replacing containers. Logging drivers that do
-not support local log retrieval are skipped with a warning from Docker Compose.
+The last five successful archives are kept. If reading or saving logs fails, the
+update prints a warning and continues. Logging drivers that do not support local
+log retrieval are skipped with a warning from Docker Compose.
 
 Read a selected archive with `gzip -cd /root/btcpay-update-logs/update-EXAMPLE.log.gz`.
 These are snapshots of logs still available at the time of archiving, not continuous
