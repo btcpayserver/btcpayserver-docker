@@ -39,7 +39,7 @@ services:
       - ZEBRA_RPC__LISTEN_ADDR=0.0.0.0:8232
       - ZEBRA_RPC__ENABLE_COOKIE_AUTH=false
     ports:
-      - "8232:8232"
+      - "8232"
 
   lightwalletd:
     image: electriccoinco/lightwalletd:v0.4.18
@@ -72,9 +72,9 @@ services:
       --data-dir=/var/lib/lightwalletd/db
       --log-file=/dev/stdout
       --log-level=7
-    ports:
-      - "127.0.0.1:9067:9067" # gRPC
-      - "127.0.0.1:9068:9068" # HTTP
+    expose:
+      - "9067" # gRPC
+      - "9068" # HTTP
 
 configs:
   lwd_config:
