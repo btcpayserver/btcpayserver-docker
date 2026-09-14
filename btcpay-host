@@ -88,6 +88,10 @@ case "$command" in
         json_null
         ;;
     changedomain)
+        if [ "$#" -ne 2 ] || [[ ! "$2" =~ ^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$ ]]; then
+            echo "The domain must be a valid domain name without a protocol." >&2
+            exit 1
+        fi
         changedomain.sh "${2:-}"
         ;;
     update)
