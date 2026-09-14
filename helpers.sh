@@ -337,6 +337,34 @@ docker_update() {
     docker_compose_update
 }
 
+# Save project container output before replacement, retaining five private,
+# compressed snapshots.
+btcpay_archive_logs() (
+    set -o pipefail
+    local archive_dir archive_file
+    local archives
+
+    # Logs can contain sensitive information. Keep archives outside the checkout.
+    umask 077
+    archive_dir="$BTCPAY_BASE_DIRECTORY/btcpay-update-logs"
+    mkdir -p "$archive_dir" && chmod 700 "$archive_dir" || return 1
+    archive_file="$archive_dir/update-$(date -u +%Y%m%dT%H%M%SZ).log.gz"
+
+    if ! docker-compose -f "$BTCPAY_DOCKER_COMPOSE" logs --no-color --timestamps |
+        gzip > "$archive_file"; then
+        return 1
+    fi
+
+    echo "Container logs saved to $archive_file"
+
+    shopt -s nullglob
+    archives=("$archive_dir"/update-*.log.gz)
+    while [ "${#archives[@]}" -gt 5 ]; do
+        rm -f -- "${archives[0]}" || return 1
+        archives=("${archives[@]:1}")
+    done
+)
+
 btcpay_up() {
     pushd . > /dev/null
     cd "$(dirname "$BTCPAY_ENV_FILE")"

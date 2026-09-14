@@ -46,6 +46,11 @@ fi
 
 docker_update
 
+echo "Archiving logs of running containers..."
+if ! btcpay_archive_logs; then
+    echo "Warning: Failed to archive container logs; continuing with the update." >&2
+fi
+
 if ! ./build.sh; then
     echo "Failed to generate the docker-compose"
     exit 1

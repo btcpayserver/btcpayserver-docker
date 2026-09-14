@@ -147,6 +147,25 @@ A wide variety of useful scripts are available once BTCPay is installed:
 * `btcpay-routes`: Show, expose, or hide optional Nginx routes
 * `switch-node.sh default|bitcoincore`: Switch your Bitcoin node implementation
 
+## Update log archives
+
+Before replacing containers, `btcpay-update.sh` saves the available Docker logs for
+the installation's Compose project, including services removed by the update.
+Archives include service names and timestamps and are stored on the host in
+`$BTCPAY_BASE_DIRECTORY/btcpay-update-logs/` (normally `/root/btcpay-update-logs/`).
+The directory and compressed files are accessible only to the administrator who
+runs the update. This works with the existing logging driver on Linux and macOS.
+
+The last five successful archives are kept. If reading or saving logs fails, the
+update prints a warning and continues. Logging drivers that do not support local
+log retrieval are skipped with a warning from Docker Compose.
+
+Read a selected archive with `gzip -cd /root/btcpay-update-logs/update-EXAMPLE.log.gz`.
+These are snapshots of logs still available at the time of archiving, not continuous
+log collection: they cannot include already rotated logs or messages written after
+the snapshot. Retention is a count of updates, not a number of days or a disk quota.
+Host SSH login logs and application log files inside volumes are not archived.
+
 # Under the hood
 
 ## Generated docker-compose
