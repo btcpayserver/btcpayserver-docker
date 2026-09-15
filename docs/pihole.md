@@ -35,21 +35,8 @@ PIHOLE_SERVERIP="192.168.1.2"
 
 If your device is using pi-hole as a DNS server, you should now be able to browse `http://pi.hole/admin` to connect to your dashboard.
 
-You can find the admin password in the logs of pihole:
+Set the admin password:
 
 ```bash
-docker logs pihole | grep random
-```
-
-If the password does not work, you can try to reset the password:
-
-```bash
-pihole.sh -a -p
-docker restart pihole
-```
-
-Then running again
-
-```bash
-docker logs pihole | grep random
+pihole.sh setpassword
 ```
