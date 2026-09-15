@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker exec pihole pihole "$@"
+docker exec -ti pihole pihole "$@"
