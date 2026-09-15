@@ -12,10 +12,105 @@ mariadb_dump_name=""
 postgres_container=""
 mariadb_container=""
 database_ready_timeout=""
+migrate=false
+backup_path=""
+lnd_archive_dir=""
+lnd_recovery_dir=""
+lnd_recovery_networks=()
 
 fail() {
   printf "\n🚨 %s\n" "$1" >&2
   exit 1
+}
+
+usage() {
+  printf 'Usage: btcpay-restore.sh [--migrate] /path/to/backup.tar.gz[.gpg]\n\n'
+  printf 'Default: restore a routine backup; Bitcoin LND channels require manual channel.backup import.\n'
+  printf -- '--migrate: restore an archive made with btcpay-backup.sh --migrate and leave all BTCPay containers stopped.\n'
+  printf 'Use migration mode only if the source has remained stopped since the backup.\n'
+}
+
+# Run in the Compose environment directory, and return the actual down status.
+# btcpay_down also runs popd, which can mask a failed shutdown.
+stop_btcpay() (
+  cd "$(dirname "$BTCPAY_ENV_FILE")" || exit 1
+  docker-compose -f "$BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
+)
+
+check_lnd_destination() {
+  local target="$volumes_dir/generated_lnd_bitcoin_datadir/_data"
+  local entries
+
+  if [ -z "$lnd_archive_dir" ]; then
+    return 0
+  fi
+  if [ -L "$(dirname "$target")" ] || [ -L "$target" ] ||
+      { [ -e "$target" ] && [ ! -d "$target" ]; }; then
+    fail "The destination Bitcoin LND data directory is not a regular directory."
+  fi
+
+  shopt -s dotglob nullglob
+  entries=("$target"/*)
+  shopt -u dotglob nullglob
+  if [ "${#entries[@]}" -ne 0 ]; then
+    fail "The destination Bitcoin LND data directory is not empty. Use a fresh LND destination; restoring over existing wallet or channel data is unsafe. See docs/backup-restore.md."
+  fi
+}
+
+preserve_lnd_backups() {
+  local scb network
+  local scb_files
+
+  shopt -s nullglob
+  scb_files=("$lnd_archive_dir"/data/chain/bitcoin/*/channel.backup)
+  shopt -u nullglob
+  for scb in "${scb_files[@]}"; do
+    if [ -L "$scb" ] || [ ! -f "$scb" ]; then
+      fail "The archived LND static channel backup is not a regular file: $scb"
+    fi
+    if [ ! -s "$scb" ]; then
+      continue
+    fi
+    network=$(basename "$(dirname "$scb")")
+    if ! [[ "$network" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+      fail "Unexpected Bitcoin LND network directory: $network"
+    fi
+    if [ -z "$lnd_recovery_dir" ]; then
+      if ! lnd_recovery_dir=$(mktemp -d "$BTCPAY_BASE_DIRECTORY/lnd-recovery.XXXXXX"); then
+        fail "Could not create a directory to preserve LND static channel backups."
+      fi
+    fi
+    if ! mkdir -- "$lnd_recovery_dir/$network" ||
+        ! cp -- "$scb" "$lnd_recovery_dir/$network/channel.backup"; then
+      fail "Could not preserve the LND static channel backup for $network."
+    fi
+    lnd_recovery_networks+=("$network")
+  done
+  if [ -n "$lnd_recovery_dir" ]; then
+    printf 'ℹ️ LND static channel backups preserved in %s. Keep this directory until recovery is complete.\n' "$lnd_recovery_dir"
+  fi
+}
+
+print_lnd_recovery_steps() {
+  local network
+
+  printf '\n⚠️ Bitcoin LND channel recovery is NOT automatic. Restoring the wallet does not restore open channels.\n'
+  if [ "${#lnd_recovery_networks[@]}" -eq 0 ]; then
+    printf '⚠️ No nonempty channel.backup was found. Wallet data was restored, but channel recovery needs a separately saved SCB.\n'
+    printf 'See docs/backup-restore.md and LND\047s disaster recovery documentation.\n'
+    return
+  fi
+  printf 'Keep the original node stopped. Once LND is unlocked and synced, verify the preserved SCB for your network.\n'
+  printf 'Use only the commands for the network configured on the destination; --network does not reconfigure LND.\n'
+  printf 'Only after verification succeeds, run restorechanbackup: it asks peers to FORCE-CLOSE the backed-up channels.\n'
+  printf 'Import channel.backup, never channel.db. Recovery depends on peers responding. See docs/backup-restore.md.\n'
+  for network in "${lnd_recovery_networks[@]}"; do
+    printf '\nCommands for %s (paths used by bitcoin-lncli.sh are inside the container):\n' "$network"
+    printf '  ./bitcoin-lncli.sh --network=%q getinfo\n' "$network"
+    printf '  docker cp %q btcpayserver_lnd_bitcoin:/data/recovery-channel.backup\n' "$lnd_recovery_dir/$network/channel.backup"
+    printf '  ./bitcoin-lncli.sh --network=%q verifychanbackup --multi_file=/data/recovery-channel.backup\n' "$network"
+    printf '  ./bitcoin-lncli.sh --network=%q restorechanbackup --multi_file=/data/recovery-channel.backup\n' "$network"
+  done
 }
 
 cleanup_on_exit() {
@@ -26,7 +121,7 @@ cleanup_on_exit() {
   if [ "$status" -ne 0 ]; then
     if [ "$btcpay_stopped" = true ] && [ -n "${BTCPAY_DOCKER_COMPOSE:-}" ]; then
       printf "\nℹ️ Stopping containers after the failed restore …\n" >&2
-      if docker-compose -f "$BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}" >/dev/null 2>&1; then
+      if stop_btcpay >/dev/null 2>&1; then
         printf "ℹ️ BTCPay Server has been left stopped to avoid using partially restored data.\n" >&2
       else
         printf "⚠️ Containers could not be stopped automatically. Run btcpay-down.sh before continuing.\n" >&2
@@ -35,6 +130,9 @@ cleanup_on_exit() {
 
     if [ -n "$restore_dir" ] && [ -d "$restore_dir" ]; then
       printf "ℹ️ Restore files were retained in %s for diagnosis.\n" "$restore_dir" >&2
+    fi
+    if [ -n "$lnd_recovery_dir" ]; then
+      printf 'ℹ️ Preserved LND static channel backups remain in %s.\n' "$lnd_recovery_dir" >&2
     fi
   fi
 
@@ -134,16 +232,51 @@ normalize_postgres_dump() {
 }
 
 trap cleanup_on_exit EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --migrate)
+      if [ "$migrate" = true ]; then
+        fail "--migrate was specified more than once."
+      fi
+      migrate=true
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    --)
+      shift
+      if [ "$#" -ne 1 ] || [ -n "$backup_path" ]; then
+        fail "Specify exactly one backup archive."
+      fi
+      backup_path=$1
+      shift
+      ;;
+    -*)
+      fail "Unknown option: $1. Use --help for usage."
+      ;;
+    *)
+      if [ -n "$backup_path" ]; then
+        fail "Specify exactly one backup archive."
+      fi
+      backup_path=$1
+      shift
+      ;;
+  esac
+done
+
+if [ -z "$backup_path" ]; then
+  usage >&2
+  exit 1
+fi
 
 if [ "$(id -u)" -ne 0 ]; then
   printf "\n🚨 This script must be run as root.\n"
   printf "➡️ Use the command 'sudo su -' (include the trailing hyphen) and try again.\n\n"
-  exit 1
-fi
-
-backup_path=${1:-}
-if [ -z "$backup_path" ]; then
-  printf "\nℹ️ Usage: btcpay-restore.sh /path/to/backup.tar.gz\n\n"
   exit 1
 fi
 
@@ -174,7 +307,7 @@ fi
 backup_passphrase="${BTCPAY_BACKUP_PASSPHRASE:-}"
 if [[ "$backup_path" == *.gpg && -z "$backup_passphrase" ]]; then
   printf "\n🔐 %s is encrypted. Please provide the passphrase to decrypt it." "$backup_path"
-  printf "\nℹ️ Usage: BTCPAY_BACKUP_PASSPHRASE=t0pSeCrEt btcpay-restore.sh /path/to/backup.tar.gz.gpg\n\n"
+  printf "\nℹ️ Set BTCPAY_BACKUP_PASSPHRASE to the archive's passphrase and retry the same command.\n\n"
   exit 1
 fi
 
@@ -265,13 +398,68 @@ if [ -f "mariadb.sql.gz" ]; then
   fi
 fi
 
+archive_mode=legacy
+if [ -e btcpay-backup-mode ] || [ -L btcpay-backup-mode ]; then
+  if [ -L btcpay-backup-mode ] || [ ! -f btcpay-backup-mode ]; then
+    fail "The backup mode marker is not a regular file."
+  fi
+  archive_mode=$(<btcpay-backup-mode)
+  case "$archive_mode" in
+    backup|migrate) ;;
+    *) fail "The backup contains an invalid mode marker." ;;
+  esac
+fi
+if [ "$migrate" = true ]; then
+  if [ "$archive_mode" != migrate ]; then
+    fail "--migrate requires an archive created by btcpay-backup.sh --migrate. Routine and legacy archives cannot be used for migration."
+  fi
+  printf '\n⚠️ Migration restore: the source must have remained stopped since this archive was created.\n'
+  printf 'The destination stack will also remain stopped until you start it explicitly.\n'
+elif [ "$archive_mode" = migrate ]; then
+  fail "This is a migration archive. Use --migrate only if the source has remained stopped since backup. For an outdated archive, follow the SCB disaster recovery instructions in docs/backup-restore.md."
+fi
+
+archived_lnd_data="$restore_dir/volumes/generated_lnd_bitcoin_datadir/_data"
+if [ -e "$archived_lnd_data" ] || [ -L "$archived_lnd_data" ]; then
+  if [ -L "$archived_lnd_data" ] || [ ! -d "$archived_lnd_data" ]; then
+    fail "The archived Bitcoin LND data directory is not a regular directory."
+  fi
+  lnd_archive_dir="$archived_lnd_data"
+  if [ "$migrate" = false ]; then
+    if [ -e "$lnd_archive_dir/data/graph" ] || [ -L "$lnd_archive_dir/data/graph" ]; then
+      fail "This archive contains Bitcoin LND channel state. Refusing to start a potentially outdated channel database. Follow the SCB disaster recovery instructions in docs/backup-restore.md."
+    fi
+    printf '\n⚠️ This restore recovers the Bitcoin LND wallet only. Manual channel.backup import is required to recover channel funds by asking peers to force-close.\n'
+  else
+    shopt -s nullglob
+    lnd_wallets=("$lnd_archive_dir"/data/chain/bitcoin/*/wallet.db)
+    shopt -u nullglob
+    for wallet in "${lnd_wallets[@]}"; do
+      network=$(basename "$(dirname "$wallet")")
+      if [ ! -s "$lnd_archive_dir/data/graph/$network/channel.db" ]; then
+        fail "The migration archive is missing channel.db for the Bitcoin LND $network wallet. A complete bbolt channel database is required."
+      fi
+    done
+  fi
+  check_lnd_destination
+fi
+
 cd "$btcpay_dir"
 # shellcheck source=/dev/null
 . ./helpers.sh
 
 printf "\nℹ️ Stopping BTCPay Server …\n\n"
 btcpay_stopped=true
-btcpay_down
+if ! stop_btcpay; then
+  fail "Could not stop the BTCPay containers. No volumes have been restored."
+fi
+
+# Recheck after shutdown in case the destination created LND data during
+# validation. An overlay must never mix different wallets or channel states.
+check_lnd_destination
+if [ -n "$lnd_archive_dir" ] && [ "$migrate" = false ]; then
+  preserve_lnd_backups
+fi
 
 cd "$restore_dir"
 
@@ -312,7 +500,7 @@ fi
 printf "✅ Volume restore done.\n"
 
 printf "\nℹ️ Starting Postgres database container …\n"
-if ! docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d postgres; then
+if ! docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up --no-deps -d postgres; then
   fail "Starting the Postgres database container failed."
 fi
 if ! postgres_container=$(docker-compose -f "$BTCPAY_DOCKER_COMPOSE" ps -q postgres); then
@@ -327,7 +515,7 @@ fi
 
 if [ -n "$mariadb_dump_name" ]; then
   printf "\nℹ️ Starting MariaDB database container …\n"
-  if ! docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d mariadb; then
+  if ! docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up --no-deps -d mariadb; then
     fail "Starting the MariaDB database container failed."
   fi
   if ! mariadb_container=$(docker-compose -f "$BTCPAY_DOCKER_COMPOSE" ps -q mariadb); then
@@ -362,10 +550,17 @@ if [ -n "$mariadb_dump_name" ]; then
   printf "✅ MariaDB database restore done.\n"
 fi
 
-printf "\nℹ️ Restarting BTCPay Server …\n\n"
-cd "$btcpay_dir"
-btcpay_up
-btcpay_stopped=false
+if [ "$migrate" = true ]; then
+  printf '\nℹ️ Stopping database containers after migration restore …\n\n'
+  if ! stop_btcpay; then
+    fail "Could not stop the BTCPay containers after migration restore."
+  fi
+else
+  printf "\nℹ️ Restarting BTCPay Server …\n\n"
+  cd "$btcpay_dir"
+  btcpay_up
+  btcpay_stopped=false
+fi
 
 printf "\nℹ️ Cleaning up …\n\n"
 if [ "$restore_dir" != "$expected_restore_dir" ] || [ -z "$restore_dir" ]; then
@@ -375,4 +570,12 @@ if ! rm -rf -- "$restore_dir"; then
   fail "Could not clean restore directory $restore_dir."
 fi
 
-printf "✅ Restore done\n\n"
+if [ "$migrate" = true ]; then
+  printf '✅ Migration restore done. All BTCPay containers remain stopped.\n'
+  printf 'Keep the source stopped permanently. After verifying the destination configuration, start it with ./btcpay-up.sh from the BTCPay Docker directory.\n\n'
+else
+  printf "✅ Restore done\n\n"
+  if [ -n "$lnd_archive_dir" ]; then
+    print_lnd_recovery_steps
+  fi
+fi
