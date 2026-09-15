@@ -7,9 +7,6 @@ You will learn what to consider when creating a backup and how to restore one.
 
 ## Remarks and Considerations
 
-The original backup strategy for BTCPay Server still exists and is documented [here](https://docs.btcpayserver.org/Docker/#how-can-i-back-up-my-btcpay-server).
-While this guide covers the [new process](https://github.com/btcpayserver/btcpayserver-docker/pull/641), the old `backup.sh` script still works.
-
 :::warning
 BTCPay Server is not and will never be responsible for your backups.
 Make sure your backups include all the files and data you want to preserve.
