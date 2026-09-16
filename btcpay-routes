@@ -67,9 +67,12 @@ validate_catalog() {
     [ -d "$source_routes" ] || fail "Route catalog directory does not exist: $source_routes"
     [ -f "$manifest_file" ] || fail "Generated manifest does not exist: $manifest_file"
     jq -e '
-        type == "object" and keys == ["fragments", "optionalRoutes", "requiredRoutes"] and
+        type == "object" and
+        (keys == ["fragments", "optionalRoutes", "requiredRoutes"] or
+         keys == ["fragments", "optionalRoutes", "requiredRoutes", "secrets"]) and
         all(.requiredRoutes[], .optionalRoutes[]; type == "string" and test("^[a-z0-9][a-z0-9-]*$")) and
         all(.fragments[]; type == "string") and
+        all((.secrets // [])[]; type == "string" and length > 0) and
         ((.requiredRoutes | length) == (.requiredRoutes | unique | length)) and
         ((.optionalRoutes | length) == (.optionalRoutes | unique | length)) and
         (([.requiredRoutes[]] - [.optionalRoutes[]] | length) == (.requiredRoutes | length))

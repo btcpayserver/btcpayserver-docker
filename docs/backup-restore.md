@@ -52,7 +52,7 @@ The script performs the following steps:
 * Ensure the database containers are running and ready
 * Dump the databases
 * Stop BTCPay Server
-* Archive the Docker volumes and database dumps
+* Archive the Docker volumes, generated secrets, and database dumps
   * Exclude blockchain data and caches that can be downloaded again
   * Optionally [encrypt the archive](#set-a-backup-passphrase)
 * Restart BTCPay Server
@@ -148,6 +148,7 @@ The script will do the following steps:
 
 * Extract the backup archive (and decrypt it when necessary)
 * Stop BTCPay Server
+* Restore generated secrets when the backup contains them, failing without overwriting when the destination already exists
 * Restore the Docker volumes
 * Start the database containers and wait until they are ready
 * Import the database dumps with strict error handling

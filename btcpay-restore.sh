@@ -247,6 +247,18 @@ fi
 if [ ! -d "volumes" ]; then
   fail "The volumes directory does not exist in the backup."
 fi
+if [ -L "secrets" ]; then
+  fail "The backup secrets directory must not be a symlink."
+fi
+if [ -e "secrets" ] && [ ! -d "secrets" ]; then
+  fail "The backup secrets path is not a directory."
+fi
+if [ -d "secrets" ] && [ -n "$(find "secrets" -type l -print -quit)" ]; then
+  fail "The backup secrets directory must not contain symlinks."
+fi
+if [ -d "secrets" ] && { [ -e "$btcpay_dir/secrets" ] || [ -L "$btcpay_dir/secrets" ]; }; then
+  fail "The destination secrets path already exists. Remove it before restoring this backup."
+fi
 if ! gzip -t -- "$postgres_dump_name"; then
   fail "$postgres_dump_name is corrupt or incomplete."
 fi
@@ -267,6 +279,19 @@ btcpay_stopped=true
 btcpay_down
 
 cd "$restore_dir"
+
+if [ -d "secrets" ]; then
+  printf "\nℹ️ Restoring secrets …\n"
+  if [ -e "$btcpay_dir/secrets" ] || [ -L "$btcpay_dir/secrets" ]; then
+    fail "The destination secrets path already exists. Remove it before restoring this backup."
+  fi
+  if ! mkdir -m 700 -- "$btcpay_dir/secrets" ||
+      ! cp -a -- "secrets/." "$btcpay_dir/secrets/" ||
+      ! chmod 700 -- "$btcpay_dir/secrets"; then
+    fail "Restoring secrets failed. Please check the error above."
+  fi
+  printf "✅ Secret restore done.\n"
+fi
 
 printf "\nℹ️ Restoring volumes …\n"
 if ! mkdir -p -- "$volumes_dir"; then
