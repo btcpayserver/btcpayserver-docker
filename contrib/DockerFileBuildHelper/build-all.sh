@@ -530,30 +530,6 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/joinmarket:0.9.10" .
 cd - && cd ..
 
 
-# Build librepatron
-# https://raw.githubusercontent.com/JeffVandrewJr/patron/v0.7.39/Dockerfile
-DOCKERFILE="Dockerfile"
-echo "Building jvandrew/librepatron:0.7.39"
-git clone https://github.com/JeffVandrewJr/patron librepatron
-cd librepatron
-git checkout v0.7.39
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/librepatron:0.7.39" .
-cd - && cd ..
-
-
-# Build isso
-# https://raw.githubusercontent.com/JeffVandrewJr/isso/patron.22/Dockerfile
-DOCKERFILE="Dockerfile"
-echo "Building jvandrew/isso:atron.22"
-git clone https://github.com/JeffVandrewJr/isso isso
-cd isso
-git checkout patron.22
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "jvandrew/isso:atron.22" .
-cd - && cd ..
-
-
 # Build lightning-terminal
 # https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.17.4-alpha/Dockerfile
 DOCKERFILE="Dockerfile"

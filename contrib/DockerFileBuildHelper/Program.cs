@@ -353,20 +353,10 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/Groestlcoin/groestlcoin-spark";
                     dockerInfo.GitRef = $"v{image.Tag.Substring("version-".Length)}";
                     break;
-                case "librepatron":
-                    dockerInfo.DockerFilePath = $"Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/JeffVandrewJr/patron";
-                    dockerInfo.GitRef = $"v{image.Tag}";
-                    break;
                 case "electrumx":
                     dockerInfo.DockerFilePath = $"Dockerfile";
                     dockerInfo.GitLink = "https://github.com/lukechilds/docker-electrumx";
                     dockerInfo.GitRef = $"master";
-                    break;
-                case "isso":
-                    dockerInfo.DockerFilePath = $"Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/JeffVandrewJr/isso";
-                    dockerInfo.GitRef = $"patron.{image.Tag.Substring("atron.".Length)}";
                     break;
                 case "mariadb":
                     // 10.5.8 -> 10.5
