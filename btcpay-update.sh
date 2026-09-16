@@ -2,14 +2,7 @@
 
 set -e
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-	# Mac OS
-	BASH_PROFILE_SCRIPT="$HOME/btcpay-env.sh"
-
-else
-	# Linux
-	BASH_PROFILE_SCRIPT="/etc/profile.d/btcpay-env.sh"
-fi
+BASH_PROFILE_SCRIPT="/etc/profile.d/btcpay-env.sh"
 
 . ${BASH_PROFILE_SCRIPT}
 
@@ -33,9 +26,7 @@ fi
 
 if ! command -v jq > /dev/null 2>&1; then
     echo "jq is required, installing it now..."
-    if [[ "$OSTYPE" == "darwin"* ]] && command -v brew > /dev/null 2>&1; then
-        brew install jq
-    elif command -v apt-get > /dev/null 2>&1; then
+    if command -v apt-get > /dev/null 2>&1; then
         apt-get update -qq >/dev/null
         DEBIAN_FRONTEND=noninteractive apt-get install -y -qq jq >/dev/null || {
             DEBIAN_FRONTEND=noninteractive apt --fix-broken install -y -qq >/dev/null

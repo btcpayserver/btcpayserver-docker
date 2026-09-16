@@ -198,14 +198,9 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 # Load the BTCPay environment when the caller has not already done so.
-if [[ "${OSTYPE:-}" == darwin* ]]; then
-  bash_profile_script="${HOME:?}/btcpay-env.sh"
-else
-  bash_profile_script="/etc/profile.d/btcpay-env.sh"
-fi
-if [ -f "$bash_profile_script" ]; then
+if [ -f "/etc/profile.d/btcpay-env.sh" ]; then
   # shellcheck source=/dev/null
-  . "$bash_profile_script"
+  . "/etc/profile.d/btcpay-env.sh"
 fi
 
 if [ -z "${BTCPAY_BASE_DIRECTORY:-}" ]; then

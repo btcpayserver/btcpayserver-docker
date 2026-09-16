@@ -2,15 +2,9 @@
 
 set -euo pipefail
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    BASH_PROFILE_SCRIPT="$HOME/btcpay-env.sh"
-else
-    BASH_PROFILE_SCRIPT="/etc/profile.d/btcpay-env.sh"
-fi
-
-if [ -f "$BASH_PROFILE_SCRIPT" ]; then
+if [ -f "/etc/profile.d/btcpay-env.sh" ]; then
     # shellcheck source=/dev/null
-    . "$BASH_PROFILE_SCRIPT"
+    . "/etc/profile.d/btcpay-env.sh"
 fi
 
 authorized_keys="/root/.ssh/authorized_keys"

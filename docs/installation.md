@@ -19,9 +19,9 @@ Storage and memory needs increase when you add Lightning, more chains, an
 unpruned node, transaction indexing, or optional services. The setup script does
 not validate resource capacity.
 
-The automated Linux installation uses `apt-get` and Docker's installation
-script. A Debian or Ubuntu-style host is therefore the expected path. The setup
-script contains macOS handling, but a Linux host is recommended for production.
+Only Linux hosts are supported. The automated installation uses `apt-get` and
+Docker's installation script, so a Debian or Ubuntu-style host is the expected
+path.
 
 ## Install a Bitcoin Deployment
 
