@@ -20,4 +20,6 @@ docker run -it --rm -v `pwd`:/project -w /project/contrib/DockerFileBuildHelper 
 
 This will build a `build-all.sh` file which you can run locally.
 
-To update the README table and the `build-all-images.sh` script that's checked into git, replace `run.sh` with `update-repo.sh`.
+To update the supported-image table and the `build-all-images.sh` script that
+are checked into Git, replace `run.sh` with `update-repo.sh`. The generated
+table is stored in [`docs/supported-images.md`](../../docs/supported-images.md).

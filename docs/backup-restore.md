@@ -1,4 +1,4 @@
-# Backup & Restore
+# Backup and Restore
 
 This guide explains the backup and restore process for the [Docker deployment](https://docs.btcpayserver.org/Docker/).
 You will learn what to consider when creating a backup and how to restore one.
@@ -24,13 +24,11 @@ Disaster recovery is particularly risky if you back up only once per night and t
 The Lightning channel data captured by the `btcpay-backup.sh` script is sufficient for a planned migration, provided that the old server is shut down cleanly.
 Do not start the old server again after restoring and starting the new server.
 
-:::tip
-The Lightning static channel backup should be monitored by a script and copied to a remote server so that you always have the latest state available.
-We will provide such a script with a future update.
-Until then, keep the above in mind when restoring a backup!
-:::
+Copy backups and implementation-specific static channel backups to protected
+remote storage. Keep the warning above in mind whenever restoring a Lightning
+deployment.
 
-## How does the backup work?
+## Create a Backup
 
 The backup process is run using the `btcpay-backup.sh` script.
 
@@ -97,7 +95,7 @@ export BTCPAY_BACKUP_PASSPHRASE
 ./btcpay-backup.sh
 ```
 
-To [restore](#how-to-restore) the encrypted backup, set `BTCPAY_BACKUP_PASSPHRASE` to the same passphrase.
+To [restore](#restore-a-backup) the encrypted backup, set `BTCPAY_BACKUP_PASSPHRASE` to the same passphrase.
 
 ### Automation by crontab
 
@@ -114,7 +112,7 @@ If the cron job should encrypt backups, also set `BTCPAY_BACKUP_PASSPHRASE` in i
 
 Make sure the base path in the command (here `/root/BTCPayServer`) matches the output of `echo "$BTCPAY_BASE_DIRECTORY"`.
 
-## How to restore?
+## Restore a Backup
 
 The restore process is similar to the `btcpay-backup.sh` process, but in reverse.
 Run the `btcpay-restore.sh` script with the full path to either an unencrypted `backup.tar.gz` file or an encrypted `backup.tar.gz.gpg` file.

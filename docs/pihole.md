@@ -1,39 +1,35 @@
-# Pi-Hole support
+# Pi-hole
 
-[Pi-Hole](https://pi-hole.net/) is a black hole for internet advertisement.
-It works as a DNS server which blacklist domains tied to advertisement. If you use it as your main DNS server and it detects your query is trying to resolve a domain belonging to an advertisement company, it will resolve the domain to IP `0.0.0.0`, preventing the advertisement to load on any computer using this DNS server.
+[Pi-hole](https://pi-hole.net/) is a DNS-based network advertisement blocker.
 
-Note that our pi-hole integration is meant to be used in a **local network**. Please do not try to use this option on a VPS.
+The integration is intended for a **trusted local network**. Do not expose its
+DNS service on a public VPS.
 
 ## How to use
 
 Let's imagine the local IP of your BTCPay Server is `192.168.1.2`.
 
-1. Connect as root to your server
-2. Add pihole as an option to your docker deployment
+Assume the local IP address of the BTCPay Server host is `192.168.1.2`.
+Connect as root and enable the fragment:
 
 ```bash
 BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-pihole"
 . btcpay-setup.sh -i
 ```
 
-3. If your server has a firewall, make sure it allow incoming traffic to port `53 (UDP)`.
-4. Configure your home router DHCP server to use `192.168.1.2` as primary DNS server.
-
-
-From now everytime a device will connect to your local network, they will automatically use pi-hole as a DNS server. Advertisements will go to a black hole for all devices.
+Allow incoming TCP and UDP traffic on port 53 from the trusted LAN. Configure
+the router's DHCP server to advertise `192.168.1.2` as the primary DNS server.
 
 ## Using the dashboard
 
-Pi-Hole comes with a very nice admin dashboard to monitor its activity.
-It is disabled by default. To enable it, you need to configure `PIHOLE_SERVERIP` to the IP of your server:
+Set `PIHOLE_SERVERIP` to the host's LAN address to enable the dashboard:
 
 ```bash
 PIHOLE_SERVERIP="192.168.1.2"
 . btcpay-setup.sh -i
 ```
 
-If your device is using pi-hole as a DNS server, you should now be able to browse `http://pi.hole/admin` to connect to your dashboard.
+From a device using Pi-hole for DNS, browse to `http://pi.hole/admin`.
 
 Set the admin password:
 

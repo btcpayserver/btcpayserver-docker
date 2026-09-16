@@ -296,7 +296,7 @@ BTCPayServer/wwwroot/bundles/*
 .vscode/
 *docker-compose.generated.yml
 
-Generated/chatwoot_config.env
+Generated/chatwoot-config.env
 Generated/error
 /secrets/
 

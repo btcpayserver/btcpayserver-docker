@@ -13,6 +13,19 @@ permissions:
   contents: read
 
 jobs:
+  documentation:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check local documentation links
+        run: >-
+          docker run --rm -v "$PWD:/input:ro"
+          lycheeverse/lychee:0.24.2
+          --offline --no-progress
+          /input/README.md '/input/docs/**/*.md'
+
   test-install:
     if: github.event_name == 'pull_request' || github.ref == 'refs/heads/master'
     runs-on: ubuntu-22.04
