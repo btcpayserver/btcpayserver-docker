@@ -28,6 +28,7 @@ postgres_dump_name="postgres.sql.gz"
 postgres_dump_path=""
 temporary_backup_path=""
 work_dir=""
+archive_entries=()
 
 fail() {
   printf "\n🚨 %s\n" "$1" >&2
@@ -230,7 +231,6 @@ fi
 if [ ! -f "$BTCPAY_DOCKER_COMPOSE" ]; then
   fail "Docker Compose file $BTCPAY_DOCKER_COMPOSE does not exist."
 fi
-
 if ! btcpay_mountpoint=$(docker volume inspect generated_btcpay_datadir --format='{{.Mountpoint}}'); then
   fail "Could not inspect the generated_btcpay_datadir Docker volume."
 fi
@@ -325,6 +325,20 @@ dump_entries=("$postgres_dump_name")
 if [ -n "$mariadb_dump_name" ]; then
   dump_entries+=("$mariadb_dump_name")
 fi
+archive_entries=(-C "$work_dir" "${dump_entries[@]}" -C "$docker_dir" "${volume_entries[@]}")
+
+if [ -L "$btcpay_dir/secrets" ]; then
+  fail "The secrets directory must not be a symlink."
+fi
+if [ -e "$btcpay_dir/secrets" ] && [ ! -d "$btcpay_dir/secrets" ]; then
+  fail "The secrets path is not a directory."
+fi
+if [ -d "$btcpay_dir/secrets" ]; then
+  if [ -n "$(find "$btcpay_dir/secrets" -type l -print -quit)" ]; then
+    fail "The secrets directory must not contain symlinks."
+  fi
+  archive_entries+=(-C "$btcpay_dir" secrets)
+fi
 
 tar_excludes=(
   --exclude="volumes/backup_datadir"
@@ -350,7 +364,7 @@ tar_excludes=(
   --exclude="volumes/generated_lwd-cache"
   --exclude="volumes/generated_zebrad-cache"
   --exclude="volumes/generated_zec_data"
-  --exclude="**/logs/*"
+  --exclude="volumes/**/logs/*"
 )
 
 backup_filename=$(basename "$backup_path")
@@ -361,8 +375,7 @@ fi
 if [ -n "$backup_passphrase" ]; then
   printf "\n🔐 BTCPAY_BACKUP_PASSPHRASE is set, the backup will be encrypted.\n"
   if ! tar -czf - "${tar_excludes[@]}" \
-      -C "$work_dir" "${dump_entries[@]}" \
-      -C "$docker_dir" "${volume_entries[@]}" |
+      "${archive_entries[@]}" |
       gpg --batch --yes --pinentry-mode loopback --passphrase-fd 3 \
         --symmetric --output "$temporary_backup_path" 3<<<"$backup_passphrase"; then
     fail "Archiving or encrypting failed. Please check the error above."
@@ -375,8 +388,7 @@ if [ -n "$backup_passphrase" ]; then
   printf "✅ Encrypted archive done.\n"
 else
   if ! tar -czf "$temporary_backup_path" "${tar_excludes[@]}" \
-      -C "$work_dir" "${dump_entries[@]}" \
-      -C "$docker_dir" "${volume_entries[@]}"; then
+      "${archive_entries[@]}"; then
     fail "Archiving failed. Please check the error above."
   fi
   if ! tar -tzf "$temporary_backup_path" >/dev/null; then
