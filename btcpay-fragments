@@ -298,14 +298,7 @@ case "$command_name" in
         ;;
 esac
 
-profile_file="${BTCPAY_FRAGMENTS_PROFILE:-}"
-if [ -z "$profile_file" ]; then
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        profile_file="$HOME/btcpay-env.sh"
-    else
-        profile_file="/etc/profile.d/btcpay-env.sh"
-    fi
-fi
+profile_file="${BTCPAY_FRAGMENTS_PROFILE:-/etc/profile.d/btcpay-env.sh}"
 
 load_saved_state
 load_available_fragments

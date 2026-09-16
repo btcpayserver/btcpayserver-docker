@@ -27,7 +27,8 @@ components fit together.
 
 ## Requirements
 
-The installation below targets a fresh Linux VPS with:
+Only Linux hosts are supported. The installation below targets a fresh Linux
+VPS with:
 
 - A supported `x86_64`, `armv7l`, or `aarch64` processor
 - At least 2 GB of RAM and 80 GB of available storage
@@ -37,7 +38,7 @@ The installation below targets a fresh Linux VPS with:
 
 The setup script installs Docker and Docker Compose when needed. Read the
 [installation guide](docs/installation.md) before adapting this process to an
-existing server, another platform, or an external reverse proxy.
+existing server, another Linux distribution, or an external reverse proxy.
 
 <a id="full-installation-for-technical-users"></a>
 

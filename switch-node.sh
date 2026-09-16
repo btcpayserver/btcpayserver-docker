@@ -23,15 +23,6 @@ case "$node" in
         ;;
 esac
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-	# Mac OS
-	BASH_PROFILE_SCRIPT="$HOME/btcpay-env.sh"
-
-else
-	# Linux
-	BASH_PROFILE_SCRIPT="/etc/profile.d/btcpay-env.sh"
-fi
-
 . helpers.sh
 
 

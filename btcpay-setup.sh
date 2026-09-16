@@ -7,34 +7,16 @@ if [[ "$0" = "$BASH_SOURCE" ]]; then
     exit 1
 fi
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    # Mac OS
+if [[ "$(uname -s)" != "Linux" ]]; then
+    echo "This script only supports Linux hosts."
+    return 1
+fi
 
-    if [[ $EUID -eq 0 ]]; then
-        # Running as root is discouraged on Mac OS. Run under the current user instead.
-        echo "This script should not be run as root."
-        return 1
-    fi
+BASH_PROFILE_SCRIPT="/etc/profile.d/btcpay-env.sh"
 
-    BASH_PROFILE_SCRIPT="$HOME/btcpay-env.sh"
-
-    # Mac OS doesn't use /etc/profile.d/xxx.sh. Instead we create a new file and load that from ~/.bash_profile
-    if [[ ! -f "$HOME/.bash_profile" ]]; then
-        touch "$HOME/.bash_profile"
-    fi
-    if [[ -z $(grep ". \"$BASH_PROFILE_SCRIPT\"" "$HOME/.bash_profile") ]]; then
-        # Line does not exist, add it
-        echo ". \"$BASH_PROFILE_SCRIPT\"" >> "$HOME/.bash_profile"
-    fi
-
-else
-    # Root user is not needed for Mac OS
-    BASH_PROFILE_SCRIPT="/etc/profile.d/btcpay-env.sh"
-
-    if [[ $EUID -ne 0 ]]; then
-        echo "This script must be run as root after running \"sudo su -\""
-        return 1
-    fi
+if [[ $EUID -ne 0 ]]; then
+    echo "This script must be run as root after running \"sudo su -\""
+    return 1
 fi
 
 # Verify we are in right folder. If we are not, let's go in the parent folder of the current docker-compose.
@@ -57,7 +39,7 @@ Usage:
 ------
 
 Install BTCPay on this server
-This script must be run as root, except on Mac OS
+This script must be run as root on a Linux host
 
     -i : Run install and start BTCPay Server
     --install-only: Run install only
@@ -165,15 +147,12 @@ if ! [[ "$START" ]]; then
 fi
 
 if [[ -z "$BTCPAYGEN_CRYPTO1" ]]; then
-    if [[ "$OSTYPE" != "darwin"* ]]; then
-        # Not Mac OS - Mac OS uses it's own env file
-        if [[ -f "$BASH_PROFILE_SCRIPT" ]]; then
-            echo "This script must be run as root after running \"sudo su -\""
-        else
-            echo "BTCPAYGEN_CRYPTO1 should not be empty"
-        fi
-        return 1
+    if [[ -f "$BASH_PROFILE_SCRIPT" ]]; then
+        echo "This script must be run as root after running \"sudo su -\""
+    else
+        echo "BTCPAYGEN_CRYPTO1 should not be empty"
     fi
+    return 1
 fi
 
 if [ ! -z "$BTCPAY_ADDITIONAL_HOSTS" ] && [[ "$BTCPAY_ADDITIONAL_HOSTS" == *[';']* ]]; then 
@@ -379,29 +358,11 @@ if ! [[ -x "$(command -v docker)" ]] || ! [[ -x "$(command -v docker-compose)" ]
     fi
     if ! [[ -x "$(command -v docker)" ]]; then
         if [[ "$(uname -m)" == "x86_64" ]] || [[ "$(uname -m)" == "armv7l" ]] || [[ "$(uname -m)" == "aarch64" ]]; then
-            if [[ "$OSTYPE" == "darwin"* ]]; then
-                # Mac OS	
-                if ! [[ -x "$(command -v brew)" ]]; then
-                    # Brew is not installed, install it now
-                    echo "Homebrew, the package manager for Mac OS, is not installed. Installing it now..."
-                    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-                fi
-                if [[ -x "$(command -v brew)" ]]; then
-                    echo "Homebrew is installed, but Docker isn't. Installing it now using brew..."
-                    # Brew is installed, install docker now
-                    # This sequence is a bit strange, but it's what what needed to get it working on a fresh Mac OS X Mojave install
-                    brew cask install docker
-                    brew install docker
-                    brew link docker
-                fi
-            else
-                # Not Mac OS
-                echo "Trying to install docker..."
-                curl -fsSL https://get.docker.com -o get-docker.sh
-                chmod +x get-docker.sh
-                sh get-docker.sh
-                rm get-docker.sh
-            fi
+            echo "Trying to install docker..."
+            curl -fsSL https://get.docker.com -o get-docker.sh
+            chmod +x get-docker.sh
+            sh get-docker.sh
+            rm get-docker.sh
         else
             echo "Unsupported architecture $(uname -m)"
             return 1
