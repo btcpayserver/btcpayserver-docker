@@ -18,7 +18,7 @@ print_help() {
 Usage: btcpay-fragments <command> [fragments...]
 
 Commands:
-  show                         Show saved and available fragments as JSON.
+  show                         Show saved, effective, and available fragments as JSON.
   add <fragment...>            Add one or more additional fragments.
   remove <fragment...>         Remove one or more additional fragments.
   exclude <fragment...>        Exclude one or more fragments.
@@ -101,6 +101,22 @@ load_saved_state() {
     setup_script="$repo_dir/btcpay-setup.sh"
     [ -d "$fragment_dir" ] || fail "Fragment directory does not exist: $fragment_dir"
     [ -f "$setup_script" ] || fail "Setup script does not exist: $setup_script"
+
+    local manifest_file="$repo_dir/Generated/manifest.json"
+    effective_json='[]'
+    if [ -e "$manifest_file" ]; then
+        [ -r "$manifest_file" ] || fail "Generated manifest is not readable: $manifest_file"
+        if ! effective_json="$(jq -ce '
+            if type == "object" and
+               (.fragments | type == "array") and
+               all(.fragments[]; type == "string")
+            then (.fragments | sort)
+            else error("invalid fragment metadata")
+            end
+        ' "$manifest_file" 2>/dev/null)"; then
+            fail "Generated manifest contains invalid fragment metadata: $manifest_file"
+        fi
+    fi
 }
 
 load_available_fragments() {
@@ -121,8 +137,9 @@ print_state() {
     jq -cn \
         --argjson excluded "$excluded_json" \
         --argjson additional "$additional_json" \
+        --argjson effective "$effective_json" \
         --argjson available "$available_json" \
-        '{excludedFragments:$excluded,additionalFragments:$additional,availableFragments:$available}'
+        '{excludedFragments:$excluded,additionalFragments:$additional,effectiveFragments:$effective,availableFragments:$available}'
 }
 
 contains_name() {

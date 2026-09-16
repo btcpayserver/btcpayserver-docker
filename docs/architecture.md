@@ -61,5 +61,5 @@ especially one with Lightning channels.
 
 The generator can add Lightning nodes, other cryptocurrency nodes, application
 services, storage profiles, and network endpoints. Fragment metadata expresses
-required, recommended, exclusive, and incompatible selections. See the
+required, recommended, excluded, exclusive, and incompatible selections. See the
 [fragment catalog](./fragments.md) for the available options.

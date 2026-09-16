@@ -7,13 +7,15 @@ and multiple fragment names can be passed at once:
 ```bash
 btcpay-fragments add opt-add-mempool
 btcpay-fragments remove opt-add-mempool
-btcpay-fragments exclude nginx-https
-btcpay-fragments unexclude nginx-https
+btcpay-fragments exclude opt-add-tor
+btcpay-fragments unexclude opt-add-tor
 btcpay-fragments show
 ```
 
 `show` and successful changes return JSON containing the saved additional and
-excluded fragments plus every fragment available in the current checkout.
+excluded fragments, the effective fragments from the last generated manifest,
+and every fragment available in the current checkout. `effectiveFragments` is
+empty before the first successful generation.
 Adding a fragment removes it from the excluded set, and excluding one removes
 it from the additional set. Repeating an operation that is already satisfied is
 a no-op.
@@ -63,7 +65,7 @@ formal generator prerequisite, so confirm LND is enabled.
 | Fragment | Purpose and requirements |
 |---|---|
 | [`opt-add-tor`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-tor.yml) | Add Tor hidden services and selected onion connectivity; recommended automatically |
-| [`opt-add-cloudflared`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-cloudflared.yml) | Expose bundled Nginx through Cloudflare Tunnel; see the [guide](./cloudflare-tunnel.md) |
+| [`opt-add-cloudflared`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-cloudflared.yml) | Expose bundled Nginx through Cloudflare Tunnel and disable its local HTTPS companion; see the [guide](./cloudflare-tunnel.md) |
 | [`opt-add-tor-relay`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-tor-relay.yml) | Run a public non-exit relay on port 9001; requires contact details and legal review |
 | [`opt-add-pihole`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-pihole.yml) | Add Pi-hole DNS on TCP/UDP 53 for a trusted LAN; see the [guide](./pihole.md) |
 

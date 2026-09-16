@@ -45,17 +45,22 @@ First, we are going to create the tunnel on Cloudflare.
 
 ![BTCPay Server Cloudflare Tunnel](./img/btcpayexposecloudflare5.jpg)
 
-8. In the SSH section of your server, add Cloudflare tunnel by running the following script. (replace `<YOUR_TOKEN_HERE>` with what you copied in step `5.`, and also replace `<YOUR_DOMAIN_HERE>` with the domain you entered in steps `7.`)
+8. This integration requires the bundled Nginx reverse proxy
+   (`BTCPAYGEN_REVERSEPROXY=nginx`). In the SSH section of your server, add
+   Cloudflare Tunnel by running the following script. Replace
+   `<YOUR_TOKEN_HERE>` with what you copied in step 5 and `<YOUR_DOMAIN_HERE>`
+   with the domain you entered in step 7.
 ```bash
 export BTCPAY_HOST="<YOUR_DOMAIN_HERE>"
 export CLOUDFLARE_TUNNEL_TOKEN="<YOUR_TOKEN_HERE>"
 btcpay-fragments add opt-add-cloudflared
-btcpay-fragments exclude nginx-https
 ```
 
-The Cloudflare fragment trusts forwarded headers. Block direct public access to
-the configured Nginx HTTP port with your host or provider firewall so requests
-can reach it only through the tunnel.
+The Cloudflare fragment requires Nginx and disables its Let's Encrypt companion
+automatically because Cloudflare terminates HTTPS for the tunnel. It also
+trusts forwarded headers. Block direct public access to the configured Nginx
+HTTP port with your host or provider firewall so requests can reach it only
+through the tunnel.
 
 Now you should be able to access your server from the internet! (If you get an Nginx error 503, check below)
 

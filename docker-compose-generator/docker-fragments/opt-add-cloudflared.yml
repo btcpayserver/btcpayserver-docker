@@ -11,3 +11,8 @@ services:
   nginx-gen:
     environment:
       - TRUST_DOWNSTREAM_PROXY=true
+
+required:
+  - "nginx"
+excluded:
+  - "nginx-https"
