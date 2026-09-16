@@ -114,12 +114,6 @@ Follow `docs/installation.md#complete-the-installation` and
 
 Before declaring the deployment production-ready:
 
-- Follow `docs/backup-restore.md` to create an encrypted backup, move it to
-  protected off-host storage, and establish a recurring schedule, retention,
-  failure monitoring, and periodic restore tests.
-- Explain that stale Lightning channel state can lose funds. A full deployment
-  backup is suitable for a planned migration only when the old node is shut
-  down cleanly and never restarted after the restored node starts.
 - Review the update procedure in `docs/updating.md`, including Docker-wide image
   cleanup implications on a shared host.
 - Record the approved non-secret profile, DNS and firewall assumptions, backup
