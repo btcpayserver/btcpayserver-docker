@@ -266,8 +266,8 @@ if [[ "$lnd_data_dir" == */generated_lnd_bitcoin_datadir/_data ]] &&
     [ -d "$lnd_data_dir" ] && [ ! -L "$lnd_data_dir" ]; then
   lnd_previous_dir=$(mktemp -d "$BTCPAY_BASE_DIRECTORY/lnd-before-restore.XXXXXX") &&
     mv -- "$lnd_data_dir" "$lnd_previous_dir/_data" &&
-    mkdir -m 700 -- "$lnd_data_dir" &&
-    printf 'Previous destination LND data preserved in %s\n' "$lnd_previous_dir"
+    printf 'Previous destination LND data preserved in %s\n' "$lnd_previous_dir" &&
+    mkdir -m 700 -- "$lnd_data_dir"
 else
   printf 'Unexpected LND data path; no data was moved.\n'
 fi
