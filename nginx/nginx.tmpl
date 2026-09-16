@@ -431,6 +431,18 @@ server {
 	include /etc/nginx/vhost.d/default;
 	{{ end }}
 
+	{{ if (and (not (exists (printf "/etc/nginx/vhost.d/%s" $host))) (not (exists "/etc/nginx/vhost.d/default"))) }}
+	# Serve ACME HTTP-01 challenges unless the legacy companion provides this location
+	location ^~ /.well-known/acme-challenge/ {
+		auth_basic off;
+		auth_request off;
+		allow all;
+		root /usr/share/nginx/html;
+		try_files $uri =404;
+		break;
+	}
+	{{ end }}
+
 	location / {
 		{{ if eq $proto "uwsgi" }}
 		include uwsgi_params;
