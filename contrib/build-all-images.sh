@@ -411,22 +411,6 @@ docker build -f "$DOCKERFILE" -t "redis:5.0.2-alpine" .
 cd - && cd ..
 
 
-# Build btctransmuter
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.59/Dockerfiles/amd64.Dockerfile
-DOCKERFILE="Dockerfiles/amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.59/Dockerfiles/arm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfiles/arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btctransmuter/v0.0.59/Dockerfiles/arm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfiles/arm64v8.Dockerfile"
-echo "Building btcpayserver/btctransmuter:0.0.59"
-git clone https://github.com/btcpayserver/btctransmuter btctransmuter
-cd btctransmuter
-git checkout v0.0.59
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btctransmuter:0.0.59" .
-cd - && cd ..
-
-
 # Build chatwoot
 # https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
 DOCKERFILE="docker/Dockerfile"
@@ -484,22 +468,6 @@ cd cloudflared
 git checkout Cloudflared/2026.8.3
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "btcpayserver/cloudflared:2026.8.3" .
-cd - && cd ..
-
-
-# Build btcpayserver-configurator
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver-configurator/v0.0.21/Dockerfiles/amd64.Dockerfile
-DOCKERFILE="Dockerfiles/amd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver-configurator/v0.0.21/Dockerfiles/arm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfiles/arm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/btcpayserver-configurator/v0.0.21/Dockerfiles/arm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfiles/arm64v8.Dockerfile"
-echo "Building btcpayserver/btcpayserver-configurator:0.0.21"
-git clone https://github.com/btcpayserver/btcpayserver-configurator btcpayserver-configurator
-cd btcpayserver-configurator
-git checkout v0.0.21
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/btcpayserver-configurator:0.0.21" .
 cd - && cd ..
 
 
