@@ -43,7 +43,7 @@ This script must be run as root on a Linux host
 
     -i : Run install and start BTCPay Server
     --install-only: Run install only
-    --docker-unavailable: Same as --install-only, but will also skip install steps requiring docker
+    --docker-unavailable: Allow install-only setup to continue without Docker; automatic Docker installation may still be attempted
     --no-startup-register: Do not register BTCPayServer to start via systemctl or upstart
     --no-systemd-reload: Do not reload systemd configuration
 
@@ -53,18 +53,18 @@ This script will:
 * Install Docker-Compose
 * Setup BTCPay settings
 * Make sure it starts at reboot via upstart or systemd
-* Add BTCPay utilities in /usr/bin
+* Add BTCPay utilities in /usr/local/bin
 * Start BTCPay
 
 You can run again this script if you desire to change your configuration.
 Except BTC and LTC, other crypto currencies are maintained by their own community. Run at your own risk.
 
-Make sure you own a domain with DNS record pointing to your website.
-If you want HTTPS setup automatically with Let's Encrypt, leave REVERSEPROXY_HTTP_PORT at it's default value of 80 and make sure this port is accessible from the internet.
+BTCPAY_HOST may be empty for local or manually proxied deployments.
+If you want HTTPS setup automatically with Let's Encrypt, set BTCPAY_HOST to a domain whose DNS records point to this server, leave REVERSEPROXY_HTTP_PORT at its default value of 80, and make sure this port is accessible from the internet.
 Or, if you want to offload SSL because you have an existing web proxy, change REVERSEPROXY_HTTP_PORT to any port you want and set TRUST_DOWNSTREAM_PROXY=true. You can then forward the traffic and its X-Forwarded-* headers.
 
 Environment variables:
-    BTCPAY_HOST: The hostname of your website (eg. btcpay.example.com)
+    BTCPAY_HOST: Optional primary hostname of your website (eg. btcpay.example.com). Required for automatic public HTTPS.
     BTCPAY_LIGHTNING_HOST: The hostname announced for your node on the lightning network (by default, the BTCPAY_HOST will be used)
     REVERSEPROXY_HTTP_PORT: The port the reverse proxy binds to for public HTTP requests. Default: 80
     REVERSEPROXY_HTTPS_PORT: The port the reverse proxy binds to for public HTTPS requests. Default: 443
@@ -73,17 +73,17 @@ Environment variables:
     LETSENCRYPT_EMAIL: A mail will be sent to this address if certificate expires and fail to renew automatically (eg. me@example.com)
     NBITCOIN_NETWORK: The type of network to use (eg. mainnet, testnet or regtest. Default: mainnet)
     LIGHTNING_ALIAS: An alias for your lightning network node if used
-    BTCPAYGEN_CRYPTO1: First supported crypto currency (eg. btc, ltc, grs, ftc, doge, mona, dash, none. Default: btc)
+    BTCPAYGEN_CRYPTO1: First supported crypto currency (btc, ltc, grs, ftc, doge, mona, dash, xmr, bdx, lbtc, zec, dcr. Default: btc)
     BTCPAYGEN_CRYPTO2: Second supported crypto currency (Default: empty)
-    BTCPAYGEN_CRYPTON: N th supported crypto currency where N is maximum at maximum 9. (Default: none)
+    BTCPAYGEN_CRYPTON: Nth supported crypto currency, where N is at most 9. (Default: empty)
     BTCPAYGEN_REVERSEPROXY: Whether to use or not a reverse proxy. NGinx setup HTTPS for you. (eg. nginx, none. Default: nginx)
-    BTCPAYGEN_LIGHTNING: Lightning network implementation to use (eg. clightning, lnd, none)
+    BTCPAYGEN_LIGHTNING: Lightning network implementation to use (eg. clightning, lnd, phoenixd, none. Default: none)
     BTCPAYGEN_ADDITIONAL_FRAGMENTS: Semi colon separated list of additional fragments you want to use (eg. opt-save-storage)
     ACME_CA_URI: The API endpoint to ask for HTTPS certificate (default: production)
     BTCPAY_ENABLE_SSH: Optional, gives BTCPay Server SSH access to the host by allowing it to edit authorized_keys of the host, it can be used for managing the authorized_keys or updating BTCPay Server directly through the website. (Default: false)
     BTCPAYGEN_DOCKER_IMAGE: Allows you to specify a custom docker image for the generator (Default: btcpayserver/docker-compose-generator)
     BTCPAY_IMAGE: Allows you to specify the btcpayserver docker image to use over the default version. (Default: current stable version of btcpayserver, eg. btcpayserver/btcpayserver:version)
-    BTCPAY_UPDATE_CLEAN: Clean (prune) all old BTCPayServer images after an update. WARNING: also removes all non-BTCPayServer images! (default: true)
+    BTCPAY_UPDATE_CLEAN: Remove all unused Docker images after an update except generator-labeled images. (Default: true)
     BTCPAY_PROTOCOL: Allows you to specify the external transport protocol of BTCPayServer. (Default: https)
     BTCPAY_ADDITIONAL_HOSTS: Allows you to specify additional domains to your BTCPayServer with https support if enabled. (eg. example2.com,example3.com)
 Add-on specific variables:

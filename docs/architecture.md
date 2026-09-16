@@ -33,10 +33,9 @@ graph TD
 ## Generated Configuration
 
 `build.sh` passes the selected generator variables into the Docker Compose
-generator. The generator writes:
+generator. The standard setup writes:
 
-- `Generated/docker-compose.generated.yml`, or another suffix selected with
-  `BTCPAYGEN_SUBNAME`
+- `Generated/docker-compose.generated.yml`
 - `Generated/manifest.json`, containing selected fragments, Nginx routes, and
   generated-secret declarations
 - `Generated/pull-images.sh`
@@ -44,9 +43,6 @@ generator. The generator writes:
 
 `generate-secrets.sh` creates missing files declared by the manifest under the
 repository's ignored `secrets/` directory. Existing secret files are retained.
-
-The setup path expects the default `generated` Compose suffix. Use
-`BTCPAYGEN_SUBNAME` only when operating a separately generated stack yourself.
 
 ## Persistent Data
 

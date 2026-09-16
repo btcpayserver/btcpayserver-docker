@@ -49,13 +49,12 @@ root:
 BTCPAYGEN_CRYPTO1="btc" \
 BTCPAYGEN_REVERSEPROXY="nginx" \
 BTCPAYGEN_LIGHTNING="none" \
-BTCPAYGEN_SUBNAME="custom" \
 ./build.sh
 ```
 
 Unlike `btcpay-setup.sh`, direct `build.sh` use does not apply the setup
-defaults. Specify every selection you need. The output above is
-`Generated/docker-compose.custom.yml`; operate it explicitly with Docker
+defaults. Specify every selection you need. The output is
+`Generated/docker-compose.generated.yml`; operate it explicitly with Docker
 Compose and provide its runtime environment.
 
 ## Existing Reverse Proxy
