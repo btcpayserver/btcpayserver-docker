@@ -16,6 +16,7 @@ ln -s "$repo_dir/btcpay-fragments" "$test_dir/bin/btcpay-fragments"
 touch \
     "$fragment_dir/alpha.yml" \
     "$fragment_dir/beta.yml" \
+    "$fragment_dir/btcpay-host.yml" \
     "$fragment_dir/gamma.yml" \
     "$fragment_dir/Local.Custom.yml" \
     "$fragment_dir/bad name.yml"
@@ -92,7 +93,7 @@ assert_state() {
         .additionalFragments == $additional and
         .excludedFragments == $excluded and
         .effectiveFragments == $effective and
-        .availableFragments == ["Local.Custom", "alpha", "bad name", "beta", "gamma"]
+        .availableFragments == ["Local.Custom", "alpha", "bad name", "beta", "btcpay-host", "gamma"]
     ' <<< "$output" >/dev/null
 }
 
@@ -164,11 +165,6 @@ cmp -s "$profile" "$profile_before"
 run_fragments add Local.Custom
 [ "$status" -eq 1 ]
 jq -e '.error == "Unknown or invalid fragments: local.custom"' <<< "$output" >/dev/null
-[ "$(setup_calls)" -eq 1 ]
-
-run_fragments add btcpay-host
-[ "$status" -eq 1 ]
-jq -e '.error == "Unknown or invalid fragments: btcpay-host"' <<< "$output" >/dev/null
 [ "$(setup_calls)" -eq 1 ]
 
 run_fragments exclude beta
@@ -252,6 +248,14 @@ rm "$test_dir/bin/mv"
 unset TEST_SETUP_FAIL
 
 run_fragments show
+[ "$status" -eq 0 ]
+assert_state '["alpha"]' '["nginx-https"]'
+
+run_fragments exclude btcpay-host
+[ "$status" -eq 0 ]
+assert_state '["alpha"]' '["btcpay-host","nginx-https"]'
+
+run_fragments unexclude btcpay-host
 [ "$status" -eq 0 ]
 assert_state '["alpha"]' '["nginx-https"]'
 

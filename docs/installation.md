@@ -70,10 +70,10 @@ If `/etc/docker/daemon.json` does not exist, setup creates a JSON-file logging
 configuration limited to three 5 MB files. It does not replace an existing
 Docker daemon configuration.
 
-Host SSH integration is disabled by default. Enabling `BTCPAY_ENABLE_SSH=true`
-allows BTCPay Server to invoke a restricted set of host-management commands and
-changes host SSH configuration; read [Configuration](./configuration.md) before
-enabling it.
+The recommended `btcpay-host` fragment allows BTCPay Server to invoke a
+restricted set of host-management commands and changes host SSH configuration.
+Read [Configuration](./configuration.md) for its security boundaries and how to
+exclude it.
 
 ## Complete the Installation
 

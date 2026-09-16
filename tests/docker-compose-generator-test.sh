@@ -30,12 +30,38 @@ rm -rf "$generator_dir/src/bin" "$generator_dir/src/obj"
 jq -e '
     (.fragments | index("opt-add-cloudflared") != null) and
     (.fragments | index("nginx") != null) and
+    (.fragments | index("btcpay-host") != null) and
     (.fragments | index("nginx-https") == null)
 ' "$test_dir/Generated/manifest.json" >/dev/null
+grep -q 'BTCPAY_BTCPAYHOSTENABLED' \
+    "$test_dir/Generated/docker-compose.fragment-exclusion-test.yml"
+grep -q 'btcpay_host_id_ed25519' \
+    "$test_dir/Generated/docker-compose.fragment-exclusion-test.yml"
 
 if grep -q "letsencrypt-nginx-proxy-companion" \
     "$test_dir/Generated/docker-compose.fragment-exclusion-test.yml"; then
     printf 'Excluded nginx-https services were generated\n' >&2
+    exit 1
+fi
+
+(
+    cd "$generator_dir"
+    BTCPAYGEN_REVERSEPROXY="nginx" \
+    BTCPAYGEN_EXCLUDE_FRAGMENTS="btcpay-host" \
+    BTCPAYGEN_SUBNAME="recommended-exclusion-test" \
+    dotnet run \
+        --no-build \
+        --project src/docker-compose-generator.csproj \
+        --configuration Release \
+        --no-launch-profile \
+        -p:TargetFrameworkOverride=net8.0
+)
+
+jq -e '(.fragments | index("btcpay-host") == null)' \
+    "$test_dir/Generated/manifest.json" >/dev/null
+if grep -q 'BTCPAY_BTCPAYHOSTENABLED\|btcpay_host_id_ed25519' \
+    "$test_dir/Generated/docker-compose.recommended-exclusion-test.yml"; then
+    printf 'Excluded btcpay-host configuration was generated\n' >&2
     exit 1
 fi
 

@@ -111,17 +111,9 @@ btcpay_setup_ssh() {
     local authorized_keys_tmp="$ssh_dir/authorized_keys.tmp"
     local public_key
 
-    BTCPAYGEN_ADDITIONAL_FRAGMENTS="$(remove_fragments "$BTCPAYGEN_ADDITIONAL_FRAGMENTS" "btcpay-host")"
-    if [[ "$BTCPAY_ENABLE_SSH" == "true" ]]; then
-        BTCPAYGEN_ADDITIONAL_FRAGMENTS="$(add_fragments "$BTCPAYGEN_ADDITIONAL_FRAGMENTS" "btcpay-host")"
-    fi
-
     if [ "$(id -u)" -ne 0 ]; then
-        if [[ "$BTCPAY_ENABLE_SSH" == "true" ]]; then
-            echo "BTCPAY_ENABLE_SSH=true requires root access to update $authorized_keys"
-            return 1
-        fi
-        return 0
+        echo "BTCPay host integration requires root access to update $authorized_keys"
+        return 1
     fi
 
     mkdir -p "$ssh_dir" || return 1
@@ -138,30 +130,28 @@ btcpay_setup_ssh() {
         return 1
     fi
 
-    if [[ "$BTCPAY_ENABLE_SSH" == "true" ]]; then
-        if [ ! -f "$key_file" ]; then
-            if ! ssh-keygen -t ed25519 -f "$key_file" -N "" -C "btcpay-host" -q; then
-                rm -f -- "$authorized_keys_tmp"
-                return 1
-            fi
-        fi
-        if [ ! -f "$key_file.pub" ]; then
-            if ! ssh-keygen -y -f "$key_file" > "$key_file.pub"; then
-                rm -f -- "$authorized_keys_tmp" "$key_file.pub"
-                return 1
-            fi
-        fi
-        if ! public_key="$(cat "$key_file.pub")"; then
+    if [ ! -f "$key_file" ]; then
+        if ! ssh-keygen -t ed25519 -f "$key_file" -N "" -C "btcpay-host" -q; then
             rm -f -- "$authorized_keys_tmp"
             return 1
         fi
+    fi
+    if [ ! -f "$key_file.pub" ]; then
+        if ! ssh-keygen -y -f "$key_file" > "$key_file.pub"; then
+            rm -f -- "$authorized_keys_tmp" "$key_file.pub"
+            return 1
+        fi
+    fi
+    if ! public_key="$(cat "$key_file.pub")"; then
+        rm -f -- "$authorized_keys_tmp"
+        return 1
+    fi
 
-        if ! printf 'restrict,command="%s" %s\n' \
-                "${BTCPAY_BASE_DIRECTORY}/btcpayserver-docker/Generated/btcpay-host-proxy" \
-                "$public_key" >> "$authorized_keys_tmp"; then
-            rm -f -- "$authorized_keys_tmp"
-            return 1
-        fi
+    if ! printf 'restrict,command="%s" %s\n' \
+            "${BTCPAY_BASE_DIRECTORY}/btcpayserver-docker/Generated/btcpay-host-proxy" \
+            "$public_key" >> "$authorized_keys_tmp"; then
+        rm -f -- "$authorized_keys_tmp"
+        return 1
     fi
 
     if ! cmp -s "$authorized_keys_tmp" "$authorized_keys"; then
@@ -240,8 +230,7 @@ for variable in "${env_variables[@]}"; do
 done
 
 sshd_config="/etc/ssh/sshd_config"
-if [[ "$BTCPAY_ENABLE_SSH" == "true" ]] && \
-   [[ -f "$sshd_config" ]] && \
+if [[ -f "$sshd_config" ]] && \
    grep -q "PermitRootLogin[[:space:]]no" "$sshd_config"; then
    echo "Updating "$sshd_config" (Change from 'PermitRootLogin no' to 'PermitRootLogin prohibit-password')"
    echo "BTCPay Server needs connection from inside the container to the host in order to run btcpay-update.sh"
