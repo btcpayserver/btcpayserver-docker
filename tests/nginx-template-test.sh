@@ -11,12 +11,16 @@ isolated_network="$test_id-isolated"
 explicit_backend="$test_id-explicit"
 multi_backend="$test_id-multi"
 fallback_backend="$test_id-fallback"
+local_backend="$test_id-local"
+nonlocal_backend="$test_id-nonlocal"
+nohttps_backend="$test_id-nohttps"
 generator="$test_id-generator"
 nginx_image="$("$repo_dir/tests/docker-fragment-image.sh" nginx)"
 docker_gen_image="$("$repo_dir/tests/docker-fragment-image.sh" nginx-gen)"
 
 cleanup() {
-    docker rm -f "$generator" "$explicit_backend" "$multi_backend" "$fallback_backend" >/dev/null 2>&1 || true
+    docker rm -f "$generator" "$explicit_backend" "$multi_backend" "$fallback_backend" \
+        "$local_backend" "$nonlocal_backend" "$nohttps_backend" >/dev/null 2>&1 || true
     docker network rm "$primary_network" "$secondary_network" "$isolated_network" >/dev/null 2>&1 || true
     rm -rf "$test_dir"
 }
@@ -31,7 +35,11 @@ upstream_server_count() {
     ' "$test_dir/conf/default.conf"
 }
 
-mkdir -p "$test_dir/conf" "$test_dir/vhost" "$test_dir/html"
+mkdir -p "$test_dir/certs" "$test_dir/conf" "$test_dir/vhost" "$test_dir/html"
+openssl req -x509 -nodes -newkey rsa:2048 -days 1 \
+    -subj '/CN=default' \
+    -keyout "$test_dir/certs/default.key" \
+    -out "$test_dir/certs/default.crt" >/dev/null 2>&1
 docker network create "$primary_network" >/dev/null
 docker network create "$secondary_network" >/dev/null
 docker network create "$isolated_network" >/dev/null
@@ -53,11 +61,28 @@ docker run -d --name "$fallback_backend" --network "$isolated_network" --expose 
     -e VIRTUAL_HOST_NAME=fallback_test \
     "$nginx_image" >/dev/null
 
+docker run -d --name "$local_backend" --network "$primary_network" --expose 80 \
+    -e VIRTUAL_HOST=development.local \
+    -e VIRTUAL_HOST_NAME=local_test \
+    "$nginx_image" >/dev/null
+
+docker run -d --name "$nonlocal_backend" --network "$primary_network" --expose 80 \
+    -e VIRTUAL_HOST=notlocal \
+    -e VIRTUAL_HOST_NAME=nonlocal_test \
+    "$nginx_image" >/dev/null
+
+docker run -d --name "$nohttps_backend" --network "$primary_network" --expose 80 \
+    -e VIRTUAL_HOST=disabled.local \
+    -e VIRTUAL_HOST_NAME=nohttps_test \
+    -e HTTPS_METHOD=nohttps \
+    "$nginx_image" >/dev/null
+
 docker create --name "$generator" --network "$primary_network" \
     -e DEFAULT_HOST=none \
     -e 'RESOLVERS=127.0.0.11 valid=30s ipv6=off' \
     -v /var/run/docker.sock:/tmp/docker.sock:ro \
     -v "$repo_dir/nginx:/etc/docker-gen/templates:ro" \
+    -v "$test_dir/certs:/etc/nginx/certs:ro" \
     -v "$test_dir/conf:/etc/nginx/conf.d" \
     -v "$test_dir/vhost:/etc/nginx/vhost.d" \
     -v "$test_dir/html:/usr/share/nginx/html" \
@@ -95,7 +120,20 @@ fi
 grep -Fq 'server_name explicit.test;' "$test_dir/conf/default.conf"
 grep -Fq 'proxy_pass http://explicit_test;' "$test_dir/conf/default.conf"
 
+# Only actual .local hosts use the development certificate for HTTPS. An
+# uncertified non-local host, and a .local host opting out of HTTPS, reject SNI.
+test "$(grep -Fc 'proxy_pass http://local_test;' "$test_dir/conf/default.conf")" -eq 2
+test "$(grep -Fc 'proxy_pass http://nonlocal_test;' "$test_dir/conf/default.conf")" -eq 1
+test "$(grep -Fc 'proxy_pass http://nohttps_test;' "$test_dir/conf/default.conf")" -eq 1
+test "$(grep -Fc 'ssl_reject_handshake on;' "$test_dir/conf/default.conf")" -eq 5
+test "$(grep -Fc 'ssl_certificate /etc/nginx/certs/default.crt;' "$test_dir/conf/default.conf")" -eq 2
+if grep -Fq 'return 500;' "$test_dir/conf/default.conf"; then
+    printf 'Uncertified TLS hosts must reject the handshake, not return HTTP 500\n' >&2
+    exit 1
+fi
+
 docker run --rm \
+    -v "$test_dir/certs:/etc/nginx/certs:ro" \
     -v "$test_dir/conf:/etc/nginx/conf.d:ro" \
     -v "$test_dir/vhost:/etc/nginx/vhost.d:ro" \
     -v "$test_dir/html:/usr/share/nginx/html:ro" \
