@@ -18,10 +18,7 @@ Running `. ./btcpay-setup.sh` without `-i` prints its current options and help.
 | `BTCPAYGEN_LIGHTNING` | `clightning`, `lnd`, `phoenixd`, or `none` | `none` |
 | `BTCPAYGEN_REVERSEPROXY` | `nginx` or `none` | `nginx` |
 | `BTCPAYGEN_DOCKER_IMAGE` | Compose generator image | `btcpayserver/docker-compose-generator` |
-| `BTCPAYGEN_SUBNAME` | Generated Compose filename suffix | `generated` |
 
-The setup utilities operate `Generated/docker-compose.generated.yml`; a custom
-`BTCPAYGEN_SUBNAME` is intended for advanced, manually operated builds.
 Manage optional and excluded fragments with `btcpay-fragments`; see [Optional
 Fragments](./fragments.md).
 
@@ -76,11 +73,12 @@ Choose at most one pruning profile:
 | `opt-save-storage` | 100 GB |
 | `opt-save-storage-s` | 50 GB |
 | `opt-save-storage-xs` | 25 GB |
-| `opt-save-storage-xxs` | 5 GB; not recommended for Lightning |
+| `opt-save-storage-xxs` | 5 GB; not recommended for Lightning, but not rejected by the generator |
 
 Pruning is incompatible with `opt-txindex`, ElectrumX, and the bundled Mempool
-service. `opt-save-memory` lowers daemon caches for constrained hosts;
-`opt-more-memory` raises them. The two memory profiles are mutually exclusive.
+service. Use `opt-save-memory` on hosts with less than 1 GB of memory. Use
+`opt-more-memory` when more than 1 GB can be dedicated to Bitcoin Core. The two
+memory profiles are mutually exclusive.
 
 ## Add-on Variables
 

@@ -32,9 +32,11 @@ VPS with:
 
 - A supported `x86_64`, `armv7l`, or `aarch64` processor
 - At least 2 GB of RAM and 80 GB of available storage
-- A domain name whose DNS records point to the server
-- Incoming TCP ports 80 and 443 open to the internet
 - Root access through `sudo`
+
+A domain is not required for local or manually proxied deployments. The bundled
+automatic HTTPS setup requires a domain whose DNS records point to the server
+and incoming TCP ports 80 and 443 open to the internet.
 
 The setup script installs Docker and Docker Compose when needed. Read the
 [installation guide](docs/installation.md) before adapting this process to an

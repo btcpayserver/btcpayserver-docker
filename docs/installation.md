@@ -11,9 +11,12 @@ Use a server with:
 - An `x86_64`, `armv7l`, or `aarch64` processor
 - At least 2 GB of RAM and 80 GB of available storage for the documented pruned
   Bitcoin profile
-- A domain with DNS records pointing to the server
-- Incoming TCP ports 80 and 443 open to the internet
 - Root access
+
+A domain is optional. The bundled automatic HTTPS setup requires a domain with
+DNS records pointing to the server and incoming TCP ports 80 and 443 open to the
+internet. Local deployments and installations behind a manually configured
+proxy can leave `BTCPAY_HOST` empty.
 
 Storage and memory needs increase when you add Lightning, more chains, an
 unpruned node, transaction indexing, or optional services. The setup script does

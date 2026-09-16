@@ -137,7 +137,6 @@ mkdir "$TMP_DIR/Generated"
   BTCPAYGEN_REVERSEPROXY="nginx" \
   BTCPAYGEN_LIGHTNING="none" \
   BTCPAYGEN_ADDITIONAL_FRAGMENTS="$FRAGMENT" \
-  BTCPAYGEN_SUBNAME="fragment-check" \
   dotnet run --project src/docker-compose-generator.csproj \
     --configuration Release --no-launch-profile
 )
@@ -145,7 +144,7 @@ mkdir "$TMP_DIR/Generated"
 BTCPAY_HOST="example.com" \
 BTCPAY_ADDITIONAL_HOSTS="" \
 docker compose \
-  -f "$TMP_DIR/Generated/docker-compose.fragment-check.yml" \
+  -f "$TMP_DIR/Generated/docker-compose.generated.yml" \
   config --quiet
 jq --arg fragment "$FRAGMENT" \
   -e '.fragments | index($fragment) != null' \

@@ -31,9 +31,9 @@ every architecture or receives the same maintenance level.
 | [`opt-save-storage`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-save-storage.yml) | Prune supported nodes to about 100 GB |
 | [`opt-save-storage-s`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-save-storage-s.yml) | Prune supported nodes to about 50 GB |
 | [`opt-save-storage-xs`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-save-storage-xs.yml) | Prune supported nodes to about 25 GB |
-| [`opt-save-storage-xxs`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-save-storage-xxs.yml) | Prune supported nodes to about 5 GB; not recommended for Lightning |
-| [`opt-save-memory`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-save-memory.yml) | Reduce daemon cache and mempool settings on constrained hosts |
-| [`opt-more-memory`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-more-memory.yml) | Increase daemon cache for faster synchronization |
+| [`opt-save-storage-xxs`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-save-storage-xxs.yml) | Prune supported nodes to about 5 GB; not recommended for Lightning, but not rejected by the generator |
+| [`opt-save-memory`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-save-memory.yml) | Reduce daemon cache and mempool settings on hosts with less than 1 GB of memory |
+| [`opt-more-memory`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-more-memory.yml) | Increase daemon cache when more than 1 GB can be dedicated to Bitcoin Core |
 | [`opt-txindex`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-txindex.yml) | Enable transaction indexing; incompatible with pruning |
 | [`opt-mempoolfullrbf`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-mempoolfullrbf.yml) | Enable Bitcoin Core full-RBF policy; recommended automatically for Bitcoin |
 

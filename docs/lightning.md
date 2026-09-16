@@ -22,10 +22,11 @@ Use `lnd` or `phoenixd` instead to select another implementation.
 
 ## Network Access
 
-CLN and LND publish Bitcoin Lightning peer port 9735. Open it when you want the
-node to accept incoming peer connections. Groestlcoin Lightning uses host port
-9736. API endpoints are internal unless you explicitly enable an optional Nginx
-route with `btcpay-routes`; see [Networking](./networking.md).
+Bitcoin CLN and LND publish host TCP port 9735 for peer connections.
+Bitcoin CLN additionally exposes container port 9736 for gRPC without publishing it on the host.
+Open the peer port when you want the node to accept incoming connections. Other API
+endpoints are internal unless you explicitly enable an optional Nginx route
+with `btcpay-routes`; see [Networking](./networking.md).
 
 ## Command-line Access
 
