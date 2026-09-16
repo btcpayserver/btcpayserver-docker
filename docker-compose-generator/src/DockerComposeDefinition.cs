@@ -47,29 +47,11 @@ namespace DockerGenerator
 			Console.WriteLine($"Generating {GetFilePath()}");
 			var deserializer = new DeserializerBuilder().Build();
 			var serializer = new SerializerBuilder().Build();
-			var fragmentsNotFound = new HashSet<FragmentName>();
-			var requiredFragments = new HashSet<FragmentName>();
-			var recommendedFragments = new HashSet<FragmentName>();
-			var processedFragments = new HashSet<FragmentName>();
-			var unprocessedFragments = new HashSet<FragmentName>();
+			var (processedFragments, fragmentsNotFound) = ResolveFragments();
 			var exclusives = new List<(FragmentName FragmentName, string Exclusivity)>();
 			var incompatibles = new List<(FragmentName FragmentName, string Exclusivity)>();
 
-			foreach (var fragment in Fragments.Where(NotExcluded))
-			{
-				unprocessedFragments.Add(fragment);
-			}
-		reprocessFragments:
-			foreach (var fragment in unprocessedFragments.ToList())
-			{
-				var fragmentPath = GetFragmentLocation(fragment);
-				if (!File.Exists(fragmentPath))
-				{
-					fragmentsNotFound.Add(fragment);
-					unprocessedFragments.Remove(fragment);
-				}
-			}
-			foreach (var o in unprocessedFragments.Select(f => (f, ParseDocument(f))).ToList())
+			foreach (var o in processedFragments.Select(f => (f, ParseDocument(f))).ToList())
 			{
 				var doc = o.Item2;
 				var fragment = o.f;
@@ -87,36 +69,7 @@ namespace DockerGenerator
 						incompatibles.Add((fragment, node.ToString()));
 					}
 				}
-				if (doc.Children.ContainsKey("required") && doc.Children["required"] is YamlSequenceNode fragmentRequireRoot)
-				{
-					foreach (var node in fragmentRequireRoot)
-					{
-						if (ExcludeFragments.Contains(new FragmentName(node.ToString())))
-							throw new YamlBuildException($"You excluded fragment {new FragmentName(node.ToString())} but it is required by {fragment}");
-						requiredFragments.Add(new FragmentName(node.ToString()));
-					}
-				}
-				if (doc.Children.ContainsKey("recommended") && doc.Children["recommended"] is YamlSequenceNode fragmentRecommendedRoot)
-				{
-					foreach (var node in fragmentRecommendedRoot)
-					{
-						if (!ExcludeFragments.Contains(new FragmentName(node.ToString())))
-							recommendedFragments.Add(new FragmentName(node.ToString()));
-					}
-				}
-				processedFragments.Add(fragment);
-				unprocessedFragments.Remove(fragment);
 			}
-
-			foreach (var fragment in requiredFragments
-										.Concat(recommendedFragments)
-										.Where(f => !processedFragments.Contains(f) && !fragmentsNotFound.Contains(f)))
-			{
-				unprocessedFragments.Add(fragment);
-			}
-			if (unprocessedFragments.Count != 0)
-				goto reprocessFragments;
-
 			var exclusiveConflict = exclusives.GroupBy(e => e.Exclusivity)
 			.Where(e => e.Count() != 1)
 			.FirstOrDefault();
@@ -236,6 +189,112 @@ namespace DockerGenerator
 			File.WriteAllText(outputFile, JsonSerializer.Serialize(manifest, new JsonSerializerOptions { WriteIndented = true }));
 			Console.WriteLine($"Generated {outputFile}");
 			Console.WriteLine();
+		}
+
+		private (HashSet<FragmentName> Processed, HashSet<FragmentName> NotFound) ResolveFragments()
+		{
+			var rootFragments = Fragments.Where(NotExcluded).ToHashSet();
+			var declaredExclusions = new HashSet<FragmentName>();
+			var seenExclusionSets = new HashSet<string>(StringComparer.Ordinal);
+
+			while (true)
+			{
+				var exclusionSignature = String.Join("\n", declaredExclusions.OrderBy(f => f.Name).Select(f => f.Name));
+				if (!seenExclusionSets.Add(exclusionSignature))
+					throw new YamlBuildException("Fragment exclusions contain a cycle and cannot be resolved");
+
+				var selectedFragments = rootFragments.ToHashSet();
+				var mandatoryFragments = rootFragments.ToHashSet();
+				var processedFragments = new HashSet<FragmentName>();
+				var fragmentsNotFound = new HashSet<FragmentName>();
+				var unprocessedFragments = rootFragments.ToHashSet();
+				var exclusions = new List<(FragmentName Fragment, FragmentName Excluded)>();
+				var excludedRequirements = new List<(FragmentName Fragment, FragmentName Required)>();
+
+				while (unprocessedFragments.Count != 0)
+				{
+					var fragment = unprocessedFragments.First();
+					unprocessedFragments.Remove(fragment);
+
+					if (!File.Exists(GetFragmentLocation(fragment)))
+					{
+						fragmentsNotFound.Add(fragment);
+						continue;
+					}
+
+					var doc = ParseDocument(fragment);
+					foreach (var excluded in ReadExcludedFragments(doc, fragment))
+					{
+						if (excluded.Equals(fragment))
+							throw new YamlBuildException($"Fragment {fragment} cannot exclude itself");
+						exclusions.Add((fragment, excluded));
+					}
+
+					if (doc.Children.ContainsKey("required") && doc.Children["required"] is YamlSequenceNode fragmentRequireRoot)
+					{
+						foreach (var node in fragmentRequireRoot)
+						{
+							var required = new FragmentName(node.ToString());
+							if (ExcludeFragments.Contains(required))
+							{
+								excludedRequirements.Add((fragment, required));
+								continue;
+							}
+							mandatoryFragments.Add(required);
+							if (selectedFragments.Add(required))
+								unprocessedFragments.Add(required);
+						}
+					}
+
+					if (doc.Children.ContainsKey("recommended") && doc.Children["recommended"] is YamlSequenceNode fragmentRecommendedRoot)
+					{
+						foreach (var node in fragmentRecommendedRoot)
+						{
+							var recommended = new FragmentName(node.ToString());
+							if (!ExcludeFragments.Contains(recommended) &&
+								!declaredExclusions.Contains(recommended) &&
+								selectedFragments.Add(recommended))
+								unprocessedFragments.Add(recommended);
+						}
+					}
+
+					processedFragments.Add(fragment);
+				}
+
+				var nextDeclaredExclusions = exclusions.Select(e => e.Excluded).ToHashSet();
+				if (declaredExclusions.SetEquals(nextDeclaredExclusions))
+				{
+					var excludedRequirement = excludedRequirements.FirstOrDefault();
+					if (excludedRequirement.Fragment != null)
+						throw new YamlBuildException($"You excluded fragment {excludedRequirement.Required} but it is required by {excludedRequirement.Fragment}");
+					var conflict = exclusions.FirstOrDefault(e => mandatoryFragments.Contains(e.Excluded));
+					if (conflict.Fragment != null)
+						throw new YamlBuildException($"Fragment {conflict.Fragment} excludes {conflict.Excluded}, but {conflict.Excluded} is explicitly selected or required");
+					return (processedFragments, fragmentsNotFound);
+				}
+
+				declaredExclusions = nextDeclaredExclusions;
+			}
+		}
+
+		private IEnumerable<FragmentName> ReadExcludedFragments(YamlMappingNode document, FragmentName fragment)
+		{
+			if (!document.Children.TryGetValue("excluded", out var excludedNode))
+				yield break;
+			if (excludedNode is not YamlSequenceNode excludedSequence)
+				throw new YamlBuildException($"excluded in fragment {fragment} must be a sequence");
+
+			foreach (var node in excludedSequence)
+			{
+				if (node is not YamlScalarNode scalar || string.IsNullOrWhiteSpace(scalar.Value))
+					throw new YamlBuildException($"excluded in fragment {fragment} contains an invalid fragment name");
+				if (scalar.Value.Trim().EndsWith(".yml", StringComparison.OrdinalIgnoreCase))
+					throw new YamlBuildException($"excluded in fragment {fragment} contains an invalid fragment name");
+				var excluded = new FragmentName(scalar.Value);
+				if (!Regex.IsMatch(excluded.Name, "^[a-z0-9][a-z0-9._-]*$"))
+					throw new YamlBuildException($"excluded in fragment {fragment} contains an invalid fragment name");
+				yield return excluded;
+			}
 		}
 
 		private void AddRoutes(YamlMappingNode document, string key, HashSet<string> routes, FragmentName fragment)

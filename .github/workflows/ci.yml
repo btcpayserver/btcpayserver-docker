@@ -37,6 +37,8 @@ jobs:
         run: tests/btcpay-routes-test.sh
       - name: Test fragment management
         run: tests/btcpay-fragments-test.sh
+      - name: Test Docker Compose generator
+        run: tests/docker-compose-generator-test.sh
       - name: Test environment persistence
         run: tests/environment-test.sh
       - name: Test nginx template rendering
