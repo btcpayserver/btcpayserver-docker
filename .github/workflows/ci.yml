@@ -20,10 +20,11 @@ jobs:
         with:
           persist-credentials: false
       - name: Check local documentation links
-        uses: lycheeverse/lychee-action@v2
-        with:
-          args: --offline --no-progress README.md 'docs/**/*.md'
-          fail: true
+        run: >-
+          docker run --rm -v "$PWD:/input:ro"
+          lycheeverse/lychee:0.24.2
+          --offline --no-progress
+          /input/README.md '/input/docs/**/*.md'
 
   test-install:
     if: github.event_name == 'pull_request' || github.ref == 'refs/heads/master'
