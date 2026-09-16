@@ -51,7 +51,6 @@ See [Networking](./networking.md) before changing proxy or certificate settings.
 | `NBITCOIN_NETWORK` | `mainnet`, `testnet`, or `regtest` | `mainnet` |
 | `BTCPAY_IMAGE` | Override the BTCPay Server image | Release selected by fragments |
 | `LIGHTNING_ALIAS` | Public Lightning node alias | Implementation default |
-| `BTCPAY_ENABLE_SSH` | Permit restricted BTCPay-to-host management over SSH | `false` |
 | `BTCPAY_UPDATE_CLEAN` | Remove unused images after updates | `true` |
 | `COMPOSE_HTTP_TIMEOUT` | Compose operation timeout in seconds | `180` |
 
@@ -60,9 +59,11 @@ persist it in `/etc/profile.d/btcpay-env.sh` or the generated environment file.
 Export it again before each setup, update, or `btcpay-up.sh` invocation that
 could recreate the BTCPay Server container.
 
-`BTCPAY_ENABLE_SSH=true` creates a host key, adds a restricted forced command to
-root's `authorized_keys`, mounts the private key into BTCPay Server, and may
-change `PermitRootLogin no` to `PermitRootLogin prohibit-password`.
+The recommended `btcpay-host` fragment mounts a generated host key into BTCPay
+Server. Setup adds a restricted forced command to root's `authorized_keys` and
+may change `PermitRootLogin no` to `PermitRootLogin prohibit-password`. Exclude
+the fragment with `BTCPAYGEN_EXCLUDE_FRAGMENTS` to prevent BTCPay Server from
+accessing the key.
 
 ## Storage and Memory Profiles
 

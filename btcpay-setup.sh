@@ -80,7 +80,6 @@ Environment variables:
     BTCPAYGEN_LIGHTNING: Lightning network implementation to use (eg. clightning, lnd, phoenixd, none. Default: none)
     BTCPAYGEN_ADDITIONAL_FRAGMENTS: Semi colon separated list of additional fragments you want to use (eg. opt-save-storage)
     ACME_CA_URI: The API endpoint to ask for HTTPS certificate (default: production)
-    BTCPAY_ENABLE_SSH: Optional, gives BTCPay Server SSH access to the host by allowing it to edit authorized_keys of the host, it can be used for managing the authorized_keys or updating BTCPay Server directly through the website. (Default: false)
     BTCPAYGEN_DOCKER_IMAGE: Allows you to specify a custom docker image for the generator (Default: btcpayserver/docker-compose-generator)
     BTCPAY_IMAGE: Allows you to specify the btcpayserver docker image to use over the default version. (Default: current stable version of btcpayserver, eg. btcpayserver/btcpayserver:version)
     BTCPAY_UPDATE_CLEAN: Remove all unused Docker images after an update except generator-labeled images. (Default: true)
@@ -179,7 +178,6 @@ fi
 : "${REVERSEPROXY_HTTP_PORT:=80}"
 : "${REVERSEPROXY_HTTPS_PORT:=443}"
 : "${TRUST_DOWNSTREAM_PROXY:=false}"
-: "${BTCPAY_ENABLE_SSH:=false}"
 : "${PIHOLE_SERVERIP:=}"
 : "${CLOUDFLARE_TUNNEL_TOKEN:=}"
 : "${BTCPAY_UPDATE_CLEAN:=true}"
@@ -242,7 +240,6 @@ TRUST_DOWNSTREAM_PROXY:$TRUST_DOWNSTREAM_PROXY
 ZAMMAD_HOST:$ZAMMAD_HOST
 WOOCOMMERCE_HOST:$WOOCOMMERCE_HOST
 CHATWOOT_HOST:$CHATWOOT_HOST
-BTCPAY_ENABLE_SSH:$BTCPAY_ENABLE_SSH
 LETSENCRYPT_EMAIL:$LETSENCRYPT_EMAIL
 NBITCOIN_NETWORK:$NBITCOIN_NETWORK
 LIGHTNING_ALIAS:$LIGHTNING_ALIAS
@@ -300,7 +297,7 @@ if ! {
         BTCPAYGEN_LIGHTNING BTCPAYGEN_REVERSEPROXY \
         BTCPAYGEN_ADDITIONAL_FRAGMENTS BTCPAYGEN_EXCLUDE_FRAGMENTS \
         BTCPAY_DOCKER_COMPOSE BTCPAY_BASE_DIRECTORY BTCPAY_ENV_FILE \
-        BTCPAY_ENABLE_SSH PIHOLE_SERVERIP; do
+        PIHOLE_SERVERIP; do
         printf 'export %s=%q\n' "$variable" "${!variable-}"
     done
     cat <<'EOF'

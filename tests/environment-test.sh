@@ -12,7 +12,6 @@ trap 'rm -rf "$test_dir"' EXIT
 export BTCPAY_ENV_FILE="$test_dir/.env"
 export BTCPAY_HOST="example.com"
 export BTCPAYGEN_CRYPTO1="btc"
-export BTCPAY_ENABLE_SSH="true"
 export TRUST_DOWNSTREAM_PROXY="true"
 
 if "$repo_dir/btcpay-host" changedomain $'example.com\nPROMPT_COMMAND=id' 2> "$test_dir/error"; then

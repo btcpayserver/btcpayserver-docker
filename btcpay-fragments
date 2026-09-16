@@ -200,11 +200,6 @@ validate_request() {
         name="$(normalize_name "$argument")"
         requested+=("$name")
 
-        if [ "$name" = "btcpay-host" ]; then
-            invalid+=("$name")
-            continue
-        fi
-
         if [[ ! "$name" =~ ^[a-z0-9][a-z0-9._-]*$ ]]; then
             if { [ "$action" != "remove" ] && [ "$action" != "unexclude" ]; } || ! contains_name "$target_json" "$name"; then
                 invalid+=("$name")

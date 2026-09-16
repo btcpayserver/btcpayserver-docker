@@ -135,9 +135,6 @@ Before declaring the deployment production-ready:
   normal guided installation.
 - Do not use `build.sh` as a harmless preview command. Do not edit generated
   Compose files; use documented environment variables or custom fragments.
-- Keep `BTCPAY_ENABLE_SSH` and `TRUST_DOWNSTREAM_PROXY` disabled unless the
-  approved architecture specifically requires them and their trust boundaries
-  have been explained.
 - Treat every `*-expose` fragment and optional Nginx API route as advanced.
 - For an external proxy or tunnel, verify that clients cannot bypass it to
   inject forwarded headers or reach the backend directly.

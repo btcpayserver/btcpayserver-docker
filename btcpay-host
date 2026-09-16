@@ -9,10 +9,7 @@ fi
 
 authorized_keys="/root/.ssh/authorized_keys"
 ssh_dir="$(dirname "$authorized_keys")"
-allowed_commands=(env help)
-if [[ "${BTCPAY_ENABLE_SSH:-false}" == "true" ]]; then
-    allowed_commands+=(changedomain update clean restart)
-fi
+allowed_commands=(env help changedomain update clean restart)
 
 json_string() {
     jq -Rs .
