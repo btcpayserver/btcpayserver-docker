@@ -1,5 +1,28 @@
 # Agent Instructions
 
+## Repository Workflows
+
+Load `.agents/skills/nginx-routes/SKILL.md` before changing Nginx route files,
+route metadata, or the generated route manifest. Load
+`.agents/skills/btcpayserver-docker-prs/SKILL.md` for pull request work.
+
+Use `.github/workflows/ci.yml` as the source of truth for validation. Run the
+focused non-destructive test scripts that cover the changed area:
+
+- `tests/btcpay-routes-test.sh`
+- `tests/environment-test.sh`
+- `tests/nginx-template-test.sh`
+- `tests/generate-secrets-test.sh`
+
+Never run `.github/scripts/test-install.sh` on a development machine. It is for
+disposable CI runners: it stops and removes the host Docker installation before
+installing and starting a complete stack.
+
+Treat `build.sh` as an operational command, not a side-effect-free generator.
+It configures SSH, pulls or builds container images, writes `Generated/`,
+creates persistent secrets, and may synchronize Nginx routes. Run it only when
+those host and container changes are intended.
+
 ## Generated Image Documentation
 
 `contrib/build-all-images.sh` and the image table in
