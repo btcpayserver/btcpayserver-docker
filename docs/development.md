@@ -36,7 +36,6 @@ lowercase, kebab-case filename. Existing naming conventions are:
 
 - `opt-add-<product>.yml` for an optional application or service
 - `opt-<feature>.yml` for an optional behavior or tuning change
-- `opt-<service>-expose.yml` for deliberate host port exposure
 - `<chain>.yml` and `<chain>-<lightning>.yml` for cryptocurrency integrations
 
 Use a nearby fragment with similar behavior as the starting point. Useful
@@ -160,7 +159,7 @@ the current validation commands, and finish with `git diff --check`.
 
 ## Add a Cryptocurrency
 
-Adding a chain requires coordinated support across the stack:
+Adding a chain requires coordinated support across the stack, for Bitcoin-based crypto-currencies:
 
 1. Add or verify chain support in NBitcoin, NBXplorer, and BTCPay Server.
 2. Provide maintained, reproducible container images for the required daemon
