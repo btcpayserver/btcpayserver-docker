@@ -2,6 +2,8 @@
 
 ## Repository Workflows
 
+Load `.agents/skills/vps-deployment/SKILL.md` when guiding an operator through a
+VPS deployment, reconfiguration, update, migration, restore, or troubleshooting.
 Load `.agents/skills/docker-fragments/SKILL.md` before adding or substantially
 changing Compose generator fragments. Load `.agents/skills/nginx-routes/SKILL.md`
 before changing Nginx route files, route metadata, or the generated route
