@@ -33,10 +33,6 @@ if ! fragments_json="$("$BTCPAY_BASE_DIRECTORY/btcpayserver-docker/btcpay-fragme
   printf '%s\n' "$fragments_json" >&2
   exit 1
 fi
-if ! command -v jq >/dev/null 2>&1; then
-  echo "Unable to inspect fragment selection: jq is required." >&2
-  exit 1
-fi
 set +e
 jq -e '.additionalFragments | any(startswith("opt-save-storage"))' \
   >/dev/null <<< "$fragments_json"

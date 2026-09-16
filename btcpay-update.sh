@@ -36,8 +36,11 @@ if ! command -v jq > /dev/null 2>&1; then
     if [[ "$OSTYPE" == "darwin"* ]] && command -v brew > /dev/null 2>&1; then
         brew install jq
     elif command -v apt-get > /dev/null 2>&1; then
-        apt-get update
-        apt-get install -y jq
+        apt-get update -qq >/dev/null
+        DEBIAN_FRONTEND=noninteractive apt-get install -y -qq jq >/dev/null || {
+            DEBIAN_FRONTEND=noninteractive apt --fix-broken install -y -qq >/dev/null
+            DEBIAN_FRONTEND=noninteractive apt-get install -y -qq jq >/dev/null
+        }
     else
         echo "Error: jq is required but could not be installed automatically." >&2
         exit 1
