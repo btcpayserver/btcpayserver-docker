@@ -28,8 +28,25 @@ if ! [[ "$NBITCOIN_NETWORK" ]]; then
     exit 1
 fi
 
-if ! "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker/btcpay-fragments" show |
-     jq -e '.additionalFragments | any(startswith("opt-save-storage"))' >/dev/null; then
+if ! fragments_json="$("$BTCPAY_BASE_DIRECTORY/btcpayserver-docker/btcpay-fragments" show)"; then
+  echo "Unable to read fragment selection:" >&2
+  printf '%s\n' "$fragments_json" >&2
+  exit 1
+fi
+if ! command -v jq >/dev/null 2>&1; then
+  echo "Unable to inspect fragment selection: jq is required." >&2
+  exit 1
+fi
+set +e
+jq -e '.additionalFragments | any(startswith("opt-save-storage"))' \
+  >/dev/null <<< "$fragments_json"
+fragment_status=$?
+set -e
+if [ "$fragment_status" -gt 1 ]; then
+  echo "Unable to inspect fragment selection: invalid JSON response." >&2
+  exit 1
+fi
+if [ "$fragment_status" -eq 1 ]; then
   echo "Pruning must be enabled by running:"
   echo ""
   echo 'btcpay-fragments add opt-save-storage-s'

@@ -198,6 +198,18 @@ assert_state '["alpha"]' '["nginx-https"]'
 [ "$(setup_calls)" -eq 7 ]
 
 cp "$profile" "$profile_before"
+cat > "$test_dir/bin/cp" <<'EOF'
+#!/bin/bash
+exit 1
+EOF
+chmod +x "$test_dir/bin/cp"
+run_fragments add gamma
+[ "$status" -eq 1 ]
+jq -e '.error == "Failed to back up deployment profile"' <<< "$output" >/dev/null
+cmp -s "$profile" "$profile_before"
+[ "$(setup_calls)" -eq 7 ]
+rm "$test_dir/bin/cp"
+
 export TEST_SETUP_FAIL=true
 run_fragments add gamma
 [ "$status" -eq 1 ]
@@ -205,6 +217,23 @@ jq -e '.error == "Failed to apply fragment changes; previous deployment profile 
 [[ "$error_output" == *"setup failed"* ]]
 cmp -s "$profile" "$profile_before"
 [ "$(setup_calls)" -eq 8 ]
+unset TEST_SETUP_FAIL
+
+cat > "$test_dir/bin/mv" <<'EOF'
+#!/bin/bash
+exit 1
+EOF
+chmod +x "$test_dir/bin/mv"
+export TEST_SETUP_FAIL=true
+run_fragments add gamma
+[ "$status" -eq 1 ]
+jq -e '.error == "Failed to apply fragment changes; deployment profile could not be restored"' <<< "$output" >/dev/null
+backup_path="${error_output##*Profile backup retained for manual recovery: }"
+[ -f "$backup_path" ]
+cmp -s "$backup_path" "$profile_before"
+[ "$(setup_calls)" -eq 9 ]
+rm "$test_dir/bin/mv"
+/usr/bin/mv -f -- "$backup_path" "$profile"
 unset TEST_SETUP_FAIL
 
 run_fragments show

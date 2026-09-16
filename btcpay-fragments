@@ -29,14 +29,16 @@ EOF
 
 restore_profile() {
     if [ -n "$profile_backup" ] && [ -f "$profile_backup" ]; then
-        mv -f -- "$profile_backup" "$profile_file"
+        if ! mv -f -- "$profile_backup" "$profile_file"; then
+            return 1
+        fi
         profile_backup=""
     fi
 }
 
 cleanup() {
     if [ -n "$profile_backup" ] && [ -f "$profile_backup" ]; then
-        rm -f -- "$profile_backup"
+        printf 'Profile backup retained for manual recovery: %s\n' "$profile_backup" >&2
     fi
 }
 
@@ -44,14 +46,17 @@ unexpected_error() {
     local status="$1"
     local line="$2"
     trap - ERR
-    restore_profile
-    json_error "Unexpected failure at line $line"
+    if restore_profile; then
+        json_error "Unexpected failure at line $line"
+    else
+        json_error "Unexpected failure at line $line; deployment profile could not be restored"
+    fi
     exit "$status"
 }
 
 trap cleanup EXIT
 trap 'unexpected_error $? $LINENO' ERR
-trap 'restore_profile; exit 1' HUP INT TERM
+trap 'restore_profile || true; exit 1' HUP INT TERM
 
 normalize_list() {
     jq -Rsc '
@@ -230,6 +235,8 @@ mutate_state() {
 }
 
 apply_state() {
+    local backup_candidate
+
     [ "$(id -u)" -eq 0 ] || fail "Fragment changes must be run as root"
 
     if [ "$new_additional_json" = "$additional_json" ] && [ "$new_excluded_json" = "$excluded_json" ]; then
@@ -237,8 +244,13 @@ apply_state() {
         return 0
     fi
 
-    profile_backup="$(mktemp "${profile_file}.btcpay-fragments.XXXXXX")"
-    cp -p -- "$profile_file" "$profile_backup"
+    backup_candidate="$(mktemp "${profile_file}.btcpay-fragments.XXXXXX")" ||
+        fail "Failed to create deployment profile backup"
+    if ! cp -p -- "$profile_file" "$backup_candidate"; then
+        rm -f -- "$backup_candidate"
+        fail "Failed to back up deployment profile"
+    fi
+    profile_backup="$backup_candidate"
 
     load_profile_for_apply
     BTCPAYGEN_ADDITIONAL_FRAGMENTS="$(jq -r 'join(";")' <<< "$new_additional_json")"
@@ -258,8 +270,11 @@ apply_state() {
     cd "$original_directory"
 
     if [ "$setup_status" -ne 0 ]; then
-        restore_profile
-        fail "Failed to apply fragment changes; previous deployment profile restored"
+        if restore_profile; then
+            fail "Failed to apply fragment changes; previous deployment profile restored"
+        else
+            fail "Failed to apply fragment changes; deployment profile could not be restored"
+        fi
     fi
 
     rm -f -- "$profile_backup"

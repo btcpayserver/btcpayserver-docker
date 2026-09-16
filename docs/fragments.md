@@ -1,7 +1,8 @@
 # Optional Fragments
 
-Manage optional fragments with `btcpay-fragments`. Changes are applied
-immediately and multiple fragment names can be passed at once:
+Manage optional fragments with `btcpay-fragments`. `show` is read-only; all
+commands that change fragments must run as root. Changes are applied immediately
+and multiple fragment names can be passed at once:
 
 ```bash
 btcpay-fragments add opt-add-mempool
