@@ -2,8 +2,10 @@
 
 ## Repository Workflows
 
-Load `.agents/skills/nginx-routes/SKILL.md` before changing Nginx route files,
-route metadata, or the generated route manifest. Load
+Load `.agents/skills/docker-fragments/SKILL.md` before adding or substantially
+changing Compose generator fragments. Load `.agents/skills/nginx-routes/SKILL.md`
+before changing Nginx route files, route metadata, or the generated route
+manifest. Load
 `.agents/skills/btcpayserver-docker-prs/SKILL.md` for pull request work.
 
 Use `.github/workflows/ci.yml` as the source of truth for validation. Run the
