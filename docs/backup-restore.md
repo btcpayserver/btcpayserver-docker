@@ -148,7 +148,7 @@ The script will do the following steps:
 
 * Extract the backup archive (and decrypt it when necessary)
 * Stop BTCPay Server
-* Restore generated secrets when the backup contains them
+* Restore generated secrets when the backup contains them, failing without overwriting when the destination already exists
 * Restore the Docker volumes
 * Start the database containers and wait until they are ready
 * Import the database dumps with strict error handling

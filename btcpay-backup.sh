@@ -330,15 +330,16 @@ archive_entries=(-C "$work_dir" "${dump_entries[@]}" -C "$docker_dir" "${volume_
 if [ -L "$btcpay_dir/secrets" ]; then
   fail "The secrets directory must not be a symlink."
 fi
-if [ -e "$btcpay_dir/secrets" ] && [ ! -d "$btcpay_dir/secrets" ]; then
-  fail "The secrets path is not a directory."
+if ! mkdir -p -- "$btcpay_dir/secrets"; then
+  fail "Could not create the secrets directory."
 fi
-if [ -d "$btcpay_dir/secrets" ]; then
-  if [ -n "$(find "$btcpay_dir/secrets" -type l -print -quit)" ]; then
-    fail "The secrets directory must not contain symlinks."
-  fi
-  archive_entries+=(-C "$btcpay_dir" secrets)
+if ! chmod 700 -- "$btcpay_dir/secrets"; then
+  fail "Could not secure the secrets directory."
 fi
+if [ -n "$(find "$btcpay_dir/secrets" -type l -print -quit)" ]; then
+  fail "The secrets directory must not contain symlinks."
+fi
+archive_entries+=(-C "$btcpay_dir" secrets)
 
 tar_excludes=(
   --exclude="volumes/backup_datadir"
