@@ -24,20 +24,23 @@ an empty string to disable certificate requests.
 
 ## External Reverse Proxy
 
-To terminate HTTPS before the BTCPay host, generate the stack without bundled
-Nginx and publish BTCPay Server on a loopback-only port:
+To terminate HTTPS on an existing reverse proxy, keep the bundled Nginx for
+BTCPay's internal routing but disable its HTTPS companion:
 
 ```bash
-export BTCPAYGEN_REVERSEPROXY="none"
+export BTCPAYGEN_REVERSEPROXY="nginx"
 export BTCPAY_HOST="btcpay.example.com"
 export BTCPAY_PROTOCOL="https"
-export NOREVERSEPROXY_HTTP_PORT="127.0.0.1:10080"
+export REVERSEPROXY_HTTP_PORT="10080"
+export TRUST_DOWNSTREAM_PROXY="true"
+export BTCPAYGEN_EXCLUDE_FRAGMENTS="$BTCPAYGEN_EXCLUDE_FRAGMENTS;nginx-https"
 . ./btcpay-setup.sh -i
 ```
 
 The external proxy must preserve the original host and HTTPS scheme so BTCPay
-generates correct URLs. This example assumes Nginx runs on the BTCPay host and
-the certificate is already provisioned:
+generates correct URLs. Replace `BTCPAY_SERVER_IP` with an address through which
+the external Nginx server can reach the BTCPay host. This example assumes the
+certificate is already provisioned on the external server:
 
 ```nginx
 # Add this map once inside the http block, outside any server block.
@@ -72,7 +75,7 @@ server {
     proxy_busy_buffers_size 256k;
 
     location / {
-        proxy_pass http://127.0.0.1:10080;
+        proxy_pass http://BTCPAY_SERVER_IP:10080;
         proxy_http_version 1.1;
         proxy_buffering off;
 
@@ -95,14 +98,11 @@ Replace the hostname and certificate paths, then validate and reload Nginx:
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-When the external proxy runs on another host, publish port 10080 on a reachable
-interface instead of loopback and firewall it so only that proxy can connect.
-Never expose the unencrypted backend port publicly.
-
-If the bundled Nginx remains behind another trusted TLS proxy, set
-`TRUST_DOWNSTREAM_PROXY=true` only after preventing clients from reaching its
-HTTP port directly. This setting trusts forwarded headers and is enabled
-automatically by the Cloudflare Tunnel fragment.
+Firewall port 10080 on the BTCPay host so only the external proxy can connect.
+This restriction is required because `TRUST_DOWNSTREAM_PROXY=true` accepts the
+incoming `X-Forwarded-*` headers as authoritative. Never expose this
+unencrypted, trusted backend port publicly. The Cloudflare Tunnel fragment
+configures this trust automatically for its private container connection.
 
 ## Cloudflare Tunnel
 
