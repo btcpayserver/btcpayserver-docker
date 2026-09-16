@@ -24,8 +24,12 @@ jobs:
         run: tests/btcpay-routes-test.sh
       - name: Test environment persistence
         run: tests/environment-test.sh
+      - name: Test nginx template rendering
+        run: tests/nginx-template-test.sh
       - name: Validate nginx route catalog
-        run: docker run --rm -v "$PWD/nginx/routes:/etc/nginx/routes:ro" -v "$PWD/tests/nginx-routes.conf:/etc/nginx/nginx.conf:ro" nginx:1.25.3-bookworm nginx -t
+        run: |
+          nginx_image="$(tests/docker-fragment-image.sh nginx)"
+          docker run --rm -v "$PWD/nginx/routes:/etc/nginx/routes:ro" -v "$PWD/tests/nginx-routes.conf:/etc/nginx/nginx.conf:ro" "$nginx_image" nginx -t
       - name: Test installation
         run: sudo .github/scripts/test-install.sh
 
