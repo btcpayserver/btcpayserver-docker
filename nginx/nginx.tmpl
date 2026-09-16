@@ -542,7 +542,7 @@ server {
 	{{ end }}
 	http2  on;
 	{{/* Enable usage of self-signed SSL certificate if .local hostname */}}
-	{{ if hasSuffix "local" $host }}
+	{{ if and (ne $https_method "nohttps") (hasSuffix ".local" $host) }}
 	{{ if eq $network_tag "internal" }}
 	# Only allow traffic from internal clients
 	include /etc/nginx/network_internal.conf;
@@ -576,12 +576,12 @@ server {
 		{{ end }}
 	}
 	{{ template "redirects" (dict "HostName" $host_name "Containers" $) }}
-	{{ else }}
-	return 500;
-	{{ end }}
 
 	ssl_certificate /etc/nginx/certs/default.crt;
 	ssl_certificate_key /etc/nginx/certs/default.key;
+	{{ else }}
+	ssl_reject_handshake on;
+	{{ end }}
 }
 {{ end }}
 {{ end }}
