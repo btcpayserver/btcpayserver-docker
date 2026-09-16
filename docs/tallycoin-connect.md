@@ -14,8 +14,7 @@ You can either set `TALLYCOIN_PASSWD_CLEARTEXT` (plain text) or `TALLYCOIN_PASSW
 ```bash
 export TALLYCOIN_APIKEY="my-tallycoin-api-key"
 export TALLYCOIN_PASSWD_CLEARTEXT="sUpErSeCuRe"
-export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-tallycoin-connect"
-. btcpay-setup.sh -i
+btcpay-fragments add opt-add-tallycoin-connect
 ```
 
 Tallycoin Connect appears under **Server Settings > Services** and is served at

@@ -18,8 +18,7 @@ Point a dedicated hostname at the server, then enable the fragment:
 
 ```bash
 export CHATWOOT_HOST="chatwoot.example.com"
-export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-chatwoot"
-. btcpay-setup.sh -i
+btcpay-fragments add opt-add-chatwoot
 ```
 After the services start, initialize the Chatwoot database:
 

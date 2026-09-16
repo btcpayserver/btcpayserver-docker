@@ -19,18 +19,14 @@ cp docker-compose-generator/docker-fragments/opt-save-storage.yml \
 Edit the custom file, then select its basename:
 
 ```bash
-export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage.custom"
-. ./btcpay-setup.sh -i
+btcpay-fragments add opt-save-storage.custom
 ```
 
-When preserving existing options, append instead:
+The command preserves other selected fragments. Remove the custom fragment with:
 
 ```bash
-export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-save-storage.custom"
+btcpay-fragments remove opt-save-storage.custom
 ```
-
-Fragment names can be separated by commas or semicolons and supplied with or
-without `.yml`.
 
 ## Fragment Metadata
 

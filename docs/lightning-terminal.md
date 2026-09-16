@@ -10,8 +10,7 @@ Set a strong UI password and enable the fragment:
 
 ```bash
 export LIT_PASSWD="sUpErSeCuRe"
-export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-lightning-terminal"
-. btcpay-setup.sh -i
+btcpay-fragments add opt-add-lightning-terminal
 ```
 
 Lightning Terminal appears under **Server Settings > Services** and is served at

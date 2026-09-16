@@ -49,9 +49,8 @@ First, we are going to create the tunnel on Cloudflare.
 ```bash
 export BTCPAY_HOST="<YOUR_DOMAIN_HERE>"
 export CLOUDFLARE_TUNNEL_TOKEN="<YOUR_TOKEN_HERE>"
-export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-cloudflared"
-export BTCPAYGEN_EXCLUDE_FRAGMENTS="$BTCPAYGEN_EXCLUDE_FRAGMENTS;nginx-https"
-. btcpay-setup.sh -i
+btcpay-fragments add opt-add-cloudflared
+btcpay-fragments exclude nginx-https
 ```
 
 The Cloudflare fragment trusts forwarded headers. Block direct public access to

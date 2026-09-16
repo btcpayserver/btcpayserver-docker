@@ -28,11 +28,11 @@ if ! [[ "$NBITCOIN_NETWORK" ]]; then
     exit 1
 fi
 
-if ! [[ "$BTCPAYGEN_ADDITIONAL_FRAGMENTS" == *"opt-save-storage"* ]]; then
-  echo "Pruning must be enabled, please update BTCPAYGEN_ADDITIONAL_FRAGMENTS by running:"
+if ! "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker/btcpay-fragments" show |
+     jq -e '.additionalFragments | any(startswith("opt-save-storage"))' >/dev/null; then
+  echo "Pruning must be enabled by running:"
   echo ""
-  echo 'BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-save-storage-s"'
-  echo '. btcpay-setup.sh -i'
+  echo 'btcpay-fragments add opt-save-storage-s'
   exit 1
 fi
 

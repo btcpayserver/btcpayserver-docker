@@ -1,12 +1,21 @@
 # Optional Fragments
 
-Set optional fragments through `BTCPAYGEN_ADDITIONAL_FRAGMENTS`, separated by
-semicolons or commas, then source setup again:
+Manage optional fragments with `btcpay-fragments`. Changes are applied
+immediately and multiple fragment names can be passed at once:
 
 ```bash
-export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-mempool"
-. ./btcpay-setup.sh -i
+btcpay-fragments add opt-add-mempool
+btcpay-fragments remove opt-add-mempool
+btcpay-fragments exclude nginx-https
+btcpay-fragments unexclude nginx-https
+btcpay-fragments show
 ```
+
+`show` and successful changes return JSON containing the saved additional and
+excluded fragments plus every fragment available in the current checkout.
+Adding a fragment removes it from the excluded set, and excluding one removes
+it from the additional set. Repeating an operation that is already satisfied is
+a no-op.
 
 Dependencies and incompatibilities are resolved by the generator. Review each
 linked fragment before enabling third-party services; not every image supports

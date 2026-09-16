@@ -17,13 +17,13 @@ Running `. ./btcpay-setup.sh` without `-i` prints its current options and help.
 | `BTCPAYGEN_CRYPTO1` ... `BTCPAYGEN_CRYPTO9` | Cryptocurrency codes to enable | `btc` in slot 1 |
 | `BTCPAYGEN_LIGHTNING` | `clightning`, `lnd`, `phoenixd`, or `none` | `none` |
 | `BTCPAYGEN_REVERSEPROXY` | `nginx` or `none` | `nginx` |
-| `BTCPAYGEN_ADDITIONAL_FRAGMENTS` | Semicolon- or comma-separated optional fragments | Empty |
-| `BTCPAYGEN_EXCLUDE_FRAGMENTS` | Recommended fragments to suppress | Empty |
 | `BTCPAYGEN_DOCKER_IMAGE` | Compose generator image | `btcpayserver/docker-compose-generator` |
 | `BTCPAYGEN_SUBNAME` | Generated Compose filename suffix | `generated` |
 
 The setup utilities operate `Generated/docker-compose.generated.yml`; a custom
 `BTCPAYGEN_SUBNAME` is intended for advanced, manually operated builds.
+Manage optional and excluded fragments with `btcpay-fragments`; see [Optional
+Fragments](./fragments.md).
 
 ## Host and Network
 

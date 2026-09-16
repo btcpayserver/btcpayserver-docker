@@ -13,8 +13,7 @@ Assume the local IP address of the BTCPay Server host is `192.168.1.2`.
 Connect as root and enable the fragment:
 
 ```bash
-BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-pihole"
-. btcpay-setup.sh -i
+btcpay-fragments add opt-add-pihole
 ```
 
 Allow incoming TCP and UDP traffic on port 53 from the trusted LAN. Configure
