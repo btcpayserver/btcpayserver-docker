@@ -13,7 +13,7 @@
 {{ end }}
 
 
-{{ define "redirects" }}
+{{ define "service-routes" }}
 	{{ if eq $.HostName "btcpay" }}
 	{{ range $container := $.Containers }}
 		{{ if $container.Env.REAL_IP_HEADER }}
@@ -266,7 +266,7 @@ server {
 	location / {
 		proxy_pass http://{{ trim $upstream_name }};
 	}
-	{{ template "redirects" (dict "HostName" $host_name "Containers" $) }}
+	{{ template "service-routes" (dict "HostName" $host_name "Containers" $) }}
 }
 	{{ end }}
 {{ end }}
@@ -480,7 +480,7 @@ server {
 	{{ template "vhost-include" (dict "Host" $host) }}
 
 	{{ template "proxy-location" (dict "Host" $host "Proto" $proto "UpstreamName" $upstream_name "VhostRoot" $vhost_root) }}
-	{{ template "redirects" (dict "HostName" $host_name "Containers" $) }}
+	{{ template "service-routes" (dict "HostName" $host_name "Containers" $) }}
 }
 
 {{ end }}
@@ -500,7 +500,7 @@ server {
 	{{ template "vhost-include" (dict "Host" $host) }}
 
 	{{ template "proxy-location" (dict "Host" $host "Proto" $proto "UpstreamName" $upstream_name "VhostRoot" $vhost_root) }}
-	{{ template "redirects" (dict "HostName" $host_name "Containers" $) }}
+	{{ template "service-routes" (dict "HostName" $host_name "Containers" $) }}
 }
 
 {{ if (and (not $is_https) (exists "/etc/nginx/certs/default.crt") (exists "/etc/nginx/certs/default.key")) }}
@@ -519,7 +519,7 @@ server {
 	{{ template "vhost-include" (dict "Host" $host) }}
 
 	{{ template "proxy-location" (dict "Host" $host "Proto" $proto "UpstreamName" $upstream_name "VhostRoot" $vhost_root) }}
-	{{ template "redirects" (dict "HostName" $host_name "Containers" $) }}
+	{{ template "service-routes" (dict "HostName" $host_name "Containers" $) }}
 
 	ssl_certificate /etc/nginx/certs/default.crt;
 	ssl_certificate_key /etc/nginx/certs/default.key;
