@@ -101,8 +101,7 @@ sudo nginx -t && sudo systemctl reload nginx
 Firewall port 10080 on the BTCPay host so only the external proxy can connect.
 This restriction is required because `TRUST_DOWNSTREAM_PROXY=true` accepts the
 incoming `X-Forwarded-*` headers as authoritative. Never expose this
-unencrypted, trusted backend port publicly. The Cloudflare Tunnel fragment
-configures this trust automatically for its private container connection.
+unencrypted, trusted backend port publicly.
 
 ## Cloudflare Tunnel
 
