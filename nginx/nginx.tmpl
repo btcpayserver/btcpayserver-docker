@@ -47,6 +47,45 @@
 	{{ end }}
 {{ end }}
 
+{{ define "network-access" }}
+	{{ if eq .NetworkTag "internal" }}
+	# Only allow traffic from internal clients
+	include /etc/nginx/network_internal.conf;
+	{{ end }}
+{{ end }}
+
+{{ define "vhost-include" }}
+	{{ if (exists (printf "/etc/nginx/vhost.d/%s" .Host)) }}
+	include {{ printf "/etc/nginx/vhost.d/%s" .Host }};
+	{{ else if (exists "/etc/nginx/vhost.d/default") }}
+	include /etc/nginx/vhost.d/default;
+	{{ end }}
+{{ end }}
+
+{{ define "proxy-location" }}
+	location / {
+		{{ if eq .Proto "uwsgi" }}
+		include uwsgi_params;
+		uwsgi_pass {{ trim .Proto }}://{{ trim .UpstreamName }};
+		{{ else if eq .Proto "fastcgi" }}
+		root   {{ trim .VhostRoot }};
+		include fastcgi.conf;
+		fastcgi_pass {{ trim .UpstreamName }};
+		{{ else }}
+		proxy_pass {{ trim .Proto }}://{{ trim .UpstreamName }};
+		{{ end }}
+		{{ if (exists (printf "/etc/nginx/htpasswd/%s" .Host)) }}
+		auth_basic	"Restricted {{ .Host }}";
+		auth_basic_user_file	{{ (printf "/etc/nginx/htpasswd/%s" .Host) }};
+		{{ end }}
+		{{ if (exists (printf "/etc/nginx/vhost.d/%s_location" .Host)) }}
+		include {{ printf "/etc/nginx/vhost.d/%s_location" .Host}};
+		{{ else if (exists "/etc/nginx/vhost.d/default_location") }}
+		include /etc/nginx/vhost.d/default_location;
+		{{ end }}
+	}
+{{ end }}
+
 {{ $trust_downstream_proxy := eq (or ($.Env.TRUST_DOWNSTREAM_PROXY) "") "true" }}
 
 map $proxy_add_x_forwarded_for $proxy_x_forwarded_for {
@@ -331,10 +370,7 @@ server {
 	{{ end }}
 	http2  on;
 
-	{{ if eq $network_tag "internal" }}
-	# Only allow traffic from internal clients
-	include /etc/nginx/network_internal.conf;
-	{{ end }}
+	{{ template "network-access" (dict "NetworkTag" $network_tag) }}
 
 	{{ if eq $ssl_policy "Mozilla-Modern" }}
 	ssl_protocols TLSv1.3;
@@ -450,34 +486,9 @@ server {
 	add_header Strict-Transport-Security "{{ trim $hsts }}" always;
 	{{ end }}
 
-	{{ if (exists (printf "/etc/nginx/vhost.d/%s" $host)) }}
-	include {{ printf "/etc/nginx/vhost.d/%s" $host }};
-	{{ else if (exists "/etc/nginx/vhost.d/default") }}
-	include /etc/nginx/vhost.d/default;
-	{{ end }}
+	{{ template "vhost-include" (dict "Host" $host) }}
 
-	location / {
-		{{ if eq $proto "uwsgi" }}
-		include uwsgi_params;
-		uwsgi_pass {{ trim $proto }}://{{ trim $upstream_name }};
-		{{ else if eq $proto "fastcgi" }}
-		root   {{ trim $vhost_root }};
-		include fastcgi.conf;
-		fastcgi_pass {{ trim $upstream_name }};
-		{{ else }}
-		proxy_pass {{ trim $proto }}://{{ trim $upstream_name }};
-		{{ end }}
-
-		{{ if (exists (printf "/etc/nginx/htpasswd/%s" $host)) }}
-		auth_basic	"Restricted {{ $host }}";
-		auth_basic_user_file	{{ (printf "/etc/nginx/htpasswd/%s" $host) }};
-		{{ end }}
-		{{ if (exists (printf "/etc/nginx/vhost.d/%s_location" $host)) }}
-		include {{ printf "/etc/nginx/vhost.d/%s_location" $host}};
-		{{ else if (exists "/etc/nginx/vhost.d/default_location") }}
-		include /etc/nginx/vhost.d/default_location;
-		{{ end }}
-	}
+	{{ template "proxy-location" (dict "Host" $host "Proto" $proto "UpstreamName" $upstream_name "VhostRoot" $vhost_root) }}
 	{{ template "redirects" (dict "HostName" $host_name "Containers" $) }}
 }
 
@@ -493,38 +504,11 @@ server {
 	listen [::]:80 {{ $default_server }};
 	{{ end }}
 
-	{{ if eq $network_tag "internal" }}
-	# Only allow traffic from internal clients
-	include /etc/nginx/network_internal.conf;
-	{{ end }}
+	{{ template "network-access" (dict "NetworkTag" $network_tag) }}
 
-	{{ if (exists (printf "/etc/nginx/vhost.d/%s" $host)) }}
-	include {{ printf "/etc/nginx/vhost.d/%s" $host }};
-	{{ else if (exists "/etc/nginx/vhost.d/default") }}
-	include /etc/nginx/vhost.d/default;
-	{{ end }}
+	{{ template "vhost-include" (dict "Host" $host) }}
 
-	location / {
-		{{ if eq $proto "uwsgi" }}
-		include uwsgi_params;
-		uwsgi_pass {{ trim $proto }}://{{ trim $upstream_name }};
-		{{ else if eq $proto "fastcgi" }}
-		root   {{ trim $vhost_root }};
-		include fastcgi.conf;
-		fastcgi_pass {{ trim $upstream_name }};
-		{{ else }}
-		proxy_pass {{ trim $proto }}://{{ trim $upstream_name }};
-		{{ end }}
-		{{ if (exists (printf "/etc/nginx/htpasswd/%s" $host)) }}
-		auth_basic	"Restricted {{ $host }}";
-		auth_basic_user_file	{{ (printf "/etc/nginx/htpasswd/%s" $host) }};
-		{{ end }}
-		{{ if (exists (printf "/etc/nginx/vhost.d/%s_location" $host)) }}
-		include {{ printf "/etc/nginx/vhost.d/%s_location" $host}};
-		{{ else if (exists "/etc/nginx/vhost.d/default_location") }}
-		include /etc/nginx/vhost.d/default_location;
-		{{ end }}
-	}
+	{{ template "proxy-location" (dict "Host" $host "Proto" $proto "UpstreamName" $upstream_name "VhostRoot" $vhost_root) }}
 	{{ template "redirects" (dict "HostName" $host_name "Containers" $) }}
 }
 
@@ -539,38 +523,11 @@ server {
 	http2  on;
 	{{/* Enable usage of self-signed SSL certificate if .local hostname */}}
 	{{ if and (ne $https_method "nohttps") (hasSuffix ".local" $host) }}
-	{{ if eq $network_tag "internal" }}
-	# Only allow traffic from internal clients
-	include /etc/nginx/network_internal.conf;
-	{{ end }}
+	{{ template "network-access" (dict "NetworkTag" $network_tag) }}
 
-	{{ if (exists (printf "/etc/nginx/vhost.d/%s" $host)) }}
-	include {{ printf "/etc/nginx/vhost.d/%s" $host }};
-	{{ else if (exists "/etc/nginx/vhost.d/default") }}
-	include /etc/nginx/vhost.d/default;
-	{{ end }}
+	{{ template "vhost-include" (dict "Host" $host) }}
 
-	location / {
-		{{ if eq $proto "uwsgi" }}
-		include uwsgi_params;
-		uwsgi_pass {{ trim $proto }}://{{ trim $upstream_name }};
-		{{ else if eq $proto "fastcgi" }}
-		root   {{ trim $vhost_root }};
-		include fastcgi.conf;
-		fastcgi_pass {{ trim $upstream_name }};
-		{{ else }}
-		proxy_pass {{ trim $proto }}://{{ trim $upstream_name }};
-		{{ end }}
-		{{ if (exists (printf "/etc/nginx/htpasswd/%s" $host)) }}
-		auth_basic	"Restricted {{ $host }}";
-		auth_basic_user_file	{{ (printf "/etc/nginx/htpasswd/%s" $host) }};
-		{{ end }}
-		{{ if (exists (printf "/etc/nginx/vhost.d/%s_location" $host)) }}
-		include {{ printf "/etc/nginx/vhost.d/%s_location" $host}};
-		{{ else if (exists "/etc/nginx/vhost.d/default_location") }}
-		include /etc/nginx/vhost.d/default_location;
-		{{ end }}
-	}
+	{{ template "proxy-location" (dict "Host" $host "Proto" $proto "UpstreamName" $upstream_name "VhostRoot" $vhost_root) }}
 	{{ template "redirects" (dict "HostName" $host_name "Containers" $) }}
 
 	ssl_certificate /etc/nginx/certs/default.crt;
