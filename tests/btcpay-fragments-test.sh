@@ -83,12 +83,15 @@ run_fragments() {
 assert_state() {
     local additional="$1"
     local excluded="$2"
+    local effective="${3:-[]}"
     jq -e \
         --argjson additional "$additional" \
-        --argjson excluded "$excluded" '
-        keys == ["additionalFragments", "availableFragments", "excludedFragments"] and
+        --argjson excluded "$excluded" \
+        --argjson effective "$effective" '
+        keys == ["additionalFragments", "availableFragments", "effectiveFragments", "excludedFragments"] and
         .additionalFragments == $additional and
         .excludedFragments == $excluded and
+        .effectiveFragments == $effective and
         .availableFragments == ["Local.Custom", "alpha", "bad name", "beta", "gamma"]
     ' <<< "$output" >/dev/null
 }
@@ -114,6 +117,18 @@ run_fragments show
 [ "$status" -eq 0 ]
 assert_state '["beta","stale"]' '["legacy-missing","nginx-https"]'
 [ "$(setup_calls)" -eq 0 ]
+
+mkdir -p "$test_repo/Generated"
+jq -n '{fragments:["nginx", "alpha"]}' > "$test_repo/Generated/manifest.json"
+run_fragments show
+[ "$status" -eq 0 ]
+assert_state '["beta","stale"]' '["legacy-missing","nginx-https"]' '["alpha","nginx"]'
+
+printf '{invalid\n' > "$test_repo/Generated/manifest.json"
+run_fragments show
+[ "$status" -eq 1 ]
+jq -e '.error | startswith("Generated manifest contains invalid fragment metadata:")' <<< "$output" >/dev/null
+rm -f "$test_repo/Generated/manifest.json"
 
 run_fragments show unexpected
 [ "$status" -eq 1 ]

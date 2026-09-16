@@ -34,6 +34,7 @@ Fragments can declare:
 
 - `required`: recursively selected dependencies that cannot be excluded
 - `recommended`: recursively selected defaults that can be excluded
+- `excluded`: recommended fragments suppressed while this fragment is selected
 - `exclusive`: alternatives that cannot be selected together
 - `incompatible`: conflicts with an exclusive group
 - `required-routes` and `optional-routes`: Nginx route declarations

@@ -79,15 +79,20 @@ Fragments can use these generator-specific top-level sequences:
 |---|---|
 | `required` | Recursively select dependencies that operators cannot exclude. |
 | `recommended` | Recursively select defaults unless explicitly excluded. |
+| `excluded` | Suppress recommended fragments that conflict with this fragment. |
 | `exclusive` | Claim a named group in which only one selected fragment is allowed. |
 | `incompatible` | Reject the fragment when a selected fragment claims the named exclusive group. |
 | `required-routes` | Enable Nginx route aliases whenever the fragment is selected. |
 | `optional-routes` | Make route aliases available through `btcpay-routes add` and `remove`. |
 
-Values in `exclusive` and `incompatible` are group names such as `lightning`,
-`proxy`, or `pruning`; they are not fragment filenames. Use `required` only for
-functionality without which the fragment cannot work. Use `recommended` for a
-safe default that an operator may reasonably disable.
+Values in `required`, `recommended`, and `excluded` are fragment basenames
+without the `.yml` suffix. Values in `exclusive` and `incompatible` are group
+names such as `lightning`, `proxy`, or `pruning`; they are not fragment
+filenames. Use `required` only for functionality without which the fragment
+cannot work. Use `recommended` for a safe default that an operator may
+reasonably disable. Use `excluded` when selecting the fragment makes a
+recommended fragment invalid; exclusions cannot override explicit or required
+selections.
 
 When exposing an HTTP or API endpoint through bundled Nginx, add its snippet to
 `nginx/routes/<alias>.conf` and declare the lowercase, hyphenated alias as
