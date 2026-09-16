@@ -70,6 +70,11 @@
 {{ end }}
 
 {{ $trust_downstream_proxy := eq (or ($.Env.TRUST_DOWNSTREAM_PROXY) "") "true" }}
+{{ $public_https_port := or ($.Env.REVERSEPROXY_HTTPS_PORT) "443" }}
+{{ $public_https_port_suffix := "" }}
+{{ if ne $public_https_port "443" }}
+	{{ $public_https_port_suffix = printf ":%s" $public_https_port }}
+{{ end }}
 
 map $proxy_add_x_forwarded_for $proxy_x_forwarded_for {
   default {{ if $trust_downstream_proxy }}$proxy_add_x_forwarded_for{{ else }}$remote_addr{{ end }};
@@ -330,7 +335,10 @@ server {
 
 	# Redirect all other requests to HTTPS
 	location / {
-		return 301 https://$host$request_uri;
+		if ($request_method !~ ^(GET|HEAD)$) {
+			return 308 https://$host{{ $public_https_port_suffix }}$request_uri;
+		}
+		return 301 https://$host{{ $public_https_port_suffix }}$request_uri;
 	}
 }
 {{ end }}
