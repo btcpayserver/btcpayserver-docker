@@ -42,10 +42,13 @@
 		{{ $serviceName := (index $container.Labels "com.docker.compose.service") }}
 		{{ if (eq $serviceName "isso") }}
 	location /isso {
-		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header X-Forwarded-For $proxy_x_forwarded_for;
+		proxy_set_header X-Forwarded-Host $proxy_x_forwarded_host;
+		proxy_set_header X-Forwarded-Port $proxy_x_forwarded_port;
+		proxy_set_header X-Forwarded-Proto $proxy_x_forwarded_proto;
+		proxy_set_header X-Forwarded-Ssl $proxy_x_forwarded_ssl;
 		proxy_set_header X-Script-Name /isso;
 		proxy_set_header Host $host;
-		proxy_set_header X-Forwarded-Proto $scheme;
 		proxy_pass http://isso:8080;
 	}
 		{{ end }}
@@ -53,17 +56,27 @@
 	{{ end }}
 {{ end }}
 
-# If we receive X-Forwarded-Proto, pass it through; otherwise, pass along the
-# scheme used to connect to this server
+{{ $trust_downstream_proxy := eq (or ($.Env.TRUST_DOWNSTREAM_PROXY) "") "true" }}
+
+map $proxy_add_x_forwarded_for $proxy_x_forwarded_for {
+  default {{ if $trust_downstream_proxy }}$proxy_add_x_forwarded_for{{ else }}$remote_addr{{ end }};
+  ''      $remote_addr;
+}
+
+# Only preserve the downstream proxy's forwarded request context when it is
+# explicitly trusted. Otherwise derive it from this connection.
 map $http_x_forwarded_proto $proxy_x_forwarded_proto {
-  default $http_x_forwarded_proto;
+  default {{ if $trust_downstream_proxy }}$http_x_forwarded_proto{{ else }}$scheme{{ end }};
   ''      $scheme;
 }
 
-# If we receive X-Forwarded-Port, pass it through; otherwise, pass along the
-# server port the client connected to
+map $http_x_forwarded_host $proxy_x_forwarded_host {
+  default {{ if $trust_downstream_proxy }}$http_x_forwarded_host{{ else }}$host{{ end }};
+  ''      $host;
+}
+
 map $http_x_forwarded_port $proxy_x_forwarded_port {
-  default $http_x_forwarded_port;
+  default {{ if $trust_downstream_proxy }}$http_x_forwarded_port{{ else }}$server_port{{ end }};
   ''      $server_port;
 }
 
@@ -85,8 +98,8 @@ server_tokens off;
 ssl_dhparam /etc/nginx/dhparam/dhparam.pem;
 {{ end }}
 
-# Set appropriate X-Forwarded-Ssl header
-map $scheme $proxy_x_forwarded_ssl {
+# Keep X-Forwarded-Ssl consistent with the effective forwarded protocol.
+map $proxy_x_forwarded_proto $proxy_x_forwarded_ssl {
   default off;
   https on;
 }
@@ -115,7 +128,8 @@ proxy_set_header Host $http_host;
 proxy_set_header Upgrade $http_upgrade;
 proxy_set_header Connection $proxy_connection;
 proxy_set_header X-Real-IP $remote_addr;
-proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-For $proxy_x_forwarded_for;
+proxy_set_header X-Forwarded-Host $proxy_x_forwarded_host;
 proxy_set_header X-Forwarded-Proto $proxy_x_forwarded_proto;
 proxy_set_header X-Forwarded-Ssl $proxy_x_forwarded_ssl;
 proxy_set_header X-Forwarded-Port $proxy_x_forwarded_port;
@@ -214,12 +228,12 @@ server {
 	client_max_body_size 100M;
 	server_name {{ trim $onionHost }};
 	listen 80 ;
-	proxy_set_header X-Forwarded-Host  $http_host;
+	proxy_set_header X-Forwarded-Host $proxy_x_forwarded_host;
 	proxy_set_header Host $http_host;
 	proxy_set_header Upgrade $http_upgrade;
 	proxy_set_header Connection $proxy_connection;
 	proxy_set_header X-Real-IP $remote_addr;
-	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	proxy_set_header X-Forwarded-For $proxy_x_forwarded_for;
 	proxy_set_header X-Forwarded-Proto $proxy_x_forwarded_proto;
 	proxy_set_header X-Forwarded-Ssl $proxy_x_forwarded_ssl;
 	proxy_set_header X-Forwarded-Port $proxy_x_forwarded_port;
@@ -304,12 +318,12 @@ server {
 {{ end }}
 
 server {
-	proxy_set_header X-Forwarded-Host  $http_host;
+	proxy_set_header X-Forwarded-Host $proxy_x_forwarded_host;
 	proxy_set_header Host $http_host;
 	proxy_set_header Upgrade $http_upgrade;
 	proxy_set_header Connection $proxy_connection;
 	proxy_set_header X-Real-IP $remote_addr;
-	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	proxy_set_header X-Forwarded-For $proxy_x_forwarded_for;
 	proxy_set_header X-Forwarded-Proto $proxy_x_forwarded_proto;
 	proxy_set_header X-Forwarded-Ssl $proxy_x_forwarded_ssl;
 	proxy_set_header X-Forwarded-Port $proxy_x_forwarded_port;

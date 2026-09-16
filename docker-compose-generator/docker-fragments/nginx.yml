@@ -21,8 +21,9 @@ services:
     image: btcpayserver/docker-gen:0.10.7
     container_name: nginx-gen
     environment:
-      DEFAULT_HOST: ${REVERSEPROXY_DEFAULT_HOST:-none}
-      RESOLVERS: 127.0.0.11 valid=30s ipv6=off
+      - DEFAULT_HOST=${REVERSEPROXY_DEFAULT_HOST:-none}
+      - RESOLVERS=127.0.0.11 valid=30s ipv6=off
+      - TRUST_DOWNSTREAM_PROXY=${TRUST_DOWNSTREAM_PROXY:-false}
     volumes:
       - "/var/run/docker.sock:/tmp/docker.sock:ro"
       - "../nginx:/etc/docker-gen/templates:ro"
