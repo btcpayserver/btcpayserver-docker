@@ -35,6 +35,8 @@ jobs:
           persist-credentials: false
       - name: Test nginx route management
         run: tests/btcpay-routes-test.sh
+      - name: Test fragment management
+        run: tests/btcpay-fragments-test.sh
       - name: Test environment persistence
         run: tests/environment-test.sh
       - name: Test nginx template rendering

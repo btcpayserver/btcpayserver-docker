@@ -1,0 +1,322 @@
+#!/bin/bash
+
+set -Eeuo pipefail
+
+profile_backup=""
+
+json_error() {
+    jq -cn --arg error "$1" '{error:$error}'
+}
+
+fail() {
+    json_error "$1"
+    exit 1
+}
+
+print_help() {
+    cat <<'EOF'
+Usage: btcpay-fragments <command> [fragments...]
+
+Commands:
+  show                         Show saved and available fragments as JSON.
+  add <fragment...>            Add one or more additional fragments.
+  remove <fragment...>         Remove one or more additional fragments.
+  exclude <fragment...>        Exclude one or more fragments.
+  unexclude <fragment...>      Stop excluding one or more fragments.
+  help                         Show this help.
+EOF
+}
+
+restore_profile() {
+    if [ -n "$profile_backup" ] && [ -f "$profile_backup" ]; then
+        if ! mv -f -- "$profile_backup" "$profile_file"; then
+            return 1
+        fi
+        profile_backup=""
+    fi
+}
+
+cleanup() {
+    if [ -n "$profile_backup" ] && [ -f "$profile_backup" ]; then
+        printf 'Profile backup retained for manual recovery: %s\n' "$profile_backup" >&2
+    fi
+}
+
+unexpected_error() {
+    local status="$1"
+    local line="$2"
+    trap - ERR
+    if restore_profile; then
+        json_error "Unexpected failure at line $line"
+    else
+        json_error "Unexpected failure at line $line; deployment profile could not be restored"
+    fi
+    exit "$status"
+}
+
+trap cleanup EXIT
+trap 'unexpected_error $? $LINENO' ERR
+trap 'restore_profile || true; exit 1' HUP INT TERM
+
+normalize_list() {
+    jq -Rsc '
+        gsub(","; ";")
+        | split(";")
+        | map(gsub("^[[:space:]]+|[[:space:]]+$"; "") | ascii_downcase | sub("[.]yml$"; ""))
+        | map(select(length > 0))
+        | unique
+        | sort
+    ' <<< "$1"
+}
+
+normalize_name() {
+    jq -nr --arg name "$1" \
+        '$name | gsub("^[[:space:]]+|[[:space:]]+$"; "") | ascii_downcase | sub("[.]yml$"; "")'
+}
+
+load_saved_state() {
+    [ -r "$profile_file" ] || fail "Saved deployment profile is not readable: $profile_file"
+
+    local profile_state
+    if ! profile_state="$(
+        unset BTCPAYGEN_ADDITIONAL_FRAGMENTS BTCPAYGEN_EXCLUDE_FRAGMENTS
+        # shellcheck source=/dev/null
+        . "$profile_file" >/dev/null 2>&1 || exit 1
+        jq -cn \
+            --arg additional "${BTCPAYGEN_ADDITIONAL_FRAGMENTS:-}" \
+            --arg excluded "${BTCPAYGEN_EXCLUDE_FRAGMENTS:-}" \
+            --arg baseDirectory "${BTCPAY_BASE_DIRECTORY:-}" \
+            '{additional:$additional,excluded:$excluded,baseDirectory:$baseDirectory}'
+    )"; then
+        fail "Failed to load saved deployment profile: $profile_file"
+    fi
+
+    additional_json="$(normalize_list "$(jq -r '.additional' <<< "$profile_state")")"
+    excluded_json="$(normalize_list "$(jq -r '.excluded' <<< "$profile_state")")"
+    base_directory="$(jq -r '.baseDirectory' <<< "$profile_state")"
+    [ -n "$base_directory" ] || fail "BTCPAY_BASE_DIRECTORY is not set in $profile_file"
+
+    repo_dir="$base_directory/btcpayserver-docker"
+    fragment_dir="$repo_dir/docker-compose-generator/docker-fragments"
+    setup_script="$repo_dir/btcpay-setup.sh"
+    [ -d "$fragment_dir" ] || fail "Fragment directory does not exist: $fragment_dir"
+    [ -f "$setup_script" ] || fail "Setup script does not exist: $setup_script"
+}
+
+load_available_fragments() {
+    local file
+    local name
+    local -a available=()
+
+    for file in "$fragment_dir"/*.yml; do
+        [ -f "$file" ] || continue
+        name="${file##*/}"
+        available+=("${name%.yml}")
+    done
+
+    available_json="$(jq -cn --args '$ARGS.positional | unique | sort' -- "${available[@]}")"
+}
+
+print_state() {
+    jq -cn \
+        --argjson excluded "$excluded_json" \
+        --argjson additional "$additional_json" \
+        --argjson available "$available_json" \
+        '{excludedFragments:$excluded,additionalFragments:$additional,availableFragments:$available}'
+}
+
+contains_name() {
+    local values="$1"
+    local name="$2"
+    jq -e --arg name "$name" 'index($name) != null' <<< "$values" >/dev/null
+}
+
+load_profile_for_apply() {
+    local declaration
+    local flags
+    local name
+    local i
+    local -a caller_names=()
+    local -a caller_values=()
+
+    while IFS= read -r name; do
+        case "$name" in
+            BTCPAYGEN_ADDITIONAL_FRAGMENTS|BTCPAYGEN_EXCLUDE_FRAGMENTS|BTCPAY_BASE_DIRECTORY|BTCPAY_DOCKER_COMPOSE|BTCPAY_ENV_FILE)
+                continue
+                ;;
+        esac
+        declaration="$(declare -p "$name" 2>/dev/null || true)"
+        flags="${declaration#declare -}"
+        flags="${flags%% *}"
+        [[ "$flags" == *r* ]] && continue
+        caller_names+=("$name")
+        caller_values+=("${!name}")
+    done < <(compgen -e)
+
+    # shellcheck source=/dev/null
+    . "$profile_file" >&2
+
+    for ((i = 0; i < ${#caller_names[@]}; i++)); do
+        printf -v "${caller_names[$i]}" '%s' "${caller_values[$i]}"
+        export "${caller_names[$i]}"
+    done
+}
+
+validate_request() {
+    local action="$1"
+    shift
+    local argument
+    local name
+    local target_json
+    local -a invalid=()
+    local -a requested=()
+
+    [ "$#" -gt 0 ] || fail "$action requires at least one fragment"
+
+    if [ "$action" = "remove" ]; then
+        target_json="$additional_json"
+    else
+        target_json="$excluded_json"
+    fi
+
+    for argument in "$@"; do
+        name="$(normalize_name "$argument")"
+        requested+=("$name")
+
+        if [ "$name" = "btcpay-host" ]; then
+            invalid+=("$name")
+            continue
+        fi
+
+        if [[ ! "$name" =~ ^[a-z0-9][a-z0-9._-]*$ ]]; then
+            if { [ "$action" != "remove" ] && [ "$action" != "unexclude" ]; } || ! contains_name "$target_json" "$name"; then
+                invalid+=("$name")
+            fi
+            continue
+        fi
+
+        if [ "$action" = "add" ] || [ "$action" = "exclude" ]; then
+            [ -f "$fragment_dir/$name.yml" ] || invalid+=("$name")
+        elif [ ! -f "$fragment_dir/$name.yml" ] && ! contains_name "$target_json" "$name"; then
+            invalid+=("$name")
+        fi
+    done
+
+    requested_json="$(jq -cn --args '$ARGS.positional | unique | sort' -- "${requested[@]}")"
+    if [ "${#invalid[@]}" -gt 0 ]; then
+        invalid_json="$(jq -cn --args '$ARGS.positional | unique | sort' -- "${invalid[@]}")"
+        fail "Unknown or invalid fragments: $(jq -r 'join(", ")' <<< "$invalid_json")"
+    fi
+}
+
+mutate_state() {
+    local action="$1"
+    local new_state
+
+    new_state="$(jq -cn \
+        --arg action "$action" \
+        --argjson additional "$additional_json" \
+        --argjson excluded "$excluded_json" \
+        --argjson requested "$requested_json" '
+        def without($values): [.[] as $name | select(($values | index($name)) == null) | $name];
+        if $action == "add" then
+            {additional: (($additional + $requested) | unique | sort), excluded: ($excluded | without($requested))}
+        elif $action == "remove" then
+            {additional: ($additional | without($requested)), excluded: $excluded}
+        elif $action == "exclude" then
+            {additional: ($additional | without($requested)), excluded: (($excluded + $requested) | unique | sort)}
+        else
+            {additional: $additional, excluded: ($excluded | without($requested))}
+        end
+    ')"
+
+    new_additional_json="$(jq -c '.additional' <<< "$new_state")"
+    new_excluded_json="$(jq -c '.excluded' <<< "$new_state")"
+}
+
+apply_state() {
+    local backup_candidate
+
+    [ "$(id -u)" -eq 0 ] || fail "Fragment changes must be run as root"
+
+    if [ "$new_additional_json" = "$additional_json" ] && [ "$new_excluded_json" = "$excluded_json" ]; then
+        print_state
+        return 0
+    fi
+
+    backup_candidate="$(mktemp "${profile_file}.btcpay-fragments.XXXXXX")" ||
+        fail "Failed to create deployment profile backup"
+    if ! cp -p -- "$profile_file" "$backup_candidate"; then
+        rm -f -- "$backup_candidate"
+        fail "Failed to back up deployment profile"
+    fi
+    profile_backup="$backup_candidate"
+
+    load_profile_for_apply
+    BTCPAYGEN_ADDITIONAL_FRAGMENTS="$(jq -r 'join(";")' <<< "$new_additional_json")"
+    BTCPAYGEN_EXCLUDE_FRAGMENTS="$(jq -r 'join(";")' <<< "$new_excluded_json")"
+    export BTCPAYGEN_ADDITIONAL_FRAGMENTS BTCPAYGEN_EXCLUDE_FRAGMENTS
+
+    local original_directory="$PWD"
+    local setup_status
+    cd "$repo_dir"
+    trap - ERR
+    set +e
+    # shellcheck source=/dev/null
+    . "$setup_script" -i >&2
+    setup_status=$?
+    set -e
+    trap 'unexpected_error $? $LINENO' ERR
+    cd "$original_directory"
+
+    if [ "$setup_status" -ne 0 ]; then
+        if restore_profile; then
+            fail "Failed to apply fragment changes; previous deployment profile restored"
+        else
+            fail "Failed to apply fragment changes; deployment profile could not be restored"
+        fi
+    fi
+
+    rm -f -- "$profile_backup"
+    profile_backup=""
+    load_saved_state
+    load_available_fragments
+    print_state
+}
+
+command_name="${1:-}"
+if [ -z "$command_name" ] || [ "$command_name" = "help" ] || [ "$command_name" = "-h" ] || [ "$command_name" = "--help" ]; then
+    print_help
+    exit 0
+fi
+
+case "$command_name" in
+    show|add|remove|exclude|unexclude)
+        ;;
+    *)
+        fail "Unknown command: $command_name"
+        ;;
+esac
+
+profile_file="${BTCPAY_FRAGMENTS_PROFILE:-}"
+if [ -z "$profile_file" ]; then
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        profile_file="$HOME/btcpay-env.sh"
+    else
+        profile_file="/etc/profile.d/btcpay-env.sh"
+    fi
+fi
+
+load_saved_state
+load_available_fragments
+
+if [ "$command_name" = "show" ]; then
+    [ "$#" -eq 1 ] || fail "show does not accept arguments"
+    print_state
+    exit 0
+fi
+
+shift
+validate_request "$command_name" "$@"
+mutate_state "$command_name"
+apply_state

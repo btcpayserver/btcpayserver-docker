@@ -15,6 +15,7 @@ install_tooling() {
                 "btcpayserver_beldexd" "beldex-wallet-cli.sh" "Command line for your Beldex instance" \
                 "pihole" "pihole.sh" "Command line for running pihole commands" \
                 "*" "btcpay-host" "Command line exposing the services of the host (see https://github.com/btcpayserver/btcpayserver/pull/7511)" \
+                "*" "btcpay-fragments" "Command line for managing Docker Compose fragments" \
                 "*" "btcpay-routes" "Command line for managing optional nginx routes" \
                 "*" "btcpay-clean.sh" "Command line for deleting old unused docker images" \
                 "*" "btcpay-down.sh" "Command line for stopping all services related to BTCPay Server" \
@@ -33,11 +34,13 @@ install_tooling() {
         dependency="${scripts[$i+0]}"
         comment="${scripts[$i+2]}"
 
-        [ -e /usr/local/bin/$scriptname ] && rm /usr/local/bin/$scriptname
+        if [ -e "/usr/local/bin/$scriptname" ] || [ -L "/usr/local/bin/$scriptname" ]; then
+            rm -f -- "/usr/local/bin/$scriptname" || return 1
+        fi
         if [ -e "$scriptname" ]; then
             if [ "$dependency" == "*" ] || ( [ -e "$BTCPAY_DOCKER_COMPOSE" ] && grep -q "$dependency" "$BTCPAY_DOCKER_COMPOSE" ); then
-                chmod +x $scriptname
-                ln -s "$(pwd)/$scriptname" /usr/local/bin
+                chmod +x "$scriptname" || return 1
+                ln -s "$(pwd)/$scriptname" "/usr/local/bin/$scriptname" || return 1
                 echo "Installed $scriptname to /usr/local/bin: $comment"
             fi
         else
@@ -106,6 +109,7 @@ btcpay_setup_ssh() {
     local key_file="$ssh_dir/btcpay_host_id_ed25519"
     local authorized_keys="$ssh_dir/authorized_keys"
     local authorized_keys_tmp="$ssh_dir/authorized_keys.tmp"
+    local public_key
 
     BTCPAYGEN_ADDITIONAL_FRAGMENTS="$(remove_fragments "$BTCPAYGEN_ADDITIONAL_FRAGMENTS" "btcpay-host")"
     if [[ "$BTCPAY_ENABLE_SSH" == "true" ]]; then
@@ -120,36 +124,52 @@ btcpay_setup_ssh() {
         return 0
     fi
 
-    mkdir -p "$ssh_dir"
-    chmod 700 "$ssh_dir"
+    mkdir -p "$ssh_dir" || return 1
+    chmod 700 "$ssh_dir" || return 1
 
     if [ ! -f "$authorized_keys" ]; then
-        touch "$authorized_keys"
-        chmod 600 "$authorized_keys"
+        touch "$authorized_keys" || return 1
+        chmod 600 "$authorized_keys" || return 1
     fi
-    cp "$authorized_keys" "$authorized_keys_tmp"
-    sed -i '/ btcpayserver$/d' "$authorized_keys_tmp"
-    sed -i '/ btcpay-host$/d' "$authorized_keys_tmp"
+    cp "$authorized_keys" "$authorized_keys_tmp" || return 1
+    if ! sed -i '/ btcpayserver$/d' "$authorized_keys_tmp" ||
+       ! sed -i '/ btcpay-host$/d' "$authorized_keys_tmp"; then
+        rm -f -- "$authorized_keys_tmp"
+        return 1
+    fi
 
     if [[ "$BTCPAY_ENABLE_SSH" == "true" ]]; then
         if [ ! -f "$key_file" ]; then
-            ssh-keygen -t ed25519 -f "$key_file" -N "" -C "btcpay-host" -q
+            if ! ssh-keygen -t ed25519 -f "$key_file" -N "" -C "btcpay-host" -q; then
+                rm -f -- "$authorized_keys_tmp"
+                return 1
+            fi
         fi
         if [ ! -f "$key_file.pub" ]; then
-            ssh-keygen -y -f "$key_file" > "$key_file.pub"
+            if ! ssh-keygen -y -f "$key_file" > "$key_file.pub"; then
+                rm -f -- "$authorized_keys_tmp" "$key_file.pub"
+                return 1
+            fi
+        fi
+        if ! public_key="$(cat "$key_file.pub")"; then
+            rm -f -- "$authorized_keys_tmp"
+            return 1
         fi
 
-        printf 'restrict,command="%s" %s\n' \
+        if ! printf 'restrict,command="%s" %s\n' \
                 "${BTCPAY_BASE_DIRECTORY}/btcpayserver-docker/Generated/btcpay-host-proxy" \
-                "$(cat "$key_file.pub")" >> "$authorized_keys_tmp"
+                "$public_key" >> "$authorized_keys_tmp"; then
+            rm -f -- "$authorized_keys_tmp"
+            return 1
+        fi
     fi
 
     if ! cmp -s "$authorized_keys_tmp" "$authorized_keys"; then
         echo "$authorized_keys updated"
-        mv "$authorized_keys_tmp" "$authorized_keys"
-        chmod 600 "$authorized_keys"
+        mv "$authorized_keys_tmp" "$authorized_keys" || return 1
+        chmod 600 "$authorized_keys" || return 1
     else
-        rm "$authorized_keys_tmp"
+        rm -f -- "$authorized_keys_tmp" || return 1
     fi
 }
 
@@ -379,10 +399,16 @@ btcpay_archive_logs() (
 )
 
 btcpay_up() {
+    local status
     pushd . > /dev/null
     cd "$(dirname "$BTCPAY_ENV_FILE")"
-    docker-compose -f $BTCPAY_DOCKER_COMPOSE up --remove-orphans -d -t "${COMPOSE_HTTP_TIMEOUT:-180}"
+    if docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up --remove-orphans -d -t "${COMPOSE_HTTP_TIMEOUT:-180}"; then
+        status=0
+    else
+        status=$?
+    fi
     popd > /dev/null
+    [ "$status" -eq 0 ] || return "$status"
     ensure_reverse_proxy_up
 }
 
@@ -437,10 +463,16 @@ ensure_reverse_proxy_up() {
 }
 
 btcpay_pull() {
+    local status
     pushd . > /dev/null
     cd "$(dirname "$BTCPAY_ENV_FILE")"
-    docker-compose -f "$BTCPAY_DOCKER_COMPOSE" pull
+    if docker-compose -f "$BTCPAY_DOCKER_COMPOSE" pull; then
+        status=0
+    else
+        status=$?
+    fi
     popd > /dev/null
+    return "$status"
 }
 
 btcpay_down() {

@@ -8,9 +8,8 @@ Point a dedicated hostname at the server, then enable and initialize the
 fragment:
 
 ```bash
-export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-fireflyiii"
 export FIREFLY_HOST="firefly.example.com"
-. btcpay-setup.sh -i
+btcpay-fragments add opt-add-fireflyiii
 . ./Tools/fireflyiii/init.sh
 ```
 
