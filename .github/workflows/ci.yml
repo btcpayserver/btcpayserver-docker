@@ -26,6 +26,8 @@ jobs:
         run: tests/environment-test.sh
       - name: Test nginx template rendering
         run: tests/nginx-template-test.sh
+      - name: Test secret generation
+        run: tests/generate-secrets-test.sh
       - name: Validate nginx route catalog
         run: |
           nginx_image="$(tests/docker-fragment-image.sh nginx)"

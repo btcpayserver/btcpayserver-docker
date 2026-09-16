@@ -45,7 +45,7 @@ export BTCPAYGEN_REVERSEPROXY=nginx
 
 write_manifest() {
     jq -n --argjson required "$1" --argjson optional "$2" \
-        '{requiredRoutes:$required,optionalRoutes:$optional,fragments:["test"]}' > "$BTCPAY_ROUTES_MANIFEST"
+        '{requiredRoutes:$required,optionalRoutes:$optional,fragments:["test"],secrets:[]}' > "$BTCPAY_ROUTES_MANIFEST"
 }
 
 write_manifest '["mempool"]' '["thunderhub"]'

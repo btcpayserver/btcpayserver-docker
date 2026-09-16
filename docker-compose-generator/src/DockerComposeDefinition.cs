@@ -146,6 +146,7 @@ namespace DockerGenerator
 			var volumes = new List<KeyValuePair<YamlNode, YamlNode>>();
 			var configs = new List<KeyValuePair<YamlNode, YamlNode>>();
 			var networks = new List<KeyValuePair<YamlNode, YamlNode>>();
+			var secrets = new List<KeyValuePair<YamlNode, YamlNode>>();
 			var requiredRoutes = new HashSet<string>(StringComparer.Ordinal);
 			var optionalRoutes = new HashSet<string>(StringComparer.Ordinal);
 			foreach (var o in processedFragments.Select(f => (f, ParseDocument(f))).ToList())
@@ -168,6 +169,10 @@ namespace DockerGenerator
 				{
 					networks.AddRange(fragmentNetworksRoot.Children);
 				}
+				if (doc.Children.ContainsKey("secrets") && doc.Children["secrets"] is YamlMappingNode fragmentSecretsRoot)
+				{
+					secrets.AddRange(fragmentSecretsRoot.Children);
+				}
 				AddRoutes(doc, "required-routes", requiredRoutes, fragment);
 				AddRoutes(doc, "optional-routes", optionalRoutes, fragment);
 			}
@@ -180,7 +185,17 @@ namespace DockerGenerator
 			output.Add("volumes", new YamlMappingNode(volumes));
 			output.Add("configs", new YamlMappingNode(configs));
 			output.Add("networks", new YamlMappingNode(networks));
+			output.Add("secrets", new YamlMappingNode(secrets));
 			PostProcess(output);
+			var secretFiles = secrets
+				.Select(s => s.Value)
+				.OfType<YamlMappingNode>()
+				.Where(s => s.Children.TryGetValue("file", out var file) && file is YamlScalarNode)
+				.Select(s => ((YamlScalarNode)s.Children["file"]).Value)
+				.Where(f => !string.IsNullOrWhiteSpace(f))
+				.Distinct(StringComparer.Ordinal)
+				.OrderBy(f => f, StringComparer.Ordinal)
+				.ToArray();
 
 			var dockerImages = ((YamlMappingNode)output["services"]).Children.Select(kv => kv.Value["image"].ToString()).ToList();
 			dockerImages.Add("docker/compose-bin:v2.40.3");
@@ -214,7 +229,8 @@ namespace DockerGenerator
 			{
 				requiredRoutes = requiredRoutes.OrderBy(r => r, StringComparer.Ordinal).ToArray(),
 				optionalRoutes = optionalRoutes.OrderBy(r => r, StringComparer.Ordinal).ToArray(),
-				fragments = processedFragments.Select(f => f.Name).OrderBy(f => f, StringComparer.Ordinal).ToArray()
+				fragments = processedFragments.Select(f => f.Name).OrderBy(f => f, StringComparer.Ordinal).ToArray(),
+				secrets = secretFiles
 			};
 			outputFile = GetFilePath("manifest.json");
 			File.WriteAllText(outputFile, JsonSerializer.Serialize(manifest, new JsonSerializerOptions { WriteIndented = true }));

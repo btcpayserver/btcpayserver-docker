@@ -38,6 +38,7 @@ docker run -v "$(pwd)/Generated:/app/Generated" \
 
 [[ -f "Generated/pull-images.sh" ]] && chmod +x Generated/pull-images.sh
 [[ -f "Generated/save-images.sh" ]] && chmod +x Generated/save-images.sh
+./generate-secrets.sh Generated/manifest.json
 
 if [[ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]]; then
     ./btcpay-routes sync
