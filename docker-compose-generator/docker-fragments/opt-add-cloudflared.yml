@@ -8,3 +8,6 @@ services:
       REAL_IP_HEADER: Cf-Connecting-Ip
     links:
       - nginx
+  nginx-gen:
+    environment:
+      - TRUST_DOWNSTREAM_PROXY=true

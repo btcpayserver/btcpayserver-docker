@@ -99,6 +99,7 @@ Check out this video if you're interested in learning more about setting up [BTC
 * `REVERSEPROXY_HTTP_PORT`: The public port the reverse proxy binds to for HTTP traffic (default: 80)
 * `REVERSEPROXY_HTTPS_PORT`: The public port the reverse proxy binds to for HTTPS traffic (default: 443)
 * `REVERSEPROXY_DEFAULT_HOST`: Optional, if using a reverse proxy nginx, specify which website should be presented if the server is accessed by its IP or by an unrecognized domain name.
+* `TRUST_DOWNSTREAM_PROXY`: Set to `true` only when Nginx is behind a trusted external TLS proxy and its HTTP port cannot be reached directly. This trusts the proxy's `X-Forwarded-*` headers. (default: `false`; enabled automatically by `opt-add-cloudflared`)
 * `NOREVERSEPROXY_HTTP_PORT`: Optional, if not using a reverse proxy, specify which port should be opened for HTTP traffic. (default: 80)
 * `NBITCOIN_NETWORK`: The type of network to use (eg. `mainnet`, `testnet`, or `regtest`. Default: `mainnet`)
 * `LIGHTNING_ALIAS`: An alias for your lightning network node, if used

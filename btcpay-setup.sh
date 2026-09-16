@@ -77,7 +77,7 @@ Except BTC and LTC, other crypto currencies are maintained by their own communit
 
 Make sure you own a domain with DNS record pointing to your website.
 If you want HTTPS setup automatically with Let's Encrypt, leave REVERSEPROXY_HTTP_PORT at it's default value of 80 and make sure this port is accessible from the internet.
-Or, if you want to offload SSL because you have an existing web proxy, change REVERSEPROXY_HTTP_PORT to any port you want. You can then forward the traffic. Just don't forget to pass the X-Forwarded-Proto header.
+Or, if you want to offload SSL because you have an existing web proxy, change REVERSEPROXY_HTTP_PORT to any port you want and set TRUST_DOWNSTREAM_PROXY=true. You can then forward the traffic and its X-Forwarded-* headers.
 
 Environment variables:
     BTCPAY_HOST: The hostname of your website (eg. btcpay.example.com)
@@ -85,6 +85,7 @@ Environment variables:
     REVERSEPROXY_HTTP_PORT: The port the reverse proxy binds to for public HTTP requests. Default: 80
     REVERSEPROXY_HTTPS_PORT: The port the reverse proxy binds to for public HTTPS requests. Default: 443
     REVERSEPROXY_DEFAULT_HOST: Optional, if using a reverse proxy nginx, specify which website should be presented if the server is accessed by its IP.
+    TRUST_DOWNSTREAM_PROXY: Trust X-Forwarded-* headers from an external reverse proxy. Only enable when direct access to the Nginx port is blocked. Default: false
     LETSENCRYPT_EMAIL: A mail will be sent to this address if certificate expires and fail to renew automatically (eg. me@example.com)
     NBITCOIN_NETWORK: The type of network to use (eg. mainnet, testnet or regtest. Default: mainnet)
     LIGHTNING_ALIAS: An alias for your lightning network node if used
@@ -197,6 +198,7 @@ fi
 : "${BTCPAY_ADDITIONAL_HOSTS:=}"
 : "${REVERSEPROXY_HTTP_PORT:=80}"
 : "${REVERSEPROXY_HTTPS_PORT:=443}"
+: "${TRUST_DOWNSTREAM_PROXY:=false}"
 : "${BTCPAY_ENABLE_SSH:=false}"
 : "${PIHOLE_SERVERIP:=}"
 : "${CLOUDFLARE_TUNNEL_TOKEN:=}"
@@ -244,6 +246,7 @@ BTCPAY_ADDITIONAL_HOSTS:$BTCPAY_ADDITIONAL_HOSTS
 REVERSEPROXY_HTTP_PORT:$REVERSEPROXY_HTTP_PORT
 REVERSEPROXY_HTTPS_PORT:$REVERSEPROXY_HTTPS_PORT
 REVERSEPROXY_DEFAULT_HOST:$REVERSEPROXY_DEFAULT_HOST
+TRUST_DOWNSTREAM_PROXY:$TRUST_DOWNSTREAM_PROXY
 LIBREPATRON_HOST:$LIBREPATRON_HOST
 ZAMMAD_HOST:$ZAMMAD_HOST
 WOOCOMMERCE_HOST:$WOOCOMMERCE_HOST

@@ -13,6 +13,7 @@ export BTCPAY_ENV_FILE="$test_dir/.env"
 export BTCPAY_HOST="example.com"
 export BTCPAYGEN_CRYPTO1="btc"
 export BTCPAY_ENABLE_SSH="true"
+export TRUST_DOWNSTREAM_PROXY="true"
 
 if "$repo_dir/btcpay-host" changedomain $'example.com\nPROMPT_COMMAND=id' 2> "$test_dir/error"; then
     printf 'btcpay-host must reject an invalid domain\n' >&2
@@ -22,6 +23,7 @@ grep -Fxq 'The domain must be a valid domain name without a protocol.' "$test_di
 
 btcpay_update_docker_env
 grep -Fxq 'BTCPAY_HOST=example.com' "$BTCPAY_ENV_FILE"
+grep -Fxq 'TRUST_DOWNSTREAM_PROXY=true' "$BTCPAY_ENV_FILE"
 
 cp "$BTCPAY_ENV_FILE" "$test_dir/expected.env"
 export BTCPAY_HOST=$'example.com\nPROMPT_COMMAND=id'
