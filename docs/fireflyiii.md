@@ -1,19 +1,21 @@
-# Firefly III support
+# Firefly III
 
-[Firefly III](https://www.firefly-iii.org/)  is a self-hosted financial manager.
-It can help you keep track of expenses, income, budgets and everything in between. It supports credit cards, shared household accounts and savings accounts. It’s pretty fancy. You should use it to save and organise money.
+[Firefly III](https://www.firefly-iii.org/) is a self-hosted financial manager.
 
 ## How to use
 
-1. Connect as root to your server
-2. Configure a domain's DNS to point to your server ip. e.g. `firefly.yourserver.org`
-3. Add fireflyiii as an option to your docker deployment
+Point a dedicated hostname at the server, then enable and initialize the
+fragment:
 
 ```bash
-BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-fireflyiii"
-FIREFLY_HOST="firefly.yourserver.org"
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-fireflyiii"
+export FIREFLY_HOST="firefly.example.com"
 . btcpay-setup.sh -i
 . ./Tools/fireflyiii/init.sh
 ```
 
-4. Access Firefly III at `firefly.yourserver.org` and create your admin account.
+Access `https://firefly.example.com` and create the administrator account.
+
+The bundled fragment currently contains a fixed application key and tracks the
+`latest` Firefly III image. Review the fragment and Firefly III's deployment
+requirements before using it with sensitive financial data.

@@ -1,4 +1,4 @@
-# Cloudflare tunnel support
+# Cloudflare Tunnel
 
 Your server is on a local network, and you want to expose it on the internet (clearnet)?
 
@@ -22,7 +22,7 @@ With Cloudflare tunnel, you will enjoy low latency access to your server, on cle
 
 You still need to configure the tunnel correctly; this documentation will guide you through it.
 
-## How to use?
+## Configure the Tunnel
 
 First, we are going to create the tunnel on Cloudflare.
 
@@ -47,13 +47,16 @@ First, we are going to create the tunnel on Cloudflare.
 
 8. In the SSH section of your server, add Cloudflare tunnel by running the following script. (replace `<YOUR_TOKEN_HERE>` with what you copied in step `5.`, and also replace `<YOUR_DOMAIN_HERE>` with the domain you entered in steps `7.`)
 ```bash
-BTCPAY_HOST="<YOUR_DOMAIN_HERE>"
-[[ "$REVERSEPROXY_DEFAULT_HOST" ]] && REVERSEPROXY_DEFAULT_HOST="$BTCPAY_HOST"
-CLOUDFLARE_TUNNEL_TOKEN="<YOUR_TOKEN_HERE>"
-BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-cloudflared"
-BTCPAYGEN_EXCLUDE_FRAGMENTS="$BTCPAYGEN_EXCLUDE_FRAGMENTS;nginx-https"
+export BTCPAY_HOST="<YOUR_DOMAIN_HERE>"
+export CLOUDFLARE_TUNNEL_TOKEN="<YOUR_TOKEN_HERE>"
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-cloudflared"
+export BTCPAYGEN_EXCLUDE_FRAGMENTS="$BTCPAYGEN_EXCLUDE_FRAGMENTS;nginx-https"
 . btcpay-setup.sh -i
 ```
+
+The Cloudflare fragment trusts forwarded headers. Block direct public access to
+the configured Nginx HTTP port with your host or provider firewall so requests
+can reach it only through the tunnel.
 
 Now you should be able to access your server from the internet! (If you get an Nginx error 503, check below)
 
@@ -71,8 +74,8 @@ An error 503 means that the tunnel is working and Cloudflare is correctly set up
 This command will instruct you to forward any requests from your domain to your BTCPay Server container. It also instructs you to forward any HTTP requests with an unrecognized domain name to your BTCPay Server container.
 
 ```bash
-BTCPAY_HOST="<YOUR_DOMAIN_HERE>"
-REVERSEPROXY_DEFAULT_HOST="<YOUR_DOMAIN_HERE>"
+export BTCPAY_HOST="<YOUR_DOMAIN_HERE>"
+export REVERSEPROXY_DEFAULT_HOST="<YOUR_DOMAIN_HERE>"
 . btcpay-setup.sh -i
 ```
 

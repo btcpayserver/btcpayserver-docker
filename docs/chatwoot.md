@@ -1,32 +1,33 @@
-# Chatwoot support
+# Chatwoot
 
-[Chatwoot](https://www.chatwoot.com/) is a customer support tool for instant messaging channels which can help businesses provide exceptional customer support.
+[Chatwoot](https://www.chatwoot.com/) is a self-hosted customer-support and
+messaging application.
 
-## How to use
+## Installation
 
-1. Connect as root to your server
-2. create chatwoot configuration file where `{CONFIG DATA HERE}` is replaced by settings from [here](https://www.chatwoot.com/docs/environment-variables)
+Create `Generated/chatwoot-config.env` with the settings required by the
+[Chatwoot environment reference](https://www.chatwoot.com/docs/environment-variables).
+The file is ignored by Git.
 
 ```bash
 sudo su -
-cd btcpayserver-docker
-cat >> Generated/chatwoot-config.env <<EOL
-{CONFIG DATA HERE}
-{CONFIG DATA HERE}
-EOL
+cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
+editor Generated/chatwoot-config.env
 ```
-3. Add chatwoot as an option to your BTCPay deployment and set the host to use (point DNS to server as well)
+Point a dedicated hostname at the server, then enable the fragment:
 
 ```bash
-CHATWOOT_HOST="chatwoot.xpayserver.com"
-BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-chatwoot"
+export CHATWOOT_HOST="chatwoot.example.com"
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="$BTCPAYGEN_ADDITIONAL_FRAGMENTS;opt-add-chatwoot"
 . btcpay-setup.sh -i
-
 ```
-4. Wait for BTPay to be online and then create the database for chatwoot
+After the services start, initialize the Chatwoot database:
 
 ```bash
-docker exec -ti chatwoot sh -c "export DISABLE_DATABASE_ENVIRONMENT_CHECK=1 && bundle exec rails db:reset"
+docker exec -ti chatwoot sh -c \
+  "bundle exec rails db:prepare"
 ```
-4. Go to chatwoot website at https://chatwoot.xpayserver.com and set up.
+Open `https://chatwoot.example.com` to finish setup.
 
+The bundled fragment uses an old fixed Chatwoot release. Review its image and
+configuration before enabling it on a production deployment.

@@ -13,6 +13,18 @@ permissions:
   contents: read
 
 jobs:
+  documentation:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check local documentation links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --offline --no-progress README.md 'docs/**/*.md'
+          fail: true
+
   test-install:
     if: github.event_name == 'pull_request' || github.ref == 'refs/heads/master'
     runs-on: ubuntu-22.04
