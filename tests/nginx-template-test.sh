@@ -110,6 +110,7 @@ docker run -d --name "$nohttps_backend" --network "$primary_network" --expose 80
 
 docker create --name "$generator" --network "$primary_network" \
     -e DEFAULT_HOST=none \
+    -e REVERSEPROXY_HTTPS_PORT=8443 \
     -e 'RESOLVERS=127.0.0.11 valid=30s ipv6=off' \
     -v /var/run/docker.sock:/tmp/docker.sock:ro \
     -v "$repo_dir/nginx:/etc/docker-gen/templates:ro" \
@@ -175,7 +176,9 @@ grep -Fq 'include /etc/nginx/btcpay-routes/enabled-routes/*.conf;' "$test_dir/co
 # network, vhost, protocol, authentication, certificate, and HSTS settings.
 grep -Fq 'server_name secure.test;' "$test_dir/conf/default.conf"
 grep -Fq 'location ^~ /.well-known/acme-challenge/' "$test_dir/conf/default.conf"
-grep -Fq "return 301 https://\$host\$request_uri;" "$test_dir/conf/default.conf"
+grep -Fq 'if ($request_method !~ ^(GET|HEAD)$) {' "$test_dir/conf/default.conf"
+grep -Fq 'return 308 https://$host:8443$request_uri;' "$test_dir/conf/default.conf"
+grep -Fq 'return 301 https://$host:8443$request_uri;' "$test_dir/conf/default.conf"
 grep -Fq 'include /etc/nginx/network_internal.conf;' "$test_dir/conf/default.conf"
 grep -Fq 'include /etc/nginx/vhost.d/secure.test;' "$test_dir/conf/default.conf"
 grep -Fq 'uwsgi_pass uwsgi://secure_test;' "$test_dir/conf/default.conf"

@@ -23,6 +23,8 @@ services:
       - "nginx_certs:/etc/nginx/certs:ro"
 
   nginx-gen:
+    environment:
+      - REVERSEPROXY_HTTPS_PORT=${REVERSEPROXY_HTTPS_PORT:-443}
     volumes:
       - "nginx_certs:/etc/nginx/certs:ro"
 volumes:
