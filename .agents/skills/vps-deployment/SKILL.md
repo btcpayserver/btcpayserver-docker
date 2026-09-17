@@ -1,6 +1,6 @@
 ---
 name: vps-deployment
-description: Guide an operator through planning, installing, verifying, reconfiguring, updating, migrating, restoring, or troubleshooting BTCPay Server on a VPS with the official Docker deployment. Use for operator-side VPS work, production deployment choices, domain and HTTPS preparation, synchronization, backups, and deployment-readiness questions.
+description: Guide an operator through planning, installing, verifying, reconfiguring, updating, migrating, restoring, or troubleshooting BTCPay Server on a VPS with the official Docker deployment. Use for operator-side VPS work, production deployment choices, domain and HTTPS preparation, synchronization, and deployment-readiness questions.
 ---
 
 # VPS Deployment Assistant
@@ -15,6 +15,13 @@ memory.
 - Determine whether the user wants planning, a guided installation, review of
   an existing plan, or troubleshooting. Do not begin host changes for a
   planning question.
+- For installation, reconfiguration, update, migration, restore, or
+  troubleshooting, begin by asking only for the SSH target or command needed
+  to access the VPS. Use the operator's existing SSH configuration and keys;
+  never ask them to send a password or private key.
+- Once SSH access is available, gather discoverable facts from the VPS with
+  read-only commands instead of asking the operator to report them. Do not
+  front-load a questionnaire.
 - Work in phases: discovery, preflight, plan approval, installation,
   verification, and production readiness. Complete and verify one phase before
   moving to the next.
@@ -25,25 +32,34 @@ memory.
 - Do not claim success from a command exit alone. Verify the expected service,
   HTTPS, synchronization, and exposure outcomes.
 
-## Discover Requirements
+## Access and Discover
 
-Read `README.md` and `docs/installation.md`, then ask only for facts not already
-provided:
+Read `README.md` and `docs/installation.md`. Ask for the SSH target or command
+needed to reach the VPS unless the user already provided it. After connecting,
+use read-only checks to discover:
 
-1. Whether this is a fresh, dedicated VPS and which Linux distribution,
-   architecture, RAM, and free storage it has.
-2. Whether the user has root or sudo access and whether Docker, web servers, or
-   other workloads already run there.
-3. The intended domain, DNS state, provider firewall, and ingress model:
-   bundled Nginx, an existing reverse proxy, or Cloudflare Tunnel.
-4. Whether this is mainnet, testnet, or regtest; which chains are needed; and
-   whether the node may be pruned.
-5. Whether Lightning is needed now. Recommend starting without Lightning unless
-   the user understands liquidity management and its backup constraints.
-6. Any required add-ons, public APIs, or host ports. Do not enable optional
-   services preemptively.
-7. The off-host backup destination, encryption and retention expectations, and
-   who will maintain updates and restore tests.
+1. The Linux distribution, architecture, memory, storage, and whether the VPS
+   appears fresh and dedicated.
+2. The available privilege level and any existing Docker workloads, web
+   servers, listeners, deployment files, or BTCPay installation.
+3. Public IP addresses, hostname and DNS evidence available from the host,
+   firewall state visible on the VPS, and the apparent ingress model.
+4. Existing BTCPay network, chain, pruning, Lightning, add-on, exposed-port,
+   and update when present. Do not read or display secret
+   values.
+
+Only after this inspection, ask for decisions that cannot be discovered, such
+as the intended domain when it is not configured, desired Bitcoin network,
+whether pruning or Lightning is wanted, optional services, and provider-side
+firewall changes. Ask only questions that
+affect the next action, group them into one concise message, provide
+conservative defaults, and do not repeat questions answered by the host state
+or earlier context. If SSH access cannot be provided, explain that direct
+inspection is preferred and use a single concise fallback questionnaire.
+
+Recommend starting without Lightning unless the user understands liquidity
+management and its backup constraints. Do not enable optional services
+preemptively.
 
 For an ordinary first deployment, recommend the root README's current standard
 profile without restating or modifying it. Read `docs/configuration.md`,
@@ -78,8 +94,7 @@ plan containing:
 - The exact non-secret environment values that will be applied.
 - Expected DNS, firewall, public ports, storage, and Lightning exposure.
 - Host changes described in `docs/installation.md#what-setup-changes`.
-- Expected downtime or conflicts, plus backup and rollback status for an
-  existing deployment.
+- Expected downtime or conflicts.
 
 Ask for explicit confirmation of this plan. Require separate confirmation
 before reconfiguration, updates, restores, firewall changes, stopping services,
@@ -116,8 +131,7 @@ Before declaring the deployment production-ready:
 
 - Review the update procedure in `docs/updating.md`, including Docker-wide image
   cleanup implications on a shared host.
-- Record the approved non-secret profile, DNS and firewall assumptions, backup
-  location, and routine verification commands for the operator.
+- Record the approved non-secret profile, DNS and firewall assumptions, and routine verification commands for the operator.
 
 ## Safety Boundaries
 
