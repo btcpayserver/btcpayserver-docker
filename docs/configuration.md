@@ -92,8 +92,6 @@ memory profiles are mutually exclusive.
 | `ZAMMAD_HOST` | `opt-add-zammad` |
 | `PIHOLE_SERVERIP` | `opt-add-pihole` |
 | `LIT_PASSWD` | `opt-add-lightning-terminal` |
-| `TALLYCOIN_APIKEY` | `opt-add-tallycoin-connect` |
-| `TALLYCOIN_PASSWD`, `TALLYCOIN_PASSWD_CLEARTEXT` | `opt-add-tallycoin-connect` |
 | `LND_WTCLIENT_SWEEP_FEE` | `opt-lnd-wtclient` |
 | `TOR_RELAY_NICKNAME`, `TOR_RELAY_EMAIL` | `opt-add-tor-relay` |
 | `BTCPAY_DCR_WALLET_PASSPHRASE` | Decred wallet service |

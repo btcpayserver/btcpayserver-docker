@@ -45,8 +45,8 @@ repository unless you install your own wrapper.
 
 LND-specific fragments include auto-compaction, autopilot, keysend, watchtower
 server, and watchtower client. Browser applications such as Lightning Terminal,
-ThunderHub, Sphinx Relay, Helipad, and Tallycoin Connect also require LND. See
-the [fragment catalog](./fragments.md) for dependencies and exposed ports.
+ThunderHub, Sphinx Relay, and Helipad also require LND. See the [fragment
+catalog](./fragments.md) for dependencies and exposed ports.
 
 ## Backups
 

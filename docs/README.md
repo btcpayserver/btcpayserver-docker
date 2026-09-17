@@ -53,7 +53,6 @@ For product usage, stores, wallets, and integrations, see the
 - [Firefly III](./fireflyiii.md)
 - [Lightning Terminal](./lightning-terminal.md)
 - [Pi-hole](./pihole.md)
-- [Tallycoin Connect](./tallycoin-connect.md)
 
 The [fragment catalog](./fragments.md) lists every available optional fragment,
 including features that do not require a separate guide.
