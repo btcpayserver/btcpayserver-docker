@@ -92,7 +92,6 @@ Add-on specific variables:
     TOR_RELAY_NICKNAME: If tor relay is activated with opt-add-tor-relay, the relay nickname
     TOR_RELAY_EMAIL: If tor relay is activated with opt-add-tor-relay, the email for Tor to contact you regarding your relay
     CHATWOOT_HOST: If chatwoot is activated with opt-add-chatwoot, the hostname of your chatwoot website (eg. store.example.com)
-    FIREFLY_HOST: If fireflyiii is activated with opt-add-fireflyiii, the hostname of your firefly website (eg. firefly.example.com)
     CLOUDFLARE_TUNNEL_TOKEN: Used to expose your instance to clearnet with a Cloudflare Argo Tunnel
 END
 }
@@ -262,7 +261,6 @@ ACME_CA_URI:$ACME_CA_URI
 TOR_RELAY_NICKNAME: $TOR_RELAY_NICKNAME
 TOR_RELAY_EMAIL: $TOR_RELAY_EMAIL
 PIHOLE_SERVERIP: $PIHOLE_SERVERIP
-FIREFLY_HOST: $FIREFLY_HOST
 ----------------------
 Additional exported variables:
 BTCPAY_DOCKER_COMPOSE=$BTCPAY_DOCKER_COMPOSE

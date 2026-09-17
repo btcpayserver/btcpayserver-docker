@@ -50,7 +50,6 @@ For product usage, stores, wallets, and integrations, see the
 
 - [Chatwoot](./chatwoot.md)
 - [Cloudflare Tunnel](./cloudflare-tunnel.md)
-- [Firefly III](./fireflyiii.md)
 - [Lightning Terminal](./lightning-terminal.md)
 - [Pi-hole](./pihole.md)
 - [Tallycoin Connect](./tallycoin-connect.md)
