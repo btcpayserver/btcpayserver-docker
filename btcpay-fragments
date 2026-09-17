@@ -251,11 +251,6 @@ apply_state() {
 
     [ "$(id -u)" -eq 0 ] || fail "Fragment changes must be run as root"
 
-    if [ "$new_additional_json" = "$additional_json" ] && [ "$new_excluded_json" = "$excluded_json" ]; then
-        print_state
-        return 0
-    fi
-
     backup_candidate="$(mktemp "${profile_file}.btcpay-fragments.XXXXXX")" ||
         fail "Failed to create deployment profile backup"
     if ! cp -p -- "$profile_file" "$backup_candidate"; then

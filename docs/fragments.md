@@ -17,8 +17,9 @@ excluded fragments, the effective fragments from the last generated manifest,
 and every fragment available in the current checkout. `effectiveFragments` is
 empty before the first successful generation.
 Adding a fragment removes it from the excluded set, and excluding one removes
-it from the additional set. Repeating an operation that is already satisfied is
-a no-op.
+it from the additional set. Every successful mutation command reapplies setup,
+even when the requested fragment state is already satisfied. This also applies
+other exported environment changes from the calling shell.
 
 The fragment directory and `btcpay-fragments show` are authoritative for the
 current checkout. This page is a curated operator catalog and may not describe
