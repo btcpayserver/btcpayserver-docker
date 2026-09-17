@@ -138,20 +138,30 @@ jq -e '.error == "show does not accept arguments"' <<< "$output" >/dev/null
 run_fragments add beta
 [ "$status" -eq 0 ]
 assert_state '["beta","stale"]' '["legacy-missing","nginx-https"]'
-[ "$(setup_calls)" -eq 0 ]
+[ "$(setup_calls)" -eq 1 ]
 
 write_id 1000
 run_fragments add beta
 [ "$status" -eq 1 ]
 jq -e '.error == "Fragment changes must be run as root"' <<< "$output" >/dev/null
-[ "$(setup_calls)" -eq 0 ]
+[ "$(setup_calls)" -eq 1 ]
 write_id 0
+
+run_fragments remove alpha
+[ "$status" -eq 0 ]
+assert_state '["beta","stale"]' '["legacy-missing","nginx-https"]'
+[ "$(setup_calls)" -eq 2 ]
+
+run_fragments unexclude alpha
+[ "$status" -eq 0 ]
+assert_state '["beta","stale"]' '["legacy-missing","nginx-https"]'
+[ "$(setup_calls)" -eq 3 ]
 
 run_fragments add ' ALPHA.YML '
 [ "$status" -eq 0 ]
 assert_state '["alpha","beta","stale"]' '["legacy-missing","nginx-https"]'
-[ "$(setup_calls)" -eq 1 ]
-[ "$(<"$TEST_SETUP_OVERRIDES")" = "caller" ]
+[ "$(setup_calls)" -eq 4 ]
+[ "$(sort -u "$TEST_SETUP_OVERRIDES")" = "caller" ]
 [[ "$error_output" == *"setup invoked"* ]]
 
 profile_before="$test_dir/profile-before"
@@ -160,53 +170,58 @@ run_fragments add missing 'bad;name' gamma
 [ "$status" -eq 1 ]
 jq -e '.error == "Unknown or invalid fragments: bad;name, missing"' <<< "$output" >/dev/null
 cmp -s "$profile" "$profile_before"
-[ "$(setup_calls)" -eq 1 ]
+[ "$(setup_calls)" -eq 4 ]
 
 run_fragments add Local.Custom
 [ "$status" -eq 1 ]
 jq -e '.error == "Unknown or invalid fragments: local.custom"' <<< "$output" >/dev/null
-[ "$(setup_calls)" -eq 1 ]
+[ "$(setup_calls)" -eq 4 ]
 
 run_fragments exclude beta
 [ "$status" -eq 0 ]
 assert_state '["alpha","stale"]' '["beta","legacy-missing","nginx-https"]'
-[ "$(setup_calls)" -eq 2 ]
+[ "$(setup_calls)" -eq 5 ]
+
+run_fragments exclude beta
+[ "$status" -eq 0 ]
+assert_state '["alpha","stale"]' '["beta","legacy-missing","nginx-https"]'
+[ "$(setup_calls)" -eq 6 ]
 
 run_fragments add beta
 [ "$status" -eq 0 ]
 assert_state '["alpha","beta","stale"]' '["legacy-missing","nginx-https"]'
-[ "$(setup_calls)" -eq 3 ]
+[ "$(setup_calls)" -eq 7 ]
 
 run_fragments unexclude legacy-missing
 [ "$status" -eq 0 ]
 assert_state '["alpha","beta","stale"]' '["nginx-https"]'
-[ "$(setup_calls)" -eq 4 ]
+[ "$(setup_calls)" -eq 8 ]
 
 run_fragments remove stale
 [ "$status" -eq 0 ]
 assert_state '["alpha","beta"]' '["nginx-https"]'
-[ "$(setup_calls)" -eq 5 ]
+[ "$(setup_calls)" -eq 9 ]
 
 run_fragments remove absent-stale
 [ "$status" -eq 1 ]
 jq -e '.error == "Unknown or invalid fragments: absent-stale"' <<< "$output" >/dev/null
-[ "$(setup_calls)" -eq 5 ]
+[ "$(setup_calls)" -eq 9 ]
 
 run_fragments unexclude absent-stale
 [ "$status" -eq 1 ]
 jq -e '.error == "Unknown or invalid fragments: absent-stale"' <<< "$output" >/dev/null
-[ "$(setup_calls)" -eq 5 ]
+[ "$(setup_calls)" -eq 9 ]
 
 write_profile 'alpha;removed-custom' 'nginx-https;removed-exclusion'
 run_fragments remove removed-custom
 [ "$status" -eq 0 ]
 assert_state '["alpha"]' '["nginx-https","removed-exclusion"]'
-[ "$(setup_calls)" -eq 6 ]
+[ "$(setup_calls)" -eq 10 ]
 
 run_fragments unexclude removed-exclusion
 [ "$status" -eq 0 ]
 assert_state '["alpha"]' '["nginx-https"]'
-[ "$(setup_calls)" -eq 7 ]
+[ "$(setup_calls)" -eq 11 ]
 
 cp "$profile" "$profile_before"
 cat > "$test_dir/bin/cp" <<'EOF'
@@ -218,7 +233,7 @@ run_fragments add gamma
 [ "$status" -eq 1 ]
 jq -e '.error == "Failed to back up deployment profile"' <<< "$output" >/dev/null
 cmp -s "$profile" "$profile_before"
-[ "$(setup_calls)" -eq 7 ]
+[ "$(setup_calls)" -eq 11 ]
 rm "$test_dir/bin/cp"
 
 export TEST_SETUP_FAIL=true
@@ -227,7 +242,7 @@ run_fragments add gamma
 jq -e '.error == "Failed to apply fragment changes; previous deployment profile restored"' <<< "$output" >/dev/null
 [[ "$error_output" == *"setup failed"* ]]
 cmp -s "$profile" "$profile_before"
-[ "$(setup_calls)" -eq 8 ]
+[ "$(setup_calls)" -eq 12 ]
 unset TEST_SETUP_FAIL
 
 cat > "$test_dir/bin/mv" <<'EOF'
@@ -242,7 +257,7 @@ jq -e '.error == "Failed to apply fragment changes; deployment profile could not
 backup_path="${error_output##*Profile backup retained for manual recovery: }"
 [ -f "$backup_path" ]
 cmp -s "$backup_path" "$profile_before"
-[ "$(setup_calls)" -eq 9 ]
+[ "$(setup_calls)" -eq 13 ]
 rm "$test_dir/bin/mv"
 /usr/bin/mv -f -- "$backup_path" "$profile"
 unset TEST_SETUP_FAIL
