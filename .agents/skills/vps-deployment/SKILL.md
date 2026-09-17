@@ -15,10 +15,11 @@ memory.
 - Determine whether the user wants planning, a guided installation, review of
   an existing plan, or troubleshooting. Do not begin host changes for a
   planning question.
-- For installation, reconfiguration, update, migration, restore, or
-  troubleshooting, begin by asking only for the SSH host target
-  to access the VPS. Use the operator's existing SSH configuration and keys;
-  never ask them to send a password or private key. You will then connect to `root@<server-hostname>`.
+- When the VPS already exists, begin installation, reconfiguration, update,
+  migration, restore, or troubleshooting by asking only for the SSH host target
+  needed to access it. Use the operator's existing SSH configuration and keys;
+  never ask them to send a password or private key. You will then connect to
+  `root@<server-hostname>`.
 - Once SSH access is available, gather discoverable facts from the VPS with
   read-only commands instead of asking the operator to report them. Do not
   front-load a questionnaire.
@@ -31,6 +32,35 @@ memory.
   target host and how commands will reach it before running anything.
 - Do not claim success from a command exit alone. Verify the expected service,
   HTTPS, synchronization, and exposure outcomes.
+
+## Select and Size a VPS
+
+When the operator has not provisioned a VPS yet, ask which cryptocurrencies the
+deployment must support before recommending a provider plan. Do not silently
+assume Bitcoin-only: each additional full node changes the memory, storage,
+bandwidth, and maintenance requirements. Read `docs/cryptocurrencies.md` and
+the selected chain definitions before sizing a multi-chain deployment. Ask
+about Lightning and known resource-intensive add-ons in the same concise
+message when they affect sizing.
+
+For an ordinary Bitcoin-only deployment, prefer a low-cost dedicated VPS with
+4 GB of RAM rather than buying excess headroom. Use `opt-save-storage-xs` as an
+acceptable default and budget usable storage as its approximately 25 GB pruned
+block target plus approximately 20 GB for the rest of the deployment. In
+practice, recommend a plan with at least approximately 45 GB of usable storage,
+rounding up to the provider's next available disk size. Do not recommend 8 GB
+of RAM or a 160 GB SSD for this profile without a concrete requirement that
+needs it.
+
+When provider pricing makes local SSD storage expensive, offer the alternative
+of mounting Bitcoin Core's `blocks` directory on a provider-attached volume.
+The block files do not require SSD performance; keep the operating system,
+Docker data, Bitcoin chainstate, and databases on the VPS's faster root disk.
+Account for the root disk and attached volume separately when applying the
+pruned-block-target-plus-20-GB rule. Before using this layout, confirm that the
+volume persists across VPS lifecycle operations, is mounted before Docker
+starts, has suitable ownership, and is represented by a custom Compose fragment
+rather than an edit to generated Compose output.
 
 ## Access and Discover
 
@@ -45,8 +75,8 @@ use read-only checks to discover:
 3. Public IP addresses, hostname and DNS evidence available from the host,
    firewall state visible on the VPS, and the apparent ingress model.
 4. Existing BTCPay network, chain, pruning, Lightning, add-on, exposed-port,
-   and update when present. Do not read or display secret
-   values.
+   storage-mount, and update configuration when present. Do not read or display
+   secret values.
 
 Only after this inspection, ask for decisions that cannot be discovered, such
 as the intended domain when it is not configured, desired Bitcoin network,
@@ -91,8 +121,10 @@ Before any root-level or service-changing command, show a concise deployment
 plan containing:
 
 - The target host and whether it is dedicated.
+- The selected cryptocurrencies and the resource assumptions used to size them.
 - The exact non-secret environment values that will be applied.
-- Expected DNS, firewall, public ports, storage, and Lightning exposure.
+- Expected DNS, firewall, public ports, pruning profile, root and attached
+  storage layout, and Lightning exposure.
 - Host changes described in `docs/installation.md#what-setup-changes`.
 - Expected downtime or conflicts.
 
