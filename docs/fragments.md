@@ -84,7 +84,6 @@ formal generator prerequisite, so confirm LND is enabled.
 | [`opt-add-shopify`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-shopify.yml) | Add the internal Shopify app deployer |
 | [`opt-add-sphinxrelay`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-sphinxrelay.yml) | Add Sphinx Relay; requires Bitcoin LND and keysend |
 | [`opt-add-taler-merchant`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-taler-merchant.yml) | Add the GNU Taler merchant backend |
-| [`opt-add-tallycoin-connect`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-tallycoin-connect.yml) | Add Tallycoin Connect; requires Bitcoin LND; see the [guide](./tallycoin-connect.md) |
 | [`opt-add-teos`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-teos.yml) | Add a TEOS watchtower on port 9814; requires Bitcoin and ZMQ |
 | [`opt-add-thunderhub`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-thunderhub.yml) | Add ThunderHub; requires Bitcoin LND |
 | [`opt-add-woocommerce`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-woocommerce.yml) | Add WordPress and WooCommerce on a dedicated host |
