@@ -382,7 +382,7 @@ fi
 
 # Generate the docker compose in BTCPAY_DOCKER_COMPOSE
 if $HAS_DOCKER; then
-    if ! ./build.sh; then
+    if ! ./build.sh --setup-ssh --sync-routes; then
         echo "Failed to generate the docker-compose"
         return 1
     fi

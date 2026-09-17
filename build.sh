@@ -2,8 +2,43 @@
 
 set -e
 
+display_help() {
+    cat <<EOF
+Usage: $0 [--setup-ssh] [--sync-routes]
+
+Options:
+  --setup-ssh    Configure BTCPay Server host SSH integration
+  --sync-routes  Synchronize generated Nginx routes
+  -h, --help     Show this help
+EOF
+}
+
+setup_ssh=false
+sync_routes=false
+for arg in "$@"; do
+    case "$arg" in
+        --setup-ssh)
+            setup_ssh=true
+            ;;
+        --sync-routes)
+            sync_routes=true
+            ;;
+        -h|--help)
+            display_help
+            exit 0
+            ;;
+        *)
+            echo "Unsupported argument: $arg" >&2
+            display_help >&2
+            exit 1
+            ;;
+    esac
+done
+
 . helpers.sh
-btcpay_setup_ssh
+if $setup_ssh; then
+    btcpay_setup_ssh
+fi
 
 : "${BTCPAYGEN_DOCKER_IMAGE:=btcpayserver/docker-compose-generator}"
 if [ "$BTCPAYGEN_DOCKER_IMAGE" == "btcpayserver/docker-compose-generator:local" ]
@@ -40,6 +75,6 @@ docker run -v "$(pwd)/Generated:/app/Generated" \
 [[ -f "Generated/save-images.sh" ]] && chmod +x Generated/save-images.sh
 ./generate-secrets.sh Generated/manifest.json
 
-if [[ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]]; then
+if $sync_routes && [[ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]]; then
     ./btcpay-routes sync
 fi

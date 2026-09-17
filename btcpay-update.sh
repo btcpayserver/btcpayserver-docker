@@ -45,7 +45,7 @@ if ! btcpay_archive_logs; then
     echo "Warning: Failed to archive container logs; continuing with the update." >&2
 fi
 
-if ! ./build.sh; then
+if ! ./build.sh --setup-ssh --sync-routes; then
     echo "Failed to generate the docker-compose"
     exit 1
 fi
