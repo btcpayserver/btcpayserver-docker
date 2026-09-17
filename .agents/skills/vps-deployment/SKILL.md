@@ -16,9 +16,9 @@ memory.
   an existing plan, or troubleshooting. Do not begin host changes for a
   planning question.
 - For installation, reconfiguration, update, migration, restore, or
-  troubleshooting, begin by asking only for the SSH target or command needed
+  troubleshooting, begin by asking only for the SSH host target
   to access the VPS. Use the operator's existing SSH configuration and keys;
-  never ask them to send a password or private key.
+  never ask them to send a password or private key. You will then connect to `root@<server-hostname>`.
 - Once SSH access is available, gather discoverable facts from the VPS with
   read-only commands instead of asking the operator to report them. Do not
   front-load a questionnaire.
