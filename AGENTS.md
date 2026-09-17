@@ -22,11 +22,6 @@ Never run `.github/scripts/test-install.sh` on a development machine. It is for
 disposable CI runners: it stops and removes the host Docker installation before
 installing and starting a complete stack.
 
-Treat `build.sh` as an operational command, not a side-effect-free generator.
-It configures SSH, pulls or builds container images, writes `Generated/`,
-creates persistent secrets, and may synchronize Nginx routes. Run it only when
-those host and container changes are intended.
-
 ## Generated Image Documentation
 
 `contrib/build-all-images.sh` and the image table in

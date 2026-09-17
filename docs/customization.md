@@ -54,7 +54,9 @@ BTCPAYGEN_LIGHTNING="none" \
 ```
 
 Unlike `btcpay-setup.sh`, direct `build.sh` use does not apply the setup
-defaults. Specify every selection you need. The output is
+defaults, configure host SSH integration, or synchronize Nginx routes. The
+setup and update scripts request those host changes explicitly with
+`--setup-ssh` and `--sync-routes`. The output is
 `Generated/docker-compose.generated.yml`; operate it explicitly with Docker
 Compose and provide its runtime environment.
 
