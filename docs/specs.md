@@ -100,6 +100,11 @@ choose an upgradeable plan and monitor memory pressure during simultaneous
 initial synchronization. Review the [cryptocurrency
 guide](./cryptocurrencies.md) before selecting more than one.
 
+Monero is pruned by default but used approximately 105 GB for its blockchain as
+of July 2026; it does not use the pruning targets listed above. Plan for at
+least 250 GB of SSD storage to leave enough headroom for chain growth, Bitcoin,
+and the rest of the stack. ([Source](https://sethforprivacy.com/guides/accepting-monero-via-btcpay-server/))
+
 ### Lightning
 
 Avoid `opt-save-storage-xxs` for a Lightning deployment. Lightning also adds a
