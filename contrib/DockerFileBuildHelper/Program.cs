@@ -39,7 +39,7 @@ namespace DockerFileBuildHelper
             foreach (var image in new[]
             {
                 Image.Parse("btcpayserver/docker-compose-generator"),
-            }.Concat(GetImages(fragmentDirectory)))
+            }.Concat(GetImages(fragmentDirectory)).DistinctBy(image => image.ToString()))
             {
                 // TODO: Ask beldex guys
                 if (image.Name == "beldex" || image.Name == "busybox")
