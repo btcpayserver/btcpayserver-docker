@@ -48,7 +48,6 @@ For product usage, stores, wallets, and integrations, see the
 
 ## Optional Services
 
-- [Chatwoot](./chatwoot.md)
 - [Cloudflare Tunnel](./cloudflare-tunnel.md)
 - [Lightning Terminal](./lightning-terminal.md)
 - [Pi-hole](./pihole.md)

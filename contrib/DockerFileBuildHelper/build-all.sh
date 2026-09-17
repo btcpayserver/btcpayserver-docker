@@ -411,50 +411,6 @@ docker build -f "$DOCKERFILE" -t "redis:5.0.2-alpine" .
 cd - && cd ..
 
 
-# Build chatwoot
-# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
-DOCKERFILE="docker/Dockerfile"
-# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/Dockerfile"
-# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/Dockerfile"
-echo "Building chatwoot/chatwoot:v1.7.0"
-git clone https://github.com/chatwoot/chatwoot chatwoot
-cd chatwoot
-git checkout v1.7.0
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "chatwoot/chatwoot:v1.7.0" .
-cd - && cd ..
-
-
-# Build chatwoot
-# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
-DOCKERFILE="docker/Dockerfile"
-# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/Dockerfile"
-# https://raw.githubusercontent.com/chatwoot/chatwoot/v1.7.0/docker/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/Dockerfile"
-echo "Building chatwoot/chatwoot:v1.7.0"
-git clone https://github.com/chatwoot/chatwoot chatwoot
-cd chatwoot
-git checkout v1.7.0
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "chatwoot/chatwoot:v1.7.0" .
-cd - && cd ..
-
-
-# Build redis
-# https://raw.githubusercontent.com/docker-library/redis/f1a8498333ae3ab340b5b39fbac1d7e1dc0d628c/5.0/Dockerfile
-DOCKERFILE="5.0/Dockerfile"
-echo "Building redis:5.0.2-alpine"
-git clone https://github.com/docker-library/redis redis
-cd redis
-git checkout f1a8498333ae3ab340b5b39fbac1d7e1dc0d628c
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "redis:5.0.2-alpine" .
-cd - && cd ..
-
-
 # Build cloudflared
 # https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Cloudflared/2026.8.3/Cloudflared/2026.8.3/Dockerfile
 DOCKERFILE="Cloudflared/2026.8.3/Dockerfile"

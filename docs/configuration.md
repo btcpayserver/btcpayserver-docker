@@ -86,7 +86,6 @@ memory profiles are mutually exclusive.
 | Variable | Used by |
 |---|---|
 | `CLOUDFLARE_TUNNEL_TOKEN` | `opt-add-cloudflared` |
-| `CHATWOOT_HOST` | `opt-add-chatwoot` |
 | `WOOCOMMERCE_HOST` | `opt-add-woocommerce` |
 | `ZAMMAD_HOST` | `opt-add-zammad` |
 | `PIHOLE_SERVERIP` | `opt-add-pihole` |

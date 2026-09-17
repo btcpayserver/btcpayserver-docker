@@ -91,7 +91,6 @@ Add-on specific variables:
     BTCPAYGEN_EXCLUDE_FRAGMENTS:  Semicolon-separated list of fragments you want to forcefully exclude (eg. bitcoin-clightning)
     TOR_RELAY_NICKNAME: If tor relay is activated with opt-add-tor-relay, the relay nickname
     TOR_RELAY_EMAIL: If tor relay is activated with opt-add-tor-relay, the email for Tor to contact you regarding your relay
-    CHATWOOT_HOST: If chatwoot is activated with opt-add-chatwoot, the hostname of your chatwoot website (eg. store.example.com)
     CLOUDFLARE_TUNNEL_TOKEN: Used to expose your instance to clearnet with a Cloudflare Argo Tunnel
 END
 }
@@ -238,7 +237,6 @@ REVERSEPROXY_DEFAULT_HOST:$REVERSEPROXY_DEFAULT_HOST
 TRUST_DOWNSTREAM_PROXY:$TRUST_DOWNSTREAM_PROXY
 ZAMMAD_HOST:$ZAMMAD_HOST
 WOOCOMMERCE_HOST:$WOOCOMMERCE_HOST
-CHATWOOT_HOST:$CHATWOOT_HOST
 LETSENCRYPT_EMAIL:$LETSENCRYPT_EMAIL
 NBITCOIN_NETWORK:$NBITCOIN_NETWORK
 LIGHTNING_ALIAS:$LIGHTNING_ALIAS
