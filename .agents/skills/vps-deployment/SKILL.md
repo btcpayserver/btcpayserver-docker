@@ -17,12 +17,9 @@ memory.
   planning question.
 - When the VPS already exists, begin installation, reconfiguration, update,
   migration, restore, or troubleshooting by asking only for the SSH host target
-  needed to access it. Use the operator's existing SSH configuration and keys;
-  never ask them to send a password or private key. You will then connect to
-  `root@<server-hostname>`.
-- Once SSH access is available, gather discoverable facts from the VPS with
-  read-only commands instead of asking the operator to report them. Do not
-  front-load a questionnaire.
+  and connect to `root@<server-hostname>` using existing SSH configuration and
+  keys. Never request a password or private key. Discover host facts with
+  read-only commands instead of front-loading a questionnaire.
 - Work in phases: discovery, preflight, plan approval, installation,
   verification, and production readiness. Complete and verify one phase before
   moving to the next.
@@ -35,38 +32,25 @@ memory.
 
 ## Select and Size a VPS
 
-When the operator has not provisioned a VPS yet, ask which cryptocurrencies the
-deployment must support before recommending a provider plan. Do not silently
-assume Bitcoin-only: each additional full node changes the memory, storage,
-bandwidth, and maintenance requirements. Read `docs/cryptocurrencies.md` and
-the selected chain definitions before sizing a multi-chain deployment. Ask
-about Lightning and known resource-intensive add-ons in the same concise
-message when they affect sizing.
+Before recommending a VPS, ask in one concise message which cryptocurrencies,
+Lightning implementation, and resource-intensive add-ons it must support. Do
+not assume Bitcoin-only. For multiple chains, read `docs/cryptocurrencies.md`
+and their definitions before sizing.
 
-For an ordinary Bitcoin-only deployment, prefer a low-cost dedicated VPS with
-4 GB of RAM rather than buying excess headroom. Use `opt-save-storage-xs` as an
-acceptable default and budget usable storage as its approximately 25 GB pruned
-block target plus approximately 20 GB for the rest of the deployment. In
-practice, recommend a plan with at least approximately 45 GB of usable storage,
-rounding up to the provider's next available disk size. Do not recommend 8 GB
-of RAM or a 160 GB SSD for this profile without a concrete requirement that
-needs it.
+For ordinary Bitcoin-only deployments, prefer a low-cost VPS with 4 GB RAM and
+`opt-save-storage-xs`. Size usable storage as the pruning target plus 20 GB:
+approximately 45 GB for this 25 GB profile, rounded up to the next plan size.
+Do not recommend 8 GB RAM or a 160 GB SSD without a concrete need.
 
-When provider pricing makes local SSD storage expensive, offer the alternative
-of mounting Bitcoin Core's `blocks` directory on a provider-attached volume.
-The block files do not require SSD performance; keep the operating system,
-Docker data, Bitcoin chainstate, and databases on the VPS's faster root disk.
-Account for the root disk and attached volume separately when applying the
-pruned-block-target-plus-20-GB rule. Before using this layout, confirm that the
-volume persists across VPS lifecycle operations, is mounted before Docker
-starts, has suitable ownership, and is represented by a custom Compose fragment
-rather than an edit to generated Compose output.
+If local SSD storage is expensive, offer a provider-attached non-SSD volume for
+Bitcoin Core's `blocks` directory. Keep the OS, Docker, chainstate, and databases
+on the root SSD; budget the pruning target on the attached volume and 20 GB on
+the root disk. Confirm persistence, mount ordering, and ownership. When configure
+it, make sure mounts are mounted before docker starts.
 
 ## Access and Discover
 
-Read `README.md` and `docs/installation.md`. Ask for the SSH target or command
-needed to reach the VPS unless the user already provided it. After connecting,
-use read-only checks to discover:
+Read `README.md` and `docs/installation.md`, then use read-only checks to find:
 
 1. The Linux distribution, architecture, memory, storage, and whether the VPS
    appears fresh and dedicated.
@@ -78,14 +62,9 @@ use read-only checks to discover:
    storage-mount, and update configuration when present. Do not read or display
    secret values.
 
-Only after this inspection, ask for decisions that cannot be discovered, such
-as the intended domain when it is not configured, desired Bitcoin network,
-whether pruning or Lightning is wanted, optional services, and provider-side
-firewall changes. Ask only questions that
-affect the next action, group them into one concise message, provide
-conservative defaults, and do not repeat questions answered by the host state
-or earlier context. If SSH access cannot be provided, explain that direct
-inspection is preferred and use a single concise fallback questionnaire.
+After inspection, ask once for only the decisions needed next and not available
+from the host or prior context, offering conservative defaults. If SSH access
+is unavailable, use one concise fallback questionnaire.
 
 Recommend starting without Lightning unless the user understands liquidity
 management and its backup constraints. Do not enable optional services
