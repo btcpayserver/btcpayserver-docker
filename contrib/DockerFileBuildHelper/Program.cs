@@ -321,12 +321,6 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitLink = "https://github.com/Groestlcoin/lightning";
                     dockerInfo.GitRef = $"{image.Tag}";
                     break;
-                case "chatwoot":
-                    dockerInfo.DockerFilePath = $"docker/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/chatwoot/chatwoot";
-                    dockerInfo.GitRef = $"{image.Tag}";
-                    dockerInfo.SupportedByUs = false;
-                    break;
                 case "lightning-charge":
                     dockerInfo.DockerFilePath = $"Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = "arm32v7.Dockerfile";
@@ -612,13 +606,6 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = image.Tag.Replace("-path-prefix", "");
                     if (image.Tag.EndsWith("-path-prefix"))
                         dockerInfo.DockerBuildArguments = "--build-arg public_url=/lit/";
-                    break;
-                case "chatwoot/chatwoot":
-                    dockerInfo.DockerFilePath = $"docker/Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"docker/Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"docker/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/chatwoot/chatwoot";
-                    dockerInfo.GitRef = $"{image.Tag}";
                     break;
                 case "podcastindexorg/podcasting20-helipad":
                     dockerInfo.DockerFilePath = $"umbrel/Dockerfile";

@@ -74,7 +74,6 @@ formal generator prerequisite, so confirm LND is enabled.
 | Fragment | Purpose and requirements |
 |---|---|
 | [`opt-add-btcqbo`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-btcqbo.yml) | Add the QuickBooks connector at `/btcqbo/` |
-| [`opt-add-chatwoot`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-chatwoot.yml) | Add Chatwoot, Sidekiq, and Redis; requires a configuration file and dedicated host; see the [guide](./chatwoot.md) |
 | [`opt-add-helipad`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-helipad.yml) | Add Podcasting 2.0 Helipad; requires Bitcoin LND |
 | [`opt-add-lightning-terminal`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-lightning-terminal.yml) | Add Lightning Terminal; requires Bitcoin LND and `LIT_PASSWD`; see the [guide](./lightning-terminal.md) |
 | [`opt-add-ltcmweb`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-ltcmweb.yml) | Add the Litecoin MWEB plugin daemon; requires Litecoin |
