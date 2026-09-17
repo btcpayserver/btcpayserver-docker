@@ -44,6 +44,12 @@ generator. The standard setup writes:
 `generate-secrets.sh` creates missing files declared by the manifest under the
 repository's ignored `secrets/` directory. Existing secret files are retained.
 
+`build.sh` pulls or builds the generator image and writes generated files and
+missing secrets. Host SSH configuration and Nginx route synchronization are
+opt-in through `--setup-ssh` and `--sync-routes`. Use the isolated generator
+workflow in [Development](./development.md#validate-the-fragment) when image,
+generated-file, and secret changes are not intended.
+
 ## Persistent Data
 
 Services store persistent data in Docker volumes. The generated Compose file is

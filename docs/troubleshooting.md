@@ -20,11 +20,13 @@ are empty, start a new login shell or source that file.
 
 ```bash
 docker-compose -f "$BTCPAY_DOCKER_COMPOSE" ps
-docker-compose -f "$BTCPAY_DOCKER_COMPOSE" config
+docker-compose -f "$BTCPAY_DOCKER_COMPOSE" config --quiet
 ```
 
 The generated configuration should parse without errors. A stopped or
 restarting service usually has the most useful immediate log output.
+Do not publish full `docker-compose config` output without careful redaction;
+interpolated environment values can include tunnel tokens and add-on passwords.
 
 ## Inspect Logs
 
@@ -89,7 +91,8 @@ Include:
 - `docker-compose -f "$BTCPAY_DOCKER_COMPOSE" ps`
 - Relevant service logs with secrets and customer information removed
 - Whether DNS, ports, proxies, or firewall rules recently changed
-- The current repository commit from `git rev-parse HEAD`
+- The current repository commit from
+  `git -C "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker" rev-parse HEAD`
 
 Ask deployment questions in the
 [community chat](https://chat.btcpayserver.org/). Use the

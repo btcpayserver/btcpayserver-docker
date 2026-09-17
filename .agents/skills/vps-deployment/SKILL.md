@@ -19,7 +19,8 @@ memory.
   migration, restore, or troubleshooting by asking only for the SSH host target
   and connect to `root@<server-hostname>` using existing SSH configuration and
   keys. Never request a password or private key. Discover host facts with
-  read-only commands instead of front-loading a questionnaire.
+  read-only commands instead of asking the operator to provide information
+  available through SSH.
 - Work in phases: discovery, preflight, plan approval, installation,
   verification, and production readiness. Complete and verify one phase before
   moving to the next.
@@ -37,16 +38,10 @@ Lightning implementation, and resource-intensive add-ons it must support. Do
 not assume Bitcoin-only. For multiple chains, read `docs/cryptocurrencies.md`
 and their definitions before sizing.
 
-For ordinary Bitcoin-only deployments, prefer a low-cost VPS with 4 GB RAM and
-`opt-save-storage-xs`. Size usable storage as the pruning target plus 20 GB:
-approximately 45 GB for this 25 GB profile, rounded up to the next plan size.
-Do not recommend 8 GB RAM or a 160 GB SSD without a concrete need.
-
-If local SSD storage is expensive, offer a provider-attached non-SSD volume for
-Bitcoin Core's `blocks` directory. Keep the OS, Docker, chainstate, and databases
-on the root SSD; budget the pruning target on the attached volume and 20 GB on
-the root disk. Confirm persistence, mount ordering, and ownership. When configure
-it, make sure mounts are mounted before docker starts.
+Read `docs/specs.md` and treat it as the source of truth for resource targets,
+storage calculations, attached-volume requirements, and price comparisons. Map
+the operator's requirements to that guidance, then compare the total cost of
+current provider plans without copying sizing rules into this skill.
 
 ## Access and Discover
 
@@ -66,8 +61,12 @@ After inspection, ask once for only the decisions needed next and not available
 from the host or prior context, offering conservative defaults. If SSH access
 is unavailable, use one concise fallback questionnaire.
 
+Do not ask about backup plans, destinations, encryption, retention, or restore
+testing during setup. Only discuss backup or restore details when the user
+explicitly requests backup or restore work.
+
 Recommend starting without Lightning unless the user understands liquidity
-management and its backup constraints. Do not enable optional services
+management and its operational constraints. Do not enable optional services
 preemptively.
 
 For an ordinary first deployment, recommend the root README's current standard
@@ -109,7 +108,7 @@ plan containing:
 
 Ask for explicit confirmation of this plan. Require separate confirmation
 before reconfiguration, updates, restores, firewall changes, stopping services,
-or enabling host SSH integration and optional public API routes.
+or enabling optional public API routes.
 
 ## Install and Verify
 

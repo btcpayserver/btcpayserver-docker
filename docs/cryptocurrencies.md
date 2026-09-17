@@ -26,7 +26,7 @@ and maintenance requirements.
 | `dcr` | Decred | None |
 
 The current source of truth is
-[`docker-compose-generator/crypto-definitions.json`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/crypto-definitions.json).
+[`docker-compose-generator/crypto-definitions.json`](../docker-compose-generator/crypto-definitions.json).
 Unknown codes do not select a chain; use empty variables rather than a `none`
 code for unused slots.
 
@@ -46,13 +46,15 @@ selection.
 
 - Monero runs a pruned daemon by default. Its wallet RPC is internal unless
   `opt-monero-expose` binds daemon RPC to host loopback.
-- Beldex wallet RPC is internal unless `opt-beldex-expose` is selected.
+- `opt-beldex-expose` is not currently a reliable wallet-RPC exposure path due
+  to a service-name mismatch in the fragment. Treat Beldex RPC exposure as
+  unsupported until the fragment is corrected and tested.
 - Liquid recommends its default pruning fragment automatically.
-- The default Zcash definition uses an external lightwallet service. The
-  separate full-node fragment is resource intensive and intended for advanced
-  testing.
+- The Zcash definition uses an external lightwallet service. The bundled
+  full-node fragment does not currently have a supported selection path.
 - Decred requires a wallet passphrase through
-  `BTCPAY_DCR_WALLET_PASSPHRASE`.
+  `BTCPAY_DCR_WALLET_PASSPHRASE`. Setup does not persist this value; export it
+  again before setup, updates, or service recreation.
 
 Adding a chain not present in the definitions is a generator development task;
 see [Development](./development.md#add-a-cryptocurrency).

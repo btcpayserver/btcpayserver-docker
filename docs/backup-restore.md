@@ -21,8 +21,12 @@ If you publish an old state (for example, from yesterday's backup), you will mos
 
 Disaster recovery is particularly risky if you back up only once per night and then need to restore that backup.
 
-The Lightning channel data captured by the `btcpay-backup.sh` script is sufficient for a planned migration, provided that the old server is shut down cleanly.
-Do not start the old server again after restoring and starting the new server.
+`btcpay-backup.sh` restarts the stack after taking its snapshot, so the archive
+alone cannot guarantee frozen Lightning state for a planned migration. Do not
+use it as the sole migration procedure for an active Lightning node. Follow the
+implementation-specific migration and static-channel-backup guidance, keep the
+old node from changing after the final migration snapshot, and never run both
+the old and restored nodes.
 
 Copy backups and implementation-specific static channel backups to protected
 remote storage. Keep the warning above in mind whenever restoring a Lightning
@@ -104,13 +108,21 @@ Here is an example crontab entry that runs a nightly backup at 4:15 AM:
 ```bash
 SHELL=/bin/bash
 PATH=/bin:/usr/sbin:/usr/bin:/usr/local/bin
-15 4 * * * /root/BTCPayServer/btcpayserver-docker/btcpay-backup.sh >/dev/null 2>&1
+MAILTO=admin@example.com
+15 4 * * * /root/BTCPayServer/btcpayserver-docker/btcpay-backup.sh
 ```
 
 Set the correct `SHELL` and `PATH` so that the script runs in the expected environment.
 If the cron job should encrypt backups, also set `BTCPAY_BACKUP_PASSPHRASE` in its environment.
+Configure working mail delivery for `MAILTO`, or connect the job to another
+monitoring system that reports failures.
 
 Make sure the base path in the command (here `/root/BTCPayServer`) matches the output of `echo "$BTCPAY_BASE_DIRECTORY"`.
+
+Each run replaces the same local `backup.tar.gz` or `backup.tar.gz.gpg` file.
+The backup script does not provide retention or an off-host copy. Monitor the
+cron result and use a separate, tested process to copy each successful archive
+to protected off-host storage with the required retention.
 
 ## Restore a Backup
 
@@ -126,6 +138,23 @@ sudo su -
 # Like the other scripts, it is inside the BTCPay base directory
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 ```
+
+The archive is not a complete deployment profile. Before restoring, prepare a
+compatible checkout and run setup with the intended network, chains, Lightning
+implementation, and fragments. Restore requires the saved environment profile,
+generated Compose file, and `generated_btcpay_datadir` Docker volume to exist.
+
+Standard backups contain generated secrets. Restore refuses to overwrite an
+existing `secrets/` path. Stop the prepared target, move that directory aside,
+and retain it until the restore is verified:
+
+```bash
+btcpay-down.sh
+mv "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker/secrets" \
+  "$BTCPAY_BASE_DIRECTORY/secrets.before-restore"
+```
+
+Do not merge old and restored secret directories.
 
 To restore an unencrypted backup, run:
 
@@ -169,14 +198,17 @@ If the passphrase for an encrypted backup is incorrect, the restore fails with t
 🚨 Decryption or archive extraction failed. Please check the error above.
 ```
 
-When the restore completes, you will see:
+When the restore script completes, you will see:
 
 ```
 ✅ Restore done
 ```
 
-Everything should be up and running again when the restore is complete.
-You've successfully restored your BTCPay Server. Congratulations!
+This message confirms that the restore steps and Compose startup completed; it
+does not prove application health, public HTTPS, chain synchronization, or
+Lightning state. Follow the [troubleshooting checks](./troubleshooting.md),
+verify the expected services and public hostname, and inspect synchronization
+before accepting payments.
 
 :::tip
 Always make sure your backup strategy is tested and fits your needs.

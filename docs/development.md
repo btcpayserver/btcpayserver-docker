@@ -7,15 +7,16 @@ manifest, and image scripts.
 
 ## Build the Generator Locally
 
-From the repository root:
+For image-only development, build the generator directly from the repository
+root:
 
 ```bash
-export BTCPAYGEN_DOCKER_IMAGE="btcpayserver/docker-compose-generator:local"
-./build.sh
+docker build \
+  -t btcpayserver/docker-compose-generator:local \
+  docker-compose-generator
 ```
 
-The special `:local` image name makes `build.sh` build the generator Dockerfile
-instead of pulling the published image.
+This avoids the generated-file and secret changes performed by `build.sh`.
 
 For direct .NET development:
 
@@ -108,11 +109,9 @@ Fragments](./fragments.md). Add a dedicated guide when operators need to
 configure credentials, DNS, hostnames, backups, security boundaries, or an
 external service.
 
-Every image reference is also consumed by `contrib/DockerFileBuildHelper`. Add
-or update its source-build mapping when verified source Dockerfiles are
-available. If the image intentionally cannot be built by the helper, explicitly
-exclude it rather than inventing source provenance. Follow `AGENTS.md` to
-regenerate the image script and supported-image table.
+Every image reference is also consumed by `contrib/DockerFileBuildHelper`.
+Follow [Generated Image Documentation](#generated-image-documentation) when an
+image changes.
 
 Cryptocurrency fragments additionally require the integration steps under [Add
 a Cryptocurrency](#add-a-cryptocurrency).
@@ -171,7 +170,7 @@ Adding a chain requires coordinated support across the stack, for Bitcoin-based 
 3. Add the Compose fragments for the node, NBXplorer configuration, volumes,
    and optional Lightning implementation.
 4. Add the chain to
-   [`docker-compose-generator/crypto-definitions.json`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/crypto-definitions.json).
+   [`docker-compose-generator/crypto-definitions.json`](../docker-compose-generator/crypto-definitions.json).
 5. Add source-build mappings for published images where verified source builds
    are available.
 6. Test generation, startup, synchronization, payment detection, upgrades, and

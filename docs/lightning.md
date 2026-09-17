@@ -8,7 +8,7 @@ Lightning is optional and disabled by default. Choose one implementation with
 | `clightning` | Core Lightning (CLN) | Yes | Yes |
 | `lnd` | LND | Yes | Yes |
 | `phoenixd` | Phoenixd | Yes | No |
-| `none` | No Lightning service | Yes | Yes |
+| `none` | No Lightning service | N/A | N/A |
 
 For a Bitcoin CLN deployment:
 
@@ -22,11 +22,11 @@ Use `lnd` or `phoenixd` instead to select another implementation.
 
 ## Network Access
 
-Bitcoin CLN and LND publish host TCP port 9735 for peer connections.
-Bitcoin CLN additionally exposes container port 9736 for gRPC without publishing it on the host.
-Open the peer port when you want the node to accept incoming connections. Other API
-endpoints are internal unless you explicitly enable an optional Nginx route
-with `btcpay-routes`; see [Networking](./networking.md).
+Open a peer port only when the node should accept incoming connections. API
+endpoints remain internal unless an optional route is enabled. See
+[Lightning Ports](./networking.md#lightning-ports) and [Optional Nginx
+Routes](./networking.md#optional-nginx-routes) for the canonical port and route
+guidance.
 
 ## Command-line Access
 
@@ -51,10 +51,11 @@ catalog](./fragments.md) for dependencies and exposed ports.
 ## Backups
 
 Old Lightning channel state is dangerous and can lead to loss of funds. A full
-deployment backup is suitable for a planned migration only when the old server
-is shut down cleanly and is never restarted after the restored node starts.
-Read [Backup and Restore](./backup-restore.md#lightning-channel-backup) before
-moving or restoring a Lightning deployment.
+deployment backup does not by itself guarantee frozen channel state because the
+backup script restarts the stack. Read [Backup and
+Restore](./backup-restore.md#lightning-channel-backup) and follow the selected
+implementation's migration guidance before moving or restoring a Lightning
+deployment.
 
 For wallet, liquidity, and channel-management guidance, see the
 [BTCPay Server Lightning documentation](https://docs.btcpayserver.org/LightningNetwork/).

@@ -29,9 +29,14 @@ unused images unrelated to BTCPay Server. Set it to `false` before updating if
 the host relies on other cached images:
 
 ```bash
+cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 export BTCPAY_UPDATE_CLEAN="false"
 . ./btcpay-setup.sh -i
+btcpay-update.sh
 ```
+
+Setup persists the changed value before the update. It also regenerates and
+applies the stack, so expect a service recreation before the update itself.
 
 ## Archived Update Logs
 
@@ -42,8 +47,10 @@ $BTCPAY_BASE_DIRECTORY/btcpay-update-logs/update-UTC_TIMESTAMP.log.gz
 ```
 
 The directory is mode 700 and archives are created under a private umask. The
-newest five successful archives are retained. A log-archive failure prints a
-warning but does not stop the update.
+five latest successful log captures are retained. Capturing logs happens before
+generation and service recreation, so an archive does not prove the update
+itself succeeded. A log-archive failure prints a warning but does not stop the
+update.
 
 Read an archive with:
 
@@ -54,7 +61,7 @@ gzip -cd "$BTCPAY_BASE_DIRECTORY/btcpay-update-logs/update-EXAMPLE.log.gz"
 These files are snapshots of Docker logs still available immediately before
 the update. They do not contain already rotated messages, later messages, host
 SSH logs, or application files stored inside volumes. Retention is based on the
-number of successful update archives, not age or disk usage.
+number of captured archives, not age or disk usage.
 
 ## Diagnose a Failed Update
 

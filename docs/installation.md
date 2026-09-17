@@ -1,53 +1,27 @@
 # Installation
 
-The recommended production target is a dedicated Linux VPS. The root
-[README](https://github.com/btcpayserver/btcpayserver-docker#install) contains the shortest complete installation path;
-this guide explains its requirements and effects.
+The recommended production target is a dedicated Linux VPS. This guide explains
+the requirements, setup effects, and completion steps.
+
+**AI-assisted installation:** This repository includes a
+[`vps-deployment` skill](https://github.com/btcpayserver/btcpayserver-docker/blob/master/.agents/skills/vps-deployment/SKILL.md) for
+compatible AI agents. Ask the agent to use this skill to help select a VPS,
+perform preflight checks, plan the deployment, guide installation, and verify
+the result.
 
 ## Requirements
 
-Use a server with:
+Use the [server specifications guide](./specs.md) to size a dedicated Linux host
+for the chains and features you need.
 
-- An `x86_64`, `armv7l`, or `aarch64` processor
-- At least 2 GB of RAM and 80 GB of available storage for the documented pruned
-  Bitcoin profile
-- Root access
-
-A domain is optional. The bundled automatic HTTPS setup requires a domain with
-DNS records pointing to the server and incoming TCP ports 80 and 443 open to the
-internet. Local deployments and installations behind a manually configured
-proxy can leave `BTCPAY_HOST` empty.
-
-Storage and memory needs increase when you add Lightning, more chains, an
-unpruned node, transaction indexing, or optional services. The setup script does
-not validate resource capacity.
-
-Only Linux hosts are supported. The automated installation uses `apt-get` and
-Docker's installation script, so a Debian or Ubuntu-style host is the expected
-path.
+Review [Networking](./networking.md#public-https) for domain, DNS, HTTPS, and
+public-port requirements.
 
 ## Install a Bitcoin Deployment
 
-Replace the example host before running these commands:
-
-```bash
-sudo su -
-
-mkdir BTCPayServer
-cd BTCPayServer
-git clone https://github.com/btcpayserver/btcpayserver-docker
-cd btcpayserver-docker
-
-export BTCPAY_HOST="btcpay.example.com"
-export NBITCOIN_NETWORK="mainnet"
-export BTCPAYGEN_CRYPTO1="btc"
-export BTCPAYGEN_LIGHTNING="none"
-export BTCPAYGEN_REVERSEPROXY="nginx"
-export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage-s"
-
-. ./btcpay-setup.sh -i
-exit
-```
+Follow the current [installation commands in the root
+README](https://github.com/btcpayserver/btcpayserver-docker#install), replacing
+the example hostname before running them.
 
 The script must be sourced with `. ./btcpay-setup.sh`; executing it in a child
 shell does not preserve the environment it configures.
@@ -72,8 +46,9 @@ Docker daemon configuration.
 
 The recommended `btcpay-host` fragment allows BTCPay Server to invoke a
 restricted set of host-management commands and changes host SSH configuration.
-Read [Configuration](./configuration.md) for its security boundaries and how to
-exclude it.
+Excluding the fragment prevents BTCPay Server from receiving the host key, but
+setup still prepares the host-side SSH integration and does not undo prior SSH
+changes. Read [Configuration](./configuration.md) for details.
 
 ## Complete the Installation
 

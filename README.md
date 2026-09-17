@@ -25,14 +25,19 @@ Lightning implementations, additional cryptocurrencies, and other services are
 optional. See the [architecture guide](docs/architecture.md) for how the
 components fit together.
 
-## Requirements
+## Before Installing
 
-Only Linux hosts are supported. The installation below targets a fresh Linux
-VPS with:
+Use the [server specifications guide](docs/specs.md) to select and size a VPS
+for the chains and features you need.
 
-- A supported `x86_64`, `armv7l`, or `aarch64` processor
-- At least 2 GB of RAM and 80 GB of available storage
-- Root access through `sudo`
+Provider-specific cloud installation guides are available for:
+
+- [LunaNode](https://docs.btcpayserver.org/Deployment/LunaNode/) (most popular)
+- [Cloudzy](https://docs.btcpayserver.org/Deployment/Cloudzy/)
+- [Clovyr](https://docs.btcpayserver.org/Deployment/Clovyr/)
+- [Microsoft Azure](https://docs.btcpayserver.org/Deployment/Azure/)
+- [Google Cloud](https://docs.btcpayserver.org/Deployment/GoogleCloud/)
+- [Comet Cash](https://docs.btcpayserver.org/Deployment/CometCash/)
 
 A domain is not required for local or manually proxied deployments. The bundled
 automatic HTTPS setup requires a domain whose DNS records point to the server
@@ -61,7 +66,7 @@ export NBITCOIN_NETWORK="mainnet"
 export BTCPAYGEN_CRYPTO1="btc"
 export BTCPAYGEN_LIGHTNING="none"
 export BTCPAYGEN_REVERSEPROXY="nginx"
-export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage-s"
+export BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-save-storage-xs"
 
 . ./btcpay-setup.sh -i
 exit
@@ -77,6 +82,7 @@ status in the BTCPay Server interface before accepting payments.
 
 ## Next Steps
 
+<!-- Legacy anchors retained for compatibility with old documentation links. -->
 <a id="environment-variables"></a>
 <a id="introduction"></a>
 <a id="architecture"></a>
