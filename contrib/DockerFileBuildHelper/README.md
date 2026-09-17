@@ -1,25 +1,32 @@
 # DockerFile build helper
 
-By default, when you use docker deployment, you are fetching pre-built docker images hosted on dockerhub.
-While this bring the advantage that deployment is fast and reliable, this also mean that you are ultimately trusting the owner of the docker images.
-This repository generate a script that you can use to build all images from the sources by yourself.
+By default, the Docker deployment fetches prebuilt images from container
+registries. This makes deployment fast and reliable but requires trusting the
+image publishers. This helper generates a script for building supported images
+from source.
 
 ## How to use?
 
-Install [.NET Core SDK](https://dotnet.microsoft.com/download) and run:
+From this directory, install the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) and run:
 
 ```bash
 ./run.sh
 ```
 
-Or using Docker:
+Or, from the repository root, use Docker:
 
+```bash
+docker run --rm \
+  -v "$PWD:/project" \
+  -w /project/contrib/DockerFileBuildHelper \
+  mcr.microsoft.com/dotnet/sdk:10.0 \
+  ./run.sh
 ```
-docker run -it --rm -v `pwd`:/project -w /project/contrib/DockerFileBuildHelper mcr.microsoft.com/dotnet/sdk:2.1 ./run.sh
-```
 
-This will build a `build-all.sh` file which you can run locally.
+`run.sh` generates a local `build-all.sh` file in this directory, which you can
+run to build the images from source. It does not update the generated artifacts
+checked into the repository.
 
-To update the supported-image table and the `build-all-images.sh` script that
-are checked into Git, replace `run.sh` with `update-repo.sh`. The generated
-table is stored in [`docs/supported-images.md`](../../docs/supported-images.md).
+To update the checked-in `contrib/build-all-images.sh` script and supported-image
+table, run `./update-repo.sh` instead. The generated table is stored in
+[`docs/supported-images.md`](../../docs/supported-images.md).

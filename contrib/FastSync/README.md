@@ -64,7 +64,7 @@ Before you start the [load-utxo-set.sh](load-utxo-set.sh), you must bring down y
 In the `btcpayserver-docker` directory you run `btcpay-down.sh` to bring down your instance.
 
 ```bash
-cd $BTCPAY_BASE_DIRECTORY/btcpayserver-docker
+cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 ./btcpay-down.sh
 ```
 
@@ -73,7 +73,7 @@ cd $BTCPAY_BASE_DIRECTORY/btcpayserver-docker
 After you've shut down BTCPay Server, you now go into the FastSync directory and run the `load-utxo-set.sh` script:
 
 ```bash
-cd $BTCPAY_BASE_DIRECTORY/btcpayserver-docker/contrib/FastSync
+cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker/contrib/FastSync"
 ./load-utxo-set.sh
 ```
 
@@ -90,6 +90,10 @@ Once the files are downloaded, the hash will be checked against those in [utxo-s
 After the [load-utxo-set.sh](load-utxo-set.sh) is done, you will be warned, and asked to delete the docker volume `generated_bitcoin_wallet_datadir`.
 This will be recreated when we now run the `btcpay-up.sh` script.
 
+:::warning
+Do not delete `generated_bitcoin_wallet_datadir` if the Bitcoin Core wallet contains funds. Deleting the volume permanently removes that wallet data and can cause loss of funds. Only run the following command after confirming that the wallet contains no funds.
+:::
+
 ```bash
 docker volume rm generated_bitcoin_wallet_datadir
 ```
@@ -97,7 +101,7 @@ docker volume rm generated_bitcoin_wallet_datadir
 Now go back to the `btcpayserver-docker` directory, and let's restart your Server with `./btcpay-up.sh` to sync the rest!
 
 ```bash
-cd $BTCPAY_BASE_DIRECTORY/btcpayserver-docker
+cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 ./btcpay-up.sh
 ```
 
@@ -117,7 +121,9 @@ docker logs --tail -100 btcpayserver_bitcoind
 **Completing those steps does not mean that the UTXO set snapshot is legit. It only means that you trust the owner of this git repository to have verified that it is legit.**
 :::
 
-### Don't trust, verify!<a name="donttrust"></a>
+<a id="donttrust"></a>
+
+### Don't trust, verify!
 
 If you don't trust anybody, which should be the case as much as possible, then here are the steps to verify that the UTXO set you just loaded is not malicious.
 
@@ -129,7 +135,7 @@ If you don't trust anybody, which should be the case as much as possible, then h
 If `Synchy` or `Trusty` are both using BTCPay Server, go to the `btcpayserver-docker` directory and use:
 
 ```bash
-cd $BTCPAY_BASE_DIRECTORY/btcpayserver-docker
+cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
 ./bitcoin-cli.sh gettxoutsetinfo
 ```
 
@@ -179,11 +185,11 @@ If you are a bitcoin developer or public figure, feel free to add your signature
 4. Run the following command line
 
 ```bash
-cd $BTCPAY_BASE_DIRECTORY/btcpayserver-docker/contrib/FastSync
+cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker/contrib/FastSync"
 keybase pgp sign -i YOU.utxo-sets -c -t -o sigs/YOU.utxo-sets.asc
 rm YOU.utxo-sets
 git add sigs/YOU.utxo-sets.asc
-git commit -m "Add YOU utxo-set signature" --all
+git commit -m "Add YOU utxo-set signature"
 ```
 
 And make a pull request to `btcpayserver-docker` repository.
@@ -192,9 +198,10 @@ And make a pull request to `btcpayserver-docker` repository.
 
 You should not need to do this because [load-utxo-set.sh](load-utxo-set.sh) will do the hard work for you.
 
-But if you want, browse on [this listing](http://utxosets.blob.core.windows.net/public?restype=container&comp=list&include=metadata).
-
-Select the snapshot you want, and download it by querying `http://utxosets.blob.core.windows.net/public/{blobName}`.
+There is no maintained public listing of every snapshot. The current default
+download locations are defined in [load-utxo-set.sh](load-utxo-set.sh). To use a
+different snapshot, set `UTXO_DOWNLOAD_LINK` and make sure its filename and hash
+are present in [utxo-sets](utxo-sets) before running the script.
 
 ### How can I create my own snapshot?
 
@@ -223,7 +230,7 @@ This feature may be controversial because of the risk that almost nobody will fo
 
 What if somebody starts spreading a corrupted snapshot on the wild scale?
 
-I think this issue can be mitigated at the social layer. If several people start using social media to spread their `bitcoin-cli getutxosetinfo` every 10 000 blocks, any corrupt snapshot would be soon detected. We plan to make expose the hash via `BTCPayServer` and make it easy for people to share.
+I think this issue can be mitigated at the social layer. If several people start using social media to spread their `bitcoin-cli gettxoutsetinfo` every 10 000 blocks, any corrupt snapshot would be soon detected. We plan to expose the hash via `BTCPayServer` and make it easy for people to share.
 
 ### Why you don't just: Make BTCPayServer rely on SPV
 

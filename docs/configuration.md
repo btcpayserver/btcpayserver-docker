@@ -32,7 +32,7 @@ Fragments](./fragments.md).
 | `BTCPAY_LIGHTNING_HOST` | Host announced by Lightning instead of `BTCPAY_HOST` | Empty |
 | `REVERSEPROXY_HTTP_PORT` | Nginx host HTTP port | `80` |
 | `REVERSEPROXY_HTTPS_PORT` | Nginx host HTTPS port | `443` |
-| `REVERSEPROXY_DEFAULT_HOST` | Destination for unknown hostnames | Empty |
+| `REVERSEPROXY_DEFAULT_HOST` | Destination for unknown hostnames | `none` |
 | `NOREVERSEPROXY_HTTP_PORT` | BTCPay host port without Nginx | `80` |
 | `TRUST_DOWNSTREAM_PROXY` | Trust forwarded headers from a protected external proxy | `false` |
 | `LETSENCRYPT_EMAIL` | ACME expiry-notification address | Empty |
@@ -54,6 +54,11 @@ See [Networking](./networking.md) before changing proxy or certificate settings.
 | `BTCPAY_UPDATE_CLEAN` | Remove unused images after updates | `true` |
 | `COMPOSE_HTTP_TIMEOUT` | Compose operation timeout in seconds | `180` |
 
+Setup manages `COMPOSE_HTTP_TIMEOUT` as 180 seconds in the saved profile. To
+override it for a direct Docker Compose command, export a different value after
+loading that profile. BTCPay operational wrappers source the saved profile again
+and reset it to 180.
+
 `BTCPAY_ROOTPATH` can serve BTCPay Server below a URL path, but setup does not
 persist it in `/etc/profile.d/btcpay-env.sh` or the generated environment file.
 Export it again before each setup, update, or `btcpay-up.sh` invocation that
@@ -63,23 +68,15 @@ The recommended `btcpay-host` fragment mounts a generated host key into BTCPay
 Server. Setup adds a restricted forced command to root's `authorized_keys` and
 may change `PermitRootLogin no` to `PermitRootLogin prohibit-password`. Exclude
 the fragment with `BTCPAYGEN_EXCLUDE_FRAGMENTS` to prevent BTCPay Server from
-accessing the key.
+accessing the key. Exclusion does not prevent setup from preparing the host key
+and authorized-key entry, and it does not revert SSH changes from an earlier
+setup.
 
 ## Storage and Memory Profiles
 
-Choose at most one pruning profile:
-
-| Fragment | Approximate retained block target |
-|---|---:|
-| `opt-save-storage` | 100 GB |
-| `opt-save-storage-s` | 50 GB |
-| `opt-save-storage-xs` | 25 GB |
-| `opt-save-storage-xxs` | 5 GB; not recommended for Lightning, but not rejected by the generator |
-
-Pruning is incompatible with `opt-txindex`, ElectrumX, and the bundled Mempool
-service. Use `opt-save-memory` on hosts with less than 1 GB of memory. Use
-`opt-more-memory` when more than 1 GB can be dedicated to Bitcoin Core. The two
-memory profiles are mutually exclusive.
+Use [Server Specifications](./specs.md#calculate-storage) to size pruning and
+memory requirements. Select the corresponding fragment and review its
+incompatibilities in [Optional Fragments](./fragments.md#resource-profiles).
 
 ## Add-on Variables
 
@@ -96,6 +93,9 @@ memory profiles are mutually exclusive.
 
 Some third-party fragments require additional files or initialization. Follow
 their linked guide in the [fragment catalog](./fragments.md).
+
+Setup does not persist `BTCPAY_DCR_WALLET_PASSPHRASE`. Export it again before
+each setup, update, or command that can recreate the Decred wallet service.
 
 ## Operational Variables
 

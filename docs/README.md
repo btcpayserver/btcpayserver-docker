@@ -8,11 +8,14 @@ For product usage, stores, wallets, and integrations, see the
 
 - [Installation](./installation.md): requirements, the production deployment path,
   and what the setup script changes on the host
+- [Server specifications](./specs.md): size CPU, memory, storage, and bandwidth
+  for selected chains and features
 - [Architecture](./architecture.md): required components, data flow, generated
   files, and optional services
 
 ## Configure the Stack
 
+<!-- Legacy anchors retained for compatibility with old documentation links. -->
 <a id="environment-variables"></a>
 <a id="generated-docker-compose"></a>
 <a id="how-i-can-prune-my-nodes"></a>
@@ -39,6 +42,7 @@ For product usage, stores, wallets, and integrations, see the
 
 ## Customize and Develop
 
+<!-- Legacy anchor retained for compatibility with old documentation links. -->
 <a id="how-can-i-customize-the-generated-docker-compose-file"></a>
 
 - [Customization](./customization.md): generated Compose files and custom

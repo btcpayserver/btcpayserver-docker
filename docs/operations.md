@@ -23,7 +23,9 @@ systemctl reload btcpayserver
 
 ## Reconfigure and Update
 
-- `. ./btcpay-setup.sh -i` regenerates and applies changed configuration.
+- From `"$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"`,
+  `. ./btcpay-setup.sh -i` regenerates the stack and immediately recreates
+  affected services with the changed configuration.
 - `btcpay-update.sh` pulls the repository, regenerates the stack, and recreates
   services. See [Updating](./updating.md).
 - `changedomain.sh new.example.com` changes the primary domain. Disable

@@ -1,26 +1,25 @@
 # Cloudflare Tunnel
 
-Your server is on a local network, and you want to expose it on the internet (clearnet)?
+Cloudflare Tunnel can expose a BTCPay Server running on a private network
+without opening an inbound router port or maintaining dynamic DNS. Alternatives
+include direct port forwarding, Tor, or a reverse tunnel through a public host.
 
-While there are many solutions at your disposal, this one is by far the least costly and easiest.
+This design adds Cloudflare as a trusted intermediary: Cloudflare terminates the
+client connection and can observe or modify traffic. Availability also depends
+on Cloudflare and on the server's outbound internet connection. Use Tor or a
+different ingress design if that trust model is unsuitable.
 
-Traditionally, the solution to this problem is either:
-* Configure your firewall and your internet router (NAT) correctly to accept incoming traffic
-* Use Tor
-* Setup an SSH reverse tunnel to a public VPS
+## Prerequisites
 
-The challenge with the first solution is that there is no unified way to do it. Every local network has its own way of doing.
-On top of it, it may not even work: internet server providers may block incoming traffic, or they might use dynamic IPs. You need to set up a [dyndns service](https://docs.btcpayserver.org/Deployment/DynamicDNS/) to update the DNS record when the IP changes automatically.
+This integration requires an existing BTCPay Server Docker deployment using the
+bundled Nginx reverse proxy (`BTCPAYGEN_REVERSEPROXY=nginx`). Run fragment
+changes from a root login shell. Your server must be able to make outbound
+connections to Cloudflare on port 7844; no inbound tunnel port is required.
 
-The challenges with the second solution are that Tor has very high latency, so your server will feel sluggish and unreliable, and you would need a Tor-enabled browser to access it. (such as Brave or Tor Browser)
-
-The third solution is technically challenging and isn't free, as you need to pay for a VPS.
-
-Cloudflare tunnel offers an alternative to those solutions with a single downside: Cloudflare can see or modify all of your traffic, as it acts as a middleman between the client's browser and your local server.
-
-With Cloudflare tunnel, you will enjoy low latency access to your server, on clearnet, and WITHOUT the need to configure your firewall, internet router, dynamic DNS, and any internet service provider. For free.
-
-You still need to configure the tunnel correctly; this documentation will guide you through it.
+The tunnel token is a secret. Setup persists it in the deployment `.env` file,
+and Docker configuration can expose it to users with Docker access. Keep host
+and Docker access restricted, do not share command output containing the token,
+and rotate the token in Cloudflare if it is disclosed.
 
 ## Configure the Tunnel
 
@@ -28,7 +27,7 @@ First, we are going to create the tunnel on Cloudflare.
 
 1. You need to [create an account on Cloudflare](https://cloudflare.com/).
 2. Enable Cloudflare for your domain name. For Namecheap, [follow this tutorial](https://www.namecheap.com/support/knowledgebase/article.aspx/9607/2210/how-to-set-up-dns-records-for-your-domain-in-cloudflare-account/).
-3. After the DNS changes are propagated, go to [Zero Trust](https://dash.teams.cloudflare.com/) option on the left menu, go to `access`, then click `tunnels`.
+3. After the DNS changes are propagated, open the [Cloudflare dashboard](https://dash.cloudflare.com/?to=/:account/tunnels), then go to **Networking > Tunnels**.
 
 ![BTCPay Server Cloudflare Tunnel](./img/btcpayexposecloudflare1.jpg)
 
@@ -38,49 +37,52 @@ First, we are going to create the tunnel on Cloudflare.
 
 5. In `Choose your environment`, click on docker and copy your token. You will need it later (the string after `--token`, as shown in the following screenshot)
 
-![BTCpay Server Cloudflare Tunnel](./img/Cloudflare-Tunnel-Token.png)
+![BTCPay Server Cloudflare Tunnel token](./img/Cloudflare-Tunnel-Token.png)
 
 6. Click on the `Next` button
-7. Enter your subdomain, and select your domain in the list. Then in `Service` select `HTTP` and enter `nginx`.
+7. Add a **Published application** route. Enter your subdomain, select your
+   domain, and set the service URL to `http://nginx`.
 
-![BTCPay Server Cloudflare Tunnel](./img/btcpayexposecloudflare5.jpg)
+![BTCPay Server Cloudflare Tunnel service URL](./img/btcpayexposecloudflare5.jpg)
 
-8. This integration requires the bundled Nginx reverse proxy
-   (`BTCPAYGEN_REVERSEPROXY=nginx`). In the SSH section of your server, add
-   Cloudflare Tunnel by running the following script. Replace
-   `<YOUR_TOKEN_HERE>` with what you copied in step 5 and `<YOUR_DOMAIN_HERE>`
-   with the domain you entered in step 7.
+8. In a root login shell on the server, add Cloudflare Tunnel with the following
+   commands. Replace `<YOUR_TOKEN_HERE>` with what you copied in step 5 and
+   `<YOUR_DOMAIN_HERE>` with the domain you entered in step 7.
+
 ```bash
 export BTCPAY_HOST="<YOUR_DOMAIN_HERE>"
 export CLOUDFLARE_TUNNEL_TOKEN="<YOUR_TOKEN_HERE>"
 btcpay-fragments add opt-add-cloudflared
 ```
 
-The Cloudflare fragment requires Nginx and disables its Let's Encrypt companion
-automatically because Cloudflare terminates HTTPS for the tunnel. It also
-trusts forwarded headers. Block direct public access to the configured Nginx
-HTTP port with your host or provider firewall so requests can reach it only
-through the tunnel.
+The Cloudflare fragment disables Nginx's Let's Encrypt companion because
+Cloudflare terminates HTTPS for the tunnel. It also trusts forwarded headers.
+Block all direct access to the configured Nginx HTTP port, including access from
+untrusted local networks, so requests can reach it only through the tunnel.
+Otherwise, a client that bypasses Cloudflare can forge forwarded headers.
 
-Now you should be able to access your server from the internet! (If you get an Nginx error 503, check below)
+A published application is public by default. If access should be restricted,
+configure a Cloudflare Access application and policy before relying on the
+tunnel for access control.
+
+Now you should be able to access your server from the internet. If you get an
+Nginx error 503, check the troubleshooting section below.
 
 ## Recommended additional step
 
-In [cloudflare dashboard](https://dash.cloudflare.com), navigate to your websites, go to `Edge Certificates`, and check `Always Use HTTPS`. This will make sure that any request to your website uses HTTPS.
-![](./img/Cloudflare-Always-Https.png)
+In the [Cloudflare dashboard](https://dash.cloudflare.com), navigate to your
+website, go to **SSL/TLS > Edge Certificates**, and enable **Always Use HTTPS**.
+This ensures that visitors use HTTPS.
 
-## Known error
+![Cloudflare Always Use HTTPS setting](./img/Cloudflare-Always-Https.png)
+
+## Troubleshooting
 
 ### Error 503
 
-An error 503 means that the tunnel is working and Cloudflare is correctly set up, the HTTP request is reaching your server, but the server's reverse proxy doesn't know which downstream container should receive the request.
-
-This command will instruct you to forward any requests from your domain to your BTCPay Server container. It also instructs you to forward any HTTP requests with an unrecognized domain name to your BTCPay Server container.
-
-```bash
-export BTCPAY_HOST="<YOUR_DOMAIN_HERE>"
-export REVERSEPROXY_DEFAULT_HOST="<YOUR_DOMAIN_HERE>"
-. btcpay-setup.sh -i
-```
-
-`REVERSEPROXY_DEFAULT_HOST` will ensure you can still access your server from the local network with an IP or a local domain name.
+An error 503 generally means that the tunnel reached Nginx but Nginx could not
+select the expected downstream service. Confirm that the published application
+uses `http://nginx`, that its hostname exactly matches `BTCPAY_HOST`, and that
+the BTCPay containers are running. Do not work around this by setting a default
+host for unrecognized requests or by opening direct access to Nginx; doing so
+weakens the tunnel's forwarded-header trust boundary.

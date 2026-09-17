@@ -20,6 +20,10 @@ Adding a fragment removes it from the excluded set, and excluding one removes
 it from the additional set. Repeating an operation that is already satisfied is
 a no-op.
 
+The fragment directory and `btcpay-fragments show` are authoritative for the
+current checkout. This page is a curated operator catalog and may not describe
+private custom fragments.
+
 Dependencies and incompatibilities are resolved by the generator. Review each
 linked fragment before enabling third-party services; not every image supports
 every architecture or receives the same maintenance level.
@@ -54,7 +58,7 @@ incompatible with pruning.
 | [`opt-add-electrumx`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-electrumx.yml) | Add public ElectrumX; requires txindex and an unpruned node |
 | [`opt-expose-unsafe`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-expose-unsafe.yml) | Publish Bitcoin P2P port 8333; trusted networks or restrictive firewall only |
 | [`opt-monero-expose`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-monero-expose.yml) | Bind Monero daemon RPC to host loopback |
-| [`opt-beldex-expose`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-beldex-expose.yml) | Bind Beldex daemon and wallet RPC to host loopback |
+| [`opt-beldex-expose`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-beldex-expose.yml) | Intended to bind Beldex RPC to host loopback; currently unsupported due to a service-name mismatch |
 | [`opt-decred-expose`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-decred-expose.yml) | Bind Decred wallet RPC to host loopback |
 
 The LND tuning fragments affect a selected LND service; some do not declare a
@@ -84,7 +88,7 @@ formal generator prerequisite, so confirm LND is enabled.
 | [`opt-add-taler-merchant`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-taler-merchant.yml) | Add the GNU Taler merchant backend |
 | [`opt-add-teos`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-teos.yml) | Add a TEOS watchtower on port 9814; requires Bitcoin and ZMQ |
 | [`opt-add-thunderhub`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-thunderhub.yml) | Add ThunderHub; requires Bitcoin LND |
-| [`opt-add-woocommerce`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-woocommerce.yml) | Add WordPress and WooCommerce on a dedicated host |
+| [`opt-add-woocommerce`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-woocommerce.yml) | Add WordPress and WooCommerce on a dedicated hostname |
 | [`opt-add-zammad`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-zammad.yml) | Add the Zammad application stack; requires substantial additional resources |
 
 ## Custom Fragments

@@ -22,6 +22,9 @@ Edit the custom file, then select its basename:
 btcpay-fragments add opt-save-storage.custom
 ```
 
+Fragment changes require root and immediately run setup to regenerate and apply
+the stack. They are not selection-only edits.
+
 The command preserves other selected fragments. Remove the custom fragment with:
 
 ```bash
@@ -30,16 +33,9 @@ btcpay-fragments remove opt-save-storage.custom
 
 ## Fragment Metadata
 
-Fragments can declare:
-
-- `required`: recursively selected dependencies that cannot be excluded
-- `recommended`: recursively selected defaults that can be excluded
-- `excluded`: recommended fragments suppressed while this fragment is selected
-- `exclusive`: alternatives that cannot be selected together
-- `incompatible`: conflicts with an exclusive group
-- `required-routes` and `optional-routes`: Nginx route declarations
-
-Use existing fragments as examples and validate the resulting Compose file.
+See [Declare Relationships](./development.md#declare-relationships) for the
+canonical metadata reference. Use existing fragments as examples and validate
+the resulting Compose file.
 
 ## Generate Without Installing
 

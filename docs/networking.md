@@ -113,6 +113,7 @@ for setup.
 ## Lightning Ports
 
 Bitcoin CLN and LND publish host TCP port 9735 for peer connections.
+Groestlcoin CLN and LND publish host TCP port 9736.
 Bitcoin CLN also exposes container port 9736 internally for gRPC, but does not
 publish it on the host. Phoenixd does not expose a public peer-listening port
 through this stack. Open only the host ports required by the implementation you
