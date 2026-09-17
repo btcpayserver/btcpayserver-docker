@@ -7,11 +7,10 @@ You will learn what to consider when creating a backup and how to restore one.
 
 ## Remarks and Considerations
 
-:::warning
-BTCPay Server is not and will never be responsible for your backups.
-Make sure your backups include all the files and data you want to preserve.
-Test that you can restore a backup before relying on your backup strategy.
-:::
+> [!WARNING]
+> BTCPay Server is not and will never be responsible for your backups.
+> Make sure your backups include all the files and data you want to preserve.
+> Test that you can restore a backup before relying on your backup strategy.
 
 ### Lightning channel backup
 
@@ -210,8 +209,7 @@ Lightning state. Follow the [troubleshooting checks](./troubleshooting.md),
 verify the expected services and public hostname, and inspect synchronization
 before accepting payments.
 
-:::tip
-Always make sure your backup strategy is tested and fits your needs.
-No single solution fits every situation; this guide covers the common cases.
-For the latest guidance, feel free to ask on the BTCPay Server community channels.
-:::
+> [!TIP]
+> Always make sure your backup strategy is tested and fits your needs.
+> No single solution fits every situation; this guide covers the common cases.
+> For the latest guidance, feel free to ask on the BTCPay Server community channels.

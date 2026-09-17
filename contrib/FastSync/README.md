@@ -10,9 +10,8 @@ However, synchronization time will take around two weeks on some low-powered dev
 
 Fast Sync provides a solution to decrease the synchronization time dramatically to minutes or a few hours.
 
-:::warning
-Current UTXO Set snapshots only work for Bitcoin Core 0.17.0 or higher. Do NOT use these sets on older versions of Bitcoin Core (0.16.3 or lower)
-:::
+> [!WARNING]
+> Current UTXO Set snapshots only work for Bitcoin Core 0.17.0 or higher. Do NOT use these sets on older versions of Bitcoin Core (0.16.3 or lower)
 
 ## How does Fast Sync solve the problem?
 
@@ -90,9 +89,8 @@ Once the files are downloaded, the hash will be checked against those in [utxo-s
 After the [load-utxo-set.sh](load-utxo-set.sh) is done, you will be warned, and asked to delete the docker volume `generated_bitcoin_wallet_datadir`.
 This will be recreated when we now run the `btcpay-up.sh` script.
 
-:::warning
-Do not delete `generated_bitcoin_wallet_datadir` if the Bitcoin Core wallet contains funds. Deleting the volume permanently removes that wallet data and can cause loss of funds. Only run the following command after confirming that the wallet contains no funds.
-:::
+> [!WARNING]
+> Do not delete `generated_bitcoin_wallet_datadir` if the Bitcoin Core wallet contains funds. Deleting the volume permanently removes that wallet data and can cause loss of funds. Only run the following command after confirming that the wallet contains no funds.
 
 ```bash
 docker volume rm generated_bitcoin_wallet_datadir
@@ -116,10 +114,9 @@ docker logs --tail -100 btcpayserver_bitcoind
 ![BTCPay Server FastSync](../../docs/img/fastsync/btcpayfastsync4.jpg)
 
 
-:::warning
-**However: This will only prove that the owner of this git repository is honest, and the utxo-sets are verified and correct.**
-**Completing those steps does not mean that the UTXO set snapshot is legit. It only means that you trust the owner of this git repository to have verified that it is legit.**
-:::
+> [!WARNING]
+> **However: This will only prove that the owner of this git repository is honest, and the utxo-sets are verified and correct.**
+> **Completing those steps does not mean that the UTXO set snapshot is legit. It only means that you trust the owner of this git repository to have verified that it is legit.**
 
 <a id="donttrust"></a>
 
@@ -151,9 +148,8 @@ Running this command might take some time, and nothing will show up in the termi
 
 ![BTCPay Server FastSync](../../docs/img/fastsync/btcpayfastsync6.jpg)
 
-:::warning
-**Completing those steps, assuming the software you are running is not malicious, correctly prove that the UTXO set snapshot is legit**.
-:::
+> [!WARNING]
+> **Completing those steps, assuming the software you are running is not malicious, correctly prove that the UTXO set snapshot is legit**.
 
 ### If you trust someone else...
 
@@ -169,9 +165,8 @@ If you don't like command line, you can verify against [keybase verify page](htt
 
 You can verify that the handle `NicolasDorier` refers to the person who controls `NicolasDorier` Twitter, GitHub, and Reddit handle on [the keybase profile page](https://keybase.io/NicolasDorier).
 
-:::tip
-**Completing those steps does not mean that the UTXO set snapshot is legit**. It only means that you trust the owner of a Keybase account, who has proved access to some social media accounts in the past.
-:::
+> [!TIP]
+> **Completing those steps does not mean that the UTXO set snapshot is legit**. It only means that you trust the owner of a Keybase account, who has proved access to some social media accounts in the past.
 
 ## FAQ
 
