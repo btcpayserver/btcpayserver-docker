@@ -104,6 +104,10 @@ add_fragments() {
     echo "$result"
 }
 
+notify_btcpayserver() {
+    docker kill --signal HUP generated_btcpayserver_1 >/dev/null 2>&1 || true
+}
+
 btcpay_setup_ssh() {
     local ssh_dir="/root/.ssh"
     local key_file="$ssh_dir/btcpay_host_id_ed25519"
