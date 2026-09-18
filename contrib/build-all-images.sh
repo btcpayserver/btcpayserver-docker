@@ -276,18 +276,18 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/btcpayserver/nbxplorer/v2.6.15/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/nbxplorer/v2.6.16/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/nbxplorer/v2.6.15/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/nbxplorer/v2.6.16/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/nbxplorer/v2.6.15/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/nbxplorer/v2.6.16/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building nicolasdorier/nbxplorer:2.6.15"
+echo "Building nicolasdorier/nbxplorer:2.6.16"
 git clone https://github.com/btcpayserver/nbxplorer nbxplorer
 cd nbxplorer
-git checkout v2.6.15
+git checkout v2.6.16
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.6.15" .
+docker build -f "$DOCKERFILE" -t "nicolasdorier/nbxplorer:2.6.16" .
 cd - && cd ..
 
 
