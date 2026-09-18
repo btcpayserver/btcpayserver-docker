@@ -420,6 +420,22 @@ elif [ "$archive_mode" = migrate ]; then
 fi
 
 archived_lnd_data="$restore_dir/volumes/generated_lnd_bitcoin_datadir/_data"
+if [ "$migrate" = true ]; then
+  # Check ancestors before looking for databases so symlinks cannot redirect
+  # validation outside the archived LND data or hide unmatched network state.
+  for directory in \
+    "$restore_dir/volumes" \
+    "$restore_dir/volumes/generated_lnd_bitcoin_datadir" \
+    "$archived_lnd_data" \
+    "$archived_lnd_data/data" \
+    "$archived_lnd_data/data/chain" \
+    "$archived_lnd_data/data/chain/bitcoin" \
+    "$archived_lnd_data/data/graph"; do
+    if [ -L "$directory" ] || { [ -e "$directory" ] && [ ! -d "$directory" ]; }; then
+      fail "The migration archive has an invalid Bitcoin LND directory (symlinks are not allowed): $directory"
+    fi
+  done
+fi
 if [ -e "$archived_lnd_data" ] || [ -L "$archived_lnd_data" ]; then
   if [ -L "$archived_lnd_data" ] || [ ! -d "$archived_lnd_data" ]; then
     fail "The archived Bitcoin LND data directory is not a regular directory."
@@ -431,14 +447,23 @@ if [ -e "$archived_lnd_data" ] || [ -L "$archived_lnd_data" ]; then
     fi
     printf '\n⚠️ This restore recovers the Bitcoin LND wallet only. Manual channel.backup import is required to recover channel funds by asking peers to force-close.\n'
   else
-    shopt -s nullglob
-    lnd_wallets=("$lnd_archive_dir"/data/chain/bitcoin/*/wallet.db)
-    shopt -u nullglob
-    for wallet in "${lnd_wallets[@]}"; do
-      network=$(basename "$(dirname "$wallet")")
-      if [ ! -s "$lnd_archive_dir/data/graph/$network/channel.db" ]; then
-        fail "The migration archive is missing channel.db for the Bitcoin LND $network wallet. A complete bbolt channel database is required."
+    # Inspect both sides of every network pair, including directories whose
+    # database is missing. A graph-only network must not escape validation.
+    shopt -s dotglob nullglob
+    lnd_network_dirs=("$lnd_archive_dir"/data/chain/bitcoin/* "$lnd_archive_dir"/data/graph/*)
+    shopt -u dotglob nullglob
+    for directory in "${lnd_network_dirs[@]}"; do
+      if [ -L "$directory" ] || [ ! -d "$directory" ]; then
+        fail "The migration archive has an invalid Bitcoin LND network directory (symlinks are not allowed): $directory"
       fi
+      network=${directory##*/}
+      for database in \
+        "$lnd_archive_dir/data/chain/bitcoin/$network/wallet.db" \
+        "$lnd_archive_dir/data/graph/$network/channel.db"; do
+        if [ -L "$database" ] || [ ! -f "$database" ] || [ ! -s "$database" ]; then
+          fail "The migration archive has missing or invalid ${database##*/} for Bitcoin LND $network. Each network requires a nonempty regular wallet.db/channel.db pair without symlinks."
+        fi
+      done
     done
   fi
   check_lnd_destination

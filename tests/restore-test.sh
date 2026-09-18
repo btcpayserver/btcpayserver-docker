@@ -362,20 +362,98 @@ for scenario in migrate-default backup-migrate legacy-migrate legacy-graph backu
   assert_untouched
 done
 
-# A migration cannot preserve channels when any wallet's channel database is
-# missing or empty, even if the other networks have complete databases.
-for database in missing empty; do
+# Every network needs both regular, nonempty databases, even when the other
+# networks have valid pairs. Symlinks must not satisfy either requirement.
+for database in data/chain/bitcoin/testnet/wallet.db data/graph/testnet/channel.db; do
+  for invalid in missing empty directory symlink dangling-symlink; do
+    new_case
+    make_fixture migrate lnd-full
+    database_path="$fixture_dir/volumes/generated_lnd_bitcoin_datadir/_data/$database"
+    case "$invalid" in
+      missing) rm -- "$database_path" ;;
+      empty) : > "$database_path" ;;
+      directory) rm -- "$database_path"; mkdir "$database_path" ;;
+      symlink)
+        mv -- "$database_path" "$database_path.actual"
+        ln -s "$(basename "$database_path").actual" "$database_path"
+        ;;
+      dangling-symlink)
+        rm -- "$database_path"
+        ln -s missing-database "$database_path"
+        ;;
+    esac
+    pack_archive
+    expect_failure --migrate "$archive_path"
+    assert_untouched
+    grep -Fq "${database##*/} for Bitcoin LND testnet" "$case_dir/restore.log" ||
+      fail_test "migration did not identify $invalid $database"
+  done
+done
+
+# Enumerate both sides: an entire network directory may be absent rather than
+# only its database. Other complete networks must not mask the incomplete one.
+for network_dir in data/chain/bitcoin/testnet data/graph/testnet; do
   new_case
   make_fixture migrate lnd-full
-  channel_db="$fixture_dir/volumes/generated_lnd_bitcoin_datadir/_data/data/graph/testnet/channel.db"
-  if [ "$database" = missing ]; then
-    rm -- "$channel_db"
-  else
-    : > "$channel_db"
-  fi
+  mv -- "$fixture_dir/volumes/generated_lnd_bitcoin_datadir/_data/$network_dir" "$case_dir/removed-network"
   pack_archive
   expect_failure --migrate "$archive_path"
   assert_untouched
+  grep -Eq '(wallet|channel)\.db for Bitcoin LND testnet' "$case_dir/restore.log" ||
+    fail_test "migration did not identify the missing $network_dir database"
+done
+
+# An empty network directory is incomplete state, while a node that has never
+# created any network directories can still be migrated.
+for network_root in data/chain/bitcoin data/graph; do
+  new_case
+  make_fixture migrate lnd-full
+  mkdir "$fixture_dir/volumes/generated_lnd_bitcoin_datadir/_data/$network_root/signet"
+  pack_archive
+  expect_failure --migrate "$archive_path"
+  assert_untouched
+  grep -Eq '(wallet|channel)\.db for Bitcoin LND signet' "$case_dir/restore.log" ||
+    fail_test "migration did not identify the empty $network_root/signet network"
+done
+new_case
+make_fixture migrate none
+fixture_file volumes/generated_lnd_bitcoin_datadir/_data/tls.cert 'uninitialized LND fixture'
+pack_archive
+expect_success --migrate "$archive_path"
+assert_imports
+assert_stopped
+
+# Regular database files reached through linked roots or network directories
+# are also unsafe. Keep the link target within the archive but outside LND's
+# network roots so no unrelated extra network can cause the expected failure.
+for linked_dir in data data/chain data/chain/bitcoin data/chain/bitcoin/testnet data/graph data/graph/testnet; do
+  new_case
+  make_fixture migrate lnd-full
+  linked_path="$fixture_dir/volumes/generated_lnd_bitcoin_datadir/_data/$linked_dir"
+  mv -- "$linked_path" "$fixture_dir/linked-directory-target"
+  ln -s "$(realpath --relative-to="$(dirname "$linked_path")" "$fixture_dir/linked-directory-target")" "$linked_path"
+  pack_archive
+  expect_failure --migrate "$archive_path"
+  assert_untouched
+  grep -Fq 'directory (symlinks are not allowed):' "$case_dir/restore.log" &&
+    grep -Fq "/$linked_dir" "$case_dir/restore.log" ||
+    fail_test "migration did not identify the linked $linked_dir directory"
+done
+
+# A linked volume parent must not bypass validation, including when its target
+# is missing and the nested _data path therefore appears not to exist.
+for link_target in linked-volume-target missing-volume-target; do
+  new_case
+  make_fixture migrate lnd-full
+  volume_path="$fixture_dir/volumes/generated_lnd_bitcoin_datadir"
+  mv -- "$volume_path" "$fixture_dir/linked-volume-target"
+  ln -s "../$link_target" "$volume_path"
+  pack_archive
+  expect_failure --migrate "$archive_path"
+  assert_untouched
+  grep -Fq 'directory (symlinks are not allowed):' "$case_dir/restore.log" &&
+    grep -Fq '/volumes/generated_lnd_bitcoin_datadir' "$case_dir/restore.log" ||
+    fail_test 'migration did not identify the linked LND volume'
 done
 
 # Refuse to overlay any existing LND destination data in either mode. This
