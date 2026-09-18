@@ -146,10 +146,6 @@ print_state() {
         '{optionalRoutes:$optionalRoutes,enabledRoutes:$enabledRoutes}'
 }
 
-notify_btcpayserver() {
-    docker kill --signal HUP generated_btcpayserver_1 >/dev/null 2>&1 || true
-}
-
 restore_enabled_routes() {
     rm -f "$enabled_routes"/*
     cp -a "$enabled_backup"/. "$enabled_routes"/
@@ -210,6 +206,8 @@ if [ -z "$command_name" ] || [ "$command_name" = "help" ]; then
 fi
 
 require_environment
+# shellcheck source=helpers.sh
+. "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker/helpers.sh"
 manifest_file="${BTCPAY_ROUTES_MANIFEST:-$BTCPAY_BASE_DIRECTORY/btcpayserver-docker/Generated/manifest.json}"
 prepare_directories
 validate_catalog

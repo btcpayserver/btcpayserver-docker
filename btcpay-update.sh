@@ -71,7 +71,7 @@ fi
 install_tooling
 btcpay_update_docker_env
 btcpay_up
-docker kill --signal HUP generated_btcpayserver_1 >/dev/null 2>&1 || true
+notify_btcpayserver
 
 set +e
 if [ "$BTCPAY_UPDATE_CLEAN" == true ]; then

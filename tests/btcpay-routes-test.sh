@@ -177,15 +177,15 @@ export BTCPAYGEN_REVERSEPROXY=none
 run_routes show
 [ "$status" -eq 1 ]
 jq -e 'keys == ["error"] and .error == "BTCPAYGEN_REVERSEPROXY must be nginx"' <<< "$output" >/dev/null
-host_environment="$(BTCPAY_ENABLE_SSH=false "$repo_dir/btcpay-host" env)"
+host_environment="$("$repo_dir/btcpay-host" env)"
 jq -e 'has("routes") | not' <<< "$host_environment" >/dev/null
 
 export BTCPAYGEN_REVERSEPROXY=nginx
 run_routes sync
-host_environment="$(BTCPAY_ENABLE_SSH=false "$repo_dir/btcpay-host" env)"
+host_environment="$("$repo_dir/btcpay-host" env)"
 jq -e '
     .deploymentType == "btcpayserver-docker" and
-    .commands == ["env", "help"] and
+    .commands == ["env", "help", "changedomain", "update", "clean", "restart"] and
     .routes.optionalRoutes == ["clightning-rest"] and
     .routes.enabledRoutes == ["clightning-rest", "rtl"]
 ' <<< "$host_environment" >/dev/null
