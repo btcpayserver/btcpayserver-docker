@@ -4,7 +4,7 @@ optional-routes:
   - "clightning-rest"
 services:
   clightning_bitcoin:
-    image: btcpayserver/lightning:v26.06.7
+    image: btcpayserver/lightning:v26.06.7-1
     container_name: btcpayserver_clightning_bitcoin
     init: true
     restart: unless-stopped
