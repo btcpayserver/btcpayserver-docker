@@ -350,15 +350,37 @@ for scenario in migrate-default backup-migrate legacy-migrate legacy-graph backu
   new_case
   restore_args=()
   case "$scenario" in
-    migrate-default) make_fixture migrate lnd-full ;;
-    backup-migrate) make_fixture backup lnd; restore_args=(--migrate) ;;
-    legacy-migrate) make_fixture legacy lnd-full; restore_args=(--migrate) ;;
-    legacy-graph) make_fixture legacy lnd-full ;;
-    backup-graph) make_fixture backup lnd-full ;;
-    unknown-mode) make_fixture invalid lnd ;;
+    migrate-default)
+      make_fixture migrate lnd-full
+      expected_error='This is a migration archive.'
+      ;;
+    backup-migrate)
+      make_fixture backup lnd
+      restore_args=(--migrate)
+      expected_error='--migrate requires an archive created by btcpay-backup.sh --migrate.'
+      ;;
+    legacy-migrate)
+      make_fixture legacy lnd-full
+      restore_args=(--migrate)
+      expected_error='--migrate requires an archive created by btcpay-backup.sh --migrate.'
+      ;;
+    legacy-graph)
+      make_fixture legacy lnd-full
+      expected_error='This archive contains Bitcoin LND channel state.'
+      ;;
+    backup-graph)
+      make_fixture backup lnd-full
+      expected_error='This archive contains Bitcoin LND channel state.'
+      ;;
+    unknown-mode)
+      make_fixture invalid lnd
+      expected_error='The backup contains an invalid mode marker.'
+      ;;
   esac
   pack_archive
   expect_failure "${restore_args[@]}" "$archive_path"
+  grep -Fq -- "$expected_error" "$case_dir/restore.log" ||
+    fail_test "$scenario did not report the expected rejection: $expected_error"
   assert_untouched
 done
 
@@ -635,11 +657,25 @@ make_fixture backup lnd
 pack_archive
 for invalid in missing unknown extra duplicate; do
   case "$invalid" in
-    missing) expect_failure ;;
-    unknown) expect_failure --invalid "$archive_path" ;;
-    extra) expect_failure "$archive_path" "$archive_path" ;;
-    duplicate) expect_failure --migrate --migrate "$archive_path" ;;
+    missing)
+      expected_error='Usage: btcpay-restore.sh [--migrate] /path/to/backup.tar.gz[.gpg]'
+      expect_failure
+      ;;
+    unknown)
+      expected_error='Unknown option: --invalid. Use --help for usage.'
+      expect_failure --invalid "$archive_path"
+      ;;
+    extra)
+      expected_error='Specify exactly one backup archive.'
+      expect_failure "$archive_path" "$archive_path"
+      ;;
+    duplicate)
+      expected_error='--migrate was specified more than once.'
+      expect_failure --migrate --migrate "$archive_path"
+      ;;
   esac
+  grep -Fq -- "$expected_error" "$case_dir/restore.log" ||
+    fail_test "$invalid arguments did not report the expected rejection: $expected_error"
   [ ! -s "$RESTORE_TEST_COMMANDS" ] || fail_test 'invalid arguments accessed Docker'
   assert_untouched
 done
