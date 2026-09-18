@@ -454,7 +454,7 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePath = "Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = "Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = "Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/dgarage/nbxplorer";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/nbxplorer";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
