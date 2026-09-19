@@ -558,7 +558,8 @@ make_fixture backup lnd-no-scb
 pack_archive
 expect_success "$archive_path"
 assert_imports
-grep -qi 'channel.backup\|static channel backup' "$case_dir/restore.log" || fail_test 'missing-SCB warning was not displayed'
+grep -Fxq '⚠️ No nonempty channel.backup was found. Wallet data was restored, but channel recovery needs a separately saved SCB.' "$case_dir/restore.log" ||
+  fail_test 'missing-SCB warning was not displayed'
 [ -f "$case_dir/running-all" ] || fail_test 'wallet-only restore did not restart'
 
 # No-LND and CLN restores retain existing behavior and do not create LND
