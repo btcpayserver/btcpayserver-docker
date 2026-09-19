@@ -1,0 +1,502 @@
+#!/bin/bash
+
+set -Eeuo pipefail
+
+profile_backup=""
+
+print_help() {
+    cat <<'EOF'
+Usage: btcpay-switch <command> [options] <target>
+
+Commands:
+  node default|bitcoincore                 Switch the Bitcoin node implementation.
+  ln [--yes] clightning|lnd|phoenixd|none Switch the Lightning implementation.
+  help                                     Show this help.
+EOF
+}
+
+print_node_help() {
+    cat <<'EOF'
+Usage: btcpay-switch node default|bitcoincore
+
+Both targets currently select Bitcoin Core. Use default to follow the
+implementation selected by the BTCPay Server team, or bitcoincore to pin the
+explicit Bitcoin Core fragment.
+EOF
+}
+
+print_ln_help() {
+    cat <<'EOF'
+Usage: btcpay-switch ln [--yes] clightning|lnd|phoenixd|none
+
+Switch the Lightning implementation for supported configured chains. Switching
+does not migrate wallets, channels, or liquidity. --yes bypasses the interactive
+confirmation required when leaving an active Lightning implementation.
+EOF
+}
+
+fail() {
+    printf 'Error: %s\n' "$1" >&2
+    exit 1
+}
+
+restore_profile() {
+    if [ -n "$profile_backup" ] && [ -f "$profile_backup" ]; then
+        mv -f -- "$profile_backup" "$profile_file" || return 1
+        profile_backup=""
+    fi
+}
+
+cleanup() {
+    if [ -n "$profile_backup" ] && [ -f "$profile_backup" ]; then
+        printf 'Profile backup retained for manual recovery: %s\n' "$profile_backup" >&2
+    fi
+}
+
+handle_interruption() {
+    if [ -n "$profile_backup" ] && [ -f "$profile_backup" ]; then
+        if restore_profile; then
+            printf 'Switch interrupted; previous deployment profile restored. Generated or running state may require recovery.\n' >&2
+        else
+            printf 'Switch interrupted; deployment profile could not be restored.\n' >&2
+        fi
+    fi
+    exit 1
+}
+
+normalize_fragments() {
+    local value="${1//,/;}"
+    local fragment
+    local result=""
+    local -a fragments
+
+    IFS=';' read -ra fragments <<< "$value"
+    for fragment in "${fragments[@]}"; do
+        fragment="${fragment//[[:space:]]/}"
+        fragment="${fragment,,}"
+        fragment="${fragment%.yml}"
+        [ -n "$fragment" ] || continue
+        if [ -z "$result" ]; then
+            result="$fragment"
+        else
+            result="$result;$fragment"
+        fi
+    done
+    printf '%s\n' "$result"
+}
+
+list_contains() {
+    local list="$1"
+    local expected="$2"
+    local item
+    local -a items
+
+    IFS=';' read -ra items <<< "$list"
+    for item in "${items[@]}"; do
+        [ "$item" = "$expected" ] && return 0
+    done
+    return 1
+}
+
+append_unique() {
+    local list="$1"
+    local value="$2"
+
+    if list_contains "$list" "$value"; then
+        printf '%s\n' "$list"
+    elif [ -z "$list" ]; then
+        printf '%s\n' "$value"
+    else
+        printf '%s;%s\n' "$list" "$value"
+    fi
+}
+
+display_list() {
+    printf '%s' "${1//;/, }"
+}
+
+load_saved_state() {
+    profile_file="${BTCPAY_SWITCH_PROFILE:-/etc/profile.d/btcpay-env.sh}"
+    [ -r "$profile_file" ] || fail "Saved deployment profile is not readable: $profile_file"
+
+    local base_directory
+    if ! base_directory="$(
+        unset BTCPAY_BASE_DIRECTORY
+        # shellcheck source=/dev/null
+        . "$profile_file" >/dev/null 2>&1 || exit 1
+        printf '%s\n' "${BTCPAY_BASE_DIRECTORY:-}"
+    )"; then
+        fail "Failed to load saved deployment profile: $profile_file"
+    fi
+
+    [ -n "$base_directory" ] || fail "BTCPAY_BASE_DIRECTORY is not set in $profile_file"
+    repo_dir="$base_directory/btcpayserver-docker"
+    setup_script="$repo_dir/btcpay-setup.sh"
+    helper_script="$repo_dir/helpers.sh"
+    crypto_definitions="$repo_dir/docker-compose-generator/crypto-definitions.json"
+    fragment_dir="$repo_dir/docker-compose-generator/docker-fragments"
+    manifest_file="$repo_dir/Generated/manifest.json"
+
+    [ -f "$setup_script" ] || fail "Setup script does not exist: $setup_script"
+    [ -f "$helper_script" ] || fail "Helper script does not exist: $helper_script"
+    [ -r "$crypto_definitions" ] || fail "Cryptocurrency definitions are not readable: $crypto_definitions"
+    [ -d "$fragment_dir" ] || fail "Fragment directory does not exist: $fragment_dir"
+
+    # shellcheck source=/dev/null
+    . "$helper_script"
+    btcpay_load_saved_environment "$profile_file" ||
+        fail "Failed to reload saved deployment profile: $profile_file"
+
+    additional_fragments="$(normalize_fragments "${BTCPAYGEN_ADDITIONAL_FRAGMENTS:-}")"
+    excluded_fragments="$(normalize_fragments "${BTCPAYGEN_EXCLUDE_FRAGMENTS:-}")"
+    effective_fragments=""
+    if [ -e "$manifest_file" ]; then
+        [ -r "$manifest_file" ] || fail "Generated manifest is not readable: $manifest_file"
+        if ! effective_fragments="$(jq -er '
+            if type == "object" and
+               (.fragments | type == "array") and
+               all(.fragments[]; type == "string")
+            then [.fragments[] | ascii_downcase] | join(";")
+            else error("invalid fragment metadata")
+            end
+        ' "$manifest_file" 2>/dev/null)"; then
+            fail "Generated manifest contains invalid fragment metadata: $manifest_file"
+        fi
+    fi
+}
+
+apply_changes() {
+    [ "$(id -u)" -eq 0 ] || fail "Switching the deployment configuration must be run as root"
+
+    local backup_candidate
+    backup_candidate="$(mktemp "${profile_file}.btcpay-switch.XXXXXX")" ||
+        fail "Failed to create deployment profile backup"
+    if ! cp -p -- "$profile_file" "$backup_candidate"; then
+        rm -f -- "$backup_candidate"
+        fail "Failed to back up deployment profile"
+    fi
+    profile_backup="$backup_candidate"
+
+    local original_directory="$PWD"
+    local setup_status
+    cd "$repo_dir"
+    set +e
+    # shellcheck source=/dev/null
+    . "$setup_script" -i
+    setup_status=$?
+    set -e
+    cd "$original_directory"
+
+    if [ "$setup_status" -ne 0 ]; then
+        if restore_profile; then
+            fail "Failed to apply the switch; previous deployment profile restored. Generated or running state may require recovery"
+        else
+            fail "Failed to apply the switch; deployment profile could not be restored"
+        fi
+    fi
+
+    rm -f -- "$profile_backup"
+    profile_backup=""
+}
+
+switch_node() {
+    local target="$1"
+    case "$target" in
+        default|bitcoincore)
+            ;;
+        *)
+            print_node_help >&2
+            exit 1
+            ;;
+    esac
+
+    load_saved_state
+
+    local current_additional
+    local current_excluded
+    local new_additional
+    local new_excluded
+    current_additional="$(normalize_fragments "${BTCPAYGEN_ADDITIONAL_FRAGMENTS:-}")"
+    current_excluded="$(normalize_fragments "${BTCPAYGEN_EXCLUDE_FRAGMENTS:-}")"
+    new_additional="$(remove_fragments "$current_additional" "bitcoincore" "bitcoinknots")"
+    new_excluded="$(remove_fragments "$current_excluded" "bitcoin")"
+
+    if [ "$target" = "bitcoincore" ]; then
+        new_additional="$(add_fragments "$new_additional" "bitcoincore")"
+        new_excluded="$(add_fragments "$new_excluded" "bitcoin")"
+    fi
+
+    if [ "$new_additional" = "$current_additional" ] && [ "$new_excluded" = "$current_excluded" ]; then
+        printf 'Bitcoin node implementation is already set to %s.\n' "$target"
+        return 0
+    fi
+
+    BTCPAYGEN_ADDITIONAL_FRAGMENTS="$new_additional"
+    BTCPAYGEN_EXCLUDE_FRAGMENTS="$new_excluded"
+    export BTCPAYGEN_ADDITIONAL_FRAGMENTS BTCPAYGEN_EXCLUDE_FRAGMENTS
+
+    printf 'Switching Bitcoin node implementation to %s.\n' "$target"
+    apply_changes
+}
+
+find_manual_lightning_fragments() {
+    local fragment
+    local found=""
+    local implementation_fragments
+    local -a fragments
+    implementation_fragments="$(jq -r '
+        [.[] | .CLightningFragment, .LNDFragment, .PhoenixdFragment | select(. != null) | ascii_downcase]
+        | unique
+        | join(";")
+    ' "$crypto_definitions")"
+
+    IFS=';' read -ra fragments <<< "$implementation_fragments"
+    for fragment in "${fragments[@]}"; do
+        if list_contains "$additional_fragments" "$fragment" || list_contains "$excluded_fragments" "$fragment"; then
+            found="$(append_unique "$found" "$fragment")"
+        fi
+    done
+    printf '%s\n' "$found"
+}
+
+find_lnd_blockers() {
+    local fragment
+    local found=""
+    local candidates
+    local -a fragments
+
+    candidates="$(normalize_fragments "$effective_fragments;$additional_fragments")"
+    IFS=';' read -ra fragments <<< "$candidates"
+    for fragment in "${fragments[@]}"; do
+        if ! list_contains "$effective_fragments" "$fragment" && list_contains "$excluded_fragments" "$fragment"; then
+            continue
+        fi
+        if [ -f "$fragment_dir/$fragment.yml" ] &&
+           grep -Eq "^[[:space:]]*-[[:space:]]*['\"]?bitcoin-lnd['\"]?[[:space:]]*$" "$fragment_dir/$fragment.yml"; then
+            found="$(append_unique "$found" "$fragment")"
+        fi
+    done
+    printf '%s\n' "$found"
+}
+
+implementation_is_active() {
+    local field="$1"
+    local fragment
+    local fragments
+    local -a implementation_fragments
+
+    fragments="$(jq -r --arg field "$field" '
+        [.[] | .[$field] | select(. != null) | ascii_downcase] | unique | join(";")
+    ' "$crypto_definitions")"
+    IFS=';' read -ra implementation_fragments <<< "$fragments"
+    for fragment in "${implementation_fragments[@]}"; do
+        list_contains "$effective_fragments" "$fragment" && return 0
+    done
+    return 1
+}
+
+active_lightning_implementations() {
+    local active=""
+
+    implementation_is_active "CLightningFragment" && active="$(append_unique "$active" "clightning")"
+    implementation_is_active "LNDFragment" && active="$(append_unique "$active" "lnd")"
+    implementation_is_active "PhoenixdFragment" && active="$(append_unique "$active" "phoenixd")"
+    printf '%s\n' "$active"
+}
+
+validate_chain_support() {
+    local target="$1"
+    [ "$target" != "none" ] || return 0
+
+    local field
+    case "$target" in
+        clightning) field="CLightningFragment" ;;
+        lnd) field="LNDFragment" ;;
+        phoenixd) field="PhoenixdFragment" ;;
+    esac
+
+    local chain
+    local support
+    local supported=0
+    local unsupported=""
+    local seen=""
+    local variable
+    local i
+    for i in {1..9}; do
+        variable="BTCPAYGEN_CRYPTO$i"
+        chain="${!variable:-}"
+        chain="${chain,,}"
+        [ -n "$chain" ] || continue
+        list_contains "$seen" "$chain" && continue
+        seen="$(append_unique "$seen" "$chain")"
+
+        support="$(jq -r --arg chain "$chain" --arg field "$field" '
+            first(.[] | select((.Crypto | ascii_downcase) == $chain) | .[$field]) // ""
+        ' "$crypto_definitions")"
+        if [ -n "$support" ]; then
+            supported=$((supported + 1))
+        else
+            unsupported="$(append_unique "$unsupported" "$chain")"
+        fi
+    done
+
+    [ "$supported" -gt 0 ] || fail "$target is not supported by any selected cryptocurrency"
+    if [ -n "$unsupported" ]; then
+        printf 'Warning: %s is not supported for: %s. Those chains will have no managed Lightning service.\n' \
+            "$target" "$(display_list "$unsupported")" >&2
+    fi
+}
+
+confirm_lightning_switch() {
+    local active="$1"
+    local target="$2"
+    local assume_yes="$3"
+    local implementation
+    local leaving_active=false
+    local -a implementations
+
+    IFS=';' read -ra implementations <<< "$active"
+    for implementation in "${implementations[@]}"; do
+        if [ "$implementation" != "$target" ]; then
+            leaving_active=true
+            break
+        fi
+    done
+    [ -n "$active" ] || {
+        case "$current_lightning" in
+            clightning|lnd|phoenixd)
+                [ "$current_lightning" = "$target" ] || leaving_active=true
+                ;;
+        esac
+    }
+
+    [ "$leaving_active" = true ] || return 0
+    printf 'Warning: Switching Lightning implementations does not migrate wallets, channels, or liquidity.\n' >&2
+    printf 'Old implementation data will be retained, but must not be treated as migrated state.\n' >&2
+    [ "$assume_yes" = true ] && return 0
+    [ -t 0 ] || fail "Confirmation requires an interactive terminal; rerun with --yes to proceed"
+
+    local answer
+    if ! read -r -p "Type YES to switch to $target: " answer; then
+        fail "Lightning switch cancelled"
+    fi
+    [ "$answer" = "YES" ] || fail "Lightning switch cancelled"
+}
+
+effective_matches_target() {
+    local target="$1"
+    local active="$2"
+
+    if [ ! -e "$manifest_file" ]; then
+        return 0
+    fi
+    if [ "$target" = "none" ]; then
+        [ -z "$active" ]
+        return
+    fi
+    [ "$active" = "$target" ]
+}
+
+switch_lightning() {
+    local target="$1"
+    local assume_yes="$2"
+    case "$target" in
+        clightning|lnd|phoenixd|none)
+            ;;
+        *)
+            print_ln_help >&2
+            exit 1
+            ;;
+    esac
+
+    load_saved_state
+
+    local manual_fragments
+    manual_fragments="$(find_manual_lightning_fragments)"
+    [ -z "$manual_fragments" ] ||
+        fail "Remove direct Lightning fragment overrides before switching: $(display_list "$manual_fragments")"
+
+    if [ "$target" != "lnd" ]; then
+        local blockers
+        blockers="$(find_lnd_blockers)"
+        [ -z "$blockers" ] ||
+            fail "Remove LND-dependent add-ons before switching: $(display_list "$blockers")"
+    fi
+
+    validate_chain_support "$target"
+
+    local saved_lightning="${BTCPAYGEN_LIGHTNING:-none}"
+    current_lightning="${saved_lightning,,}"
+    case "$current_lightning" in
+        clightning|lnd|phoenixd|none)
+            ;;
+        *)
+            printf 'Warning: replacing invalid saved BTCPAYGEN_LIGHTNING value: %s\n' "$saved_lightning" >&2
+            ;;
+    esac
+
+    local active
+    active="$(active_lightning_implementations)"
+    if [ "$current_lightning" = "$target" ] && effective_matches_target "$target" "$active"; then
+        printf 'Lightning implementation is already set to %s.\n' "$target"
+        return 0
+    fi
+
+    confirm_lightning_switch "$active" "$target" "$assume_yes"
+
+    BTCPAYGEN_LIGHTNING="$target"
+    export BTCPAYGEN_LIGHTNING
+    printf 'Switching Lightning implementation to %s.\n' "$target"
+    apply_changes
+}
+
+trap cleanup EXIT
+trap handle_interruption HUP INT TERM
+
+command_name="${1:-}"
+case "$command_name" in
+    ""|help|-h|--help)
+        print_help
+        exit 0
+        ;;
+    node)
+        shift
+        if [ "${1:-}" = "help" ] || [ "${1:-}" = "-h" ] || [ "${1:-}" = "--help" ]; then
+            print_node_help
+            exit 0
+        fi
+        if [ "$#" -ne 1 ]; then
+            print_node_help >&2
+            exit 1
+        fi
+        switch_node "$1"
+        ;;
+    ln)
+        shift
+        if [ "${1:-}" = "help" ] || [ "${1:-}" = "-h" ] || [ "${1:-}" = "--help" ]; then
+            print_ln_help
+            exit 0
+        fi
+        target=""
+        assume_yes=false
+        for argument in "$@"; do
+            if [ "$argument" = "--yes" ]; then
+                [ "$assume_yes" = false ] || fail "--yes may only be specified once"
+                assume_yes=true
+            elif [ -z "$target" ]; then
+                target="$argument"
+            else
+                print_ln_help >&2
+                exit 1
+            fi
+        done
+        if [ -z "$target" ]; then
+            print_ln_help >&2
+            exit 1
+        fi
+        switch_lightning "$target" "$assume_yes"
+        ;;
+    *)
+        fail "Unknown command: $command_name"
+        ;;
+esac

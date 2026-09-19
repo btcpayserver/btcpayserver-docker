@@ -20,6 +20,28 @@ export BTCPAYGEN_LIGHTNING="clightning"
 
 Use `lnd` or `phoenixd` instead to select another implementation.
 
+## Switch Implementations
+
+Use `btcpay-switch ln` to select a configured Lightning implementation:
+
+```bash
+btcpay-switch ln clightning
+btcpay-switch ln lnd
+btcpay-switch ln phoenixd
+btcpay-switch ln none
+```
+
+Switching away from an active implementation requires typing `YES`. For
+noninteractive use, pass `--yes`. The command refuses to replace custom direct
+Lightning fragment selections or LND-dependent applications; remove the listed
+fragments first. It warns when an implementation is unsupported by some
+selected chains and refuses a selection supported by none of them.
+
+This changes configuration only. It does not migrate wallets, channels,
+liquidity, or credentials, and it retains the previous implementation's Docker
+volumes. Follow the implementation-specific migration guidance before
+switching a funded node.
+
 ## Network Access
 
 Open a peer port only when the node should accept incoming connections. API
