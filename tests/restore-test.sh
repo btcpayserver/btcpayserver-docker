@@ -12,6 +12,7 @@ if [ -f "$profile_path" ]; then
 fi
 
 test_dir="$(mktemp -d)"
+# Stop the fixture's GPG agent and remove its temporary directory on exit.
 cleanup() {
   gpgconf --homedir "$test_dir/gnupg" --kill gpg-agent 2>/dev/null || true
   rm -rf -- "$test_dir"
@@ -26,6 +27,7 @@ export BTCPAY_DATABASE_READY_TIMEOUT=1
 export COMPOSE_HTTP_TIMEOUT=180
 export RESTORE_TEST_RUNNER_PID=$$
 
+# Print the failure message in $@ and available restore logs, then exit with 1.
 fail_test() {
   printf 'Restore test failed: %s\n' "$*" >&2
   if [ -f "${case_dir:-}/restore.log" ]; then
@@ -35,6 +37,8 @@ fail_test() {
 }
 
 # Execute the real script and helper functions, with all Docker access mocked.
+
+# Report UID 0 for -u; delegate other arguments to the system id command.
 id() {
   if [ "$*" = -u ]; then
     printf '0\n'
@@ -43,6 +47,8 @@ id() {
   fi
 }
 
+# Simulate Docker volume lookups and database dumps/imports, saving imported SQL.
+# Enforce migration ordering and inject configured failures or interrupts.
 docker() {
   printf 'docker %s\n' "$*" >> "$RESTORE_TEST_COMMANDS"
   case "$*" in
@@ -95,6 +101,8 @@ docker() {
   esac
 }
 
+# Track mock Compose lifecycle transitions and enforce secrets before startup.
+# Inject configured shutdown/restart failures, LND writes, and SCB replacement.
 docker-compose() {
   [ "$1" = -f ] && [ "$2" = "$BTCPAY_DOCKER_COMPOSE" ] || return 1
   shift 2
@@ -157,6 +165,7 @@ docker-compose() {
   esac
 }
 
+# Inject copy failures for -a operations; otherwise delegate to the system cp.
 cp() {
   if [ "$RESTORE_TEST_FAIL_OVERLAY" = true ] && [ "${1:-}" = -a ]; then
     printf 'Injected volume-copy failure.\n' >&2
@@ -165,6 +174,7 @@ cp() {
   command cp "$@"
 }
 
+# Delegate to tar, rejecting backup archive creation while mock containers run.
 tar() {
   if [ "${1:-}" = -czf ] && [ -n "$RESTORE_TEST_BACKUP_MODE" ]; then
     if [ -f "$RESTORE_TEST_CASE/running-all" ] ||
@@ -177,6 +187,8 @@ tar() {
 }
 export -f id docker docker-compose cp tar
 
+# Create isolated case paths and reset mock settings for a fresh destination.
+# Seed running-stack and destination-data markers so side effects can be checked.
 new_case() {
   case_dir="$(mktemp -d "$test_dir/case.XXXXXX")"
   export RESTORE_TEST_CASE="$case_dir"
@@ -205,12 +217,16 @@ new_case() {
   printf 'existing destination settings\n' > "$RESTORE_TEST_VOLUMES/generated_btcpay_datadir/_data/settings.config"
 }
 
+# Write $1 relative to fixture_dir, creating parent directories.
+# Use nonempty $2 as contents, or the relative path when $2 is absent or empty.
 fixture_file() {
   local path="$fixture_dir/$1"
   mkdir -p "$(dirname "$path")"
   printf '%s\n' "${2:-$1}" > "$path"
 }
 
+# Build fixture data for archive mode $1 and Lightning variant $2 (such as lnd-full).
+# Include mock SQL dumps and the selected wallet, SCB, and channel database state.
 make_fixture() {
   local mode=$1
   local lightning=$2
@@ -242,6 +258,8 @@ make_fixture() {
   fi
 }
 
+# Pack fixture_dir and set archive_path; $1 selects plain (default) or encrypted.
+# Encrypted fixtures also set the test passphrase for subsequent restores.
 pack_archive() {
   local format=${1:-plain}
   archive_path="$case_dir/backup.tar.gz"
@@ -254,12 +272,16 @@ pack_archive() {
   fi
 }
 
+# Run restore with $@ and capture output in the current case's restore.log.
+# Abort the test with diagnostics if restore exits unsuccessfully.
 expect_success() {
   if ! bash "$repo_dir/btcpay-restore.sh" "$@" > "$case_dir/restore.log" 2>&1; then
     fail_test "restore unexpectedly failed: $*"
   fi
 }
 
+# Capture restore.log and restore_status for an expected failure of $@.
+# Abort on unexpected success or unsupported Docker mock commands.
 expect_failure() {
   if bash "$repo_dir/btcpay-restore.sh" "$@" > "$case_dir/restore.log" 2>&1; then
     fail_test "restore unexpectedly succeeded: $*"
@@ -271,6 +293,7 @@ expect_failure() {
   fi
 }
 
+# Assert preflight rejection preserved the running stack and destination data.
 assert_untouched() {
   [ -f "$case_dir/running-all" ] || fail_test 'preflight failure stopped the running stack'
   grep -q '^existing destination settings$' "$RESTORE_TEST_VOLUMES/generated_btcpay_datadir/_data/settings.config" ||
@@ -280,6 +303,8 @@ assert_untouched() {
   fi
 }
 
+# Assert all mock containers are stopped and no whole-stack startup was attempted.
+# Pass allow-restart as $1 when checking cleanup after a failed restart.
 assert_stopped() {
   [ ! -e "$case_dir/running-all" ] && [ ! -e "$case_dir/running-postgres" ] &&
     [ ! -e "$case_dir/running-mariadb" ] || fail_test 'containers were not all left stopped'
@@ -288,6 +313,7 @@ assert_stopped() {
   fi
 }
 
+# Assert both SQL dumps were imported and archived settings reached the destination.
 assert_imports() {
   grep -q '^SELECT 42;$' "$case_dir/postgres-import.sql" || fail_test 'Postgres dump was not imported'
   grep -q '^SELECT 43;$' "$case_dir/mariadb-import.sql" || fail_test 'MariaDB dump was not imported'

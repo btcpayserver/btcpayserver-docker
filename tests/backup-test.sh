@@ -13,6 +13,7 @@ if [ -f "$profile_path" ]; then
 fi
 
 test_dir="$(mktemp -d)"
+# Stop the fixture's GPG agent and remove its temporary directory on exit.
 cleanup() {
   gpgconf --homedir "$test_dir/gnupg" --kill gpg-agent 2>/dev/null || true
   rm -rf -- "$test_dir"
@@ -49,6 +50,7 @@ for file in "${secret_files[@]}"; do
 done
 touch "$BTCPAY_DOCKER_COMPOSE" "$BTCPAY_ENV_FILE"
 
+# Reset mock container markers, shutdown counters, and event logs for a case.
 reset_state() {
   rm -f -- "$BACKUP_TEST_STATE"/{postgres,mariadb,failure-used,interrupted}
   touch "$BACKUP_TEST_STATE/stack" "$BACKUP_TEST_STATE/postgres"
@@ -61,6 +63,8 @@ reset_state() {
 
 # Run the actual backup script without root privileges or a Docker daemon.
 # Unexpected Docker commands fail instead of reaching the host's Docker socket.
+
+# Report UID 0 for -u; delegate other arguments to the system id command.
 id() {
   if [ "$*" = "-u" ]; then
     printf '0\n'
@@ -69,6 +73,8 @@ id() {
   fi
 }
 
+# Simulate Docker volume inspection, readiness probes, and SQL dumps.
+# Log calls, inject configured failures/signals, and reject unexpected commands.
 docker() {
   printf 'docker %s\n' "$*" >>"$BACKUP_TEST_STATE/events"
   case "$*" in
@@ -115,6 +121,8 @@ docker() {
   esac
 }
 
+# Simulate Compose service discovery and start/stop transitions using markers.
+# Log each call and inject configured startup or shutdown failures.
 docker-compose() {
   printf 'compose %s\n' "$*" >>"$BACKUP_TEST_STATE/events"
   [ "$1" = -f ] && [ "$2" = "$BTCPAY_DOCKER_COMPOSE" ] || return 1
@@ -164,6 +172,8 @@ docker-compose() {
   esac
 }
 
+# Delegate to tar after checking that all containers are stopped for archiving.
+# Record archive/validation events and inject the configured failure.
 tar() {
   if [ "$1" = -czf ]; then
     printf 'archive\n' >>"$BACKUP_TEST_STATE/events"
@@ -214,6 +224,7 @@ for file in "${included_files[@]}" "${graph_files[@]}" "${excluded_files[@]}"; d
   printf '%s\n' "$file" >"$fixture_path"
 done
 
+# Assert that no backup work directories or temporary archives remain.
 assert_no_temporary_files() {
   local leftovers
   shopt -s nullglob
@@ -222,6 +233,8 @@ assert_no_temporary_files() {
   [ "${#leftovers[@]}" -eq 0 ]
 }
 
+# Assert the mock stack runs after default backup or stays stopped for migration.
+# Reject any attempted whole-stack restart during a migration backup.
 assert_stack_state() {
   if [ "$BACKUP_TEST_MODE" = migrate ]; then
     [ ! -e "$BACKUP_TEST_STATE/stack" ]

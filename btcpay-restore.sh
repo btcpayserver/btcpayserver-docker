@@ -18,11 +18,13 @@ lnd_archive_dir=""
 lnd_recovery_dir=""
 lnd_recovery_networks=()
 
+# Report $1 on stderr and terminate the script with status 1.
 fail() {
   printf "\n🚨 %s\n" "$1" >&2
   exit 1
 }
 
+# Print restore arguments and the default/migration recovery behavior to stdout.
 usage() {
   printf 'Usage: btcpay-restore.sh [--migrate] /path/to/backup.tar.gz[.gpg]\n\n'
   printf 'Default: restore a routine backup; Bitcoin LND channels require manual channel.backup import.\n'
@@ -37,6 +39,8 @@ stop_btcpay() (
   docker-compose -f "$BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"
 )
 
+# Abort if archived LND data would overlay a linked, invalid, or nonempty target.
+# Allow absent/empty destinations and skip the check for archives without LND.
 check_lnd_destination() {
   local target="$volumes_dir/generated_lnd_bitcoin_datadir/_data"
   local entries
@@ -57,6 +61,8 @@ check_lnd_destination() {
   fi
 }
 
+# Copy nonempty archived SCBs into a private, persistent directory before startup.
+# Set lnd_recovery_dir and lnd_recovery_networks; abort on invalid files or copy errors.
 preserve_lnd_backups() {
   local scb network
   local scb_files
@@ -91,6 +97,8 @@ preserve_lnd_backups() {
   fi
 }
 
+# Print per-network SCB recovery commands using preserved copies, or a wallet-only
+# warning when none exist. This function never imports backups automatically.
 print_lnd_recovery_steps() {
   local network
 
@@ -113,6 +121,8 @@ print_lnd_recovery_steps() {
   done
 }
 
+# EXIT trap: retain failed restore/SCB files and report their paths.
+# Attempt to stop partially restored services when needed, preserving exit status.
 cleanup_on_exit() {
   local status=$?
 
@@ -139,6 +149,8 @@ cleanup_on_exit() {
   exit "$status"
 }
 
+# Poll Postgres readiness for container $1 using database_ready_timeout.
+# Return 0 when ready or 1 after all attempts fail.
 wait_for_postgres() {
   local container=$1
   local elapsed
@@ -153,6 +165,8 @@ wait_for_postgres() {
   return 1
 }
 
+# Poll MariaDB readiness for container $1 using database_ready_timeout.
+# Return 0 when ready or 1 after all attempts fail.
 wait_for_mariadb() {
   local container=$1
   local elapsed
@@ -167,6 +181,7 @@ wait_for_mariadb() {
   return 1
 }
 
+# Read a plain SQL dump from stdin and write a restore-safe version to stdout.
 # pg_dumpall --clean emits cluster-level DROP commands without IF EXISTS in
 # older backups. It also tries to drop and recreate the bootstrap postgres role,
 # even though the restore is connected as that role. Normalize only those

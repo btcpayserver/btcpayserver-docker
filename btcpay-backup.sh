@@ -31,11 +31,13 @@ stack_stopped=false
 work_dir=""
 archive_entries=()
 
+# Report $1 on stderr and terminate the script with status 1.
 fail() {
   printf "\n🚨 %s\n" "$1" >&2
   exit 1
 }
 
+# Print backup modes, output filenames, and migration constraints to stdout.
 usage() {
   printf '%s\n' \
     'Usage: btcpay-backup.sh [--migrate]' \
@@ -62,7 +64,8 @@ if [ "$#" -eq 1 ]; then
   esac
 fi
 
-# btcpay_down's final popd can hide a failed docker-compose down command.
+# Stop the configured Compose stack and record success in stack_stopped.
+# Return nonzero on failure; btcpay_down's final popd can mask shutdown errors.
 stop_btcpay() {
   stack_stopped=false
   if ! (cd "$(dirname "$BTCPAY_ENV_FILE")" &&
@@ -72,12 +75,16 @@ stop_btcpay() {
   stack_stopped=true
 }
 
+# Restart the stack in its Compose environment and run the reverse-proxy helper.
+# Propagate startup or helper failures to the caller.
 restart_btcpay() {
   (cd "$(dirname "$BTCPAY_ENV_FILE")" &&
     docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up --remove-orphans -d -t "${COMPOSE_HTTP_TIMEOUT:-180}" &&
     ensure_reverse_proxy_up)
 }
 
+# Remove this run's temporary archive, dumps, mode marker, and work directory.
+# Return nonzero if removal fails or the work directory fails its path guard.
 cleanup_temporary_files() {
   local cleanup_failed=false
   local path
@@ -106,6 +113,9 @@ cleanup_temporary_files() {
   [ "$cleanup_failed" = false ]
 }
 
+# EXIT trap: clean temporary files and recover the appropriate stack state.
+# Restart stopped default backups, keep migration sources stopped, and preserve
+# the original failure status or report cleanup failures with status 1.
 cleanup_on_exit() {
   local status=$?
   local cleanup_failed=false
@@ -144,6 +154,8 @@ cleanup_on_exit() {
   exit "$status"
 }
 
+# Poll Postgres readiness for container $1 using database_ready_timeout.
+# Return 0 when ready or 1 after all attempts fail.
 wait_for_postgres() {
   local container=$1
   local elapsed
@@ -158,6 +170,8 @@ wait_for_postgres() {
   return 1
 }
 
+# Poll MariaDB readiness for container $1 using database_ready_timeout.
+# Return 0 when ready or 1 after all attempts fail.
 wait_for_mariadb() {
   local container=$1
   local elapsed
@@ -172,6 +186,8 @@ wait_for_mariadb() {
   return 1
 }
 
+# Print the sole container ID for service $1, or an empty string if none is found.
+# Abort on inspection failure or multiple returned container IDs.
 get_compose_container() {
   local service=$1
   local container
@@ -186,6 +202,7 @@ get_compose_container() {
   printf "%s" "$container"
 }
 
+# Return success when service $1 appears in the cached compose_services output.
 compose_has_service() {
   local service=$1
   local configured_service
@@ -199,6 +216,8 @@ compose_has_service() {
   return 1
 }
 
+# Set postgres_container, starting only Postgres if needed, and wait for readiness.
+# Abort on volume creation, startup, discovery, or readiness failures.
 ensure_postgres_ready() {
   postgres_container=$(get_compose_container postgres)
 
@@ -222,6 +241,8 @@ ensure_postgres_ready() {
   fi
 }
 
+# Set mariadb_container, starting only MariaDB if needed, and wait for readiness.
+# Abort on volume creation, startup, discovery, or readiness failures.
 ensure_mariadb_ready() {
   mariadb_container=$(get_compose_container mariadb)
 
