@@ -79,7 +79,7 @@ load_saved_state() {
 
     local profile_state
     if ! profile_state="$(
-        unset BTCPAYGEN_ADDITIONAL_FRAGMENTS BTCPAYGEN_EXCLUDE_FRAGMENTS
+            unset BTCPAYGEN_ADDITIONAL_FRAGMENTS BTCPAYGEN_EXCLUDE_FRAGMENTS BTCPAY_BASE_DIRECTORY
         # shellcheck source=/dev/null
         . "$profile_file" >/dev/null 2>&1 || exit 1
         jq -cn \
@@ -99,8 +99,10 @@ load_saved_state() {
     repo_dir="$base_directory/btcpayserver-docker"
     fragment_dir="$repo_dir/docker-compose-generator/docker-fragments"
     setup_script="$repo_dir/btcpay-setup.sh"
+    helper_script="$repo_dir/helpers.sh"
     [ -d "$fragment_dir" ] || fail "Fragment directory does not exist: $fragment_dir"
     [ -f "$setup_script" ] || fail "Setup script does not exist: $setup_script"
+    [ -f "$helper_script" ] || fail "Helper script does not exist: $helper_script"
 
     local manifest_file="$repo_dir/Generated/manifest.json"
     effective_json='[]'
@@ -146,37 +148,6 @@ contains_name() {
     local values="$1"
     local name="$2"
     jq -e --arg name "$name" 'index($name) != null' <<< "$values" >/dev/null
-}
-
-load_profile_for_apply() {
-    local declaration
-    local flags
-    local name
-    local i
-    local -a caller_names=()
-    local -a caller_values=()
-
-    while IFS= read -r name; do
-        case "$name" in
-            BTCPAYGEN_ADDITIONAL_FRAGMENTS|BTCPAYGEN_EXCLUDE_FRAGMENTS|BTCPAY_BASE_DIRECTORY|BTCPAY_DOCKER_COMPOSE|BTCPAY_ENV_FILE)
-                continue
-                ;;
-        esac
-        declaration="$(declare -p "$name" 2>/dev/null || true)"
-        flags="${declaration#declare -}"
-        flags="${flags%% *}"
-        [[ "$flags" == *r* ]] && continue
-        caller_names+=("$name")
-        caller_values+=("${!name}")
-    done < <(compgen -e)
-
-    # shellcheck source=/dev/null
-    . "$profile_file" >&2
-
-    for ((i = 0; i < ${#caller_names[@]}; i++)); do
-        printf -v "${caller_names[$i]}" '%s' "${caller_values[$i]}"
-        export "${caller_names[$i]}"
-    done
 }
 
 validate_request() {
@@ -251,6 +222,11 @@ apply_state() {
 
     [ "$(id -u)" -eq 0 ] || fail "Fragment changes must be run as root"
 
+    # shellcheck source=/dev/null
+    . "$helper_script"
+    btcpay_load_saved_environment "$profile_file" >&2 ||
+        fail "Failed to reload saved deployment profile: $profile_file"
+
     backup_candidate="$(mktemp "${profile_file}.btcpay-fragments.XXXXXX")" ||
         fail "Failed to create deployment profile backup"
     if ! cp -p -- "$profile_file" "$backup_candidate"; then
@@ -259,7 +235,6 @@ apply_state() {
     fi
     profile_backup="$backup_candidate"
 
-    load_profile_for_apply
     BTCPAYGEN_ADDITIONAL_FRAGMENTS="$(jq -r 'join(";")' <<< "$new_additional_json")"
     BTCPAYGEN_EXCLUDE_FRAGMENTS="$(jq -r 'join(";")' <<< "$new_excluded_json")"
     export BTCPAYGEN_ADDITIONAL_FRAGMENTS BTCPAYGEN_EXCLUDE_FRAGMENTS

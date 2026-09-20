@@ -1,3 +1,30 @@
+BTCPAY_ENV_VARIABLES=(
+    BTCPAY_PROTOCOL
+    BTCPAY_HOST
+    BTCPAY_LIGHTNING_HOST
+    BTCPAY_ADDITIONAL_HOSTS
+    BTCPAY_ANNOUNCEABLE_HOST
+    REVERSEPROXY_HTTP_PORT
+    REVERSEPROXY_HTTPS_PORT
+    REVERSEPROXY_DEFAULT_HOST
+    TRUST_DOWNSTREAM_PROXY
+    NOREVERSEPROXY_HTTP_PORT
+    BTCPAY_IMAGE
+    BTCPAY_UPDATE_CLEAN
+    ACME_CA_URI
+    NBITCOIN_NETWORK
+    LETSENCRYPT_EMAIL
+    LIGHTNING_ALIAS
+    ZAMMAD_HOST
+    BTCPAY_CRYPTOS
+    WOOCOMMERCE_HOST
+    TOR_RELAY_NICKNAME
+    TOR_RELAY_EMAIL
+    LND_WTCLIENT_SWEEP_FEE
+    LIT_PASSWD
+    CLOUDFLARE_TUNNEL_TOKEN
+)
+
 install_tooling() {
     scripts=( \
                 "btcpayserver_bitcoind" "bitcoin-cli.sh" "Command line for your Bitcoin instance" \
@@ -21,12 +48,15 @@ install_tooling() {
                 "*" "btcpay-down.sh" "Command line for stopping all services related to BTCPay Server" \
                 "*" "btcpay-restart.sh" "Command line for restarting all services related to BTCPay Server" \
                 "*" "btcpay-setup.sh" "Command line for restarting all services related to BTCPay Server" \
-                "*" "switch-node.sh" "Command line for switching the Bitcoin node implementation" \
+                "*" "btcpay-switch" "Command line for switching node implementations" \
                 "*" "btcpay-up.sh" "Command line for starting all services related to BTCPay Server" \
                 "*" "btcpay-admin.sh" "Command line for some administrative operation in BTCPay Server" \
                 "*" "btcpay-update.sh" "Command line for updating your BTCPay Server to the latest commit of this repository" \
                 "*" "changedomain.sh" "Command line for changing the external domain of your BTCPay Server" \
             )
+
+    # Remove the utility replaced by btcpay-switch, including dangling symlinks.
+    rm -f -- /usr/local/bin/switch-node.sh || return 1
 
     i=0
     while [ $i -lt ${#scripts[@]} ]; do
@@ -48,6 +78,17 @@ install_tooling() {
         fi
         i=`expr $i + 3`
     done
+}
+
+btcpay_load_saved_environment() {
+    local profile_file="$1"
+
+    [ -r "$profile_file" ] || return 1
+
+    # Unlike other saved settings, absence means use the generated host list.
+    unset BTCPAY_LETSENCRYPT_HOSTS
+    # shellcheck source=/dev/null
+    . "$profile_file"
 }
 
 remove_fragments() {
@@ -193,34 +234,7 @@ btcpay_expand_variables
 
 local variable
 local value
-local env_variables=(
-    BTCPAY_PROTOCOL
-    BTCPAY_HOST
-    BTCPAY_LIGHTNING_HOST
-    BTCPAY_ADDITIONAL_HOSTS
-    BTCPAY_ANNOUNCEABLE_HOST
-    REVERSEPROXY_HTTP_PORT
-    REVERSEPROXY_HTTPS_PORT
-    REVERSEPROXY_DEFAULT_HOST
-    TRUST_DOWNSTREAM_PROXY
-    NOREVERSEPROXY_HTTP_PORT
-    BTCPAY_IMAGE
-    BTCPAY_UPDATE_CLEAN
-    ACME_CA_URI
-    NBITCOIN_NETWORK
-    LETSENCRYPT_EMAIL
-    LIGHTNING_ALIAS
-    ZAMMAD_HOST
-    BTCPAY_CRYPTOS
-    WOOCOMMERCE_HOST
-    TOR_RELAY_NICKNAME
-    TOR_RELAY_EMAIL
-    LND_WTCLIENT_SWEEP_FEE
-    LIT_PASSWD
-    CLOUDFLARE_TUNNEL_TOKEN
-)
-
-for variable in "${env_variables[@]}"; do
+for variable in "${BTCPAY_ENV_VARIABLES[@]}"; do
     value="${!variable-}"
     if [[ "$value" == *$'\n'* ]] || [[ "$value" == *$'\r'* ]]; then
         echo "Refusing to write $variable: environment values cannot contain newlines." >&2
@@ -237,7 +251,7 @@ if [[ -f "$sshd_config" ]] && \
    service sshd reload
 fi
 
-for variable in "${env_variables[@]}"; do
+for variable in "${BTCPAY_ENV_VARIABLES[@]}"; do
     printf '%s=%s\n' "$variable" "${!variable-}"
 done > "$BTCPAY_ENV_FILE"
 }

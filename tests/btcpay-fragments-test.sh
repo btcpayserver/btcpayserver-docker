@@ -10,8 +10,10 @@ deployment_dir="$test_dir/deployment"
 test_repo="$deployment_dir/btcpayserver-docker"
 fragment_dir="$test_repo/docker-compose-generator/docker-fragments"
 profile="$test_dir/btcpay-env.sh"
+env_file="$test_dir/.env"
 mkdir -p "$test_dir/bin" "$fragment_dir"
 ln -s "$repo_dir/btcpay-fragments" "$test_dir/bin/btcpay-fragments"
+ln -s "$repo_dir/helpers.sh" "$test_repo/helpers.sh"
 
 touch \
     "$fragment_dir/alpha.yml" \
@@ -38,12 +40,23 @@ write_id 0
 cat > "$test_repo/btcpay-setup.sh" <<'EOF'
 #!/bin/bash
 printf 'setup invoked\n' >&2
-printf '%s\n' "${TEST_OVERRIDE:-unset}" >> "$TEST_SETUP_OVERRIDES"
+printf '%s|%s|%s\n' \
+    "${TEST_OVERRIDE:-unset}" \
+    "${BTCPAY_IMAGE-unset}" \
+    "${BTCPAY_LETSENCRYPT_HOSTS+set}" >> "$TEST_SETUP_OVERRIDES"
 {
     printf 'export BTCPAY_BASE_DIRECTORY=%q\n' "$TEST_BASE_DIRECTORY"
+    printf 'export BTCPAY_ENV_FILE=%q\n' "$TEST_ENV_FILE"
     printf 'export BTCPAYGEN_ADDITIONAL_FRAGMENTS=%q\n' "$BTCPAYGEN_ADDITIONAL_FRAGMENTS"
     printf 'export BTCPAYGEN_EXCLUDE_FRAGMENTS=%q\n' "$BTCPAYGEN_EXCLUDE_FRAGMENTS"
     printf 'export TEST_OVERRIDE=%q\n' "profile"
+    cat <<'PROFILE'
+if cat "$BTCPAY_ENV_FILE" &> /dev/null; then
+    while IFS= read -r line; do
+        ! [[ "$line" == "#"* ]] && [[ "$line" == *"="* ]] && export "$line"
+    done < "$BTCPAY_ENV_FILE"
+fi
+PROFILE
 } > "$BTCPAY_FRAGMENTS_PROFILE"
 if [ "${TEST_SETUP_FAIL:-false}" = "true" ]; then
     printf 'setup failed\n' >&2
@@ -56,19 +69,31 @@ chmod +x "$test_repo/btcpay-setup.sh"
 write_profile() {
     {
         printf 'export BTCPAY_BASE_DIRECTORY=%q\n' "$deployment_dir"
+        printf 'export BTCPAY_ENV_FILE=%q\n' "$env_file"
         printf 'export BTCPAYGEN_ADDITIONAL_FRAGMENTS=%q\n' "$1"
         printf 'export BTCPAYGEN_EXCLUDE_FRAGMENTS=%q\n' "$2"
         printf 'export TEST_OVERRIDE=%q\n' "profile"
+        cat <<'PROFILE'
+if cat "$BTCPAY_ENV_FILE" &> /dev/null; then
+    while IFS= read -r line; do
+        ! [[ "$line" == "#"* ]] && [[ "$line" == *"="* ]] && export "$line"
+    done < "$BTCPAY_ENV_FILE"
+fi
+PROFILE
     } > "$profile"
 }
 
+printf 'BTCPAY_IMAGE=saved-image\n' > "$env_file"
 write_profile ' stale.yml ; beta ; beta ' 'nginx-https;legacy-missing'
 
 export PATH="$test_dir/bin:$PATH"
 export BTCPAY_FRAGMENTS_PROFILE="$profile"
 export TEST_BASE_DIRECTORY="$deployment_dir"
+export TEST_ENV_FILE="$env_file"
 export TEST_SETUP_OVERRIDES="$test_dir/setup-overrides"
 export TEST_OVERRIDE="caller"
+export BTCPAY_IMAGE="caller-only"
+export BTCPAY_LETSENCRYPT_HOSTS="caller-only"
 export BTCPAYGEN_ADDITIONAL_FRAGMENTS="parent-stale-additional"
 export BTCPAYGEN_EXCLUDE_FRAGMENTS="parent-stale-excluded"
 
@@ -161,7 +186,7 @@ run_fragments add ' ALPHA.YML '
 [ "$status" -eq 0 ]
 assert_state '["alpha","beta","stale"]' '["legacy-missing","nginx-https"]'
 [ "$(setup_calls)" -eq 4 ]
-[ "$(sort -u "$TEST_SETUP_OVERRIDES")" = "caller" ]
+[ "$(sort -u "$TEST_SETUP_OVERRIDES")" = "profile|saved-image|" ]
 [[ "$error_output" == *"setup invoked"* ]]
 
 profile_before="$test_dir/profile-before"

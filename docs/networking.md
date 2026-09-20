@@ -18,7 +18,7 @@ Port 80 must be reachable for the default ACME HTTP challenge. Changing
 device forwards public port 80 to it.
 
 `BTCPAY_ADDITIONAL_HOSTS` accepts comma-separated hostnames. By default,
-certificates are requested for the primary and additional hosts. Set
+certificates are requested for the primary (`BTCPAY_HOST`) and additional hosts (`BTCPAY_ADDITIONAL_HOSTS`). Set
 `BTCPAY_LETSENCRYPT_HOSTS` to a comma-separated subset, or explicitly set it to
 an empty string to disable certificate requests.
 
