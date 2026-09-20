@@ -40,9 +40,10 @@ write_id 0
 cat > "$test_repo/btcpay-setup.sh" <<'EOF'
 #!/bin/bash
 printf 'setup invoked\n' >&2
-printf '%s|%s\n' \
+printf '%s|%s|%s\n' \
     "${TEST_OVERRIDE:-unset}" \
-    "${BTCPAY_IMAGE-unset}" >> "$TEST_SETUP_OVERRIDES"
+    "${BTCPAY_IMAGE-unset}" \
+    "${BTCPAY_LETSENCRYPT_HOSTS+set}" >> "$TEST_SETUP_OVERRIDES"
 {
     printf 'export BTCPAY_BASE_DIRECTORY=%q\n' "$TEST_BASE_DIRECTORY"
     printf 'export BTCPAY_ENV_FILE=%q\n' "$TEST_ENV_FILE"
@@ -92,6 +93,7 @@ export TEST_ENV_FILE="$env_file"
 export TEST_SETUP_OVERRIDES="$test_dir/setup-overrides"
 export TEST_OVERRIDE="caller"
 export BTCPAY_IMAGE="caller-only"
+export BTCPAY_LETSENCRYPT_HOSTS="caller-only"
 export BTCPAYGEN_ADDITIONAL_FRAGMENTS="parent-stale-additional"
 export BTCPAYGEN_EXCLUDE_FRAGMENTS="parent-stale-excluded"
 
@@ -184,7 +186,7 @@ run_fragments add ' ALPHA.YML '
 [ "$status" -eq 0 ]
 assert_state '["alpha","beta","stale"]' '["legacy-missing","nginx-https"]'
 [ "$(setup_calls)" -eq 4 ]
-[ "$(sort -u "$TEST_SETUP_OVERRIDES")" = "profile|saved-image" ]
+[ "$(sort -u "$TEST_SETUP_OVERRIDES")" = "profile|saved-image|" ]
 [[ "$error_output" == *"setup invoked"* ]]
 
 profile_before="$test_dir/profile-before"

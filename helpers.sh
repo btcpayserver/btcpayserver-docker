@@ -85,6 +85,8 @@ btcpay_load_saved_environment() {
 
     [ -r "$profile_file" ] || return 1
 
+    # Unlike other saved settings, absence means use the generated host list.
+    unset BTCPAY_LETSENCRYPT_HOSTS
     # shellcheck source=/dev/null
     . "$profile_file"
 }
