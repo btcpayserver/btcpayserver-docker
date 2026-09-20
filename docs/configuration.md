@@ -36,7 +36,7 @@ Fragments](./fragments.md).
 | `NOREVERSEPROXY_HTTP_PORT` | BTCPay host port without Nginx | `80` |
 | `TRUST_DOWNSTREAM_PROXY` | Trust forwarded headers from a protected external proxy | `false` |
 | `LETSENCRYPT_EMAIL` | ACME expiry-notification address | Empty |
-| `BTCPAY_LETSENCRYPT_HOSTS` | Hosts receiving certificates; explicit empty disables requests | All configured hosts |
+| `BTCPAY_LETSENCRYPT_HOSTS` | Hosts receiving certificates; explicit empty disables requests | Certificates are requested for the primary (`BTCPAY_HOST`) and additional hosts (`BTCPAY_ADDITIONAL_HOSTS`). |
 | `ACME_CA_URI` | `production`, `staging`, or another ACME directory | `production` |
 
 Only enable `TRUST_DOWNSTREAM_PROXY=true` when direct access to Nginx's HTTP
