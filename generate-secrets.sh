@@ -64,11 +64,16 @@ while IFS= read -r secret; do
     fi
 
     temporary="$(mktemp "$secret_dir/.btcpay-secret.XXXXXX")"
-    secret_value=""
-    while (( ${#secret_value} < 64 )); do
-        secret_value+="$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | LC_ALL=C tr -dc 'a-zA-Z0-9')"
-    done
-    printf '%s' "${secret_value:0:64}" > "$temporary"
+    # Preserve the UI password when migrating existing LiT deployments.
+    if [[ "$relative_path" == "lit_password" && -n "${LIT_PASSWD:-}" ]]; then
+        printf '%s' "$LIT_PASSWD" > "$temporary"
+    else
+        secret_value=""
+        while (( ${#secret_value} < 64 )); do
+            secret_value+="$(dd if=/dev/urandom bs=128 count=1 2>/dev/null | LC_ALL=C tr -dc 'a-zA-Z0-9')"
+        done
+        printf '%s' "${secret_value:0:64}" > "$temporary"
+    fi
     chmod 644 -- "$temporary"
     if [[ ! -e "$secret_path" && ! -L "$secret_path" ]]; then
         mv -n -- "$temporary" "$secret_path"
