@@ -86,7 +86,6 @@ incompatibilities in [Optional Fragments](./fragments.md#resource-profiles).
 | `WOOCOMMERCE_HOST` | `opt-add-woocommerce` |
 | `ZAMMAD_HOST` | `opt-add-zammad` |
 | `PIHOLE_SERVERIP` | `opt-add-pihole` |
-| `LIT_PASSWD` | `opt-add-lightning-terminal` |
 | `LND_WTCLIENT_SWEEP_FEE` | `opt-lnd-wtclient` |
 | `TOR_RELAY_NICKNAME`, `TOR_RELAY_EMAIL` | `opt-add-tor-relay` |
 | `BTCPAY_DCR_WALLET_PASSPHRASE` | Decred wallet service |

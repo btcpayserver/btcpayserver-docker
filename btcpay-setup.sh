@@ -229,7 +229,7 @@ echo "
 Parameters passed:"
 for variable in "${BTCPAY_ENV_VARIABLES[@]}"; do
     case "$variable" in
-        LIT_PASSWD|CLOUDFLARE_TUNNEL_TOKEN)
+        CLOUDFLARE_TUNNEL_TOKEN)
             continue
             ;;
     esac

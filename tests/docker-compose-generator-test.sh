@@ -65,6 +65,29 @@ if grep -q 'BTCPAY_BTCPAYHOSTENABLED\|btcpay_host_id_ed25519' \
     exit 1
 fi
 
+(
+    cd "$generator_dir"
+    BTCPAYGEN_REVERSEPROXY="nginx" \
+    BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-add-lightning-terminal" \
+    BTCPAYGEN_SUBNAME="lit-secret-test" \
+    dotnet run \
+        --no-build \
+        --project src/docker-compose-generator.csproj \
+        --configuration Release \
+        --no-launch-profile \
+        -p:TargetFrameworkOverride=net8.0
+)
+
+jq -e '.secrets == ["../secrets/lit_password"]' \
+    "$test_dir/Generated/manifest.json" >/dev/null
+grep -q -- '--uipassword_file=/run/secrets/lit_password' \
+    "$test_dir/Generated/docker-compose.lit-secret-test.yml"
+if grep -q -- '--uipassword=' \
+    "$test_dir/Generated/docker-compose.lit-secret-test.yml"; then
+    printf 'Lightning Terminal password was rendered into the command\n' >&2
+    exit 1
+fi
+
 set +e
 proxy_conflict_output="$({
     cd "$generator_dir" || exit 1
