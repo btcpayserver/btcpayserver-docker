@@ -30,9 +30,9 @@ services:
       - "nbxplorer_datadir:/root/.nbxplorer"
     ports:
       - "9735:9735"
-      - "3010"
     expose:
       - "9736"
+      - "3010"
     links:
       - bitcoind
 
