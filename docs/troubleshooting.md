@@ -72,6 +72,20 @@ when requests with unrecognized hosts should reach BTCPay Server.
 If another proxy terminates HTTPS, confirm it preserves the `Host` and
 `X-Forwarded-Proto` headers. See [Networking](./networking.md).
 
+### "Your access to BTCPay Server is over an unsecured network"
+
+If HTTPS is terminated by an external reverse proxy, ensure it sends
+`X-Forwarded-Proto: https`, then reconfigure BTCPay Server to trust the proxy:
+
+```bash
+export TRUST_DOWNSTREAM_PROXY="true"
+. ./btcpay-setup.sh -i
+```
+
+Only enable this when the BTCPay host's HTTP port is accessible exclusively
+through the trusted reverse proxy. See [External Reverse
+Proxy](./networking.md#external-reverse-proxy).
+
 ## Restart the Stack
 
 ```bash
