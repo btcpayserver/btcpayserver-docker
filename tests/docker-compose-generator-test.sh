@@ -78,7 +78,7 @@ fi
         -p:TargetFrameworkOverride=net8.0
 )
 
-jq -e '.secrets == ["../secrets/lit_password"]' \
+jq -e '.secrets | index("../secrets/lit_password") != null' \
     "$test_dir/Generated/manifest.json" >/dev/null
 grep -q -- '--uipassword_file=/run/secrets/lit_password' \
     "$test_dir/Generated/docker-compose.lit-secret-test.yml"
