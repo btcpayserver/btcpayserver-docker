@@ -72,12 +72,8 @@ catalog](./fragments.md) for dependencies and exposed ports.
 
 ## Backups
 
-Old Lightning channel state is dangerous and can lead to loss of funds. A full
-deployment backup does not by itself guarantee frozen channel state because the
-backup script restarts the stack. Read [Backup and
-Restore](./backup-restore.md#lightning-channel-backup) and follow the selected
-implementation's migration guidance before moving or restoring a Lightning
-deployment.
+For Lightning backup, disaster recovery, and migration requirements, follow
+[Backup and Restore](./backup-restore.md#lightning-channel-backup).
 
 For wallet, liquidity, and channel-management guidance, see the
 [BTCPay Server Lightning documentation](https://docs.btcpayserver.org/LightningNetwork/).

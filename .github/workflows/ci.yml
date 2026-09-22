@@ -49,6 +49,10 @@ jobs:
         run: tests/nginx-template-test.sh
       - name: Test secret generation
         run: tests/generate-secrets-test.sh
+      - name: Test backup archives
+        run: bash tests/backup-test.sh
+      - name: Test restore modes
+        run: bash tests/restore-test.sh
       - name: Validate nginx route catalog
         run: |
           nginx_image="$(tests/docker-fragment-image.sh nginx)"

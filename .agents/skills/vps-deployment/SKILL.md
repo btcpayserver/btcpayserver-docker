@@ -63,7 +63,11 @@ is unavailable, use one concise fallback questionnaire.
 
 Do not ask about backup plans, destinations, encryption, retention, or restore
 testing during setup. Only discuss backup or restore details when the user
-explicitly requests backup or restore work.
+explicitly requests backup, migration, or restore work.
+
+For explicitly requested backup, migration, or restore work, follow
+`docs/backup-restore.md` as the source of truth. Do not reproduce its procedures
+in this skill.
 
 Recommend starting without Lightning unless the user understands liquidity
 management and its operational constraints. Do not enable optional services
