@@ -42,10 +42,10 @@ services:
 
   tor:
     restart: unless-stopped
-    image: btcpayserver/tor:0.4.9.12
+    image: btcpayserver/tor:0.4.9.12-1
     container_name: tor
     environment:
-      TOR_PASSWORD: btcpayserver
+      TOR_PASSWORD_FILE: /run/secrets/tor_password
       TOR_ADDITIONAL_CONFIG: /usr/local/etc/tor/torrc-2
       TOR_EXTRA_ARGS: |
         CookieAuthentication 1
@@ -56,6 +56,8 @@ services:
       - "tor_datadir:/home/tor/.tor"
       - "tor_torrcdir:/usr/local/etc/tor:ro"
       - "tor_servicesdir:/var/lib/tor/hidden_services"
+    secrets:
+      - tor_password
 
   clightning_bitcoin:
     environment:
@@ -124,3 +126,6 @@ volumes:
   tor_datadir:
   tor_torrcdir:
   tor_servicesdir:
+secrets:
+  tor_password:
+    file: ../secrets/tor_password

@@ -16,16 +16,21 @@ services:
 
   tor-relay:
     restart: unless-stopped
-    image: btcpayserver/tor:0.4.9.12
+    image: btcpayserver/tor:0.4.9.12-1
     container_name: tor-relay
     environment:
-      TOR_PASSWORD: btcpayserver
+      TOR_PASSWORD_FILE: /run/secrets/tor_relay_password
       TOR_ADDITIONAL_CONFIG: /usr/local/etc/tor/torrc-2
+    secrets:
+      - tor_relay_password
     volumes:
       - "tor_relay_datadir:/home/tor/.tor"
-      - "tor_relay_torrcdir:/usr/local/etc/tor"
+      - "tor_relay_torrcdir:/usr/local/etc/tor:ro"
     ports:
       - "9001:9001"
 volumes:
   tor_relay_datadir:
   tor_relay_torrcdir:
+secrets:
+  tor_relay_password:
+    file: ../secrets/tor_relay_password

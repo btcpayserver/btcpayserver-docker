@@ -31,8 +31,16 @@ jq -e '
     (.fragments | index("opt-add-cloudflared") != null) and
     (.fragments | index("nginx") != null) and
     (.fragments | index("btcpay-host") != null) and
-    (.fragments | index("nginx-https") == null)
+    (.fragments | index("nginx-https") == null) and
+    .secrets == ["../secrets/tor_password"]
 ' "$test_dir/Generated/manifest.json" >/dev/null
+grep -q 'TOR_PASSWORD_FILE: /run/secrets/tor_password' \
+    "$test_dir/Generated/docker-compose.fragment-exclusion-test.yml"
+if grep -q 'TOR_PASSWORD: btcpayserver' \
+    "$test_dir/Generated/docker-compose.fragment-exclusion-test.yml"; then
+    printf 'Hardcoded Tor control password was generated\n' >&2
+    exit 1
+fi
 grep -q 'BTCPAY_BTCPAYHOSTENABLED' \
     "$test_dir/Generated/docker-compose.fragment-exclusion-test.yml"
 grep -q 'btcpay_host_id_ed25519' \
@@ -78,13 +86,36 @@ fi
         -p:TargetFrameworkOverride=net8.0
 )
 
-jq -e '.secrets == ["../secrets/lit_password"]' \
+jq -e '.secrets == ["../secrets/lit_password", "../secrets/tor_password"]' \
     "$test_dir/Generated/manifest.json" >/dev/null
 grep -q -- '--uipassword_file=/run/secrets/lit_password' \
     "$test_dir/Generated/docker-compose.lit-secret-test.yml"
 if grep -q -- '--uipassword=' \
     "$test_dir/Generated/docker-compose.lit-secret-test.yml"; then
     printf 'Lightning Terminal password was rendered into the command\n' >&2
+    exit 1
+fi
+
+(
+    cd "$generator_dir"
+    BTCPAYGEN_REVERSEPROXY="nginx" \
+    BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-add-tor-relay" \
+    BTCPAYGEN_SUBNAME="tor-relay-secret-test" \
+    dotnet run \
+        --no-build \
+        --project src/docker-compose-generator.csproj \
+        --configuration Release \
+        --no-launch-profile \
+        -p:TargetFrameworkOverride=net8.0
+)
+
+jq -e '.secrets == ["../secrets/tor_password", "../secrets/tor_relay_password"]' \
+    "$test_dir/Generated/manifest.json" >/dev/null
+grep -q 'TOR_PASSWORD_FILE: /run/secrets/tor_relay_password' \
+    "$test_dir/Generated/docker-compose.tor-relay-secret-test.yml"
+if grep -q 'TOR_PASSWORD: btcpayserver' \
+    "$test_dir/Generated/docker-compose.tor-relay-secret-test.yml"; then
+    printf 'Hardcoded Tor relay control password was generated\n' >&2
     exit 1
 fi
 
