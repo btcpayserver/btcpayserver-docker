@@ -25,7 +25,7 @@ services:
       - tor_relay_password
     volumes:
       - "tor_relay_datadir:/home/tor/.tor"
-      - "tor_relay_torrcdir:/usr/local/etc/tor:ro"
+      - "tor_relay_torrcdir:/usr/local/etc/tor"
     ports:
       - "9001:9001"
 volumes:
