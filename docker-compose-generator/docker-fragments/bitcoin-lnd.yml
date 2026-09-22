@@ -65,10 +65,10 @@ services:
       RTL_COOKIE_PATH: /data/.cookie
       LOGOUT_REDIRECT_LINK: /server/services
     volumes:
-      - "bitcoin_datadir:/etc/bitcoin"
-      - "lnd_bitcoin_datadir:/etc/lnd"
-      - "lnd_bitcoin_datadir:/root/.lnd"
-      - "lndloop_bitcoin_datadir:/etc/lndloop"
+      - "bitcoin_datadir:/etc/bitcoin:ro"
+      - "lnd_bitcoin_datadir:/etc/lnd:ro"
+      - "lnd_bitcoin_datadir:/root/.lnd:ro"
+      - "lndloop_bitcoin_datadir:/etc/lndloop:ro"
       - "lnd_bitcoin_rtl_datadir:/data"
     expose:
       - "3000"
@@ -83,7 +83,7 @@ services:
       BTCPAY_BTCEXTERNALLNDREST: "server=/lnd-rest/btc/;macaroonfilepath=/etc/lnd_bitcoin/admin.macaroon;macaroondirectorypath=/etc/lnd_bitcoin"
       BTCPAY_BTCEXTERNALLNDSEEDBACKUP: "/etc/lnd_bitcoin/data/chain/bitcoin/${NBITCOIN_NETWORK:-regtest}/walletunlock.json"
     volumes:
-      - "lnd_bitcoin_datadir:/etc/lnd_bitcoin"
+      - "lnd_bitcoin_datadir:/etc/lnd_bitcoin:ro"
       - "lnd_bitcoin_rtl_datadir:/etc/lnd_bitcoin_rtl"
     links:
       - lnd_bitcoin
@@ -95,13 +95,9 @@ services:
   nginx:
     links:
       - "lnd_bitcoin"
-    volumes:
-      - "lnd_bitcoin_datadir:/lnd"
   nginx-gen:
     links:
       - "lnd_bitcoin"
-    volumes:
-      - "lnd_bitcoin_datadir:/lnd"
 
   mempool_api:
     environment:
@@ -112,7 +108,7 @@ services:
       LND_REST_API_URL: "http://lnd_bitcoin:8080"
       LND_TIMEOUT: 1000000
     volumes:
-      - "lnd_bitcoin_datadir:/etc/lnd"
+      - "lnd_bitcoin_datadir:/etc/lnd:ro"
 
   mempool_web:
     environment:

@@ -11,15 +11,15 @@ services:
       BTCPAY_TORRCFILE: /usr/local/etc/tor/torrc-2
       BTCPAY_SOCKSENDPOINT: tor:9050
     volumes:
-      - "tor_servicesdir:/var/lib/tor/hidden_services"
-      - "tor_torrcdir:/usr/local/etc/tor/"
+      - "tor_servicesdir:/var/lib/tor/hidden_services:ro"
+      - "tor_torrcdir:/usr/local/etc/tor/:ro"
 
   woocommerce:
     environment:
       HIDDENSERVICE_NAME: WooCommerce
       WOOCOMMERCE_HIDDENSERVICE_HOSTNAME_FILE: /var/lib/tor/hidden_services/WooCommerce/hostname
     volumes:
-      - "tor_servicesdir:/var/lib/tor/hidden_services"
+      - "tor_servicesdir:/var/lib/tor/hidden_services:ro"
 
   bitcoind:
     environment:
@@ -32,16 +32,13 @@ services:
       BITCOIN_EXTRA_ARGS: |
         onion=tor:9050
     volumes:
-      - "tor_datadir:/home/tor/.tor"
+      - "tor_datadir:/home/tor/.tor:ro"
     links:
       - tor
 
-  nginx:
-    volumes:
-      - "tor_servicesdir:/var/lib/tor/hidden_services"
   nginx-gen:
     volumes:
-      - "tor_servicesdir:/var/lib/tor/hidden_services"
+      - "tor_servicesdir:/var/lib/tor/hidden_services:ro"
 
   tor:
     restart: unless-stopped
@@ -57,7 +54,7 @@ services:
       - "9051"  # Tor Control
     volumes:
       - "tor_datadir:/home/tor/.tor"
-      - "tor_torrcdir:/usr/local/etc/tor"
+      - "tor_torrcdir:/usr/local/etc/tor:ro"
       - "tor_servicesdir:/var/lib/tor/hidden_services"
 
   clightning_bitcoin:
@@ -68,7 +65,7 @@ services:
       LIGHTNINGD_OPT: |
         proxy=tor:9050
     volumes:
-      - "tor_servicesdir:/var/lib/tor/hidden_services"
+      - "tor_servicesdir:/var/lib/tor/hidden_services:ro"
     links:
       - tor
   tor-gen:
@@ -95,8 +92,8 @@ services:
     links:
       - tor
     volumes:
-      - "tor_datadir:/home/tor/.tor"
-      - "tor_servicesdir:/var/lib/tor/hidden_services"
+      - "tor_datadir:/home/tor/.tor:ro"
+      - "tor_servicesdir:/var/lib/tor/hidden_services:ro"
 
   electrumx:
     environment:
@@ -109,16 +106,16 @@ services:
       HIDDENSERVICE_NAME: teos
       HIDDENSERVICE_PORT: 9814
     volumes:
-      - "tor_servicesdir:/var/lib/tor/hidden_services"
-      - "tor_torrcdir:/usr/local/etc/tor/"
+      - "tor_servicesdir:/var/lib/tor/hidden_services:ro"
+      - "tor_torrcdir:/usr/local/etc/tor/:ro"
 
   zammad-nginx:
     environment:
       HIDDENSERVICE_NAME: zammad
       HIDDENSERVICE_PORT: 80
     volumes:
-      - "tor_servicesdir:/var/lib/tor/hidden_services"
-      - "tor_torrcdir:/usr/local/etc/tor/"
+      - "tor_servicesdir:/var/lib/tor/hidden_services:ro"
+      - "tor_torrcdir:/usr/local/etc/tor/:ro"
 
   bitcoin_thub:
     environment:

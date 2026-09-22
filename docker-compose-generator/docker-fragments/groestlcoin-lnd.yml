@@ -48,7 +48,7 @@ services:
       BTCPAY_GRSEXTERNALLNDREST: "server=/lnd-rest/grs/;macaroonfilepath=/etc/lnd_groestlcoin/admin.macaroon;macaroondirectorypath=/etc/lnd_groestlcoin"
       BTCPAY_GRSEXTERNALLNDSEEDBACKUP: "/etc/lnd_groestlcoin/data/chain/groestlcoin/${NBITCOIN_NETWORK:-regtest}/walletunlock.json"
     volumes:
-      - "lnd_groestlcoin_datadir:/etc/lnd_groestlcoin"
+      - "lnd_groestlcoin_datadir:/etc/lnd_groestlcoin:ro"
     links:
       - lnd_groestlcoin
 
@@ -64,13 +64,9 @@ services:
   nginx:
     links:
       - "lnd_groestlcoin"
-    volumes:
-      - "lnd_groestlcoin_datadir:/lnd"
   nginx-gen:
     links:
       - "lnd_groestlcoin"
-    volumes:
-      - "lnd_groestlcoin_datadir:/lnd"
 
 volumes:
   lnd_groestlcoin_datadir:
