@@ -65,11 +65,9 @@ Do not ask about backup plans, destinations, encryption, retention, or restore
 testing during setup. Only discuss backup or restore details when the user
 explicitly requests backup, migration, or restore work.
 
-For explicitly requested Bitcoin LND backup, migration, or restore work, follow
-`docs/backup-restore.md`. Default backups require manual static channel backup
-recovery and do not preserve open channels. For a planned migration, use
-`--migrate` for both backup and restore, keep the source stopped from the
-snapshot onward, and never run the original and restored nodes together.
+For explicitly requested backup, migration, or restore work, follow
+`docs/backup-restore.md` as the source of truth. Do not reproduce its procedures
+in this skill.
 
 Recommend starting without Lightning unless the user understands liquidity
 management and its operational constraints. Do not enable optional services

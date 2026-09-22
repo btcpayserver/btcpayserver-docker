@@ -50,16 +50,8 @@ catalog](./fragments.md) for dependencies and exposed ports.
 
 ## Backups
 
-Old Lightning channel state is dangerous and can lead to loss of funds.
-Default backups restart the stack after taking their snapshot. For Bitcoin LND,
-they exclude the channel database and require manual static channel backup
-recovery; they do not preserve open channels.
-For a planned Bitcoin LND migration, use `btcpay-backup.sh --migrate` and
-`btcpay-restore.sh --migrate`, keeping the source stopped from the snapshot onward
-and never running the original and restored nodes together.
-Read [Backup and Restore](./backup-restore.md#lightning-channel-backup) and follow
-the selected implementation's migration guidance before moving or restoring a
-Lightning deployment.
+For Lightning backup, disaster recovery, and migration requirements, follow
+[Backup and Restore](./backup-restore.md#lightning-channel-backup).
 
 For wallet, liquidity, and channel-management guidance, see the
 [BTCPay Server Lightning documentation](https://docs.btcpayserver.org/LightningNetwork/).
