@@ -23,7 +23,7 @@ source ./btcpay-setup.sh -i
 jq -e '
   .requiredRoutes == ["rtl"] and
   .optionalRoutes == ["clightning-rest"] and
-  .secrets == [] and
+  .secrets == ["../secrets/tor_password"] and
   (.fragments | index("bitcoin-clightning") != null)
 ' Generated/manifest.json > /dev/null
 
