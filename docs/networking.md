@@ -31,7 +31,6 @@ BTCPay's internal routing but disable its HTTPS companion:
 export BTCPAYGEN_REVERSEPROXY="nginx"
 export BTCPAY_HOST="btcpay.example.com"
 export BTCPAY_PROTOCOL="https"
-export REVERSEPROXY_HTTP_PORT="10080"
 export TRUST_DOWNSTREAM_PROXY="true"
 export BTCPAYGEN_EXCLUDE_FRAGMENTS="$BTCPAYGEN_EXCLUDE_FRAGMENTS;nginx-https"
 . ./btcpay-setup.sh -i
@@ -41,6 +40,9 @@ The external proxy must preserve the original host and HTTPS scheme so BTCPay
 generates correct URLs. Replace `BTCPAY_SERVER_IP` with an address through which
 the external proxy can reach the BTCPay host. The examples below assume the
 certificate is already provisioned on the external server.
+
+If the external proxy runs on the BTCPay host, set
+`REVERSEPROXY_HTTP_PORT=10080` and use port `10080` instead of `80` below.
 
 ### Nginx
 
@@ -77,7 +79,7 @@ server {
     proxy_busy_buffers_size 256k;
 
     location / {
-        proxy_pass http://BTCPAY_SERVER_IP:10080;
+        proxy_pass http://BTCPAY_SERVER_IP:80;
         proxy_http_version 1.1;
         proxy_buffering off;
 
@@ -131,8 +133,8 @@ Apache 2.4.47 or later can proxy HTTP and WebSocket traffic through
     RequestHeader set X-Forwarded-Port "443"
     RequestHeader unset Proxy early
 
-    ProxyPass / http://BTCPAY_SERVER_IP:10080/ upgrade=websocket
-    ProxyPassReverse / http://BTCPAY_SERVER_IP:10080/
+    ProxyPass / http://BTCPAY_SERVER_IP:80/ upgrade=websocket
+    ProxyPassReverse / http://BTCPAY_SERVER_IP:80/
 
     LimitRequestBody 104857600
 
@@ -148,10 +150,10 @@ Replace the hostname and certificate paths, then validate and reload Apache:
 sudo apachectl configtest && sudo systemctl reload apache2
 ```
 
-Firewall port 10080 on the BTCPay host so only the external proxy can connect.
-This restriction is required because `TRUST_DOWNSTREAM_PROXY=true` accepts the
-incoming `X-Forwarded-*` headers as authoritative. Never expose this
-unencrypted, trusted backend port publicly.
+Firewall Nginx's HTTP port so only the external proxy can connect. This
+restriction is required because `TRUST_DOWNSTREAM_PROXY=true` accepts incoming
+`X-Forwarded-*` headers as authoritative. Never expose this unencrypted,
+trusted backend port publicly.
 
 ## Cloudflare Tunnel
 
