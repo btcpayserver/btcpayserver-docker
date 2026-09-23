@@ -39,8 +39,10 @@ export BTCPAYGEN_EXCLUDE_FRAGMENTS="$BTCPAYGEN_EXCLUDE_FRAGMENTS;nginx-https"
 
 The external proxy must preserve the original host and HTTPS scheme so BTCPay
 generates correct URLs. Replace `BTCPAY_SERVER_IP` with an address through which
-the external Nginx server can reach the BTCPay host. This example assumes the
-certificate is already provisioned on the external server:
+the external proxy can reach the BTCPay host. The examples below assume the
+certificate is already provisioned on the external server.
+
+### Nginx
 
 ```nginx
 # Add this map once inside the http block, outside any server block.
@@ -96,6 +98,54 @@ Replace the hostname and certificate paths, then validate and reload Nginx:
 
 ```bash
 sudo nginx -t && sudo systemctl reload nginx
+```
+
+### Apache
+
+Enable the required modules on Debian-based systems:
+
+```bash
+sudo a2enmod headers proxy proxy_http ssl
+```
+
+Apache 2.4.47 or later can proxy HTTP and WebSocket traffic through
+`mod_proxy_http`:
+
+```apacheconf
+<VirtualHost *:80>
+    ServerName btcpay.example.com
+    Redirect permanent / https://btcpay.example.com/
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerName btcpay.example.com
+
+    SSLEngine on
+    SSLCertificateFile /etc/letsencrypt/live/btcpay.example.com/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/btcpay.example.com/privkey.pem
+
+    ProxyRequests Off
+    ProxyPreserveHost On
+    ProxyAddHeaders On
+    RequestHeader set X-Forwarded-Proto "https"
+    RequestHeader set X-Forwarded-Port "443"
+    RequestHeader unset Proxy early
+
+    ProxyPass / http://BTCPAY_SERVER_IP:10080/ upgrade=websocket
+    ProxyPassReverse / http://BTCPAY_SERVER_IP:10080/
+
+    LimitRequestBody 104857600
+
+    # Some signing workflows use large request headers.
+    LimitRequestLine 500000
+    LimitRequestFieldSize 500000
+</VirtualHost>
+```
+
+Replace the hostname and certificate paths, then validate and reload Apache:
+
+```bash
+sudo apachectl configtest && sudo systemctl reload apache2
 ```
 
 Firewall port 10080 on the BTCPay host so only the external proxy can connect.
