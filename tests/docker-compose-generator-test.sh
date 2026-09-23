@@ -88,6 +88,30 @@ if grep -q -- '--uipassword=' \
     exit 1
 fi
 
+(
+    cd "$generator_dir"
+    BTCPAYGEN_CRYPTO1="doge" \
+    BTCPAYGEN_CRYPTO2="lbtc" \
+    BTCPAYGEN_LIGHTNING="none" \
+    BTCPAYGEN_REVERSEPROXY="nginx" \
+    BTCPAYGEN_SUBNAME="rpc-cookie-test" \
+    dotnet run \
+        --no-build \
+        --project src/docker-compose-generator.csproj \
+        --configuration Release \
+        --no-launch-profile \
+        -p:TargetFrameworkOverride=net8.0
+)
+
+rpc_cookie_compose="$test_dir/Generated/docker-compose.rpc-cookie-test.yml"
+grep -q 'dogecoin_datadir:/root/.dogecoin' "$rpc_cookie_compose"
+grep -q 'elements_datadir:/root/.elements' "$rpc_cookie_compose"
+if grep -Eq 'rpc(user|password)=|rpcauth=liquid|NBXPLORER_(DOGE|LBTC)RPC(USER|PASSWORD)' \
+    "$rpc_cookie_compose"; then
+    printf 'Fixed Dogecoin or Liquid RPC credentials were rendered\n' >&2
+    exit 1
+fi
+
 set +e
 proxy_conflict_output="$({
     cd "$generator_dir" || exit 1

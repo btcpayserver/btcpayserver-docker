@@ -16,7 +16,6 @@ services:
         rpcallowip=0.0.0.0/0
         port=39388
         whitelist=0.0.0.0/0
-        rpcauth=liquid:c8bf1a8961d97f224cb21224aaa8235d$$402f4a8907683d057b8c58a42940b6e54d1638322a42986ae28ebb844e603ae6        
         validatepegin=0
         fallbackfee=0.000001
     expose:
@@ -30,8 +29,6 @@ services:
       NBXPLORER_CHAINS: "lbtc"
       NBXPLORER_LBTCRPCURL: http://elementsd_liquid:43782/
       NBXPLORER_LBTCNODEENDPOINT: elementsd_liquid:39388
-      NBXPLORER_LBTCRPCUSER: "liquid"
-      NBXPLORER_LBTCRPCPASSWORD: "liquid"
     volumes:
       - "elements_datadir:/root/.elements"
   btcpayserver:

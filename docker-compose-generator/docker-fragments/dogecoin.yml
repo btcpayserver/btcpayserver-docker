@@ -5,8 +5,6 @@ services:
     image: btcpayserver/dogecoin:1.14.7
     environment:
       DOGECOIN_EXTRA_ARGS: |
-        rpcuser=ceiwHEbqWI83
-        rpcpassword=DwubwWsoo3
         ${NBITCOIN_NETWORK:-regtest}=1
         server=1
         rpcport=22555
@@ -25,8 +23,6 @@ services:
       NBXPLORER_CHAINS: "doge"
       NBXPLORER_DOGERPCURL: http://dogecoind:22555/
       NBXPLORER_DOGENODEENDPOINT: dogecoind:22556
-      NBXPLORER_DOGERPCUSER: ceiwHEbqWI83
-      NBXPLORER_DOGERPCPASSWORD: DwubwWsoo3
     volumes:
       - "dogecoin_datadir:/root/.dogecoin"
   btcpayserver:
