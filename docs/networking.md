@@ -32,8 +32,9 @@ export BTCPAYGEN_REVERSEPROXY="nginx"
 export BTCPAY_HOST="btcpay.example.com"
 export BTCPAY_PROTOCOL="https"
 export TRUST_DOWNSTREAM_PROXY="true"
-export BTCPAYGEN_EXCLUDE_FRAGMENTS="$BTCPAYGEN_EXCLUDE_FRAGMENTS;nginx-https"
 . ./btcpay-setup.sh -i
+# Disable the HTTPS companion after setup saves the proxy settings above.
+btcpay-fragments exclude nginx-https
 ```
 
 The external proxy must preserve the original host and HTTPS scheme so BTCPay
