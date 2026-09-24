@@ -353,7 +353,6 @@ namespace DockerFileBuildHelper
                     break;
                 case "phoenixd":
                     dockerInfo.DockerFilePath = ".docker/Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = ".docker/Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = ".docker/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/ACINQ/phoenixd";
                     dockerInfo.GitRef = $"v{image.Tag}";
