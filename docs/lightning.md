@@ -48,7 +48,8 @@ Open a peer port only when the node should accept incoming connections. API
 endpoints remain internal unless an optional route is enabled. See
 [Lightning Ports](./networking.md#lightning-ports) and [Optional Nginx
 Routes](./networking.md#optional-nginx-routes) for the canonical port and route
-guidance.
+guidance. To connect external software to Bitcoin LND over REST or gRPC, follow
+[LND REST and gRPC APIs](./networking.md#expose-bitcoin-lnd-apis).
 
 ## Command-line Access
 

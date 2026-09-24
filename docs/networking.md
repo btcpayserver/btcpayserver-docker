@@ -190,9 +190,55 @@ stored as relative symlinks under `nginx/enabled-routes` and synchronized during
 generation. Changes validate and reload a running Nginx container; a failed
 validation or reload is rolled back.
 
-LND's wallet creation, unlock, and password-change methods remain blocked by
-Nginx because those methods are not macaroon-protected. Other LND API calls
-require the appropriate macaroon.
+<a id="expose-bitcoin-lnd-apis"></a>
+
+### LND REST and gRPC APIs
+
+The `lnd-rest` and `lnd-grpc` routes are available when Bitcoin LND and the
+bundled Nginx reverse proxy are selected. They are disabled by default. No
+additional Compose fragment or host port is required.
+
+Enable only the API required by the external client:
+
+```bash
+btcpay-routes add lnd-rest
+btcpay-routes add lnd-grpc
+```
+
+To enable or disable both together:
+
+```bash
+btcpay-routes add lnd-rest lnd-grpc
+btcpay-routes remove lnd-rest lnd-grpc
+```
+
+Use `btcpay-routes show` to check which routes are enabled. With
+`BTCPAY_HOST=btcpay.example.com`, the public endpoints are:
+
+- REST: `https://btcpay.example.com/lnd-rest/btc/`
+- gRPC: `btcpay.example.com:443` with TLS
+
+After Bitcoin is synchronized, open **Server Settings > Services** in BTCPay
+Server and select **LND (REST)** or **LND (gRPC)** for the endpoint, macaroons,
+and temporary QR-code configuration. REST clients send the macaroon in the
+`Grpc-Metadata-macaroon` header; gRPC clients use the `macaroon` metadata key.
+The public endpoint uses the HTTPS certificate for `BTCPAY_HOST`, not LND's
+internal TLS certificate.
+
+Macaroons grant control over the Lightning node. Use the least-privileged
+macaroon supported by the client, protect it as a secret, and avoid distributing
+the admin macaroon unless full node control is required. Nginx blocks LND's
+unauthenticated wallet creation, unlocking, password-change, and state methods.
+Other calls still require an appropriate macaroon.
+
+These routes do not publish LND's internal ports `8080` or `10009` on the host;
+traffic passes through the configured HTTPS port, normally `443`.
+
+If another reverse proxy is placed in front of the bundled Nginx, it must also
+forward the enabled route. The REST route uses regular HTTPS forwarding. The
+gRPC route requires the external proxy to support HTTP/2 gRPC forwarding; the
+generic external Nginx and Apache examples above only configure HTTP and
+WebSocket forwarding.
 
 ## Unsafe Exposures
 
