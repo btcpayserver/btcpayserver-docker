@@ -5,10 +5,10 @@ commands that change fragments must run as root. Changes are applied immediately
 and multiple fragment names can be passed at once:
 
 ```bash
-btcpay-fragments add opt-add-mempool
+btcpay-fragments add opt-add-rtl opt-add-tor
 btcpay-fragments remove opt-add-mempool
-btcpay-fragments exclude opt-add-tor
-btcpay-fragments unexclude opt-add-tor
+btcpay-fragments exclude btcpay-host
+btcpay-fragments unexclude btcpay-host
 btcpay-fragments show
 ```
 
@@ -55,6 +55,7 @@ incompatible with pruning.
 | [`opt-lnd-keysend`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-lnd-keysend.yml) | Enable LND keysend |
 | [`opt-lnd-watchtower`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-lnd-watchtower.yml) | Enable the LND watchtower server and publish port 9911 |
 | [`opt-lnd-wtclient`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-lnd-wtclient.yml) | Enable the LND watchtower client |
+| [`opt-add-rtl`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-rtl.yml) | Add Ride The Lightning for the selected Bitcoin Core Lightning or LND implementation |
 | [`opt-add-zmq`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-zmq.yml) | Enable internal ZMQ endpoints for supported nodes |
 | [`opt-add-electrumx`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-electrumx.yml) | Add public ElectrumX; requires txindex and an unpruned node |
 | [`opt-expose-unsafe`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-expose-unsafe.yml) | Publish Bitcoin P2P port 8333; trusted networks or restrictive firewall only |
@@ -69,7 +70,7 @@ formal generator prerequisite, so confirm LND is enabled.
 
 | Fragment | Purpose and requirements |
 |---|---|
-| [`opt-add-tor`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-tor.yml) | Add Tor hidden services and selected onion connectivity; recommended automatically |
+| [`opt-add-tor`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-tor.yml) | Add Tor hidden services and selected onion connectivity |
 | [`opt-add-cloudflared`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-cloudflared.yml) | Expose bundled Nginx through Cloudflare Tunnel and disable its local HTTPS companion; see the [guide](./cloudflare-tunnel.md) |
 | [`opt-add-tor-relay`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-tor-relay.yml) | Run a public non-exit relay on port 9001; requires contact details and legal review |
 | [`opt-add-pihole`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-pihole.yml) | Add Pi-hole DNS on TCP/UDP 53 for a trusted LAN; see the [guide](./pihole.md) |

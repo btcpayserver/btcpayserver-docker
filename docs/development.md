@@ -46,6 +46,11 @@ multi-service application, and `opt-save-storage.yml` for a tuning overlay.
 
 Each generated service must have exactly one selected fragment that defines its
 `image`. Other fragments can extend that service without repeating the image.
+Service entries without an `image` are overlays: the generator merges them only
+when another selected fragment defines the same service with an `image`, and
+otherwise omits them from the generated Compose file. This allows an optional
+fragment to activate service-specific configuration already declared by other
+selected fragments.
 The generator uses a shallow merge rather than Docker Compose's multi-file
 merge behavior:
 
