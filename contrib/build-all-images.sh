@@ -37,22 +37,6 @@ docker build -f "$DOCKERFILE" -t "btcpayserver/lightning:v26.06.7-1" .
 cd - && cd ..
 
 
-# Build rtl
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.12/Dockerfile
-DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.12/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.12/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building shahanafarooqui/rtl:v0.15.12"
-git clone https://github.com/Ride-The-Lightning/RTL rtl
-cd rtl
-git checkout v0.15.12
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:v0.15.12" .
-cd - && cd ..
-
-
 # Build lnd
 # https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.3-beta-2/linuxamd64.Dockerfile
 DOCKERFILE="linuxamd64.Dockerfile"
@@ -510,6 +494,22 @@ cd pihole
 git checkout 2026.07.2
 cd "$(dirname $DOCKERFILE)"
 docker build -f "$DOCKERFILE" -t "pihole/pihole:2026.07.2" .
+cd - && cd ..
+
+
+# Build rtl
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.12/Dockerfile
+DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.12/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
+# https://raw.githubusercontent.com/Ride-The-Lightning/RTL/v0.15.12/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+echo "Building shahanafarooqui/rtl:v0.15.12"
+git clone https://github.com/Ride-The-Lightning/RTL rtl
+cd rtl
+git checkout v0.15.12
+cd "$(dirname $DOCKERFILE)"
+docker build -f "$DOCKERFILE" -t "shahanafarooqui/rtl:v0.15.12" .
 cd - && cd ..
 
 
