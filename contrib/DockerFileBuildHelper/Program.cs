@@ -248,7 +248,9 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePath = $"WooCommerce/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = $"WooCommerce/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
-                    dockerInfo.GitRef = $"WooCommerce/{image.Tag}";
+                    // Pin dockerfile-deps PR #155 until the WooCommerce/11.1.2 release tag exists.
+                    dockerInfo.GitRef = image.Tag == "11.1.2" ?
+                        "576dbc5cb4ebce1491a89d8f0ddd65a6a5fbfa08" : $"WooCommerce/{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "cloudflared":
