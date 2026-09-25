@@ -586,18 +586,18 @@ cd - && cd ..
 
 
 # Build tor
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.9.12-1/Tor/0.4.9.12/linuxamd64.Dockerfile
-DOCKERFILE="Tor/0.4.9.12/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.9.12-1/Tor/0.4.9.12/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Tor/0.4.9.12/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.9.12-1/Tor/0.4.9.12/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Tor/0.4.9.12/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/tor:0.4.9.12-1"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.9.13/Tor/0.4.9.13/linuxamd64.Dockerfile
+DOCKERFILE="Tor/0.4.9.13/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.9.13/Tor/0.4.9.13/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Tor/0.4.9.13/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.9.13/Tor/0.4.9.13/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Tor/0.4.9.13/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/tor:0.4.9.13"
 git clone https://github.com/btcpayserver/dockerfile-deps tor
 cd tor
-git checkout Tor/0.4.9.12-1
+git checkout Tor/0.4.9.13
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/tor:0.4.9.12-1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/tor:0.4.9.13" .
 cd - && cd ..
 
 
