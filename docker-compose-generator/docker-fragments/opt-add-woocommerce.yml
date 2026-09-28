@@ -33,7 +33,7 @@ services:
     volumes:
       - "mariadb_datadir:/var/lib/mysql"
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u$$MYSQL_USER -p$$MYSQL_PASSWORD --silent"]
+      test: ["CMD-SHELL", "mariadb -h 127.0.0.1 -u\"$$MYSQL_USER\" -p\"$$MYSQL_PASSWORD\" --execute='SELECT 1' >/dev/null"]
       start_period: 10s
       interval: 10s
       timeout: 5s
