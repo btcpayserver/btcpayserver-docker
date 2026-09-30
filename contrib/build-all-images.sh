@@ -664,18 +664,16 @@ cd - && cd ..
 
 
 # Build phoenixd
-# https://raw.githubusercontent.com/ACINQ/phoenixd/v0.8.0/.docker/Dockerfile
+# https://raw.githubusercontent.com/ACINQ/phoenixd/v0.9.1/.docker/Dockerfile
 DOCKERFILE=".docker/Dockerfile"
-# https://raw.githubusercontent.com/ACINQ/phoenixd/v0.8.0/.docker/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE=".docker/Dockerfile"
-# https://raw.githubusercontent.com/ACINQ/phoenixd/v0.8.0/.docker/Dockerfile
+# https://raw.githubusercontent.com/ACINQ/phoenixd/v0.9.1/.docker/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE=".docker/Dockerfile"
-echo "Building acinq/phoenixd:0.8.0"
+echo "Building acinq/phoenixd:0.9.1"
 git clone https://github.com/ACINQ/phoenixd phoenixd
 cd phoenixd
-git checkout v0.8.0
+git checkout v0.9.1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "acinq/phoenixd:0.8.0" .
+docker build -f "$DOCKERFILE" -t "acinq/phoenixd:0.9.1" .
 cd - && cd ..
 
 
