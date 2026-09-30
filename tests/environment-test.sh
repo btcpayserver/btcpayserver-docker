@@ -20,6 +20,43 @@ if "$repo_dir/btcpay-host" changedomain $'example.com\nPROMPT_COMMAND=id' 2> "$t
 fi
 grep -Fxq 'The domain must be a valid domain name without a protocol.' "$test_dir/error"
 
+mkdir "$test_dir/bin"
+cat > "$test_dir/bin/btcpay-host" <<'EOF'
+#!/bin/bash
+printf '%s\0' "$@"
+EOF
+chmod +x "$test_dir/bin/btcpay-host"
+
+proxy="$repo_dir/Generated/btcpay-host-proxy"
+arguments=('env' 'space separated' "single'quote" "\$HOME; *" $'embedded\nnewline' $'trailing newline\n' '')
+jq -cn --args '$ARGS.positional' "${arguments[@]}" |
+    PATH="$test_dir/bin:$PATH" "$proxy" > "$test_dir/actual-arguments"
+printf '%s\0' "${arguments[@]}" > "$test_dir/expected-arguments"
+cmp -s "$test_dir/expected-arguments" "$test_dir/actual-arguments"
+
+injected_file="$test_dir/injected"
+if jq -cn '"env", ["/usr/bin/touch", $path]' --arg path "$injected_file" |
+    PATH="$test_dir/bin:$PATH" "$proxy" > /dev/null 2> "$test_dir/error"; then
+    printf 'btcpay-host-proxy must reject multiple JSON documents\n' >&2
+    exit 1
+fi
+if [ -e "$injected_file" ]; then
+    printf 'btcpay-host-proxy executed a command from a second JSON document\n' >&2
+    exit 1
+fi
+grep -Fxq 'Expected exactly one JSON array containing only strings' "$test_dir/error"
+
+if printf '["env", 1]\n' |
+    PATH="$test_dir/bin:$PATH" "$proxy" > /dev/null 2> "$test_dir/error"; then
+    printf 'btcpay-host-proxy must reject non-string arguments\n' >&2
+    exit 1
+fi
+if printf '["env", "\\u0000"]\n' |
+    PATH="$test_dir/bin:$PATH" "$proxy" > /dev/null 2> "$test_dir/error"; then
+    printf 'btcpay-host-proxy must reject NUL arguments\n' >&2
+    exit 1
+fi
+
 btcpay_update_docker_env
 grep -Fxq 'BTCPAY_HOST=example.com' "$BTCPAY_ENV_FILE"
 grep -Fxq 'TRUST_DOWNSTREAM_PROXY=true' "$BTCPAY_ENV_FILE"

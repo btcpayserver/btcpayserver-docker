@@ -1,5 +1,15 @@
 #!/bin/bash
 set -euo pipefail
 
-eval "set -- $(jq -r '@sh' < /dev/stdin)"
-exec btcpay-host "$@"
+json="$(</dev/stdin)"
+if ! jq -e -s '
+    length == 1 and
+    (.[0] | type == "array") and
+    all(.[0][]; type == "string" and (contains("\u0000") | not))
+' > /dev/null <<< "$json"; then
+    printf 'Expected exactly one JSON array containing only strings\n' >&2
+    exit 1
+fi
+
+mapfile -d '' -t args < <(jq -j -s '.[0][] | ., "\u0000"' <<< "$json")
+exec btcpay-host "${args[@]}"
