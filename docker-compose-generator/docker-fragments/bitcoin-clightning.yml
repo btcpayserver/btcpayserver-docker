@@ -37,7 +37,7 @@ services:
       - bitcoind
 
   bitcoin_rtl:
-    image: shahanafarooqui/rtl:v0.15.12
+    image: shahanafarooqui/rtl:v0.15.13
     restart: unless-stopped
     environment:
       LN_IMPLEMENTATION: CLN
