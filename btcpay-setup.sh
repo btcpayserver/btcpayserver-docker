@@ -71,7 +71,7 @@ Environment variables:
     REVERSEPROXY_DEFAULT_HOST: Optional, if using a reverse proxy nginx, specify which website should be presented if the server is accessed by its IP.
     TRUST_DOWNSTREAM_PROXY: Trust X-Forwarded-* headers from an external reverse proxy. Only enable when direct access to the Nginx port is blocked. Default: false
     LETSENCRYPT_EMAIL: A mail will be sent to this address if certificate expires and fail to renew automatically (eg. me@example.com)
-    NBITCOIN_NETWORK: The type of network to use (eg. mainnet, testnet or regtest. Default: mainnet)
+    NBITCOIN_NETWORK: The type of network to use (eg. mainnet, signet, testnet or regtest. Default: mainnet)
     LIGHTNING_ALIAS: An alias for your lightning network node if used
     BTCPAYGEN_CRYPTO1: First supported crypto currency (btc, ltc, grs, ftc, doge, mona, dash, xmr, bdx, lbtc, zec, dcr. Default: btc)
     BTCPAYGEN_CRYPTO2: Second supported crypto currency (Default: empty)
@@ -263,8 +263,8 @@ if [[ -z "$BTCPAYGEN_CRYPTO1" ]]; then
     return 1
 fi
 
-if [[ "$NBITCOIN_NETWORK" != "mainnet" ]] && [[ "$NBITCOIN_NETWORK" != "testnet" ]] && [[ "$NBITCOIN_NETWORK" != "regtest" ]]; then
-    echo "NBITCOIN_NETWORK should be equal to mainnet, testnet or regtest"
+if [[ "$NBITCOIN_NETWORK" != "mainnet" ]] && [[ "$NBITCOIN_NETWORK" != "signet" ]] && [[ "$NBITCOIN_NETWORK" != "testnet" ]] && [[ "$NBITCOIN_NETWORK" != "regtest" ]]; then
+    echo "NBITCOIN_NETWORK should be equal to mainnet, signet, testnet or regtest"
     return 1
 fi
 
