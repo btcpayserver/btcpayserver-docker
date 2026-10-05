@@ -408,16 +408,16 @@ cd - && cd ..
 
 
 # Build lightning-terminal
-# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.17.5-alpha/Dockerfile
+# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.17.6/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.17.5-alpha/Dockerfile
+# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.17.6/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building lightninglabs/lightning-terminal:v0.17.5-alpha-path-prefix"
+echo "Building lightninglabs/lightning-terminal:v0.17.6-path-prefix"
 git clone https://github.com/lightninglabs/lightning-terminal lightning-terminal
 cd lightning-terminal
-git checkout v0.17.5-alpha
+git checkout v0.17.6
 cd "$(dirname $DOCKERFILE)"
-docker build --build-arg public_url=/lit/ -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.17.5-alpha-path-prefix" .
+docker build --build-arg public_url=/lit/ -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.17.6-path-prefix" .
 cd - && cd ..
 
 
