@@ -19,7 +19,7 @@ services:
 
   btcpayserver:
     environment:
-      BTCPAY_BTCLIGHTNING: "type=phoenixd;server=http://phoenixd:9740;passwordfilepath=/run/secrets/phoenixd_password.pwd"
+      BTCPAY_BTCLIGHTNING: "type=phoenixd;server=http://phoenixd:9740/;passwordfilepath=/run/secrets/phoenixd_password.pwd"
     secrets:
       - source: phoenixd_password
         target: phoenixd_password.pwd
