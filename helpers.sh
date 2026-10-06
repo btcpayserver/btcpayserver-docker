@@ -145,8 +145,15 @@ add_fragments() {
     echo "$result"
 }
 
+# Signal containers from the inside: Docker records every `docker kill`,
+# whatever the signal, as a manual stop, so the container's next exit (a
+# BTCPay soft restart, for instance) would bypass its restart policy.
+docker_signal_reload() {
+    docker exec "$1" sh -c 'kill -HUP 1'
+}
+
 notify_btcpayserver() {
-    docker kill --signal HUP generated_btcpayserver_1 >/dev/null 2>&1 || true
+    docker_signal_reload generated_btcpayserver_1 >/dev/null 2>&1 || true
 }
 
 btcpay_setup_ssh() {
