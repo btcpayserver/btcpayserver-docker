@@ -71,6 +71,7 @@ fi
 install_tooling
 btcpay_update_docker_env
 btcpay_up
+notify_btcpayserver
 
 set +e
 if [ "$BTCPAY_UPDATE_CLEAN" == true ]; then

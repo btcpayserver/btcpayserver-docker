@@ -35,6 +35,22 @@ systemctl reload btcpayserver
 
 ## Node Commands
 
+Switch between supported Bitcoin node selections with:
+
+```bash
+btcpay-switch node default
+btcpay-switch node bitcoincore
+```
+
+`default` follows the implementation selected by the BTCPay Server team.
+`bitcoincore` explicitly selects the Bitcoin Core fragment. The old
+`switch-node.sh` utility has been replaced by `btcpay-switch node`.
+
+To switch the Lightning implementation, see
+[Switch Implementations](./lightning.md#switch-implementations).
+
+## Service Commands
+
 Wrappers are installed only when their service exists. Common examples:
 
 ```bash

@@ -20,6 +20,14 @@ original="$(< "$test_dir/secrets/test")"
 "$repo_dir/generate-secrets.sh" "$test_dir/Generated/manifest.json"
 [[ "$(< "$test_dir/secrets/test")" == "$original" ]]
 
+jq -n '{secrets:["../secrets/lit_password"]}' > "$test_dir/Generated/manifest.json"
+LIT_PASSWD="existing-lit-password" \
+    "$repo_dir/generate-secrets.sh" "$test_dir/Generated/manifest.json"
+[[ "$(< "$test_dir/secrets/lit_password")" == "existing-lit-password" ]]
+LIT_PASSWD="replacement-lit-password" \
+    "$repo_dir/generate-secrets.sh" "$test_dir/Generated/manifest.json"
+[[ "$(< "$test_dir/secrets/lit_password")" == "existing-lit-password" ]]
+
 jq -n '{requiredRoutes:[],optionalRoutes:[],fragments:[]}' > "$test_dir/Generated/manifest.json"
 "$repo_dir/generate-secrets.sh" "$test_dir/Generated/manifest.json"
 

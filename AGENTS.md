@@ -10,6 +10,11 @@ before changing Nginx route files, route metadata, or the generated route
 manifest. Load
 `.agents/skills/btcpayserver-docker-prs/SKILL.md` for pull request work.
 
+Keep operational documentation in a single authoritative location. When a
+dedicated documentation page already covers a workflow, link to it from overview
+pages and agent skills instead of repeating its commands, constraints, or safety
+guidance. Update the authoritative page when behavior changes.
+
 Use `.github/workflows/ci.yml` as the source of truth for validation. Run the
 focused non-destructive test scripts that cover the changed area:
 

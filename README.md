@@ -48,8 +48,9 @@ The setup script installs Docker and Docker Compose when needed. Read the
 existing server, another Linux distribution, or an external reverse proxy.
 
 <a id="full-installation-for-technical-users"></a>
+<a id="install"></a>
 
-## Install
+## Install a Bitcoin Deployment
 
 Replace `btcpay.example.com` with your domain, then run:
 

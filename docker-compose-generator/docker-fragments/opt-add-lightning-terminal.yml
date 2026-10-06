@@ -9,12 +9,14 @@ services:
       LND_EXTRA_ARGS: |
         rpcmiddleware.enable=true
   lnd_lit:
-    image: "lightninglabs/lightning-terminal:v0.17.4-alpha-path-prefix"
+    image: "lightninglabs/lightning-terminal:v0.17.6-path-prefix"
     restart: unless-stopped
     environment:
       LIT_AUTO_MIGRATE_TO_SQL: "true"
     expose:
       - "8080"
+    secrets:
+      - lit_password
     volumes:
       - "lnd_lit_datadir:/root/.lit"
       - "lnd_bitcoin_datadir:/data/lnd:ro"
@@ -25,7 +27,7 @@ services:
     command:
       - "--insecure-httplisten=0.0.0.0:8080"
       - "--network=${NBITCOIN_NETWORK}"
-      - "--uipassword=${LIT_PASSWD}"
+      - "--uipassword_file=/run/secrets/lit_password"
       - "--lnd-mode=remote"
       - "--remote.lnd.rpcserver=lnd_bitcoin:10009"
       - "--remote.lnd.macaroonpath=/data/lnd/admin.macaroon"
@@ -36,5 +38,8 @@ services:
       - "--faraday.bitcoin.passwordfile=/deps/.bitcoin/RPCUsers/lnd"
 volumes:
   lnd_lit_datadir:
+secrets:
+  lit_password:
+    file: ../secrets/lit_password
 required:
   - "bitcoin-lnd"

@@ -54,18 +54,18 @@ cd - && cd ..
 
 
 # Build lnd
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.3-beta-1/linuxamd64.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.3-beta-2/linuxamd64.Dockerfile
 DOCKERFILE="linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.3-beta-1/linuxarm32v7.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.3-beta-2/linuxarm32v7.Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.3-beta-1/linuxarm64v8.Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/lnd/basedon-v0.21.3-beta-2/linuxarm64v8.Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/lnd:v0.21.3-beta-1"
+echo "Building btcpayserver/lnd:v0.21.3-beta-2"
 git clone https://github.com/btcpayserver/lnd lnd
 cd lnd
-git checkout basedon-v0.21.3-beta-1
+git checkout basedon-v0.21.3-beta-2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.21.3-beta-1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/lnd:v0.21.3-beta-2" .
 cd - && cd ..
 
 
@@ -324,14 +324,14 @@ cd - && cd ..
 
 
 # Build nbxplorer
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.13/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/nbxplorer/v2.6.13/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.13/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/nbxplorer/v2.6.13/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/dgarage/nbxplorer/v2.6.13/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/nbxplorer/v2.6.13/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
 echo "Building nicolasdorier/nbxplorer:2.6.13"
-git clone https://github.com/dgarage/nbxplorer nbxplorer
+git clone https://github.com/btcpayserver/nbxplorer nbxplorer
 cd nbxplorer
 git checkout v2.6.13
 cd "$(dirname $DOCKERFILE)"

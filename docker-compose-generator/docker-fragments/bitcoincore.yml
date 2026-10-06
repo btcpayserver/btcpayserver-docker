@@ -3,6 +3,10 @@ services:
     restart: unless-stopped
     container_name: btcpayserver_bitcoind
     image: btcpayserver/bitcoin:31.1-1
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
     environment:
       BITCOIN_NETWORK: ${NBITCOIN_NETWORK:-regtest}
       CREATE_WALLET: "false"

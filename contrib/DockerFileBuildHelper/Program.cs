@@ -420,9 +420,9 @@ namespace DockerFileBuildHelper
                     break;
                 }
                 case "tor":
-                    dockerInfo.DockerFilePath = $"Tor/{image.Tag}/linuxamd64.Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"Tor/{image.Tag}/linuxarm32v7.Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"Tor/{image.Tag}/linuxarm64v8.Dockerfile";
+                    dockerInfo.DockerFilePath = $"Tor/{NoRevision(image.Tag)}/linuxamd64.Dockerfile";
+                    dockerInfo.DockerFilePathARM32v7 = $"Tor/{NoRevision(image.Tag)}/linuxarm32v7.Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = $"Tor/{NoRevision(image.Tag)}/linuxarm64v8.Dockerfile";
                     dockerInfo.GitLink = "https://github.com/btcpayserver/dockerfile-deps";
                     dockerInfo.GitRef = $"Tor/{image.Tag}";
                     dockerInfo.SupportedByUs = true;
@@ -453,7 +453,7 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePath = "Dockerfile";
                     dockerInfo.DockerFilePathARM32v7 = "Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = "Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/dgarage/nbxplorer";
+                    dockerInfo.GitLink = "https://github.com/btcpayserver/nbxplorer";
                     dockerInfo.GitRef = $"v{image.Tag}";
                     dockerInfo.SupportedByUs = true;
                     break;
@@ -491,7 +491,7 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePathARM32v7 = $"mainline/debian/Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = $"mainline/debian/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/nginx/docker-nginx";
-                    dockerInfo.GitRef = "c5b3ce398e37067d93ab1edf803e9b96a1116092";
+                    dockerInfo.GitRef = "a16f1329e13e7273c4103f75d863ca625b75109e";
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "docker-gen":

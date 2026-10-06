@@ -39,6 +39,8 @@ jobs:
         run: tests/build-test.sh
       - name: Test fragment management
         run: tests/btcpay-fragments-test.sh
+      - name: Test node and Lightning switching
+        run: tests/btcpay-switch-test.sh
       - name: Test Docker Compose generator
         run: tests/docker-compose-generator-test.sh
       - name: Test environment persistence
@@ -47,12 +49,35 @@ jobs:
         run: tests/nginx-template-test.sh
       - name: Test secret generation
         run: tests/generate-secrets-test.sh
+      - name: Test backup archives
+        run: bash tests/backup-test.sh
+      - name: Test restore modes
+        run: bash tests/restore-test.sh
       - name: Validate nginx route catalog
         run: |
           nginx_image="$(tests/docker-fragment-image.sh nginx)"
           docker run --rm -v "$PWD/nginx/routes:/etc/nginx/routes:ro" -v "$PWD/tests/nginx-routes.conf:/etc/nginx/nginx.conf:ro" "$nginx_image" nginx -t
       - name: Test installation
         run: sudo .github/scripts/test-install.sh
+
+  publish-documentation:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    needs:
+      - documentation
+      - test-install
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Trigger documentation build
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: >-
+          curl --fail-with-body --silent --show-error
+          --request POST
+          --header "Authorization: Bearer $GH_PAT"
+          --header "Accept: application/vnd.github+json"
+          --header "X-GitHub-Api-Version: 2022-11-28"
+          https://api.github.com/repos/btcpayserver/btcpayserver-doc/dispatches
+          --data '{"event_type":"build_docs"}'
 
   publish-generator:
     if: github.event_name == 'push' && github.ref == 'refs/heads/dcg-latest'

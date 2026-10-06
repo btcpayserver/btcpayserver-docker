@@ -36,7 +36,7 @@ services:
       LOG_LEVEL: debug
       LOGOUT_URL: "/server/services/thunderhub/BTC"
     volumes:
-      - "lnd_bitcoin_datadir:/etc/lnd"
+      - "lnd_bitcoin_datadir:/etc/lnd:ro"
       - "lnd_bitcoin_thub_datadir:/data"
     expose:
       - "3000"

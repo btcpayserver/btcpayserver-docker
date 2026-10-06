@@ -179,6 +179,7 @@ mutate_routes() {
     done
 
     if [ "$(docker inspect -f '{{.State.Running}}' nginx 2>/dev/null || true)" != "true" ]; then
+        notify_btcpayserver
         fail "nginx is not running; route selection was saved and will be applied by btcpay_up"
     fi
 
@@ -194,6 +195,7 @@ mutate_routes() {
 
     rm -rf "$enabled_backup"
     enabled_backup=""
+    notify_btcpayserver
     print_state
 }
 
@@ -204,6 +206,8 @@ if [ -z "$command_name" ] || [ "$command_name" = "help" ]; then
 fi
 
 require_environment
+# shellcheck source=helpers.sh
+. "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker/helpers.sh"
 manifest_file="${BTCPAY_ROUTES_MANIFEST:-$BTCPAY_BASE_DIRECTORY/btcpayserver-docker/Generated/manifest.json}"
 prepare_directories
 validate_catalog

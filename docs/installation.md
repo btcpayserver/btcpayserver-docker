@@ -20,8 +20,8 @@ public-port requirements.
 ## Install a Bitcoin Deployment
 
 Follow the current [installation commands in the root
-README](https://github.com/btcpayserver/btcpayserver-docker#install), replacing
-the example hostname before running them.
+README](https://github.com/btcpayserver/btcpayserver-docker#install-a-bitcoin-deployment),
+replacing the example hostname before running them.
 
 The script must be sourced with `. ./btcpay-setup.sh`; executing it in a child
 shell does not preserve the environment it configures.
@@ -54,6 +54,10 @@ changes. Read [Configuration](./configuration.md) for details.
 
 Open `https://btcpay.example.com` and create the first account. The first
 registered account becomes the server administrator, so register it promptly.
+
+Setup can exit successfully even when the ACME companion could not issue a
+certificate. Follow the [Nginx and HTTPS checks](./troubleshooting.md#check-nginx-and-https)
+and resolve any certificate errors before treating HTTPS as ready.
 
 The site can open before Bitcoin Core and NBXplorer finish synchronizing. Check
 the synchronization status in BTCPay Server before accepting payments. You can

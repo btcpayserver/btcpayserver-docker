@@ -4,7 +4,7 @@ optional-routes:
   - "clightning-rest"
 services:
   clightning_bitcoin:
-    image: btcpayserver/lightning:v26.06.7
+    image: btcpayserver/lightning:v26.06.8
     container_name: btcpayserver_clightning_bitcoin
     init: true
     restart: unless-stopped
@@ -30,14 +30,14 @@ services:
       - "nbxplorer_datadir:/root/.nbxplorer"
     ports:
       - "9735:9735"
-      - "3010"
     expose:
       - "9736"
+      - "3010"
     links:
       - bitcoind
 
   bitcoin_rtl:
-    image: shahanafarooqui/rtl:v0.15.12
+    image: shahanafarooqui/rtl:v0.15.13
     restart: unless-stopped
     environment:
       LN_IMPLEMENTATION: CLN

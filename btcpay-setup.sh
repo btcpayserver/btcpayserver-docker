@@ -71,7 +71,7 @@ Environment variables:
     REVERSEPROXY_DEFAULT_HOST: Optional, if using a reverse proxy nginx, specify which website should be presented if the server is accessed by its IP.
     TRUST_DOWNSTREAM_PROXY: Trust X-Forwarded-* headers from an external reverse proxy. Only enable when direct access to the Nginx port is blocked. Default: false
     LETSENCRYPT_EMAIL: A mail will be sent to this address if certificate expires and fail to renew automatically (eg. me@example.com)
-    NBITCOIN_NETWORK: The type of network to use (eg. mainnet, testnet or regtest. Default: mainnet)
+    NBITCOIN_NETWORK: The type of network to use (eg. mainnet, signet, testnet or regtest. Default: mainnet)
     LIGHTNING_ALIAS: An alias for your lightning network node if used
     BTCPAYGEN_CRYPTO1: First supported crypto currency (btc, ltc, grs, ftc, doge, mona, dash, xmr, bdx, lbtc, zec, dcr. Default: btc)
     BTCPAYGEN_CRYPTO2: Second supported crypto currency (Default: empty)
@@ -226,20 +226,16 @@ fi
 
 echo "
 -------SETUP-----------
-Parameters passed:
-BTCPAY_PROTOCOL:$BTCPAY_PROTOCOL
-BTCPAY_HOST:$BTCPAY_HOST
-BTCPAY_LIGHTNING_HOST: $BTCPAY_LIGHTNING_HOST
-BTCPAY_ADDITIONAL_HOSTS:$BTCPAY_ADDITIONAL_HOSTS
-REVERSEPROXY_HTTP_PORT:$REVERSEPROXY_HTTP_PORT
-REVERSEPROXY_HTTPS_PORT:$REVERSEPROXY_HTTPS_PORT
-REVERSEPROXY_DEFAULT_HOST:$REVERSEPROXY_DEFAULT_HOST
-TRUST_DOWNSTREAM_PROXY:$TRUST_DOWNSTREAM_PROXY
-ZAMMAD_HOST:$ZAMMAD_HOST
-WOOCOMMERCE_HOST:$WOOCOMMERCE_HOST
-LETSENCRYPT_EMAIL:$LETSENCRYPT_EMAIL
-NBITCOIN_NETWORK:$NBITCOIN_NETWORK
-LIGHTNING_ALIAS:$LIGHTNING_ALIAS
+Parameters passed:"
+for variable in "${BTCPAY_ENV_VARIABLES[@]}"; do
+    case "$variable" in
+        CLOUDFLARE_TUNNEL_TOKEN)
+            continue
+            ;;
+    esac
+    printf '%s:%s\n' "$variable" "${!variable-}"
+done
+cat <<END
 BTCPAYGEN_CRYPTO1:$BTCPAYGEN_CRYPTO1
 BTCPAYGEN_CRYPTO2:$BTCPAYGEN_CRYPTO2
 BTCPAYGEN_CRYPTO3:$BTCPAYGEN_CRYPTO3
@@ -253,29 +249,22 @@ BTCPAYGEN_REVERSEPROXY:$BTCPAYGEN_REVERSEPROXY
 BTCPAYGEN_LIGHTNING:$BTCPAYGEN_LIGHTNING
 BTCPAYGEN_ADDITIONAL_FRAGMENTS:$BTCPAYGEN_ADDITIONAL_FRAGMENTS
 BTCPAYGEN_EXCLUDE_FRAGMENTS:$BTCPAYGEN_EXCLUDE_FRAGMENTS
-BTCPAY_IMAGE:$BTCPAY_IMAGE
-BTCPAY_UPDATE_CLEAN:$BTCPAY_UPDATE_CLEAN
-ACME_CA_URI:$ACME_CA_URI
-TOR_RELAY_NICKNAME: $TOR_RELAY_NICKNAME
-TOR_RELAY_EMAIL: $TOR_RELAY_EMAIL
 PIHOLE_SERVERIP: $PIHOLE_SERVERIP
 ----------------------
 Additional exported variables:
 BTCPAY_DOCKER_COMPOSE=$BTCPAY_DOCKER_COMPOSE
 BTCPAY_BASE_DIRECTORY=$BTCPAY_BASE_DIRECTORY
 BTCPAY_ENV_FILE=$BTCPAY_ENV_FILE
-BTCPAY_CRYPTOS:$BTCPAY_CRYPTOS
-BTCPAY_ANNOUNCEABLE_HOST:$BTCPAY_ANNOUNCEABLE_HOST
 ----------------------
-"
+END
 
 if [[ -z "$BTCPAYGEN_CRYPTO1" ]]; then
     echo "BTCPAYGEN_CRYPTO1 should not be empty"
     return 1
 fi
 
-if [[ "$NBITCOIN_NETWORK" != "mainnet" ]] && [[ "$NBITCOIN_NETWORK" != "testnet" ]] && [[ "$NBITCOIN_NETWORK" != "regtest" ]]; then
-    echo "NBITCOIN_NETWORK should be equal to mainnet, testnet or regtest"
+if [[ "$NBITCOIN_NETWORK" != "mainnet" ]] && [[ "$NBITCOIN_NETWORK" != "signet" ]] && [[ "$NBITCOIN_NETWORK" != "testnet" ]] && [[ "$NBITCOIN_NETWORK" != "regtest" ]]; then
+    echo "NBITCOIN_NETWORK should be equal to mainnet, signet, testnet or regtest"
     return 1
 fi
 

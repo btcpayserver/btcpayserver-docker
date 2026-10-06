@@ -11,9 +11,8 @@ root login shell. The fragment selects Bitcoin LND automatically.
 
 > **Important:** Lightning Terminal receives LND's administrative macaroon and
 > can control funds and channels; it is not a read-only dashboard. Its UI and
-> RPC endpoints are routed through the public BTCPay hostname. Use a unique,
-> high-entropy UI password of at least eight characters and consider an
-> additional access-control layer.
+> RPC endpoints are routed through the public BTCPay hostname. Protect the
+> generated UI password and consider an additional access-control layer.
 
 The fragment enables LiT's automatic bbolt-to-SQL migration. Once that migration
 completes, its data cannot be downgraded to a pre-0.17 LiT release or migrated
@@ -21,16 +20,23 @@ back to bbolt. Ensure the deployment and `lnd_lit_datadir` data are recoverable
 before enabling or updating the fragment, and review the pinned LiT release's
 migration notes.
 
-Set the UI password and enable the fragment:
+Enable the fragment:
 
 ```bash
-export LIT_PASSWD="sUpErSeCuRe"
 btcpay-fragments add opt-add-lightning-terminal
 ```
 
-Setup persists `LIT_PASSWD` in the deployment `.env` file, and it is rendered
-into the container command. Treat the file and Docker access as privileged and
-rotate the password if it is disclosed.
+Setup generates a 64-character UI password once, stores it in
+`secrets/lit_password`, and mounts it into the container as a Compose secret.
+Display the password from a root login shell with:
+
+```bash
+cat "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker/secrets/lit_password"
+```
+
+Treat the secret file and Docker access as privileged. To rotate the password,
+replace the file contents with a new password of at least eight characters and
+restart the `lnd_lit` service.
 
 Lightning Terminal appears under **Server Settings > Services** and is served at
 `/lit/` on the BTCPay Server host.

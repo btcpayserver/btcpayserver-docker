@@ -5,15 +5,14 @@ set -Eeuo pipefail
 # Backups can contain database dumps, wallet data, and other secrets.
 umask 077
 
-# Please be aware of these important issues:
-#
-# - Old channel state is toxic and you can lose all your funds, if you or someone
-#   else closes a channel based on the backup with old state - and the state changes
-#   often! If you publish an old state (say from yesterday's backup) on chain, you
-#   WILL LOSE ALL YOUR FUNDS IN A CHANNEL, because the counterparty will publish a
-#   revocation key!
+# Saving a channel database can help specialist recovery. Starting LND from
+# stale channel state is unsafe: broadcasting a revoked commitment can lose all
+# funds in that channel. Only use a database snapshot for migration while the
+# source has remained stopped since the snapshot was taken.
 
 backup_dir=""
+backup_mode="backup"
+backup_mode_path=""
 backup_path=""
 btcpay_dir=""
 btcpay_stopped=false
@@ -23,23 +22,74 @@ compose_services=""
 mariadb_container=""
 mariadb_dump_name=""
 mariadb_dump_path=""
+migration_started=false
 postgres_container=""
 postgres_dump_name="postgres.sql.gz"
 postgres_dump_path=""
 temporary_backup_path=""
+stack_stopped=false
 work_dir=""
 archive_entries=()
 
+# Report $1 on stderr and terminate the script with status 1.
 fail() {
   printf "\n🚨 %s\n" "$1" >&2
   exit 1
 }
 
+# Print backup modes, output filenames, and migration constraints to stdout.
+usage() {
+  printf '%s\n' \
+    'Usage: btcpay-backup.sh [--migrate]' \
+    '' \
+    'Default: back up for disaster recovery, omit Bitcoin LND data/graph, and restart BTCPay.' \
+    'Recover LND channels by importing channel.backup (SCB); peers will be asked to close them.' \
+    '' \
+    '--migrate: include Bitcoin LND data/graph and leave all BTCPay Docker Compose containers stopped.' \
+    'Use this snapshot only while the source remains stopped to migrate with open channels.' \
+    'Do not restart the source before or after starting the destination.' \
+    '' \
+    'Outputs: backup.tar.gz[.gpg], or backup-migrate.tar.gz[.gpg] with --migrate.'
+}
+
+if [ "$#" -gt 1 ]; then
+  usage >&2
+  fail 'Expected at most one option.'
+fi
+if [ "$#" -eq 1 ]; then
+  case "$1" in
+    --migrate) backup_mode="migrate" ;;
+    -h|--help) usage; exit 0 ;;
+    *) usage >&2; fail "Unknown option: $1" ;;
+  esac
+fi
+
+# Stop the configured Compose stack and record success in stack_stopped.
+# Return nonzero on failure; btcpay_down's final popd can mask shutdown errors.
+stop_btcpay() {
+  stack_stopped=false
+  if ! (cd "$(dirname "$BTCPAY_ENV_FILE")" &&
+      docker-compose -f "$BTCPAY_DOCKER_COMPOSE" down -t "${COMPOSE_HTTP_TIMEOUT:-180}"); then
+    return 1
+  fi
+  stack_stopped=true
+}
+
+# Restart the stack in its Compose environment and run the reverse-proxy helper.
+# Propagate startup or helper failures to the caller.
+restart_btcpay() {
+  (cd "$(dirname "$BTCPAY_ENV_FILE")" &&
+    docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up --remove-orphans -d -t "${COMPOSE_HTTP_TIMEOUT:-180}" &&
+    ensure_reverse_proxy_up)
+}
+
+# Remove this run's temporary archive, dumps, mode marker, and work directory.
+# Return nonzero if removal fails or the work directory fails its path guard.
 cleanup_temporary_files() {
   local cleanup_failed=false
   local path
 
-  for path in "$temporary_backup_path" "$postgres_dump_path" "$mariadb_dump_path"; do
+  for path in "$temporary_backup_path" "$postgres_dump_path" "$mariadb_dump_path" "$backup_mode_path"; do
     if [ -n "$path" ] && { [ -e "$path" ] || [ -L "$path" ]; }; then
       if ! rm -f -- "$path"; then
         printf "⚠️ Could not remove temporary file %s.\n" "$path" >&2
@@ -63,15 +113,29 @@ cleanup_temporary_files() {
   [ "$cleanup_failed" = false ]
 }
 
+# EXIT trap: clean temporary files and recover the appropriate stack state.
+# Restart stopped default backups, keep migration sources stopped, and preserve
+# the original failure status or report cleanup failures with status 1.
 cleanup_on_exit() {
   local status=$?
   local cleanup_failed=false
 
   trap - EXIT
 
-  if [ "$btcpay_stopped" = true ] && [ -n "$btcpay_dir" ]; then
+  if [ "$migration_started" = true ]; then
+    if [ "$stack_stopped" = false ]; then
+      printf "\nℹ️ Stopping all BTCPay containers after interrupted migration backup …\n\n" >&2
+      if ! stop_btcpay; then
+        printf "⚠️ Could not stop all BTCPay containers. Stop the source manually before any migration.\n" >&2
+        cleanup_failed=true
+      fi
+    fi
+    if [ "$status" -ne 0 ]; then
+      printf "⚠️ Migration backup failed. BTCPay was not restarted; do not use a previous migration archive from this attempt.\n" >&2
+    fi
+  elif [ "$btcpay_stopped" = true ] && [ -n "$btcpay_dir" ]; then
     printf "\nℹ️ Restarting BTCPay Server after failed backup …\n\n" >&2
-    if (cd "$btcpay_dir" && btcpay_up); then
+    if restart_btcpay; then
       btcpay_stopped=false
     else
       printf "⚠️ BTCPay Server could not be restarted automatically. Run btcpay-up.sh before continuing.\n" >&2
@@ -90,6 +154,8 @@ cleanup_on_exit() {
   exit "$status"
 }
 
+# Poll Postgres readiness for container $1 using database_ready_timeout.
+# Return 0 when ready or 1 after all attempts fail.
 wait_for_postgres() {
   local container=$1
   local elapsed
@@ -104,6 +170,8 @@ wait_for_postgres() {
   return 1
 }
 
+# Poll MariaDB readiness for container $1 using database_ready_timeout.
+# Return 0 when ready or 1 after all attempts fail.
 wait_for_mariadb() {
   local container=$1
   local elapsed
@@ -118,6 +186,8 @@ wait_for_mariadb() {
   return 1
 }
 
+# Print the sole container ID for service $1, or an empty string if none is found.
+# Abort on inspection failure or multiple returned container IDs.
 get_compose_container() {
   local service=$1
   local container
@@ -132,6 +202,7 @@ get_compose_container() {
   printf "%s" "$container"
 }
 
+# Return success when service $1 appears in the cached compose_services output.
 compose_has_service() {
   local service=$1
   local configured_service
@@ -145,6 +216,8 @@ compose_has_service() {
   return 1
 }
 
+# Set postgres_container, starting only Postgres if needed, and wait for readiness.
+# Abort on volume creation, startup, discovery, or readiness failures.
 ensure_postgres_ready() {
   postgres_container=$(get_compose_container postgres)
 
@@ -153,7 +226,8 @@ ensure_postgres_ready() {
     if ! docker volume create generated_postgres_datadir >/dev/null; then
       fail "Could not create the generated_postgres_datadir Docker volume."
     fi
-    if ! docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d postgres; then
+    stack_stopped=false
+    if ! docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d --no-deps postgres; then
       fail "Starting the Postgres database container failed."
     fi
     postgres_container=$(get_compose_container postgres)
@@ -167,6 +241,8 @@ ensure_postgres_ready() {
   fi
 }
 
+# Set mariadb_container, starting only MariaDB if needed, and wait for readiness.
+# Abort on volume creation, startup, discovery, or readiness failures.
 ensure_mariadb_ready() {
   mariadb_container=$(get_compose_container mariadb)
 
@@ -175,7 +251,8 @@ ensure_mariadb_ready() {
     if ! docker volume create generated_mariadb_datadir >/dev/null; then
       fail "Could not create the generated_mariadb_datadir Docker volume."
     fi
-    if ! docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d mariadb; then
+    stack_stopped=false
+    if ! docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up -d --no-deps mariadb; then
       fail "Starting the MariaDB database container failed."
     fi
     mariadb_container=$(get_compose_container mariadb)
@@ -190,6 +267,8 @@ ensure_mariadb_ready() {
 }
 
 trap cleanup_on_exit EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 if [ "$(id -u)" -ne 0 ]; then
   printf "\n🚨 This script must be run as root.\n"
@@ -250,6 +329,9 @@ fi
 
 backup_dir="$volumes_dir/backup_datadir/_data"
 plain_backup_path="$backup_dir/backup.tar.gz"
+if [ "$backup_mode" = migrate ]; then
+  plain_backup_path="$backup_dir/backup-migrate.tar.gz"
+fi
 backup_path="$plain_backup_path"
 if [ -n "$backup_passphrase" ]; then
   backup_path="$plain_backup_path.gpg"
@@ -262,6 +344,8 @@ if ! work_dir=$(mktemp -d "$backup_dir/.btcpay-backup.XXXXXX"); then
   fail "Could not create a temporary backup directory in $backup_dir."
 fi
 postgres_dump_path="$work_dir/$postgres_dump_name"
+backup_mode_path="$work_dir/btcpay-backup-mode"
+printf '%s\n' "$backup_mode" >"$backup_mode_path"
 
 cd "$btcpay_dir"
 # shellcheck source=/dev/null
@@ -272,6 +356,14 @@ if ! compose_services=$(docker-compose -f "$BTCPAY_DOCKER_COMPOSE" config --serv
 fi
 if ! compose_has_service postgres; then
   fail "The Docker Compose file does not define a postgres service."
+fi
+
+if [ "$backup_mode" = migrate ]; then
+  printf "\nℹ️ Migration backup: stopping all BTCPay containers before database dumps …\n\n"
+  migration_started=true
+  if ! stop_btcpay; then
+    fail "Could not stop all BTCPay containers. Migration backup aborted."
+  fi
 fi
 
 ensure_postgres_ready
@@ -304,7 +396,9 @@ fi
 
 printf "\nℹ️ Stopping BTCPay Server …\n\n"
 btcpay_stopped=true
-btcpay_down
+if ! stop_btcpay; then
+  fail "Could not stop all BTCPay containers. Backup aborted before archiving."
+fi
 
 cd "$docker_dir"
 printf "\nℹ️ Archiving files in %s …\n" "$(pwd)"
@@ -316,7 +410,7 @@ if [ "${#volume_entries[@]}" -eq 0 ]; then
   fail "Could not find Docker volume directories to archive."
 fi
 
-dump_entries=("$postgres_dump_name")
+dump_entries=("$postgres_dump_name" "btcpay-backup-mode")
 if [ -n "$mariadb_dump_name" ]; then
   dump_entries+=("$mariadb_dump_name")
 fi
@@ -355,13 +449,18 @@ tar_excludes=(
   --exclude="volumes/generated_mariadb_datadir"
   --exclude="volumes/generated_postgres_datadir"
   --exclude="volumes/generated_electrumx_datadir"
-  --exclude="volumes/generated_lnd_bitcoin_datadir/_data/data/graph"
   --exclude="volumes/generated_clightning_bitcoin_datadir/_data/lightning-rpc"
   --exclude="volumes/generated_lwd-cache"
   --exclude="volumes/generated_zebrad-cache"
   --exclude="volumes/generated_zec_data"
   --exclude="volumes/**/logs/*"
 )
+# LND stores channel state as well as the routing graph here. Routine backups
+# use channel.backup for SCB recovery; restoring old channel.db state is unsafe.
+# Migration includes this directory only while the source remains stopped.
+if [ "$backup_mode" = backup ]; then
+  tar_excludes+=(--exclude="volumes/generated_lnd_bitcoin_datadir/_data/data/graph")
+fi
 
 backup_filename=$(basename "$backup_path")
 if ! temporary_backup_path=$(mktemp "$backup_dir/.$backup_filename.XXXXXX"); then
@@ -404,10 +503,14 @@ if [ -n "$backup_passphrase" ] && { [ -e "$plain_backup_path" ] || [ -L "$plain_
   fi
 fi
 
-printf "\nℹ️ Restarting BTCPay Server …\n\n"
-cd "$btcpay_dir"
-btcpay_up
-btcpay_stopped=false
+if [ "$backup_mode" = backup ]; then
+  printf "\nℹ️ Restarting BTCPay Server …\n\n"
+  cd "$btcpay_dir"
+  if ! restart_btcpay; then
+    fail "BTCPay Server could not be restarted after backup."
+  fi
+  btcpay_stopped=false
+fi
 
 printf "\nℹ️ Cleaning up …\n\n"
 if ! cleanup_temporary_files; then
@@ -415,6 +518,18 @@ if ! cleanup_temporary_files; then
 fi
 postgres_dump_path=""
 mariadb_dump_path=""
+backup_mode_path=""
 work_dir=""
 
 printf "✅ Backup done => %s\n\n" "$backup_path"
+if [ "$backup_mode" = migrate ]; then
+  printf '%s\n' \
+    '⚠️ Migration backup: all BTCPay Docker Compose containers remain stopped.' \
+    'Keep the source stopped. If it processes new channel state, this snapshot is no longer safe for migration.' \
+    'Restore with btcpay-restore.sh --migrate; never run source and destination together.'
+elif compose_has_service lnd_bitcoin; then
+  printf '%s\n' \
+    'ℹ️ Bitcoin LND backup is for disaster recovery. It excludes data/graph and cannot preserve open channels.' \
+    'After restore, explicitly import channel.backup using lncli restorechanbackup or the BTCPay wrapper.' \
+    'SCB recovery asks peers to close channels; see docs/backup-restore.md for the recovery procedure.'
+fi

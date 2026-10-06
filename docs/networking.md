@@ -18,7 +18,7 @@ Port 80 must be reachable for the default ACME HTTP challenge. Changing
 device forwards public port 80 to it.
 
 `BTCPAY_ADDITIONAL_HOSTS` accepts comma-separated hostnames. By default,
-certificates are requested for the primary and additional hosts. Set
+certificates are requested for the primary (`BTCPAY_HOST`) and additional hosts (`BTCPAY_ADDITIONAL_HOSTS`). Set
 `BTCPAY_LETSENCRYPT_HOSTS` to a comma-separated subset, or explicitly set it to
 an empty string to disable certificate requests.
 
@@ -31,16 +31,21 @@ BTCPay's internal routing but disable its HTTPS companion:
 export BTCPAYGEN_REVERSEPROXY="nginx"
 export BTCPAY_HOST="btcpay.example.com"
 export BTCPAY_PROTOCOL="https"
-export REVERSEPROXY_HTTP_PORT="10080"
 export TRUST_DOWNSTREAM_PROXY="true"
-export BTCPAYGEN_EXCLUDE_FRAGMENTS="$BTCPAYGEN_EXCLUDE_FRAGMENTS;nginx-https"
 . ./btcpay-setup.sh -i
+# Disable the HTTPS companion after setup saves the proxy settings above.
+btcpay-fragments exclude nginx-https
 ```
 
 The external proxy must preserve the original host and HTTPS scheme so BTCPay
 generates correct URLs. Replace `BTCPAY_SERVER_IP` with an address through which
-the external Nginx server can reach the BTCPay host. This example assumes the
-certificate is already provisioned on the external server:
+the external proxy can reach the BTCPay host. The examples below assume the
+certificate is already provisioned on the external server.
+
+If the external proxy runs on the BTCPay host, set
+`REVERSEPROXY_HTTP_PORT=10080` and use port `10080` instead of `80` below.
+
+### Nginx
 
 ```nginx
 # Add this map once inside the http block, outside any server block.
@@ -75,7 +80,7 @@ server {
     proxy_busy_buffers_size 256k;
 
     location / {
-        proxy_pass http://BTCPAY_SERVER_IP:10080;
+        proxy_pass http://BTCPAY_SERVER_IP:80;
         proxy_http_version 1.1;
         proxy_buffering off;
 
@@ -98,10 +103,58 @@ Replace the hostname and certificate paths, then validate and reload Nginx:
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-Firewall port 10080 on the BTCPay host so only the external proxy can connect.
-This restriction is required because `TRUST_DOWNSTREAM_PROXY=true` accepts the
-incoming `X-Forwarded-*` headers as authoritative. Never expose this
-unencrypted, trusted backend port publicly.
+### Apache
+
+Enable the required modules on Debian-based systems:
+
+```bash
+sudo a2enmod headers proxy proxy_http ssl
+```
+
+Apache 2.4.47 or later can proxy HTTP and WebSocket traffic through
+`mod_proxy_http`:
+
+```apacheconf
+<VirtualHost *:80>
+    ServerName btcpay.example.com
+    Redirect permanent / https://btcpay.example.com/
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerName btcpay.example.com
+
+    SSLEngine on
+    SSLCertificateFile /etc/letsencrypt/live/btcpay.example.com/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/btcpay.example.com/privkey.pem
+
+    ProxyRequests Off
+    ProxyPreserveHost On
+    ProxyAddHeaders On
+    RequestHeader set X-Forwarded-Proto "https"
+    RequestHeader set X-Forwarded-Port "443"
+    RequestHeader unset Proxy early
+
+    ProxyPass / http://BTCPAY_SERVER_IP:80/ upgrade=websocket
+    ProxyPassReverse / http://BTCPAY_SERVER_IP:80/
+
+    LimitRequestBody 104857600
+
+    # Some signing workflows use large request headers.
+    LimitRequestLine 500000
+    LimitRequestFieldSize 500000
+</VirtualHost>
+```
+
+Replace the hostname and certificate paths, then validate and reload Apache:
+
+```bash
+sudo apachectl configtest && sudo systemctl reload apache2
+```
+
+Firewall Nginx's HTTP port so only the external proxy can connect. This
+restriction is required because `TRUST_DOWNSTREAM_PROXY=true` accepts incoming
+`X-Forwarded-*` headers as authoritative. Never expose this unencrypted,
+trusted backend port publicly.
 
 ## Cloudflare Tunnel
 
@@ -137,9 +190,55 @@ stored as relative symlinks under `nginx/enabled-routes` and synchronized during
 generation. Changes validate and reload a running Nginx container; a failed
 validation or reload is rolled back.
 
-LND's wallet creation, unlock, and password-change methods remain blocked by
-Nginx because those methods are not macaroon-protected. Other LND API calls
-require the appropriate macaroon.
+<a id="expose-bitcoin-lnd-apis"></a>
+
+### LND REST and gRPC APIs
+
+The `lnd-rest` and `lnd-grpc` routes are available when Bitcoin LND and the
+bundled Nginx reverse proxy are selected. They are disabled by default. No
+additional Compose fragment or host port is required.
+
+Enable only the API required by the external client:
+
+```bash
+btcpay-routes add lnd-rest
+btcpay-routes add lnd-grpc
+```
+
+To enable or disable both together:
+
+```bash
+btcpay-routes add lnd-rest lnd-grpc
+btcpay-routes remove lnd-rest lnd-grpc
+```
+
+Use `btcpay-routes show` to check which routes are enabled. With
+`BTCPAY_HOST=btcpay.example.com`, the public endpoints are:
+
+- REST: `https://btcpay.example.com/lnd-rest/btc/`
+- gRPC: `btcpay.example.com:443` with TLS
+
+After Bitcoin is synchronized, open **Server Settings > Services** in BTCPay
+Server and select **LND (REST)** or **LND (gRPC)** for the endpoint, macaroons,
+and temporary QR-code configuration. REST clients send the macaroon in the
+`Grpc-Metadata-macaroon` header; gRPC clients use the `macaroon` metadata key.
+The public endpoint uses the HTTPS certificate for `BTCPAY_HOST`, not LND's
+internal TLS certificate.
+
+Macaroons grant control over the Lightning node. Use the least-privileged
+macaroon supported by the client, protect it as a secret, and avoid distributing
+the admin macaroon unless full node control is required. Nginx blocks LND's
+unauthenticated wallet creation, unlocking, password-change, and state methods.
+Other calls still require an appropriate macaroon.
+
+These routes do not publish LND's internal ports `8080` or `10009` on the host;
+traffic passes through the configured HTTPS port, normally `443`.
+
+If another reverse proxy is placed in front of the bundled Nginx, it must also
+forward the enabled route. The REST route uses regular HTTPS forwarding. The
+gRPC route requires the external proxy to support HTTP/2 gRPC forwarding; the
+generic external Nginx and Apache examples above only configure HTTP and
+WebSocket forwarding.
 
 ## Unsafe Exposures
 

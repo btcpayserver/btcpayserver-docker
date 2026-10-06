@@ -63,7 +63,19 @@ Confirm DNS points to this host and ports 80/443 reach it. Then validate Nginx:
 docker exec nginx nginx -t
 docker logs --tail 200 nginx
 btcpay-routes show
+curl --show-error --silent --output /dev/null "https://$BTCPAY_HOST/"
 ```
+
+When using the bundled automatic HTTPS setup, also inspect its ACME companion:
+
+```bash
+docker logs --tail 200 letsencrypt-nginx-proxy-companion
+```
+
+Setup can exit successfully even if certificate issuance fails. Check this
+output for the configured hostname and use the `curl` result as an independent
+check that its certificate is valid. Do not bypass certificate validation with
+`curl --insecure`.
 
 A 503 response often means Nginx received the request but did not find a route
 for its hostname. Confirm `BTCPAY_HOST`, and set `REVERSEPROXY_DEFAULT_HOST` only
@@ -71,6 +83,20 @@ when requests with unrecognized hosts should reach BTCPay Server.
 
 If another proxy terminates HTTPS, confirm it preserves the `Host` and
 `X-Forwarded-Proto` headers. See [Networking](./networking.md).
+
+### "Your access to BTCPay Server is over an unsecured network"
+
+If HTTPS is terminated by an external reverse proxy, ensure it sends
+`X-Forwarded-Proto: https`, then reconfigure BTCPay Server to trust the proxy:
+
+```bash
+export TRUST_DOWNSTREAM_PROXY="true"
+. ./btcpay-setup.sh -i
+```
+
+Only enable this when the BTCPay host's HTTP port is accessible exclusively
+through the trusted reverse proxy. See [External Reverse
+Proxy](./networking.md#external-reverse-proxy).
 
 ## Restart the Stack
 

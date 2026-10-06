@@ -53,4 +53,5 @@ Use this default structure, omitting sections that do not apply:
 1. Open the PR as a draft unless the user explicitly requests a ready-for-review PR.
 2. Verify the title, base branch, head branch, draft state, body, and URL after creating or editing it.
 3. Keep the PR description accurate when later commits change behavior or usage.
-4. Return the PR URL and explicitly ask the user for review.
+4. For an image-only version bump that the user has authorized merging, merge once the repository CI checks pass. Do not wait for a pending CodeRabbit status unless it is a required check.
+5. Return the PR URL and explicitly ask the user for review.
