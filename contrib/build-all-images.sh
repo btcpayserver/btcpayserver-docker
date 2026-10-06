@@ -666,15 +666,18 @@ cd - && cd ..
 # Build phoenixd
 # https://raw.githubusercontent.com/ACINQ/phoenixd/v0.9.1/.docker/Dockerfile
 DOCKERFILE=".docker/Dockerfile"
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE=""
 # https://raw.githubusercontent.com/ACINQ/phoenixd/v0.9.1/.docker/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE=".docker/Dockerfile"
-echo "Building acinq/phoenixd:0.9.1"
-git clone https://github.com/ACINQ/phoenixd phoenixd
-cd phoenixd
-git checkout v0.9.1
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "acinq/phoenixd:0.9.1" .
-cd - && cd ..
+if [[ "$DOCKERFILE" ]]; then
+	echo "Building acinq/phoenixd:0.9.1"
+	git clone https://github.com/ACINQ/phoenixd phoenixd
+	cd phoenixd
+	git checkout v0.9.1
+	cd "$(dirname $DOCKERFILE)"
+	docker build -f "$DOCKERFILE" -t "acinq/phoenixd:0.9.1" .
+	cd - && cd ..
+fi
 
 
 # Build postgres

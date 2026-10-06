@@ -5,6 +5,7 @@
         public string DockerFilePath { get; set; }
         public string DockerFilePathARM32v7 { get; set; }
         public string DockerFilePathARM64v8 { get; set; }
+        public bool SkipARM32v7Build { get; set; }
         public string DockerHubLink { get; set; }
         public string GitLink { get; set; }
         public string GitRef { get; set; }
