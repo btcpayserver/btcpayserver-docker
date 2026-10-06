@@ -67,7 +67,13 @@ explicitly requests backup, migration, or restore work.
 
 For explicitly requested backup, migration, or restore work, follow
 `docs/backup-restore.md` as the source of truth. Do not reproduce its procedures
-in this skill.
+in this skill. Before a restore, establish whether the archive is a default
+backup or migration snapshot, whether the source has processed payments or
+channel updates since it was created, and whether the destination contains
+wallet or Lightning state. Preserve state that may be newer than the archive,
+keep the original Lightning node stopped, and obtain explicit confirmation of
+the resulting recovery plan immediately before running the restore. Never
+guess that an archive is current or that destination data is disposable.
 
 Recommend starting without Lightning unless the user understands liquidity
 management and its operational constraints. Do not enable optional services
@@ -125,11 +131,15 @@ After each consequential command, inspect its output before continuing. On
 failure, stop and diagnose the failed phase rather than repeatedly rerunning
 setup or changing unrelated settings.
 
-Follow `docs/installation.md#complete-the-installation` and
-`docs/troubleshooting.md` to verify:
+Follow `docs/installation.md#complete-the-installation` and the relevant checks
+in `docs/troubleshooting.md`, including
+`docs/troubleshooting.md#check-nginx-and-https`, to verify:
 
 1. The expected Compose services are running without restart loops.
 2. The configured HTTPS hostname has a valid certificate and reaches BTCPay.
+   Setup success is not evidence of certificate issuance: inspect the ACME
+   companion logs and make an independent TLS request without disabling
+   certificate validation.
 3. The intended operator registers the first account through a controlled
    enrollment window, receives administrator access, and reviews the subsequent
    account-registration policy. Do not leave a fresh public instance unattended
