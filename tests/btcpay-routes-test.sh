@@ -18,19 +18,20 @@ case "$1" in
         printf '%s\n' "${DOCKER_RUNNING:-true}"
         ;;
     exec)
-        if [ "${NGINX_TEST_FAIL:-false}" = "true" ]; then
+        printf '%s\n' "$*" >> "${DOCKER_EXECS_FILE:?}"
+        if [ "${NGINX_TEST_FAIL:-false}" = "true" ] && [ "$*" = "exec nginx nginx -t" ]; then
             printf '%s\n' "nginx: configuration test failed" >&2
+            exit 1
+        fi
+        if [ "${HUP_FAIL:-false}" = "true" ] && [ "$*" = "exec nginx sh -c kill -HUP 1" ]; then
+            exit 1
+        fi
+        if [ "${BTCPAY_HUP_FAIL:-false}" = "true" ] && [ "$*" = "exec generated_btcpayserver_1 sh -c kill -HUP 1" ]; then
             exit 1
         fi
         ;;
     kill)
         printf '%s\n' "$*" >> "${DOCKER_KILLS_FILE:?}"
-        if [ "${HUP_FAIL:-false}" = "true" ] && [ "${*: -1}" = "nginx" ]; then
-            exit 1
-        fi
-        if [ "${BTCPAY_HUP_FAIL:-false}" = "true" ] && [ "${*: -1}" = "generated_btcpayserver_1" ]; then
-            exit 1
-        fi
         ;;
     *)
         exit 1
@@ -48,6 +49,8 @@ export BTCPAY_BASE_DIRECTORY="$test_dir"
 export BTCPAYGEN_REVERSEPROXY=nginx
 export DOCKER_KILLS_FILE="$test_dir/docker-kills"
 : > "$DOCKER_KILLS_FILE"
+export DOCKER_EXECS_FILE="$test_dir/docker-execs"
+: > "$DOCKER_EXECS_FILE"
 
 write_manifest() {
     jq -n --argjson required "$1" --argjson optional "$2" \
@@ -94,7 +97,8 @@ assert_json_state '["thunderhub"]' '["mempool"]'
 run_routes add thunderhub
 [ "$status" -eq 0 ]
 assert_json_state '["thunderhub"]' '["mempool","thunderhub"]'
-grep -Fxq 'kill --signal HUP generated_btcpayserver_1' "$DOCKER_KILLS_FILE"
+grep -Fxq 'exec nginx sh -c kill -HUP 1' "$DOCKER_EXECS_FILE"
+grep -Fxq 'exec generated_btcpayserver_1 sh -c kill -HUP 1' "$DOCKER_EXECS_FILE"
 
 run_routes sync
 [ "$status" -eq 0 ]
@@ -189,5 +193,11 @@ jq -e '
     .routes.optionalRoutes == ["clightning-rest"] and
     .routes.enabledRoutes == ["clightning-rest", "rtl"]
 ' <<< "$host_environment" >/dev/null
+
+if [ -s "$DOCKER_KILLS_FILE" ]; then
+    printf 'Containers must be signalled with docker exec; docker kill disables their restart policy:\n' >&2
+    cat "$DOCKER_KILLS_FILE" >&2
+    exit 1
+fi
 
 printf 'btcpay-routes tests passed\n'
