@@ -21,10 +21,9 @@ export BTCPAYGEN_DOCKER_IMAGE="btcpayserver/docker-compose-generator:local"
 source ./btcpay-setup.sh -i
 
 jq -e '
-  .requiredRoutes == [] and
+  .requiredRoutes == ["rtl"] and
   .optionalRoutes == ["clightning-rest"] and
   .secrets == [] and
-  (.fragments | index("opt-add-rtl") == null) and
   (.fragments | index("opt-add-tor") == null) and
   (.fragments | index("bitcoin-clightning") != null)
 ' Generated/manifest.json > /dev/null
