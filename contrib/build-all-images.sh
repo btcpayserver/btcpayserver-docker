@@ -295,18 +295,18 @@ fi
 
 
 # Build monero
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.5.1/Monero/0.18.5.1/Dockerfile
-DOCKERFILE="Monero/0.18.5.1/Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.5.1/Monero/0.18.5.1/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Monero/0.18.5.1/Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.5.1/Monero/0.18.5.1/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Monero/0.18.5.1/Dockerfile"
-echo "Building btcpayserver/monero:0.18.5.1"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.5.3/Monero/0.18.5.3/Dockerfile
+DOCKERFILE="Monero/0.18.5.3/Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.5.3/Monero/0.18.5.3/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Monero/0.18.5.3/Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Monero/0.18.5.3/Monero/0.18.5.3/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Monero/0.18.5.3/Dockerfile"
+echo "Building btcpayserver/monero:0.18.5.3"
 git clone https://github.com/btcpayserver/dockerfile-deps monero
 cd monero
-git checkout Monero/0.18.5.1
+git checkout Monero/0.18.5.3
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.18.5.1" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/monero:0.18.5.3" .
 cd - && cd ..
 
 
