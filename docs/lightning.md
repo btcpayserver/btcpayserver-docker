@@ -58,11 +58,8 @@ The setup installs the applicable wrapper:
 ```bash
 bitcoin-lightning-cli.sh getinfo  # CLN
 bitcoin-lncli.sh getinfo          # LND
-phoenix-cli.sh getinfo            # Phoenixd, from the repository directory
+phoenix-cli.sh getinfo            # Phoenixd
 ```
-
-`phoenix-cli.sh` is not installed into `/usr/local/bin`; invoke it from the
-repository unless you install your own wrapper.
 
 ## LND Options
 
