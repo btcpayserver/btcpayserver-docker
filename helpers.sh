@@ -235,8 +235,8 @@ btcpay_reload_sshd() {
     if command -v systemctl > /dev/null 2>&1; then
         for unit in ssh sshd; do
             if systemctl is-active --quiet "$unit.service" 2> /dev/null; then
-                systemctl reload "$unit.service"
-                return
+                systemctl reload "$unit.service" && return 0
+                break
             fi
         done
     fi
