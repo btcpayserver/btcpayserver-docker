@@ -90,7 +90,7 @@ namespace DockerFileBuildHelper
                     builder.AppendLine($"# {info.GetGithubLinkOf(dockerFile.DockerFullPath)}");
                     builder.AppendLine($"[[ \"$(uname -m)\" == \"armv7l\" ]] && DOCKERFILE=\"{dockerFile.DockerFullPath}\"");
                 }
-                else if (info.SkipARM32v7Build)
+                else
                 {
                     builder.AppendLine("[[ \"$(uname -m)\" == \"armv7l\" ]] && DOCKERFILE=\"\"");
                     mightBeUnavailable = true;
@@ -100,6 +100,11 @@ namespace DockerFileBuildHelper
                     var dockerFile = DockerFile.Parse(info.DockerFilePathARM64v8);
                     builder.AppendLine($"# {info.GetGithubLinkOf(dockerFile.DockerFullPath)}");
                     builder.AppendLine($"[[ \"$(uname -m)\" == \"aarch64\" ]] && DOCKERFILE=\"{dockerFile.DockerFullPath}\"");
+                }
+                else
+                {
+                    builder.AppendLine("[[ \"$(uname -m)\" == \"aarch64\" ]] && DOCKERFILE=\"\"");
+                    mightBeUnavailable = true;
                 }
                 if (mightBeUnavailable)
                 {
@@ -358,7 +363,6 @@ namespace DockerFileBuildHelper
                     break;
                 case "phoenixd":
                     dockerInfo.DockerFilePath = ".docker/Dockerfile";
-                    dockerInfo.SkipARM32v7Build = true;
                     dockerInfo.DockerFilePathARM64v8 = ".docker/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/ACINQ/phoenixd";
                     dockerInfo.GitRef = $"v{image.Tag}";
