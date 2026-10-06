@@ -29,5 +29,4 @@ required:
   - "postgres"
   - "btcpayserver"
 recommended:
-  - "opt-add-tor"
   - "btcpay-host"

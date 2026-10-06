@@ -5,10 +5,10 @@ commands that change fragments must run as root. Changes are applied immediately
 and multiple fragment names can be passed at once:
 
 ```bash
-btcpay-fragments add opt-add-mempool
+btcpay-fragments add opt-add-tor
 btcpay-fragments remove opt-add-mempool
-btcpay-fragments exclude opt-add-tor
-btcpay-fragments unexclude opt-add-tor
+btcpay-fragments exclude btcpay-host
+btcpay-fragments unexclude btcpay-host
 btcpay-fragments show
 ```
 
@@ -69,7 +69,7 @@ formal generator prerequisite, so confirm LND is enabled.
 
 | Fragment | Purpose and requirements |
 |---|---|
-| [`opt-add-tor`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-tor.yml) | Add Tor hidden services and selected onion connectivity; recommended automatically |
+| [`opt-add-tor`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-tor.yml) | Add Tor hidden services and selected onion connectivity |
 | [`opt-add-cloudflared`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-cloudflared.yml) | Expose bundled Nginx through Cloudflare Tunnel and disable its local HTTPS companion; see the [guide](./cloudflare-tunnel.md) |
 | [`opt-add-tor-relay`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-tor-relay.yml) | Run a public non-exit relay on port 9001; requires contact details and legal review |
 | [`opt-add-pihole`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-pihole.yml) | Add Pi-hole DNS on TCP/UDP 53 for a trusted LAN; see the [guide](./pihole.md) |
