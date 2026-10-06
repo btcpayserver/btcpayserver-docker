@@ -208,6 +208,17 @@ btcpay_setup_ssh() {
     fi
 }
 
+# Matches fragment names the way the generator and btcpay-fragments do:
+# comma or semicolon separated, trimmed, case-insensitive, optional .yml.
+btcpay_fragment_is_excluded() {
+    jq -Rse --arg fragment "$1" '
+        gsub(","; ";")
+        | split(";")
+        | map(gsub("^[[:space:]]+|[[:space:]]+$"; "") | ascii_downcase | sub("[.]yml$"; ""))
+        | any(. == $fragment)
+    ' <<< "${BTCPAYGEN_EXCLUDE_FRAGMENTS:-}" > /dev/null
+}
+
 btcpay_expand_variables() {
     BTCPAY_CRYPTOS=""
     for i in "$BTCPAYGEN_CRYPTO1" "$BTCPAYGEN_CRYPTO2" "$BTCPAYGEN_CRYPTO3" "$BTCPAYGEN_CRYPTO4" "$BTCPAYGEN_CRYPTO5" "$BTCPAYGEN_CRYPTO6" "$BTCPAYGEN_CRYPTO7" "$BTCPAYGEN_CRYPTO8" "$BTCPAYGEN_CRYPTO9"
@@ -244,6 +255,7 @@ done
 
 sshd_config="/etc/ssh/sshd_config"
 if [[ -f "$sshd_config" ]] && \
+   ! btcpay_fragment_is_excluded btcpay-host && \
    grep -q "PermitRootLogin[[:space:]]no" "$sshd_config"; then
    echo "Updating "$sshd_config" (Change from 'PermitRootLogin no' to 'PermitRootLogin prohibit-password')"
    echo "BTCPay Server needs connection from inside the container to the host in order to run btcpay-update.sh"

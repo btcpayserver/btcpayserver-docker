@@ -65,12 +65,13 @@ Export it again before each setup, update, or `btcpay-up.sh` invocation that
 could recreate the BTCPay Server container.
 
 The recommended `btcpay-host` fragment mounts a generated host key into BTCPay
-Server. Setup adds a restricted forced command to root's `authorized_keys` and
-may change `PermitRootLogin no` to `PermitRootLogin prohibit-password`. Exclude
-the fragment with `BTCPAYGEN_EXCLUDE_FRAGMENTS` to prevent BTCPay Server from
-accessing the key. Exclusion does not prevent setup from preparing the host key
-and authorized-key entry, and it does not revert SSH changes from an earlier
-setup.
+Server. Setup adds a restricted forced command to root's `authorized_keys` and,
+unless the fragment is excluded, may change `PermitRootLogin no` to
+`PermitRootLogin prohibit-password`. Exclude the fragment with
+`BTCPAYGEN_EXCLUDE_FRAGMENTS` to prevent BTCPay Server from accessing the key
+and to leave `PermitRootLogin` unchanged. Exclusion does not prevent setup from
+preparing the host key and authorized-key entry, and it does not revert SSH
+changes from an earlier setup.
 
 ## Storage and Memory Profiles
 
