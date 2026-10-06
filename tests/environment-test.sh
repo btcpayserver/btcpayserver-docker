@@ -76,4 +76,49 @@ if btcpay_update_docker_env; then
 fi
 cmp -s "$test_dir/expected.env" "$BTCPAY_ENV_FILE"
 
+mkdir "$test_dir/reload-bin"
+cat > "$test_dir/reload-bin/systemctl" <<'EOF'
+#!/bin/bash
+printf 'systemctl %s\n' "$*" >> "$RELOAD_LOG"
+case "$1" in
+    is-active) [ "$3" = "$ACTIVE_UNIT" ] ;;
+    reload) exit 0 ;;
+    *) exit 1 ;;
+esac
+EOF
+cat > "$test_dir/reload-bin/service" <<'EOF'
+#!/bin/bash
+printf 'service %s\n' "$*" >> "$RELOAD_LOG"
+[ "$1" = "$SERVICE_NAME" ]
+EOF
+chmod +x "$test_dir/reload-bin/systemctl" "$test_dir/reload-bin/service"
+export RELOAD_LOG="$test_dir/reload.log"
+
+reload_sshd_with() {
+    : > "$RELOAD_LOG"
+    (
+        export ACTIVE_UNIT="$1" SERVICE_NAME="$2"
+        PATH="$test_dir/reload-bin:$PATH"
+        btcpay_reload_sshd
+    )
+}
+
+reload_sshd_with ssh.service none
+grep -Fxq 'systemctl reload ssh.service' "$RELOAD_LOG"
+
+reload_sshd_with sshd.service none
+grep -Fxq 'systemctl reload sshd.service' "$RELOAD_LOG"
+if grep -Fxq 'systemctl reload ssh.service' "$RELOAD_LOG"; then
+    printf 'Only the active SSH unit must be reloaded\n' >&2
+    exit 1
+fi
+
+reload_sshd_with none ssh
+grep -Fxq 'service ssh reload' "$RELOAD_LOG"
+
+if reload_sshd_with none none; then
+    printf 'Reloading must fail when no SSH service can be reloaded\n' >&2
+    exit 1
+fi
+
 printf 'Environment persistence tests passed\n'
