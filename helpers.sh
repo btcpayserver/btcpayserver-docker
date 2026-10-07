@@ -235,6 +235,26 @@ btcpay_expand_variables() {
     fi
 }
 
+# Debian and Ubuntu name the OpenSSH unit ssh.service, other distributions
+# sshd.service, and neither name is a reliable alias of the other.
+btcpay_reload_sshd() {
+    local unit
+    if command -v systemctl > /dev/null 2>&1; then
+        for unit in ssh sshd; do
+            if systemctl is-active --quiet "$unit.service" 2> /dev/null; then
+                systemctl reload "$unit.service" && return 0
+                break
+            fi
+        done
+    fi
+    for unit in ssh sshd; do
+        if service "$unit" reload > /dev/null 2>&1; then
+            return 0
+        fi
+    done
+    return 1
+}
+
 # Set .env file
 btcpay_update_docker_env() {
 btcpay_expand_variables
@@ -255,7 +275,9 @@ if [[ -f "$sshd_config" ]] && \
    echo "Updating "$sshd_config" (Change from 'PermitRootLogin no' to 'PermitRootLogin prohibit-password')"
    echo "BTCPay Server needs connection from inside the container to the host in order to run btcpay-update.sh"
    sed -i 's/PermitRootLogin[[:space:]]no/PermitRootLogin prohibit-password/' "$sshd_config"
-   service sshd reload
+   if ! btcpay_reload_sshd; then
+       echo "Warning: Could not reload the SSH daemon. Reload it manually to apply the change to $sshd_config." >&2
+   fi
 fi
 
 for variable in "${BTCPAY_ENV_VARIABLES[@]}"; do
