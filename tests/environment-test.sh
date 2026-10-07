@@ -14,6 +14,20 @@ export BTCPAY_HOST="example.com"
 export BTCPAYGEN_CRYPTO1="btc"
 export TRUST_DOWNSTREAM_PROXY="true"
 
+for BTCPAYGEN_EXCLUDE_FRAGMENTS in 'btcpay-host' 'opt-add-tor;btcpay-host' ' BTCPay-Host.yml , opt-add-tor'; do
+    if ! btcpay_fragment_is_excluded btcpay-host; then
+        printf 'btcpay-host must be excluded by %q\n' "$BTCPAYGEN_EXCLUDE_FRAGMENTS" >&2
+        exit 1
+    fi
+done
+for BTCPAYGEN_EXCLUDE_FRAGMENTS in '' 'opt-add-tor' 'btcpay-hostx;not-btcpay-host'; do
+    if btcpay_fragment_is_excluded btcpay-host; then
+        printf 'btcpay-host must not be excluded by %q\n' "$BTCPAYGEN_EXCLUDE_FRAGMENTS" >&2
+        exit 1
+    fi
+done
+unset BTCPAYGEN_EXCLUDE_FRAGMENTS
+
 if "$repo_dir/btcpay-host" changedomain $'example.com\nPROMPT_COMMAND=id' 2> "$test_dir/error"; then
     printf 'btcpay-host must reject an invalid domain\n' >&2
     exit 1
