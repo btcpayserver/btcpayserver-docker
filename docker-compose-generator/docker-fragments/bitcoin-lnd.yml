@@ -49,25 +49,46 @@ services:
     links:
       - bitcoind
 
+  # RTL runs as uid 1000 with gid 0 (see below). Before it starts, this one-shot
+  # container gives RTL its data volume, which is owned by root on existing
+  # instances, and makes admin.macaroon group-readable: LND has created it as
+  # 0640 since v0.14, but older nodes still carry the 0600 file it wrote before.
+  bitcoin_rtl_dircheck:
+    image: busybox:1.36.1@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662
+    container_name: generated_lnd_bitcoin_rtl_dircheck
+    restart: "no"
+    command: ["sh", "-c", "chown -R 1000:0 /data && { [ ! -e /lnd/admin.macaroon ] || chmod g+r /lnd/admin.macaroon; }"]
+    volumes:
+      - "lnd_bitcoin_rtl_datadir:/data"
+      - "lnd_bitcoin_datadir:/lnd"
+
   bitcoin_rtl:
     image: shahanafarooqui/rtl:v0.15.13
     container_name: generated_lnd_bitcoin_rtl_1
     restart: unless-stopped
+    depends_on:
+      - bitcoin_rtl_dircheck
+    # gid 0 keeps admin.macaroon (0640 root:root) readable while the wallet
+    # stays out of reach: LND's data/ directory is 0700 root:root.
+    user: "1000:0"
     environment:
       LND_SERVER_URL: http://lnd_bitcoin:8080/v1
       MACAROON_PATH: /etc/lnd
       SWAP_SERVER_URL: https://lnd_bitcoin:8081/v1
       SWAP_MACAROON_PATH: /etc/lndloop
       RTL_CONFIG_PATH: /data/
-      LND_CONFIG_PATH: /etc/lnd/lnd.conf
+      CONFIG_PATH: /etc/lnd/lnd.conf
       BITCOIND_CONFIG_PATH: /etc/bitcoin/bitcoin.conf
       RTL_SSO: 1
       RTL_COOKIE_PATH: /data/.cookie
       LOGOUT_REDIRECT_LINK: /server/services
+      # RTL-Config.json written by a root RTL points these under /root, which
+      # uid 1000 cannot enter. The variables take precedence over the file.
+      CHANNEL_BACKUP_PATH: /data/backup/node-1
+      DB_DIRECTORY_PATH: /data
     volumes:
       - "bitcoin_datadir:/etc/bitcoin:ro"
       - "lnd_bitcoin_datadir:/etc/lnd:ro"
-      - "lnd_bitcoin_datadir:/root/.lnd:ro"
       - "lndloop_bitcoin_datadir:/etc/lndloop:ro"
       - "lnd_bitcoin_rtl_datadir:/data"
     expose:
