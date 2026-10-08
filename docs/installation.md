@@ -46,9 +46,9 @@ Docker daemon configuration.
 
 The recommended `btcpay-host` fragment allows BTCPay Server to invoke a
 restricted set of host-management commands and changes host SSH configuration.
-Excluding the fragment prevents BTCPay Server from receiving the host key, but
-setup still prepares the host-side SSH integration and does not undo prior SSH
-changes. Read [Configuration](./configuration.md) for details.
+Excluding the fragment prevents BTCPay Server from receiving the host key and
+leaves `PermitRootLogin` unchanged, but setup still prepares the host key and
+authorized-key entry and does not undo prior SSH changes. Read [Configuration](./configuration.md) for details.
 
 ## Complete the Installation
 

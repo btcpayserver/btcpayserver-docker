@@ -188,7 +188,7 @@ mutate_routes() {
         restore_enabled_routes
         fail "nginx validation failed: $validation_error"
     fi
-    if ! docker kill --signal HUP nginx >/dev/null 2>&1; then
+    if ! docker_signal_reload nginx >/dev/null 2>&1; then
         restore_enabled_routes
         fail "nginx configuration is valid, but nginx could not be reloaded"
     fi

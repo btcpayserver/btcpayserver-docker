@@ -29,6 +29,7 @@ install_tooling() {
                 "btcpayserver_bitcoind" "bitcoin-cli.sh" "Command line for your Bitcoin instance" \
                 "btcpayserver_clightning_bitcoin" "bitcoin-lightning-cli.sh" "Command line for your Bitcoin C-Lightning instance" \
                 "btcpayserver_lnd_bitcoin" "bitcoin-lncli.sh" "Command line for your Bitcoin LND instance" \
+                "phoenixd" "phoenix-cli.sh" "Command line for your Phoenixd instance" \
                 "btcpayserver_dashd" "dash-cli.sh" "Command line for your Dash instance" \
                 "btcpayserver_dogecoind" "dogecoin-cli.sh" "Command line for your Dogecoin instance" \
                 "btcpayserver_feathercoind" "feathercoin-cli.sh" "Command line for your Feathercoin instance" \
@@ -144,8 +145,15 @@ add_fragments() {
     echo "$result"
 }
 
+# Signal containers from the inside: Docker records every `docker kill`,
+# whatever the signal, as a manual stop, so the container's next exit (a
+# BTCPay soft restart, for instance) would bypass its restart policy.
+docker_signal_reload() {
+    docker exec "$1" sh -c 'kill -HUP 1'
+}
+
 notify_btcpayserver() {
-    docker kill --signal HUP generated_btcpayserver_1 >/dev/null 2>&1 || true
+    docker_signal_reload generated_btcpayserver_1 >/dev/null 2>&1 || true
 }
 
 btcpay_setup_ssh() {
@@ -207,6 +215,17 @@ btcpay_setup_ssh() {
     fi
 }
 
+# Matches fragment names the way the generator and btcpay-fragments do:
+# comma or semicolon separated, trimmed, case-insensitive, optional .yml.
+btcpay_fragment_is_excluded() {
+    jq -Rse --arg fragment "$1" '
+        gsub(","; ";")
+        | split(";")
+        | map(gsub("^[[:space:]]+|[[:space:]]+$"; "") | ascii_downcase | sub("[.]yml$"; ""))
+        | any(. == $fragment)
+    ' <<< "${BTCPAYGEN_EXCLUDE_FRAGMENTS:-}" > /dev/null
+}
+
 btcpay_expand_variables() {
     BTCPAY_CRYPTOS=""
     for i in "$BTCPAYGEN_CRYPTO1" "$BTCPAYGEN_CRYPTO2" "$BTCPAYGEN_CRYPTO3" "$BTCPAYGEN_CRYPTO4" "$BTCPAYGEN_CRYPTO5" "$BTCPAYGEN_CRYPTO6" "$BTCPAYGEN_CRYPTO7" "$BTCPAYGEN_CRYPTO8" "$BTCPAYGEN_CRYPTO9"
@@ -227,6 +246,26 @@ btcpay_expand_variables() {
     fi
 }
 
+# Debian and Ubuntu name the OpenSSH unit ssh.service, other distributions
+# sshd.service, and neither name is a reliable alias of the other.
+btcpay_reload_sshd() {
+    local unit
+    if command -v systemctl > /dev/null 2>&1; then
+        for unit in ssh sshd; do
+            if systemctl is-active --quiet "$unit.service" 2> /dev/null; then
+                systemctl reload "$unit.service" && return 0
+                break
+            fi
+        done
+    fi
+    for unit in ssh sshd; do
+        if service "$unit" reload > /dev/null 2>&1; then
+            return 0
+        fi
+    done
+    return 1
+}
+
 # Set .env file
 btcpay_update_docker_env() {
 btcpay_expand_variables
@@ -243,11 +282,14 @@ done
 
 sshd_config="/etc/ssh/sshd_config"
 if [[ -f "$sshd_config" ]] && \
+   ! btcpay_fragment_is_excluded btcpay-host && \
    grep -q "PermitRootLogin[[:space:]]no" "$sshd_config"; then
    echo "Updating "$sshd_config" (Change from 'PermitRootLogin no' to 'PermitRootLogin prohibit-password')"
    echo "BTCPay Server needs connection from inside the container to the host in order to run btcpay-update.sh"
    sed -i 's/PermitRootLogin[[:space:]]no/PermitRootLogin prohibit-password/' "$sshd_config"
-   service sshd reload
+   if ! btcpay_reload_sshd; then
+       echo "Warning: Could not reload the SSH daemon. Reload it manually to apply the change to $sshd_config." >&2
+   fi
 fi
 
 for variable in "${BTCPAY_ENV_VARIABLES[@]}"; do
