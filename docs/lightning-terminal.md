@@ -38,7 +38,7 @@ To see the current Loop terms:
 
 To interact with Pool:
 
-`loop.sh getinfo`
+`pool.sh getinfo`
 
 
 To get a report from Faraday:
