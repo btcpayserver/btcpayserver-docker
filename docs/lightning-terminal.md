@@ -59,11 +59,11 @@ Enter your pairing phrase and set a password. Each pairing phrase can only be us
 
 You may inspect your sessions with:
 
-`bitcoin-litcli.sh sessions list all`
+`litcli.sh sessions list all`
 
 Retrieve the local pubkey using the command above revoke a session with:
 
-`bitcoin-litcli.sh sessions revoke --localpubkey <your local pubkey>`
+`litcli.sh sessions revoke --localpubkey <your local pubkey>`
 
 ## Troubleshooting
 
