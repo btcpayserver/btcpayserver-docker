@@ -30,24 +30,24 @@ Lightning Terminal appears under **Server Settings > Services**.
 
 To interact with LiT you may use the command line interface over gRPC. To create an admin session:
 
-`. ./litcli.sh sessions add --label "btcpay" --type admin`
+`litcli.sh sessions add --label "btcpay" --type admin`
 
 To see the current Loop terms:
 
-`. ./loop.sh terms`
+`loop.sh terms`
 
 To interact with Pool:
 
-`. ./loop.sh getinfo`
+`loop.sh getinfo`
 
 
 To get a report from Faraday:
 
-`. ./frcli.sh insights`
+`frcli.sh insights`
 
 To interact with Taproot Assets:
 
-`. ./tapcli.sh getinfo`
+`tapcli.sh getinfo`
 
 ## Web Interface
 
@@ -59,11 +59,11 @@ Enter your pairing phrase and set a password. Each pairing phrase can only be us
 
 You may inspect your sessions with:
 
-`. ./bitcoin-litcli.sh sessions list all`
+`bitcoin-litcli.sh sessions list all`
 
 And revoke a session with:
 
-`. ./bitcoin-litcli.sh sessions revoke --localpubkey`
+`bitcoin-litcli.sh sessions revoke --localpubkey`
 
 ## Troubleshooting
 
