@@ -61,9 +61,9 @@ You may inspect your sessions with:
 
 `bitcoin-litcli.sh sessions list all`
 
-And revoke a session with:
+Retrieve the local pubkey using the command above revoke a session with:
 
-`bitcoin-litcli.sh sessions revoke --localpubkey`
+`bitcoin-litcli.sh sessions revoke --localpubkey <your local pubkey>`
 
 ## Troubleshooting
 
