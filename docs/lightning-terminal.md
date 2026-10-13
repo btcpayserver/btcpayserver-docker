@@ -1,7 +1,7 @@
 # Lightning Terminal
 
-[Lightning Terminal](https://github.com/lightninglabs/lightning-terminal) (LiT) is a browser-based interface for managing channel liquidity.
-It integrates the Lightning Labs services Loop, Poold and Faraday all in one and offers a web UI to manage them.
+[Lightning Terminal](https://github.com/lightninglabs/lightning-terminal) (LiT) is a software bundle for Lightning Labs products and services.
+It integrates Loop, Pool, Faraday and Taproot Assets and includes LND Accounts and LNC Sessions.
 This fragment requires Bitcoin LND. It selects that dependency automatically.
 
 ## Installation
@@ -10,9 +10,7 @@ This requires an existing BTCPay Server Docker deployment and must be run from a
 root login shell. The fragment selects Bitcoin LND automatically.
 
 > **Important:** Lightning Terminal receives LND's administrative macaroon and
-> can control funds and channels; it is not a read-only dashboard. Its UI and
-> RPC endpoints are routed through the public BTCPay hostname. Protect the
-> generated UI password and consider an additional access-control layer.
+> can control funds and channels. Generate LNC Sessions with caution.
 
 The fragment enables LiT's automatic bbolt-to-SQL migration. Once that migration
 completes, its data cannot be downgraded to a pre-0.17 LiT release or migrated
@@ -26,20 +24,46 @@ Enable the fragment:
 btcpay-fragments add opt-add-lightning-terminal
 ```
 
-Setup generates a 64-character UI password once, stores it in
-`secrets/lit_password`, and mounts it into the container as a Compose secret.
-Display the password from a root login shell with:
+Lightning Terminal appears under **Server Settings > Services**.
 
-```bash
-cat "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker/secrets/lit_password"
-```
+## Command Line Interface
 
-Treat the secret file and Docker access as privileged. To rotate the password,
-replace the file contents with a new password of at least eight characters and
-restart the `lnd_lit` service.
+To interact with LiT you may use the command line interface over gRPC. To create an admin session:
 
-Lightning Terminal appears under **Server Settings > Services** and is served at
-`/lit/` on the BTCPay Server host.
+`. ./litcli.sh sessions add --label "btcpay" --type admin`
+
+To see the current Loop terms:
+
+`. ./loop.sh terms`
+
+To interact with Pool:
+
+`. ./loop.sh getinfo`
+
+
+To get a report from Faraday:
+
+`. ./frcli.sh insights`
+
+To interact with Taproot Assets:
+
+`. ./tapcli.sh getinfo`
+
+## Web Interface
+
+To interact with LiT through the web-UI you will have to first generate a session through the command line (shown above).
+
+Then, navigate to `https://terminal.lightning.engineering` and click on "Connect My Node."
+
+Enter your pairing phrase and set a password. Each pairing phrase can only be used once.
+
+You may inspect your sessions with:
+
+`. ./bitcoin-litcli.sh sessions list all`
+
+And revoke a session with:
+
+`. ./bitcoin-litcli.sh sessions revoke --localpubkey`
 
 ## Troubleshooting
 
