@@ -1,3 +1,10 @@
+# install_tooling and docker_compose_update install into /usr/local/bin, which
+# non-interactive shells (cron, `ssh host 'cmd'`) often leave out of PATH.
+case ":$PATH:" in
+    *:/usr/local/bin:*) ;;
+    *) export PATH="/usr/local/bin:$PATH" ;;
+esac
+
 BTCPAY_ENV_VARIABLES=(
     BTCPAY_PROTOCOL
     BTCPAY_HOST
