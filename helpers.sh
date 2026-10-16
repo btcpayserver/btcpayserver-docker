@@ -29,6 +29,11 @@ install_tooling() {
                 "btcpayserver_bitcoind" "bitcoin-cli.sh" "Command line for your Bitcoin instance" \
                 "btcpayserver_clightning_bitcoin" "bitcoin-lightning-cli.sh" "Command line for your Bitcoin C-Lightning instance" \
                 "btcpayserver_lnd_bitcoin" "bitcoin-lncli.sh" "Command line for your Bitcoin LND instance" \
+                "btcpayserver_litd" "frcli.sh" "Command Line for your Faraday instance" \
+                "btcpayserver_litd" "litcli.sh" "Command Line for your litd instance" \
+                "btcpayserver_litd" "loop.sh" "Command Line for your Loop instance" \
+                "btcpayserver_litd" "pool.sh" "Command Line for your Pool instance" \
+                "btcpayserver_litd" "tapcli.sh" "Command Line for your Taproot Assets instance" \
                 "phoenixd" "phoenix-cli.sh" "Command line for your Phoenixd instance" \
                 "btcpayserver_dashd" "dash-cli.sh" "Command line for your Dash instance" \
                 "btcpayserver_dogecoind" "dogecoin-cli.sh" "Command line for your Dogecoin instance" \
