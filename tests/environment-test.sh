@@ -9,6 +9,18 @@ trap 'rm -rf "$test_dir"' EXIT
 # shellcheck source=../helpers.sh
 . "$repo_dir/helpers.sh"
 
+# helpers.sh must make the tools it installs in /usr/local/bin reachable from a
+# non-interactive shell whose PATH does not include it.
+# shellcheck disable=SC2016 # $1 and $PATH expand in the child shell
+helpers_path="$(env -i PATH=/usr/bin:/bin bash -c '. "$1" && printf %s "$PATH"' _ "$repo_dir/helpers.sh")"
+case ":$helpers_path:" in
+    *:/usr/local/bin:*) ;;
+    *)
+        printf 'helpers.sh must add /usr/local/bin to PATH, got %q\n' "$helpers_path" >&2
+        exit 1
+        ;;
+esac
+
 export BTCPAY_ENV_FILE="$test_dir/.env"
 export BTCPAY_HOST="example.com"
 export BTCPAYGEN_CRYPTO1="btc"
