@@ -6,17 +6,8 @@ This fragment requires Bitcoin LND. It selects that dependency automatically.
 
 ## Installation
 
-This requires an existing BTCPay Server Docker deployment and must be run from a
-root login shell. The fragment selects Bitcoin LND automatically.
-
 > **Important:** Lightning Terminal receives LND's administrative macaroon and
 > can control funds and channels. Generate LNC Sessions with caution.
-
-The fragment enables LiT's automatic bbolt-to-SQL migration. Once that migration
-completes, its data cannot be downgraded to a pre-0.17 LiT release or migrated
-back to bbolt. Ensure the deployment and `lnd_lit_datadir` data are recoverable
-before enabling or updating the fragment, and review the pinned LiT release's
-migration notes.
 
 Enable the fragment:
 
