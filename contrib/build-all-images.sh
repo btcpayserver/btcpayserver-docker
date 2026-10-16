@@ -343,18 +343,18 @@ cd - && cd ..
 
 
 # Build nginx
-# https://raw.githubusercontent.com/nginx/docker-nginx/a16f1329e13e7273c4103f75d863ca625b75109e/mainline/debian/Dockerfile
+# https://raw.githubusercontent.com/nginx/docker-nginx/4b9f658be76820b24e4ef4605413a5c08707a512/mainline/debian/Dockerfile
 DOCKERFILE="mainline/debian/Dockerfile"
-# https://raw.githubusercontent.com/nginx/docker-nginx/a16f1329e13e7273c4103f75d863ca625b75109e/mainline/debian/Dockerfile
+# https://raw.githubusercontent.com/nginx/docker-nginx/4b9f658be76820b24e4ef4605413a5c08707a512/mainline/debian/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="mainline/debian/Dockerfile"
-# https://raw.githubusercontent.com/nginx/docker-nginx/a16f1329e13e7273c4103f75d863ca625b75109e/mainline/debian/Dockerfile
+# https://raw.githubusercontent.com/nginx/docker-nginx/4b9f658be76820b24e4ef4605413a5c08707a512/mainline/debian/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="mainline/debian/Dockerfile"
-echo "Building nginx:1.31.6-trixie"
+echo "Building nginx:1.31.7-trixie"
 git clone https://github.com/nginx/docker-nginx nginx
 cd nginx
-git checkout a16f1329e13e7273c4103f75d863ca625b75109e
+git checkout 4b9f658be76820b24e4ef4605413a5c08707a512
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nginx:1.31.6-trixie" .
+docker build -f "$DOCKERFILE" -t "nginx:1.31.7-trixie" .
 cd - && cd ..
 
 
@@ -461,12 +461,12 @@ DOCKERFILE="Dockerfile"
 # https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.17.6/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
 if [[ "$DOCKERFILE" ]]; then
-	echo "Building lightninglabs/lightning-terminal:v0.17.6-path-prefix"
+	echo "Building lightninglabs/lightning-terminal:v0.17.6"
 	git clone https://github.com/lightninglabs/lightning-terminal lightning-terminal
 	cd lightning-terminal
 	git checkout v0.17.6
 	cd "$(dirname $DOCKERFILE)"
-	docker build --build-arg public_url=/lit/ -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.17.6-path-prefix" .
+	docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.17.6" .
 	cd - && cd ..
 fi
 
