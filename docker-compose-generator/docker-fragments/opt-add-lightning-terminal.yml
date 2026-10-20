@@ -7,7 +7,7 @@ services:
       LND_EXTRA_ARGS: |
         rpcmiddleware.enable=true
   lnd_lit:
-    image: "lightninglabs/lightning-terminal:v0.17.6"
+    image: "lightninglabs/lightning-terminal:v0.17.7"
     container_name: btcpayserver_litd
     restart: unless-stopped
     environment:
