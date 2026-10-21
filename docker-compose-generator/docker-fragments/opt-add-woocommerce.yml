@@ -1,6 +1,6 @@
 services:
   woocommerce:
-    image: btcpayserver/woocommerce:11.1.2
+    image: btcpayserver/woocommerce:11.2.1
     environment:
       WOOCOMMERCE_HOST: ${WOOCOMMERCE_HOST}
       WORDPRESS_DB_HOST: mariadb

@@ -664,18 +664,18 @@ cd - && cd ..
 
 
 # Build woocommerce
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/WooCommerce/11.1.2/WooCommerce/11.1.2/linuxamd64.Dockerfile
-DOCKERFILE="WooCommerce/11.1.2/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/WooCommerce/11.2.1/WooCommerce/11.2.1/linuxamd64.Dockerfile
+DOCKERFILE="WooCommerce/11.2.1/linuxamd64.Dockerfile"
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE=""
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/WooCommerce/11.1.2/WooCommerce/11.1.2/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="WooCommerce/11.1.2/linuxarm64v8.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/WooCommerce/11.2.1/WooCommerce/11.2.1/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="WooCommerce/11.2.1/linuxarm64v8.Dockerfile"
 if [[ "$DOCKERFILE" ]]; then
-	echo "Building btcpayserver/woocommerce:11.1.2"
+	echo "Building btcpayserver/woocommerce:11.2.1"
 	git clone https://github.com/btcpayserver/dockerfile-deps woocommerce
 	cd woocommerce
-	git checkout WooCommerce/11.1.2
+	git checkout WooCommerce/11.2.1
 	cd "$(dirname $DOCKERFILE)"
-	docker build -f "$DOCKERFILE" -t "btcpayserver/woocommerce:11.1.2" .
+	docker build -f "$DOCKERFILE" -t "btcpayserver/woocommerce:11.2.1" .
 	cd - && cd ..
 fi
 
