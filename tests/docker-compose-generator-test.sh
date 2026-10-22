@@ -119,6 +119,44 @@ docker compose \
     -f "$test_dir/Generated/docker-compose.clightning-tor-test.yml" \
     config --quiet
 
+for lightning in clightning lnd; do
+    (
+        cd "$generator_dir"
+        BTCPAYGEN_CRYPTO1="btc" \
+        BTCPAYGEN_REVERSEPROXY="nginx" \
+        BTCPAYGEN_LIGHTNING="$lightning" \
+        BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-add-mempool" \
+        BTCPAYGEN_SUBNAME="mempool-$lightning-test" \
+        dotnet run \
+            --no-build \
+            --project src/docker-compose-generator.csproj \
+            --configuration Release \
+            --no-launch-profile \
+            -p:TargetFrameworkOverride=net8.0
+    )
+
+    mempool_compose="$test_dir/Generated/docker-compose.mempool-$lightning-test.yml"
+    docker compose -f "$mempool_compose" config --quiet
+    docker compose -f "$mempool_compose" config --format json > \
+        "$test_dir/mempool-$lightning-test.json"
+
+    if [ "$lightning" = lnd ]; then
+        jq -e '
+            .services.mempool_api.environment.LIGHTNING_BACKEND == "lnd" and
+            .services.mempool_api.environment.LND_TLS_CERT_PATH == "/dev/null" and
+            .services.mempool_api.environment.LND_MACAROON_PATH == "/etc/lnd/readonly.macaroon" and
+            (.services.mempool_api.volumes | length == 1) and
+            .services.mempool_api.volumes[0].target == "/etc/lnd" and
+            .services.mempool_api.volumes[0].read_only == true and
+            (.services.mempool_api.volumes[0].source | endswith("lnd_bitcoin_readonly_datadir"))
+        ' "$test_dir/mempool-$lightning-test.json" >/dev/null
+    elif grep -q 'CLIGHTNING_SOCKET\|clightning_bitcoin_datadir:/etc/lightning' \
+        "$mempool_compose"; then
+        printf 'Mempool received Core Lightning RPC access\n' >&2
+        exit 1
+    fi
+done
+
 set +e
 proxy_conflict_output="$({
     cd "$generator_dir" || exit 1

@@ -30,7 +30,7 @@ services:
         bitcoind.zmqpubrawtx=tcp://bitcoind:28333
         adminmacaroonpath=/data/admin.macaroon
         invoicemacaroonpath=/data/invoice.macaroon
-        readonlymacaroonpath=/data/readonly.macaroon
+        readonlymacaroonpath=/readonly/readonly.macaroon
         tlsextradomain=lnd_bitcoin
         no-rest-tls=1
         protocol.wumbo-channels=1
@@ -43,6 +43,7 @@ services:
       - "9735"
     volumes:
       - "lnd_bitcoin_datadir:/data"
+      - "lnd_bitcoin_readonly_datadir:/readonly"
       - "lndloop_bitcoin_datadir:/root/.loop/${NBITCOIN_NETWORK:-regtest}"
       - "bitcoin_datadir:/deps/.bitcoin"
       - "nbxplorer_datadir:/root/.nbxplorer"
@@ -103,12 +104,13 @@ services:
     environment:
       LIGHTNING_ENABLED: "true"
       LIGHTNING_BACKEND: "lnd"
-      LND_TLS_CERT_PATH: "/etc/lnd/tls.cert"
+      # Mempool requires a readable certificate path even for plaintext REST.
+      LND_TLS_CERT_PATH: "/dev/null"
       LND_MACAROON_PATH: "/etc/lnd/readonly.macaroon"
       LND_REST_API_URL: "http://lnd_bitcoin:8080"
       LND_TIMEOUT: 1000000
     volumes:
-      - "lnd_bitcoin_datadir:/etc/lnd:ro"
+      - "lnd_bitcoin_readonly_datadir:/etc/lnd:ro"
 
   mempool_web:
     environment:
@@ -116,6 +118,7 @@ services:
 
 volumes:
   lnd_bitcoin_datadir:
+  lnd_bitcoin_readonly_datadir:
   lndloop_bitcoin_datadir:
   lnd_bitcoin_rtl_datadir:
 
