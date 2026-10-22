@@ -45,6 +45,8 @@ jobs:
         run: tests/docker-compose-generator-test.sh
       - name: Test environment persistence
         run: tests/environment-test.sh
+      - name: Test administrative utility
+        run: tests/btcpay-admin-test.sh
       - name: Test nginx template rendering
         run: tests/nginx-template-test.sh
       - name: Test secret generation
