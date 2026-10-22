@@ -1,7 +1,7 @@
 services:
   nginx:
     restart: unless-stopped
-    image: nginx:1.31.7-trixie
+    image: nginx:1.31.8-trixie
     command: ["nginx", "-g", "daemon off; worker_shutdown_timeout 5s;"]
     logging:
       driver: local
