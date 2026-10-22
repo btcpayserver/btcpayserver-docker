@@ -343,18 +343,18 @@ cd - && cd ..
 
 
 # Build nginx
-# https://raw.githubusercontent.com/nginx/docker-nginx/4b9f658be76820b24e4ef4605413a5c08707a512/mainline/debian/Dockerfile
+# https://raw.githubusercontent.com/nginx/docker-nginx/6fabb4c960a02a1e576d2789974c45f4cd2aa854/mainline/debian/Dockerfile
 DOCKERFILE="mainline/debian/Dockerfile"
-# https://raw.githubusercontent.com/nginx/docker-nginx/4b9f658be76820b24e4ef4605413a5c08707a512/mainline/debian/Dockerfile
+# https://raw.githubusercontent.com/nginx/docker-nginx/6fabb4c960a02a1e576d2789974c45f4cd2aa854/mainline/debian/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="mainline/debian/Dockerfile"
-# https://raw.githubusercontent.com/nginx/docker-nginx/4b9f658be76820b24e4ef4605413a5c08707a512/mainline/debian/Dockerfile
+# https://raw.githubusercontent.com/nginx/docker-nginx/6fabb4c960a02a1e576d2789974c45f4cd2aa854/mainline/debian/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="mainline/debian/Dockerfile"
-echo "Building nginx:1.31.7-trixie"
+echo "Building nginx:1.31.8-trixie"
 git clone https://github.com/nginx/docker-nginx nginx
 cd nginx
-git checkout 4b9f658be76820b24e4ef4605413a5c08707a512
+git checkout 6fabb4c960a02a1e576d2789974c45f4cd2aa854
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "nginx:1.31.7-trixie" .
+docker build -f "$DOCKERFILE" -t "nginx:1.31.8-trixie" .
 cd - && cd ..
 
 
