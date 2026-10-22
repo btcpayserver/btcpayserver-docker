@@ -578,18 +578,18 @@ cd - && cd ..
 
 
 # Build shopify-app-deployer
-# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.10/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.11/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.10/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.11/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.10/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/shopify-app/1.11/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/shopify-app-deployer:1.10"
+echo "Building btcpayserver/shopify-app-deployer:1.11"
 git clone https://github.com/btcpayserver/shopify-app shopify-app-deployer
 cd shopify-app-deployer
-git checkout 1.10
+git checkout 1.11
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/shopify-app-deployer:1.10" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/shopify-app-deployer:1.11" .
 cd - && cd ..
 
 
