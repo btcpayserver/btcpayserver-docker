@@ -72,13 +72,6 @@ server {
 
     client_max_body_size 100M;
 
-    # Some signing workflows use large request and response headers.
-    client_header_buffer_size 500k;
-    large_client_header_buffers 4 500k;
-    proxy_buffer_size 128k;
-    proxy_buffers 4 256k;
-    proxy_busy_buffers_size 256k;
-
     location / {
         proxy_pass http://BTCPAY_SERVER_IP:80;
         proxy_http_version 1.1;
@@ -138,10 +131,6 @@ Apache 2.4.47 or later can proxy HTTP and WebSocket traffic through
     ProxyPassReverse / http://BTCPAY_SERVER_IP:80/
 
     LimitRequestBody 104857600
-
-    # Some signing workflows use large request headers.
-    LimitRequestLine 500000
-    LimitRequestFieldSize 500000
 </VirtualHost>
 ```
 
