@@ -359,18 +359,18 @@ cd - && cd ..
 
 
 # Build docker-gen
-# https://raw.githubusercontent.com/btcpayserver/docker-gen/0.10.7/Dockerfile.alpine
+# https://raw.githubusercontent.com/btcpayserver/docker-gen/0.17.2-1/Dockerfile.alpine
 DOCKERFILE="Dockerfile.alpine"
-# https://raw.githubusercontent.com/btcpayserver/docker-gen/0.10.7/Dockerfile.alpine
+# https://raw.githubusercontent.com/btcpayserver/docker-gen/0.17.2-1/Dockerfile.alpine
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile.alpine"
-# https://raw.githubusercontent.com/btcpayserver/docker-gen/0.10.7/Dockerfile.alpine
+# https://raw.githubusercontent.com/btcpayserver/docker-gen/0.17.2-1/Dockerfile.alpine
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile.alpine"
-echo "Building btcpayserver/docker-gen:0.10.7"
+echo "Building btcpayserver/docker-gen:0.17.2-1"
 git clone https://github.com/btcpayserver/docker-gen docker-gen
 cd docker-gen
-git checkout 0.10.7
+git checkout 0.17.2-1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/docker-gen:0.10.7" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/docker-gen:0.17.2-1" .
 cd - && cd ..
 
 
