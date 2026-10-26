@@ -37,6 +37,18 @@
 	{{ end }}
 {{ end }}
 
+{{ define "acme-http-challenge-location" }}
+	# Do not HTTPS redirect Let's Encrypt ACME challenge
+	location ^~ /.well-known/acme-challenge/ {
+		auth_basic off;
+		auth_request off;
+		allow all;
+		root /usr/share/nginx/html;
+		try_files $uri =404;
+		break;
+	}
+{{ end }}
+
 {{ define "vhost-include" }}
 	{{ if (exists (printf "/etc/nginx/vhost.d/%s" .Host)) }}
 	include {{ printf "/etc/nginx/vhost.d/%s" .Host }};
@@ -71,6 +83,7 @@
 
 {{ $trust_downstream_proxy := eq (or ($.Env.TRUST_DOWNSTREAM_PROXY) "") "true" }}
 {{ $public_https_port := or ($.Env.REVERSEPROXY_HTTPS_PORT) "443" }}
+{{ $default_acme_http_challenge := or ($.Env.ACME_HTTP_CHALLENGE_LOCATION) "true" }}
 {{ $public_https_port_suffix := "" }}
 {{ if ne $public_https_port "443" }}
 	{{ $public_https_port_suffix = printf ":%s" $public_https_port }}
@@ -286,6 +299,14 @@ server {
 {{/* Get the HSTS defined by containers w/ the same vhost, falling back to "max-age=31536000" */}}
 {{ $hsts := or (first (groupByKeys $containers "Env.HSTS")) "max-age=31536000" }}
 
+{{/* Generate ACME HTTP-01 locations by default, as modern nginx-proxy does. */}}
+{{ $acme_http_challenge := or (first (groupByKeys $containers "Env.ACME_HTTP_CHALLENGE_LOCATION")) $default_acme_http_challenge }}
+{{ $acme_http_challenge_legacy := eq $acme_http_challenge "legacy" }}
+{{ $acme_http_challenge_enabled := false }}
+{{ if not $acme_http_challenge_legacy }}
+	{{ $acme_http_challenge_enabled = parseBool $acme_http_challenge }}
+{{ end }}
+
 {{/* Get the VIRTUAL_ROOT By containers w/ use fastcgi root */}}
 {{ $vhost_root := or (first (groupByKeys $containers "Env.VIRTUAL_ROOT")) "/var/www/public" }}
 
@@ -317,15 +338,9 @@ server {
 	listen [::]:80 {{ $default_server }};
 	{{ end }}
 
-	# Allow acme challenge requests without redirect
-	location ^~ /.well-known/acme-challenge/ {
-		auth_basic off;
-		auth_request off;
-		allow all;
-		root /usr/share/nginx/html;
-		try_files $uri =404;
-		break;
-	}
+	{{ if or $acme_http_challenge_legacy $acme_http_challenge_enabled }}
+	{{ template "acme-http-challenge-location" }}
+	{{ end }}
 
 	# Redirect all other requests to HTTPS
 	location / {
@@ -490,6 +505,10 @@ server {
 	{{ end }}
 
 	{{ template "network-access" (dict "NetworkTag" $network_tag) }}
+
+	{{ if and (ne $https_method "nohttps") $acme_http_challenge_enabled }}
+	{{ template "acme-http-challenge-location" }}
+	{{ end }}
 
 	{{ template "vhost-include" (dict "Host" $host) }}
 

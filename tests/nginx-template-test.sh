@@ -38,6 +38,29 @@ upstream_server_count() {
     ' "$test_dir/conf/default.conf"
 }
 
+server_block_match_count() {
+    awk -v host="$1" -v needle="$2" '
+        /^[[:space:]]*server \{/ {
+            block = $0 ORS
+            depth = 1
+            next
+        }
+        depth {
+            block = block $0 ORS
+            opens = gsub(/{/, "{")
+            closes = gsub(/}/, "}")
+            depth += opens - closes
+            if (depth == 0) {
+                if (index(block, "server_name " host ";") && index(block, needle)) {
+                    count++
+                }
+                block = ""
+            }
+        }
+        END { print count + 0 }
+    ' "$test_dir/conf/default.conf"
+}
+
 mkdir -p "$test_dir/certs" "$test_dir/conf" "$test_dir/htpasswd" "$test_dir/vhost" "$test_dir/html"
 printf 'allow all;\n' > "$test_dir/network_internal.conf"
 printf '' > "$test_dir/fastcgi.conf"
@@ -81,6 +104,7 @@ docker run -d --name "$https_backend" --network "$primary_network" --expose 80 \
 docker run -d --name "$multi_backend" --network "$primary_network" --expose 80 \
     -e VIRTUAL_HOST=multi.test \
     -e VIRTUAL_HOST_NAME=multi_test \
+    -e ACME_HTTP_CHALLENGE_LOCATION=false \
     "$nginx_image" >/dev/null
 docker network connect "$secondary_network" "$multi_backend"
 
@@ -152,6 +176,13 @@ fi
 
 grep -Fq 'server_name explicit.test;' "$test_dir/conf/default.conf"
 grep -Fq 'proxy_pass http://explicit_test;' "$test_dir/conf/default.conf"
+
+# ACME HTTP-01 is served before first certificate issuance without requiring
+# acme-companion to inject a location through the vhost volume. Hosts that
+# explicitly disable HTTPS do not expose the challenge location.
+test "$(server_block_match_count explicit.test 'location ^~ /.well-known/acme-challenge/')" -eq 1
+test "$(server_block_match_count http.test 'location ^~ /.well-known/acme-challenge/')" -eq 0
+test "$(server_block_match_count multi.test 'location ^~ /.well-known/acme-challenge/')" -eq 0
 
 # Only actual .local hosts use the development certificate for HTTPS. An
 # uncertified non-local host, and a .local host opting out of HTTPS, reject SNI.
