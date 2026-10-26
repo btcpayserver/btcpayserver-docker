@@ -327,18 +327,18 @@ cd - && cd ..
 
 
 # Build letsencrypt-nginx-proxy-companion
-# https://raw.githubusercontent.com/btcpayserver/docker-letsencrypt-nginx-proxy-companion/v2.2.9-2/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/docker-letsencrypt-nginx-proxy-companion/v2.8.2-1/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/docker-letsencrypt-nginx-proxy-companion/v2.2.9-2/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/docker-letsencrypt-nginx-proxy-companion/v2.8.2-1/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/docker-letsencrypt-nginx-proxy-companion/v2.2.9-2/Dockerfile
+# https://raw.githubusercontent.com/btcpayserver/docker-letsencrypt-nginx-proxy-companion/v2.8.2-1/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building btcpayserver/letsencrypt-nginx-proxy-companion:2.2.9-2"
+echo "Building btcpayserver/letsencrypt-nginx-proxy-companion:2.8.2-1"
 git clone https://github.com/btcpayserver/docker-letsencrypt-nginx-proxy-companion letsencrypt-nginx-proxy-companion
 cd letsencrypt-nginx-proxy-companion
-git checkout v2.2.9-2
+git checkout v2.8.2-1
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/letsencrypt-nginx-proxy-companion:2.2.9-2" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/letsencrypt-nginx-proxy-companion:2.8.2-1" .
 cd - && cd ..
 
 
