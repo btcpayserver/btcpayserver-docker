@@ -46,7 +46,7 @@ For product usage, stores, wallets, and integrations, see the
 <a id="how-can-i-customize-the-generated-docker-compose-file"></a>
 
 - [Customization](./customization.md): generated Compose files and custom
-  fragments
+  fragments, including use of an existing Bitcoin Core node
 - [Development](./development.md): generator development and adding a new
   cryptocurrency
 
