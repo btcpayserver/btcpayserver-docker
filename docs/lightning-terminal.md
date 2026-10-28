@@ -15,7 +15,9 @@ Enable the fragment:
 btcpay-fragments add opt-add-lightning-terminal
 ```
 
-Lightning Terminal appears under **Server Settings > Services**.
+The local web interface is disabled, and Lightning Terminal does not appear under
+**Server Settings > Services**. Use the command-line tools or the hosted web
+interface described below.
 
 ## Command Line Interface
 
@@ -40,9 +42,9 @@ To interact with Taproot Assets:
 
 `tapcli.sh getinfo`
 
-## Web Interface
+## Hosted Web Interface
 
-To interact with LiT through the web-UI you will have to first generate a session through the command line (shown above).
+To interact with LiT through the hosted web interface, first generate a session through the command line (shown above).
 
 Then, navigate to `https://terminal.lightning.engineering` and click on "Connect My Node."
 
