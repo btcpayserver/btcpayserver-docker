@@ -1,4 +1,6 @@
 {{ $CurrentContainer := where $ "ID" .Docker.CurrentContainerID | first }}
+{{/* docker-gen can be absent from the running container list while starting. */}}
+{{ if not $CurrentContainer }}{{ $CurrentContainer = where $ "Name" "nginx" | first }}{{ end }}
 {{ define "upstream" }}
 	{{/* If we got the containers from swarm and this container's port is published to host, use host IP:PORT */}}
 	{{ if and .Address .Container.Node.ID .Address.HostPort }}
@@ -228,7 +230,7 @@ upstream {{ $upstream_name }} {
 	{{ $address := where $container.Addresses "Port" $port | first }}
 	{{ $containerNetwork := false }}
 	{{ range $network := $container.Networks }}
-		{{ if and (not $containerNetwork) (ne $network.Name "ingress") (or (where $CurrentContainer.Networks "Name" $network.Name | first) (where $CurrentContainer.Networks "Name" "host" | first)) }}
+		{{ if and $CurrentContainer (not $containerNetwork) (ne $network.Name "ingress") (or (where $CurrentContainer.Networks "Name" $network.Name | first) (where $CurrentContainer.Networks "Name" "host" | first)) }}
 			{{ $containerNetwork = $network }}
 		{{ end }}
 	{{ end }}
