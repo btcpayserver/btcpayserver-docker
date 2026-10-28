@@ -5,7 +5,7 @@ optional-routes:
   - "lnd-rest"
 services:
   lnd_bitcoin:
-    image: btcpayserver/lnd:v0.21.5-beta.rc1
+    image: btcpayserver/lnd:v0.21.5-beta
     container_name: btcpayserver_lnd_bitcoin
     restart: unless-stopped
     environment:
