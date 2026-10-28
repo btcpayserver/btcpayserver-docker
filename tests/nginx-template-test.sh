@@ -17,11 +17,13 @@ local_backend="$test_id-local"
 nonlocal_backend="$test_id-nonlocal"
 nohttps_backend="$test_id-nohttps"
 generator="$test_id-generator"
+proxy="$test_id-proxy"
+fixture_label="$test_id-visible"
 nginx_image="$("$repo_dir/tests/docker-fragment-image.sh" nginx)"
 docker_gen_image="$("$repo_dir/tests/docker-fragment-image.sh" nginx-gen)"
 
 cleanup() {
-    docker rm -f "$generator" "$explicit_backend" "$multi_backend" "$fallback_backend" \
+    docker rm -f "$generator" "$proxy" "$explicit_backend" "$multi_backend" "$fallback_backend" \
         "$http_backend" "$https_backend" "$local_backend" "$nonlocal_backend" \
         "$nohttps_backend" >/dev/null 2>&1 || true
     docker network rm "$primary_network" "$secondary_network" "$isolated_network" >/dev/null 2>&1 || true
@@ -61,7 +63,12 @@ server_block_match_count() {
     ' "$test_dir/conf/default.conf"
 }
 
-mkdir -p "$test_dir/certs" "$test_dir/conf" "$test_dir/htpasswd" "$test_dir/vhost" "$test_dir/html"
+mkdir -p "$test_dir/certs" "$test_dir/conf" "$test_dir/htpasswd" "$test_dir/vhost" "$test_dir/html" "$test_dir/templates"
+# Use a unique proxy name so this test never collides with a real deployment's
+# fixed container name. Only the fallback lookup changes in the test template.
+sed "s/where \\$ \"Name\" \"nginx\"/where \\$ \"Name\" \"$proxy\"/" \
+    "$repo_dir/nginx/nginx.tmpl" > "$test_dir/templates/nginx.tmpl"
+grep -Fq "where \$ \"Name\" \"$proxy\"" "$test_dir/templates/nginx.tmpl"
 printf 'allow all;\n' > "$test_dir/network_internal.conf"
 printf '' > "$test_dir/fastcgi.conf"
 printf 'add_header X-Vhost-Default true;\n' > "$test_dir/vhost/default"
@@ -80,7 +87,11 @@ docker network create "$primary_network" >/dev/null
 docker network create "$secondary_network" >/dev/null
 docker network create "$isolated_network" >/dev/null
 
-docker run -d --name "$explicit_backend" --network "$primary_network" --expose 80 \
+docker run -d --name "$proxy" --network "$primary_network" --label "$fixture_label" \
+    "$nginx_image" >/dev/null
+docker network connect "$secondary_network" "$proxy"
+
+docker run -d --name "$explicit_backend" --network "$primary_network" --expose 80 --label "$fixture_label" \
     -e VIRTUAL_HOST=explicit.test \
     -e VIRTUAL_HOST_NAME=explicit_test \
     -e VIRTUAL_PORT=8080 \
@@ -137,7 +148,7 @@ docker create --name "$generator" --network "$primary_network" \
     -e REVERSEPROXY_HTTPS_PORT=8443 \
     -e 'RESOLVERS=127.0.0.11 valid=30s ipv6=off' \
     -v /var/run/docker.sock:/tmp/docker.sock:ro \
-    -v "$repo_dir/nginx:/etc/docker-gen/templates:ro" \
+    -v "$test_dir/templates:/etc/docker-gen/templates:ro" \
     -v "$test_dir/certs:/etc/nginx/certs:ro" \
     -v "$test_dir/conf:/etc/nginx/conf.d" \
     -v "$test_dir/htpasswd:/etc/nginx/htpasswd:ro" \
@@ -238,5 +249,33 @@ docker run --rm \
     -v "$test_dir/network_internal.conf:/etc/nginx/network_internal.conf:ro" \
     -v "$repo_dir/nginx:/etc/nginx/btcpay-routes:ro" \
     "$nginx_image" nginx -t
+
+# Restrict the container list to the explicitly labelled fixtures, which excludes
+# docker-gen itself deterministically. The nginx proxy is present on the backend
+# network, so the template must render the real upstream rather than crash.
+render_without_self() {
+    docker run --rm --network "$primary_network" \
+        -e "DOCKER_CONTAINER_FILTERS=label=$fixture_label" \
+        -e DOCKER_HOST=unix:///tmp/docker.sock \
+        -v /var/run/docker.sock:/tmp/docker.sock:ro \
+        -v "$test_dir/templates:/etc/docker-gen/templates:ro" \
+        --entrypoint /usr/local/bin/docker-gen "$docker_gen_image" \
+        /etc/docker-gen/templates/nginx.tmpl
+}
+
+render_without_self > "$test_dir/conf/no-self.conf"
+grep -Fq 'upstream explicit_test {' "$test_dir/conf/no-self.conf"
+grep -Fq "server $explicit_ip:8080;" "$test_dir/conf/no-self.conf"
+
+# If the proxy is absent too, rendering must still succeed but mark the
+# upstream unavailable rather than routing to an unverified network.
+docker stop "$proxy" >/dev/null
+render_without_self > "$test_dir/conf/no-self-or-proxy.conf"
+grep -Fq 'upstream explicit_test {' "$test_dir/conf/no-self-or-proxy.conf"
+grep -Fq 'server 127.0.0.1 down;' "$test_dir/conf/no-self-or-proxy.conf"
+if grep -Fq "server $explicit_ip:8080;" "$test_dir/conf/no-self-or-proxy.conf"; then
+    printf 'Backend must not be routed without a known proxy network\n' >&2
+    exit 1
+fi
 
 printf 'Nginx template tests passed\n'
