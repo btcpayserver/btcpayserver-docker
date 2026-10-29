@@ -19,11 +19,81 @@ The local web interface is disabled, and Lightning Terminal does not appear unde
 **Server Settings > Services**. Use the command-line tools or the hosted web
 interface described below.
 
+## Upgrading an Existing Installation
+
+The fragment layout changed in [#1187](https://github.com/btcpayserver/btcpayserver-docker/pull/1187).
+Previously, `lnd_lit_datadir` was mounted at `/root/.lit`; it is now mounted at
+`/lit`, with LiT using `/lit/.lit`. Existing mainnet session data can therefore
+remain at `/lit/mainnet` while LiT creates a new database at `/lit/.lit/mainnet`.
+Previously paired LNC wallets, such as Zeus, may stop connecting without an
+obvious error. Fresh installations do not need this migration.
+
+For an affected mainnet installation, run the following on the host **as root**.
+It discovers the mounted volume instead of assuming Docker's storage path,
+stops only LiT, backs up the volume, and preserves the newer mainnet directory
+before moving the old one into place. Do not use this procedure if you need to
+keep sessions or accounts created in the newer database: the databases are not
+merged. For another network, replace `mainnet` with that network's directory.
+
+```bash
+(
+    set -e
+    umask 077
+    lit_volume="$(docker inspect --format '{{range .Mounts}}{{if eq .Destination "/lit"}}{{.Source}}{{end}}{{end}}' btcpayserver_litd)"
+    test -n "$lit_volume"
+    cd "$lit_volume"
+    test -d mainnet
+    test ! -e .lit/mainnet.before-migration
+
+    docker stop btcpayserver_litd
+    tar -czf "/root/lit-before-migration-$(date -u +%Y%m%dT%H%M%SZ).tar.gz" .
+    mkdir -p .lit
+    if [ -e .lit/mainnet ]; then
+        mv .lit/mainnet .lit/mainnet.before-migration
+    fi
+    mv mainnet .lit/
+    docker start btcpayserver_litd
+)
+```
+
+If a command fails after LiT stops, leave it stopped and investigate before
+restarting. Keep the backup private: it contains session credentials. After a
+successful migration, check the [service logs](#troubleshooting), run
+`litcli.sh sessions list all`, and confirm that your previously paired wallet
+connects again.
+
 ## Command Line Interface
 
-To interact with LiT you may use the command line interface over gRPC. To create an admin session:
+To interact with LiT you may use the command line interface over gRPC. Choose the
+least privilege your client needs. For example, create a read-only session that
+expires in one day:
 
-`litcli.sh sessions add --label "btcpay" --type admin`
+```bash
+litcli.sh sessions add --label "btcpay-readonly" --type readonly --expiry 86400
+```
+
+Session options:
+
+- `--type readonly|admin|account|custom` selects the permissions. `readonly` is
+  the default; `admin` grants full administrative access, including control of
+  funds and channels. Only use `--type admin` for a trusted client that needs it.
+- `--type account` restricts access to an existing LiT account, selected with
+  `--account_id <account ID>`. See the [upstream accounts guide](https://github.com/lightninglabs/lightning-terminal/blob/v0.17.8/docs/accounts.md).
+- `--type custom` accepts `--permission entity:action` (for example,
+  `--permission info:read`) or `--uri` with an RPC method URI (for example,
+  `--uri /lnrpc.Lightning/GetInfo`). Repeat these flags to include more permissions.
+- `--expiry` is the session lifetime in **seconds**; the default is **90 days**
+  (`7776000` seconds).
+
+For example, allow only the `GetInfo` RPC for one hour:
+
+```bash
+litcli.sh sessions add --label "btcpay-info" --type custom --uri /lnrpc.Lightning/GetInfo --expiry 3600
+```
+
+Use `litcli.sh sessions add --help` for all available options. Create scoped
+sessions through the CLI; the hosted Terminal interface does not provide these
+session-scoping controls.
 
 To see the current Loop terms:
 
@@ -54,7 +124,7 @@ You may inspect your sessions with:
 
 `litcli.sh sessions list all`
 
-Retrieve the local pubkey using the command above revoke a session with:
+Retrieve the local pubkey using the command above and revoke a session with:
 
 `litcli.sh sessions revoke --localpubkey <your local pubkey>`
 
