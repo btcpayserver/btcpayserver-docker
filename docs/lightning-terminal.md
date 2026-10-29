@@ -28,39 +28,10 @@ remain at `/lit/mainnet` while LiT creates a new database at `/lit/.lit/mainnet`
 Previously paired LNC wallets, such as Zeus, may stop connecting without an
 obvious error. Fresh installations do not need this migration.
 
-For an affected mainnet installation, run the following on the host **as root**.
-It discovers the mounted volume instead of assuming Docker's storage path,
-stops only LiT, backs up the volume, and preserves the newer mainnet directory
-before moving the old one into place. Do not use this procedure if you need to
-keep sessions or accounts created in the newer database: the databases are not
-merged. For another network, replace `mainnet` with that network's directory.
-
-```bash
-(
-    set -e
-    umask 077
-    lit_volume="$(docker inspect --format '{{range .Mounts}}{{if eq .Destination "/lit"}}{{.Source}}{{end}}{{end}}' btcpayserver_litd)"
-    test -n "$lit_volume"
-    cd "$lit_volume"
-    test -d mainnet
-    test ! -e .lit/mainnet.before-migration
-
-    docker stop btcpayserver_litd
-    tar -czf "/root/lit-before-migration-$(date -u +%Y%m%dT%H%M%SZ).tar.gz" .
-    mkdir -p .lit
-    if [ -e .lit/mainnet ]; then
-        mv .lit/mainnet .lit/mainnet.before-migration
-    fi
-    mv mainnet .lit/
-    docker start btcpayserver_litd
-)
-```
-
-If a command fails after LiT stops, leave it stopped and investigate before
-restarting. Keep the backup private: it contains session credentials. After a
-successful migration, check the [service logs](#troubleshooting), run
-`litcli.sh sessions list all`, and confirm that your previously paired wallet
-connects again.
+See [SoulReaver-SS's migration steps on GitHub](https://github.com/btcpayserver/btcpayserver-docker/pull/1216#issuecomment-6476587112)
+for affected mainnet installations. Back up the LiT volume before making changes,
+and check that the paths match your installation. The old and newer session
+databases are not merged.
 
 ## Command Line Interface
 
