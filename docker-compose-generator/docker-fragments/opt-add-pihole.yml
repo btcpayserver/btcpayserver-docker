@@ -17,7 +17,7 @@ services:
             - "53:53/tcp"
             - "53:53/udp"
         volumes:
-            - "./pihole/resolv.conf:/etc/resolv.conf:ro"
+            - "./pihole/resolv.conf:/etc/resolv.conf:ro,z"
             - "pihole_datadir:/etc/pihole"
 volumes:
     pihole_datadir:

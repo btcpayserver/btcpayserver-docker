@@ -3,6 +3,8 @@ services:
     restart: unless-stopped
     image: btcpayserver/letsencrypt-nginx-proxy-companion:2.8.2-2
     container_name: letsencrypt-nginx-proxy-companion
+    security_opt:
+      - label=disable
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "nginx_conf:/etc/nginx/conf.d"

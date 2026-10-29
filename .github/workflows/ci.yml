@@ -51,6 +51,8 @@ jobs:
         run: tests/nginx-template-test.sh
       - name: Test secret generation
         run: tests/generate-secrets-test.sh
+      - name: Test SELinux bind mount labels
+        run: tests/selinux-labels-test.sh
       - name: Test backup archives
         run: bash tests/backup-test.sh
       - name: Test restore modes

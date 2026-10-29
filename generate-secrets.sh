@@ -76,3 +76,9 @@ while IFS= read -r secret; do
     fi
     rm -f -- "$temporary"
 done < <(jq -r '(.secrets // [])[]' "$manifest")
+
+# Compose bind mounts secret files without SELinux relabeling, so label them for container access.
+if [[ -d "$secret_root" ]] && command -v selinuxenabled >/dev/null 2>&1 && selinuxenabled; then
+    chcon -R -t container_file_t -- "$secret_root" ||
+        printf 'Warning: could not label %s for container access\n' "$secret_root" >&2
+fi

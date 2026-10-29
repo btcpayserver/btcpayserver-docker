@@ -71,6 +71,10 @@ For a new service:
   credentials.
 - Add Compose secrets when the service needs a generated credential. Secret
   file paths must be relative paths below `../secrets/`.
+- Add the `z` option to host bind mounts, for example
+  `"./example.conf:/etc/example.conf:ro,z"`, so SELinux hosts allow access. Do
+  not relabel `/var/run/docker.sock`; give a service that mounts it
+  `security_opt: ["label=disable"]` instead.
 
 ### Declare Relationships
 
