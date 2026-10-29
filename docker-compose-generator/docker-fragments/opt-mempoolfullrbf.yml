@@ -1,7 +1,0 @@
-#  must not use opt-save-storage
-
-services:
-  bitcoind:
-    environment:
-      BITCOIN_EXTRA_ARGS: |
-        mempoolfullrbf=1

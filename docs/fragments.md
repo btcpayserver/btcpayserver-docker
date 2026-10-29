@@ -40,7 +40,6 @@ every architecture or receives the same maintenance level.
 | [`opt-save-memory`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-save-memory.yml) | Reduce daemon cache and mempool settings on hosts with less than 1 GB of memory |
 | [`opt-more-memory`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-more-memory.yml) | Increase daemon cache when more than 1 GB can be dedicated to Bitcoin Core |
 | [`opt-txindex`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-txindex.yml) | Enable transaction indexing; incompatible with pruning |
-| [`opt-mempoolfullrbf`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-mempoolfullrbf.yml) | Enable Bitcoin Core full-RBF policy; recommended automatically for Bitcoin |
 
 Only one pruning profile can be selected. The two memory profiles are mutually
 exclusive. Transaction indexing, ElectrumX, and the bundled Mempool service are
