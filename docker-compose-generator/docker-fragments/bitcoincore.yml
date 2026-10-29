@@ -2,7 +2,7 @@ services:
   bitcoind:
     restart: unless-stopped
     container_name: btcpayserver_bitcoind
-    image: btcpayserver/bitcoin:31.1-1
+    image: btcpayserver/bitcoin:32.1
     ulimits:
       nofile:
         soft: 65536
