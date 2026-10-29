@@ -17,6 +17,7 @@ fi
 # Not in a terminal (e.g. the web UI): detach, so restarting BTCPay can't kill the update midway
 if [ ! -t 1 ] && [ -z "$BTCPAY_UPDATE_DETACHED" ]; then
     log="$BTCPAY_BASE_DIRECTORY/btcpay-update.log"
+    install -m 600 /dev/null "$log"
     BTCPAY_UPDATE_DETACHED=1 setsid ./btcpay-update.sh --skip-git-pull > "$log" 2>&1 < /dev/null &
     tail -n +1 -f --pid=$! "$log" || true
     wait $!
