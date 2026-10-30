@@ -73,8 +73,10 @@ btcpay-up.sh
 btcpay-down.sh
 
 # As on boot, starting Docker with an empty ruleset must first restore the filter.
-nft delete table ip btcpay_ipv4_options
+# btcpayserver.service is stopped too: it requires Docker, so a restart would re-run btcpay_up.
 systemctl daemon-reload
+systemctl stop btcpayserver.service btcpay-ipv4-options-filter.service
+nft delete table ip btcpay_ipv4_options
 systemctl restart docker
 systemctl is-active --quiet btcpay-ipv4-options-filter.service
 nft list table ip btcpay_ipv4_options > /dev/null
