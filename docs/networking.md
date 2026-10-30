@@ -235,3 +235,38 @@ Internal Compose `expose` entries are not host-published ports. Fragments named
 `*-expose` deliberately bind additional RPC endpoints, generally to host
 loopback. `opt-expose-unsafe` publishes Bitcoin P2P port 8333 and must be used
 only on a trusted LAN or behind firewall rules that allow known peers.
+
+## IPv4 Options Filter
+
+[CVE-2026-98432](https://nvd.nist.gov/vuln/detail/CVE-2026-98432) is a Linux
+kernel use-after-free in the IPv4 TCP handshake. Every IPv4 TCP listener on the
+host can reach it, including published container ports, when the connecting
+SYN carries IP options. Updating the host kernel and rebooting is the fix:
+container images and `btcpay-update.sh` do not change the host kernel, and
+disabling MPTCP does not help because MPTCP connections use the same code.
+
+Until your distribution ships a patched kernel, drop inbound IPv4 packets that
+carry IP options:
+
+```bash
+btcpay-ipv4-options-filter enable
+btcpay-ipv4-options-filter status
+```
+
+The filter needs the `nft` command from the `nftables` package. Do not start
+`nftables.service` on a Docker host: its default configuration flushes the
+ruleset, including Docker's rules. The filter uses its own
+`ip btcpay_ipv4_options` table and leaves Docker and ufw rules unchanged. While
+`$BTCPAY_BASE_DIRECTORY/.ipv4-options-filter-enabled` exists, BTCPay Server
+restores the filter whenever it starts, including after a reboot.
+
+Legitimate traffic rarely carries IP options. IGMP messages and diagnostics
+such as `ping -R` do, so multicast group membership and record-route pings to
+the host stop working; a typical VPS uses neither. IPv6 traffic is not
+filtered.
+
+Once the host runs a patched kernel, remove the filter:
+
+```bash
+btcpay-ipv4-options-filter disable
+```

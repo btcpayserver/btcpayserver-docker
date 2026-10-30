@@ -56,6 +56,7 @@ install_tooling() {
                 "*" "btcpay-host" "Command line exposing the services of the host (see https://github.com/btcpayserver/btcpayserver/pull/7511)" \
                 "*" "btcpay-fragments" "Command line for managing Docker Compose fragments" \
                 "*" "btcpay-routes" "Command line for managing optional nginx routes" \
+                "*" "btcpay-ipv4-options-filter" "Command line for the CVE-2026-98432 IPv4 options filter" \
                 "*" "btcpay-clean.sh" "Command line for deleting old unused docker images" \
                 "*" "btcpay-down.sh" "Command line for stopping all services related to BTCPay Server" \
                 "*" "btcpay-restart.sh" "Command line for restarting all services related to BTCPay Server" \
@@ -453,8 +454,38 @@ btcpay_archive_logs() (
     done
 )
 
+btcpay_ipv4_options_filter_flag() {
+    printf '%s/.ipv4-options-filter-enabled\n' "$BTCPAY_BASE_DIRECTORY"
+}
+
+btcpay_ipv4_options_filter_apply() {
+    if ! command -v nft > /dev/null 2>&1; then
+        echo "Error: nft is required. Install the nftables package, but do not start nftables.service: its default configuration flushes Docker's firewall rules." >&2
+        return 1
+    fi
+    # Declaring the table before deleting it makes the replacement atomic and idempotent.
+    nft -f - <<'EOF'
+table ip btcpay_ipv4_options
+delete table ip btcpay_ipv4_options
+table ip btcpay_ipv4_options {
+    chain prerouting {
+        type filter hook prerouting priority -300; policy accept;
+        ip hdrlength > 5 counter drop comment "CVE-2026-98432"
+    }
+}
+EOF
+}
+
+btcpay_ipv4_options_filter_restore() {
+    [ -n "${BTCPAY_BASE_DIRECTORY:-}" ] && [ -e "$(btcpay_ipv4_options_filter_flag)" ] || return 0
+    btcpay_ipv4_options_filter_apply
+}
+
 btcpay_up() {
     local status
+    if ! btcpay_ipv4_options_filter_restore; then
+        echo "Warning: Failed to restore the IPv4 options filter, check btcpay-ipv4-options-filter status." >&2
+    fi
     pushd . > /dev/null
     cd "$(dirname "$BTCPAY_ENV_FILE")"
     if docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up --remove-orphans -d -t "${COMPOSE_HTTP_TIMEOUT:-180}"; then

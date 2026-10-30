@@ -23,6 +23,7 @@ focused non-destructive test scripts that cover the changed area:
 - `tests/nginx-template-test.sh`
 - `tests/generate-secrets-test.sh`
 - `tests/selinux-labels-test.sh`
+- `tests/btcpay-ipv4-options-filter-test.sh`
 
 Never run `.github/scripts/test-install.sh` on a development machine. It is for
 disposable CI runners: it stops and removes the host Docker installation before

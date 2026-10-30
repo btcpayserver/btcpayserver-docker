@@ -1,0 +1,74 @@
+#!/bin/bash
+
+set -Eeuo pipefail
+
+if [ -z "${BTCPAY_BASE_DIRECTORY:-}" ] && [ -f "/etc/profile.d/btcpay-env.sh" ]; then
+    # shellcheck source=/dev/null
+    . "/etc/profile.d/btcpay-env.sh"
+fi
+
+print_help() {
+    cat <<EOF
+Usage: btcpay-ipv4-options-filter <command>
+
+Drop inbound IPv4 packets that carry IP options, a stopgap for CVE-2026-98432
+until the host runs a patched kernel. While enabled, the filter is restored
+whenever BTCPay Server starts, including after a reboot.
+
+Commands:
+  enable   Load the filter and record that it is enabled.
+  disable  Remove the filter and the record.
+  status   Show whether the filter is enabled and loaded.
+  help     Show this help.
+EOF
+}
+
+filter_loaded() {
+    command -v nft > /dev/null 2>&1 && nft list table ip btcpay_ipv4_options > /dev/null 2>&1
+}
+
+command_name="${1:-}"
+if [ -z "$command_name" ] || [ "$command_name" = "help" ]; then
+    print_help
+    exit 0
+fi
+
+if [ -z "${BTCPAY_BASE_DIRECTORY:-}" ]; then
+    echo "BTCPAY_BASE_DIRECTORY is not set. Run this on a BTCPay Server host." >&2
+    exit 1
+fi
+# shellcheck source=helpers.sh
+. "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker/helpers.sh"
+flag_file="$(btcpay_ipv4_options_filter_flag)"
+
+case "$command_name" in
+    enable)
+        btcpay_ipv4_options_filter_apply
+        date -u '+%Y-%m-%dT%H:%M:%SZ' > "$flag_file"
+        echo "IPv4 options filter enabled."
+        ;;
+    disable)
+        if filter_loaded; then
+            nft delete table ip btcpay_ipv4_options
+        fi
+        rm -f -- "$flag_file"
+        echo "IPv4 options filter disabled."
+        ;;
+    status)
+        if [ -f "$flag_file" ]; then
+            echo "Enabled: yes, since $(cat "$flag_file")"
+        else
+            echo "Enabled: no"
+        fi
+        if filter_loaded; then
+            dropped="$(nft list chain ip btcpay_ipv4_options prerouting | sed -n 's/.*counter packets \([0-9]*\).*/\1/p')"
+            echo "Loaded: yes, ${dropped:-0} packets dropped"
+        else
+            echo "Loaded: no"
+        fi
+        ;;
+    *)
+        echo "Unknown command: $command_name" >&2
+        exit 1
+        ;;
+esac
