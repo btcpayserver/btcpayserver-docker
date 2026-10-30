@@ -11,8 +11,8 @@ print_help() {
     cat <<EOF
 Usage: btcpay-ipv4-options-filter <command>
 
-Drop inbound IPv4 packets that carry IP options, a stopgap for CVE-2026-98432
-until the host runs a patched kernel. btcpay-setup.sh and btcpay-update.sh
+Drop inbound IPv4 TCP packets that carry IP options, a stopgap for
+CVE-2026-98432 until the host runs a patched kernel. btcpay-setup.sh and btcpay-update.sh
 enable it unless it was disabled before or BTCPAY_IPV4_OPTIONS_FILTER is false.
 While enabled, BTCPay Server restores the filter whenever it starts, including
 after a reboot.
@@ -26,7 +26,14 @@ EOF
 }
 
 filter_loaded() {
-    command -v nft > /dev/null 2>&1 && nft list table ip btcpay_ipv4_options > /dev/null 2>&1
+    local tables
+    command -v nft > /dev/null 2>&1 || return 1
+    # A failure must not read as "no table"; stderr only warns about Docker's iptables-nft rules.
+    if ! tables="$(nft list tables ip 2> /dev/null)"; then
+        echo "Error: nft could not list the IPv4 tables." >&2
+        exit 1
+    fi
+    grep -qx 'table ip btcpay_ipv4_options' <<< "$tables"
 }
 
 command_name="${1:-}"
@@ -50,12 +57,11 @@ case "$command_name" in
         echo "IPv4 options filter enabled."
         ;;
     disable)
-        if ! command -v nft > /dev/null 2>&1; then
-            echo "Error: nft is required to remove the filter." >&2
-            exit 1
-        fi
         if filter_loaded; then
             nft delete table ip btcpay_ipv4_options
+        elif ! command -v nft > /dev/null 2>&1 && [ "$(btcpay_ipv4_options_filter_state)" = enabled ]; then
+            echo "Error: nft is required to remove the filter." >&2
+            exit 1
         fi
         btcpay_ipv4_options_filter_record disabled
         echo "IPv4 options filter disabled."
@@ -73,7 +79,7 @@ case "$command_name" in
         esac
         dropped=""
         if filter_loaded; then
-            dropped="$(nft list chain ip btcpay_ipv4_options prerouting 2> /dev/null | sed -n 's/.*ip hdrlength > 5 counter packets \([0-9]*\).*/\1/p' || true)"
+            dropped="$(nft list chain ip btcpay_ipv4_options prerouting 2> /dev/null | sed -n 's/.* counter packets \([0-9]*\) .*drop comment "CVE-2026-98432".*/\1/p' || true)"
         fi
         if [ -n "$dropped" ]; then
             echo "Loaded: yes, $dropped packets dropped"

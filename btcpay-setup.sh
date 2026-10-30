@@ -380,6 +380,9 @@ if $HAS_DOCKER; then
     fi
 fi
 
+# Before anything below starts the stack.
+btcpay_ipv4_options_filter_default
+
 # Schedule for reboot
 if $STARTUP_REGISTER && [[ -x "$(command -v systemctl)" ]]; then
     # Use systemd
@@ -482,8 +485,6 @@ if $HAS_DOCKER && [[ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ]] && [[ "$OLD_BTCPAY_DOC
         return 1
     fi
 fi
-
-btcpay_ipv4_options_filter_default
 
 if $START; then
     if ! btcpay_up; then

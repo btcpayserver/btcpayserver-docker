@@ -30,6 +30,28 @@ jq -e '
 
 timeout 1m bash .github/scripts/test-connectivity.sh
 
+# Setup's default CVE-2026-98432 filter must drop TCP that carries IP options, and only that.
+python3 - <<'EOF'
+import socket, subprocess
+
+def connects(options):
+    s = socket.socket()
+    s.settimeout(5)
+    if options:
+        s.setsockopt(socket.IPPROTO_IP, socket.IP_OPTIONS, bytes([7, 7, 4, 0, 0, 0, 0, 0]))
+    try:
+        s.connect(("127.0.0.1", 80))
+        return True
+    except OSError:
+        return False
+    finally:
+        s.close()
+
+assert connects(False), "a plain connection to nginx failed"
+assert not connects(True), "a connection carrying IP options was not dropped"
+assert subprocess.run(["ping", "-R", "-c", "1", "-W", "2", "127.0.0.1"], capture_output=True).returncode == 0, "ping with IP options was dropped"
+EOF
+
 # A service's stdout and stderr must survive container deletion.
 docker run --name btcpay-test-log-container \
     --label com.docker.compose.project=generated \

@@ -459,17 +459,21 @@ btcpay_ipv4_options_filter_flag() {
     printf '%s/.ipv4-options-filter\n' "$BTCPAY_BASE_DIRECTORY"
 }
 
-# Prints enabled, disabled, or nothing if neither setup nor the operator chose yet.
+# Prints enabled or disabled; nothing when no valid choice is recorded, so damage re-enables the filter.
 btcpay_ipv4_options_filter_state() {
     local state=""
     if [ -n "${BTCPAY_BASE_DIRECTORY:-}" ] && [ -f "$(btcpay_ipv4_options_filter_flag)" ]; then
         read -r state _ < "$(btcpay_ipv4_options_filter_flag)" || true
     fi
-    printf '%s\n' "$state"
+    case "$state" in
+        enabled|disabled) printf '%s\n' "$state" ;;
+    esac
 }
 
 btcpay_ipv4_options_filter_record() {
-    printf '%s %s\n' "$1" "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" > "$(btcpay_ipv4_options_filter_flag)"
+    local state_file
+    state_file="$(btcpay_ipv4_options_filter_flag)"
+    printf '%s %s\n' "$1" "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" > "$state_file.tmp" && mv -f -- "$state_file.tmp" "$state_file"
 }
 
 btcpay_ipv4_options_filter_apply() {
@@ -484,7 +488,7 @@ delete table ip btcpay_ipv4_options
 table ip btcpay_ipv4_options {
     chain prerouting {
         type filter hook prerouting priority -300; policy accept;
-        ip hdrlength > 5 counter drop comment "CVE-2026-98432"
+        ip hdrlength > 5 meta l4proto tcp counter drop comment "CVE-2026-98432"
     }
 }
 EOF
@@ -505,7 +509,10 @@ btcpay_ipv4_options_filter_default() {
         echo "Warning: The CVE-2026-98432 IPv4 options filter was not enabled. Set BTCPAY_IPV4_OPTIONS_FILTER=false to skip it." >&2
         return 0
     fi
-    btcpay_ipv4_options_filter_record enabled
+    if ! btcpay_ipv4_options_filter_record enabled; then
+        echo "Warning: The CVE-2026-98432 IPv4 options filter is loaded but could not be recorded, so it will not be restored after a reboot." >&2
+        return 0
+    fi
     echo "Enabled the IPv4 options filter as a CVE-2026-98432 stopgap. Run btcpay-ipv4-options-filter disable to turn it off."
 }
 
