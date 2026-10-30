@@ -51,14 +51,6 @@
 	}
 {{ end }}
 
-{{ define "vhost-include" }}
-	{{ if (exists (printf "/etc/nginx/vhost.d/%s" .Host)) }}
-	include {{ printf "/etc/nginx/vhost.d/%s" .Host }};
-	{{ else if (exists "/etc/nginx/vhost.d/default") }}
-	include /etc/nginx/vhost.d/default;
-	{{ end }}
-{{ end }}
-
 {{ define "proxy-location" }}
 	location / {
 		{{ if eq .Proto "uwsgi" }}
@@ -74,11 +66,6 @@
 		{{ if (exists (printf "/etc/nginx/htpasswd/%s" .Host)) }}
 		auth_basic	"Restricted {{ .Host }}";
 		auth_basic_user_file	{{ (printf "/etc/nginx/htpasswd/%s" .Host) }};
-		{{ end }}
-		{{ if (exists (printf "/etc/nginx/vhost.d/%s_location" .Host)) }}
-		include {{ printf "/etc/nginx/vhost.d/%s_location" .Host}};
-		{{ else if (exists "/etc/nginx/vhost.d/default_location") }}
-		include /etc/nginx/vhost.d/default_location;
 		{{ end }}
 	}
 {{ end }}
@@ -269,9 +256,6 @@ server {
 	proxy_set_header X-Forwarded-Proto $proxy_x_forwarded_proto;
 	proxy_set_header X-Forwarded-Ssl $proxy_x_forwarded_ssl;
 	proxy_set_header X-Forwarded-Port $proxy_x_forwarded_port;
-	{{ if (exists "/etc/nginx/vhost.d/default") }}
-	include /etc/nginx/vhost.d/default;
-	{{ end }}
 	location / {
 		proxy_pass http://{{ trim $upstream_name }};
 	}
@@ -488,8 +472,6 @@ server {
 	add_header Strict-Transport-Security "{{ trim $hsts }}" always;
 	{{ end }}
 
-	{{ template "vhost-include" (dict "Host" $host) }}
-
 	{{ template "proxy-location" (dict "Host" $host "Proto" $proto "UpstreamName" $upstream_name "VhostRoot" $vhost_root) }}
 	{{ template "service-routes" (dict "HostName" $host_name "Containers" $) }}
 }
@@ -512,8 +494,6 @@ server {
 	{{ template "acme-http-challenge-location" }}
 	{{ end }}
 
-	{{ template "vhost-include" (dict "Host" $host) }}
-
 	{{ template "proxy-location" (dict "Host" $host "Proto" $proto "UpstreamName" $upstream_name "VhostRoot" $vhost_root) }}
 	{{ template "service-routes" (dict "HostName" $host_name "Containers" $) }}
 }
@@ -530,8 +510,6 @@ server {
 	{{/* Enable usage of self-signed SSL certificate if .local hostname */}}
 	{{ if and (ne $https_method "nohttps") (hasSuffix ".local" $host) }}
 	{{ template "network-access" (dict "NetworkTag" $network_tag) }}
-
-	{{ template "vhost-include" (dict "Host" $host) }}
 
 	{{ template "proxy-location" (dict "Host" $host "Proto" $proto "UpstreamName" $upstream_name "VhostRoot" $vhost_root) }}
 	{{ template "service-routes" (dict "HostName" $host_name "Containers" $) }}

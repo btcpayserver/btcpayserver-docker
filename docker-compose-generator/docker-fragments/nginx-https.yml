@@ -6,7 +6,6 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "nginx_conf:/etc/nginx/conf.d"
-      - "nginx_vhost:/etc/nginx/vhost.d"
       - "nginx_html:/usr/share/nginx/html"
       - "nginx_certs:/etc/nginx/certs:rw"
       - "acme:/etc/acme.sh"

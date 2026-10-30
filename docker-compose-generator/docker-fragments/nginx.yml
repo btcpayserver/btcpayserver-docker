@@ -13,7 +13,6 @@ services:
       - "${REVERSEPROXY_HTTP_PORT:-80}:80"
     volumes:
       - "nginx_conf:/etc/nginx/conf.d"
-      - "nginx_vhost:/etc/nginx/vhost.d"
       - "nginx_html:/usr/share/nginx/html"
       - "../nginx:/etc/nginx/btcpay-routes:ro"
   nginx-gen:
@@ -28,7 +27,6 @@ services:
       - "/var/run/docker.sock:/tmp/docker.sock:ro"
       - "../nginx:/etc/docker-gen/templates:ro"
       - "nginx_conf:/etc/nginx/conf.d"
-      - "nginx_vhost:/etc/nginx/vhost.d"
       - "nginx_html:/usr/share/nginx/html"
     entrypoint: /usr/local/bin/docker-gen -notify-sighup nginx -watch -wait 5s:30s /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
     links:
@@ -36,7 +34,6 @@ services:
       - nginx
 volumes:
   nginx_conf:
-  nginx_vhost:
   nginx_html:
   nginx_certs:
 
