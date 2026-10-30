@@ -12,10 +12,10 @@ print_help() {
 Usage: btcpay-ipv4-options-filter <command>
 
 Drop inbound IPv4 TCP packets that carry IP options, a stopgap for
-CVE-2026-98432 until the host runs a patched kernel. btcpay-setup.sh and btcpay-update.sh
-enable it unless it was disabled before or BTCPAY_IPV4_OPTIONS_FILTER is false.
-While enabled, BTCPay Server restores the filter whenever it starts, including
-after a reboot.
+CVE-2026-98432 until the host runs a patched kernel. btcpay-setup.sh and
+btcpay-update.sh enable it unless it was disabled before or
+BTCPAY_IPV4_OPTIONS_FILTER is false. While enabled, BTCPay Server restores the
+filter whenever it starts, including after a reboot.
 
 Commands:
   enable   Load the filter and record that it is enabled.
