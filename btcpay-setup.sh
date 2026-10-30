@@ -53,6 +53,7 @@ This script will:
 * Install Docker-Compose
 * Setup BTCPay settings
 * Make sure it starts at reboot via upstart or systemd
+* Enable the CVE-2026-98432 IPv4 options filter unless it was disabled (see docs/networking.md)
 * Add BTCPay utilities in /usr/local/bin
 * Start BTCPay
 
@@ -83,6 +84,7 @@ Environment variables:
     BTCPAYGEN_DOCKER_IMAGE: Allows you to specify a custom docker image for the generator (Default: btcpayserver/docker-compose-generator)
     BTCPAY_IMAGE: Allows you to specify the btcpayserver docker image to use over the default version. (Default: current stable version of btcpayserver, eg. btcpayserver/btcpayserver:version)
     BTCPAY_UPDATE_CLEAN: Remove all unused Docker images after an update except generator-labeled images. (Default: true)
+    BTCPAY_IPV4_OPTIONS_FILTER: Let setup and updates enable the CVE-2026-98432 IPv4 options filter unless it was disabled. (Default: true)
     BTCPAY_PROTOCOL: Allows you to specify the external transport protocol of BTCPayServer. (Default: https)
     BTCPAY_ADDITIONAL_HOSTS: Allows you to specify additional domains to your BTCPayServer with https support if enabled. (eg. example2.com,example3.com)
 Add-on specific variables:
@@ -179,6 +181,7 @@ fi
 : "${PIHOLE_SERVERIP:=}"
 : "${CLOUDFLARE_TUNNEL_TOKEN:=}"
 : "${BTCPAY_UPDATE_CLEAN:=true}"
+: "${BTCPAY_IPV4_OPTIONS_FILTER:=true}"
 
 OLD_BTCPAY_DOCKER_COMPOSE="$BTCPAY_DOCKER_COMPOSE"
 ORIGINAL_DIRECTORY="$(pwd)"
@@ -376,6 +379,9 @@ if $HAS_DOCKER; then
         return 1
     fi
 fi
+
+# Before anything below starts the stack.
+btcpay_ipv4_options_filter_default
 
 # Schedule for reboot
 if $STARTUP_REGISTER && [[ -x "$(command -v systemctl)" ]]; then

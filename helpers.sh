@@ -18,6 +18,7 @@ BTCPAY_ENV_VARIABLES=(
     NOREVERSEPROXY_HTTP_PORT
     BTCPAY_IMAGE
     BTCPAY_UPDATE_CLEAN
+    BTCPAY_IPV4_OPTIONS_FILTER
     ACME_CA_URI
     NBITCOIN_NETWORK
     LETSENCRYPT_EMAIL
@@ -56,6 +57,7 @@ install_tooling() {
                 "*" "btcpay-host" "Command line exposing the services of the host (see https://github.com/btcpayserver/btcpayserver/pull/7511)" \
                 "*" "btcpay-fragments" "Command line for managing Docker Compose fragments" \
                 "*" "btcpay-routes" "Command line for managing optional nginx routes" \
+                "*" "btcpay-ipv4-options-filter" "Command line for the CVE-2026-98432 IPv4 options filter" \
                 "*" "btcpay-clean.sh" "Command line for deleting old unused docker images" \
                 "*" "btcpay-down.sh" "Command line for stopping all services related to BTCPay Server" \
                 "*" "btcpay-restart.sh" "Command line for restarting all services related to BTCPay Server" \
@@ -453,8 +455,118 @@ btcpay_archive_logs() (
     done
 )
 
+btcpay_ipv4_options_filter_flag() {
+    printf '%s/.ipv4-options-filter\n' "$BTCPAY_BASE_DIRECTORY"
+}
+
+# Prints enabled or disabled; nothing when no valid choice is recorded, so damage re-enables the filter.
+btcpay_ipv4_options_filter_state() {
+    local state=""
+    if [ -n "${BTCPAY_BASE_DIRECTORY:-}" ] && [ -f "$(btcpay_ipv4_options_filter_flag)" ]; then
+        read -r state _ < "$(btcpay_ipv4_options_filter_flag)" || true
+    fi
+    case "$state" in
+        enabled|disabled) printf '%s\n' "$state" ;;
+    esac
+}
+
+btcpay_ipv4_options_filter_unit() {
+    printf '%s\n' "${BTCPAY_IPV4_OPTIONS_FILTER_UNIT:-/etc/systemd/system/btcpay-ipv4-options-filter.service}"
+}
+
+# Restores the filter at boot before host services that wait for the network and before Docker restarts the containers.
+# Ordering only: a failure cannot hold them back.
+btcpay_ipv4_options_filter_install_unit() {
+    local unit
+    command -v systemctl > /dev/null 2>&1 || return 0
+    unit="$(btcpay_ipv4_options_filter_unit)"
+    cat > "$unit" <<'EOF' || { echo "Warning: Could not write $unit, so the IPv4 options filter is restored only when BTCPay Server starts." >&2; return 0; }
+[Unit]
+Description=BTCPay Server IPv4 options filter for CVE-2026-98432
+Before=network.target
+Before=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+TimeoutStartSec=30
+ExecStart=/bin/bash -c '. "/etc/profile.d/btcpay-env.sh" && cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker" && . helpers.sh && btcpay_ipv4_options_filter_restore'
+
+[Install]
+WantedBy=docker.service
+EOF
+    if ! systemctl --no-reload enable "$(basename "$unit")" > /dev/null 2>&1; then
+        echo "Warning: Could not enable $unit, so the IPv4 options filter is restored only when BTCPay Server starts." >&2
+    fi
+}
+
+btcpay_ipv4_options_filter_remove_unit() {
+    local unit
+    unit="$(btcpay_ipv4_options_filter_unit)"
+    command -v systemctl > /dev/null 2>&1 && [ -e "$unit" ] || return 0
+    systemctl --no-reload disable "$(basename "$unit")" > /dev/null 2>&1 || true
+    rm -f -- "$unit"
+}
+
+# Records the choice and keeps the boot unit in step with it.
+btcpay_ipv4_options_filter_record() {
+    local state_file
+    state_file="$(btcpay_ipv4_options_filter_flag)"
+    if ! { printf '%s %s\n' "$1" "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" > "$state_file.tmp" && mv -f -- "$state_file.tmp" "$state_file"; }; then
+        return 1
+    fi
+    if [ "$1" = enabled ]; then
+        btcpay_ipv4_options_filter_install_unit
+    else
+        btcpay_ipv4_options_filter_remove_unit
+    fi
+}
+
+btcpay_ipv4_options_filter_apply() {
+    if ! command -v nft > /dev/null 2>&1; then
+        echo "Error: nft is required. Install the nftables package, but do not start nftables.service: its default configuration flushes Docker's firewall rules." >&2
+        return 1
+    fi
+    # Declaring the table before deleting it makes the replacement atomic and idempotent.
+    nft -f - <<'EOF'
+table ip btcpay_ipv4_options
+delete table ip btcpay_ipv4_options
+table ip btcpay_ipv4_options {
+    chain prerouting {
+        type filter hook prerouting priority -300; policy accept;
+        ip hdrlength > 5 meta l4proto tcp counter drop comment "CVE-2026-98432"
+    }
+}
+EOF
+}
+
+btcpay_ipv4_options_filter_restore() {
+    [ "$(btcpay_ipv4_options_filter_state)" = enabled ] || return 0
+    btcpay_ipv4_options_filter_apply
+}
+
+btcpay_ipv4_options_filter_default() {
+    [ "${BTCPAY_IPV4_OPTIONS_FILTER:-true}" != false ] || return 0
+    [ -z "$(btcpay_ipv4_options_filter_state)" ] || return 0
+    if ! command -v nft > /dev/null 2>&1 && command -v apt-get > /dev/null 2>&1; then
+        { apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq nftables; } > /dev/null 2>&1 || true
+    fi
+    if ! btcpay_ipv4_options_filter_apply; then
+        echo "Warning: The CVE-2026-98432 IPv4 options filter was not enabled. Set BTCPAY_IPV4_OPTIONS_FILTER=false to skip it." >&2
+        return 0
+    fi
+    if ! btcpay_ipv4_options_filter_record enabled; then
+        echo "Warning: The CVE-2026-98432 IPv4 options filter is loaded but could not be recorded, so it will not be restored after a reboot." >&2
+        return 0
+    fi
+    echo "Enabled the IPv4 options filter as a CVE-2026-98432 stopgap. Run btcpay-ipv4-options-filter disable to turn it off."
+}
+
 btcpay_up() {
     local status
+    if ! btcpay_ipv4_options_filter_restore; then
+        echo "Warning: Failed to restore the IPv4 options filter, check btcpay-ipv4-options-filter status." >&2
+    fi
     pushd . > /dev/null
     cd "$(dirname "$BTCPAY_ENV_FILE")"
     if docker-compose -f "$BTCPAY_DOCKER_COMPOSE" up --remove-orphans -d -t "${COMPOSE_HTTP_TIMEOUT:-180}"; then

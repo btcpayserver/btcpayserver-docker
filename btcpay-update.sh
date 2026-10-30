@@ -80,6 +80,7 @@ fi
 
 install_tooling
 btcpay_update_docker_env
+btcpay_ipv4_options_filter_default
 btcpay_up
 notify_btcpayserver
 

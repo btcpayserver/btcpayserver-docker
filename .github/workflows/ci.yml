@@ -53,6 +53,8 @@ jobs:
         run: tests/generate-secrets-test.sh
       - name: Test SELinux bind mount labels
         run: tests/selinux-labels-test.sh
+      - name: Test IPv4 options filter
+        run: tests/btcpay-ipv4-options-filter-test.sh
       - name: Test backup archives
         run: bash tests/backup-test.sh
       - name: Test restore modes
