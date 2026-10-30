@@ -267,10 +267,13 @@ Server attempts to restore the filter whenever it starts, including after a
 reboot. If that fails, startup continues with a warning; check
 `btcpay-ipv4-options-filter status`. On systemd hosts, enabling the filter also
 installs `btcpay-ipv4-options-filter.service`, which restores it at boot before
-Docker restarts the containers. Host services such as SSH can still accept
-connections for a few seconds before that. Anything that flushes the whole
-ruleset, such as restarting `nftables.service`, removes the filter until BTCPay
-Server starts again or you run `btcpay-ipv4-options-filter enable`.
+`network.target` and before Docker restarts the containers. Host services that
+start after `network.target`, such as `ssh.service`, wait for it.
+Socket-activated listeners open earlier and are not covered, for example
+`ssh.socket`, which recent Ubuntu releases use by default. Anything that flushes
+the whole ruleset, such as restarting `nftables.service`, removes the filter
+until BTCPay Server starts again or you run
+`btcpay-ipv4-options-filter enable`.
 
 To keep setup and updates from enabling the filter, set the variable through
 setup, which saves it. This does not turn off a filter that is already enabled;

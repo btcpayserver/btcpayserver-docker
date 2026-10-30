@@ -73,7 +73,7 @@ helper() {
 grep -q '^enabled ' "$flag" || fail "enable did not record the flag"
 grep -q 'ip hdrlength > 5 meta l4proto tcp counter drop' "$NFT_STATE" || fail "enable did not load the drop rule"
 grep -q 'hook prerouting priority -300' "$NFT_STATE" || fail "the filter does not run before connection tracking"
-{ grep -qx 'Before=docker.service' "$unit_file" && grep -qx 'WantedBy=docker.service' "$unit_file" && grep -q '&& btcpay_ipv4_options_filter_restore.$' "$unit_file"; } || fail "enable did not install a boot unit that restores the filter before Docker"
+{ grep -qx 'Before=network.target' "$unit_file" && grep -qx 'Before=docker.service' "$unit_file" && grep -qx 'WantedBy=docker.service' "$unit_file" && grep -q '&& btcpay_ipv4_options_filter_restore.$' "$unit_file"; } || fail "enable did not install a boot unit that restores the filter before Docker"
 grep -qx -- '--no-reload enable btcpay-ipv4-options-filter.service' "$test_dir/systemctl.calls" || fail "enable did not enable the boot unit"
 [ "$("$cli" status)" = "Enabled: yes, since $(cut -d ' ' -f 2 "$flag")"$'\nLoaded: yes, 3 packets dropped' ] || fail "status after enable"
 touch "$NFT_STATE.flushed"
