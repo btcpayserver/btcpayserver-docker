@@ -74,9 +74,11 @@ services:
     restart: unless-stopped
     image: btcpayserver/docker-gen:0.17.2-2
     container_name: tor-gen
+    security_opt:
+      - label=disable
     volumes:
       - "/var/run/docker.sock:/tmp/docker.sock:ro"
-      - "./torrc.tmpl:/etc/docker-gen/templates/torrc.tmpl:ro"
+      - "./torrc.tmpl:/etc/docker-gen/templates/torrc.tmpl:ro,z"
       - "tor_torrcdir:/usr/local/etc/tor"
     entrypoint: /usr/local/bin/docker-gen -notify-sighup tor -watch -wait 5s:30s /etc/docker-gen/templates/torrc.tmpl /usr/local/etc/tor/torrc-2
     links:

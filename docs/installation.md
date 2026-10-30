@@ -44,6 +44,11 @@ If `/etc/docker/daemon.json` does not exist, setup creates a JSON-file logging
 configuration limited to three 5 MB files. It does not replace an existing
 Docker daemon configuration.
 
+On hosts with SELinux enabled, such as Fedora CoreOS, the generated files,
+Nginx routes, secret files, and BTCPay host SSH key are relabeled
+`container_file_t` so containers can read them. Services that watch the Docker
+socket run with SELinux labeling disabled.
+
 The recommended `btcpay-host` fragment allows BTCPay Server to invoke a
 restricted set of host-management commands and changes host SSH configuration.
 Excluding the fragment prevents BTCPay Server from receiving the host key and
