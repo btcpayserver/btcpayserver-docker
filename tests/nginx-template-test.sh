@@ -16,6 +16,7 @@ https_backend="$test_id-https"
 local_backend="$test_id-local"
 nonlocal_backend="$test_id-nonlocal"
 nohttps_backend="$test_id-nohttps"
+noredirect_backend="$test_id-noredirect"
 generator="$test_id-generator"
 proxy="$test_id-proxy"
 fixture_label="$test_id-visible"
@@ -25,7 +26,7 @@ docker_gen_image="$("$repo_dir/tests/docker-fragment-image.sh" nginx-gen)"
 cleanup() {
     docker rm -f "$generator" "$proxy" "$explicit_backend" "$multi_backend" "$fallback_backend" \
         "$http_backend" "$https_backend" "$local_backend" "$nonlocal_backend" \
-        "$nohttps_backend" >/dev/null 2>&1 || true
+        "$nohttps_backend" "$noredirect_backend" >/dev/null 2>&1 || true
     docker network rm "$primary_network" "$secondary_network" "$isolated_network" >/dev/null 2>&1 || true
     rm -rf "$test_dir"
 }
@@ -63,7 +64,7 @@ server_block_match_count() {
     ' "$test_dir/conf/default.conf"
 }
 
-mkdir -p "$test_dir/certs" "$test_dir/conf" "$test_dir/htpasswd" "$test_dir/vhost" "$test_dir/html" "$test_dir/templates"
+mkdir -p "$test_dir/certs" "$test_dir/conf" "$test_dir/htpasswd" "$test_dir/html" "$test_dir/templates"
 # Use a unique proxy name so this test never collides with a real deployment's
 # fixed container name. Only the fallback lookup changes in the test template.
 sed "s/where \\$ \"Name\" \"nginx\"/where \\$ \"Name\" \"$proxy\"/" \
@@ -71,9 +72,6 @@ sed "s/where \\$ \"Name\" \"nginx\"/where \\$ \"Name\" \"$proxy\"/" \
 grep -Fq "where \$ \"Name\" \"$proxy\"" "$test_dir/templates/nginx.tmpl"
 printf 'allow all;\n' > "$test_dir/network_internal.conf"
 printf '' > "$test_dir/fastcgi.conf"
-printf 'add_header X-Vhost-Default true;\n' > "$test_dir/vhost/default"
-printf 'add_header X-Location-Default true;\n' > "$test_dir/vhost/default_location"
-printf 'add_header X-Vhost-Secure true;\n' > "$test_dir/vhost/secure.test"
 printf 'tester:test\n' > "$test_dir/htpasswd/secure.test"
 
 for cert_name in default secure; do
@@ -143,6 +141,13 @@ docker run -d --name "$nohttps_backend" --network "$primary_network" --expose 80
     -e HTTPS_METHOD=nohttps \
     "$nginx_image" >/dev/null
 
+docker run -d --name "$noredirect_backend" --network "$primary_network" --expose 80 \
+    -e VIRTUAL_HOST=noredirect.test \
+    -e VIRTUAL_HOST_NAME=noredirect_test \
+    -e CERT_NAME=secure \
+    -e HTTPS_METHOD=noredirect \
+    "$nginx_image" >/dev/null
+
 docker create --name "$generator" --network "$primary_network" \
     -e DEFAULT_HOST=none \
     -e REVERSEPROXY_HTTPS_PORT=8443 \
@@ -152,7 +157,6 @@ docker create --name "$generator" --network "$primary_network" \
     -v "$test_dir/certs:/etc/nginx/certs:ro" \
     -v "$test_dir/conf:/etc/nginx/conf.d" \
     -v "$test_dir/htpasswd:/etc/nginx/htpasswd:ro" \
-    -v "$test_dir/vhost:/etc/nginx/vhost.d" \
     -v "$test_dir/html:/usr/share/nginx/html" \
     --entrypoint /usr/local/bin/docker-gen \
     "$docker_gen_image" \
@@ -194,6 +198,7 @@ grep -Fq 'proxy_pass http://explicit_test;' "$test_dir/conf/default.conf"
 test "$(server_block_match_count explicit.test 'location ^~ /.well-known/acme-challenge/')" -eq 1
 test "$(server_block_match_count http.test 'location ^~ /.well-known/acme-challenge/')" -eq 0
 test "$(server_block_match_count multi.test 'location ^~ /.well-known/acme-challenge/')" -eq 0
+test "$(server_block_match_count noredirect.test 'location ^~ /.well-known/acme-challenge/')" -eq 1
 
 # Only actual .local hosts use the development certificate for HTTPS. An
 # uncertified non-local host, and a .local host opting out of HTTPS, reject SNI.
@@ -215,26 +220,23 @@ grep -Fq 'proxy_pass http://btcpay;' "$test_dir/conf/default.conf"
 grep -Fq 'include /etc/nginx/btcpay-routes/enabled-routes/*.conf;' "$test_dir/conf/default.conf"
 
 # A matching certificate renders the redirect and TLS servers with their
-# network, vhost, protocol, authentication, certificate, and HSTS settings.
+# network, protocol, authentication, certificate, and HSTS settings.
 grep -Fq 'server_name secure.test;' "$test_dir/conf/default.conf"
 grep -Fq 'location ^~ /.well-known/acme-challenge/' "$test_dir/conf/default.conf"
 grep -Fq 'if ($request_method !~ ^(GET|HEAD)$) {' "$test_dir/conf/default.conf"
 grep -Fq 'return 308 https://$host:8443$request_uri;' "$test_dir/conf/default.conf"
 grep -Fq 'return 301 https://$host:8443$request_uri;' "$test_dir/conf/default.conf"
 grep -Fq 'include /etc/nginx/network_internal.conf;' "$test_dir/conf/default.conf"
-grep -Fq 'include /etc/nginx/vhost.d/secure.test;' "$test_dir/conf/default.conf"
 grep -Fq 'uwsgi_pass uwsgi://secure_test;' "$test_dir/conf/default.conf"
 grep -Fq '/etc/nginx/htpasswd/secure.test;' "$test_dir/conf/default.conf"
 grep -Fq 'ssl_certificate /etc/nginx/certs/secure.crt;' "$test_dir/conf/default.conf"
 grep -Fq 'add_header Strict-Transport-Security "max-age=1234" always;' "$test_dir/conf/default.conf"
 
 # A .local host without its own certificate is proxied through the default
-# certificate with the same access, vhost, protocol, and root settings.
+# certificate with the same access, protocol, and root settings.
 grep -Fq 'server_name service.local;' "$test_dir/conf/default.conf"
 grep -Fq 'root   /srv/service;' "$test_dir/conf/default.conf"
 grep -Fq 'fastcgi_pass service_local;' "$test_dir/conf/default.conf"
-grep -Fq 'include /etc/nginx/vhost.d/default;' "$test_dir/conf/default.conf"
-grep -Fq 'include /etc/nginx/vhost.d/default_location;' "$test_dir/conf/default.conf"
 grep -Fq 'ssl_certificate /etc/nginx/certs/default.crt;' "$test_dir/conf/default.conf"
 grep -Fq 'server_name fallback.test;' "$test_dir/conf/default.conf"
 grep -Fq 'ssl_reject_handshake on;' "$test_dir/conf/default.conf"
@@ -243,7 +245,6 @@ docker run --rm \
     -v "$test_dir/certs:/etc/nginx/certs:ro" \
     -v "$test_dir/conf:/etc/nginx/conf.d:ro" \
     -v "$test_dir/htpasswd:/etc/nginx/htpasswd:ro" \
-    -v "$test_dir/vhost:/etc/nginx/vhost.d:ro" \
     -v "$test_dir/html:/usr/share/nginx/html:ro" \
     -v "$test_dir/fastcgi.conf:/etc/nginx/fastcgi.conf:ro" \
     -v "$test_dir/network_internal.conf:/etc/nginx/network_internal.conf:ro" \
