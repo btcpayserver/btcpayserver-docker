@@ -53,6 +53,7 @@ This script will:
 * Install Docker-Compose
 * Setup BTCPay settings
 * Make sure it starts at reboot via upstart or systemd
+* Enable the CVE-2026-98432 IPv4 options filter unless it was disabled (see docs/networking.md)
 * Add BTCPay utilities in /usr/local/bin
 * Start BTCPay
 
@@ -479,6 +480,8 @@ if $HAS_DOCKER && [[ ! -z "$OLD_BTCPAY_DOCKER_COMPOSE" ]] && [[ "$OLD_BTCPAY_DOC
         return 1
     fi
 fi
+
+btcpay_ipv4_options_filter_default
 
 if $START; then
     if ! btcpay_up; then

@@ -455,7 +455,20 @@ btcpay_archive_logs() (
 )
 
 btcpay_ipv4_options_filter_flag() {
-    printf '%s/.ipv4-options-filter-enabled\n' "$BTCPAY_BASE_DIRECTORY"
+    printf '%s/.ipv4-options-filter\n' "$BTCPAY_BASE_DIRECTORY"
+}
+
+# Prints enabled, disabled, or nothing if neither setup nor the operator chose yet.
+btcpay_ipv4_options_filter_state() {
+    local state=""
+    if [ -n "${BTCPAY_BASE_DIRECTORY:-}" ] && [ -f "$(btcpay_ipv4_options_filter_flag)" ]; then
+        read -r state _ < "$(btcpay_ipv4_options_filter_flag)" || true
+    fi
+    printf '%s\n' "$state"
+}
+
+btcpay_ipv4_options_filter_record() {
+    printf '%s %s\n' "$1" "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" > "$(btcpay_ipv4_options_filter_flag)"
 }
 
 btcpay_ipv4_options_filter_apply() {
@@ -477,8 +490,21 @@ EOF
 }
 
 btcpay_ipv4_options_filter_restore() {
-    [ -n "${BTCPAY_BASE_DIRECTORY:-}" ] && [ -e "$(btcpay_ipv4_options_filter_flag)" ] || return 0
+    [ "$(btcpay_ipv4_options_filter_state)" = enabled ] || return 0
     btcpay_ipv4_options_filter_apply
+}
+
+btcpay_ipv4_options_filter_default() {
+    [ -z "$(btcpay_ipv4_options_filter_state)" ] || return 0
+    if ! command -v nft > /dev/null 2>&1 && command -v apt-get > /dev/null 2>&1; then
+        { apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq nftables; } > /dev/null 2>&1 || true
+    fi
+    if ! command -v nft > /dev/null 2>&1; then
+        echo "Warning: nft is unavailable, so the CVE-2026-98432 IPv4 options filter was not enabled. Install nftables, then run btcpay-ipv4-options-filter enable." >&2
+        return 0
+    fi
+    btcpay_ipv4_options_filter_record enabled
+    echo "Enabled the IPv4 options filter as a CVE-2026-98432 stopgap. Run btcpay-ipv4-options-filter disable to turn it off."
 }
 
 btcpay_up() {

@@ -12,12 +12,13 @@ print_help() {
 Usage: btcpay-ipv4-options-filter <command>
 
 Drop inbound IPv4 packets that carry IP options, a stopgap for CVE-2026-98432
-until the host runs a patched kernel. While enabled, the filter is restored
-whenever BTCPay Server starts, including after a reboot.
+until the host runs a patched kernel. btcpay-setup.sh enables it unless it was
+disabled before. While enabled, the filter is restored whenever BTCPay Server
+starts, including after a reboot.
 
 Commands:
   enable   Load the filter and record that it is enabled.
-  disable  Remove the filter and the record.
+  disable  Remove the filter and record that it is disabled.
   status   Show whether the filter is enabled and loaded.
   help     Show this help.
 EOF
@@ -44,25 +45,37 @@ flag_file="$(btcpay_ipv4_options_filter_flag)"
 case "$command_name" in
     enable)
         btcpay_ipv4_options_filter_apply
-        date -u '+%Y-%m-%dT%H:%M:%SZ' > "$flag_file"
+        btcpay_ipv4_options_filter_record enabled
         echo "IPv4 options filter enabled."
         ;;
     disable)
+        if ! command -v nft > /dev/null 2>&1; then
+            echo "Error: nft is required to remove the filter." >&2
+            exit 1
+        fi
         if filter_loaded; then
             nft delete table ip btcpay_ipv4_options
         fi
-        rm -f -- "$flag_file"
+        btcpay_ipv4_options_filter_record disabled
         echo "IPv4 options filter disabled."
         ;;
     status)
+        state=""
+        since=""
         if [ -f "$flag_file" ]; then
-            echo "Enabled: yes, since $(cat "$flag_file")"
-        else
-            echo "Enabled: no"
+            read -r state since < "$flag_file" || true
         fi
+        case "$state" in
+            enabled) echo "Enabled: yes, since $since" ;;
+            disabled) echo "Enabled: no, disabled since $since" ;;
+            *) echo "Enabled: no" ;;
+        esac
+        dropped=""
         if filter_loaded; then
-            dropped="$(nft list chain ip btcpay_ipv4_options prerouting | sed -n 's/.*counter packets \([0-9]*\).*/\1/p')"
-            echo "Loaded: yes, ${dropped:-0} packets dropped"
+            dropped="$(nft list chain ip btcpay_ipv4_options prerouting 2> /dev/null | sed -n 's/.*ip hdrlength > 5 counter packets \([0-9]*\).*/\1/p' || true)"
+        fi
+        if [ -n "$dropped" ]; then
+            echo "Loaded: yes, $dropped packets dropped"
         else
             echo "Loaded: no"
         fi
