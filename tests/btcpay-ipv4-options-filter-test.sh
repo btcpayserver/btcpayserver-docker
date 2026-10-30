@@ -21,9 +21,11 @@ case "$*" in
         echo "table ip filter"
         [ ! -e "$NFT_STATE" ] || echo "table ip btcpay_ipv4_options"
         ;;
-    "list chain ip btcpay_ipv4_options prerouting")
-        [ -e "$NFT_STATE" ] || exit 1
+    "list table ip btcpay_ipv4_options")
+        [ -e "$NFT_STATE" ] && [ ! -e "$NFT_STATE.listfail" ] || exit 1
+        echo 'table ip btcpay_ipv4_options {'
         [ -e "$NFT_STATE.flushed" ] || echo 'ip hdrlength > 5 meta l4proto 6 counter packets 3 bytes 372 drop comment "CVE-2026-98432"'
+        echo '}'
         ;;
     "delete table ip btcpay_ipv4_options")
         rm "$NFT_STATE"
@@ -68,6 +70,9 @@ grep -q 'hook prerouting priority -300' "$NFT_STATE" || fail "the filter does no
 touch "$NFT_STATE.flushed"
 [ "$("$cli" status | tail -1)" = "Loaded: no" ] || fail "status reported a flushed table as loaded"
 rm "$NFT_STATE.flushed"
+touch "$NFT_STATE.listfail"
+! "$cli" status > /dev/null 2>&1 || fail "status hid an nft listing failure"
+rm "$NFT_STATE.listfail"
 
 # A reboot empties the kernel ruleset but keeps the flag.
 rm "$NFT_STATE"

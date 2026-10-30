@@ -79,7 +79,11 @@ case "$command_name" in
         esac
         dropped=""
         if filter_loaded; then
-            dropped="$(nft list chain ip btcpay_ipv4_options prerouting 2> /dev/null | sed -n 's/.* counter packets \([0-9]*\) .*drop comment "CVE-2026-98432".*/\1/p' || true)"
+            if ! listing="$(nft list table ip btcpay_ipv4_options 2> /dev/null)"; then
+                echo "Error: nft could not list the filter table." >&2
+                exit 1
+            fi
+            dropped="$(sed -n 's/.* counter packets \([0-9]*\) .*drop comment "CVE-2026-98432".*/\1/p' <<< "$listing")"
         fi
         if [ -n "$dropped" ]; then
             echo "Loaded: yes, $dropped packets dropped"
