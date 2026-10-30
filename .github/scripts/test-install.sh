@@ -71,3 +71,12 @@ gzip -cd "${archives[0]}" | grep -F archive-stderr-marker
 # Test that the installed scripts run without crashing.
 btcpay-up.sh
 btcpay-down.sh
+
+# As on boot, starting Docker with an empty ruleset must first restore the filter.
+nft delete table ip btcpay_ipv4_options
+systemctl daemon-reload
+systemctl restart docker
+systemctl is-active --quiet btcpay-ipv4-options-filter.service
+nft list table ip btcpay_ipv4_options > /dev/null
+[ "$(systemctl show -p ActiveEnterTimestampMonotonic --value btcpay-ipv4-options-filter.service)" -le \
+  "$(systemctl show -p ActiveEnterTimestampMonotonic --value docker.service)" ]

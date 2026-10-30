@@ -265,11 +265,12 @@ Docker and ufw rules unchanged. The choice is recorded in
 `$BTCPAY_BASE_DIRECTORY/.ipv4-options-filter`. While it says `enabled`, BTCPay
 Server attempts to restore the filter whenever it starts, including after a
 reboot. If that fails, startup continues with a warning; check
-`btcpay-ipv4-options-filter status`. After a reboot, Docker restarts the
-containers a few seconds before BTCPay Server restores the filter. Anything
-that flushes the whole ruleset, such as restarting `nftables.service`, removes
-the filter until BTCPay Server starts again or you run
-`btcpay-ipv4-options-filter enable`.
+`btcpay-ipv4-options-filter status`. On systemd hosts, enabling the filter also
+installs `btcpay-ipv4-options-filter.service`, which restores it at boot before
+Docker restarts the containers. Host services such as SSH can still accept
+connections for a few seconds before that. Anything that flushes the whole
+ruleset, such as restarting `nftables.service`, removes the filter until BTCPay
+Server starts again or you run `btcpay-ipv4-options-filter enable`.
 
 To keep setup and updates from enabling the filter, set the variable through
 setup, which saves it. This does not turn off a filter that is already enabled;

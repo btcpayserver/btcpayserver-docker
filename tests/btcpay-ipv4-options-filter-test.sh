@@ -36,18 +36,23 @@ case "$*" in
         ;;
 esac
 EOF
+cat > "$test_dir/bin/systemctl" <<EOF
+#!/bin/bash
+echo "\$*" >> "$test_dir/systemctl.calls"
+EOF
 cat > "$test_dir/apt/apt-get" <<EOF
 #!/bin/bash
 echo "\$*" >> "$test_dir/apt-get.calls"
 [ "\$1" != install ] || $(command -v cp) "$test_dir/bin/nft" "$test_dir/apt/nft"
 EOF
-chmod +x "$test_dir/bin/nft" "$test_dir/apt/apt-get"
+chmod +x "$test_dir/bin/nft" "$test_dir/bin/systemctl" "$test_dir/apt/apt-get"
 for tool in date mv; do
     ln -s "$(command -v "$tool")" "$test_dir/no-nft/$tool"
     ln -s "$(command -v "$tool")" "$test_dir/apt/$tool"
 done
 ln -s "$(command -v cat)" "$test_dir/apt/cat"
-export PATH="$test_dir/bin:$PATH" BTCPAY_BASE_DIRECTORY="$test_dir" NFT_STATE="$test_dir/ruleset"
+unit_file="$test_dir/btcpay-ipv4-options-filter.service"
+export PATH="$test_dir/bin:$PATH" BTCPAY_BASE_DIRECTORY="$test_dir" NFT_STATE="$test_dir/ruleset" BTCPAY_IPV4_OPTIONS_FILTER_UNIT="$unit_file"
 cli="$repo_dir/btcpay-ipv4-options-filter"
 flag="$test_dir/.ipv4-options-filter"
 
@@ -66,6 +71,8 @@ helper() {
 grep -q '^enabled ' "$flag" || fail "enable did not record the flag"
 grep -q 'ip hdrlength > 5 meta l4proto tcp counter drop' "$NFT_STATE" || fail "enable did not load the drop rule"
 grep -q 'hook prerouting priority -300' "$NFT_STATE" || fail "the filter does not run before connection tracking"
+{ grep -qx 'Before=docker.service' "$unit_file" && grep -qx 'WantedBy=docker.service' "$unit_file" && grep -q '&& btcpay_ipv4_options_filter_restore.$' "$unit_file"; } || fail "enable did not install a boot unit that restores the filter before Docker"
+grep -qx -- '--no-reload enable btcpay-ipv4-options-filter.service' "$test_dir/systemctl.calls" || fail "enable did not enable the boot unit"
 [ "$("$cli" status)" = "Enabled: yes, since $(cut -d ' ' -f 2 "$flag")"$'\nLoaded: yes, 3 packets dropped' ] || fail "status after enable"
 touch "$NFT_STATE.flushed"
 [ "$("$cli" status | tail -1)" = "Loaded: no" ] || fail "status reported a flushed table as loaded"
@@ -81,6 +88,7 @@ helper btcpay_ipv4_options_filter_restore
 
 "$cli" disable > /dev/null
 { grep -q '^disabled ' "$flag" && [ ! -e "$NFT_STATE" ]; } || fail "disable did not unload and record the filter"
+{ [ ! -e "$unit_file" ] && grep -qx -- '--no-reload disable btcpay-ipv4-options-filter.service' "$test_dir/systemctl.calls"; } || fail "disable left the boot unit installed"
 [[ "$("$cli" status)" == "Enabled: no, disabled since "* ]] || fail "status after disable"
 calls="$(wc -l < "$NFT_STATE.calls")"
 helper btcpay_ipv4_options_filter_restore

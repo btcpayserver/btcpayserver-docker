@@ -470,10 +470,54 @@ btcpay_ipv4_options_filter_state() {
     esac
 }
 
+btcpay_ipv4_options_filter_unit() {
+    printf '%s\n' "${BTCPAY_IPV4_OPTIONS_FILTER_UNIT:-/etc/systemd/system/btcpay-ipv4-options-filter.service}"
+}
+
+# Restores the filter at boot before Docker restarts the containers. Ordering only: a failure cannot hold Docker back.
+btcpay_ipv4_options_filter_install_unit() {
+    local unit
+    command -v systemctl > /dev/null 2>&1 || return 0
+    unit="$(btcpay_ipv4_options_filter_unit)"
+    cat > "$unit" <<'EOF' || { echo "Warning: Could not write $unit, so the IPv4 options filter is restored only when BTCPay Server starts." >&2; return 0; }
+[Unit]
+Description=BTCPay Server IPv4 options filter for CVE-2026-98432
+Before=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+TimeoutStartSec=30
+ExecStart=/bin/bash -c '. "/etc/profile.d/btcpay-env.sh" && cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker" && . helpers.sh && btcpay_ipv4_options_filter_restore'
+
+[Install]
+WantedBy=docker.service
+EOF
+    if ! systemctl --no-reload enable "$(basename "$unit")" > /dev/null 2>&1; then
+        echo "Warning: Could not enable $unit, so the IPv4 options filter is restored only when BTCPay Server starts." >&2
+    fi
+}
+
+btcpay_ipv4_options_filter_remove_unit() {
+    local unit
+    unit="$(btcpay_ipv4_options_filter_unit)"
+    command -v systemctl > /dev/null 2>&1 && [ -e "$unit" ] || return 0
+    systemctl --no-reload disable "$(basename "$unit")" > /dev/null 2>&1 || true
+    rm -f -- "$unit"
+}
+
+# Records the choice and keeps the boot unit in step with it.
 btcpay_ipv4_options_filter_record() {
     local state_file
     state_file="$(btcpay_ipv4_options_filter_flag)"
-    printf '%s %s\n' "$1" "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" > "$state_file.tmp" && mv -f -- "$state_file.tmp" "$state_file"
+    if ! { printf '%s %s\n' "$1" "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" > "$state_file.tmp" && mv -f -- "$state_file.tmp" "$state_file"; }; then
+        return 1
+    fi
+    if [ "$1" = enabled ]; then
+        btcpay_ipv4_options_filter_install_unit
+    else
+        btcpay_ipv4_options_filter_remove_unit
+    fi
 }
 
 btcpay_ipv4_options_filter_apply() {
