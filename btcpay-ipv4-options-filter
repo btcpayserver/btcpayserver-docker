@@ -57,9 +57,10 @@ case "$command_name" in
         echo "IPv4 options filter enabled."
         ;;
     disable)
-        if filter_loaded; then
-            nft delete table ip btcpay_ipv4_options
-        elif ! command -v nft > /dev/null 2>&1 && [ "$(btcpay_ipv4_options_filter_state)" = enabled ]; then
+        if command -v nft > /dev/null 2>&1; then
+            # Declaring the table first makes the delete succeed whether or not it is loaded.
+            printf 'table ip btcpay_ipv4_options\ndelete table ip btcpay_ipv4_options\n' | nft -f -
+        elif [ "$(btcpay_ipv4_options_filter_state)" = enabled ]; then
             echo "Error: nft is required to remove the filter." >&2
             exit 1
         fi

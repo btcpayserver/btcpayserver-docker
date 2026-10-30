@@ -13,8 +13,13 @@ cat > "$test_dir/bin/nft" <<'EOF'
 case "$*" in
     "-f -")
         [ ! -e "$NFT_STATE.fail" ] || exit 1
-        cat > "$NFT_STATE"
-        echo apply >> "$NFT_STATE.calls"
+        transaction="$(cat)"
+        if [[ "$transaction" == *"chain prerouting"* ]]; then
+            printf '%s\n' "$transaction" > "$NFT_STATE"
+            echo apply >> "$NFT_STATE.calls"
+        else
+            rm -f "$NFT_STATE"
+        fi
         ;;
     "list tables ip")
         [ ! -e "$NFT_STATE.noinspect" ] || exit 1
@@ -26,9 +31,6 @@ case "$*" in
         echo 'table ip btcpay_ipv4_options {'
         [ -e "$NFT_STATE.flushed" ] || echo 'ip hdrlength > 5 meta l4proto 6 counter packets 3 bytes 372 drop comment "CVE-2026-98432"'
         echo '}'
-        ;;
-    "delete table ip btcpay_ipv4_options")
-        rm "$NFT_STATE"
         ;;
     *)
         echo "unexpected nft $*" >&2
@@ -103,9 +105,12 @@ helper btcpay_ipv4_options_filter_default > /dev/null
 { grep -q '^enabled ' "$flag" && [ -e "$NFT_STATE" ]; } || fail "setup did not enable and load the filter by default"
 
 touch "$NFT_STATE.noinspect"
-! "$cli" disable > /dev/null 2>&1 || fail "disable succeeded although nft could not list tables"
-grep -q '^enabled ' "$flag" || fail "a failed disable changed the flag"
+! "$cli" status > /dev/null 2>&1 || fail "status succeeded although nft could not list tables"
 rm "$NFT_STATE.noinspect"
+touch "$NFT_STATE.fail"
+! "$cli" disable > /dev/null 2>&1 || fail "disable succeeded although nft could not remove the table"
+{ grep -q '^enabled ' "$flag" && [ -e "$NFT_STATE" ]; } || fail "a failed disable changed the flag"
+rm "$NFT_STATE.fail"
 
 echo damaged > "$flag"
 rm "$NFT_STATE"
