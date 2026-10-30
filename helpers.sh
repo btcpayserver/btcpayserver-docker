@@ -474,7 +474,8 @@ btcpay_ipv4_options_filter_unit() {
     printf '%s\n' "${BTCPAY_IPV4_OPTIONS_FILTER_UNIT:-/etc/systemd/system/btcpay-ipv4-options-filter.service}"
 }
 
-# Restores the filter at boot before Docker restarts the containers. Ordering only: a failure cannot hold Docker back.
+# Restores the filter at boot before host services that wait for the network and before Docker restarts the containers.
+# Ordering only: a failure cannot hold them back.
 btcpay_ipv4_options_filter_install_unit() {
     local unit
     command -v systemctl > /dev/null 2>&1 || return 0
@@ -482,6 +483,7 @@ btcpay_ipv4_options_filter_install_unit() {
     cat > "$unit" <<'EOF' || { echo "Warning: Could not write $unit, so the IPv4 options filter is restored only when BTCPay Server starts." >&2; return 0; }
 [Unit]
 Description=BTCPay Server IPv4 options filter for CVE-2026-98432
+Before=network.target
 Before=docker.service
 
 [Service]
