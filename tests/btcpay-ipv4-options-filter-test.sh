@@ -40,6 +40,7 @@ EOF
 chmod +x "$test_dir/bin/nft" "$test_dir/apt/apt-get"
 ln -s "$(command -v date)" "$test_dir/no-nft/date"
 ln -s "$(command -v date)" "$test_dir/apt/date"
+ln -s "$(command -v cat)" "$test_dir/apt/cat"
 export PATH="$test_dir/bin:$PATH" BTCPAY_BASE_DIRECTORY="$test_dir" NFT_STATE="$test_dir/ruleset"
 cli="$repo_dir/btcpay-ipv4-options-filter"
 flag="$test_dir/.ipv4-options-filter"
@@ -78,8 +79,11 @@ helper btcpay_ipv4_options_filter_default > /dev/null
 { [ "$(wc -l < "$NFT_STATE.calls")" -eq "$calls" ] && grep -q '^disabled ' "$flag"; } || fail "a disabled filter came back"
 
 rm "$flag"
+BTCPAY_IPV4_OPTIONS_FILTER=false helper btcpay_ipv4_options_filter_default
+[ ! -e "$flag" ] || fail "setup enabled the filter although BTCPAY_IPV4_OPTIONS_FILTER=false"
+
 helper btcpay_ipv4_options_filter_default > /dev/null
-grep -q '^enabled ' "$flag" || fail "setup did not enable the filter by default"
+{ grep -q '^enabled ' "$flag" && [ -e "$NFT_STATE" ]; } || fail "setup did not enable and load the filter by default"
 
 rm "$flag"
 PATH="$test_dir/no-nft" helper btcpay_ipv4_options_filter_default 2> /dev/null
@@ -95,5 +99,7 @@ rm "$flag"
 touch "$NFT_STATE.fail"
 ! "$cli" enable > /dev/null 2>&1 || fail "enable succeeded although nft failed"
 [ ! -e "$flag" ] || fail "enable recorded the flag although nft failed"
+helper btcpay_ipv4_options_filter_default 2> /dev/null
+[ ! -e "$flag" ] || fail "setup recorded the flag although nft failed"
 
 printf 'IPv4 options filter tests passed\n'

@@ -14,8 +14,10 @@ The update process:
 3. Archives the currently retrievable Compose logs.
 4. Regenerates Compose, routes, and missing secrets.
 5. Reinstalls command wrappers and rewrites the container environment file.
-6. Recreates the stack.
-7. Removes unused images when `BTCPAY_UPDATE_CLEAN=true`.
+6. Enables the [IPv4 options filter](./networking.md#ipv4-options-filter)
+   unless it was disabled before or `BTCPAY_IPV4_OPTIONS_FILTER=false`.
+7. Recreates the stack.
+8. Removes unused images when `BTCPAY_UPDATE_CLEAN=true`.
 
 Back up the deployment and review release notes before significant upgrades.
 Do not keep manual changes in `Generated/docker-compose.generated.yml`; updates

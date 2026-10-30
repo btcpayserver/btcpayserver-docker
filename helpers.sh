@@ -18,6 +18,7 @@ BTCPAY_ENV_VARIABLES=(
     NOREVERSEPROXY_HTTP_PORT
     BTCPAY_IMAGE
     BTCPAY_UPDATE_CLEAN
+    BTCPAY_IPV4_OPTIONS_FILTER
     ACME_CA_URI
     NBITCOIN_NETWORK
     LETSENCRYPT_EMAIL
@@ -495,12 +496,13 @@ btcpay_ipv4_options_filter_restore() {
 }
 
 btcpay_ipv4_options_filter_default() {
+    [ "${BTCPAY_IPV4_OPTIONS_FILTER:-true}" != false ] || return 0
     [ -z "$(btcpay_ipv4_options_filter_state)" ] || return 0
     if ! command -v nft > /dev/null 2>&1 && command -v apt-get > /dev/null 2>&1; then
         { apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get install -y -qq nftables; } > /dev/null 2>&1 || true
     fi
-    if ! command -v nft > /dev/null 2>&1; then
-        echo "Warning: nft is unavailable, so the CVE-2026-98432 IPv4 options filter was not enabled. Install nftables, then run btcpay-ipv4-options-filter enable." >&2
+    if ! btcpay_ipv4_options_filter_apply; then
+        echo "Warning: The CVE-2026-98432 IPv4 options filter was not enabled. Set BTCPAY_IPV4_OPTIONS_FILTER=false to skip it." >&2
         return 0
     fi
     btcpay_ipv4_options_filter_record enabled

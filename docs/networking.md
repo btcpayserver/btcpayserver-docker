@@ -246,9 +246,12 @@ container images and `btcpay-update.sh` do not change the host kernel, and
 disabling MPTCP does not help because MPTCP connections use the same code.
 
 Until your distribution ships a patched kernel, drop inbound IPv4 packets that
-carry IP options. `btcpay-setup.sh` enables this filter unless it was disabled
-before, installing the `nftables` package with `apt-get` when `nft` is missing.
-`btcpay-update.sh` does not change it. To enable it without running setup:
+carry IP options. `btcpay-setup.sh` and `btcpay-update.sh` enable this filter
+unless it was disabled before or `BTCPAY_IPV4_OPTIONS_FILTER` is `false`. When
+`nft` is missing they install the `nftables` package with `apt-get`. Other
+package managers are not supported: install `nftables` yourself. Until then,
+setup and updates print a warning and continue without the filter. To enable
+it by hand:
 
 ```bash
 btcpay-ipv4-options-filter enable
@@ -260,7 +263,18 @@ flushes the ruleset, including Docker's rules. Installing the package does not
 start it. The filter uses its own `ip btcpay_ipv4_options` table and leaves
 Docker and ufw rules unchanged. The choice is recorded in
 `$BTCPAY_BASE_DIRECTORY/.ipv4-options-filter`. While it says `enabled`, BTCPay
-Server restores the filter whenever it starts, including after a reboot.
+Server attempts to restore the filter whenever it starts, including after a
+reboot. If that fails, startup continues with a warning; check
+`btcpay-ipv4-options-filter status`.
+
+To keep setup and updates from enabling the filter, set the variable through
+setup, which saves it:
+
+```bash
+cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker"
+export BTCPAY_IPV4_OPTIONS_FILTER="false"
+. ./btcpay-setup.sh -i
+```
 
 Legitimate traffic rarely carries IP options. IGMP messages and diagnostics
 such as `ping -R` do, so multicast group membership and record-route pings to

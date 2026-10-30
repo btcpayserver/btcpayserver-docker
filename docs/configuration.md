@@ -52,6 +52,7 @@ See [Networking](./networking.md) before changing proxy or certificate settings.
 | `BTCPAY_IMAGE` | Override the BTCPay Server image | Release selected by fragments |
 | `LIGHTNING_ALIAS` | Public Lightning node alias | Implementation default |
 | `BTCPAY_UPDATE_CLEAN` | Remove unused images after updates | `true` |
+| `BTCPAY_IPV4_OPTIONS_FILTER` | Let setup and updates enable the [IPv4 options filter](./networking.md#ipv4-options-filter) | `true` |
 | `COMPOSE_HTTP_TIMEOUT` | Compose operation timeout in seconds | `180` |
 
 Setup manages `COMPOSE_HTTP_TIMEOUT` as 180 seconds in the saved profile. To
