@@ -104,6 +104,4 @@ database changes bypass application validation and should be avoided.
 
 ## Administrative Utility
 
-`btcpay-admin.sh` provides selected account and server-policy operations, but it
-currently targets the mainnet database name. Review the script before using it
-on another network.
+`btcpay-admin.sh` provides selected account and server-policy operations.
