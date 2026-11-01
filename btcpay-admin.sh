@@ -4,7 +4,7 @@ query()
     local statement="$1"
     shift
     printf '%s\n' "$statement" | docker exec -i "$(docker ps -a -q -f "name=postgres_1")" \
-        psql -U postgres -d btcpayservermainnet \
+        psql -U postgres -d "btcpayserver${NBITCOIN_NETWORK:-mainnet}" \
         --set=ON_ERROR_STOP=1 "$@" -f -
 }
 
