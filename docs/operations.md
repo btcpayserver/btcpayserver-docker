@@ -104,8 +104,4 @@ database changes bypass application validation and should be avoided.
 
 ## Administrative Utility
 
-`btcpay-admin.sh` provides selected account and server-policy operations. It
-selects `btcpayserver${NBITCOIN_NETWORK:-mainnet}` using the exported deployment
-network; an unset or empty `NBITCOIN_NETWORK` retains the mainnet default. Use the
-saved deployment profile so the selected network matches the running instance.
-Custom database connection strings are not detected by this utility.
+`btcpay-admin.sh` provides selected account and server-policy operations.
