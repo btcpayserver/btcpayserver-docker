@@ -33,6 +33,25 @@ systemctl reload btcpayserver
 - `btcpay-clean.sh` removes unused Docker images except generator-labeled
   images. It is not limited to BTCPay Server images.
 
+### Web Maintenance Commands
+
+Updates, restarts, and domain changes requested through `btcpay-host` without a
+terminal continue on the host if the SSH connection from the BTCPay Server
+container drops. Output streams back while the connection is available; a
+connected caller receives the command's exit status. Disconnecting does not
+cancel the operation.
+
+The latest output for each command is retained in
+`$BTCPAY_BASE_DIRECTORY/btcpay-host-{update,restart,changedomain}.log` with mode
+`0600`. Each new invocation of the same command replaces its previous log.
+Commands are not serialized: do not start another maintenance operation until
+the previous one finishes, even after losing the connection.
+
+Interactive calls and direct calls to `btcpay-restart.sh` or `changedomain.sh`
+are unchanged. Non-terminal `btcpay-update.sh` calls retain their existing
+fallback protection, including the first update started by an older
+`btcpay-host`; those runs use `$BTCPAY_BASE_DIRECTORY/btcpay-update.log`.
+
 ## Node Commands
 
 Switch between supported Bitcoin node selections with:

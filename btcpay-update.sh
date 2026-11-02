@@ -14,7 +14,9 @@ if [[ "$1" != "--skip-git-pull" ]]; then
     return
 fi
 
-# Not in a terminal (e.g. the web UI): detach, so restarting BTCPay can't kill the update midway
+# Compatibility for an already-running btcpay-host from before host-side
+# detachment: this new copy is executed after the pull, even with an old caller.
+# Direct non-terminal updates keep the same protection introduced in #1221.
 if [ ! -t 1 ] && [ -z "$BTCPAY_UPDATE_DETACHED" ]; then
     log="$BTCPAY_BASE_DIRECTORY/btcpay-update.log"
     install -m 600 /dev/null "$log"
