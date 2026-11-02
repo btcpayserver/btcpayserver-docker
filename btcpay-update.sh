@@ -14,14 +14,13 @@ if [[ "$1" != "--skip-git-pull" ]]; then
     return
 fi
 
-. helpers.sh
-
-# Compatibility for an already-running btcpay-host from before host-side
-# detachment: this new copy is executed after the pull, even with an old caller.
-# Direct non-terminal updates keep the same protection introduced in #1221.
+# Not in a terminal (e.g. the web UI): detach, so restarting BTCPay can't kill the update midway
 if [ ! -t 1 ] && [ -z "$BTCPAY_UPDATE_DETACHED" ]; then
-    BTCPAY_UPDATE_DETACHED=1 btcpay_run_detached \
-        "$BTCPAY_BASE_DIRECTORY/btcpay-update.log" ./btcpay-update.sh --skip-git-pull
+    log="$BTCPAY_BASE_DIRECTORY/btcpay-update.log"
+    install -m 600 /dev/null "$log"
+    BTCPAY_UPDATE_DETACHED=1 setsid ./btcpay-update.sh --skip-git-pull > "$log" 2>&1 < /dev/null &
+    tail -n +1 -f --pid=$! "$log" || true
+    wait $!
     exit
 fi
 
@@ -32,6 +31,8 @@ if ! [ -f "/etc/docker/daemon.json" ] && [ -w "/etc/docker" ]; then
 }" > /etc/docker/daemon.json
     echo "Setting limited log files in /etc/docker/daemon.json"
 fi
+
+. helpers.sh
 
 if ! command -v jq > /dev/null 2>&1; then
     echo "jq is required, installing it now..."
