@@ -32,6 +32,20 @@ BTCPAY_ENV_VARIABLES=(
     CLOUDFLARE_TUNNEL_TOKEN
 )
 
+# Run a command independently of the caller's SSH session and stream its log.
+# Callers decide when detachment is needed and provide any recursion guards.
+btcpay_run_detached() {
+    local log="$1"
+    shift
+    local pid status=0
+    install -m 600 /dev/null "$log" || return
+    setsid "$@" > "$log" 2>&1 < /dev/null &
+    pid=$!
+    tail -n +1 -f --pid="$pid" "$log" || true
+    wait "$pid" || status=$?
+    return "$status"
+}
+
 install_tooling() {
     scripts=( \
                 "btcpayserver_bitcoind" "bitcoin-cli.sh" "Command line for your Bitcoin instance" \

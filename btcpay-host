@@ -19,7 +19,7 @@ json_null() {
     printf 'null\n'
 }
 
-run_detached() {
+run_maintenance() {
     if [ -t 1 ]; then
         "$@"
         return
@@ -27,15 +27,11 @@ run_detached() {
 
     # The SSH client lives in a container these commands can restart. Only the
     # log follower should depend on that connection, not the maintenance work.
-    local log="$BTCPAY_BASE_DIRECTORY/btcpay-host-$command.log"
-    local pid status=0
-    install -m 600 /dev/null "$log"
+    # shellcheck source=helpers.sh
+    . "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker/helpers.sh"
     # Keep the update script's first-update fallback from detaching a second time.
-    BTCPAY_UPDATE_DETACHED=1 setsid "$@" > "$log" 2>&1 < /dev/null &
-    pid=$!
-    tail -n +1 -f --pid="$pid" "$log" || true
-    wait "$pid" || status=$?
-    return "$status"
+    BTCPAY_UPDATE_DETACHED=1 btcpay_run_detached \
+        "$BTCPAY_BASE_DIRECTORY/btcpay-host-$command.log" "$@"
 }
 
 print_help() {
@@ -108,15 +104,15 @@ case "$command" in
             echo "The domain must be a valid domain name without a protocol." >&2
             exit 1
         fi
-        run_detached changedomain.sh "${2:-}"
+        run_maintenance changedomain.sh "${2:-}"
         ;;
     update)
-        run_detached btcpay-update.sh
+        run_maintenance btcpay-update.sh
         ;;
     clean)
         btcpay-clean.sh
         ;;
     restart)
-        run_detached btcpay-restart.sh
+        run_maintenance btcpay-restart.sh
         ;;
 esac

@@ -16,6 +16,7 @@ cleanup() {
 trap cleanup EXIT
 
 mkdir -p "$test_dir/bin" "$test_dir/deployment/btcpayserver-docker"
+cp "$repo_dir/helpers.sh" "$test_dir/deployment/btcpayserver-docker/helpers.sh"
 profile="$test_dir/profile"
 printf 'export BTCPAY_BASE_DIRECTORY=%q\n' "$test_dir/deployment" > "$profile"
 # Use the real wrapper without reading or modifying the machine's deployment.
@@ -172,6 +173,19 @@ btcpay-host clean < /dev/null > "$TEST_CASE/output" 2> "$TEST_CASE/error"
 [ "$(cat "$TEST_CASE/update-detached")" = unset ]
 [ ! -f "$TEST_CASE/setsid-calls" ]
 
+# The shared helper must fail before starting work if it cannot create the log,
+# including when called in a condition where Bash disables implicit errexit.
+new_case log-failure
+if (
+    # shellcheck source=helpers.sh
+    . "$repo_dir/helpers.sh"
+    btcpay_run_detached "$TEST_CASE/missing/log" worker
+) > "$TEST_CASE/output" 2> "$TEST_CASE/error"; then
+    echo 'Detached work accepted an unwritable log path' >&2
+    exit 1
+fi
+[ ! -f "$TEST_CASE/pid" ]
+
 # Exercise the actual update bootstrap and detachment code, replacing only the
 # work after it with our stub so the test cannot touch Docker or host tooling.
 update="$test_dir/deployment/btcpayserver-docker/btcpay-update.sh"
@@ -226,7 +240,7 @@ ln -s "$domain_script" "$test_dir/bin/changedomain.sh"
     printf 'export REVERSEPROXY_DEFAULT_HOST=old.example.com\n'
 } >> "$profile"
 printf 'BTCPAY_HOST=old.example.com\n' > "$test_dir/deployment/.env"
-cat > "$test_dir/deployment/btcpayserver-docker/helpers.sh" <<'EOF'
+cat >> "$test_dir/deployment/btcpayserver-docker/helpers.sh" <<'EOF'
 btcpay_update_docker_env() {
     printf 'BTCPAY_HOST=%s\n' "$BTCPAY_HOST" > "$BTCPAY_ENV_FILE"
 }
