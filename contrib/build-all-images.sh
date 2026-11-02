@@ -455,18 +455,18 @@ cd - && cd ..
 
 
 # Build lightning-terminal
-# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.17.8/Dockerfile
+# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.17.10/Dockerfile
 DOCKERFILE="Dockerfile"
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE=""
-# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.17.8/Dockerfile
+# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.17.10/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
 if [[ "$DOCKERFILE" ]]; then
-	echo "Building lightninglabs/lightning-terminal:v0.17.8"
+	echo "Building lightninglabs/lightning-terminal:v0.17.10"
 	git clone https://github.com/lightninglabs/lightning-terminal lightning-terminal
 	cd lightning-terminal
-	git checkout v0.17.8
+	git checkout v0.17.10
 	cd "$(dirname $DOCKERFILE)"
-	docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.17.8" .
+	docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.17.10" .
 	cd - && cd ..
 fi
 
