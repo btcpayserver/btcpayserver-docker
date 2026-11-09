@@ -14,8 +14,8 @@ services:
             - "80"
             - "443"
         ports:
-            - "53:53/tcp"
-            - "53:53/udp"
+            - "${PIHOLE_DNS_BIND:-53}:53/tcp"
+            - "${PIHOLE_DNS_BIND:-53}:53/udp"
         volumes:
             - "./pihole/resolv.conf:/etc/resolv.conf:ro,z"
             - "pihole_datadir:/etc/pihole"
