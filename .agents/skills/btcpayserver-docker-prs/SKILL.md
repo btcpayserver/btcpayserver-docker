@@ -30,7 +30,8 @@ For a user-facing command or workflow:
 4. Explain the practical use case, not only the command syntax.
 5. Keep examples focused; do not turn the PR description into complete product documentation.
 
-Finish with a concise `Implementation` section when technical context helps reviewers. Describe important behavior, persistence, migration, security boundaries, and rollback semantics without listing every changed file.
+Finish with an optional concise `Implementation` section when technical context helps reviewers. Describe important behavior, persistence, migration, security boundaries, and rollback semantics without listing every changed file.
+If the PR only bump dependencies, this section should be skipped.
 
 Use this default structure, omitting sections that do not apply:
 
