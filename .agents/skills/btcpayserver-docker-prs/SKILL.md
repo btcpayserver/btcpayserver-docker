@@ -21,6 +21,7 @@ Use this workflow for every pull request in this repository.
 Lead with why the change exists. Explain the operational, security, compatibility, or user problem before describing implementation details. Include links to advisories, issues, prior commits, or documentation when they materially explain the motivation.
 
 Do not add a `Validation`, `Testing`, `Tests`, or equivalent section to the PR description. Checks should still be run and reported to the user outside the PR body when useful.
+Do not mention what didn't changed.
 
 For a user-facing command or workflow:
 
