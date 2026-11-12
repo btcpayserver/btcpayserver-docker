@@ -455,18 +455,18 @@ cd - && cd ..
 
 
 # Build lightning-terminal
-# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.17.10/Dockerfile
+# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.17.11/Dockerfile
 DOCKERFILE="Dockerfile"
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE=""
-# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.17.10/Dockerfile
+# https://raw.githubusercontent.com/lightninglabs/lightning-terminal/v0.17.11/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
 if [[ "$DOCKERFILE" ]]; then
-	echo "Building lightninglabs/lightning-terminal:v0.17.10"
+	echo "Building lightninglabs/lightning-terminal:v0.17.11"
 	git clone https://github.com/lightninglabs/lightning-terminal lightning-terminal
 	cd lightning-terminal
-	git checkout v0.17.10
+	git checkout v0.17.11
 	cd "$(dirname $DOCKERFILE)"
-	docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.17.10" .
+	docker build -f "$DOCKERFILE" -t "lightninglabs/lightning-terminal:v0.17.11" .
 	cd - && cd ..
 fi
 
@@ -552,18 +552,18 @@ cd - && cd ..
 
 
 # Build pihole
-# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/2026.10.1/src/Dockerfile
+# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/2026.11.0/src/Dockerfile
 DOCKERFILE="src/Dockerfile"
-# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/2026.10.1/src/Dockerfile
+# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/2026.11.0/src/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="src/Dockerfile"
-# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/2026.10.1/src/Dockerfile
+# https://raw.githubusercontent.com/pi-hole/docker-pi-hole/2026.11.0/src/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="src/Dockerfile"
-echo "Building pihole/pihole:2026.10.1"
+echo "Building pihole/pihole:2026.11.0"
 git clone https://github.com/pi-hole/docker-pi-hole pihole
 cd pihole
-git checkout 2026.10.1
+git checkout 2026.11.0
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "pihole/pihole:2026.10.1" .
+docker build -f "$DOCKERFILE" -t "pihole/pihole:2026.11.0" .
 cd - && cd ..
 
 
@@ -648,18 +648,18 @@ cd - && cd ..
 
 
 # Build tor
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.9.15/Tor/0.4.9.15/linuxamd64.Dockerfile
-DOCKERFILE="Tor/0.4.9.15/linuxamd64.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.9.15/Tor/0.4.9.15/linuxarm32v7.Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Tor/0.4.9.15/linuxarm32v7.Dockerfile"
-# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.9.15/Tor/0.4.9.15/linuxarm64v8.Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Tor/0.4.9.15/linuxarm64v8.Dockerfile"
-echo "Building btcpayserver/tor:0.4.9.15"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.9.16/Tor/0.4.9.16/linuxamd64.Dockerfile
+DOCKERFILE="Tor/0.4.9.16/linuxamd64.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.9.16/Tor/0.4.9.16/linuxarm32v7.Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Tor/0.4.9.16/linuxarm32v7.Dockerfile"
+# https://raw.githubusercontent.com/btcpayserver/dockerfile-deps/Tor/0.4.9.16/Tor/0.4.9.16/linuxarm64v8.Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Tor/0.4.9.16/linuxarm64v8.Dockerfile"
+echo "Building btcpayserver/tor:0.4.9.16"
 git clone https://github.com/btcpayserver/dockerfile-deps tor
 cd tor
-git checkout Tor/0.4.9.15
+git checkout Tor/0.4.9.16
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "btcpayserver/tor:0.4.9.15" .
+docker build -f "$DOCKERFILE" -t "btcpayserver/tor:0.4.9.16" .
 cd - && cd ..
 
 
@@ -745,18 +745,18 @@ fi
 
 
 # Build phoenixd
-# https://raw.githubusercontent.com/ACINQ/phoenixd/v0.9.1/.docker/Dockerfile
+# https://raw.githubusercontent.com/ACINQ/phoenixd/v0.9.3/.docker/Dockerfile
 DOCKERFILE=".docker/Dockerfile"
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE=""
-# https://raw.githubusercontent.com/ACINQ/phoenixd/v0.9.1/.docker/Dockerfile
+# https://raw.githubusercontent.com/ACINQ/phoenixd/v0.9.3/.docker/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE=".docker/Dockerfile"
 if [[ "$DOCKERFILE" ]]; then
-	echo "Building acinq/phoenixd:0.9.1"
+	echo "Building acinq/phoenixd:0.9.3"
 	git clone https://github.com/ACINQ/phoenixd phoenixd
 	cd phoenixd
-	git checkout v0.9.1
+	git checkout v0.9.3
 	cd "$(dirname $DOCKERFILE)"
-	docker build -f "$DOCKERFILE" -t "acinq/phoenixd:0.9.1" .
+	docker build -f "$DOCKERFILE" -t "acinq/phoenixd:0.9.3" .
 	cd - && cd ..
 fi
 
