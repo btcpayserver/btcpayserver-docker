@@ -439,19 +439,20 @@ fi
 
 
 # Build podcasting20-helipad
-# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.10/umbrel/Dockerfile
-DOCKERFILE="umbrel/Dockerfile"
-# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.10/umbrel/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="umbrel/Dockerfile"
-# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.1.10/umbrel/Dockerfile
-[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="umbrel/Dockerfile"
-echo "Building podcastindexorg/podcasting20-helipad:v0.1.10"
-git clone https://github.com/Podcastindex-org/helipad podcasting20-helipad
-cd podcasting20-helipad
-git checkout v0.1.10
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "podcastindexorg/podcasting20-helipad:v0.1.10" .
-cd - && cd ..
+# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.2.2/Dockerfile
+DOCKERFILE="Dockerfile"
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE=""
+# https://raw.githubusercontent.com/Podcastindex-org/helipad/v0.2.2/Dockerfile
+[[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
+if [[ "$DOCKERFILE" ]]; then
+	echo "Building podcastindexorg/podcasting20-helipad:0.2.2"
+	git clone https://github.com/Podcastindex-org/helipad podcasting20-helipad
+	cd podcasting20-helipad
+	git checkout v0.2.2
+	cd "$(dirname $DOCKERFILE)"
+	docker build -f "$DOCKERFILE" -t "podcastindexorg/podcasting20-helipad:0.2.2" .
+	cd - && cd ..
+fi
 
 
 # Build lightning-terminal

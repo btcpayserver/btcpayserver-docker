@@ -617,11 +617,10 @@ namespace DockerFileBuildHelper
                         dockerInfo.DockerBuildArguments = "--build-arg public_url=/lit/";
                     break;
                 case "podcastindexorg/podcasting20-helipad":
-                    dockerInfo.DockerFilePath = $"umbrel/Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"umbrel/Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"umbrel/Dockerfile";
+                    dockerInfo.DockerFilePath = "Dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = "Dockerfile";
                     dockerInfo.GitLink = "https://github.com/Podcastindex-org/helipad";
-                    dockerInfo.GitRef = $"{image.Tag}";
+                    dockerInfo.GitRef = $"v{image.Tag.TrimStart('v')}";
                     break;
                 case "kukks/nnostr-relay":
                     dockerInfo.DockerFilePath = $"Relay/Dockerfile";
