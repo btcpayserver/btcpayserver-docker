@@ -42,7 +42,7 @@ services:
       - "8232"
 
   lightwalletd:
-    image: electriccoinco/lightwalletd:v0.4.18
+    image: electriccoinco/lightwalletd:v0.6.1
     platform: linux/amd64
     depends_on:
       zebra:

@@ -59,6 +59,6 @@ manually.
 | acinq/phoenixd | 0.9.3 | [✔️](https://raw.githubusercontent.com/ACINQ/phoenixd/v0.9.3/.docker/Dockerfile) | ️❌ | [✔️](https://raw.githubusercontent.com/ACINQ/phoenixd/v0.9.3/.docker/Dockerfile) | [Github](https://github.com/ACINQ/phoenixd) - [DockerHub](https://hub.docker.com/r/acinq/phoenixd) |
 | hhanh00/zcash-walletd | 1.1.10 | [✔️](https://raw.githubusercontent.com/elemental-pay/zcash-walletd/feat/data-config/docker/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/elemental-pay/zcash-walletd) - [DockerHub](https://hub.docker.com/r/hhanh00/zcash-walletd) |
 | zfnd/zebra | 3.0.0 | [✔️](https://raw.githubusercontent.com/ZcashFoundation/zebra/main/docker/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/ZcashFoundation/zebra) - [DockerHub](https://hub.docker.com/r/zfnd/zebra) |
-| electriccoinco/lightwalletd | v0.4.18 | [✔️](https://raw.githubusercontent.com/zcash/lightwalletd/master/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/zcash/lightwalletd) - [DockerHub](https://hub.docker.com/r/electriccoinco/lightwalletd) |
+| electriccoinco/lightwalletd | v0.6.1 | [✔️](https://raw.githubusercontent.com/zcash/lightwalletd/v0.6.1/Dockerfile) | ️❌ | ️❌ | [Github](https://github.com/zcash/lightwalletd) - [DockerHub](https://hub.docker.com/r/electriccoinco/lightwalletd) |
 
 <!-- End generated image table. -->
