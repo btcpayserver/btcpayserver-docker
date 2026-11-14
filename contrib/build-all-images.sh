@@ -811,16 +811,16 @@ fi
 
 
 # Build lightwalletd
-# https://raw.githubusercontent.com/zcash/lightwalletd/master/Dockerfile
+# https://raw.githubusercontent.com/zcash/lightwalletd/v0.6.1/Dockerfile
 DOCKERFILE="Dockerfile"
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE=""
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE=""
 if [[ "$DOCKERFILE" ]]; then
-	echo "Building electriccoinco/lightwalletd:v0.4.18"
+	echo "Building electriccoinco/lightwalletd:v0.6.1"
 	git clone https://github.com/zcash/lightwalletd lightwalletd
 	cd lightwalletd
-	git checkout master
+	git checkout v0.6.1
 	cd "$(dirname $DOCKERFILE)"
-	docker build -f "$DOCKERFILE" -t "electriccoinco/lightwalletd:v0.4.18" .
+	docker build -f "$DOCKERFILE" -t "electriccoinco/lightwalletd:v0.6.1" .
 	cd - && cd ..
 fi

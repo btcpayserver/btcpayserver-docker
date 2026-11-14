@@ -371,7 +371,7 @@ namespace DockerFileBuildHelper
                 case "lightwalletd":
                     dockerInfo.DockerFilePath = "Dockerfile";
                     dockerInfo.GitLink = "https://github.com/zcash/lightwalletd";
-                    dockerInfo.GitRef = $"master";
+                    dockerInfo.GitRef = image.Tag;
                     dockerInfo.SupportedByUs = false;
                     break;
                 case "zebra":
