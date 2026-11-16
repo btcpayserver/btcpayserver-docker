@@ -489,35 +489,41 @@ cd - && cd ..
 
 
 # Build frontend
-# https://raw.githubusercontent.com/mempool/mempool/v2.5.0/docker/frontend/Dockerfile
+# https://raw.githubusercontent.com/mempool/mempool/v3.3.2/docker/frontend/Dockerfile
 DOCKERFILE="docker/frontend/Dockerfile"
-# https://raw.githubusercontent.com/mempool/mempool/v2.5.0/docker/frontend/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/frontend/Dockerfile"
-# https://raw.githubusercontent.com/mempool/mempool/v2.5.0/docker/frontend/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE=""
+# https://raw.githubusercontent.com/mempool/mempool/v3.3.2/docker/frontend/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/frontend/Dockerfile"
-echo "Building mempool/frontend:v2.5.0"
-git clone https://github.com/mempool/mempool frontend
-cd frontend
-git checkout v2.5.0
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "mempool/frontend:v2.5.0" .
-cd - && cd ..
+if [[ "$DOCKERFILE" ]]; then
+	echo "Building mempool/frontend:v3.3.2"
+	git clone https://github.com/mempool/mempool frontend
+	cd frontend
+	git checkout v3.3.2
+	sh docker/init.sh
+	cd frontend
+	DOCKERFILE="Dockerfile"
+	docker build -f "$DOCKERFILE" -t "mempool/frontend:v3.3.2" .
+	cd - && cd ..
+fi
 
 
 # Build backend
-# https://raw.githubusercontent.com/mempool/mempool/v2.5.0/docker/backend/Dockerfile
+# https://raw.githubusercontent.com/mempool/mempool/v3.3.2/docker/backend/Dockerfile
 DOCKERFILE="docker/backend/Dockerfile"
-# https://raw.githubusercontent.com/mempool/mempool/v2.5.0/docker/backend/Dockerfile
-[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="docker/backend/Dockerfile"
-# https://raw.githubusercontent.com/mempool/mempool/v2.5.0/docker/backend/Dockerfile
+[[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE=""
+# https://raw.githubusercontent.com/mempool/mempool/v3.3.2/docker/backend/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="docker/backend/Dockerfile"
-echo "Building mempool/backend:v2.5.0"
-git clone https://github.com/mempool/mempool backend
-cd backend
-git checkout v2.5.0
-cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "mempool/backend:v2.5.0" .
-cd - && cd ..
+if [[ "$DOCKERFILE" ]]; then
+	echo "Building mempool/backend:v3.3.2"
+	git clone https://github.com/mempool/mempool backend
+	cd backend
+	git checkout v3.3.2
+	sh docker/init.sh
+	cd backend
+	DOCKERFILE="Dockerfile"
+	docker build --build-context rustgbt=../rust --build-context backend=../backend -f "$DOCKERFILE" -t "mempool/backend:v3.3.2" .
+	cd - && cd ..
+fi
 
 
 # Build mariadb
@@ -585,18 +591,18 @@ cd - && cd ..
 
 
 # Build sphinx-relay
-# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.9/Dockerfile
+# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.5.2/Dockerfile
 DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.9/Dockerfile
+# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.5.2/Dockerfile
 [[ "$(uname -m)" == "armv7l" ]] && DOCKERFILE="Dockerfile"
-# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.2.9/Dockerfile
+# https://raw.githubusercontent.com/stakwork/sphinx-relay/v2.5.2/Dockerfile
 [[ "$(uname -m)" == "aarch64" ]] && DOCKERFILE="Dockerfile"
-echo "Building sphinxlightning/sphinx-relay:v2.2.9"
+echo "Building sphinxlightning/sphinx-relay:v2.5.2"
 git clone https://github.com/stakwork/sphinx-relay sphinx-relay
 cd sphinx-relay
-git checkout v2.2.9
+git checkout v2.5.2
 cd "$(dirname $DOCKERFILE)"
-docker build -f "$DOCKERFILE" -t "sphinxlightning/sphinx-relay:v2.2.9" .
+docker build -f "$DOCKERFILE" -t "sphinxlightning/sphinx-relay:v2.5.2" .
 cd - && cd ..
 
 

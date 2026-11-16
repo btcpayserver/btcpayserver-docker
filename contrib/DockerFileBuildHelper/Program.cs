@@ -116,7 +116,15 @@ namespace DockerFileBuildHelper
                 builder.AppendLine($"cd {info.Image.Name}");
                 if (!string.IsNullOrEmpty(info.GitRef))
                     builder.AppendLine($"git checkout {info.GitRef}");
-                builder.AppendLine($"cd \"$(dirname $DOCKERFILE)\"");
+                if (!string.IsNullOrEmpty(info.DockerBuildPreparation))
+                    builder.AppendLine(info.DockerBuildPreparation);
+                if (!string.IsNullOrEmpty(info.DockerBuildDirectory))
+                {
+                    builder.AppendLine($"cd {info.DockerBuildDirectory}");
+                    builder.AppendLine("DOCKERFILE=\"Dockerfile\"");
+                }
+                else
+                    builder.AppendLine($"cd \"$(dirname $DOCKERFILE)\"");
                 var buildArguments = string.IsNullOrEmpty(info.DockerBuildArguments) ? string.Empty : $"{info.DockerBuildArguments} ";
                 builder.AppendLine($"docker build {buildArguments}-f \"$DOCKERFILE\" -t \"{info.Image}\" .");
                 builder.AppendLine($"cd - && cd ..");
@@ -631,17 +639,22 @@ namespace DockerFileBuildHelper
                     break;
                 case "mempool/frontend":
                     dockerInfo.DockerFilePath = $"docker/frontend/Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"docker/frontend/Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = $"docker/frontend/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/mempool/mempool";
                     dockerInfo.GitRef = image.Tag;
+                    // Match the upstream release workflow: prepare the source tree first.
+                    dockerInfo.DockerBuildPreparation = "sh docker/init.sh";
+                    dockerInfo.DockerBuildDirectory = "frontend";
                     break;
                 case "mempool/backend":
                     dockerInfo.DockerFilePath = $"docker/backend/Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"docker/backend/Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = $"docker/backend/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/mempool/mempool";
                     dockerInfo.GitRef = image.Tag;
+                    // Match the upstream release workflow: prepare the source tree first.
+                    dockerInfo.DockerBuildPreparation = "sh docker/init.sh";
+                    dockerInfo.DockerBuildDirectory = "backend";
+                    dockerInfo.DockerBuildArguments = "--build-context rustgbt=../rust --build-context backend=../backend";
                     break;
                 case "timescale/timescaledb":
                     dockerInfo.DockerFilePath = $"Dockerfile";

@@ -7,7 +7,7 @@ services:
     volumes:
       - "sphinxrelay_datadir:/etc/sphinxrelay_datadir"
   sphinxrelay:
-    image: "sphinxlightning/sphinx-relay:v2.2.9"
+    image: "sphinxlightning/sphinx-relay:v2.5.2"
     user: "0:0"
     restart: unless-stopped
     expose:
@@ -17,6 +17,7 @@ services:
       - "lnd_bitcoin_datadir:/relay/lnd:ro"
     environment:
       NODE_ENV: production
+      RATE_LIMIT_TRUST_PROXY: "1"
       NODE_IP: ${BTCPAY_HOST}/sphinxrelay
       NODE_ALIAS: ${LIGHTNING_ALIAS}
       LND_IP: lnd_bitcoin
