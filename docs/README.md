@@ -63,7 +63,6 @@ including features that do not require a separate guide.
 
 - [Supported images](./supported-images.md): image versions, architectures, and
   source Dockerfiles
-- [Build all images from source](https://github.com/btcpayserver/btcpayserver-docker/tree/master/contrib/DockerFileBuildHelper)
 - [FastSync](https://github.com/btcpayserver/btcpayserver-docker/tree/master/contrib/FastSync): accelerate initial Bitcoin node
   synchronization while understanding its trust model
 

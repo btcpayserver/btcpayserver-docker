@@ -8,9 +8,6 @@
         public string DockerHubLink { get; set; }
         public string GitLink { get; set; }
         public string GitRef { get; set; }
-        public string DockerBuildArguments { get; set; }
-        public string DockerBuildPreparation { get; set; }
-        public string DockerBuildDirectory { get; set; }
         public bool SupportedByUs { get; set; }
         public bool Deprecated { get; set; }
         public Image Image { get; internal set; }
