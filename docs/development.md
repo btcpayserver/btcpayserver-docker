@@ -186,8 +186,8 @@ and support it.
 
 ## Generated Image Documentation
 
-`contrib/DockerFileBuildHelper` owns `contrib/build-all-images.sh` and the table
-in `docs/supported-images.md`. Do not edit either generated section manually.
+`contrib/DockerFileBuildHelper` generates the table in
+`docs/supported-images.md`. Do not edit the generated table manually.
 Follow the repository's `AGENTS.md` procedure when an image reference changes.
 
 ## Validation
