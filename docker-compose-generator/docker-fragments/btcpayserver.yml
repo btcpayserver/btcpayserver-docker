@@ -30,3 +30,4 @@ required:
   - "btcpayserver"
 recommended:
   - "btcpay-host"
+  - "opt-apparmor-gosu"

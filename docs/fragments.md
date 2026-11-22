@@ -98,15 +98,17 @@ works around [#1257](https://github.com/btcpayserver/btcpayserver-docker/issues/
 on affected Ubuntu 26.04 hosts, AppArmor denies signals between a container's own
 processes, leaving `gosu` spinning at 100% CPU.
 
-Run `btcpay-fragments add opt-apparmor-gosu` to apply the workaround. It disables
-AppArmor confinement for PostgreSQL, Bitcoin Core, and Monero services present
-in the deployment; seccomp, capability restrictions, and namespaces remain.
-Other services are unaffected. Applying or removing the fragment recreates the
-affected containers and briefly interrupts service.
+This fragment is recommended by `btcpayserver`, so setup and updates apply it
+automatically unless explicitly excluded. It disables AppArmor confinement for
+PostgreSQL and the selected cryptocurrency node/wallet services, including
+altcoins; seccomp, capability restrictions, and namespaces remain. BTCPay Server,
+proxy, NBXplorer, and Lightning services are unaffected. Applying or excluding the
+fragment recreates the affected containers and briefly interrupts service.
 
 After upgrading Docker to a package containing
 [moby/profiles#58](https://github.com/moby/profiles/pull/58), run
-`btcpay-fragments remove opt-apparmor-gosu` to restore AppArmor confinement.
+`btcpay-fragments exclude opt-apparmor-gosu` to restore AppArmor confinement.
+Use `btcpay-fragments unexclude opt-apparmor-gosu` to re-enable the workaround.
 
 ## Custom Fragments
 
