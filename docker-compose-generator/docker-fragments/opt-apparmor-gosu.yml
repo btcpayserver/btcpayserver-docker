@@ -1,0 +1,55 @@
+# Temporary workaround for https://github.com/btcpayserver/btcpayserver-docker/issues/1257
+# Disables AppArmor confinement for PostgreSQL and cryptocurrency node/wallet services.
+# Exclude this fragment after upgrading Docker to a package containing moby/profiles#58.
+services:
+  postgres:
+    security_opt:
+      - apparmor=unconfined
+  bitcoind:
+    security_opt:
+      - apparmor=unconfined
+  litecoind:
+    security_opt:
+      - apparmor=unconfined
+  feathercoind:
+    security_opt:
+      - apparmor=unconfined
+  groestlcoind:
+    security_opt:
+      - apparmor=unconfined
+  dashd:
+    security_opt:
+      - apparmor=unconfined
+  dogecoind:
+    security_opt:
+      - apparmor=unconfined
+  monacoind:
+    security_opt:
+      - apparmor=unconfined
+  monerod:
+    security_opt:
+      - apparmor=unconfined
+  monerod_wallet:
+    security_opt:
+      - apparmor=unconfined
+  beldexd:
+    security_opt:
+      - apparmor=unconfined
+  beldexd_wallet:
+    security_opt:
+      - apparmor=unconfined
+  elementsd_liquid:
+    security_opt:
+      - apparmor=unconfined
+  zcash_walletd:
+    security_opt:
+      - apparmor=unconfined
+  zebra:
+    security_opt:
+      - apparmor=unconfined
+  lightwalletd:
+    security_opt:
+      - apparmor=unconfined
+  dcrwallet:
+    security_opt:
+      - apparmor=unconfined
