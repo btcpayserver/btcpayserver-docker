@@ -149,4 +149,46 @@ set -e
 [ "$proxy_conflict_status" -eq 1 ]
 [[ "$proxy_conflict_output" == *"group 'proxy'"* ]]
 
+# The workaround is opt-in and must not introduce services for unselected coins.
+docker compose \
+    -f "$test_dir/Generated/docker-compose.lightning-default-test.yml" \
+    config --format json | jq -e '
+    [.services[] | (.security_opt // [])[] | select(. == "apparmor=unconfined")] == []
+' >/dev/null
+
+for crypto2 in "" xmr; do
+    (
+        cd "$generator_dir"
+        BTCPAYGEN_CRYPTO1="btc" \
+        BTCPAYGEN_CRYPTO2="$crypto2" \
+        BTCPAYGEN_REVERSEPROXY="nginx" \
+        BTCPAYGEN_LIGHTNING="none" \
+        BTCPAYGEN_ADDITIONAL_FRAGMENTS="opt-apparmor-gosu" \
+        BTCPAYGEN_SUBNAME="apparmor-test" \
+        dotnet run \
+            --no-build \
+            --project src/docker-compose-generator.csproj \
+            --configuration Release \
+            --no-launch-profile \
+            -p:TargetFrameworkOverride=net8.0
+    )
+
+    jq -e '.fragments | index("opt-apparmor-gosu") != null' \
+        "$test_dir/Generated/manifest.json" >/dev/null
+    docker compose \
+        -f "$test_dir/Generated/docker-compose.apparmor-test.yml" \
+        config --format json | jq -e --arg crypto2 "$crypto2" '
+        (if $crypto2 == "xmr"
+         then ["bitcoind", "monerod", "monerod_wallet", "postgres"]
+         else ["bitcoind", "postgres"] end) as $affected |
+        ([.services | to_entries[] |
+          select((.value.security_opt // []) | index("apparmor=unconfined")) |
+          .key] | sort) == $affected and
+        (if $crypto2 == "" then
+            (.services | has("monerod") or has("monerod_wallet") | not)
+         else true end) and
+        all(.services[]; (has("privileged") | not) and (has("cap_add") | not))
+    ' >/dev/null
+done
+
 printf 'Docker Compose generator tests passed\n'

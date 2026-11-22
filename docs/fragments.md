@@ -91,6 +91,23 @@ formal generator prerequisite, so confirm LND is enabled.
 | [`opt-add-woocommerce`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-woocommerce.yml) | Add WordPress and WooCommerce on a dedicated hostname |
 | [`opt-add-zammad`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-zammad.yml) | Add the Zammad application stack; requires substantial additional resources |
 
+## AppArmor Startup Workaround
+
+[`opt-apparmor-gosu`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-apparmor-gosu.yml)
+works around [#1257](https://github.com/btcpayserver/btcpayserver-docker/issues/1257):
+on affected Ubuntu 26.04 hosts, AppArmor denies signals between a container's own
+processes, leaving `gosu` spinning at 100% CPU.
+
+Run `btcpay-fragments add opt-apparmor-gosu` to apply the workaround. It disables
+AppArmor confinement for PostgreSQL, Bitcoin Core, and Monero services present
+in the deployment; seccomp, capability restrictions, and namespaces remain.
+Other services are unaffected. Applying or removing the fragment recreates the
+affected containers and briefly interrupts service.
+
+After upgrading Docker to a package containing
+[moby/profiles#58](https://github.com/moby/profiles/pull/58), run
+`btcpay-fragments remove opt-apparmor-gosu` to restore AppArmor confinement.
+
 ## Custom Fragments
 
 For settings or services not represented here, create a `.custom.yml` fragment

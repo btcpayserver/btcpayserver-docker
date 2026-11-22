@@ -1,0 +1,16 @@
+# Temporary workaround for https://github.com/btcpayserver/btcpayserver-docker/issues/1257
+# Disables AppArmor confinement for affected gosu-based services only.
+# Remove this fragment after upgrading Docker to a package containing moby/profiles#58.
+services:
+  postgres:
+    security_opt:
+      - apparmor=unconfined
+  bitcoind:
+    security_opt:
+      - apparmor=unconfined
+  monerod:
+    security_opt:
+      - apparmor=unconfined
+  monerod_wallet:
+    security_opt:
+      - apparmor=unconfined
