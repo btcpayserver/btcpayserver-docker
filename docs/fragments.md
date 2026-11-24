@@ -84,7 +84,6 @@ formal generator prerequisite, so confirm LND is enabled.
 | [`opt-add-mempool`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-mempool.yml) | Add Mempool frontend/backend; requires ElectrumX, txindex, and an unpruned node |
 | [`opt-add-nostr-relay`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-nostr-relay.yml) | Add a PostgreSQL-backed Nostr relay at `/nostr` |
 | [`opt-add-shopify`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-shopify.yml) | Add the internal Shopify app deployer |
-| [`opt-add-sphinxrelay`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-sphinxrelay.yml) | Add Sphinx Relay; requires Bitcoin LND and keysend |
 | [`opt-add-taler-merchant`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-taler-merchant.yml) | Add the GNU Taler merchant backend |
 | [`opt-add-teos`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-teos.yml) | Add a TEOS watchtower on port 9814; requires Bitcoin and ZMQ |
 | [`opt-add-thunderhub`](https://github.com/btcpayserver/btcpayserver-docker/blob/master/docker-compose-generator/docker-fragments/opt-add-thunderhub.yml) | Add ThunderHub; requires Bitcoin LND |

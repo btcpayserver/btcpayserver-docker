@@ -524,14 +524,6 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"eb38bf28263b8e5bb7367797cb7b181b65d769bd";
                     dockerInfo.SupportedByUs = false;
                     break;
-                case "sphinx-relay":
-                    dockerInfo.DockerFilePath = $"Dockerfile";
-                    dockerInfo.DockerFilePathARM32v7 = $"Dockerfile";
-                    dockerInfo.DockerFilePathARM64v8 = $"Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/stakwork/sphinx-relay";
-                    dockerInfo.GitRef = $"{image.Tag}";
-                    dockerInfo.SupportedByUs = false;
-                    break;
                 case "lightninglabs/lightning-terminal":
                     dockerInfo.GitLink = "https://github.com/lightninglabs/lightning-terminal";
                     dockerInfo.DockerFilePath = $"Dockerfile";
