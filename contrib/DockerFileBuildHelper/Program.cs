@@ -425,7 +425,7 @@ namespace DockerFileBuildHelper
                     dockerInfo.DockerFilePathARM32v7 = $"mainline/debian/Dockerfile";
                     dockerInfo.DockerFilePathARM64v8 = $"mainline/debian/Dockerfile";
                     dockerInfo.GitLink = "https://github.com/nginx/docker-nginx";
-                    dockerInfo.GitRef = "a2a986d19aac4a79a330e6e0b5171aae4e521926";
+                    dockerInfo.GitRef = "d6e8ee84e5fa87b7279a3a25b0b6de7d55c24f3e";
                     dockerInfo.SupportedByUs = true;
                     break;
                 case "docker-gen":
