@@ -19,6 +19,9 @@ services:
   woocommerce:
     environment:
       HIDDENSERVICE_NAME: WooCommerce
+      HIDDENSERVICE_REVERSEPROXY: nginx
+      HIDDENSERVICE_PORT: 8880
+      HIDDENSERVICE_VIRTUAL_PORT: 80
       WOOCOMMERCE_HIDDENSERVICE_HOSTNAME_FILE: /var/lib/tor/hidden_services/WooCommerce/hostname
     volumes:
       - "tor_servicesdir:/var/lib/tor/hidden_services:ro"
@@ -115,7 +118,9 @@ services:
   zammad-nginx:
     environment:
       HIDDENSERVICE_NAME: zammad
-      HIDDENSERVICE_PORT: 80
+      HIDDENSERVICE_REVERSEPROXY: nginx
+      HIDDENSERVICE_PORT: 8880
+      HIDDENSERVICE_VIRTUAL_PORT: 80
     volumes:
       - "tor_servicesdir:/var/lib/tor/hidden_services:ro"
       - "tor_torrcdir:/usr/local/etc/tor/:ro"
