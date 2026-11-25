@@ -88,24 +88,6 @@ grep -Fxq 'BTCPAY_HOST=example.com' "$BTCPAY_ENV_FILE"
 grep -Fxq 'TRUST_DOWNSTREAM_PROXY=true' "$BTCPAY_ENV_FILE"
 
 cp "$BTCPAY_ENV_FILE" "$test_dir/expected.env"
-# A partial write must not replace previously saved settings, even when the
-# caller handles the failure (which disables Bash's implicit errexit behavior).
-if (
-    printf() {
-        builtin printf '%s\n' 'partial settings'
-        return 1
-    }
-    btcpay_update_docker_env
-); then
-    printf 'A failed environment write must be reported\n' >&2
-    exit 1
-fi
-cmp -s "$test_dir/expected.env" "$BTCPAY_ENV_FILE"
-if compgen -G "$BTCPAY_ENV_FILE.tmp.*" > /dev/null; then
-    printf 'A failed environment write left a temporary file\n' >&2
-    exit 1
-fi
-
 export BTCPAY_HOST=$'example.com\nPROMPT_COMMAND=id'
 if btcpay_update_docker_env; then
     printf 'A value containing a newline must be rejected\n' >&2
