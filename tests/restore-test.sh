@@ -115,7 +115,7 @@ docker-compose() {
   fi
   case "$*" in
     'config --services')
-      [ -n "$RESTORE_TEST_BACKUP_MODE" ] || return 1
+      [ "$RESTORE_TEST_FAIL_CONFIG" != true ] || return 1
       printf '%s\n' postgres mariadb lnd_bitcoin
       ;;
     'down -t 180')
@@ -202,6 +202,7 @@ new_case() {
   export RESTORE_TEST_CREATE_LND_ON_STOP=false
   export RESTORE_TEST_REWRITE_SCB=false
   export RESTORE_TEST_BACKUP_MODE=""
+  export RESTORE_TEST_FAIL_CONFIG=false
   export RESTORE_TEST_EXPECT_SECRETS=""
   export BTCPAY_BASE_DIRECTORY="$case_dir"
   export BTCPAY_DOCKER_COMPOSE="$case_dir/compose.yml"
@@ -320,6 +321,40 @@ assert_imports() {
   cmp "$fixture_dir/volumes/generated_btcpay_datadir/_data/settings.config" \
     "$RESTORE_TEST_VOLUMES/generated_btcpay_datadir/_data/settings.config" || fail_test 'settings were not restored'
 }
+
+# WooCommerce needs either a dump or an archived database volume. Refuse
+# incomplete archives before stopping or overwriting the destination.
+for scenario in missing-dump legacy-volume dump no-woocommerce config-failure; do
+  new_case
+  make_fixture legacy none
+  if [ "$scenario" != no-woocommerce ]; then
+    fixture_file volumes/generated_woocommerce_html/_data/wp-config.php
+  fi
+  if [ "$scenario" != dump ]; then
+    rm "$fixture_dir/mariadb.sql.gz"
+  fi
+  if [ "$scenario" = legacy-volume ]; then
+    fixture_file volumes/generated_mariadb_datadir/_data/mysql/db.frm
+  fi
+  if [ "$scenario" = config-failure ]; then
+    export RESTORE_TEST_FAIL_CONFIG=true
+  fi
+  pack_archive
+  case "$scenario" in
+    missing-dump|config-failure)
+      expect_failure "$archive_path"
+      assert_untouched
+      if [ "$scenario" = missing-dump ]; then
+        grep -q 'mariadb.sql.gz does not exist' "$case_dir/restore.log" ||
+          fail_test 'missing MariaDB dump was not identified'
+      fi
+      ;;
+    *)
+      expect_success "$archive_path"
+      [ -f "$case_dir/running-all" ] || fail_test 'complete restore did not restart'
+      ;;
+  esac
+done
 
 # Ordinary restores preserve SCBs outside the managed LND directory, including
 # before a startup that replaces its channel.backup with an empty channel list.

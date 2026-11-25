@@ -230,6 +230,18 @@ btcpay_setup_ssh() {
     fi
 }
 
+btcpay_teardown_ssh() {
+    local ssh_dir="/root/.ssh"
+    local authorized_keys="$ssh_dir/authorized_keys"
+
+    if [ -f "$authorized_keys" ]; then
+        # These are the managed entries replaced by btcpay_setup_ssh.
+        sed -i -e '/ btcpayserver$/d' -e '/ btcpay-host$/d' \
+            "$authorized_keys" || return 1
+    fi
+    rm -f -- "$ssh_dir/btcpay_host_id_ed25519" "$ssh_dir/btcpay_host_id_ed25519.pub"
+}
+
 # Matches fragment names the way the generator and btcpay-fragments do:
 # comma or semicolon separated, trimmed, case-insensitive, optional .yml.
 btcpay_fragment_is_excluded() {

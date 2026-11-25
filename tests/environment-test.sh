@@ -102,6 +102,27 @@ if btcpay_update_docker_env; then
 fi
 cmp -s "$test_dir/expected.env" "$BTCPAY_ENV_FILE"
 
+# Exercise SSH revocation without touching the machine's actual /root/.ssh.
+mkdir "$test_dir/ssh"
+sed "s|local ssh_dir=\"/root/.ssh\"|local ssh_dir=\"$test_dir/ssh\"|g" \
+    "$repo_dir/helpers.sh" > "$test_dir/helpers.sh"
+(
+    . "$test_dir/helpers.sh"
+    printf '%s\n' \
+        'ssh-ed25519 operator-key operator' \
+        'restrict,command="old-proxy" ssh-ed25519 old-key btcpayserver' \
+        'restrict,command="proxy" ssh-ed25519 bridge-key btcpay-host' \
+        > "$test_dir/ssh/authorized_keys"
+    touch "$test_dir/ssh/btcpay_host_id_ed25519" "$test_dir/ssh/btcpay_host_id_ed25519.pub"
+    btcpay_teardown_ssh
+    printf '%s\n' 'ssh-ed25519 operator-key operator' > "$test_dir/operator-key"
+    cmp "$test_dir/operator-key" "$test_dir/ssh/authorized_keys"
+    test ! -e "$test_dir/ssh/btcpay_host_id_ed25519"
+    test ! -e "$test_dir/ssh/btcpay_host_id_ed25519.pub"
+    btcpay_teardown_ssh
+    cmp "$test_dir/operator-key" "$test_dir/ssh/authorized_keys"
+)
+
 mkdir "$test_dir/reload-bin"
 cat > "$test_dir/reload-bin/systemctl" <<'EOF'
 #!/bin/bash
