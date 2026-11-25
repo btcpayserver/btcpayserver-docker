@@ -8,6 +8,8 @@ services:
     environment:
       HIDDENSERVICE_NAME: BTCPayServer
       HIDDENSERVICE_REVERSEPROXY: nginx
+      HIDDENSERVICE_PORT: 8880
+      HIDDENSERVICE_VIRTUAL_PORT: 80
       BTCPAY_TORRCFILE: /usr/local/etc/tor/torrc-2
       BTCPAY_SOCKSENDPOINT: tor:9050
     volumes:

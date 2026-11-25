@@ -145,6 +145,10 @@ restriction is required because `TRUST_DOWNSTREAM_PROXY=true` accepts incoming
 `X-Forwarded-*` headers as authoritative. Never expose this unencrypted,
 trusted backend port publicly.
 
+The `opt-add-tor` hidden service bypasses the external proxy. It uses a separate
+internal Nginx port (8880, not published on the host), where incoming
+`X-Forwarded-*` headers are ignored and non-onion hosts are rejected.
+
 ## Cloudflare Tunnel
 
 The `opt-add-cloudflared` fragment exposes bundled Nginx through a token-based
