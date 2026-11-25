@@ -526,6 +526,40 @@ for mode in backup migrate; do
   done
 done
 
+# Database dumps and the volumes directory must not redirect reads outside the
+# archive. Reject special files before stopping services or opening the dumps.
+for format in plain encrypted; do
+  for dump in postgres mariadb; do
+    for kind in host-file dangling directory fifo; do
+      new_case
+      make_fixture backup none
+      mv -- "$fixture_dir/$dump.sql.gz" "$case_dir/host-dump.sql.gz"
+      case "$kind" in
+        host-file) ln -s "$case_dir/host-dump.sql.gz" "$fixture_dir/$dump.sql.gz" ;;
+        dangling) ln -s missing-dump "$fixture_dir/$dump.sql.gz" ;;
+        directory) mkdir "$fixture_dir/$dump.sql.gz" ;;
+        fifo) mkfifo "$fixture_dir/$dump.sql.gz" ;;
+      esac
+      pack_archive "$format"
+      expect_failure "$archive_path"
+      assert_untouched
+      grep -Fq "The backup database dump is not a regular file: $dump.sql.gz" "$case_dir/restore.log" ||
+        fail_test "$kind $dump dump was not rejected explicitly"
+      [ ! -e "$case_dir/postgres-import.sql" ] && [ ! -e "$case_dir/mariadb-import.sql" ] ||
+        fail_test 'invalid dump reached a database'
+    done
+  done
+  new_case
+  make_fixture backup none
+  mv -- "$fixture_dir/volumes" "$case_dir/host-volumes"
+  ln -s "$case_dir/host-volumes" "$fixture_dir/volumes"
+  pack_archive "$format"
+  expect_failure "$archive_path"
+  assert_untouched
+  grep -Fq 'The backup volumes directory must not be a symlink.' "$case_dir/restore.log" ||
+    fail_test 'symlinked volumes directory was not rejected explicitly'
+done
+
 # New archives carry source secrets; refuse even an empty destination secrets
 # directory before shutting down or changing any destination data.
 for mode in backup migrate; do
@@ -609,6 +643,43 @@ for lightning in none cln; do
   recovery_dirs=("$BTCPAY_BASE_DIRECTORY"/lnd-recovery.*)
   shopt -u nullglob
   [ "${#recovery_dirs[@]}" -eq 0 ] || fail_test "$lightning restore created an LND recovery directory"
+done
+
+# Replace destination file symlinks without following them. Preserve unrelated
+# destination data and legitimate symlinks stored in an archive.
+for mode in backup migrate; do
+  for target in existing dangling; do
+    new_case
+    make_fixture "$mode" none
+    fixture_file volumes/generated_btcpay_datadir/_data/plugins/state 'archived plugin state'
+    ln -s settings.config "$fixture_dir/volumes/generated_btcpay_datadir/_data/settings.link"
+    pack_archive
+    if [ "$target" = existing ]; then
+      printf 'host file outside the volumes\n' > "$case_dir/host-file"
+    fi
+    mkdir -p "$RESTORE_TEST_VOLUMES/generated_btcpay_datadir/_data/plugins"
+    ln -s "$case_dir/host-file" "$RESTORE_TEST_VOLUMES/generated_btcpay_datadir/_data/plugins/state"
+    printf 'retained data\n' > "$RESTORE_TEST_VOLUMES/generated_btcpay_datadir/_data/retained"
+    restore_args=()
+    [ "$mode" != migrate ] || restore_args=(--migrate)
+    expect_success "${restore_args[@]}" "$archive_path"
+    assert_imports
+    if [ "$target" = existing ]; then
+      grep -qx 'host file outside the volumes' "$case_dir/host-file" ||
+        fail_test 'volume overlay wrote through a destination symlink'
+    else
+      [ ! -e "$case_dir/host-file" ] || fail_test 'volume overlay created a symlink target'
+    fi
+    restored_data="$RESTORE_TEST_VOLUMES/generated_btcpay_datadir/_data"
+    [ ! -L "$restored_data/plugins/state" ] &&
+      grep -qx 'archived plugin state' "$restored_data/plugins/state" ||
+      fail_test 'destination symlink was not replaced by the archived file'
+    [ -L "$restored_data/settings.link" ] &&
+      [ "$(readlink "$restored_data/settings.link")" = settings.config ] ||
+      fail_test 'archived symlink was not preserved'
+    grep -qx 'retained data' "$restored_data/retained" ||
+      fail_test 'volume overlay removed data absent from the archive'
+  done
 done
 
 # Failures after shutdown must never restart partially restored services.

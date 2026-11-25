@@ -35,6 +35,8 @@ jobs:
           persist-credentials: false
       - name: Test nginx route management
         run: tests/btcpay-routes-test.sh
+      - name: Test nginx route URI handling
+        run: bash tests/nginx-route-rewrite-test.sh
       - name: Test build behavior
         run: tests/build-test.sh
       - name: Test fragment management
@@ -59,6 +61,8 @@ jobs:
         run: bash tests/backup-test.sh
       - name: Test restore modes
         run: bash tests/restore-test.sh
+      - name: Test FastSync snapshot creation
+        run: bash tests/save-utxo-set-test.sh
       - name: Validate nginx route catalog
         run: |
           nginx_image="$(tests/docker-fragment-image.sh nginx)"
