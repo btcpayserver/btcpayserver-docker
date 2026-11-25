@@ -2,9 +2,11 @@ services:
   cloudflared:
     container_name: 'cloudflared-tunnel'
     image: btcpayserver/cloudflared:2026.11.2
-    command: 'tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}'
+    command: 'tunnel --no-autoupdate run'
     restart: 'on-failure'
     environment:
+      # Keep the token out of host-visible process arguments.
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
       REAL_IP_HEADER: Cf-Connecting-Ip
     links:
       - nginx

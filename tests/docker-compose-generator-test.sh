@@ -44,6 +44,72 @@ if grep -q "letsencrypt-nginx-proxy-companion" \
     exit 1
 fi
 
+# Secrets must not be interpolated into host-visible process arguments.
+cloudflared_compose="$test_dir/Generated/docker-compose.fragment-exclusion-test.yml"
+if grep -q -- '--token\|command:.*CLOUDFLARE_TUNNEL_TOKEN' "$cloudflared_compose"; then
+    printf 'The Cloudflare Tunnel token was generated as a command argument\n' >&2
+    exit 1
+fi
+grep -Fq 'TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}' "$cloudflared_compose"
+
+(
+    cd "$generator_dir"
+    BTCPAYGEN_CRYPTO1="dcr" \
+    BTCPAYGEN_REVERSEPROXY="nginx" \
+    BTCPAYGEN_SUBNAME="decred-test" \
+    dotnet run \
+        --no-build \
+        --project src/docker-compose-generator.csproj \
+        --configuration Release \
+        --no-launch-profile \
+        -p:TargetFrameworkOverride=net8.0
+)
+
+jq -e '(.fragments | index("decred") != null)' \
+    "$test_dir/Generated/manifest.json" >/dev/null
+decred_compose="$test_dir/Generated/docker-compose.decred-test.yml"
+if grep -q -- '--pass=' "$decred_compose"; then
+    printf 'The Decred wallet passphrase was generated as a command argument\n' >&2
+    exit 1
+fi
+grep -Fq 'BTCPAY_DCR_WALLET_PASSPHRASE: ${BTCPAY_DCR_WALLET_PASSPHRASE}' "$decred_compose"
+grep -Fq -- '--configfile=' "$decred_compose"
+# Compose must leave the runtime shell references intact, not insert the secret.
+BTCPAY_DCR_WALLET_PASSPHRASE='compose-test-secret' docker compose \
+    -f "$decred_compose" config --format json > "$test_dir/decred.json"
+jq -e '
+    .services.dcrwallet |
+    .environment.BTCPAY_DCR_WALLET_PASSPHRASE == "compose-test-secret" and
+    ((.command + .entrypoint | join(" ")) | contains("compose-test-secret") | not) and
+    (.entrypoint[2] | contains("$BTCPAY_DCR_WALLET_PASSPHRASE"))
+' "$test_dir/decred.json" >/dev/null
+
+# Exercise the actual generated wrapper without touching a wallet or host /run.
+wallet_wrapper="$(jq -r '.services.dcrwallet.entrypoint[2]' "$test_dir/decred.json")"
+# `compose config` retains escaped dollars for another Compose invocation;
+# container creation resolves each $$ to a literal $.
+wallet_wrapper="${wallet_wrapper//\$\$/\$}"
+wallet_wrapper="${wallet_wrapper//\/run\/dcrwallet.conf/$test_dir/runtime.conf}"
+wallet_wrapper="${wallet_wrapper//\/root\/.dcrwallet\/dcrwallet.conf/$test_dir/existing.conf}"
+printf '%s\n' '[Application Options]' 'debuglevel=warn' > "$test_dir/existing.conf"
+for passphrase in '' 'ordinary' ' leading and trailing ' '"quoted"' 'back\slash' \
+    '$dollar; `not a command`' $'line one\nline two\n' $'tabs\tand\rreturns'; do
+    BTCPAY_DCR_WALLET_PASSPHRASE="$passphrase" \
+        sh -ec "$wallet_wrapper" -- sh -c '
+            test "${BTCPAY_DCR_WALLET_PASSPHRASE+x}" != x
+            printf "%s\n" "$@"
+        ' -- > "$test_dir/wallet-args"
+    grep -Fxq -- "--configfile=$test_dir/runtime.conf" "$test_dir/wallet-args"
+    [ "$(stat -c %a "$test_dir/runtime.conf")" = 600 ]
+    grep -Fxq 'debuglevel=warn' "$test_dir/runtime.conf"
+    # The wrapper emits the JSON-compatible subset of Go string quoting.
+    tail -n 1 "$test_dir/runtime.conf" | \
+        jq -R -e --arg expected "$passphrase" 'ltrimstr("pass=") | fromjson == $expected' >/dev/null
+done
+rm "$test_dir/existing.conf"
+BTCPAY_DCR_WALLET_PASSPHRASE="" sh -ec "$wallet_wrapper" -- true
+grep -Fxq 'pass=""' "$test_dir/runtime.conf"
+
 (
     cd "$generator_dir"
     BTCPAYGEN_REVERSEPROXY="nginx" \

@@ -3,13 +3,33 @@ services:
     restart: unless-stopped
     container_name: btcpayserver_dcrwallet
     image: ghcr.io/bisoncraft/decred:2.1.5
+    environment:
+      BTCPAY_DCR_WALLET_PASSPHRASE: ${BTCPAY_DCR_WALLET_PASSPHRASE}
+    entrypoint:
+      - /bin/sh
+      - -ec
+      - |
+        umask 077
+        config=/run/dcrwallet.conf
+        if [ -f /root/.dcrwallet/dcrwallet.conf ]; then
+          cat /root/.dcrwallet/dcrwallet.conf > "$$config"
+        else
+          : > "$$config"
+        fi
+        # go-flags uses Go string quoting for INI values. Preserve whitespace,
+        # quotes, backslashes and newlines without putting the passphrase in argv.
+        pass=$$(printf '%s' "$$BTCPAY_DCR_WALLET_PASSPHRASE" |
+          sed -z 's/\\/\\\\/g; s/"/\\"/g; s/\t/\\t/g; s/\r/\\r/g; s/\n/\\n/g')
+        printf '\n[Application Options]\npass="%s"\n' "$$pass" >> "$$config"
+        unset BTCPAY_DCR_WALLET_PASSPHRASE pass
+        exec "$$@" --configfile="$$config"
+      - --
     command:
       - dcrwallet
       - --spv
       - --username=btcpay
       - --password=btcpay
       - --rpclisten=0.0.0.0:9110
-      - --pass=${BTCPAY_DCR_WALLET_PASSPHRASE}
     expose:
       - "9110"
     volumes:

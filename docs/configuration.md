@@ -97,6 +97,10 @@ their linked guide in the [fragment catalog](./fragments.md).
 
 Setup does not persist `BTCPAY_DCR_WALLET_PASSPHRASE`. Export it again before
 each setup, update, or command that can recreate the Decred wallet service.
+The service writes the passphrase to a private runtime configuration file outside
+the backed-up wallet volume, preserving options from an existing
+`/root/.dcrwallet/dcrwallet.conf`. It does not pass the passphrase on the command
+line.
 
 ## Operational Variables
 
