@@ -33,8 +33,6 @@ services:
       BITCOIN_RPCUSERS: btcrpc
       BITCOIN_EXTRA_ARGS: |
         onion=tor:9050
-    volumes:
-      - "tor_datadir:/home/tor/.tor:ro"
     links:
       - tor
 
@@ -98,7 +96,6 @@ services:
     links:
       - tor
     volumes:
-      - "tor_datadir:/home/tor/.tor:ro"
       - "tor_servicesdir:/var/lib/tor/hidden_services:ro"
 
   electrumx:
