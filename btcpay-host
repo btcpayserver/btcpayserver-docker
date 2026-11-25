@@ -104,7 +104,9 @@ case "$command" in
         json_null
         ;;
     changedomain)
-        if [ "$#" -ne 2 ] || [[ ! "$2" =~ ^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$ ]]; then
+        # DNS names allow at most 253 characters overall and 63 per label.
+        if [ "$#" -ne 2 ] || [ "${#2}" -gt 253 ] || [[ "$2" =~ [^.]{64} ]] ||
+            [[ ! "$2" =~ ^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$ ]]; then
             echo "The domain must be a valid domain name without a protocol." >&2
             exit 1
         fi

@@ -33,7 +33,19 @@ docker-compose -f "$BTCPAY_DOCKER_COMPOSE" run --rm -e "NBITCOIN_NETWORK=$NBITCO
 btcpay-up.sh
 
 echo "Calculating the hash of the tar file..."
-TAR_FILE="$(echo /var/lib/docker/volumes/generated_bitcoin_datadir/_data/utxo-snapshot-*)"
+shopt -s nullglob
+snapshot_files=(/var/lib/docker/volumes/generated_bitcoin_datadir/_data/utxo-snapshot-*)
+shopt -u nullglob
+if [ "${#snapshot_files[@]}" -ne 1 ]; then
+    echo "Expected exactly one UTXO snapshot file." >&2
+    exit 1
+fi
+TAR_FILE="${snapshot_files[0]}"
+BLOB_NAME="${TAR_FILE##*/}"
+if ! [[ "$BLOB_NAME" =~ ^utxo-snapshot-[a-zA-Z0-9._-]+$ ]]; then
+    printf 'Unexpected snapshot file: %q\n' "$TAR_FILE" >&2
+    exit 1
+fi
 echo "Tar file of size $(ls -s -h "$TAR_FILE")"
 TAR_FILE_HASH="$(sha256sum "$TAR_FILE" | cut -d " " -f 1)"
 
@@ -41,7 +53,6 @@ if [[ "$AZURE_STORAGE_CONNECTION_STRING" ]]; then
     echo "Uploading to azure..."
     # Install az from https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest
 
-    BLOB_NAME="$(basename -- "$TAR_FILE")"
     az storage container create --name "$AZURE_STORAGE_CONTAINER" --public-access "blob"
     az storage blob upload -f "$TAR_FILE" \
                         -c "$AZURE_STORAGE_CONTAINER" \
@@ -54,7 +65,7 @@ if [[ "$AZURE_STORAGE_CONNECTION_STRING" ]]; then
     STORAGE_URL="$(az storage blob url --container-name "$AZURE_STORAGE_CONTAINER" --name "$BLOB_NAME" --protocol "http")"
     echo "You can now download the UTXO on $STORAGE_URL"
     echo "Please, after download, verify the sha256 with:"
-    echo "echo "$TAR_FILE_HASH  $BLOB_NAME" | sha256sum -c -"
+    printf 'echo %q | sha256sum -c -\n' "$TAR_FILE_HASH  $BLOB_NAME"
     rm "$TAR_FILE"
 else
     echo "SHA256: $TAR_FILE_HASH"

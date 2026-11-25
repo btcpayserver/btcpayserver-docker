@@ -4,7 +4,9 @@
 
 export NEW_HOST="$1"
 
-if [[ ! "$NEW_HOST" =~ ^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$ ]]; then
+# DNS names allow at most 253 characters overall and 63 per label.
+if [ "${#NEW_HOST}" -gt 253 ] || [[ "$NEW_HOST" =~ [^.]{64} ]] ||
+    [[ ! "$NEW_HOST" =~ ^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$ ]]; then
     echo "The domain must be a valid domain name without a protocol." >&2
     exit 1
 fi
