@@ -242,7 +242,7 @@ upstream {{ $upstream_name }} {
 {{ if (eq $hiddenReverseProxy "nginx")}}
 	{{ $hiddenHostName := trim (or (first (groupByKeys $containers "Env.HIDDENSERVICE_NAME")) "") }}
 	{{ $onionHost := read (printf "/var/lib/tor/hidden_services/%s/hostname" $hiddenHostName) }}
-	{{ if ne $onionHost "" }}
+	{{ if regexMatch "^[a-z2-7]{56}\\.onion$" (trim $onionHost) }}
 server {
 	client_max_body_size 100M;
 	server_name {{ trim $onionHost }};
