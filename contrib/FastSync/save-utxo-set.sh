@@ -22,26 +22,26 @@ btcpay-down.sh
 
 for i in /var/lib/docker/volumes/generated_bitcoin_datadir/_data/utxo-snapshot-*; do
     echo "Deleting $i"
-    rm $i
+    rm -- "$i"
 done
 
 rm /var/lib/docker/volumes/generated_bitcoin_datadir/_data/utxo-snapshot-*
 # Run only bitcoind and connect to it
 SCRIPT="$(cat save-utxo-set-in-bitcoind.sh)"
-cd "`dirname $BTCPAY_ENV_FILE`"
-docker-compose -f $BTCPAY_DOCKER_COMPOSE run --rm -e "NBITCOIN_NETWORK=$NBITCOIN_NETWORK" bitcoind bash -c "$SCRIPT"
+cd "$(dirname -- "$BTCPAY_ENV_FILE")"
+docker-compose -f "$BTCPAY_DOCKER_COMPOSE" run --rm -e "NBITCOIN_NETWORK=$NBITCOIN_NETWORK" bitcoind bash -c "$SCRIPT"
 btcpay-up.sh
 
 echo "Calculating the hash of the tar file..."
 TAR_FILE="$(echo /var/lib/docker/volumes/generated_bitcoin_datadir/_data/utxo-snapshot-*)"
-echo "Tar file of size $(ls -s -h $TAR_FILE)"
+echo "Tar file of size $(ls -s -h "$TAR_FILE")"
 TAR_FILE_HASH="$(sha256sum "$TAR_FILE" | cut -d " " -f 1)"
 
 if [[ "$AZURE_STORAGE_CONNECTION_STRING" ]]; then
     echo "Uploading to azure..."
     # Install az from https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest
 
-    BLOB_NAME="$(basename -- $TAR_FILE)"
+    BLOB_NAME="$(basename -- "$TAR_FILE")"
     az storage container create --name "$AZURE_STORAGE_CONTAINER" --public-access "blob"
     az storage blob upload -f "$TAR_FILE" \
                         -c "$AZURE_STORAGE_CONTAINER" \

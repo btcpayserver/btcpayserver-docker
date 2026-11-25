@@ -384,8 +384,17 @@ fi
 
 cd "$restore_dir"
 
+# Dumps must come from the archive, not a symlink to a destination host file.
+for dump in "$postgres_dump_name" mariadb.sql.gz; do
+  if [ -L "$dump" ] || { [ -e "$dump" ] && [ ! -f "$dump" ]; }; then
+    fail "The backup database dump is not a regular file: $dump"
+  fi
+done
 if [ ! -f "$postgres_dump_name" ]; then
   fail "$postgres_dump_name does not exist in the backup."
+fi
+if [ -L "volumes" ]; then
+  fail "The backup volumes directory must not be a symlink."
 fi
 if [ ! -d "volumes" ]; then
   fail "The volumes directory does not exist in the backup."
@@ -521,13 +530,14 @@ if ! mkdir -p -- "$volumes_dir"; then
   fail "Could not create Docker volumes directory $volumes_dir."
 fi
 # Overlay the backup so intentionally excluded blockchain data remains intact.
+# Replace existing files rather than writing through container-created symlinks.
 shopt -s dotglob nullglob
 volume_entries=(volumes/*)
 shopt -u dotglob nullglob
 if [ "${#volume_entries[@]}" -eq 0 ]; then
   fail "The backup does not contain any Docker volumes."
 fi
-if ! cp -a -- "${volume_entries[@]}" "$volumes_dir/"; then
+if ! cp -a --remove-destination -- "${volume_entries[@]}" "$volumes_dir/"; then
   fail "Restoring volumes failed. Please check the error above."
 fi
 if ! mkdir -p -- "$volumes_dir/generated_postgres_datadir/_data"; then
