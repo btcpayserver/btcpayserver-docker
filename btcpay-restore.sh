@@ -497,6 +497,19 @@ cd "$btcpay_dir"
 # shellcheck source=/dev/null
 . ./helpers.sh
 
+# Older backups may contain the MariaDB volume instead of a SQL dump.
+# Without either, starting WooCommerce would leave it with an empty database.
+if [ -z "$mariadb_dump_name" ] &&
+    [ -e "$restore_dir/volumes/generated_woocommerce_html" ] &&
+    [ ! -d "$restore_dir/volumes/generated_mariadb_datadir/_data" ]; then
+  if ! compose_services=$(docker-compose -f "$BTCPAY_DOCKER_COMPOSE" config --services); then
+    fail "Could not inspect Docker Compose services."
+  fi
+  if grep -Fxq mariadb <<<"$compose_services"; then
+    fail "mariadb.sql.gz does not exist in the backup, which contains WooCommerce files but not their database. Use a complete backup or configure the destination without opt-add-woocommerce before restoring."
+  fi
+fi
+
 printf "\nℹ️ Stopping BTCPay Server …\n\n"
 btcpay_stopped=true
 if ! stop_btcpay; then

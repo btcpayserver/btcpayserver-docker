@@ -9,6 +9,9 @@ You will learn what to consider when creating a backup and how to restore one.
 
 This guide covers `btcpay-backup.sh` and `btcpay-restore.sh`.
 Use updated versions of both scripts: older restore scripts do not enforce the archive-mode and LND safety checks described here.
+When restoring WooCommerce to a destination with MariaDB enabled, the archive must
+include `mariadb.sql.gz` or a legacy MariaDB data volume. An incomplete archive is
+rejected before the destination stack is stopped.
 
 > [!WARNING]
 > BTCPay Server is not and will never be responsible for your backups.

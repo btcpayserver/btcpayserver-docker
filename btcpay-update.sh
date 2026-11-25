@@ -79,7 +79,7 @@ if [[ "$ACME_CA_URI" == "https://acme-staging.api.letsencrypt.org/directory" ]];
 fi
 
 install_tooling
-btcpay_update_docker_env
+btcpay_update_docker_env || exit 1
 btcpay_ipv4_options_filter_default
 btcpay_up
 notify_btcpayserver

@@ -251,6 +251,28 @@ docker run --rm \
     -v "$repo_dir/nginx:/etc/nginx/btcpay-routes:ro" \
     "$nginx_image" nginx -t
 
+# Missing default certificates must not make the first certified host a
+# catch-all or let uncertified hosts borrow its certificate.
+rm "$test_dir/certs/default.crt" "$test_dir/certs/default.key"
+docker start -a "$generator"
+test "$(server_block_match_count _ 'ssl_reject_handshake on;')" -eq 1
+test "$(server_block_match_count notlocal 'ssl_reject_handshake on;')" -eq 1
+test "$(server_block_match_count service.local 'ssl_reject_handshake on;')" -eq 1
+test "$(server_block_match_count secure.test 'ssl_certificate /etc/nginx/certs/secure.crt;')" -eq 1
+if grep -Fq 'ssl_certificate /etc/nginx/certs/default.crt;' "$test_dir/conf/default.conf"; then
+    printf 'Missing default certificates must not be referenced\n' >&2
+    exit 1
+fi
+docker run --rm \
+    -v "$test_dir/certs:/etc/nginx/certs:ro" \
+    -v "$test_dir/conf:/etc/nginx/conf.d:ro" \
+    -v "$test_dir/htpasswd:/etc/nginx/htpasswd:ro" \
+    -v "$test_dir/html:/usr/share/nginx/html:ro" \
+    -v "$test_dir/fastcgi.conf:/etc/nginx/fastcgi.conf:ro" \
+    -v "$test_dir/network_internal.conf:/etc/nginx/network_internal.conf:ro" \
+    -v "$repo_dir/nginx:/etc/nginx/btcpay-routes:ro" \
+    "$nginx_image" nginx -t
+
 # Restrict the container list to the explicitly labelled fixtures, which excludes
 # docker-gen itself deterministically. The nginx proxy is present on the backend
 # network, so the template must render the real upstream rather than crash.

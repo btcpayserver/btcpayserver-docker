@@ -230,6 +230,24 @@ btcpay_setup_ssh() {
     fi
 }
 
+btcpay_teardown_ssh() {
+    local ssh_dir="/root/.ssh"
+    local authorized_keys="$ssh_dir/authorized_keys"
+    local temporary_file
+
+    if [ -f "$authorized_keys" ]; then
+        temporary_file="$(mktemp "$authorized_keys.XXXXXX")" || return 1
+        # These are the managed entries replaced by btcpay_setup_ssh.
+        if ! sed -e '/ btcpayserver$/d' -e '/ btcpay-host$/d' \
+                "$authorized_keys" > "$temporary_file" ||
+            ! mv -f -- "$temporary_file" "$authorized_keys"; then
+            rm -f -- "$temporary_file"
+            return 1
+        fi
+    fi
+    rm -f -- "$ssh_dir/btcpay_host_id_ed25519" "$ssh_dir/btcpay_host_id_ed25519.pub"
+}
+
 # Matches fragment names the way the generator and btcpay-fragments do:
 # comma or semicolon separated, trimmed, case-insensitive, optional .yml.
 btcpay_fragment_is_excluded() {
@@ -307,9 +325,19 @@ if [[ -f "$sshd_config" ]] && \
    fi
 fi
 
-for variable in "${BTCPAY_ENV_VARIABLES[@]}"; do
-    printf '%s=%s\n' "$variable" "${!variable-}"
-done > "$BTCPAY_ENV_FILE"
+local temporary_file
+temporary_file="$(mktemp "$BTCPAY_ENV_FILE.tmp.XXXXXX")" || return 1
+# Keep the previous settings intact if any write fails, including on a full disk.
+# mktemp also keeps secrets in the new environment file private.
+if ! (
+    for variable in "${BTCPAY_ENV_VARIABLES[@]}"; do
+        printf '%s=%s\n' "$variable" "${!variable-}" || exit 1
+    done
+) > "$temporary_file" ||
+    ! mv -fT -- "$temporary_file" "$BTCPAY_ENV_FILE"; then
+    rm -f -- "$temporary_file"
+    return 1
+fi
 }
 
 docker_compose_set_plugin() {

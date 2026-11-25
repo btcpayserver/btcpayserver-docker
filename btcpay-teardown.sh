@@ -43,6 +43,12 @@ printf "\nℹ️  Stopping BTCPay Server and removing related Docker volumes and
 docker-compose -f $BTCPAY_DOCKER_COMPOSE down -v
 docker system prune -f
 
+printf "\nℹ️  Revoking the BTCPay Server host SSH key …\n\n"
+if ! . "$ORIGINAL_DIRECTORY/helpers.sh" || ! btcpay_teardown_ssh; then
+    echo "Could not revoke the BTCPay Server host SSH key. Resolve the error and retry teardown." >&2
+    return 1
+fi
+
 printf "\nℹ️  Removing BTCPay Server files …\n\n"
 cd $BTCPAY_BASE_DIRECTORY
 rm -rf $ORIGINAL_DIRECTORY

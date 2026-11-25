@@ -88,6 +88,24 @@ grep -Fxq 'BTCPAY_HOST=example.com' "$BTCPAY_ENV_FILE"
 grep -Fxq 'TRUST_DOWNSTREAM_PROXY=true' "$BTCPAY_ENV_FILE"
 
 cp "$BTCPAY_ENV_FILE" "$test_dir/expected.env"
+# A partial write must not replace previously saved settings, even when the
+# caller handles the failure (which disables Bash's implicit errexit behavior).
+if (
+    printf() {
+        builtin printf '%s\n' 'partial settings'
+        return 1
+    }
+    btcpay_update_docker_env
+); then
+    printf 'A failed environment write must be reported\n' >&2
+    exit 1
+fi
+cmp -s "$test_dir/expected.env" "$BTCPAY_ENV_FILE"
+if compgen -G "$BTCPAY_ENV_FILE.tmp.*" > /dev/null; then
+    printf 'A failed environment write left a temporary file\n' >&2
+    exit 1
+fi
+
 export BTCPAY_HOST=$'example.com\nPROMPT_COMMAND=id'
 if btcpay_update_docker_env; then
     printf 'A value containing a newline must be rejected\n' >&2
@@ -101,6 +119,27 @@ if btcpay_update_docker_env; then
     exit 1
 fi
 cmp -s "$test_dir/expected.env" "$BTCPAY_ENV_FILE"
+
+# Exercise SSH revocation without touching the machine's actual /root/.ssh.
+mkdir "$test_dir/ssh"
+sed "s|local ssh_dir=\"/root/.ssh\"|local ssh_dir=\"$test_dir/ssh\"|g" \
+    "$repo_dir/helpers.sh" > "$test_dir/helpers.sh"
+(
+    . "$test_dir/helpers.sh"
+    printf '%s\n' \
+        'ssh-ed25519 operator-key operator' \
+        'restrict,command="old-proxy" ssh-ed25519 old-key btcpayserver' \
+        'restrict,command="proxy" ssh-ed25519 bridge-key btcpay-host' \
+        > "$test_dir/ssh/authorized_keys"
+    touch "$test_dir/ssh/btcpay_host_id_ed25519" "$test_dir/ssh/btcpay_host_id_ed25519.pub"
+    btcpay_teardown_ssh
+    printf '%s\n' 'ssh-ed25519 operator-key operator' > "$test_dir/operator-key"
+    cmp "$test_dir/operator-key" "$test_dir/ssh/authorized_keys"
+    test ! -e "$test_dir/ssh/btcpay_host_id_ed25519"
+    test ! -e "$test_dir/ssh/btcpay_host_id_ed25519.pub"
+    btcpay_teardown_ssh
+    cmp "$test_dir/operator-key" "$test_dir/ssh/authorized_keys"
+)
 
 mkdir "$test_dir/reload-bin"
 cat > "$test_dir/reload-bin/systemctl" <<'EOF'

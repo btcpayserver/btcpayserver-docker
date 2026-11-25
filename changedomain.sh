@@ -22,6 +22,6 @@ pushd . > /dev/null
 # Modify environment file
 cd "$BTCPAY_BASE_DIRECTORY/btcpayserver-docker" || exit
 . helpers.sh
-btcpay_update_docker_env
+btcpay_update_docker_env || exit 1
 btcpay_up
 popd > /dev/null || exit
