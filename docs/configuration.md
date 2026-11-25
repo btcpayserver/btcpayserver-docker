@@ -95,9 +95,6 @@ incompatibilities in [Optional Fragments](./fragments.md#resource-profiles).
 Some third-party fragments require additional files or initialization. Follow
 their linked guide in the [fragment catalog](./fragments.md).
 
-Setup does not persist `BTCPAY_DCR_WALLET_PASSPHRASE`. Export it again before
-each setup, update, or command that can recreate the Decred wallet service.
-
 ## Operational Variables
 
 - `BTCPAY_BACKUP_PASSPHRASE` encrypts and decrypts deployment backups.

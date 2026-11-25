@@ -69,6 +69,10 @@ For a new service:
 - Reference other containers by Compose service name.
 - Use environment substitution for operator-provided values; never commit
   credentials.
+- Never substitute a secret into `command` or `entrypoint`: process arguments
+  are visible in the host's process list. Use the service's `environment`, or a
+  secret/config file when the service requires a file. Shell wrappers must read
+  secrets from the environment at runtime, not interpolate them into the script.
 - Add Compose secrets when the service needs a generated credential. Secret
   file paths must be relative paths below `../secrets/`.
 - Add the `z` option to host bind mounts, for example
