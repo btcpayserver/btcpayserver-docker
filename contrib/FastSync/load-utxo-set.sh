@@ -66,35 +66,34 @@ BITCOIN_DATA_DIR="/var/lib/docker/volumes/generated_bitcoin_datadir/_data"
 
 [ ! -d "$BITCOIN_DATA_DIR" ] && mkdir -p "$BITCOIN_DATA_DIR"
 
+# Preserve filename bytes, including trailing newlines, during hash verification.
 if [[ "$TAR_FILE" ]]; then
-  TAR_NAME="$(basename $TAR_FILE)"
+  TAR_NAME="${TAR_FILE##*/}"
 else
-  TAR_NAME="$(basename $UTXO_DOWNLOAD_LINK)"
+  TAR_NAME="${UTXO_DOWNLOAD_LINK##*/}"
   TAR_FILE="$BITCOIN_DATA_DIR/$TAR_NAME"
 fi
 
-TAR_DIR="$(dirname "$TAR_FILE")"
-cp "utxo-sets" "$TAR_DIR/utxo-sets"
-cd "$TAR_DIR"
 IS_DOWNLOADED=false
 if [ ! -f "$TAR_FILE" ]; then
   echo "Downloading $UTXO_DOWNLOAD_LINK to $TAR_FILE"
-  wget "$UTXO_DOWNLOAD_LINK" -c -O $TAR_FILE.partial -q --show-progress && mv $TAR_FILE.partial $TAR_FILE
+  wget "$UTXO_DOWNLOAD_LINK" -c -O "$TAR_FILE.partial" -q --show-progress && mv -- "$TAR_FILE.partial" "$TAR_FILE"
   IS_DOWNLOADED=true
 else
   echo "$TAR_FILE already exists"
 fi
 
-grep "$TAR_NAME" "utxo-sets" | tee "utxo-set"
-rm "utxo-sets"
-if ! sha256sum -c "utxo-set"; then
+# Hash the archive that will be extracted and match its exact hash and filename.
+TAR_DIR="${TAR_FILE%/*}"
+if [ "$TAR_DIR" = "$TAR_FILE" ]; then
+  TAR_DIR=.
+fi
+TAR_HASH_LINE="$(cd -- "$TAR_DIR" && sha256sum -- "$TAR_NAME")"
+if ! grep -qxF -- "$TAR_HASH_LINE" "utxo-sets"; then
   echo "$TAR_FILE is not trusted"
-  rm "utxo-set"
-  cd -
   exit 1
 fi
-rm "utxo-set"
-cd -
+printf '%s: OK\n' "$TAR_HASH_LINE"
 
 NETWORK_DIRECTORY=$NBITCOIN_NETWORK
 if [[ $NBITCOIN_NETWORK == "mainnet" ]]; then

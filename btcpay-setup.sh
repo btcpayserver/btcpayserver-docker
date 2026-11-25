@@ -191,12 +191,12 @@ BTCPAY_DOCKER_COMPOSE="$(pwd)/Generated/docker-compose.generated.yml"
 BTCPAY_ENV_FILE="$BTCPAY_BASE_DIRECTORY/.env"
 
 if [[ "$BTCPAYGEN_REVERSEPROXY" == "nginx" ]] && [[ "$BTCPAY_HOST" ]]; then
-    DOMAIN_NAME="$(echo "$BTCPAY_HOST" | grep -E '^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$')"
-    if [[ ! "$DOMAIN_NAME" ]]; then
+    # DNS names allow at most 253 characters overall and 63 per label.
+    if [ "${#BTCPAY_HOST}" -gt 253 ] || [[ "$BTCPAY_HOST" =~ [^.]{64} ]] ||
+        [[ ! "$BTCPAY_HOST" =~ ^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$ ]]; then
         echo "BTCPAYGEN_REVERSEPROXY is set to nginx, so BTCPAY_HOST must be a domain name which point to this server, but the current value of BTCPAY_HOST ('$BTCPAY_HOST') is not a valid domain name."
         return 1
     fi
-    BTCPAY_HOST="$DOMAIN_NAME"
 fi
 
 # Since opt-txindex requires unpruned node, throw an error if both
