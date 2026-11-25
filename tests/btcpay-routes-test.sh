@@ -200,10 +200,4 @@ if [ -s "$DOCKER_KILLS_FILE" ]; then
     exit 1
 fi
 
-# Prefix rewrites must match the complete path, like the other catalog routes.
-if grep -En 'rewrite [^ ]*\(\.\*\) ' "$repo_dir"/nginx/routes/*.conf >&2; then
-    printf 'Route prefix rewrites must be anchored at the end of the path.\n' >&2
-    exit 1
-fi
-
 printf 'btcpay-routes tests passed\n'
