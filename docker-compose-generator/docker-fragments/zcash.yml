@@ -20,7 +20,6 @@ services:
       - --allow-unencrypted-database
     environment:
       HOME: /data
-      RUST_LOG: info
     expose:
       - "8000"
     volumes:
