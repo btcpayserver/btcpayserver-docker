@@ -28,7 +28,7 @@ services:
   btcpayserver:
     environment:
       BTCPAY_ZEC_WALLET_BACKEND_TYPE: ZkoolGraphQL
-      BTCPAY_ZEC_WALLET_GRAPHQL_URI: http://zcash_walletd:8000/graphql
+      BTCPAY_ZEC_WALLET_GRAPHQL_URI: http://zkool_graphql:8000/graphql
 
 volumes:
   zec_graphql_wallet:

@@ -1,31 +1,40 @@
 services:
-  zcash_walletd:
+  zkool_graphql:
     restart: unless-stopped
     init: true
-    image: hhanh00/zcash-walletd:1.1.10
+    image: hhanh00/zkool-graphql:6.37.0
+    depends_on:
+      - lightwalletd
+    command:
+      - --db-path
+      - /data/zec-graphql.db
+      - --coin
+      - "0"
+      - --lwd-url
+      - http://lightwalletd:9067
+      - --bind-address
+      - 0.0.0.0
+      - --port
+      - "8000"
+      # The current BTCPay client does not send JWT credentials.
+      # Keep this service on the private Compose network without published ports.
+      - --allow-unauthenticated
+      - --allow-unencrypted-database
     environment:
-      NOTIFY_TX_URL: http://btcpayserver:49392/zcashlikedaemoncallback/tx?cryptoCode=zec&hash=
-      ROCKET_DB_PATH: /data/zec-wallet2.db
-      CONFIG_PATH: /data/config2.json
-      LWD_URL: http://lightwalletd:9067
+      HOME: /data
     expose:
       - "8000"
     volumes:
-    - "zec_wallet:/data"
+      - zec_graphql_wallet:/data
 
   btcpayserver:
     environment:
-      BTCPAY_ZEC_DAEMON_URI: http://zcash_walletd:8000
-      BTCPAY_ZEC_WALLET_DAEMON_URI: http://zcash_walletd:8000
-      BTCPAY_ZEC_WALLET_DAEMON_WALLETDIR: /root/zec_wallet
-      BTCPAY_ZEC_WALLET_DAEMON_CONFIG_PATH: /root/zec_wallet/config2.json
-    volumes:
-      - "zec_wallet:/root/zec_wallet"
+      BTCPAY_ZEC_WALLET_BACKEND_TYPE: ZkoolGraphQL
+      BTCPAY_ZEC_WALLET_GRAPHQL_URI: http://zkool_graphql:8000/graphql
 
   zebra:
     container_name: zebra
-    image: zfnd/zebra:3.0.0
-    platform: linux/amd64
+    image: zfnd/zebra:7.1.0
     restart: unless-stopped
     deploy:
       resources:
@@ -81,8 +90,7 @@ configs:
     file: ./zcash.conf
 
 volumes:
-  zec_wallet:
-  zec_data:
+  zec_graphql_wallet:
   zebrad-cache:
     driver: local
 

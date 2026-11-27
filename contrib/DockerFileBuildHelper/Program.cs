@@ -304,11 +304,11 @@ namespace DockerFileBuildHelper
                     dockerInfo.GitRef = $"main";
                     dockerInfo.SupportedByUs = false;
                     break;
-                case "zcash-walletd":
-                    dockerInfo.DockerFilePath = "docker/Dockerfile";
-                    dockerInfo.GitLink = "https://github.com/elemental-pay/zcash-walletd";
-                    dockerInfo.GitRef = $"feat/data-config";
-                    dockerInfo.SupportedByUs = false;
+                case "hhanh00/zkool-graphql":
+                    dockerInfo.DockerFilePath = "misc/alpine.dockerfile";
+                    dockerInfo.DockerFilePathARM64v8 = dockerInfo.DockerFilePath;
+                    dockerInfo.GitLink = "https://github.com/hhanh00/zkool2";
+                    dockerInfo.GitRef = $"zkool-v{image.Tag}";
                     break;
                 case "lnd":
                     dockerInfo.DockerFilePath = "linuxamd64.Dockerfile";
