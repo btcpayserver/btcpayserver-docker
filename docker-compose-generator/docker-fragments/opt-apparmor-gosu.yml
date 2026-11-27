@@ -1,7 +1,34 @@
 # Temporary workaround for https://github.com/btcpayserver/btcpayserver-docker/issues/1257
-# Disables AppArmor confinement for PostgreSQL and cryptocurrency node/wallet services.
+# and https://github.com/btcpayserver/btcpayserver-docker/issues/1271.
+# Stacked AppArmor profiles can block signals used by gosu and multi-threaded runtimes.
+# Disables AppArmor confinement for BTCPay, NBXplorer, PostgreSQL, nodes and Lightning.
+# Keep the historical fragment name so existing selections and exclusions still work.
 # Exclude this fragment after upgrading Docker to a package containing moby/profiles#58.
 services:
+  btcpayserver:
+    security_opt:
+      - apparmor=unconfined
+  nbxplorer:
+    security_opt:
+      - apparmor=unconfined
+  clightning_bitcoin:
+    security_opt:
+      - apparmor=unconfined
+  clightning_groestlcoin:
+    security_opt:
+      - apparmor=unconfined
+  lnd_bitcoin:
+    security_opt:
+      - apparmor=unconfined
+  lnd_groestlcoin:
+    security_opt:
+      - apparmor=unconfined
+  lnd_lit:
+    security_opt:
+      - apparmor=unconfined
+  phoenixd:
+    security_opt:
+      - apparmor=unconfined
   postgres:
     security_opt:
       - apparmor=unconfined
