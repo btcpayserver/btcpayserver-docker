@@ -17,7 +17,7 @@ services:
       - "../nginx:/etc/nginx/btcpay-routes:ro,z"
   nginx-gen:
     restart: unless-stopped
-    image: btcpayserver/docker-gen:0.17.2-2
+    image: btcpayserver/docker-gen:0.18.0-2
     container_name: nginx-gen
     security_opt:
       - label=disable
